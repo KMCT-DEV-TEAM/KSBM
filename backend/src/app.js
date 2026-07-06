@@ -1,0 +1,13 @@
+// Initialized app.js
+import express from 'express';
+const app = express();
+
+// Middlewares
+app.use(express.json());
+
+// Routes
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
+
+export default app;
