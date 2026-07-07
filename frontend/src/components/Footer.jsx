@@ -3,7 +3,7 @@ import { MapPin, Mail, Phone } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="relative bg-[#252b57] text-white pt-20 pb-8 overflow-hidden">
+    <footer className="relative bg-primary text-white pt-20 pb-8 overflow-hidden">
       
       {/* Background Geometric Pattern */}
       {/* Left Pattern */}
@@ -34,7 +34,7 @@ const Footer = () => {
           {/* Column 1: About & Social */}
           <div className="flex flex-col pr-4">
             <h3 className="text-2xl font-bold mb-6 tracking-wide text-white">KSBM</h3>
-            <p className="text-gray-300 text-sm leading-relaxed mb-8 max-w-[90%] font-medium">
+            <p className="text-secondary text-sm leading-relaxed mb-8 max-w-[90%] font-medium">
               Empowering global leaders through intellectual rigor and strategic excellence since 1998.
             </p>
             
@@ -70,7 +70,7 @@ const Footer = () => {
             <h4 className="text-sm font-semibold tracking-[0.15em] uppercase mb-8 text-white">
               PROGRAMS
             </h4>
-            <ul className="flex flex-col gap-4 text-sm text-gray-300 font-medium">
+            <ul className="flex flex-col gap-4 text-sm text-secondary font-medium">
               <li><a href="#" className="hover:text-white transition-colors">MBA Full-time</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Executive MBA</a></li>
               <li><a href="#" className="hover:text-white transition-colors">BBA Program</a></li>
@@ -83,7 +83,7 @@ const Footer = () => {
             <h4 className="text-sm font-semibold tracking-[0.15em] uppercase mb-8 text-white">
               QUICK LINKS
             </h4>
-            <ul className="flex flex-col gap-4 text-sm text-gray-300 font-medium">
+            <ul className="flex flex-col gap-4 text-sm text-secondary font-medium">
               <li><a href="#" className="hover:text-white transition-colors">Programs</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Accreditations</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Gallery</a></li>
@@ -96,7 +96,7 @@ const Footer = () => {
             <h4 className="text-sm font-semibold tracking-[0.15em] uppercase mb-8 text-white">
               CONTACT INFORMATION
             </h4>
-            <ul className="flex flex-col gap-5 text-sm text-gray-300 font-medium">
+            <ul className="flex flex-col gap-5 text-sm text-secondary font-medium">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 mt-0.5 shrink-0 opacity-80" />
                 <span>KMCT Hills, Kerala, India</span>
@@ -119,7 +119,7 @@ const Footer = () => {
         </div>
 
         {/* Footer Bottom */}
-        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-gray-400 font-medium">
+        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary font-medium">
           <p>
             © 2024 KMCT School of Business. All rights reserved. Accredited by AACSB & AMBA.
           </p>

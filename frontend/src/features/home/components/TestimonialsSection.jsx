@@ -34,15 +34,15 @@ const TestimonialsSection = () => {
   ];
 
   return (
-    <section className="w-full bg-white py-20 lg:py-24">
+    <section className="w-full bg-background py-20 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
         
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-gray-400 text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-4">
+          <p className="text-text-secondary text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-4">
             Testimonials
           </p>
-          <h2 className="text-3xl lg:text-5xl font-bold text-[#2b3990]">
+          <h2 className="text-3xl lg:text-5xl font-bold text-primary">
             Voices of Success
           </h2>
         </div>
@@ -56,7 +56,7 @@ const TestimonialsSection = () => {
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}
                 className={`relative rounded-3xl overflow-hidden transition-all duration-700 ease-in-out cursor-pointer shadow-sm hover:shadow-md ${
-                  isActive ? 'w-[75%] bg-white flex' : 'w-[12.5%]'
+                  isActive ? 'w-[75%] bg-background flex' : 'w-[12.5%]'
                 }`}
               >
                 {/* Image Section */}
@@ -71,10 +71,10 @@ const TestimonialsSection = () => {
                 {/* Text Content (Only visible when active) */}
                 {isActive && (
                   <div className="w-1/2 h-full p-12 flex flex-col justify-center animate-fade-in">
-                    <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-6 leading-snug pr-4">
+                    <h3 className="text-xl lg:text-2xl font-bold text-text-primary mb-6 leading-snug pr-4">
                       {testimonial.quote}
                     </h3>
-                    <p className="text-gray-400 text-sm leading-[1.8] mb-10 pr-8">
+                    <p className="text-text-secondary text-sm leading-[1.8] mb-10 pr-8">
                       {testimonial.body}
                     </p>
                     
@@ -85,8 +85,8 @@ const TestimonialsSection = () => {
                         className="w-12 h-12 rounded-full object-cover border border-gray-100"
                       />
                       <div>
-                        <p className="text-sm font-bold text-gray-900">{testimonial.name}</p>
-                        <p className="text-[0.65rem] font-semibold text-gray-400 uppercase tracking-widest mt-0.5">{testimonial.course}</p>
+                        <p className="text-sm font-bold text-text-primary">{testimonial.name}</p>
+                        <p className="text-[0.65rem] font-semibold text-text-secondary uppercase tracking-widest mt-0.5">{testimonial.course}</p>
                       </div>
                     </div>
                   </div>
@@ -101,7 +101,7 @@ const TestimonialsSection = () => {
           {testimonials.map((testimonial, index) => (
             <div 
               key={testimonial.id} 
-              className={`flex-col bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-8 ${activeIndex === index ? 'flex' : 'hidden'}`}
+              className={`flex-col bg-background rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-8 ${activeIndex === index ? 'flex' : 'hidden'}`}
             >
               <div className="w-full h-[350px]">
                 <img 
@@ -111,10 +111,10 @@ const TestimonialsSection = () => {
                 />
               </div>
               <div className="p-8 flex flex-col">
-                <h3 className="text-xl font-bold text-gray-900 mb-4 leading-snug">
+                <h3 className="text-xl font-bold text-text-primary mb-4 leading-snug">
                   {testimonial.quote}
                 </h3>
-                <p className="text-gray-500 text-sm leading-[1.8] mb-8">
+                <p className="text-text-secondary text-sm leading-[1.8] mb-8">
                   {testimonial.body}
                 </p>
                 <div className="flex items-center gap-4 mt-auto">
@@ -124,8 +124,8 @@ const TestimonialsSection = () => {
                     className="w-12 h-12 rounded-full object-cover"
                   />
                   <div>
-                    <p className="text-sm font-bold text-gray-900">{testimonial.name}</p>
-                    <p className="text-[0.65rem] font-semibold text-gray-400 uppercase tracking-widest mt-0.5">{testimonial.course}</p>
+                    <p className="text-sm font-bold text-text-primary">{testimonial.name}</p>
+                    <p className="text-[0.65rem] font-semibold text-text-secondary uppercase tracking-widest mt-0.5">{testimonial.course}</p>
                   </div>
                 </div>
               </div>
@@ -138,7 +138,7 @@ const TestimonialsSection = () => {
               <button 
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}
-                className={`w-14 h-14 rounded-full overflow-hidden border-2 transition-all duration-300 ${activeIndex === index ? 'border-[#2b3990] scale-110 opacity-100' : 'border-transparent opacity-50 grayscale hover:grayscale-0 hover:opacity-100'}`}
+                className={`w-14 h-14 rounded-full overflow-hidden border-2 transition-all duration-300 ${activeIndex === index ? 'border-primary scale-110 opacity-100' : 'border-transparent opacity-50 grayscale hover:grayscale-0 hover:opacity-100'}`}
               >
                 <img src={testimonial.avatar} alt={testimonial.name} className="w-full h-full object-cover" />
               </button>
