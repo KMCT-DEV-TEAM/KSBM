@@ -3,11 +3,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import AdminLayout from '../layouts/AdminLayout';
 import Home from '../features/home/Home';
+import Hero from '../features/home/components/Hero';
+import Header from '../components/Header';
 import AdminLogin from '../features/admin/AdminLogin';
 import DashboardOverview from '../features/admin/dashboard/DashboardOverview';
 import ManageUsers from '../features/admin/dashboard/ManageUsers';
 import GenericCmsPage from '../features/admin/cms/GenericCmsPage';
 import ManageHeader from '../features/admin/cms/ManageHeader';
+import ManageHero from '../features/admin/cms/ManageHero';
 import ProtectedRoute from './ProtectedRoute';
 
 const AppRoutes = () => {
@@ -22,6 +25,10 @@ const AppRoutes = () => {
         {/* Admin Login Route (No Layout Wrapper) */}
         <Route path="/admin/login" element={<AdminLogin />} />
 
+        {/* Live Preview Routes for Iframe */}
+        <Route path="/preview/header" element={<Header />} />
+        <Route path="/preview/hero" element={<Hero />} />
+
         {/* Protected Admin Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
@@ -31,7 +38,7 @@ const AppRoutes = () => {
           
           {/* CMS Stubs */}
           <Route path="cms/header" element={<ManageHeader />} />
-          <Route path="cms/hero" element={<GenericCmsPage title="Hero Section" />} />
+          <Route path="cms/hero" element={<ManageHero />} />
           <Route path="cms/about" element={<GenericCmsPage title="About KSBM" />} />
           <Route path="cms/academics" element={<GenericCmsPage title="Academic Programs" />} />
           <Route path="cms/accreditation" element={<GenericCmsPage title="Accreditation" />} />

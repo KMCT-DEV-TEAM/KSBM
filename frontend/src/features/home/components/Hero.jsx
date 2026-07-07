@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import api from '../../../api/axios';
 import {
   Mail,
   MessageCircle,
@@ -22,12 +23,57 @@ const WhatsAppIcon = ({ className }) => (
   </svg>
 );
 
-const Hero = () => {
-  const images = [
-    'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=2086&auto=format&fit=crop'
-  ];
+const Hero = ({ previewData }) => {
+  const [cmsData, setCmsData] = useState({
+    pillText: { text: 'ADMISSIONS OPEN 2025-26', isVisible: true },
+    headingLine1: { text: 'Empowering Future', isVisible: true },
+    headingLine2: { text: 'Business Leaders', isVisible: true },
+    description: { text: "Unlock your potential with India's leading B-School, where traditional academic rigor meets modern industry innovation. Join a network of global visionaries.", isVisible: true },
+    primaryButton: { text: 'Apply Now', isVisible: true, link: '#' },
+    secondaryButton: { text: 'Download Brochure', isVisible: true, link: '#' },
+  });
+
+  useEffect(() => {
+    if (previewData) {
+      setCmsData(previewData);
+    } else {
+      const fetchHeroData = async () => {
+        try {
+          const { data } = await api.get('/cms/hero');
+          if (data) {
+            setCmsData(prev => ({ 
+              ...prev, 
+              ...data,
+              pillText: typeof data.pillText === 'string' ? { text: data.pillText, isVisible: true } : (data.pillText || prev.pillText),
+              headingLine1: typeof data.headingLine1 === 'string' ? { text: data.headingLine1, isVisible: true } : (data.headingLine1 || prev.headingLine1),
+              headingLine2: typeof data.headingLine2 === 'string' ? { text: data.headingLine2, isVisible: true } : (data.headingLine2 || prev.headingLine2),
+              description: typeof data.description === 'string' ? { text: data.description, isVisible: true } : (data.description || prev.description),
+            }));
+          }
+        } catch (error) {
+          console.error("Failed to load hero CMS data", error);
+        }
+      };
+      fetchHeroData();
+    }
+
+    // Listener for iframe preview messages
+    const handleMessage = (event) => {
+      if (event.data?.type === 'preview-hero-data') {
+        setCmsData(prev => ({ ...prev, ...event.data.payload }));
+      }
+    };
+    window.addEventListener('message', handleMessage);
+
+    return () => window.removeEventListener('message', handleMessage);
+  }, [previewData]);
+  const images = cmsData.bannerImages && cmsData.bannerImages.length > 0 
+    ? cmsData.bannerImages 
+    : [
+        { url: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop' },
+        { url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop' },
+        { url: 'https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=2086&auto=format&fit=crop' }
+      ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -61,12 +107,12 @@ const Hero = () => {
       {/* Background Images with Transition */}
       {images.map((img, index) => (
         <div
-          key={img}
+          key={img.url || index}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentImageIndex ? 'opacity-100 z-0' : 'opacity-0 z-0'
             }`}
         >
           <img
-            src={img}
+            src={img.url}
             alt="Campus"
             className="w-full h-full object-cover"
           />
@@ -79,49 +125,60 @@ const Hero = () => {
 
       {/* Main Content */}
       <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 lg:px-8 py-20 flex flex-col justify-center">
-
         {/* Pill Badge */}
-        <div className="inline-flex items-center gap-2.5 bg-background/20 backdrop-blur-md rounded-full pr-5 pl-2 py-1.5 text-[0.65rem] sm:text-xs font-semibold tracking-widest text-white border border-white/30 uppercase mb-8 self-start shadow-sm">
-          <div className="flex items-center justify-center bg-white/10 rounded-full p-1">
-            <svg viewBox="-50 -50 100 100" className="w-5 h-5 text-[#5594c0]" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <g key={i} transform={`rotate(${i * 45})`}>
-                  <polygon points="0,-4 -6,-16 6,-16" />
-                  <polygon points="0,-32 -8,-18 8,-18" />
-                  <polygon points="0,-34 -12,-48 12,-48" />
-                  <polygon points="-11,-20 -20,-20 -15,-30" />
-                  <polygon points="11,-20 20,-20 15,-30" />
-                </g>
-              ))}
-            </svg>
+        {cmsData.pillText?.isVisible && (
+          <div className="inline-flex items-center gap-2.5 bg-background/20 backdrop-blur-md rounded-full pr-5 pl-2 py-1.5 text-[0.65rem] sm:text-xs font-semibold tracking-widest text-white border border-white/30 uppercase mb-8 self-start shadow-sm">
+            <div className="flex items-center justify-center bg-white/10 rounded-full p-1">
+              <svg viewBox="-50 -50 100 100" className="w-5 h-5 text-[#5594c0]" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <g key={i} transform={`rotate(${i * 45})`}>
+                    <polygon points="0,-4 -6,-16 6,-16" />
+                    <polygon points="0,-32 -8,-18 8,-18" />
+                    <polygon points="0,-34 -12,-48 12,-48" />
+                    <polygon points="-11,-20 -20,-20 -15,-30" />
+                    <polygon points="11,-20 20,-20 15,-30" />
+                  </g>
+                ))}
+              </svg>
+            </div>
+            {cmsData.pillText.text}
           </div>
-          ADMISSIONS OPEN 2025-26
-        </div>
+        )}
 
         {/* Heading */}
         <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight">
-          <span className="text-white block">Empowering Future</span>
-          <span className="text-[#bce0f0] block">Business Leaders</span>
+          {cmsData.headingLine1?.isVisible && (
+            <span className="text-white block">{cmsData.headingLine1.text}</span>
+          )}
+          {cmsData.headingLine2?.isVisible && (
+            <span className="text-[#bce0f0] block">{cmsData.headingLine2.text}</span>
+          )}
         </h1>
 
         {/* Description */}
-        <p className="max-w-2xl text-sm md:text-base mt-6 text-gray-200 leading-relaxed font-medium">
-          Unlock your potential with India's leading B-School, where traditional academic rigor meets modern industry innovation. Join a network of global visionaries.
-        </p>
+        {cmsData.description?.isVisible && (
+          <p className="max-w-2xl text-sm md:text-base mt-6 text-gray-200 leading-relaxed font-medium">
+            {cmsData.description.text}
+          </p>
+        )}
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-4 mt-10">
-          <button className="bg-secondary text-primary font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
-            Apply Now <ArrowUpRight className="w-5 h-5" />
-          </button>
-          <button className="bg-background/20 backdrop-blur-md border border-white/30 text-white font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
-            <Download className="w-5 h-5" /> Download Brochure
-          </button>
+          {cmsData.primaryButton?.isVisible && (
+            <a href={cmsData.primaryButton.link} className="bg-secondary text-primary font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
+              {cmsData.primaryButton.text} <ArrowUpRight className="w-5 h-5" />
+            </a>
+          )}
+          {cmsData.secondaryButton?.isVisible && (
+            <a href={cmsData.secondaryButton.link} className="bg-background/20 backdrop-blur-md border border-white/30 text-white font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
+              <Download className="w-5 h-5" /> {cmsData.secondaryButton.text}
+            </a>
+          )}
         </div>
       </div>
 
       {/* Glassmorphism Floating Card */}
-      <div className="hidden md:block absolute bottom-12 right-12 z-20">
+      <div className="hidden lg:block absolute bottom-12 right-12 z-20">
         <div className="relative bg-background/20 backdrop-blur-md border border-white/30 rounded-2xl p-5 w-[300px] shadow-2xl">
           {/* Blue Badge Icon Overlap */}
           <div className="absolute -top-3 -right-3 bg-primary p-2.5 rounded-xl shadow-lg border border-white/10 text-white z-30">
