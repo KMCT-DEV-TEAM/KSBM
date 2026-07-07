@@ -11,22 +11,22 @@ const AdminNavbar = () => {
   };
 
   return (
-    <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8 shrink-0">
+    <header className="mx-8 mt-6 h-16 bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] flex items-center justify-between px-6 shrink-0">
       <div className="flex items-center gap-4">
         {/* Search Bar Placeholder */}
-        <div className="hidden md:flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-lg border border-gray-200">
-          <Search className="w-4 h-4 text-gray-400" />
+        <div className="hidden md:flex items-center gap-2">
+          <Search className="w-5 h-5 text-[#697A8D]" />
           <input 
             type="text" 
-            placeholder="Search dashboard..." 
-            className="bg-transparent border-none outline-none text-sm w-64"
+            placeholder="Search (Ctrl+/)" 
+            className="bg-transparent border-none outline-none text-[15px] text-[#566A7F] placeholder-[#697A8D] w-64"
           />
         </div>
       </div>
 
       <div className="flex items-center gap-6">
-        <button className="relative text-gray-500 hover:text-[#1a237e] transition-colors">
-          <Bell className="w-5 h-5" />
+        <button className="relative text-[#697A8D] hover:text-[#696CFF] transition-colors">
+          <Bell className="w-6 h-6" />
           <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
         </button>
 
@@ -34,7 +34,7 @@ const AdminNavbar = () => {
 
         <button 
           onClick={handleLogout}
-          className="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-red-600 transition-colors"
+          className="flex items-center gap-2 text-sm font-semibold text-[#697A8D] hover:text-[#FF3E1D] transition-colors"
         >
           <LogOut className="w-4 h-4" />
           <span>Logout</span>
