@@ -3,12 +3,18 @@ import AppRoutes from './routes/AppRoutes';
 import './App.css';
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [domLoaded, setDomLoaded] = useState(false);
+  const [apiLoading, setApiLoading] = useState(false);
 
   useEffect(() => {
+    const handleApiLoading = (e) => {
+      setApiLoading(e.detail);
+    };
+    window.addEventListener('axios-loading', handleApiLoading);
+
     const handleLoad = () => {
       // Add a tiny delay to ensure smooth transition
-      setTimeout(() => setLoading(false), 300);
+      setTimeout(() => setDomLoaded(true), 300);
     };
 
     if (document.readyState === 'complete') {
@@ -17,9 +23,15 @@ function App() {
       window.addEventListener('load', handleLoad);
       // Fallback in case load event gets stuck
       setTimeout(handleLoad, 5000);
-      return () => window.removeEventListener('load', handleLoad);
     }
+
+    return () => {
+      window.removeEventListener('axios-loading', handleApiLoading);
+      window.removeEventListener('load', handleLoad);
+    };
   }, []);
+
+  const loading = !domLoaded || apiLoading;
 
   return (
     <>
