@@ -96,8 +96,12 @@ const Header = ({ previewData }) => {
       <div className="flex items-center justify-between max-w-[1440px] mx-auto px-4 lg:px-8 h-20">
         
         {/* Logo Section */}
-        <a href="/" className="flex items-center no-underline bg-white/80 p-1 rounded-md backdrop-blur-sm">
-          <img src={logoUrl || logo} alt="KSBM Logo" className="h-6 lg:h-8 object-contain" />
+        <a href="/" className="flex items-center no-underline">
+          <img 
+            src={logoUrl || logo} 
+            alt="KSBM Logo" 
+            className={`h-6 lg:h-8 object-contain transition-all duration-300 ${isScrolled ? 'brightness-0 invert' : ''}`} 
+          />
         </a>
 
         {/* Right Section: Nav & Button */}
