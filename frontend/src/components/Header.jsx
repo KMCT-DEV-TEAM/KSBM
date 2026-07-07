@@ -1,16 +1,55 @@
-import React, { useState, useEffect } from 'react'
-import logo from '../assets/Images/LOGO__KMCT School of Business Management (1).png'
-import { Menu, X } from 'lucide-react'
+import React, { useState, useEffect } from 'react';
+import logo from '../assets/Images/LOGO__KMCT School of Business Management (1).png';
+import { Menu, X } from 'lucide-react';
+import api from '../api/axios';
 
-const Header = () => {
+const Header = ({ previewData }) => {
   const [activeNav, setActiveNav] = useState('Home');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // CMS States
+  const [navItems, setNavItems] = useState([
+    { label: 'Home', link: '#home' },
+    { label: 'About Us', link: '#about-us' },
+    { label: 'Campus', link: '#campus' },
+    { label: 'Programs', link: '#programs' },
+  ]); // Fallback
+  const [actionButton, setActionButton] = useState({ text: 'Apply Now', isVisible: true });
+  const [logoUrl, setLogoUrl] = useState('');
+  const [alignment, setAlignment] = useState('center');
+
   useEffect(() => {
+    if (previewData) {
+      setNavItems(previewData.navItems || []);
+      if (previewData.navItems?.length > 0 && !activeNav) setActiveNav(previewData.navItems[0].label);
+      setActionButton(previewData.actionButton || { text: 'Apply Now', isVisible: true });
+      setLogoUrl(previewData.logoUrl || '');
+      setAlignment(previewData.alignment || 'center');
+      return;
+    }
+
+    const fetchHeaderSettings = async () => {
+      try {
+        const { data } = await api.get('/cms/header');
+        if (data.navItems && data.navItems.length > 0) {
+          setNavItems(data.navItems);
+          setActiveNav(data.navItems[0].label);
+        }
+        if (data.actionButton) setActionButton(data.actionButton);
+        if (data.logoUrl) setLogoUrl(data.logoUrl);
+        if (data.alignment) setAlignment(data.alignment);
+      } catch (error) {
+        console.error('Failed to fetch header settings:', error);
+      }
+    };
+    
+    fetchHeaderSettings();
+  }, [previewData]);
+
+  useEffect(() => {
+
     const handleScroll = () => {
-      // Change color when scrolled past the Hero section (which is min-h-[85vh] or 750px)
-      // We'll use 85vh minus header height as a solid threshold
       const scrollThreshold = Math.min(window.innerHeight * 0.85, 750) - 80;
       if (window.scrollY > scrollThreshold) {
         setIsScrolled(true);
@@ -23,46 +62,53 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    'Home',
-    'About Us',
-    'Campus',
-    'People',
-    'Placement',
-    'Programs',
-    'Events',
-    'Admission',
-    'Examinations',
-  ];
+  const getAlignmentClass = () => {
+    switch (alignment) {
+      case 'left': return 'justify-start';
+      case 'right': return 'justify-end';
+      case 'center':
+      default: return 'justify-center';
+    }
+  };
+
+  // Preview Mode Overrides (to bypass actual viewport media queries)
+  const isPreviewMobile = previewData?.previewDevice === 'mobile' || previewData?.previewDevice === 'tablet';
+  const isPreviewDesktop = previewData?.previewDevice === 'desktop';
+  
+  const desktopClass = isPreviewMobile ? 'hidden' : isPreviewDesktop ? 'flex' : 'hidden lg:flex';
+  const mobileToggleClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? 'flex' : 'flex lg:hidden';
+  const mobileDropdownClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? '' : 'lg:hidden';
 
   return (
-    <header className={`w-full shadow-[0_2px_4px_rgba(0,0,0,0.05)] sticky top-0 z-50 transition-colors duration-300 ${isScrolled ? 'bg-primary' : 'bg-background'}`}>
+    <header className={`w-full shadow-[0_2px_4px_rgba(0,0,0,0.05)] ${previewData ? 'relative' : 'sticky top-0'} z-50 transition-colors duration-300 ${isScrolled ? 'bg-primary' : 'bg-background'}`}>
       <div className="flex items-center justify-between max-w-[1440px] mx-auto px-4 lg:px-8 h-20">
+        
         {/* Logo Section */}
         <a href="/" className="flex items-center no-underline bg-white/80 p-1 rounded-md backdrop-blur-sm">
-          <img src={logo} alt="KSBM Logo" className="h-6 lg:h-8 object-contain" />
+          <img src={logoUrl || logo} alt="KSBM Logo" className="h-6 lg:h-8 object-contain" />
         </a>
 
         {/* Right Section: Nav & Button */}
-        <div className="flex items-center gap-6 xl:gap-8">
+        <div className={`flex items-center gap-6 xl:gap-8 ${alignment === 'left' ? 'flex-1 justify-start pl-8' : alignment === 'center' ? 'flex-1 justify-center' : 'justify-end'}`}>
+          
           {/* Navigation Section */}
-          <nav className="hidden lg:flex items-center">
+          <nav className={`${desktopClass} items-center`}>
             <ul className="flex items-center list-none gap-3 xl:gap-5 m-0 p-0">
-              {navItems.map((item) => (
-                <li key={item} className="relative">
+              {navItems.map((item, idx) => (
+                <li key={idx} className="relative">
                   <a
-                    href={`#${item.toLowerCase().replace(' ', '-')}`}
+                    href={item.link}
                     className={`no-underline text-sm py-2 transition-colors duration-300 inline-block ${
                       isScrolled ? 'hover:text-secondary' : 'hover:text-primary'
-                    } ${activeNav === item
+                    } ${activeNav === item.label
                       ? (isScrolled 
                           ? 'text-white font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[1px] after:bg-white after:rounded-sm' 
                           : 'text-primary font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[1px] after:bg-primary after:rounded-sm')
                       : (isScrolled ? 'text-gray-200 font-medium' : 'text-text-secondary font-medium')
                       }`}
-                    onClick={() => setActiveNav(item)}
+                    onClick={() => setActiveNav(item.label)}
                   >
-                    {item}
+                    {item.label}
                   </a>
                 </li>
               ))}
@@ -70,14 +116,16 @@ const Header = () => {
           </nav>
 
           {/* Action Button */}
-          <div className="hidden lg:flex items-center">
-            <button className={`${isScrolled ? 'bg-white text-primary hover:bg-gray-100' : 'bg-primary text-white hover:bg-[#1e2869]'} border-none rounded-full py-2 px-5 text-[14px] font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_6px_14px_rgba(43,57,144,0.3)] shadow-[0_4px_10px_rgba(43,57,144,0.2)] active:translate-y-[1px] active:shadow-[0_2px_6px_rgba(43,57,144,0.2)]`}>
-              Apply Now
-            </button>
-          </div>
+          {actionButton.isVisible && (
+            <div className={`${desktopClass} items-center`}>
+              <button className={`${isScrolled ? 'bg-white text-primary hover:bg-gray-100' : 'bg-primary text-white hover:bg-[#1e2869]'} border-none rounded-full py-2 px-5 text-[14px] font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_6px_14px_rgba(43,57,144,0.3)] shadow-[0_4px_10px_rgba(43,57,144,0.2)] active:translate-y-[1px] active:shadow-[0_2px_6px_rgba(43,57,144,0.2)]`}>
+                {actionButton.text}
+              </button>
+            </div>
+          )}
 
           {/* Mobile Menu Toggle */}
-          <div className="flex lg:hidden items-center ml-2">
+          <div className={`${mobileToggleClass} items-center ml-2`}>
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`p-2 rounded-md ${isScrolled ? 'text-white hover:bg-white/10' : 'text-primary hover:bg-primary/10'}`}
@@ -90,29 +138,31 @@ const Header = () => {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 flex flex-col py-4 px-6 z-50">
+        <div className={`${mobileDropdownClass} absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 flex flex-col py-4 px-6 z-50`}>
           <ul className="flex flex-col gap-4 list-none m-0 p-0">
-            {navItems.map((item) => (
-              <li key={item}>
+            {navItems.map((item, idx) => (
+              <li key={idx}>
                 <a
-                  href={`#${item.toLowerCase().replace(' ', '-')}`}
+                  href={item.link}
                   className={`block no-underline text-base font-medium ${
-                    activeNav === item ? 'text-primary font-bold' : 'text-slate-600'
+                    activeNav === item.label ? 'text-primary font-bold' : 'text-slate-600'
                   }`}
                   onClick={() => {
-                    setActiveNav(item);
+                    setActiveNav(item.label);
                     setIsMobileMenuOpen(false);
                   }}
                 >
-                  {item}
+                  {item.label}
                 </a>
               </li>
             ))}
-            <li className="pt-4 border-t border-gray-100">
-               <button className="w-full bg-primary text-white rounded-full py-3 text-[14px] font-semibold cursor-pointer">
-                  Apply Now
-               </button>
-            </li>
+            {actionButton.isVisible && (
+              <li className="pt-4 border-t border-gray-100">
+                <button className="w-full bg-primary text-white rounded-full py-3 text-[14px] font-semibold cursor-pointer">
+                  {actionButton.text}
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       )}
