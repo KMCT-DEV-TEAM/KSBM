@@ -23,8 +23,10 @@ const updateLoadingState = () => {
 // Request interceptor to attach the access token
 api.interceptors.request.use(
   (config) => {
-    activeRequests++;
-    updateLoadingState();
+    if (!config.hideLoader) {
+      activeRequests++;
+      updateLoadingState();
+    }
     
     const token = localStorage.getItem('accessToken');
     if (token) {
@@ -38,13 +40,17 @@ api.interceptors.request.use(
 // Response interceptor to handle token expiration (401)
 api.interceptors.response.use(
   (response) => {
-    activeRequests--;
-    updateLoadingState();
+    if (!response.config.hideLoader) {
+      activeRequests--;
+      updateLoadingState();
+    }
     return response;
   },
   async (error) => {
-    activeRequests--;
-    updateLoadingState();
+    if (!error.config?.hideLoader) {
+      activeRequests--;
+      updateLoadingState();
+    }
     
     const originalRequest = error.config;
 

@@ -4,7 +4,7 @@ import { UploadCloud, Image as ImageIcon, X, Loader2 } from 'lucide-react';
 import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
 
-const LogoUploader = ({ currentLogoUrl, onUploadSuccess }) => {
+const LogoUploader = ({ currentLogoUrl, onUploadSuccess, onUploadStateChange }) => {
   const [isUploading, setIsUploading] = useState(false);
 
   const onDrop = useCallback(async (acceptedFiles) => {
@@ -12,6 +12,7 @@ const LogoUploader = ({ currentLogoUrl, onUploadSuccess }) => {
     if (!file) return;
 
     setIsUploading(true);
+    if (onUploadStateChange) onUploadStateChange(true);
     const formData = new FormData();
     formData.append('image', file);
 
@@ -20,6 +21,7 @@ const LogoUploader = ({ currentLogoUrl, onUploadSuccess }) => {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        hideLoader: true
       });
 
       const { url } = response.data;
@@ -45,6 +47,7 @@ const LogoUploader = ({ currentLogoUrl, onUploadSuccess }) => {
       });
     } finally {
       setIsUploading(false);
+      if (onUploadStateChange) onUploadStateChange(false);
     }
   }, [onUploadSuccess]);
 

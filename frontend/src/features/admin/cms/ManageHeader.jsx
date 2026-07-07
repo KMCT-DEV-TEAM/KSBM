@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Save, Plus, Trash2, GripVertical, AlertCircle, Eye, Monitor, Smartphone, Tablet, RefreshCw, X } from 'lucide-react';
+import { Save, Plus, Trash2, GripVertical, AlertCircle, Eye, Monitor, Smartphone, Tablet, RefreshCw, X, Loader2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import LogoUploader from './components/LogoUploader';
-import HeaderPreview from '../../../components/Header';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -18,12 +17,15 @@ const Toast = Swal.mixin({
 });
 
 const ManageHeader = () => {
+  const iframeRef = useRef(null);
+  
   const [navItems, setNavItems] = useState([]);
   const [actionButton, setActionButton] = useState({ text: 'Apply Now', isVisible: true });
   const [logoUrl, setLogoUrl] = useState('');
   const [alignment, setAlignment] = useState('center');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   
@@ -103,7 +105,7 @@ const ManageHeader = () => {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await api.put('/cms/header', { navItems, actionButton, alignment, logoUrl });
+      await api.put('/cms/header', { navItems, actionButton, alignment, logoUrl }, { hideLoader: true });
       Toast.fire({ icon: 'success', title: 'Header settings saved successfully!' });
     } catch (error) {
       console.error('Error saving header settings:', error);
@@ -128,6 +130,34 @@ const ManageHeader = () => {
     newItems[index][field] = value;
     setNavItems(newItems);
   };
+
+  const previewData = {
+    navItems,
+    actionButton,
+    logoUrl,
+    alignment,
+    previewDevice: previewMode
+  };
+
+  useEffect(() => {
+    if (isPreviewModalOpen && iframeRef.current) {
+      setTimeout(() => {
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage(
+            { type: 'preview-header-data', payload: previewData },
+            '*'
+          );
+        }
+      }, 500);
+      
+      if (iframeRef.current.contentWindow) {
+        iframeRef.current.contentWindow.postMessage(
+          { type: 'preview-header-data', payload: previewData },
+          '*'
+        );
+      }
+    }
+  }, [previewData, isPreviewModalOpen]);
 
   if (isLoading) {
     return (
@@ -161,15 +191,15 @@ const ManageHeader = () => {
           </button>
           <button
             onClick={handleSave}
-            disabled={isSaving}
+            disabled={isSaving || isUploading}
             className="flex items-center gap-2 bg-[#696CFF] text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-[#5b5eea] transition-colors shadow-[0_2px_4px_0_rgba(105,108,255,0.4)] disabled:opacity-70"
           >
-            {isSaving ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            {isSaving || isUploading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
               <Save className="w-4 h-4" />
             )}
-            Save Changes
+            {isSaving ? 'Saving...' : isUploading ? 'Uploading...' : 'Save Changes'}
           </button>
         </div>
       </div>
@@ -212,9 +242,14 @@ const ManageHeader = () => {
               <X className="w-5 h-5" />
             </button>
           </div>
-          <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
-            <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <HeaderPreview previewData={{ navItems, actionButton, logoUrl, alignment, previewDevice: previewMode }} />
+          <div className="flex-1 bg-gray-100 overflow-hidden relative flex justify-center items-center p-4">
+            <div className={`bg-white shadow-2xl transition-all duration-300 h-full ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1920px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
+              <iframe 
+                ref={iframeRef}
+                src="/preview/header"
+                className="w-full h-full border-0"
+                title="Header Preview"
+              />
             </div>
           </div>
         </div>
@@ -229,6 +264,7 @@ const ManageHeader = () => {
           <LogoUploader 
             currentLogoUrl={logoUrl} 
             onUploadSuccess={(url) => setLogoUrl(url)} 
+            onUploadStateChange={(uploading) => setIsUploading(uploading)}
           />
         </div>
 
