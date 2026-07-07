@@ -1,4 +1,5 @@
 import React from 'react';
+import watermarkLogo from '../../../assets/Images/watermark_logo.png';
 
 const LifeAtKSBMSection = () => {
   // Ordered to flow nicely in a CSS columns layout (top-to-bottom, then left-to-right)
@@ -18,48 +19,54 @@ const LifeAtKSBMSection = () => {
   ];
 
   return (
-    <section className="relative w-full bg-background py-20 lg:py-24 overflow-hidden">
-      
-      {/* Abstract Background Pattern (Top Right) */}
-      <div 
-        className="absolute top-0 right-0 w-64 h-64 lg:w-[500px] lg:h-[500px] opacity-40 pointer-events-none"
-        style={{
-          backgroundImage: 'radial-gradient(#e2e8f0 3px, transparent 3px)',
-          backgroundSize: '30px 30px',
-          clipPath: 'polygon(100% 0, 100% 100%, 0 0)' 
-        }}
-      ></div>
+    <section className="relative w-full bg-background py-12 lg:py-14 overflow-hidden">
 
-      <div className="relative max-w-[1440px] mx-auto px-4 lg:px-8 z-10">
-        
+      {/* Background Watermark Logo (Right) */}
+      <div className="absolute top-1/2 right-0 translate-x-[50%] -translate-y-1/2 opacity-80 pointer-events-none z-0">
+        <img src={watermarkLogo} alt="Background Watermark" className="w-[250px] lg:w-[380px] h-auto object-contain mix-blend-multiply contrast-150" />
+      </div>
+
+      <div className="relative max-w-5xl mx-auto px-4 lg:px-8 z-10">
+
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <p className="text-text-secondary text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-4">
+          <p className="text-text-secondary text-[0.65rem] lg:text-xs tracking-[0.25em] uppercase mb-4">
             Life at KSBM
           </p>
-          <h2 className="text-3xl lg:text-5xl font-bold text-primary mb-6">
+          <h2 className="text-3xl lg:text-5xl font-semibold text-primary mb-6">
             Beyond the Classroom
           </h2>
-          <p className="text-text-secondary text-[0.95rem] lg:text-base leading-relaxed max-w-2xl mx-auto">
+          <p className="text-text-secondary text-sm lg:text-base leading-relaxed max-w-2xl mx-auto">
             Life @ KMCT is a vibrant blend of learning, innovation, culture, and unforgettable campus experiences.
           </p>
         </div>
 
-        {/* Masonry Image Gallery */}
-        <div className="columns-1 sm:columns-2 lg:columns-4 gap-6 space-y-6">
-          {images.map((img) => (
-            <div 
-              key={img.id} 
-              className="break-inside-avoid rounded-[1.5rem] overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-300"
-            >
-              <img 
-                src={img.src} 
-                alt={img.alt} 
-                className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                loading="lazy"
-              />
-            </div>
-          ))}
+        {/* Collage Image Gallery */}
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 auto-rows-[120px] md:auto-rows-[160px] grid-flow-row">
+          {images.map((img, index) => {
+            // 2 rows layout on desktop (6 columns total per row)
+            // Row 1: 2 + 1 + 1 + 2 = 6
+            // Row 2: 1 + 2 + 2 + 1 = 6
+            let spanClass = "col-span-1 row-span-1";
+            if (index === 0 || index === 3 || index === 5 || index === 6) {
+              spanClass = "col-span-1 md:col-span-2 row-span-1";
+            }
+
+            return (
+              <div
+                key={img.id}
+                className={`${spanClass} rounded-[1rem] md:rounded-[1.25rem] overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-300 relative`}
+              >
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out absolute inset-0"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
+              </div>
+            );
+          })}
         </div>
 
       </div>

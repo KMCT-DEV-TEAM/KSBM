@@ -16,3 +16,24 @@
     color: var(--color-text-primary);
   }
 }
+
+@layer utilities {
+  @keyframes scrollLeft {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    animation: scrollLeft 25s linear infinite;
+    display: flex;
+    width: max-content;
+  }
+  
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+}
