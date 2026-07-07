@@ -1,6 +1,12 @@
 import express from 'express';
-import { getHeaderSettings, updateHeaderSettings, getAboutSettings, updateAboutSettings } from './cms.controller.js';
-import { getHeaderSettings, updateHeaderSettings, getHeroSettings, updateHeroSettings } from './cms.controller.js';
+import {
+  getHeaderSettings,
+  updateHeaderSettings,
+  getAboutSettings,
+  updateAboutSettings,
+  getHeroSettings,
+  updateHeroSettings
+} from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
 const router = express.Router();
