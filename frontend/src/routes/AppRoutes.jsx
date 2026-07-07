@@ -8,6 +8,7 @@ import DashboardOverview from '../features/admin/dashboard/DashboardOverview';
 import ManageUsers from '../features/admin/dashboard/ManageUsers';
 import GenericCmsPage from '../features/admin/cms/GenericCmsPage';
 import ManageHeader from '../features/admin/cms/ManageHeader';
+import ManageAbout from '../features/admin/cms/ManageAbout';
 import ProtectedRoute from './ProtectedRoute';
 
 const AppRoutes = () => {
@@ -32,7 +33,7 @@ const AppRoutes = () => {
           {/* CMS Stubs */}
           <Route path="cms/header" element={<ManageHeader />} />
           <Route path="cms/hero" element={<GenericCmsPage title="Hero Section" />} />
-          <Route path="cms/about" element={<GenericCmsPage title="About KSBM" />} />
+          <Route path="cms/about" element={<ManageAbout />} />
           <Route path="cms/academics" element={<GenericCmsPage title="Academic Programs" />} />
           <Route path="cms/accreditation" element={<GenericCmsPage title="Accreditation" />} />
           <Route path="cms/facilities" element={<GenericCmsPage title="Facilities" />} />
