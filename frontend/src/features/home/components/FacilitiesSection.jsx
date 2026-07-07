@@ -35,18 +35,18 @@ const FacilitiesSection = () => {
   ];
 
   return (
-    <section className="w-full bg-white py-16 lg:py-24">
+    <section className="w-full bg-background py-16 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
         
         {/* Header Section */}
         <div className="text-center max-w-4xl mx-auto mb-16">
-          <p className="text-gray-400 text-xs font-semibold tracking-[0.2em] uppercase mb-4">
+          <p className="text-text-secondary text-xs font-semibold tracking-[0.2em] uppercase mb-4">
             College Facilities
           </p>
-          <h2 className="text-4xl lg:text-5xl font-bold text-[#2b3990] mb-6">
+          <h2 className="text-4xl lg:text-5xl font-bold text-primary mb-6">
             Institutional Resources
           </h2>
-          <p className="text-slate-500 text-[0.95rem] lg:text-base leading-relaxed max-w-3xl mx-auto">
+          <p className="text-text-secondary text-[0.95rem] lg:text-base leading-relaxed max-w-3xl mx-auto">
             Our state-of-the-art campus offers modern classrooms, advanced learning resources, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.
           </p>
         </div>

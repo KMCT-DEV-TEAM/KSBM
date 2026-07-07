@@ -23,16 +23,16 @@ const AccreditationSection = () => {
   ];
 
   return (
-    <section className="w-full bg-[#f8f9fa] py-16 lg:py-20 border-t border-gray-100">
+    <section className="w-full bg-background py-16 lg:py-20 border-t border-gray-100">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
         <div className="flex flex-col lg:flex-row items-center justify-between lg:justify-start">
           
           {/* Left Text Content */}
           <div className="text-center lg:text-left lg:w-[35%] shrink-0">
-            <p className="text-gray-400 text-xs font-semibold tracking-[0.2em] uppercase mb-3">
+            <p className="text-text-secondary text-xs font-semibold tracking-[0.2em] uppercase mb-3">
               Institutional Credentials
             </p>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#2b3990] leading-tight">
+            <h2 className="text-3xl lg:text-4xl font-bold text-primary leading-tight">
               Accreditation &<br className="hidden lg:block" /> Affiliations
             </h2>
           </div>
@@ -62,7 +62,7 @@ const AccreditationSection = () => {
                 
                 {/* Fallback UI if image is missing */}
                 <div 
-                  className="hidden w-24 h-24 bg-white border border-gray-200 rounded-full flex-col items-center justify-center text-[#2b3990] font-bold text-sm shadow-sm"
+                  className="hidden w-24 h-24 bg-background border border-gray-200 rounded-full flex-col items-center justify-center text-primary font-bold text-sm shadow-sm"
                   style={{ display: 'none' }} // Hidden by default, shown by onError above
                 >
                   {logo.fallbackText}

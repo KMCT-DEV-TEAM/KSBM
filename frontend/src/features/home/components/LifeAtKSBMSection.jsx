@@ -18,7 +18,7 @@ const LifeAtKSBMSection = () => {
   ];
 
   return (
-    <section className="relative w-full bg-white py-20 lg:py-24 overflow-hidden">
+    <section className="relative w-full bg-background py-20 lg:py-24 overflow-hidden">
       
       {/* Abstract Background Pattern (Top Right) */}
       <div 
@@ -34,13 +34,13 @@ const LifeAtKSBMSection = () => {
         
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <p className="text-gray-400 text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-4">
+          <p className="text-text-secondary text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-4">
             Life at KSBM
           </p>
-          <h2 className="text-3xl lg:text-5xl font-bold text-[#2b3990] mb-6">
+          <h2 className="text-3xl lg:text-5xl font-bold text-primary mb-6">
             Beyond the Classroom
           </h2>
-          <p className="text-slate-500 text-[0.95rem] lg:text-base leading-relaxed max-w-2xl mx-auto">
+          <p className="text-text-secondary text-[0.95rem] lg:text-base leading-relaxed max-w-2xl mx-auto">
             Life @ KMCT is a vibrant blend of learning, innovation, culture, and unforgettable campus experiences.
           </p>
         </div>

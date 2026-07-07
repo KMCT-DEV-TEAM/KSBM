@@ -19,18 +19,18 @@ const AcademicPrograms = () => {
   ];
 
   return (
-    <section className="w-full bg-white py-16 lg:py-24">
+    <section className="w-full bg-background py-12 lg:py-14">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
-        
+
         {/* Header Section */}
         <div className="text-center max-w-4xl mx-auto mb-16">
-          <p className="text-gray-400 text-xs font-semibold tracking-[0.2em] uppercase mb-4">
+          <p className="text-text-secondary text-xs  tracking-[0.2em] uppercase mb-4">
             Our Courses
           </p>
-          <h2 className="text-4xl lg:text-5xl font-bold text-[#2b3990] mb-6">
+          <h2 className="text-4xl lg:text-5xl font-semibold text-primary mb-6">
             Academic Programs
           </h2>
-          <p className="text-slate-500 text-[0.95rem] lg:text-base leading-relaxed max-w-3xl mx-auto">
+          <p className="text-text-secondary text-[0.95rem] lg:text-base leading-relaxed max-w-3xl mx-auto">
             Discover our MBA and BBA programmes, crafted to develop future-ready professionals through innovative learning, industry engagement, and leadership-focused education.
           </p>
         </div>
@@ -38,21 +38,21 @@ const AcademicPrograms = () => {
         {/* Programs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
           {programs.map((program) => (
-            <div 
-              key={program.id} 
+            <div
+              key={program.id}
               className="relative h-[500px] lg:h-[600px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-500"
             >
               {/* Background Image */}
-              <img 
-                src={program.image} 
-                alt={program.title} 
+              <img
+                src={program.image}
+                alt={program.title}
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
               />
 
               {/* Vertical Tag (Left Edge) */}
               <div className="absolute top-12 left-6 lg:left-8 flex flex-col items-center gap-4 z-20">
-                <div className="w-[1px] h-12 bg-white/40"></div>
-                <span 
+                <div className="w-[1px] h-12 bg-background/40"></div>
+                <span
                   className="text-white/80 text-[10px] font-bold tracking-[0.3em] uppercase"
                   style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
                 >

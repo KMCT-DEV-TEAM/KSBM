@@ -29,15 +29,15 @@ const AchievementsSection = () => {
   ];
 
   return (
-    <section className="w-full bg-white py-20 lg:py-24">
+    <section className="w-full bg-background py-20 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
         
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-gray-400 text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-4">
+          <p className="text-text-secondary text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-4">
             College Achievements
           </p>
-          <h2 className="text-3xl lg:text-5xl font-bold text-[#2b3990]">
+          <h2 className="text-3xl lg:text-5xl font-bold text-primary">
             Awards and Achievements
           </h2>
         </div>
@@ -57,17 +57,17 @@ const AchievementsSection = () => {
               </div>
 
               {/* Meta Info (Category & Date) */}
-              <p className="text-[0.65rem] font-bold text-[#2b3990] tracking-widest uppercase mb-3 flex items-center gap-2">
-                {item.category} <span className="w-1 h-1 rounded-full bg-[#2b3990]"></span> {item.date}
+              <p className="text-[0.65rem] font-bold text-primary tracking-widest uppercase mb-3 flex items-center gap-2">
+                {item.category} <span className="w-1 h-1 rounded-full bg-primary"></span> {item.date}
               </p>
 
               {/* Title */}
-              <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-3 leading-snug group-hover:text-[#2b3990] transition-colors duration-300">
+              <h3 className="text-xl lg:text-2xl font-bold text-text-primary mb-3 leading-snug group-hover:text-primary transition-colors duration-300">
                 {item.title}
               </h3>
 
               {/* Description */}
-              <p className="text-gray-500 text-sm leading-relaxed">
+              <p className="text-text-secondary text-sm leading-relaxed">
                 {item.description}
               </p>
 

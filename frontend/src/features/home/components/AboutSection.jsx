@@ -1,49 +1,47 @@
 import React from 'react';
 import { Rotate3d } from 'lucide-react';
+import graduateImg from '../../../assets/Images/graduate.png';
+import watermarkImg from '../../../assets/Images/watermark_logo.png';
+
 
 const AboutSection = () => {
   return (
-    <section className="relative w-full bg-white pt-20 lg:pt-32 pb-10">
-      {/* Abstract Background Pattern (Top Left) */}
-      <div 
-        className="absolute top-0 left-0 w-64 h-64 lg:w-96 lg:h-96 opacity-30 pointer-events-none"
-        style={{
-          backgroundImage: 'radial-gradient(#f0f4f8 2px, transparent 2px)',
-          backgroundSize: '24px 24px',
-          clipPath: 'polygon(0 0, 100% 0, 0 100%)' // simple geometric shape as placeholder
-        }}
-      ></div>
+    <section className="relative w-full bg-background pt-20 lg:pt-32 pb-10 overflow-hidden">
+      {/* Background Logo Watermark */}
+      <div className="absolute top-10 left-0 -translate-x-[35%] opacity-80 pointer-events-none z-0">
+        <img src={watermarkImg} alt="Background Watermark" className="w-[250px] lg:w-[380px] h-auto object-contain mix-blend-multiply contrast-150" />
+      </div>
 
       <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
-        
+
         {/* Top Split Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          
+
           {/* Left: Image Container */}
-          <div className="relative order-2 lg:order-1 flex justify-center lg:justify-start">
+          <div className="relative order-2 lg:order-1 flex justify-center lg:justify-start lg:ml-36">
             <div className="relative w-[80%] max-w-[450px]">
-              <img 
-                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop" 
-                alt="Graduating Student" 
+              <img
+                src={graduateImg}
+                alt="Graduating Student"
                 className="w-full h-auto rounded-lg object-cover z-10 relative"
                 style={{ clipPath: 'inset(0 0 0 0 round 1rem)' }}
               />
-              
+
               {/* Floating 360 Button */}
-              <div className="absolute -bottom-6 -left-6 bg-[#2b3990] text-white p-4 rounded-xl shadow-[0_10px_20px_rgba(43,57,144,0.3)] z-20 cursor-pointer hover:scale-105 transition-transform flex flex-col items-center gap-1">
-                <Rotate3d className="w-6 h-6" />
-                <span className="text-[10px] font-bold">360°</span>
+              <div className="absolute bottom-4 -left-2 bg-primary text-white px-3 py-1.5 rounded-lg shadow-lg z-20 cursor-pointer hover:scale-105 transition-transform flex flex-col items-center gap-0.5">
+                <Rotate3d className="w-6 h-5" />
+                <span className="text-[9px] font-bold">360°</span>
               </div>
             </div>
           </div>
 
           {/* Right: Text Content */}
-          <div className="order-1 lg:order-2">
-            <h4 className="text-[#0088cc] text-xs lg:text-sm font-bold tracking-widest uppercase mb-4 flex items-center gap-2">
-              BUILDING EXCELLENCE SINCE 1995 <span className="w-4 h-[2px] bg-[#0088cc]"></span>
+          <div className="order-1 lg:order-2 lg:-ml-12">
+            <h4 className="text-[#3C95D7] text-xs lg:text-sm font-semibold tracking-widest uppercase mb-4 flex items-center gap-2">
+              BUILDING EXCELLENCE SINCE 1995 <span className="w-2 h-[2px] bg-[#3C95D7]"></span>
             </h4>
-            
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#2b3990] leading-[1.2] mb-8">
+
+            <h2 className="text-4xl lg:text-5xl font-bold text-primary leading-[1.2] mb-8">
               Shaping Tomorrow's<br />Business Leaders
             </h2>
 
@@ -61,32 +59,32 @@ const AboutSection = () => {
       </div>
 
       {/* Bottom Stats Banner */}
-      <div className="w-full bg-[#f4fafe] mt-24 py-16">
-        <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 divide-x-0 md:divide-x divide-gray-200">
-            
+      <div className="w-full ">
+        <div className="max-w-[1440px]  bg-[#f4fafe] py-16 mx-auto px-4 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
+
             {/* Stat 1 */}
             <div className="flex flex-col items-center justify-center text-center px-4">
-              <span className="text-5xl font-light text-[#2b3990] mb-4">16+</span>
-              <span className="text-[0.7rem] font-bold tracking-widest text-gray-500 uppercase">YEARS OF EXCELLENCE</span>
+              <span className="text-5xl md:text-6xl font-serif text-[#4e558e] mb-4">16+</span>
+              <span className="text-[0.7rem] font-bold tracking-[0.15em] text-gray-600 uppercase">YEARS OF EXCELLENCE</span>
             </div>
 
             {/* Stat 2 */}
             <div className="flex flex-col items-center justify-center text-center px-4">
-              <span className="text-5xl font-light text-[#2b3990] mb-4">991+</span>
-              <span className="text-[0.7rem] font-bold tracking-widest text-gray-500 uppercase">ACTIVE STUDENTS</span>
+              <span className="text-5xl md:text-6xl font-serif text-[#4e558e] mb-4">991+</span>
+              <span className="text-[0.7rem] font-bold tracking-[0.15em] text-gray-600 uppercase">ACTIVE STUDENTS</span>
             </div>
 
             {/* Stat 3 */}
             <div className="flex flex-col items-center justify-center text-center px-4">
-              <span className="text-5xl font-light text-[#2b3990] mb-4">196+</span>
-              <span className="text-[0.7rem] font-bold tracking-widest text-gray-500 uppercase">GLOBAL RECRUITERS</span>
+              <span className="text-5xl md:text-6xl font-serif text-[#4e558e] mb-4">196+</span>
+              <span className="text-[0.7rem] font-bold tracking-[0.15em] text-gray-600 uppercase">GLOBAL RECRUITERS</span>
             </div>
 
             {/* Stat 4 */}
             <div className="flex flex-col items-center justify-center text-center px-4">
-              <span className="text-5xl font-light text-[#2b3990] mb-4">196+</span>
-              <span className="text-[0.7rem] font-bold tracking-widest text-gray-500 uppercase">GLOBAL RECRUITERS</span>
+              <span className="text-5xl md:text-6xl font-serif text-[#4e558e] mb-4">196+</span>
+              <span className="text-[0.7rem] font-bold tracking-[0.15em] text-gray-600 uppercase">GLOBAL RECRUITERS</span>
             </div>
 
           </div>

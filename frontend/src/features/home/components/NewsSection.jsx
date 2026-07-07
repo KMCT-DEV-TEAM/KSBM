@@ -32,12 +32,12 @@ const NewsSection = () => {
   ];
 
   return (
-    <section className="w-full bg-[#f8f9fa] py-20 lg:py-24">
+    <section className="w-full bg-background py-20 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
         
         {/* Header Section */}
         <div className="text-center mb-14 lg:mb-16">
-          <h2 className="text-3xl lg:text-5xl font-bold text-[#2b3990]">
+          <h2 className="text-3xl lg:text-5xl font-bold text-primary">
             Latest From KSBM
           </h2>
         </div>
@@ -61,13 +61,13 @@ const NewsSection = () => {
             </div>
 
             {/* Content */}
-            <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">
+            <p className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-3">
               {featuredArticle.date}
             </p>
-            <h3 className="text-2xl lg:text-3xl font-bold text-[#2b3990] mb-4 leading-[1.3] group-hover:text-blue-700 transition-colors duration-300">
+            <h3 className="text-2xl lg:text-3xl font-bold text-primary mb-4 leading-[1.3] group-hover:text-primary transition-colors duration-300">
               {featuredArticle.title}
             </h3>
-            <p className="text-slate-500 text-[0.95rem] leading-relaxed max-w-[95%]">
+            <p className="text-text-secondary text-[0.95rem] leading-relaxed max-w-[95%]">
               {featuredArticle.description}
             </p>
           </div>
@@ -87,10 +87,10 @@ const NewsSection = () => {
                 
                 {/* Content */}
                 <div className="flex flex-col justify-center">
-                  <p className="text-[0.65rem] font-bold text-gray-500 uppercase tracking-[0.15em] mb-2">
+                  <p className="text-[0.65rem] font-bold text-text-secondary uppercase tracking-[0.15em] mb-2">
                     {article.date}
                   </p>
-                  <h4 className="text-lg lg:text-xl font-bold text-[#2b3990] leading-snug group-hover:text-blue-700 transition-colors duration-300">
+                  <h4 className="text-lg lg:text-xl font-bold text-primary leading-snug group-hover:text-primary transition-colors duration-300">
                     {article.title}
                   </h4>
                 </div>
