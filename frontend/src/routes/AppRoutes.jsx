@@ -10,6 +10,7 @@ import DashboardOverview from '../features/admin/dashboard/DashboardOverview';
 import ManageUsers from '../features/admin/dashboard/ManageUsers';
 import GenericCmsPage from '../features/admin/cms/GenericCmsPage';
 import ManageHeader from '../features/admin/cms/ManageHeader';
+import ManageAbout from '../features/admin/cms/ManageAbout';
 import ManageHero from '../features/admin/cms/ManageHero';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -38,6 +39,8 @@ const AppRoutes = () => {
           
           {/* CMS Stubs */}
           <Route path="cms/header" element={<ManageHeader />} />
+          <Route path="cms/hero" element={<GenericCmsPage title="Hero Section" />} />
+          <Route path="cms/about" element={<ManageAbout />} />
           <Route path="cms/hero" element={<ManageHero />} />
           <Route path="cms/about" element={<GenericCmsPage title="About KSBM" />} />
           <Route path="cms/academics" element={<GenericCmsPage title="Academic Programs" />} />
