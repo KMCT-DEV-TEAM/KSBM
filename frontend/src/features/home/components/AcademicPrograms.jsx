@@ -30,7 +30,7 @@ const AcademicPrograms = () => {
           <h2 className="text-4xl lg:text-5xl font-semibold text-primary mb-6">
             Academic Programs
           </h2>
-          <p className="text-text-secondary text-[0.90rem] lg:text-base leading-relaxed max-w-3xl mx-auto">
+          <p className="text-text-secondary text-sm lg:text-base leading-relaxed max-w-3xl mx-auto">
             Discover our MBA and BBA programmes, crafted to develop future-ready professionals through innovative learning, industry engagement, and leadership-focused education.
           </p>
         </div>

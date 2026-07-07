@@ -34,94 +34,93 @@ const TestimonialsSection = () => {
   ];
 
   return (
-    <section className="w-full bg-background py-20 lg:py-24">
+    <section className="w-full bg-background py-12 lg:py-16">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
-        
+
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-text-secondary text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-4">
+          <p className="text-text-secondary text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-3">
             Testimonials
           </p>
-          <h2 className="text-3xl lg:text-5xl font-bold text-primary">
+          <h2 className="text-3xl lg:text-[2.75rem] font-bold text-primary">
             Voices of Success
           </h2>
         </div>
 
         {/* Desktop Interactive Accordion Layout */}
-        <div className="hidden lg:flex gap-6 h-[500px]">
+        <div className="hidden lg:flex gap-6 h-[380px] max-w-[950px] mx-auto">
           {testimonials.map((testimonial, index) => {
             const isActive = activeIndex === index;
             return (
-              <div 
+              <div
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}
-                className={`relative rounded-3xl overflow-hidden transition-all duration-700 ease-in-out cursor-pointer shadow-sm hover:shadow-md ${
-                  isActive ? 'w-[75%] bg-background flex' : 'w-[12.5%]'
-                }`}
+                className={`relative flex transition-all duration-700 ease-in-out cursor-pointer overflow-hidden ${isActive ? 'w-[55%] gap-6' : 'w-[22.5%] gap-0'
+                  }`}
               >
                 {/* Image Section */}
-                <div className={`${isActive ? 'w-1/2 h-full p-4' : 'w-full h-full'}`}>
-                  <img 
-                    src={testimonial.image} 
+                <div className={`h-full shrink-0 transition-all duration-700 ease-in-out ${isActive ? 'w-[41%]' : 'w-full'}`}>
+                  <img
+                    src={testimonial.image}
                     alt={testimonial.name}
-                    className={`w-full h-full object-cover transition-all duration-700 ${isActive ? 'rounded-2xl' : 'rounded-3xl'}`}
+                    className="w-full h-full object-cover rounded-3xl"
                   />
                 </div>
 
-                {/* Text Content (Only visible when active) */}
-                {isActive && (
-                  <div className="w-1/2 h-full p-12 flex flex-col justify-center animate-fade-in">
-                    <h3 className="text-xl lg:text-2xl font-bold text-text-primary mb-6 leading-snug pr-4">
+                {/* Text Content */}
+                <div className={`h-full py-4 flex flex-col justify-center transition-all duration-700 ease-in-out ${isActive ? 'w-[59%] opacity-100 translate-x-0' : 'w-0 opacity-0 translate-x-8'}`}>
+                  <div className="w-[280px]">
+                    <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 leading-snug">
                       {testimonial.quote}
                     </h3>
-                    <p className="text-text-secondary text-sm leading-[1.8] mb-10 pr-8">
+                    <p className="text-gray-500 text-[0.85rem] leading-[1.8] mb-6 pr-6">
                       {testimonial.body}
                     </p>
-                    
-                    <div className="flex items-center gap-4 mt-auto">
-                      <img 
-                        src={testimonial.avatar} 
+
+                    <div className="flex items-center gap-3 mt-auto">
+                      <img
+                        src={testimonial.avatar}
                         alt={testimonial.name}
-                        className="w-12 h-12 rounded-full object-cover border border-gray-100"
+                        className="w-10 h-10 rounded-full object-cover"
                       />
                       <div>
-                        <p className="text-sm font-bold text-text-primary">{testimonial.name}</p>
-                        <p className="text-[0.65rem] font-semibold text-text-secondary uppercase tracking-widest mt-0.5">{testimonial.course}</p>
+                        <p className="text-[0.8rem] font-bold text-gray-900">{testimonial.name}</p>
+                        <p className="text-[0.6rem] font-medium text-gray-500 uppercase mt-0.5">{testimonial.course}</p>
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}
         </div>
 
         {/* Mobile / Tablet Layout (Standard Stacked) */}
-        <div className="block lg:hidden">
+        <div className="block lg:hidden max-w-xl mx-auto">
           {testimonials.map((testimonial, index) => (
-            <div 
-              key={testimonial.id} 
-              className={`flex-col bg-background rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-8 ${activeIndex === index ? 'flex' : 'hidden'}`}
+            <div
+              key={testimonial.id}
+              className={`flex-col bg-background rounded-3xl shadow-sm overflow-hidden mb-8 ${activeIndex === index ? 'flex' : 'hidden'}`}
             >
-              <div className="w-full h-[350px]">
-                <img 
-                  src={testimonial.image} 
+              <div className="w-full h-[250px]">
+                <img
+                  src={testimonial.image}
                   alt={testimonial.name}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="p-8 flex flex-col">
-                <h3 className="text-xl font-bold text-text-primary mb-4 leading-snug">
+              <div className="p-6 flex flex-col">
+                <h3 className="text-lg font-bold text-text-primary mb-3 leading-snug">
                   {testimonial.quote}
                 </h3>
-                <p className="text-text-secondary text-sm leading-[1.8] mb-8">
+                <p className="text-text-secondary text-sm leading-[1.8] mb-6">
                   {testimonial.body}
                 </p>
                 <div className="flex items-center gap-4 mt-auto">
-                  <img 
-                    src={testimonial.avatar} 
+                  <img
+                    src={testimonial.avatar}
                     alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover"
+                    className="w-10 h-10 rounded-full object-cover"
                   />
                   <div>
                     <p className="text-sm font-bold text-text-primary">{testimonial.name}</p>
@@ -131,14 +130,14 @@ const TestimonialsSection = () => {
               </div>
             </div>
           ))}
-          
+
           {/* Mobile Thumbnails for switching */}
           <div className="flex items-center justify-center gap-4 mt-4">
             {testimonials.map((testimonial, index) => (
-              <button 
+              <button
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}
-                className={`w-14 h-14 rounded-full overflow-hidden border-2 transition-all duration-300 ${activeIndex === index ? 'border-primary scale-110 opacity-100' : 'border-transparent opacity-50 grayscale hover:grayscale-0 hover:opacity-100'}`}
+                className={`w-14 h-14 rounded-full overflow-hidden border-2${activeIndex === index ? 'border-primary scale-110 opacity-100' : 'border-transparent opacity-50 grayscale hover:grayscale-0 hover:opacity-100'}`}
               >
                 <img src={testimonial.avatar} alt={testimonial.name} className="w-full h-full object-cover" />
               </button>

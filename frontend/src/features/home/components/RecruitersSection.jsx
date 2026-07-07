@@ -25,24 +25,26 @@ const RecruitersSection = () => {
   ];
 
   return (
-    <section className="w-full bg-background py-12 lg:py-16 border-b border-gray-100">
+    <section className="w-full bg-background py-12 lg:py-16 ">
       <div className="max-w-[1440px] mx-auto px-4 lg:px-8 overflow-hidden">
-        
-        {/* Logos Container */}
-        <div className="flex flex-wrap items-center justify-center lg:justify-between gap-12 lg:gap-8 opacity-90">
-          {recruiters.map((company, index) => (
-            <div 
-              key={index} 
-              className="flex items-center justify-center w-[120px] md:w-[150px] lg:w-[180px] hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer"
-              title={company.name}
-            >
-              <img 
-                src={company.logo} 
-                alt={`${company.name} logo`} 
-                className="w-full h-auto object-contain max-h-[40px] lg:max-h-[50px]"
-              />
-            </div>
-          ))}
+
+        {/* Logos Container - Marquee Loop */}
+        <div className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
+          <ul className="flex items-center animate-marquee gap-12 lg:gap-24 opacity-90 pr-12 lg:pr-24">
+            {[...recruiters, ...recruiters].map((company, index) => (
+              <li
+                key={index}
+                className="flex items-center justify-center shrink-0 w-[120px] md:w-[150px] lg:w-[180px] hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer"
+                title={company.name}
+              >
+                <img
+                  src={company.logo}
+                  alt={`${company.name} logo`}
+                  className="w-full h-auto object-contain max-h-[40px] lg:max-h-[50px]"
+                />
+              </li>
+            ))}
+          </ul>
         </div>
 
       </div>

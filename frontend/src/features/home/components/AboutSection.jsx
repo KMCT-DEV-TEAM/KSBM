@@ -37,15 +37,15 @@ const AboutSection = () => {
 
           {/* Right: Text Content */}
           <div className="order-1 lg:order-2 lg:-ml-12">
-            <h4 className="text-text-secondary text-xs lg:text-sm font-medium tracking-widest uppercase mb-4 flex items-center gap-2">
+            <h4 className="text-text-secondary text-xs lg:text-sm tracking-widest uppercase mb-4 flex items-center gap-2">
               BUILDING EXCELLENCE SINCE 1995 <span className="w-2 h-[2px] bg-text-secondary"></span>
             </h4>
 
-            <h2 className="text-4xl lg:text-5xl font-bold text-primary leading-[1.2] mb-8">
+            <h2 className="text-4xl lg:text-5xl font-semibold text-primary leading-[1.2] mb-8">
               Shaping Tomorrow's<br className="hidden md:block" />Business Leaders
             </h2>
 
-            <div className="space-y-6 text-text-primary text-[0.95rem] leading-relaxed">
+            <div className=" text-text-primary space-y-6 text-text-primary text-sm leading-relaxed">
               <p>
                 At KMCT School of Business Management (KSBM), we believe management education goes beyond academic excellence—it is about developing ethical leaders, innovative thinkers, and future-ready professionals. For over two decades, KSBM has been committed to delivering quality education through its MBA and BBA programs, combining academic rigor with practical learning, industry exposure, internships, and experiential training to prepare students for today's evolving business landscape.
               </p>

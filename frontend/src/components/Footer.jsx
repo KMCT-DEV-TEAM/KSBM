@@ -1,65 +1,75 @@
 import React from 'react';
 import { MapPin, Mail, Phone } from 'lucide-react';
+import watermarkLogo from '../assets/Images/watermark_logo.png';
 
 const Footer = () => {
   return (
     <footer className="relative bg-primary text-white pt-20 pb-8 overflow-hidden">
-      
+
       {/* Background Geometric Pattern */}
       {/* Left Pattern */}
-      <div 
-        className="absolute bottom-0 left-0 w-[400px] h-[400px] opacity-5 pointer-events-none transform -translate-x-1/2 translate-y-1/4"
+      <div
+        className="absolute top-1/2 left-0 w-[400px] h-[400px] opacity-[0.50] pointer-events-none transform -translate-x-1/2 -translate-y-1/2 bg-secondary"
         style={{
-          backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px), radial-gradient(circle at center, #ffffff 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-          backgroundPosition: '0 0, 20px 20px',
-          clipPath: 'circle(50% at 50% 50%)'
+          maskImage: `url(${watermarkLogo})`,
+          WebkitMaskImage: `url(${watermarkLogo})`,
+          maskSize: 'contain',
+          WebkitMaskSize: 'contain',
+          maskRepeat: 'no-repeat',
+          WebkitMaskRepeat: 'no-repeat',
+          maskPosition: 'center',
+          WebkitMaskPosition: 'center'
         }}
       ></div>
       {/* Right Pattern */}
-      <div 
-        className="absolute top-0 right-0 w-[500px] h-[500px] opacity-[0.03] pointer-events-none transform translate-x-1/3 -translate-y-1/4"
+      <div
+        className="absolute top-1/2 right-0 w-[400px] h-[400px] opacity-[0.50] pointer-events-none transform translate-x-1/2 -translate-y-1/2 bg-secondary"
         style={{
-          backgroundImage: 'linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff), linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff)',
-          backgroundSize: '60px 60px',
-          backgroundPosition: '0 0, 30px 30px'
+          maskImage: `url(${watermarkLogo})`,
+          WebkitMaskImage: `url(${watermarkLogo})`,
+          maskSize: 'contain',
+          WebkitMaskSize: 'contain',
+          maskRepeat: 'no-repeat',
+          WebkitMaskRepeat: 'no-repeat',
+          maskPosition: 'center',
+          WebkitMaskPosition: 'center'
         }}
       ></div>
 
       <div className="relative max-w-[1440px] mx-auto px-4 lg:px-8 z-10">
-        
+
         {/* Main Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20">
-          
+
           {/* Column 1: About & Social */}
           <div className="flex flex-col pr-4">
-            <h3 className="text-2xl font-bold mb-6 tracking-wide text-white">KSBM</h3>
-            <p className="text-secondary text-sm leading-relaxed mb-8 max-w-[90%] font-medium">
+            <h3 className="text-2xl font-semibold mb-6 tracking-wide text-white">KSBM</h3>
+            <p className="text-secondary text-sm leading-relaxed mb-8 max-w-[90%]">
               Empowering global leaders through intellectual rigor and strategic excellence since 1998.
             </p>
-            
-            <h4 className="text-xs font-bold tracking-[0.15em] uppercase mb-4 text-white">
+
+            <h4 className="text-xs font-medium tracking-[0.15em] uppercase mb-4 text-white">
               CONNECT US
             </h4>
             <div className="flex items-center gap-3">
               {/* Instagram */}
-              <a href="#" className="w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 hover:scale-110 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+              <a href="#" className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-600 hover:text-white hover:border-transparent hover:scale-110 transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                   <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                 </svg>
               </a>
               {/* Facebook */}
-              <a href="#" className="w-8 h-8 rounded-full flex items-center justify-center bg-[#1877F2] hover:scale-110 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-white">
+              <a href="#" className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:bg-[#1877F2] hover:text-white hover:border-transparent hover:scale-110 transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
                 </svg>
               </a>
               {/* WhatsApp */}
-              <a href="#" className="w-8 h-8 rounded-full flex items-center justify-center bg-[#25D366] hover:scale-110 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              <a href="#" className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:bg-[#25D366] hover:text-white hover:border-transparent hover:scale-110 transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" />
                 </svg>
               </a>
             </div>
@@ -67,10 +77,10 @@ const Footer = () => {
 
           {/* Column 2: Programs */}
           <div className="flex flex-col">
-            <h4 className="text-sm font-semibold tracking-[0.15em] uppercase mb-8 text-white">
+            <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
               PROGRAMS
             </h4>
-            <ul className="flex flex-col gap-4 text-sm text-secondary font-medium">
+            <ul className="flex flex-col gap-4 text-sm text-secondary ">
               <li><a href="#" className="hover:text-white transition-colors">MBA Full-time</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Executive MBA</a></li>
               <li><a href="#" className="hover:text-white transition-colors">BBA Program</a></li>
@@ -80,10 +90,10 @@ const Footer = () => {
 
           {/* Column 3: Quick Links */}
           <div className="flex flex-col">
-            <h4 className="text-sm font-semibold tracking-[0.15em] uppercase mb-8 text-white">
+            <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
               QUICK LINKS
             </h4>
-            <ul className="flex flex-col gap-4 text-sm text-secondary font-medium">
+            <ul className="flex flex-col gap-4 text-sm text-secondary">
               <li><a href="#" className="hover:text-white transition-colors">Programs</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Accreditations</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Gallery</a></li>
@@ -93,10 +103,10 @@ const Footer = () => {
 
           {/* Column 4: Contact Info */}
           <div className="flex flex-col">
-            <h4 className="text-sm font-semibold tracking-[0.15em] uppercase mb-8 text-white">
+            <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
               CONTACT INFORMATION
             </h4>
-            <ul className="flex flex-col gap-5 text-sm text-secondary font-medium">
+            <ul className="flex flex-col gap-5 text-sm text-secondary">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 mt-0.5 shrink-0 opacity-80" />
                 <span>KMCT Hills, Kerala, India</span>
@@ -119,7 +129,7 @@ const Footer = () => {
         </div>
 
         {/* Footer Bottom */}
-        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary font-medium">
+        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary ">
           <p>
             © 2024 KMCT School of Business. All rights reserved. Accredited by AACSB & AMBA.
           </p>
