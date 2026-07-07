@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import logo from '../assets/Images/LOGO__KMCT School of Business Management (1).png'
+import { Menu, X } from 'lucide-react'
 
 const Header = () => {
   const [activeNav, setActiveNav] = useState('Home');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -68,13 +70,52 @@ const Header = () => {
           </nav>
 
           {/* Action Button */}
-          <div className="flex items-center">
+          <div className="hidden lg:flex items-center">
             <button className={`${isScrolled ? 'bg-white text-primary hover:bg-gray-100' : 'bg-primary text-white hover:bg-[#1e2869]'} border-none rounded-full py-2 px-5 text-[14px] font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_6px_14px_rgba(43,57,144,0.3)] shadow-[0_4px_10px_rgba(43,57,144,0.2)] active:translate-y-[1px] active:shadow-[0_2px_6px_rgba(43,57,144,0.2)]`}>
               Apply Now
             </button>
           </div>
+
+          {/* Mobile Menu Toggle */}
+          <div className="flex lg:hidden items-center ml-2">
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className={`p-2 rounded-md ${isScrolled ? 'text-white hover:bg-white/10' : 'text-primary hover:bg-primary/10'}`}
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 flex flex-col py-4 px-6 z-50">
+          <ul className="flex flex-col gap-4 list-none m-0 p-0">
+            {navItems.map((item) => (
+              <li key={item}>
+                <a
+                  href={`#${item.toLowerCase().replace(' ', '-')}`}
+                  className={`block no-underline text-base font-medium ${
+                    activeNav === item ? 'text-primary font-bold' : 'text-slate-600'
+                  }`}
+                  onClick={() => {
+                    setActiveNav(item);
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  {item}
+                </a>
+              </li>
+            ))}
+            <li className="pt-4 border-t border-gray-100">
+               <button className="w-full bg-primary text-white rounded-full py-3 text-[14px] font-semibold cursor-pointer">
+                  Apply Now
+               </button>
+            </li>
+          </ul>
+        </div>
+      )}
     </header>
   );
 };

@@ -30,17 +30,17 @@ const AcademicPrograms = () => {
           <h2 className="text-4xl lg:text-5xl font-semibold text-primary mb-6">
             Academic Programs
           </h2>
-          <p className="text-text-secondary text-[0.95rem] lg:text-base leading-relaxed max-w-3xl mx-auto">
+          <p className="text-text-secondary text-[0.90rem] lg:text-base leading-relaxed max-w-3xl mx-auto">
             Discover our MBA and BBA programmes, crafted to develop future-ready professionals through innovative learning, industry engagement, and leadership-focused education.
           </p>
         </div>
 
         {/* Programs Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto">
           {programs.map((program) => (
             <div
               key={program.id}
-              className="relative h-[500px] lg:h-[600px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-500"
+              className="relative h-[380px] lg:h-[450px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-500"
             >
               {/* Background Image */}
               <img
