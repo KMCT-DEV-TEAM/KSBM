@@ -26,25 +26,37 @@ const Header = ({ previewData }) => {
       setActionButton(previewData.actionButton || { text: 'Apply Now', isVisible: true });
       setLogoUrl(previewData.logoUrl || '');
       setAlignment(previewData.alignment || 'center');
-      return;
+    } else {
+      const fetchHeaderSettings = async () => {
+        try {
+          const { data } = await api.get('/cms/header');
+          if (data.navItems && data.navItems.length > 0) {
+            setNavItems(data.navItems);
+            setActiveNav(data.navItems[0].label);
+          }
+          if (data.actionButton) setActionButton(data.actionButton);
+          if (data.logoUrl) setLogoUrl(data.logoUrl);
+          if (data.alignment) setAlignment(data.alignment);
+        } catch (error) {
+          console.error('Failed to fetch header settings:', error);
+        }
+      };
+      fetchHeaderSettings();
     }
 
-    const fetchHeaderSettings = async () => {
-      try {
-        const { data } = await api.get('/cms/header');
-        if (data.navItems && data.navItems.length > 0) {
-          setNavItems(data.navItems);
-          setActiveNav(data.navItems[0].label);
-        }
-        if (data.actionButton) setActionButton(data.actionButton);
-        if (data.logoUrl) setLogoUrl(data.logoUrl);
-        if (data.alignment) setAlignment(data.alignment);
-      } catch (error) {
-        console.error('Failed to fetch header settings:', error);
+    // Listener for iframe preview messages
+    const handleMessage = (event) => {
+      if (event.data?.type === 'preview-header-data') {
+        const payload = event.data.payload;
+        if (payload.navItems) setNavItems(payload.navItems);
+        if (payload.actionButton) setActionButton(payload.actionButton);
+        if (payload.logoUrl) setLogoUrl(payload.logoUrl);
+        if (payload.alignment) setAlignment(payload.alignment);
       }
     };
-    
-    fetchHeaderSettings();
+    window.addEventListener('message', handleMessage);
+
+    return () => window.removeEventListener('message', handleMessage);
   }, [previewData]);
 
   useEffect(() => {
