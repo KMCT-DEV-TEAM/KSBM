@@ -3,6 +3,7 @@ import { Save, Plus, Trash2, RefreshCw, Eye, Monitor, Smartphone, Tablet, X } fr
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import LogoUploader from './components/LogoUploader';
+import ConfirmationModal from '../../../components/ConfirmationModal';
 import graduateImg from '../../../assets/Images/graduate.png';
 import AboutPreview from '../../home/components/AboutSection';
 
@@ -38,6 +39,7 @@ const ManageAbout = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, index: null, title: '', message: '', confirmText: '', variant: 'danger' });
 
   useEffect(() => {
     fetchSettings();
@@ -85,36 +87,13 @@ const ManageAbout = () => {
   };
 
   const handleResetToDefault = () => {
-    Swal.fire({
+    setConfirmModal({
+      isOpen: true,
+      action: 'reset',
       title: 'Reset to Defaults?',
-      text: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: 'var(--color-primary)',
-      cancelButtonColor: '#8592A3',
-      confirmButtonText: 'Yes, reset it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setSubheading('BUILDING EXCELLENCE SINCE 1995');
-        setShowSubheading(true);
-        setHeading("Shaping Tomorrow's Business Leaders");
-        setShowHeading(true);
-        setParagraphs([
-          "At KMCT School of Business Management (KSBM), we believe management education goes beyond academic excellence—it is about developing ethical leaders, innovative thinkers, and future-ready professionals. For over two decades, KSBM has been committed to delivering quality education through its MBA and BBA programs, combining academic rigor with practical learning, industry exposure, internships, and experiential training to prepare students for today's evolving business landscape.",
-          "Our MBA program equips students with advanced managerial knowledge, strategic thinking, and leadership skills for successful corporate careers, while the BBA program builds a strong foundation in business, communication, and management for higher studies and professional growth. Supported by experienced faculty, modern infrastructure, and strong industry collaborations, KSBM provides an inspiring environment that nurtures critical thinking, entrepreneurship, innovation, and lifelong learning."
-        ]);
-        setShowParagraphs(true);
-        setImageUrl('');
-        setShowImage(true);
-        setStats([
-          { value: '16+', label: 'YEARS OF EXCELLENCE' },
-          { value: '991+', label: 'ACTIVE STUDENTS' },
-          { value: '196+', label: 'GLOBAL RECRUITERS' },
-          { value: '196+', label: 'GLOBAL RECRUITERS' }
-        ]);
-        setShowStats(true);
-        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-      }
+      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary'
     });
   };
 
@@ -123,9 +102,15 @@ const ManageAbout = () => {
   };
 
   const removeStat = (index) => {
-    const newStats = [...stats];
-    newStats.splice(index, 1);
-    setStats(newStats);
+    setConfirmModal({
+      isOpen: true,
+      action: 'removeStat',
+      index,
+      title: 'Are you sure?',
+      message: 'You want to remove this statistic?',
+      confirmText: 'Yes, delete it!',
+      variant: 'danger'
+    });
   };
 
   const updateStat = (index, field, value) => {
@@ -145,9 +130,78 @@ const ManageAbout = () => {
   };
 
   const removeParagraph = (index) => {
-    const newParagraphs = [...paragraphs];
-    newParagraphs.splice(index, 1);
-    setParagraphs(newParagraphs);
+    setConfirmModal({
+      isOpen: true,
+      action: 'removeParagraph',
+      index,
+      title: 'Are you sure?',
+      message: 'You want to remove this paragraph?',
+      confirmText: 'Yes, delete it!',
+      variant: 'danger'
+    });
+  };
+
+  const handleConfirmAction = async () => {
+    if (confirmModal.action === 'reset') {
+      setSubheading('BUILDING EXCELLENCE SINCE 1995');
+      setShowSubheading(true);
+      setHeading("Shaping Tomorrow's Business Leaders");
+      setShowHeading(true);
+      setParagraphs([
+        "At KMCT School of Business Management (KSBM), we believe management education goes beyond academic excellence—it is about developing ethical leaders, innovative thinkers, and future-ready professionals. For over two decades, KSBM has been committed to delivering quality education through its MBA and BBA programs, combining academic rigor with practical learning, industry exposure, internships, and experiential training to prepare students for today's evolving business landscape.",
+        "Our MBA program equips students with advanced managerial knowledge, strategic thinking, and leadership skills for successful corporate careers, while the BBA program builds a strong foundation in business, communication, and management for higher studies and professional growth. Supported by experienced faculty, modern infrastructure, and strong industry collaborations, KSBM provides an inspiring environment that nurtures critical thinking, entrepreneurship, innovation, and lifelong learning."
+      ]);
+      setShowParagraphs(true);
+      setImageUrl('');
+      setShowImage(true);
+      setStats([
+        { value: '16+', label: 'YEARS OF EXCELLENCE' },
+        { value: '991+', label: 'ACTIVE STUDENTS' },
+        { value: '196+', label: 'GLOBAL RECRUITERS' },
+        { value: '196+', label: 'GLOBAL RECRUITERS' }
+      ]);
+      setShowStats(true);
+      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+    } else if (confirmModal.action === 'removeStat') {
+      const index = confirmModal.index;
+      const newStats = [...stats];
+      newStats.splice(index, 1);
+      setStats(newStats);
+      
+      setIsSaving(true);
+      try {
+        await api.put('/cms/about', {
+          subheading, heading, paragraphs, imageUrl, stats: newStats,
+          showSubheading, showHeading, showParagraphs, showImage, showStats
+        });
+        Toast.fire({ icon: 'success', title: 'Stat deleted successfully!' });
+      } catch (error) {
+        console.error('Error auto-saving after delete:', error);
+        Toast.fire({ icon: 'error', title: 'Deleted locally, but failed to save to server.' });
+      } finally {
+        setIsSaving(false);
+      }
+    } else if (confirmModal.action === 'removeParagraph') {
+      const index = confirmModal.index;
+      const newParagraphs = [...paragraphs];
+      newParagraphs.splice(index, 1);
+      setParagraphs(newParagraphs);
+      
+      setIsSaving(true);
+      try {
+        await api.put('/cms/about', {
+          subheading, heading, paragraphs: newParagraphs, imageUrl, stats,
+          showSubheading, showHeading, showParagraphs, showImage, showStats
+        });
+        Toast.fire({ icon: 'success', title: 'Paragraph deleted successfully!' });
+      } catch (error) {
+        console.error('Error auto-saving after delete:', error);
+        Toast.fire({ icon: 'error', title: 'Deleted locally, but failed to save to server.' });
+      } finally {
+        setIsSaving(false);
+      }
+    }
+    setConfirmModal({ ...confirmModal, isOpen: false });
   };
 
   if (isLoading) {
@@ -401,6 +455,17 @@ const ManageAbout = () => {
         </div>
 
       </div>
+
+      <ConfirmationModal 
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+        onConfirm={handleConfirmAction}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        variant={confirmModal.variant}
+        isSubmitting={isSaving}
+      />
     </div>
   );
 };

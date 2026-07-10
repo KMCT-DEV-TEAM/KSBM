@@ -76,9 +76,9 @@ const AboutSection = ({ previewData }) => {
   // Tailwind overrides to force mobile layout even on desktop browsers during Live Preview
   const ptClass = forceMobile ? 'pt-20' : 'pt-20 lg:pt-32';
   const watermarkWidthClass = forceMobile ? 'w-[250px]' : 'w-[250px] lg:w-[380px]';
-  const topGridClass = forceMobile ? 'grid-cols-1 gap-12' : 'grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20';
-  const leftColClass = forceMobile ? 'order-2 justify-center' : 'order-2 lg:order-1 justify-center lg:justify-start lg:ml-36';
-  const rightColClass = forceMobile ? 'order-1' : 'order-1 lg:order-2 lg:-ml-12';
+  const topGridClass = forceMobile ? 'grid-cols-1 gap-12' : 'grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16';
+  const leftColClass = forceMobile ? 'order-2 justify-center' : 'order-2 lg:order-1 justify-center lg:justify-center';
+  const rightColClass = forceMobile ? 'order-1' : 'order-1 lg:order-2';
   const subheadClass = forceMobile ? 'text-xs' : 'text-xs lg:text-sm';
   const headClass = forceMobile ? 'text-4xl' : 'text-4xl lg:text-5xl';
   

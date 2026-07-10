@@ -64,9 +64,21 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
   });
 
   const removeImage = (index) => {
-    const newImages = [...bannerImages];
-    newImages.splice(index, 1);
-    setBannerImages(newImages);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You want to remove this banner image?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: 'var(--color-primary)',
+      cancelButtonColor: '#ff3e1d',
+      confirmButtonText: 'Yes, remove it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const newImages = [...bannerImages];
+        newImages.splice(index, 1);
+        setBannerImages(newImages);
+      }
+    });
   };
 
   const handleDragStart = (e, position) => {
