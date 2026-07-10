@@ -23,11 +23,16 @@ const ManageHeader = () => {
   const [actionButton, setActionButton] = useState({ text: 'Apply Now', isVisible: true });
   const [logoUrl, setLogoUrl] = useState('');
   const [alignment, setAlignment] = useState('center');
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [previewMode, setPreviewMode] = useState('desktop');
+  
+  // New Link Modal State
+  const [isAddLinkModalOpen, setIsAddLinkModalOpen] = useState(false);
+  const [newLinkData, setNewLinkData] = useState({ label: '', link: '' });
   
   const dragItem = useRef();
   const dragOverItem = useRef();
@@ -115,14 +120,36 @@ const ManageHeader = () => {
     }
   };
 
-  const addNavItem = () => {
-    setNavItems([...navItems, { label: 'New Link', link: '#' }]);
+  const handleOpenAddLinkModal = () => {
+    setNewLinkData({ label: '', link: '' });
+    setIsAddLinkModalOpen(true);
+  };
+
+  const confirmAddLink = () => {
+    if (!newLinkData.label || !newLinkData.link) {
+      Toast.fire({ icon: 'warning', title: 'Please fill both fields.' });
+      return;
+    }
+    setNavItems([...navItems, { ...newLinkData }]);
+    setIsAddLinkModalOpen(false);
   };
 
   const removeNavItem = (index) => {
-    const newItems = [...navItems];
-    newItems.splice(index, 1);
-    setNavItems(newItems);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You want to remove this navigation link?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#696CFF',
+      cancelButtonColor: '#ff3e1d',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const newItems = [...navItems];
+        newItems.splice(index, 1);
+        setNavItems(newItems);
+      }
+    });
   };
 
   const updateNavItem = (index, field, value) => {
@@ -161,8 +188,39 @@ const ManageHeader = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#696CFF]"></div>
+      <div className="space-y-6 w-full animate-pulse">
+        <div className="flex justify-between items-end">
+          <div>
+            <div className="h-8 bg-gray-200 rounded w-64 mb-2"></div>
+            <div className="h-4 bg-gray-200 rounded w-96"></div>
+          </div>
+          <div className="flex gap-3">
+            <div className="h-10 w-32 bg-gray-200 rounded"></div>
+            <div className="h-10 w-32 bg-gray-200 rounded"></div>
+            <div className="h-10 w-40 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] p-6 md:p-8 max-w-5xl mx-auto space-y-8">
+          <div className="border-b border-gray-100 pb-8">
+            <div className="h-6 bg-gray-200 rounded w-48 mb-4"></div>
+            <div className="h-40 bg-gray-200 rounded w-full"></div>
+          </div>
+          <div className="border-b border-gray-100 pb-8">
+            <div className="h-6 bg-gray-200 rounded w-48 mb-4"></div>
+            <div className="flex gap-4">
+              <div className="h-10 w-24 bg-gray-200 rounded"></div>
+              <div className="h-10 w-24 bg-gray-200 rounded"></div>
+              <div className="h-10 w-24 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+          <div>
+            <div className="h-6 bg-gray-200 rounded w-48 mb-4"></div>
+            <div className="space-y-3">
+              <div className="h-16 bg-gray-200 rounded w-full"></div>
+              <div className="h-16 bg-gray-200 rounded w-full"></div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -293,7 +351,7 @@ const ManageHeader = () => {
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-bold text-[#566A7F]">Navigation Links</h3>
             <button 
-              onClick={addNavItem}
+              onClick={handleOpenAddLinkModal}
               className="flex items-center gap-2 text-sm font-semibold text-[#696CFF] bg-[#E7E7FF] px-3 py-1.5 rounded-md hover:bg-[#d4d4ff] transition-colors"
             >
               <Plus className="w-4 h-4" /> Add Link
@@ -380,6 +438,59 @@ const ManageHeader = () => {
           </div>
         </div>
       </div>
+
+      {/* Add Link Modal */}
+      {isAddLinkModalOpen && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-gray-900/60 backdrop-blur-sm px-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="text-lg font-bold text-[#566A7F]">Add New Link</h3>
+              <button 
+                onClick={() => setIsAddLinkModalOpen(false)}
+                className="text-gray-400 hover:text-red-500 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Display Name</label>
+                <input 
+                  type="text" 
+                  value={newLinkData.label}
+                  onChange={(e) => setNewLinkData({...newLinkData, label: e.target.value})}
+                  placeholder="e.g., Campus Life"
+                  className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-[#696CFF]/20 focus:border-[#696CFF]"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Link / Anchor</label>
+                <input 
+                  type="text" 
+                  value={newLinkData.link}
+                  onChange={(e) => setNewLinkData({...newLinkData, link: e.target.value})}
+                  placeholder="e.g., #campus or /campus"
+                  className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-[#696CFF]/20 focus:border-[#696CFF]"
+                />
+              </div>
+            </div>
+            <div className="px-6 py-4 bg-gray-50 flex justify-end gap-3 border-t border-gray-100">
+              <button 
+                onClick={() => setIsAddLinkModalOpen(false)}
+                className="px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-200 rounded-md transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={confirmAddLink}
+                className="px-4 py-2 text-sm font-semibold text-white bg-[#696CFF] hover:bg-[#5b5eea] rounded-md transition-colors shadow-sm"
+              >
+                Save Link
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
