@@ -13,6 +13,8 @@ import ManageHeader from '../features/admin/cms/ManageHeader';
 import ManageAbout from '../features/admin/cms/ManageAbout';
 import ManageHero from '../features/admin/cms/ManageHero';
 import ManagePrograms from '../features/admin/cms/ManagePrograms';
+import ManageAccreditation from '../features/admin/cms/ManageAccreditation';
+import ManageFacilities from '../features/admin/cms/ManageFacilities';
 import ProtectedRoute from './ProtectedRoute';
 
 const AppRoutes = () => {
@@ -43,8 +45,8 @@ const AppRoutes = () => {
           <Route path="cms/hero" element={<ManageHero />} />
           <Route path="cms/about" element={<ManageAbout />} />
           <Route path="cms/academics" element={<ManagePrograms />} />
-          <Route path="cms/accreditation" element={<GenericCmsPage title="Accreditation" />} />
-          <Route path="cms/facilities" element={<GenericCmsPage title="Facilities" />} />
+          <Route path="cms/accreditation" element={<ManageAccreditation />} />
+          <Route path="cms/facilities" element={<ManageFacilities />} />
           <Route path="cms/placement" element={<GenericCmsPage title="Placement" />} />
           <Route path="cms/recruiters" element={<GenericCmsPage title="Recruiters" />} />
           <Route path="cms/testimonials" element={<GenericCmsPage title="Testimonials" />} />

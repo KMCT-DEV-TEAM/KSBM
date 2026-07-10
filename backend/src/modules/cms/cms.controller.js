@@ -2,6 +2,8 @@ import Header from './header.model.js';
 import About from './about.model.js';
 import Hero from './hero.model.js';
 import Programs from './programs.model.js';
+import Accreditation from './accreditation.model.js';
+import Facilities from './facilities.model.js';
 
 // @desc    Get header settings
 // @route   GET /api/cms/header
@@ -146,5 +148,79 @@ export const updateProgramsSettings = async (req, res) => {
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating programs settings', error: error.message });
+  }
+};
+
+// @desc    Get Accreditation settings
+// @route   GET /api/cms/accreditation
+// @access  Public
+export const getAccreditationSettings = async (req, res) => {
+  try {
+    const settings = await Accreditation.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching accreditation settings', error: error.message });
+  }
+};
+
+// @desc    Update Accreditation settings
+// @route   PUT /api/cms/accreditation
+// @access  Private (Admin)
+export const updateAccreditationSettings = async (req, res) => {
+  try {
+    const { subheading, heading, imageUrl, showSubheading, showHeading, showImage } = req.body;
+
+    const settings = await Accreditation.getSettings();
+
+    if (subheading !== undefined) settings.subheading = subheading;
+    if (heading !== undefined) settings.heading = heading;
+    if (imageUrl !== undefined) settings.imageUrl = imageUrl;
+    
+    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
+    if (showHeading !== undefined) settings.showHeading = showHeading;
+    if (showImage !== undefined) settings.showImage = showImage;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating accreditation settings', error: error.message });
+  }
+};
+
+// @desc    Get Facilities settings
+// @route   GET /api/cms/facilities
+// @access  Public
+export const getFacilitiesSettings = async (req, res) => {
+  try {
+    const settings = await Facilities.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching facilities settings', error: error.message });
+  }
+};
+
+// @desc    Update Facilities settings
+// @route   PUT /api/cms/facilities
+// @access  Private (Admin)
+export const updateFacilitiesSettings = async (req, res) => {
+  try {
+    const { subheading, heading, description, facilitiesList, showSubheading, showHeading, showDescription, showFacilities } = req.body;
+
+    const settings = await Facilities.getSettings();
+
+    if (subheading !== undefined) settings.subheading = subheading;
+    if (heading !== undefined) settings.heading = heading;
+    if (description !== undefined) settings.description = description;
+    if (facilitiesList !== undefined) settings.facilitiesList = facilitiesList;
+    
+    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
+    if (showHeading !== undefined) settings.showHeading = showHeading;
+    if (showDescription !== undefined) settings.showDescription = showDescription;
+    if (showFacilities !== undefined) settings.showFacilities = showFacilities;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating facilities settings', error: error.message });
   }
 };
