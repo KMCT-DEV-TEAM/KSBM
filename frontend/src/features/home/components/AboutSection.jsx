@@ -82,11 +82,7 @@ const AboutSection = ({ previewData }) => {
   const subheadClass = forceMobile ? 'text-xs' : 'text-xs lg:text-sm';
   const headClass = forceMobile ? 'text-4xl' : 'text-4xl lg:text-5xl';
   
-  const statGridCols = cmsData.stats.length > 4 ? 4 : (cmsData.stats.length || 1);
-  const statGridClass = isPreviewMobile 
-    ? 'grid-cols-2 gap-6' 
-    : `grid-cols-2 md:grid-cols-${statGridCols} gap-6 md:gap-4`;
-  const statTextClass = isPreviewMobile ? 'text-4xl' : 'text-4xl md:text-5xl';
+  const statTextClass = isPreviewMobile ? 'text-2xl' : 'text-2xl md:text-5xl';
 
   const showTopSection = cmsData.showImage || cmsData.showHeading || cmsData.showSubheading || cmsData.showParagraphs;
 
@@ -152,12 +148,12 @@ const AboutSection = ({ previewData }) => {
       {cmsData.showStats && cmsData.stats.length > 0 && (
         <div className="w-full mt-10">
           <div className="max-w-[1440px] bg-[#f4fafe] py-10 mx-auto px-4 lg:px-8">
-            <div className={`grid ${statGridClass}`}>
+            <div className="flex flex-row justify-around md:justify-between items-center w-full gap-2 md:gap-4 overflow-x-auto whitespace-nowrap">
               
               {cmsData.stats.map((stat, index) => (
-                <div key={index} className="flex flex-col items-center justify-center text-center px-4">
+                <div key={index} className="flex flex-col items-center justify-center text-center px-2">
                   <span className={`font-serif text-[#4e558e] mb-2 ${statTextClass}`}>{stat.value}</span>
-                  <span className="text-[0.65rem] font-bold tracking-[0.15em] text-gray-600 uppercase">{stat.label}</span>
+                  <span className="text-[10px] md:text-xs font-bold tracking-widest text-gray-600 uppercase">{stat.label}</span>
                 </div>
               ))}
 

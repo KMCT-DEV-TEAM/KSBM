@@ -7,7 +7,11 @@ import {
   getHeroSettings,
   updateHeroSettings,
   getProgramsSettings,
-  updateProgramsSettings
+  updateProgramsSettings,
+  getAccreditationSettings,
+  updateAccreditationSettings,
+  getFacilitiesSettings,
+  updateFacilitiesSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -28,5 +32,13 @@ router.route('/hero')
 router.route('/programs')
   .get(getProgramsSettings)
   .put(protect, updateProgramsSettings);
+
+router.route('/accreditation')
+  .get(getAccreditationSettings)
+  .put(protect, updateAccreditationSettings);
+
+router.route('/facilities')
+  .get(getFacilitiesSettings)
+  .put(protect, updateFacilitiesSettings);
 
 export default router;
