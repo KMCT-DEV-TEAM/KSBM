@@ -12,6 +12,7 @@ import GenericCmsPage from '../features/admin/cms/GenericCmsPage';
 import ManageHeader from '../features/admin/cms/ManageHeader';
 import ManageAbout from '../features/admin/cms/ManageAbout';
 import ManageHero from '../features/admin/cms/ManageHero';
+import ManagePrograms from '../features/admin/cms/ManagePrograms';
 import ProtectedRoute from './ProtectedRoute';
 
 const AppRoutes = () => {
@@ -41,7 +42,7 @@ const AppRoutes = () => {
           <Route path="cms/header" element={<ManageHeader />} />
           <Route path="cms/hero" element={<ManageHero />} />
           <Route path="cms/about" element={<ManageAbout />} />
-          <Route path="cms/academics" element={<GenericCmsPage title="Academic Programs" />} />
+          <Route path="cms/academics" element={<ManagePrograms />} />
           <Route path="cms/accreditation" element={<GenericCmsPage title="Accreditation" />} />
           <Route path="cms/facilities" element={<GenericCmsPage title="Facilities" />} />
           <Route path="cms/placement" element={<GenericCmsPage title="Placement" />} />
