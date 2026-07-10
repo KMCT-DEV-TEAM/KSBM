@@ -139,7 +139,7 @@ const ManagePrograms = () => {
     setCurrentProgram(null);
   };
 
-  const saveProgramFromModal = () => {
+  const saveProgramFromModal = async () => {
     if (!currentProgram.title) {
       Toast.fire({ icon: 'error', title: 'Title is required' });
       return;
@@ -152,12 +152,54 @@ const ManagePrograms = () => {
     }
     setPrograms(newPrograms);
     closeProgramModal();
+
+    // Auto-save to database immediately
+    setIsSaving(true);
+    try {
+      await api.put('/cms/programs', {
+        subheading, heading, description, programs: newPrograms,
+        showSubheading, showHeading, showDescription, showPrograms
+      });
+      Toast.fire({ icon: 'success', title: 'Program saved successfully!' });
+    } catch (error) {
+      console.error('Error saving program:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to save program to database.' });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const removeProgram = (index) => {
-    const newPrograms = [...programs];
-    newPrograms.splice(index, 1);
-    setPrograms(newPrograms);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "This program will be permanently deleted.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#8592A3',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const newPrograms = [...programs];
+        newPrograms.splice(index, 1);
+        setPrograms(newPrograms);
+
+        // Auto-save deletion to database immediately
+        setIsSaving(true);
+        try {
+          await api.put('/cms/programs', {
+            subheading, heading, description, programs: newPrograms,
+            showSubheading, showHeading, showDescription, showPrograms
+          });
+          Toast.fire({ icon: 'success', title: 'Program deleted!' });
+        } catch (error) {
+          console.error('Error deleting program:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to delete program from database.' });
+        } finally {
+          setIsSaving(false);
+        }
+      }
+    });
   };
 
   if (isLoading) {
