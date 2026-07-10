@@ -3,6 +3,7 @@ import { Save, Plus, Trash2, GripVertical, AlertCircle, Eye, Monitor, Smartphone
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import LogoUploader from './components/LogoUploader';
+import ConfirmationModal from '../../../components/ConfirmationModal';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -29,6 +30,8 @@ const ManageHeader = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
+  
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, index: null, title: '', message: '', confirmText: '', variant: 'danger' });
   
   // New Link Modal State
   const [isAddLinkModalOpen, setIsAddLinkModalOpen] = useState(false);
@@ -59,32 +62,13 @@ const ManageHeader = () => {
   };
 
   const handleResetToDefault = () => {
-    Swal.fire({
+    setConfirmModal({
+      isOpen: true,
+      action: 'reset',
       title: 'Reset to Defaults?',
-      text: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: 'var(--color-primary)',
-      cancelButtonColor: '#8592A3',
-      confirmButtonText: 'Yes, reset it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setNavItems([
-          { label: 'Home', link: '#home' },
-          { label: 'About Us', link: '#about-us' },
-          { label: 'Campus', link: '#campus' },
-          { label: 'People', link: '#people' },
-          { label: 'Placement', link: '#placement' },
-          { label: 'Programs', link: '#programs' },
-          { label: 'Events', link: '#events' },
-          { label: 'Admission', link: '#admission' },
-          { label: 'Examinations', link: '#examinations' },
-        ]);
-        setActionButton({ text: 'Apply Now', isVisible: true });
-        setLogoUrl('');
-        setAlignment('center');
-        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-      }
+      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary'
     });
   };
 
@@ -135,21 +119,52 @@ const ManageHeader = () => {
   };
 
   const removeNavItem = (index) => {
-    Swal.fire({
+    setConfirmModal({
+      isOpen: true,
+      action: 'removeLink',
+      index,
       title: 'Are you sure?',
-      text: "You want to remove this navigation link?",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#696CFF',
-      cancelButtonColor: '#ff3e1d',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const newItems = [...navItems];
-        newItems.splice(index, 1);
-        setNavItems(newItems);
-      }
+      message: 'You want to remove this navigation link?',
+      confirmText: 'Yes, delete it!',
+      variant: 'danger'
     });
+  };
+
+  const handleConfirmAction = async () => {
+    if (confirmModal.action === 'reset') {
+      setNavItems([
+        { label: 'Home', link: '#home' },
+        { label: 'About Us', link: '#about-us' },
+        { label: 'Campus', link: '#campus' },
+        { label: 'People', link: '#people' },
+        { label: 'Placement', link: '#placement' },
+        { label: 'Programs', link: '#programs' },
+        { label: 'Events', link: '#events' },
+        { label: 'Admission', link: '#admission' },
+        { label: 'Examinations', link: '#examinations' },
+      ]);
+      setActionButton({ text: 'Apply Now', isVisible: true });
+      setLogoUrl('');
+      setAlignment('center');
+      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+    } else if (confirmModal.action === 'removeLink') {
+      const index = confirmModal.index;
+      const newItems = [...navItems];
+      newItems.splice(index, 1);
+      setNavItems(newItems);
+      
+      setIsSaving(true);
+      try {
+        await api.put('/cms/header', { navItems: newItems, actionButton, alignment, logoUrl }, { hideLoader: true });
+        Toast.fire({ icon: 'success', title: 'Link deleted successfully!' });
+      } catch (error) {
+        console.error('Error auto-saving after delete:', error);
+        Toast.fire({ icon: 'error', title: 'Deleted locally, but failed to save to server.' });
+      } finally {
+        setIsSaving(false);
+      }
+    }
+    setConfirmModal({ ...confirmModal, isOpen: false });
   };
 
   const updateNavItem = (index, field, value) => {
@@ -352,7 +367,7 @@ const ManageHeader = () => {
             <h3 className="text-lg font-bold text-[#566A7F]">Navigation Links</h3>
             <button 
               onClick={handleOpenAddLinkModal}
-              className="flex items-center gap-2 text-sm font-semibold text-[#696CFF] bg-[#E7E7FF] px-3 py-1.5 rounded-md hover:bg-[#d4d4ff] transition-colors"
+              className="flex items-center gap-2 text-sm font-semibold text-primary bg-primary/10 px-3 py-1.5 rounded-md hover:bg-primary/20 transition-colors"
             >
               <Plus className="w-4 h-4" /> Add Link
             </button>
@@ -460,7 +475,7 @@ const ManageHeader = () => {
                   value={newLinkData.label}
                   onChange={(e) => setNewLinkData({...newLinkData, label: e.target.value})}
                   placeholder="e.g., Campus Life"
-                  className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-[#696CFF]/20 focus:border-[#696CFF]"
+                  className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
               </div>
               <div>
@@ -470,7 +485,7 @@ const ManageHeader = () => {
                   value={newLinkData.link}
                   onChange={(e) => setNewLinkData({...newLinkData, link: e.target.value})}
                   placeholder="e.g., #campus or /campus"
-                  className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-[#696CFF]/20 focus:border-[#696CFF]"
+                  className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
               </div>
             </div>
@@ -483,7 +498,7 @@ const ManageHeader = () => {
               </button>
               <button 
                 onClick={confirmAddLink}
-                className="px-4 py-2 text-sm font-semibold text-white bg-[#696CFF] hover:bg-[#5b5eea] rounded-md transition-colors shadow-sm"
+                className="px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-md transition-colors shadow-sm"
               >
                 Save Link
               </button>
@@ -491,6 +506,17 @@ const ManageHeader = () => {
           </div>
         </div>
       )}
+
+      <ConfirmationModal 
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+        onConfirm={handleConfirmAction}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        variant={confirmModal.variant}
+        isSubmitting={isSaving}
+      />
     </div>
   );
 };
