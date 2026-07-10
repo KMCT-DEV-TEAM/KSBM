@@ -74,38 +74,46 @@ const Header = ({ previewData }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const getAlignmentClass = () => {
-    switch (alignment) {
-      case 'left': return 'justify-start';
-      case 'right': return 'justify-end';
-      case 'center':
-      default: return 'justify-center';
-    }
-  };
-
   // Preview Mode Overrides (to bypass actual viewport media queries)
   const isPreviewMobile = previewData?.previewDevice === 'mobile' || previewData?.previewDevice === 'tablet';
   const isPreviewDesktop = previewData?.previewDevice === 'desktop';
-  
+
+  const getAlignmentClass = () => {
+    if (isPreviewMobile) return 'flex-1 justify-end';
+    if (isPreviewDesktop) {
+      switch (alignment) {
+        case 'left': return 'flex-1 justify-start pl-8';
+        case 'center': return 'flex-1 justify-center';
+        case 'right': default: return 'flex-1 justify-end';
+      }
+    }
+    // Real responsive behavior
+    switch (alignment) {
+      case 'left': return 'flex-1 justify-end lg:justify-start lg:pl-8';
+      case 'center': return 'flex-1 justify-end lg:justify-center';
+      case 'right': default: return 'flex-1 justify-end';
+    }
+  };
+
   const desktopClass = isPreviewMobile ? 'hidden' : isPreviewDesktop ? 'flex' : 'hidden lg:flex';
   const mobileToggleClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? 'flex' : 'flex lg:hidden';
   const mobileDropdownClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? '' : 'lg:hidden';
 
   return (
-    <header className={`w-full shadow-[0_2px_4px_rgba(0,0,0,0.05)] ${previewData ? 'relative' : 'sticky top-0'} z-50 transition-colors duration-300 ${isScrolled ? 'bg-primary' : 'bg-background'}`}>
-      <div className="flex items-center justify-between max-w-[1440px] mx-auto px-4 lg:px-8 h-20">
+    <header className={`w-[98%] max-w-[1440px] fixed left-0 right-0 mx-auto mt-2 lg:mt-3 rounded-2xl z-50 transition-all duration-300 border ${isScrolled ? 'bg-primary border-transparent shadow-lg' : 'bg-white/20 border-white/30 backdrop-blur-lg shadow-[0_8px_32px_rgba(0,0,0,0.2)]'}`}>
+      <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16 sm:h-20">
         
         {/* Logo Section */}
-        <a href="/" className="flex items-center no-underline">
+        <a href="/" className="flex items-center no-underline shrink-0">
           <img 
             src={logoUrl || logo} 
             alt="KSBM Logo" 
-            className={`h-6 lg:h-8 object-contain transition-all duration-300 ${isScrolled ? 'brightness-0 invert' : ''}`} 
+            className="h-5 sm:h-6 lg:h-8 object-contain transition-all duration-300 brightness-0 invert" 
           />
         </a>
 
         {/* Right Section: Nav & Button */}
-        <div className={`flex items-center gap-6 xl:gap-8 ${alignment === 'left' ? 'flex-1 justify-start pl-8' : alignment === 'center' ? 'flex-1 justify-center' : 'justify-end'}`}>
+        <div className={`flex items-center gap-4 xl:gap-8 ${getAlignmentClass()}`}>
           
           {/* Navigation Section */}
           <nav className={`${desktopClass} items-center`}>
@@ -114,13 +122,9 @@ const Header = ({ previewData }) => {
                 <li key={idx} className="relative">
                   <a
                     href={item.link}
-                    className={`no-underline text-sm py-2 transition-colors duration-300 inline-block ${
-                      isScrolled ? 'hover:text-secondary' : 'hover:text-primary'
-                    } ${activeNav === item.label
-                      ? (isScrolled 
-                          ? 'text-white font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[1px] after:bg-white after:rounded-sm' 
-                          : 'text-primary font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[1px] after:bg-primary after:rounded-sm')
-                      : (isScrolled ? 'text-gray-200 font-medium' : 'text-text-secondary font-medium')
+                    className={`no-underline text-sm py-2 transition-colors duration-300 inline-block hover:text-white ${activeNav === item.label
+                      ? 'text-white font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[1px] after:bg-white after:rounded-sm'
+                      : 'text-gray-200 font-medium'
                       }`}
                     onClick={() => setActiveNav(item.label)}
                   >
@@ -134,7 +138,7 @@ const Header = ({ previewData }) => {
           {/* Action Button */}
           {actionButton.isVisible && (
             <div className={`${desktopClass} items-center`}>
-              <button className={`${isScrolled ? 'bg-white text-primary hover:bg-gray-100' : 'bg-primary text-white hover:bg-[#1e2869]'} border-none rounded-full py-2 px-5 text-[14px] font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_6px_14px_rgba(43,57,144,0.3)] shadow-[0_4px_10px_rgba(43,57,144,0.2)] active:translate-y-[1px] active:shadow-[0_2px_6px_rgba(43,57,144,0.2)]`}>
+              <button className={`${isScrolled ? 'bg-white text-primary hover:bg-gray-100' : 'bg-primary text-white hover:bg-[#1e2869]'} border-none rounded-full py-2 px-5 text-[14px] font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_6px_14px_rgba(0,0,0,0.15)] shadow-[0_4px_10px_rgba(0,0,0,0.1)] active:translate-y-[1px] active:shadow-[0_2px_6px_rgba(0,0,0,0.1)]`}>
                 {actionButton.text}
               </button>
             </div>
@@ -142,9 +146,9 @@ const Header = ({ previewData }) => {
 
           {/* Mobile Menu Toggle */}
           <div className={`${mobileToggleClass} items-center ml-2`}>
-            <button 
+            <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`p-2 rounded-md ${isScrolled ? 'text-white hover:bg-white/10' : 'text-primary hover:bg-primary/10'}`}
+              className="p-2 rounded-md text-white hover:bg-white/10"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -154,15 +158,14 @@ const Header = ({ previewData }) => {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className={`${mobileDropdownClass} absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 flex flex-col py-4 px-6 z-50`}>
+        <div className={`${mobileDropdownClass} absolute top-[calc(100%+0.5rem)] left-0 w-full bg-white shadow-xl rounded-2xl border border-gray-100 flex flex-col py-4 px-6 z-50`}>
           <ul className="flex flex-col gap-4 list-none m-0 p-0">
             {navItems.map((item, idx) => (
               <li key={idx}>
                 <a
                   href={item.link}
-                  className={`block no-underline text-base font-medium ${
-                    activeNav === item.label ? 'text-primary font-bold' : 'text-slate-600'
-                  }`}
+                  className={`block no-underline text-base font-medium ${activeNav === item.label ? 'text-primary font-bold' : 'text-slate-600'
+                    }`}
                   onClick={() => {
                     setActiveNav(item.label);
                     setIsMobileMenuOpen(false);

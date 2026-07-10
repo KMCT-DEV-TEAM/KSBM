@@ -1,9 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Rotate3d } from 'lucide-react';
+import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
 import graduateImg from '../../../assets/Images/graduate.png';
 import watermarkImg from '../../../assets/Images/watermark_logo.png';
 import api from '../../../api/axios';
 
+
+const Counter = ({ value }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount: 0.5 });
+  
+  const strValue = String(value);
+  const match = strValue.match(/^(\d+)(.*)$/);
+  
+  const count = useMotionValue(0);
+  const numericValue = match ? parseInt(match[1], 10) : 0;
+  const suffix = match ? match[2] : '';
+  const rounded = useTransform(count, (latest) => Math.round(latest) + suffix);
+
+  useEffect(() => {
+    if (isInView && match) {
+      const controls = animate(count, numericValue, { duration: 4.5, ease: "easeOut" });
+      return controls.stop;
+    }
+  }, [isInView, numericValue, count, match]);
+
+  if (!match) {
+    return <span>{value}</span>;
+  }
+
+  return <motion.span ref={ref}>{rounded}</motion.span>;
+};
 
 const AboutSection = ({ previewData }) => {
   const [cmsData, setCmsData] = useState({
@@ -72,17 +99,17 @@ const AboutSection = ({ previewData }) => {
   const isPreviewMobile = previewData?.previewDevice === 'mobile';
   const isPreviewTablet = previewData?.previewDevice === 'tablet';
   const forceMobile = isPreviewMobile || isPreviewTablet;
-  
+
   // Tailwind overrides to force mobile layout even on desktop browsers during Live Preview
-  const ptClass = forceMobile ? 'pt-20' : 'pt-20 lg:pt-32';
-  const watermarkWidthClass = forceMobile ? 'w-[250px]' : 'w-[250px] lg:w-[380px]';
-  const topGridClass = forceMobile ? 'grid-cols-1 gap-12' : 'grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16';
-  const leftColClass = forceMobile ? 'order-2 justify-center' : 'order-2 lg:order-1 justify-center lg:justify-center';
+  const ptClass = forceMobile ? 'pt-12' : 'pt-12 lg:pt-32';
+  const watermarkWidthClass = forceMobile ? 'w-[200px]' : 'w-[200px] md:w-[250px] lg:w-[380px]';
+  const topGridClass = forceMobile ? 'grid-cols-1 gap-10' : 'grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16';
+  const leftColClass = forceMobile ? 'order-2 justify-center mt-6' : 'order-2 lg:order-1 justify-center mt-6 lg:mt-0';
   const rightColClass = forceMobile ? 'order-1' : 'order-1 lg:order-2';
   const subheadClass = forceMobile ? 'text-xs' : 'text-xs lg:text-sm';
-  const headClass = forceMobile ? 'text-4xl' : 'text-4xl lg:text-5xl';
-  
-  const statTextClass = isPreviewMobile ? 'text-2xl' : 'text-2xl md:text-5xl';
+  const headClass = forceMobile ? 'text-3xl' : 'text-3xl md:text-4xl lg:text-5xl';
+
+  const statTextClass = forceMobile ? 'text-3xl' : 'text-3xl md:text-4xl lg:text-5xl';
 
   const showTopSection = cmsData.showImage || cmsData.showHeading || cmsData.showSubheading || cmsData.showParagraphs;
 
@@ -101,8 +128,14 @@ const AboutSection = ({ previewData }) => {
 
             {/* Left: Image Container */}
             {cmsData.showImage && (
-              <div className={`relative flex ${leftColClass}`}>
-                <div className="relative w-[80%] max-w-[450px]">
+              <motion.div 
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: false, amount: 0.3 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className={`relative flex w-full items-center ${leftColClass}`}
+              >
+                <div className="relative w-[90%] md:w-[70%] lg:w-[80%] max-w-[450px]">
                   <img
                     src={cmsData.imageUrl || graduateImg}
                     alt="Graduating Student"
@@ -116,29 +149,53 @@ const AboutSection = ({ previewData }) => {
                     <span className="text-[9px] font-bold">360°</span>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             )}
 
             {/* Right: Text Content */}
-            <div className={`${rightColClass} ${!cmsData.showImage ? 'lg:col-span-2 text-center flex flex-col items-center' : ''}`}>
+            <motion.div 
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.3 }}
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.2,
+                    }
+                  }
+                }}
+                className={`${rightColClass} ${!cmsData.showImage ? 'lg:col-span-2 text-center flex flex-col items-center' : ''}`}
+            >
               {cmsData.showSubheading && (
-                <h4 className={`text-text-secondary ${subheadClass} tracking-widest uppercase mb-4 flex items-center gap-2 ${!cmsData.showImage ? 'justify-center' : ''}`}>
+                <motion.h4 
+                  variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+                  className={`text-text-secondary ${subheadClass} tracking-widest uppercase mb-4 flex items-center gap-2 ${!cmsData.showImage ? 'justify-center' : ''}`}
+                >
                   {cmsData.subheading} <span className="w-2 h-[2px] bg-text-secondary"></span>
-                </h4>
+                </motion.h4>
               )}
 
               {cmsData.showHeading && (
-                <h2 className={`font-semibold text-primary leading-[1.2] mb-8 ${headClass}`} dangerouslySetInnerHTML={{ __html: cmsData.heading }} />
+                <motion.h2 
+                  variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+                  className={`font-semibold text-primary leading-[1.2] mb-8 ${headClass}`} 
+                  dangerouslySetInnerHTML={{ __html: cmsData.heading }} 
+                />
               )}
 
               {cmsData.showParagraphs && (
-                <div className="text-text-primary space-y-6 text-sm leading-relaxed max-w-4xl mx-auto">
+                <motion.div 
+                  variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+                  className="text-text-primary space-y-6 text-sm leading-relaxed max-w-4xl mx-auto"
+                >
                   {cmsData.paragraphs.map((para, index) => (
                     <p key={index}>{para}</p>
                   ))}
-                </div>
+                </motion.div>
               )}
-            </div>
+            </motion.div>
           </div>
         )}
 
@@ -146,20 +203,42 @@ const AboutSection = ({ previewData }) => {
 
 
       {cmsData.showStats && cmsData.stats.length > 0 && (
-        <div className="w-full mt-10">
-          <div className="max-w-[1440px] bg-[#f4fafe] py-10 mx-auto px-4 lg:px-8">
-            <div className="flex flex-row justify-around md:justify-between items-center w-full gap-2 md:gap-4 overflow-x-auto whitespace-nowrap">
-              
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.2 }}
+          variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: {
+                duration: 0.8,
+                staggerChildren: 0.1,
+              }
+            }
+          }}
+          className="w-full "
+        >
+          <div className="max-w-[1440px] bg-[#f4fafe] py-12 mx-auto px-4 lg:px-8 rounded-xl shadow-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 w-full">
+
               {cmsData.stats.map((stat, index) => (
-                <div key={index} className="flex flex-col items-center justify-center text-center px-2">
-                  <span className={`font-serif text-[#4e558e] mb-2 ${statTextClass}`}>{stat.value}</span>
-                  <span className="text-[10px] md:text-xs font-bold tracking-widest text-gray-600 uppercase">{stat.label}</span>
-                </div>
+                <motion.div 
+                  key={index} 
+                  variants={{ hidden: { opacity: 0, scale: 0.8 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } } }}
+                  className="flex flex-col items-center justify-center text-center px-2"
+                >
+                  <span className={`font-serif text-[#4e558e] mb-2 ${statTextClass}`}>
+                    <Counter value={stat.value} />
+                  </span>
+                  <span className="text-xs font-bold tracking-widest text-gray-600 uppercase">{stat.label}</span>
+                </motion.div>
               ))}
 
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </section>
   );

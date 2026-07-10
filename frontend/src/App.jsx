@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import AppRoutes from './routes/AppRoutes';
+import Loader from './components/Loader';
 import './App.css';
 
 function App() {
@@ -36,17 +37,11 @@ function App() {
   return (
     <>
       {loading && (
-        <div className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center">
-          <div className="relative w-20 h-20">
-            <div className="absolute inset-0 rounded-full border-4 border-gray-100"></div>
-            <div className="absolute inset-0 rounded-full border-4 border-[#1e2869] border-t-transparent animate-spin"></div>
-          </div>
-          <p className="mt-6 text-[#1e2869] font-bold tracking-widest uppercase text-sm animate-pulse">Loading</p>
-        </div>
+        <Loader fullScreen={true} theme="dark" text="Loading Experience" />
       )}
       
       {/* We keep the app mounted in the background but hidden so it can load its assets */}
-      <div className={loading ? 'opacity-0 h-screen overflow-hidden' : 'opacity-100 transition-opacity duration-700 ease-in-out'}>
+      <div className={loading ? 'opacity-0 h-screen overflow-hidden w-full' : 'opacity-100 transition-opacity duration-700 ease-in-out w-full overflow-x-hidden'}>
         <AppRoutes />
       </div>
     </>
