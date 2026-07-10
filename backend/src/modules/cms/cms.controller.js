@@ -1,6 +1,7 @@
 import Header from './header.model.js';
 import About from './about.model.js';
 import Hero from './hero.model.js';
+import Programs from './programs.model.js';
 
 // @desc    Get header settings
 // @route   GET /api/cms/header
@@ -107,5 +108,43 @@ export const updateHeroSettings = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server error updating about settings', error: error.message });
     res.status(500).json({ message: 'Server error updating hero settings', error: error.message });
+  }
+};
+
+// @desc    Get Programs settings
+// @route   GET /api/cms/programs
+// @access  Public
+export const getProgramsSettings = async (req, res) => {
+  try {
+    const settings = await Programs.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching programs settings', error: error.message });
+  }
+};
+
+// @desc    Update Programs settings
+// @route   PUT /api/cms/programs
+// @access  Private (Admin)
+export const updateProgramsSettings = async (req, res) => {
+  try {
+    const { subheading, heading, description, programs, showSubheading, showHeading, showDescription, showPrograms } = req.body;
+
+    const settings = await Programs.getSettings();
+
+    if (subheading !== undefined) settings.subheading = subheading;
+    if (heading !== undefined) settings.heading = heading;
+    if (description !== undefined) settings.description = description;
+    if (programs !== undefined) settings.programs = programs;
+    
+    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
+    if (showHeading !== undefined) settings.showHeading = showHeading;
+    if (showDescription !== undefined) settings.showDescription = showDescription;
+    if (showPrograms !== undefined) settings.showPrograms = showPrograms;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating programs settings', error: error.message });
   }
 };

@@ -5,7 +5,9 @@ import {
   getAboutSettings,
   updateAboutSettings,
   getHeroSettings,
-  updateHeroSettings
+  updateHeroSettings,
+  getProgramsSettings,
+  updateProgramsSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -22,5 +24,9 @@ router.route('/about')
 router.route('/hero')
   .get(getHeroSettings)
   .put(protect, updateHeroSettings);
+
+router.route('/programs')
+  .get(getProgramsSettings)
+  .put(protect, updateProgramsSettings);
 
 export default router;
