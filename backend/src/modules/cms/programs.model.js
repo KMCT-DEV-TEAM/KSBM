@@ -11,15 +11,15 @@ const programSchema = new mongoose.Schema({
   },
   subtitle: {
     type: String,
-    required: true,
+    default: '',
   },
   image: {
     type: String,
-    required: true,
+    default: '',
   },
   tag: {
     type: String,
-    required: true,
+    default: '',
   },
 });
 
