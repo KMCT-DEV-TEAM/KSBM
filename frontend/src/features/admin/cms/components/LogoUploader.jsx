@@ -65,7 +65,7 @@ const LogoUploader = ({ currentLogoUrl, onUploadSuccess, onUploadStateChange }) 
       <div 
         {...getRootProps()} 
         className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors
-          ${isDragActive ? 'border-[#696CFF] bg-[#696CFF]/5' : 'border-gray-300 hover:border-[#696CFF]/50'}
+          ${isDragActive ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-primary/50'}
           ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}
         `}
       >
@@ -74,12 +74,12 @@ const LogoUploader = ({ currentLogoUrl, onUploadSuccess, onUploadStateChange }) 
         <div className="flex flex-col items-center justify-center space-y-3">
           {isUploading ? (
             <>
-              <Loader2 className="w-10 h-10 text-[#696CFF] animate-spin" />
+              <Loader2 className="w-10 h-10 text-primary animate-spin" />
               <p className="text-sm font-medium text-gray-500">Uploading...</p>
             </>
           ) : (
             <>
-              <div className="p-3 bg-[#E7E7FF] text-[#696CFF] rounded-full">
+              <div className="p-3 bg-primary/10 text-primary rounded-full">
                 <UploadCloud className="w-6 h-6" />
               </div>
               <div>
@@ -101,7 +101,7 @@ const LogoUploader = ({ currentLogoUrl, onUploadSuccess, onUploadStateChange }) 
             </div>
             <div>
               <p className="text-sm font-semibold text-gray-700">Current Logo</p>
-              <a href={currentLogoUrl} target="_blank" rel="noreferrer" className="text-xs text-[#696CFF] hover:underline truncate block max-w-xs">
+              <a href={currentLogoUrl} target="_blank" rel="noreferrer" className="text-xs text-primary hover:underline truncate block max-w-xs">
                 {currentLogoUrl}
               </a>
             </div>

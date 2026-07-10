@@ -95,7 +95,7 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
       <div 
         {...getRootProps()} 
         className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
-          ${isDragActive ? 'border-[#696CFF] bg-[#696CFF]/5' : 'border-gray-300 hover:border-[#696CFF]/50'}
+          ${isDragActive ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-primary/50'}
           ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}
         `}
       >
@@ -104,12 +104,12 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
         <div className="flex flex-col items-center justify-center space-y-4">
           {isUploading ? (
             <>
-              <Loader2 className="w-12 h-12 text-[#696CFF] animate-spin" />
+              <Loader2 className="w-12 h-12 text-primary animate-spin" />
               <p className="text-sm font-medium text-gray-500">Uploading Images...</p>
             </>
           ) : (
             <>
-              <div className="p-4 bg-[#E7E7FF] text-[#696CFF] rounded-full">
+              <div className="p-4 bg-primary/10 text-primary rounded-full">
                 <UploadCloud className="w-8 h-8" />
               </div>
               <div>
@@ -153,7 +153,7 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <a href={img.url} target="_blank" rel="noreferrer" className="text-sm text-[#696CFF] hover:underline truncate block">
+                  <a href={img.url} target="_blank" rel="noreferrer" className="text-sm text-primary hover:underline truncate block">
                     {img.url}
                   </a>
                 </div>

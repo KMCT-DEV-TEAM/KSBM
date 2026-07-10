@@ -25,7 +25,7 @@ const AdminNavbar = () => {
       </div>
 
       <div className="flex items-center gap-6">
-        <button className="relative text-[#697A8D] hover:text-[#696CFF] transition-colors">
+        <button className="relative text-[#697A8D] hover:text-primary transition-colors">
           <Bell className="w-6 h-6" />
           <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
         </button>
@@ -34,7 +34,7 @@ const AdminNavbar = () => {
 
         <button 
           onClick={handleLogout}
-          className="flex items-center gap-2 text-sm font-semibold text-[#697A8D] hover:text-[#FF3E1D] transition-colors"
+          className="flex items-center gap-2 text-sm font-semibold text-red-500 hover:text-red-600 transition-colors"
         >
           <LogOut className="w-4 h-4" />
           <span>Logout</span>

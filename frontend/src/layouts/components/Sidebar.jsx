@@ -51,7 +51,7 @@ const Sidebar = () => {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${
                     isActive 
-                      ? 'bg-[#E7E7FF] text-[#696CFF] font-semibold' 
+                      ? 'bg-primary/10 text-primary font-semibold' 
                       : 'text-[#697A8D] hover:bg-gray-50'
                   }`
                 }
@@ -74,7 +74,7 @@ const Sidebar = () => {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${
                     isActive 
-                      ? 'bg-[#E7E7FF] text-[#696CFF] font-semibold' 
+                      ? 'bg-primary/10 text-primary font-semibold' 
                       : 'text-[#697A8D] hover:bg-gray-50'
                   }`
                 }
@@ -90,7 +90,7 @@ const Sidebar = () => {
 
       <div className="p-6 shrink-0 bg-white border-t border-gray-100">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#E7E7FF] text-[#696CFF] flex items-center justify-center font-bold text-lg">
+          <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-lg">
             A
           </div>
           <div>

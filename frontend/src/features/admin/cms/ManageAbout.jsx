@@ -90,7 +90,7 @@ const ManageAbout = () => {
       text: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#696CFF',
+      confirmButtonColor: 'var(--color-primary)',
       cancelButtonColor: '#8592A3',
       confirmButtonText: 'Yes, reset it!'
     }).then((result) => {
@@ -153,7 +153,7 @@ const ManageAbout = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#696CFF]"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -168,7 +168,7 @@ const ManageAbout = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsPreviewModalOpen(true)}
-            className="flex items-center gap-2 bg-indigo-50 text-indigo-600 px-4 py-2.5 rounded-md font-semibold text-sm border border-indigo-100 hover:bg-indigo-100 hover:border-indigo-200 transition-colors shadow-sm"
+            className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2.5 rounded-md font-semibold text-sm border border-primary/20 hover:bg-primary/20 hover:border-primary/30 transition-colors shadow-sm"
           >
             <Eye className="w-4 h-4" />
             Live Preview
@@ -183,7 +183,7 @@ const ManageAbout = () => {
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="flex items-center gap-2 bg-[#696CFF] text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-[#5b5eea] transition-colors shadow-[0_2px_4px_0_rgba(105,108,255,0.4)] disabled:opacity-70"
+            className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-[0_2px_4px_0_var(--color-primary)] disabled:opacity-70"
           >
             {isSaving ? (
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
@@ -205,21 +205,21 @@ const ManageAbout = () => {
             <div className="flex items-center bg-white rounded-md border border-gray-200 p-0.5">
               <button
                 onClick={() => setPreviewMode('desktop')}
-                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'desktop' ? 'bg-[#E7E7FF] text-[#696CFF]' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'desktop' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Desktop View"
               >
                 <Monitor className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setPreviewMode('tablet')}
-                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'tablet' ? 'bg-[#E7E7FF] text-[#696CFF]' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'tablet' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Tablet View"
               >
                 <Tablet className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setPreviewMode('mobile')}
-                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'mobile' ? 'bg-[#E7E7FF] text-[#696CFF]' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'mobile' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Mobile View"
               >
                 <Smartphone className="w-4 h-4" />
@@ -255,7 +255,7 @@ const ManageAbout = () => {
               <div className="flex justify-between items-center mb-1.5">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
                 <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showSubheading} onChange={(e) => setShowSubheading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-[#696CFF] focus:ring-[#696CFF]" />
+                  <input type="checkbox" checked={showSubheading} onChange={(e) => setShowSubheading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
                   <span className="text-xs font-semibold text-gray-500">Show</span>
                 </label>
               </div>
@@ -264,14 +264,14 @@ const ManageAbout = () => {
                 value={subheading}
                 onChange={(e) => setSubheading(e.target.value)}
                 placeholder="e.g. BUILDING EXCELLENCE SINCE 1995"
-                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-[#696CFF]/20 focus:border-[#696CFF]"
+                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
             <div>
               <div className="flex justify-between items-center mb-1.5">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
                 <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showHeading} onChange={(e) => setShowHeading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-[#696CFF] focus:ring-[#696CFF]" />
+                  <input type="checkbox" checked={showHeading} onChange={(e) => setShowHeading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
                   <span className="text-xs font-semibold text-gray-500">Show</span>
                 </label>
               </div>
@@ -280,7 +280,7 @@ const ManageAbout = () => {
                 value={heading}
                 onChange={(e) => setHeading(e.target.value)}
                 placeholder="e.g. Shaping Tomorrow's Business Leaders"
-                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-[#696CFF]/20 focus:border-[#696CFF]"
+                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
           </div>
@@ -291,7 +291,7 @@ const ManageAbout = () => {
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-bold text-[#566A7F]">About Image</h3>
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={showImage} onChange={(e) => setShowImage(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-[#696CFF] focus:ring-[#696CFF]" />
+              <input type="checkbox" checked={showImage} onChange={(e) => setShowImage(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
               <span className="text-sm font-semibold text-gray-500">Show Image</span>
             </label>
           </div>
@@ -307,13 +307,13 @@ const ManageAbout = () => {
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-bold text-[#566A7F]">Paragraphs</h3>
               <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
-                <input type="checkbox" checked={showParagraphs} onChange={(e) => setShowParagraphs(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-[#696CFF] focus:ring-[#696CFF]" />
+                <input type="checkbox" checked={showParagraphs} onChange={(e) => setShowParagraphs(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
                 <span className="text-sm font-semibold text-gray-500">Show Paragraphs</span>
               </label>
             </div>
             <button
               onClick={addParagraph}
-              className="flex items-center gap-2 text-sm font-semibold text-[#696CFF] bg-[#E7E7FF] px-3 py-1.5 rounded-md hover:bg-[#d4d4ff] transition-colors"
+              className="flex items-center gap-2 text-sm font-semibold text-primary bg-primary/10 px-3 py-1.5 rounded-md hover:bg-primary/20 transition-colors"
             >
               <Plus className="w-4 h-4" /> Add Paragraph
             </button>
@@ -325,7 +325,7 @@ const ManageAbout = () => {
                   value={para}
                   onChange={(e) => updateParagraph(index, e.target.value)}
                   rows="4"
-                  className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-[#696CFF]/20 focus:border-[#696CFF]"
+                  className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
                 <button
                   onClick={() => removeParagraph(index)}
@@ -345,13 +345,13 @@ const ManageAbout = () => {
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-bold text-[#566A7F]">Statistics</h3>
               <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
-                <input type="checkbox" checked={showStats} onChange={(e) => setShowStats(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-[#696CFF] focus:ring-[#696CFF]" />
+                <input type="checkbox" checked={showStats} onChange={(e) => setShowStats(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
                 <span className="text-sm font-semibold text-gray-500">Show Stats Section</span>
               </label>
             </div>
             <button
               onClick={addStat}
-              className="flex items-center gap-2 text-sm font-semibold text-[#696CFF] bg-[#E7E7FF] px-3 py-1.5 rounded-md hover:bg-[#d4d4ff] transition-colors"
+              className="flex items-center gap-2 text-sm font-semibold text-primary bg-primary/10 px-3 py-1.5 rounded-md hover:bg-primary/20 transition-colors"
             >
               <Plus className="w-4 h-4" /> Add Stat
             </button>
@@ -370,7 +370,7 @@ const ManageAbout = () => {
                       value={stat.value}
                       onChange={(e) => updateStat(index, 'value', e.target.value)}
                       placeholder="Value (e.g., 16+)"
-                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-[#696CFF]/20 focus:border-[#696CFF]"
+                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
                   </div>
                   <div>
@@ -379,7 +379,7 @@ const ManageAbout = () => {
                       value={stat.label}
                       onChange={(e) => updateStat(index, 'label', e.target.value)}
                       placeholder="Label (e.g., YEARS OF EXCELLENCE)"
-                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-[#696CFF]/20 focus:border-[#696CFF]"
+                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
                   </div>
                 </div>
