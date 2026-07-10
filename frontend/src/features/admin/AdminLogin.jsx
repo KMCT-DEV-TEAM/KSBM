@@ -62,7 +62,7 @@ const AdminLogin = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-[#696CFF]/20 focus:border-[#696CFF] transition-all"
+                className="w-full pl-10 pr-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                 placeholder="admin@ksbm.ac.in"
                 required
               />
@@ -73,7 +73,7 @@ const AdminLogin = () => {
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
               <label className="text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Password</label>
-              <a href="#" className="text-xs font-semibold text-[#696CFF] hover:text-[#5b5eea]">Forgot Password?</a>
+              <a href="#" className="text-xs font-semibold text-primary hover:text-primary/90">Forgot Password?</a>
             </div>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -83,7 +83,7 @@ const AdminLogin = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-[#696CFF]/20 focus:border-[#696CFF] transition-all"
+                className="w-full pl-10 pr-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                 placeholder="••••••••"
                 required
               />
@@ -92,7 +92,7 @@ const AdminLogin = () => {
 
           {/* Remember Me Toggle Mock */}
           <div className="flex items-center mt-2">
-            <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-[#696CFF] focus:ring-[#696CFF]" />
+            <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
             <span className="ml-2 text-sm text-[#697A8D]">Remember me</span>
           </div>
 
@@ -100,7 +100,7 @@ const AdminLogin = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-[#696CFF] text-white py-2.5 rounded-md font-semibold text-sm hover:bg-[#5b5eea] transition-colors shadow-[0_2px_4px_0_rgba(105,108,255,0.4)] disabled:opacity-70 mt-4 flex justify-center items-center"
+            className="w-full bg-primary text-white py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-[0_2px_4px_0_var(--color-primary)] disabled:opacity-70 mt-4 flex justify-center items-center"
           >
             {isLoading ? (
               <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
