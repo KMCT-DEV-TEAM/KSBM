@@ -141,8 +141,32 @@ const ManageHero = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#696CFF]"></div>
+      <div className="space-y-6 w-full animate-pulse">
+        <div className="flex justify-between items-end">
+          <div>
+            <div className="h-8 bg-gray-200 rounded w-64 mb-2"></div>
+            <div className="h-4 bg-gray-200 rounded w-96"></div>
+          </div>
+          <div className="flex gap-3">
+            <div className="h-10 w-32 bg-gray-200 rounded"></div>
+            <div className="h-10 w-32 bg-gray-200 rounded"></div>
+            <div className="h-10 w-40 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] p-6 md:p-8 max-w-5xl mx-auto space-y-8">
+          <div className="border-b border-gray-100 pb-8">
+            <div className="h-6 bg-gray-200 rounded w-48 mb-4"></div>
+            <div className="h-40 bg-gray-200 rounded w-full"></div>
+          </div>
+          <div className="border-b border-gray-100 pb-8">
+            <div className="h-6 bg-gray-200 rounded w-48 mb-4"></div>
+            <div className="space-y-4">
+              <div className="h-12 bg-gray-200 rounded w-full"></div>
+              <div className="h-12 bg-gray-200 rounded w-full"></div>
+              <div className="h-12 bg-gray-200 rounded w-full"></div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
