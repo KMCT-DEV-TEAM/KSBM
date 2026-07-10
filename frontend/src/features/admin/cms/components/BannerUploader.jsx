@@ -40,12 +40,24 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
     }
 
     if (uploadedUrls.length > 0) {
-      setBannerImages((prev) => [...prev, ...uploadedUrls]);
+      const newImages = [...bannerImages, ...uploadedUrls];
+      setBannerImages(newImages);
+      
+      try {
+        const { data } = await api.get('/cms/hero');
+        await api.put('/cms/hero', {
+          ...data,
+          bannerImages: newImages
+        });
+      } catch (error) {
+        console.error('Failed to sync upload with database:', error);
+      }
+
       Swal.fire({
         toast: true,
         position: 'top-end',
         icon: 'success',
-        title: 'Images uploaded successfully!',
+        title: 'Images uploaded and saved to database!',
         showConfirmButton: false,
         timer: 3000
       });
@@ -72,11 +84,37 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
       confirmButtonColor: 'var(--color-primary)',
       cancelButtonColor: '#ff3e1d',
       confirmButtonText: 'Yes, remove it!'
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         const newImages = [...bannerImages];
         newImages.splice(index, 1);
         setBannerImages(newImages);
+        
+        try {
+          const { data } = await api.get('/cms/hero');
+          await api.put('/cms/hero', {
+            ...data,
+            bannerImages: newImages
+          });
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Image deleted from database!',
+            showConfirmButton: false,
+            timer: 3000
+          });
+        } catch (error) {
+          console.error('Failed to delete image from database:', error);
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'Failed to delete from database',
+            showConfirmButton: false,
+            timer: 3000
+          });
+        }
       }
     });
   };
@@ -89,7 +127,7 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
     dragOverItem.current = position;
   };
 
-  const handleDragEnd = () => {
+  const handleDragEnd = async () => {
     if (dragItem.current === undefined || dragOverItem.current === undefined) return;
     if (dragItem.current === dragOverItem.current) return;
 
@@ -100,6 +138,16 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
     dragItem.current = undefined;
     dragOverItem.current = undefined;
     setBannerImages(copyListItems);
+    
+    try {
+      const { data } = await api.get('/cms/hero');
+      await api.put('/cms/hero', {
+        ...data,
+        bannerImages: copyListItems
+      });
+    } catch (error) {
+      console.error('Failed to sync reorder with database:', error);
+    }
   };
 
   return (
