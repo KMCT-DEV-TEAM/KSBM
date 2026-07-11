@@ -61,7 +61,7 @@ const FacilitiesSection = ({ previewData }) => {
 
   return (
     <section className="w-full bg-background py-14 lg:py-20">
-      <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header Section */}
         {(showSubheading || showHeading || showDescription) && (

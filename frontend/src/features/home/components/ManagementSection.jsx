@@ -37,7 +37,7 @@ const ManagementSection = ({ previewData }) => {
 
   return (
     <section className="w-full bg-white py-16 lg:py-24">
-      <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.p

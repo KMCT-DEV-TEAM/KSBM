@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-// const api = axios.create({
-//   baseURL: 'http://localhost:5000/api', // Adjust this in production
-//   withCredentials: true, // Crucial for sending and receiving httpOnly cookies
-// });
 const api = axios.create({
-  baseURL: 'https://ksbm-bs43.onrender.com/api', // Adjust this in production
+  baseURL: 'http://localhost:5000/api', // Adjust this in production
   withCredentials: true, // Crucial for sending and receiving httpOnly cookies
 });
+// const api = axios.create({
+//   baseURL: 'https://ksbm-bs43.onrender.com/api', // Adjust this in production
+//   withCredentials: true, // Crucial for sending and receiving httpOnly cookies
+// });
 
 let activeRequests = 0;
 let loadingTimer = null;
