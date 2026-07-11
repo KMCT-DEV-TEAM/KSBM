@@ -7,15 +7,20 @@ import cmsRoutes from './modules/cms/cms.routes.js';
 import uploadRoutes from './modules/upload/upload.routes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
+
+
+dotenv.config();
+
 // Middlewares
 app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:5174"],
+  origin: ["http://localhost:5173", "http://localhost:5174", "https://ksbm-1.onrender.com"],
   credentials: true,
 }));
 app.use(express.json());

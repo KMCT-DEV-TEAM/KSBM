@@ -1,7 +1,11 @@
 import axios from 'axios';
 
+// const api = axios.create({
+//   baseURL: 'http://localhost:5000/api', // Adjust this in production
+//   withCredentials: true, // Crucial for sending and receiving httpOnly cookies
+// });
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // Adjust this in production
+  baseURL: 'https://ksbm-bs43.onrender.com/api', // Adjust this in production
   withCredentials: true, // Crucial for sending and receiving httpOnly cookies
 });
 
@@ -27,7 +31,7 @@ api.interceptors.request.use(
       activeRequests++;
       updateLoadingState();
     }
-    
+
     const token = localStorage.getItem('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -51,7 +55,7 @@ api.interceptors.response.use(
       activeRequests--;
       updateLoadingState();
     }
-    
+
     const originalRequest = error.config;
 
     // If the error is 401 and we haven't already retried this request, and it's not the refresh endpoint itself
