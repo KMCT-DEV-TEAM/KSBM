@@ -9,6 +9,29 @@ const AcademicPrograms = ({ previewData }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const scrollRef = React.useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 10);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) {
+      el.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+      checkScroll();
+      return () => {
+        el.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', checkScroll);
+      };
+    }
+  }, [data, previewData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -181,18 +204,22 @@ const AcademicPrograms = ({ previewData }) => {
                 {/* Navigation Arrows for Slider */}
                 {hasMultiplePages && (
                   <>
-                    <button 
-                      onClick={() => scroll('left')}
-                      className="absolute top-1/2 -translate-y-1/2 left-4 md:left-[calc(50%-416px)] lg:left-[calc(50%-620px)] z-30 w-12 h-12 rounded-full bg-white/95 backdrop-blur shadow-[0_4px_15px_rgba(0,0,0,0.15)] text-primary items-center justify-center hover:bg-primary hover:text-white hover:scale-110 transition-all opacity-0 group-hover/slider:opacity-100 disabled:opacity-0 focus:opacity-100 hidden md:flex"
-                    >
-                      <ChevronLeft className="w-6 h-6 ml-[-2px]" />
-                    </button>
-                    <button 
-                      onClick={() => scroll('right')}
-                      className="absolute top-1/2 -translate-y-1/2 right-4 md:right-[calc(50%-416px)] lg:right-[calc(50%-620px)] z-30 w-12 h-12 rounded-full bg-white/95 backdrop-blur shadow-[0_4px_15px_rgba(0,0,0,0.15)] text-primary items-center justify-center hover:bg-primary hover:text-white hover:scale-110 transition-all opacity-0 group-hover/slider:opacity-100 disabled:opacity-0 focus:opacity-100 hidden md:flex"
-                    >
-                      <ChevronRight className="w-6 h-6 mr-[-2px]" />
-                    </button>
+                    {canScrollLeft && (
+                      <button 
+                        onClick={() => scroll('left')}
+                        className="absolute top-1/2 -translate-y-1/2 left-4 md:left-[calc(50%-416px)] lg:left-[calc(50%-688px)] z-30 w-12 h-12 rounded-full bg-white/95 backdrop-blur shadow-[0_4px_15px_rgba(0,0,0,0.15)] text-primary items-center justify-center hover:bg-primary hover:text-white hover:scale-110 transition-all opacity-0 group-hover/slider:opacity-100 disabled:opacity-0 focus:opacity-100 hidden md:flex"
+                      >
+                        <ChevronLeft className="w-6 h-6 ml-[-2px]" />
+                      </button>
+                    )}
+                    {canScrollRight && (
+                      <button 
+                        onClick={() => scroll('right')}
+                        className="absolute top-1/2 -translate-y-1/2 right-4 md:right-[calc(50%-416px)] lg:right-[calc(50%-688px)] z-30 w-12 h-12 rounded-full bg-white/95 backdrop-blur shadow-[0_4px_15px_rgba(0,0,0,0.15)] text-primary items-center justify-center hover:bg-primary hover:text-white hover:scale-110 transition-all opacity-0 group-hover/slider:opacity-100 disabled:opacity-0 focus:opacity-100 hidden md:flex"
+                      >
+                        <ChevronRight className="w-6 h-6 mr-[-2px]" />
+                      </button>
+                    )}
                   </>
                 )}
 
@@ -204,9 +231,6 @@ const AcademicPrograms = ({ previewData }) => {
                     msOverflowStyle: 'none'
                   }}
                 >
-                  {/* Padding div to center content on desktop start */}
-                  <div className="hidden md:block shrink-0" style={{ width: 'max(0px, calc(50% - 416px))' }}></div>
-                  
                   {programs.map((program, index) =>
                     renderProgramCard(
                       program,
@@ -214,9 +238,6 @@ const AcademicPrograms = ({ previewData }) => {
                       `flex-none snap-center md:snap-start w-[85vw] md:w-[400px] h-[340px] md:h-[340px] lg:h-[380px]`
                     )
                   )}
-
-                  {/* Padding div to center content on desktop end */}
-                  <div className="hidden md:block shrink-0" style={{ width: 'max(0px, calc(50% - 416px))' }}></div>
                 </div>
               </div>
             )}
