@@ -14,6 +14,7 @@ import {
   updateFacilitiesSettings,
   getManagementSettings,
   updateManagementSettings
+  updatePlacementSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -46,5 +47,9 @@ router.route('/facilities')
 router.route('/management')
   .get(getManagementSettings)
   .put(protect, updateManagementSettings);
+
+router.route('/placement')
+  .get(getPlacementSettings)
+  .put(protect, updatePlacementSettings);
 
 export default router;

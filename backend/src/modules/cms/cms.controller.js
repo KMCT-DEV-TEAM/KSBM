@@ -5,7 +5,7 @@ import Programs from './programs.model.js';
 import Accreditation from './accreditation.model.js';
 import Facilities from './facilities.model.js';
 import Management from './management.model.js';
-
+import Placement from './placement.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -226,15 +226,15 @@ export const updateFacilitiesSettings = async (req, res) => {
   }
 };
 
-// @desc    Get Management settings
-// @route   GET /api/cms/management
-// @access  Public
 export const getManagementSettings = async (req, res) => {
   try {
     const settings = await Management.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching management settings', error: error.message });
+    res.status(500).json({
+      message: "Server error fetching management settings",
+      error: error.message,
+    });
   }
 };
 
@@ -255,6 +255,72 @@ export const updateManagementSettings = async (req, res) => {
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error updating management settings', error: error.message });
+    res.status(500).json({
+      message: "Server error updating management settings",
+      error: error.message,
+    });
+  }
+};
+
+// @desc    Get Placement settings
+// @route   GET /api/cms/placement
+// @access  Public
+export const getPlacementSettings = async (req, res) => {
+  try {
+    const settings = await Placement.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error fetching placement settings",
+      error: error.message,
+    });
+  }
+};
+
+// @desc    Update Placement settings
+// @route   PUT /api/cms/placement
+// @access  Private (Admin)
+export const updatePlacementSettings = async (req, res) => {
+  try {
+    const {
+      subheading,
+      heading,
+      description,
+      stat1Value,
+      stat1Label,
+      stat2Value,
+      stat2Label,
+      showSubheading,
+      showHeading,
+      showDescription,
+      showStats,
+    } = req.body;
+
+    const settings = await Placement.getSettings();
+
+    if (subheading !== undefined) settings.subheading = subheading;
+    if (heading !== undefined) settings.heading = heading;
+    if (description !== undefined) settings.description = description;
+    if (stat1Value !== undefined) settings.stat1Value = stat1Value;
+    if (stat1Label !== undefined) settings.stat1Label = stat1Label;
+    if (stat2Value !== undefined) settings.stat2Value = stat2Value;
+    if (stat2Label !== undefined) settings.stat2Label = stat2Label;
+
+    if (showSubheading !== undefined)
+      settings.showSubheading = showSubheading;
+    if (showHeading !== undefined)
+      settings.showHeading = showHeading;
+    if (showDescription !== undefined)
+      settings.showDescription = showDescription;
+    if (showStats !== undefined)
+      settings.showStats = showStats;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error updating placement settings",
+      error: error.message,
+    });
   }
 };
