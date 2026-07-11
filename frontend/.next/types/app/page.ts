@@ -1,4 +1,4 @@
-// File: D:\KMCT\Projects\KSBM\frontend\src\app\page.jsx
+// File: D:\KMCT\KSBM\frontend\src\app\page.jsx
 import * as entry from '../../../src/app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
