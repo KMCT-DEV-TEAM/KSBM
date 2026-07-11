@@ -21,6 +21,7 @@ const Sidebar = () => {
     { name: 'About KSBM', path: '/admin/cms/about', icon: <Image className="w-5 h-5" /> },
     { name: 'Academic Programs', path: '/admin/cms/academics', icon: <BookOpen className="w-5 h-5" /> },
     { name: 'Accreditation', path: '/admin/cms/accreditation', icon: <Award className="w-5 h-5" /> },
+    { name: 'Management', path: '/admin/cms/management', icon: <Users className="w-5 h-5" /> },
     { name: 'Facilities', path: '/admin/cms/facilities', icon: <Building2 className="w-5 h-5" /> },
     { name: 'Placement', path: '/admin/cms/placement', icon: <Briefcase className="w-5 h-5" /> },
     { name: 'Recruiters', path: '/admin/cms/recruiters', icon: <Handshake className="w-5 h-5" /> },

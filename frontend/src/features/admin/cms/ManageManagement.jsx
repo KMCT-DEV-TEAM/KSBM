@@ -1,0 +1,365 @@
+import React, { useState, useEffect } from 'react';
+import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2, GripVertical, Image as ImageIcon } from 'lucide-react';
+import api from '../../../api/axios';
+import Swal from 'sweetalert2';
+import ConfirmationModal from '../../../components/ConfirmationModal';
+import ManagementPreview from '../../home/components/ManagementSection';
+import LogoUploader from './components/LogoUploader';
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
+
+const ManageManagement = () => {
+  const [subheading, setSubheading] = useState('');
+  const [heading, setHeading] = useState('');
+  const [description, setDescription] = useState('');
+  const [members, setMembers] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [previewMode, setPreviewMode] = useState('desktop');
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, title: '', message: '', confirmText: '', variant: 'danger' });
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const { data } = await api.get('/cms/management');
+      setSubheading(data.subheading || '');
+      setHeading(data.heading || '');
+      setDescription(data.description || '');
+      setMembers(data.members || []);
+    } catch (error) {
+      console.error('Error fetching management settings:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to load management settings.' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await api.put('/cms/management', {
+        subheading, heading, description, members
+      });
+      Toast.fire({ icon: 'success', title: 'Management section saved successfully!' });
+    } catch (error) {
+      console.error('Error saving management settings:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleResetToDefault = () => {
+    setConfirmModal({
+      isOpen: true,
+      action: 'reset',
+      title: 'Reset to Defaults?',
+      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary'
+    });
+  };
+
+  const handleConfirmAction = async () => {
+    if (confirmModal.action === 'reset') {
+      setSubheading('OUR MANAGEMENT');
+      setHeading('The Architects Of Excellence');
+      setDescription('Our leadership board combines decades of top-tier industry experience with a profound commitment to academic innovation.');
+      setMembers([
+        {
+          id: '1',
+          name: 'Dr. Sarah Mitchell',
+          role: 'MANAGING DIRECTOR',
+          verticalText: 'DIRECTOR',
+          image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: '2',
+          name: 'Dr. Adrian Starlin',
+          role: 'CHAIRMAN DIRECTOR',
+          verticalText: 'CHAIRMAN',
+          image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: '3',
+          name: 'Dr. Elena Rostova',
+          role: 'EXECUTIVE DIRECTOR',
+          verticalText: 'EXECUTIVE',
+          image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+        }
+      ]);
+      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+    }
+    setConfirmModal({ ...confirmModal, isOpen: false });
+  };
+
+  const handleAddMember = () => {
+    setMembers([
+      ...members,
+      {
+        id: Date.now().toString(),
+        name: 'New Member',
+        role: 'ROLE',
+        verticalText: 'TEXT',
+        image: ''
+      }
+    ]);
+  };
+
+  const handleUpdateMember = (id, field, value) => {
+    setMembers(members.map(member => 
+      member.id === id ? { ...member, [field]: value } : member
+    ));
+  };
+
+  const handleDeleteMember = async (id) => {
+    const updatedMembers = members.filter(member => member.id !== id);
+    setMembers(updatedMembers);
+    
+    try {
+      await api.put('/cms/management', {
+        subheading, heading, description, members: updatedMembers
+      });
+      Toast.fire({ icon: 'success', title: 'Member deleted from database.' });
+    } catch (error) {
+      console.error('Error deleting member:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to delete member from database.' });
+      setMembers(members); // revert on failure
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6 w-full">
+      <div className="flex justify-between items-end">
+        <div>
+          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Management Settings</h1>
+          <p className="text-[#697A8D] mt-1 text-sm">Manage the leadership board and management section.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsPreviewModalOpen(true)}
+            className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2.5 rounded-md font-semibold text-sm border border-primary/20 hover:bg-primary/20 hover:border-primary/30 transition-colors shadow-sm"
+          >
+            <Eye className="w-4 h-4" />
+            Live Preview
+          </button>
+          <button
+            onClick={handleResetToDefault}
+            className="flex items-center gap-2 bg-white text-[#697A8D] px-4 py-2.5 rounded-md font-semibold text-sm border border-[#D9DEE3] hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Reset to Default
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-[0_2px_4px_0_var(--color-primary)] disabled:opacity-70"
+          >
+            {isSaving ? (
+              <Loader2 className="w-4 h-4 animate-spin text-white" />
+            ) : (
+              <Save className="w-4 h-4" />
+            )}
+            Save Changes
+          </button>
+        </div>
+      </div>
+
+      {isPreviewModalOpen && (
+        <div className="fixed inset-0 z-[100] flex flex-col bg-gray-900/80 backdrop-blur-sm">
+          <div className="flex justify-between items-center bg-white px-4 py-3 border-b border-gray-200">
+            <div className="flex items-center gap-2 text-sm font-bold text-[#697A8D] uppercase tracking-wider">
+              <Eye className="w-5 h-5" /> Live Preview
+            </div>
+
+            <div className="flex items-center bg-white rounded-md border border-gray-200 p-0.5">
+              <button
+                onClick={() => setPreviewMode('desktop')}
+                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'desktop' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
+                title="Desktop View"
+              >
+                <Monitor className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setPreviewMode('tablet')}
+                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'tablet' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
+                title="Tablet View"
+              >
+                <Tablet className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setPreviewMode('mobile')}
+                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'mobile' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
+                title="Mobile View"
+              >
+                <Smartphone className="w-4 h-4" />
+              </button>
+            </div>
+
+            <button
+              onClick={() => setIsPreviewModalOpen(false)}
+              className="p-2 text-gray-500 hover:text-red-500 bg-gray-100 hover:bg-red-50 rounded-md transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
+            <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
+              <ManagementPreview previewData={{
+                subheading, heading, description, members
+              }} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] p-6 md:p-8 max-w-5xl mx-auto">
+        <div className="mb-8 pb-8 border-b border-gray-100">
+          <h3 className="text-lg font-bold text-[#566A7F] mb-4">Header Content</h3>
+          <div className="grid grid-cols-1 gap-6">
+            <div>
+              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Subheading</label>
+              <input
+                type="text"
+                value={subheading}
+                onChange={(e) => setSubheading(e.target.value)}
+                placeholder="e.g. OUR MANAGEMENT"
+                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Main Heading</label>
+              <input
+                type="text"
+                value={heading}
+                onChange={(e) => setHeading(e.target.value)}
+                placeholder="e.g. The Architects Of Excellence"
+                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+                placeholder="e.g. Our leadership board combines decades of top-tier industry experience..."
+                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-lg font-bold text-[#566A7F]">Management Members</h3>
+            <button
+              onClick={handleAddMember}
+              className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+            >
+              <Plus className="w-4 h-4" /> Add Member
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            {members.map((member, index) => (
+              <div key={member.id} className="p-4 border border-gray-200 rounded-lg bg-gray-50 flex gap-6 items-start relative group">
+                <button
+                  onClick={() => handleDeleteMember(member.id)}
+                  className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                  title="Remove Member"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+
+                <div className="w-40 shrink-0">
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Profile Image</label>
+                  <LogoUploader
+                    currentLogoUrl={member.image || 'https://via.placeholder.com/150'}
+                    onUploadSuccess={(url) => handleUpdateMember(member.id, 'image', url)}
+                  />
+                </div>
+
+                <div className="flex-1 grid grid-cols-2 gap-4">
+                  <div className="col-span-2">
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Name</label>
+                    <input
+                      type="text"
+                      value={member.name}
+                      onChange={(e) => handleUpdateMember(member.id, 'name', e.target.value)}
+                      placeholder="e.g. Dr. Sarah Mitchell"
+                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Role</label>
+                    <input
+                      type="text"
+                      value={member.role}
+                      onChange={(e) => handleUpdateMember(member.id, 'role', e.target.value)}
+                      placeholder="e.g. MANAGING DIRECTOR"
+                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Vertical Text</label>
+                    <input
+                      type="text"
+                      value={member.verticalText}
+                      onChange={(e) => handleUpdateMember(member.id, 'verticalText', e.target.value)}
+                      placeholder="e.g. DIRECTOR"
+                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            {members.length === 0 && (
+              <div className="text-center py-8 text-gray-400 text-sm">
+                No management members added yet. Click "Add Member" to create one.
+              </div>
+            )}
+          </div>
+        </div>
+
+      </div>
+
+      <ConfirmationModal 
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+        onConfirm={handleConfirmAction}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        variant={confirmModal.variant}
+        isSubmitting={isSaving}
+      />
+    </div>
+  );
+};
+
+export default ManageManagement;
