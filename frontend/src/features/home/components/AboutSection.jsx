@@ -120,7 +120,7 @@ const AboutSection = ({ previewData }) => {
         <img src={watermarkImg} alt="Background Watermark" className={`${watermarkWidthClass} h-auto object-contain mix-blend-multiply contrast-150`} />
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Top Split Section */}
         {showTopSection && (
@@ -143,11 +143,6 @@ const AboutSection = ({ previewData }) => {
                     style={{ clipPath: 'inset(0 0 0 0 round 1rem)' }}
                   />
 
-                  {/* Floating 360 Button */}
-                  <div className="absolute bottom-4 -left-2 bg-primary text-white px-3 py-1.5 rounded-lg shadow-lg z-20 cursor-pointer hover:scale-105 transition-transform flex flex-col items-center gap-0.5">
-                    <Rotate3d className="w-6 h-5" />
-                    <span className="text-[9px] font-bold">360°</span>
-                  </div>
                 </div>
               </motion.div>
             )}
@@ -195,6 +190,22 @@ const AboutSection = ({ previewData }) => {
                   ))}
                 </motion.div>
               )}
+
+              {/* 360 Button under text */}
+              <motion.div 
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+                className={`mt-8 flex ${!cmsData.showImage ? 'justify-center' : 'justify-start'}`}
+              >
+                <button className="group bg-primary text-white border border-transparent px-5 py-3 rounded-lg shadow-lg cursor-pointer hover:bg-white hover:text-primary hover:border-primary hover:-translate-y-1 transition-all flex items-center gap-2 overflow-hidden">
+                  <Rotate3d className="w-5 h-5 shrink-0" />
+                  <div className="flex items-center text-sm font-bold tracking-widest uppercase whitespace-nowrap">
+                    <span>360°</span>
+                    <span className="max-w-0 opacity-0 overflow-hidden group-hover:max-w-[150px] group-hover:opacity-100 group-hover:ml-2 transition-all duration-500 ease-in-out">
+                      Visitor Tour
+                    </span>
+                  </div>
+                </button>
+              </motion.div>
             </motion.div>
           </div>
         )}
@@ -220,7 +231,7 @@ const AboutSection = ({ previewData }) => {
           }}
           className="w-full "
         >
-          <div className="max-w-[1440px] bg-[#f4fafe] py-12 mx-auto px-4 lg:px-8 rounded-xl shadow-sm">
+          <div className="w-[98%] max-w-[1440px] bg-[#f4fafe] py-12 mx-auto px-4 sm:px-6 lg:px-8 rounded-xl shadow-sm">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 w-full">
 
               {cmsData.stats.map((stat, index) => (

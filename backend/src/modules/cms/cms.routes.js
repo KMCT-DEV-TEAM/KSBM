@@ -13,7 +13,8 @@ import {
   getFacilitiesSettings,
   updateFacilitiesSettings,
   getManagementSettings,
-  updateManagementSettings
+  updateManagementSettings,
+  getPlacementSettings,
   updatePlacementSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';

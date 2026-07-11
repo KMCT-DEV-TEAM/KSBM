@@ -29,7 +29,7 @@ const PlacementSection = ({ previewData }) => {
   if (loading) {
     return (
       <section className="w-full bg-[#f4f7f9] py-16 lg:py-20">
-        <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
+        <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse flex flex-col items-center">
             <div className="h-4 bg-gray-300 rounded w-48 mb-4"></div>
             <div className="h-10 bg-gray-300 rounded w-96 mb-6"></div>
@@ -66,7 +66,7 @@ const PlacementSection = ({ previewData }) => {
 
   return (
     <section className={`w-full bg-[#f4f7f9] py-16 lg:py-20 ${isMobilePreview ? 'max-w-[375px] mx-auto' : isTabletPreview ? 'max-w-[768px] mx-auto' : ''}`}>
-      <div className={`mx-auto px-4 lg:px-8 ${isMobilePreview || isTabletPreview ? 'w-full' : 'max-w-[1440px]'}`}>
+      <div className={`mx-auto px-4 sm:px-6 lg:px-8 ${isMobilePreview || isTabletPreview ? 'w-full' : 'w-[98%] max-w-[1440px]'}`}>
 
         {/* Header Section */}
         <div className="text-center max-w-4xl mx-auto mb-16">
