@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useRouter, usePathname } from 'next/navigation';
 import api from '../api/axios';
 
-const ProtectedRoute = () => {
+const ProtectedRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -22,7 +23,13 @@ const ProtectedRoute = () => {
     checkAuth();
   }, []);
 
-  if (isAuthenticated === null) {
+  useEffect(() => {
+    if (isAuthenticated === false) {
+      router.replace(`/admin/login?from=${pathname}`);
+    }
+  }, [isAuthenticated, router, pathname]);
+
+  if (isAuthenticated === null || isAuthenticated === false) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1a237e] mb-4"></div>
@@ -31,11 +38,7 @@ const ProtectedRoute = () => {
     );
   }
 
-  return isAuthenticated ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/admin/login" state={{ from: location }} replace />
-  );
+  return children;
 };
 
 export default ProtectedRoute;

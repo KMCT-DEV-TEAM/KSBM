@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Users, BookOpen, Building2, TrendingUp, MoreVertical, CreditCard, DollarSign } from 'lucide-react';
 
@@ -126,3 +127,4 @@ const DashboardOverview = () => {
 };
 
 export default DashboardOverview;
+

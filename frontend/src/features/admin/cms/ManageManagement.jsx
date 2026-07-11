@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2, GripVertical, Image as ImageIcon } from 'lucide-react';
 import api from '../../../api/axios';
@@ -363,3 +364,4 @@ const ManageManagement = () => {
 };
 
 export default ManageManagement;
+

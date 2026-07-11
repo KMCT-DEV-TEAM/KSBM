@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 
 const GenericCmsPage = ({ title }) => {
@@ -24,3 +25,4 @@ const GenericCmsPage = ({ title }) => {
 };
 
 export default GenericCmsPage;
+

@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { Save, Plus, Trash2, GripVertical, AlertCircle, Eye, Monitor, Smartphone, Tablet, RefreshCw, X, Loader2 } from 'lucide-react';
 import api from '../../../api/axios';
@@ -522,3 +523,4 @@ const ManageHeader = () => {
 };
 
 export default ManageHeader;
+

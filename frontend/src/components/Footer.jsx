@@ -1,6 +1,7 @@
+"use client";
 import React from 'react';
 import { MapPin, Mail, Phone } from 'lucide-react';
-import watermarkLogo from '../assets/Images/watermark_logo.png';
+const watermarkLogo = '/assets/Images/watermark_logo.png';
 
 const Footer = () => {
   return (
@@ -149,3 +150,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

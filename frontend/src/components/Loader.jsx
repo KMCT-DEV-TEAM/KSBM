@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -38,3 +39,4 @@ const Loader = ({ fullScreen = false, theme = 'dark', text = 'Loading' }) => {
 };
 
 export default Loader;
+

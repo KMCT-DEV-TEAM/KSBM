@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../../api/axios';
@@ -126,3 +127,4 @@ const ManagementSection = ({ previewData }) => {
 };
 
 export default ManagementSection;
+

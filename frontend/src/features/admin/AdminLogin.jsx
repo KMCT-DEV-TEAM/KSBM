@@ -1,15 +1,16 @@
+"use client";
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Lock, Mail, AlertCircle } from 'lucide-react';
 import api from '../../api/axios';
-import logo from '../../assets/Images/LOGO__KMCT School of Business Management (1).png';
+const logo = '/assets/Images/LOGO__KMCT School of Business Management (1).png';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ const AdminLogin = () => {
       const response = await api.post('/users/login', { email, password });
       localStorage.setItem('accessToken', response.data.accessToken);
       localStorage.setItem('userInfo', JSON.stringify(response.data));
-      navigate('/admin/dashboard');
+      router.push('/admin/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to authenticate. Please try again.');
     } finally {
@@ -120,3 +121,4 @@ const AdminLogin = () => {
 };
 
 export default AdminLogin;
+

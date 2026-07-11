@@ -1,8 +1,8 @@
+"use client";
 import React from 'react';
-import { Outlet } from 'react-router-dom';
 import Footer from '../components/Footer';
 
-const MainLayout = () => {
+const MainLayout = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* 
@@ -10,7 +10,7 @@ const MainLayout = () => {
         you can move <Header /> from the Home component to right here, above <main> 
       */}
       <main className="flex-grow">
-        <Outlet />
+        {children}
       </main>
       
       {/* Global Footer */}
@@ -20,3 +20,4 @@ const MainLayout = () => {
 };
 
 export default MainLayout;
+

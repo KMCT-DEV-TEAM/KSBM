@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2 } from 'lucide-react';
 import api from '../../../api/axios';
@@ -5,7 +6,7 @@ import Swal from 'sweetalert2';
 import LogoUploader from './components/LogoUploader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import AccreditationPreview from '../../home/components/AccreditationSection';
-import defaultAccreditationImg from '../../../assets/Images/Group 47.png';
+const defaultAccreditationImg = '/assets/Images/Group 47.png';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -264,3 +265,4 @@ const ManageAccreditation = () => {
 };
 
 export default ManageAccreditation;
+

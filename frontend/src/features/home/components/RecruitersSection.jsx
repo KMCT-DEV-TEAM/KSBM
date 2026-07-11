@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 
 const RecruitersSection = () => {
@@ -53,3 +54,4 @@ const RecruitersSection = () => {
 };
 
 export default RecruitersSection;
+

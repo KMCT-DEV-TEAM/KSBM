@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { Loader2 } from 'lucide-react';
@@ -61,3 +62,4 @@ const ConfirmationModal = ({
 };
 
 export default ConfirmationModal;
+

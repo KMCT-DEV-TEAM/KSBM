@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { UploadCloud, Image as ImageIcon, X, Loader2 } from 'lucide-react';
@@ -123,3 +124,4 @@ const LogoUploader = ({ currentLogoUrl, onUploadSuccess, onUploadStateChange }) 
 };
 
 export default LogoUploader;
+

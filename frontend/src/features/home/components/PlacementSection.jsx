@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/axios';
 
@@ -125,3 +126,4 @@ const PlacementSection = ({ previewData }) => {
 };
 
 export default PlacementSection;
+

@@ -1,7 +1,8 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/axios';
 import { motion } from 'framer-motion';
-import accredential from "../../../assets/Images/Group 47.png"
+const accredential = '/assets/Images/Group 47.png'
 import Loader from '../../../components/Loader';
 
 const AccreditationSection = ({ previewData }) => {
@@ -113,3 +114,4 @@ const AccreditationSection = ({ previewData }) => {
 };
 
 export default AccreditationSection;
+

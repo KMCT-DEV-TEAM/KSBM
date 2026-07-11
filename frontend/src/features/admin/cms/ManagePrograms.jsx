@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { Save, Plus, Trash2, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Edit2 } from 'lucide-react';
 import api from '../../../api/axios';
@@ -521,3 +522,4 @@ const ManagePrograms = () => {
 };
 
 export default ManagePrograms;
+

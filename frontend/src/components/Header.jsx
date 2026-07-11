@@ -1,5 +1,6 @@
+"use client";
 import React, { useState, useEffect } from 'react';
-import logo from '../assets/Images/LOGO__KMCT School of Business Management (1).png';
+const logo = '/assets/Images/LOGO__KMCT School of Business Management (1).png';
 import { Menu, X } from 'lucide-react';
 import api from '../api/axios';
 
@@ -190,3 +191,4 @@ const Header = ({ previewData }) => {
 };
 
 export default Header;
+

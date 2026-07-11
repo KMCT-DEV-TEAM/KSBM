@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { UploadCloud, Loader2, X, GripVertical, Image as ImageIcon } from 'lucide-react';
@@ -235,3 +236,4 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
 };
 
 export default BannerUploader;
+

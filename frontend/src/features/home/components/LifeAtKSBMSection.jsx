@@ -1,5 +1,6 @@
+"use client";
 import React from 'react';
-import watermarkLogo from '../../../assets/Images/watermark_logo.png';
+const watermarkLogo = '/assets/Images/watermark_logo.png';
 
 const LifeAtKSBMSection = () => {
   // Ordered to flow nicely in a CSS columns layout (top-to-bottom, then left-to-right)
@@ -75,3 +76,4 @@ const LifeAtKSBMSection = () => {
 };
 
 export default LifeAtKSBMSection;
+
