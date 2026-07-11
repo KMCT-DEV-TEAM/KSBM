@@ -1,8 +1,9 @@
+"use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { Rotate3d } from 'lucide-react';
 import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
-import graduateImg from '../../../assets/Images/graduate.png';
-import watermarkImg from '../../../assets/Images/watermark_logo.png';
+const graduateImg = '/assets/Images/graduate.png';
+const watermarkImg = '/assets/Images/watermark_logo.png';
 import api from '../../../api/axios';
 
 
@@ -256,3 +257,4 @@ const AboutSection = ({ previewData }) => {
 };
 
 export default AboutSection;
+

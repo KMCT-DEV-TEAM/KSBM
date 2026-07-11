@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 
 const NewsSection = () => {
@@ -115,3 +116,4 @@ const NewsSection = () => {
 };
 
 export default NewsSection;
+

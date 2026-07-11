@@ -1,7 +1,8 @@
+"use client";
 import React from 'react';
-import awardImg from '../../../assets/Images/achievement_award.png';
-import sportsImg from '../../../assets/Images/achievement_sports.png';
-import posterImg from '../../../assets/Images/achievement_poster.png';
+const awardImg = '/assets/Images/achievement_award.png';
+const sportsImg = '/assets/Images/achievement_sports.png';
+const posterImg = '/assets/Images/achievement_poster.png';
 
 const AchievementsSection = () => {
   const achievements = [
@@ -84,3 +85,4 @@ const AchievementsSection = () => {
 };
 
 export default AchievementsSection;
+

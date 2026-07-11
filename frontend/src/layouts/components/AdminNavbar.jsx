@@ -1,10 +1,11 @@
+"use client";
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { LogOut, Bell, Search } from 'lucide-react';
 import LogoutModal from '../../components/LogoutModal';
 
 const AdminNavbar = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const handleLogout = () => {
@@ -13,7 +14,7 @@ const AdminNavbar = () => {
 
   const confirmLogout = () => {
     setIsLogoutModalOpen(false);
-    navigate('/admin/login');
+    router.push('/admin/login');
   };
 
   return (
@@ -59,3 +60,4 @@ const AdminNavbar = () => {
 };
 
 export default AdminNavbar;
+

@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 
 const ManageUsers = () => {
@@ -65,3 +66,4 @@ const ManageUsers = () => {
 };
 
 export default ManageUsers;
+

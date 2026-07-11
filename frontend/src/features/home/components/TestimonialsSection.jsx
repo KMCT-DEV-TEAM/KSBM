@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 
 const TestimonialsSection = () => {
@@ -151,3 +152,4 @@ const TestimonialsSection = () => {
 };
 
 export default TestimonialsSection;
+

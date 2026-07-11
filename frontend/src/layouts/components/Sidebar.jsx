@@ -1,14 +1,17 @@
+"use client";
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, Users, Settings, 
   MonitorPlay, Type, Image, BookOpen, 
   Award, Building2, Briefcase, Handshake, 
   MessageSquare, Star, Newspaper, Heart, PanelBottom
 } from 'lucide-react';
-import logo from '../../assets/Images/LOGO__KMCT School of Business Management (1).png';
+const logo = '/assets/Images/LOGO__KMCT School of Business Management (1).png';
 
 const Sidebar = () => {
+  const pathname = usePathname();
   const mainLinks = [
     { name: 'Overview', path: '/admin/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
     { name: 'Users', path: '/admin/users', icon: <Users className="w-5 h-5" /> },
@@ -46,20 +49,18 @@ const Sidebar = () => {
           <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Core</p>
           <div className="space-y-1">
             {mainLinks.map((link) => (
-              <NavLink
+              <Link
                 key={link.path}
-                to={link.path}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${
-                    isActive 
-                      ? 'bg-primary/10 text-primary font-semibold' 
-                      : 'text-[#697A8D] hover:bg-gray-50'
-                  }`
-                }
+                href={link.path}
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${
+                  pathname === link.path 
+                    ? 'bg-primary/10 text-primary font-semibold' 
+                    : 'text-[#697A8D] hover:bg-gray-50'
+                }`}
               >
                 {link.icon}
                 <span className="text-sm">{link.name}</span>
-              </NavLink>
+              </Link>
             ))}
           </div>
         </div>
@@ -69,20 +70,18 @@ const Sidebar = () => {
           <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Website Content</p>
           <div className="space-y-1">
             {cmsLinks.map((link) => (
-              <NavLink
+              <Link
                 key={link.path}
-                to={link.path}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${
-                    isActive 
-                      ? 'bg-primary/10 text-primary font-semibold' 
-                      : 'text-[#697A8D] hover:bg-gray-50'
-                  }`
-                }
+                href={link.path}
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${
+                  pathname === link.path 
+                    ? 'bg-primary/10 text-primary font-semibold' 
+                    : 'text-[#697A8D] hover:bg-gray-50'
+                }`}
               >
                 {link.icon}
                 <span className="text-sm">{link.name}</span>
-              </NavLink>
+              </Link>
             ))}
           </div>
         </div>
@@ -105,3 +104,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+

@@ -1,10 +1,11 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { Save, Plus, Trash2, RefreshCw, Eye, Monitor, Smartphone, Tablet, X } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import LogoUploader from './components/LogoUploader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
-import graduateImg from '../../../assets/Images/graduate.png';
+const graduateImg = '/assets/Images/graduate.png';
 import AboutPreview from '../../home/components/AboutSection';
 
 const Toast = Swal.mixin({
@@ -471,3 +472,4 @@ const ManageAbout = () => {
 };
 
 export default ManageAbout;
+

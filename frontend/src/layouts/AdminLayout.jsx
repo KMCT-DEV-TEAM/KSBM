@@ -1,9 +1,9 @@
+"use client";
 import React from 'react';
-import { Outlet } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import AdminNavbar from './components/AdminNavbar';
 
-const AdminLayout = () => {
+const AdminLayout = ({ children }) => {
   return (
     <div className="flex h-screen w-full bg-[#F5F5F9] overflow-hidden font-sans">
       {/* Sidebar Component */}
@@ -15,9 +15,9 @@ const AdminLayout = () => {
         {/* Top Navbar */}
         <AdminNavbar />
 
-        {/* Dynamic Page Content (Outlet Area) */}
+        {/* Dynamic Page Content (Children Area) */}
         <main className="flex-1 overflow-y-auto p-8">
-          <Outlet />
+          {children}
         </main>
         
       </div>
@@ -26,3 +26,4 @@ const AdminLayout = () => {
 };
 
 export default AdminLayout;
+

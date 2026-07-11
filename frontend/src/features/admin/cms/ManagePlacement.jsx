@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2 } from 'lucide-react';
 import api from '../../../api/axios';
@@ -346,3 +347,4 @@ const ManagePlacement = () => {
 };
 
 export default ManagePlacement;
+
