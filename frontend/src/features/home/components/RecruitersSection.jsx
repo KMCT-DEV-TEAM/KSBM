@@ -27,7 +27,7 @@ const RecruitersSection = () => {
 
   return (
     <section className="w-full bg-background py-12 lg:py-16 ">
-      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <div className="w-full px-4 sm:px-6 lg:px-8 overflow-hidden">
 
         {/* Logos Container - Marquee Loop */}
         <div className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">

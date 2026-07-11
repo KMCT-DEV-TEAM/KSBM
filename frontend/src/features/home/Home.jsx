@@ -17,48 +17,20 @@ import ManagementSection from './components/ManagementSection';
 const Home = () => {
   return (
     <div>
-      
 
-      {/* Header called inside Home as requested */}
       <Header />
-      
-      {/* Hero Section */}
       <Hero />
-      
-      {/* Third Section: About KSBM */}
       <AboutSection />
-      
-      {/* Fourth Section: Academic Programs */}
       <AcademicPrograms />
-      
-      {/* Fifth Section: Accreditation & Affiliations */}
       <AccreditationSection />
-      
-      {/* Management Section */}
       <ManagementSection />
-      
-      {/* Sixth Section: College Facilities */}
       <FacilitiesSection />
-      
-      {/* Seventh Section: Placement Highlights */}
       <PlacementSection />
-      
-      {/* Eighth Section: Recruiters/Partners */}
       <RecruitersSection />
-      
-      {/* Ninth Section: Testimonials */}
       <TestimonialsSection />
-      
-      {/* Tenth Section: College Achievements */}
       <AchievementsSection />
-      
-      {/* Eleventh Section: Latest News */}
       <NewsSection />
-      
-      {/* Twelfth Section: Life at KSBM */}
       <LifeAtKSBMSection />
-      
-      {/* Rest of the page content can go here in the future */}
     </div>
   );
 };

@@ -34,7 +34,7 @@ const AchievementsSection = () => {
 
   return (
     <section className="w-full bg-background py-12 lg:py-14">
-      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
 
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -47,7 +47,7 @@ const AchievementsSection = () => {
         </div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 w-full mx-auto">
           {achievements.map((item) => (
             <div key={item.id} className="group cursor-pointer flex flex-col">
 

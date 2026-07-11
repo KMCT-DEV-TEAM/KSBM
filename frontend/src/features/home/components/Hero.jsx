@@ -176,7 +176,7 @@ const Hero = ({ previewData }) => {
             }
           }
         }}
-        className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-20 flex flex-col justify-center"
+        className="relative z-10 w-full px-4 sm:px-6 lg:px-8 py-20 flex flex-col justify-center"
       >
 
         {/* Pill Badge */}
