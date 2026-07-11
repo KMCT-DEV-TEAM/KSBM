@@ -11,7 +11,9 @@ import {
   getAccreditationSettings,
   updateAccreditationSettings,
   getFacilitiesSettings,
-  updateFacilitiesSettings
+  updateFacilitiesSettings,
+  getPlacementSettings,
+  updatePlacementSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -40,5 +42,9 @@ router.route('/accreditation')
 router.route('/facilities')
   .get(getFacilitiesSettings)
   .put(protect, updateFacilitiesSettings);
+
+router.route('/placement')
+  .get(getPlacementSettings)
+  .put(protect, updatePlacementSettings);
 
 export default router;
