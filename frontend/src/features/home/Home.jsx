@@ -11,6 +11,7 @@ import TestimonialsSection from './components/TestimonialsSection';
 import AchievementsSection from './components/AchievementsSection';
 import NewsSection from './components/NewsSection';
 import LifeAtKSBMSection from './components/LifeAtKSBMSection';
+import ManagementSection from './components/ManagementSection';
 
 const Home = () => {
   return (
@@ -29,6 +30,9 @@ const Home = () => {
       
       {/* Fifth Section: Accreditation & Affiliations */}
       <AccreditationSection />
+      
+      {/* Management Section */}
+      <ManagementSection />
       
       {/* Sixth Section: College Facilities */}
       <FacilitiesSection />
