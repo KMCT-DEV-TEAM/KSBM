@@ -4,6 +4,7 @@ import Hero from './hero.model.js';
 import Programs from './programs.model.js';
 import Accreditation from './accreditation.model.js';
 import Facilities from './facilities.model.js';
+import Management from './management.model.js';
 
 // @desc    Get header settings
 // @route   GET /api/cms/header
@@ -222,5 +223,38 @@ export const updateFacilitiesSettings = async (req, res) => {
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating facilities settings', error: error.message });
+  }
+};
+
+// @desc    Get Management settings
+// @route   GET /api/cms/management
+// @access  Public
+export const getManagementSettings = async (req, res) => {
+  try {
+    const settings = await Management.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching management settings', error: error.message });
+  }
+};
+
+// @desc    Update Management settings
+// @route   PUT /api/cms/management
+// @access  Private (Admin)
+export const updateManagementSettings = async (req, res) => {
+  try {
+    const { subheading, heading, description, members } = req.body;
+
+    const settings = await Management.getSettings();
+
+    if (subheading !== undefined) settings.subheading = subheading;
+    if (heading !== undefined) settings.heading = heading;
+    if (description !== undefined) settings.description = description;
+    if (members !== undefined) settings.members = members;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating management settings', error: error.message });
   }
 };
