@@ -20,7 +20,7 @@ dotenv.config();
 
 // Middlewares   
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:3001", "https://ksbm-1.onrender.com"],
+  origin: ["http://localhost:3000", "http://localhost:3001", "https://ksbm-2.onrender.com"],
   credentials: true,
 }));
 app.use(express.json());
