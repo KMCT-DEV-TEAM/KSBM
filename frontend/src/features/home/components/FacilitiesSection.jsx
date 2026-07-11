@@ -59,6 +59,14 @@ const FacilitiesSection = ({ previewData }) => {
     return null;
   }
 
+  // Create enough duplicates to ensure smooth scrolling
+  const minItemsNeeded = 8;
+  let repeatedList = [...facilitiesList];
+  while (repeatedList.length > 0 && repeatedList.length < minItemsNeeded) {
+    repeatedList = [...repeatedList, ...facilitiesList];
+  }
+  const marqueeList = [...repeatedList, ...repeatedList];
+
 
   return (
     <section className="w-full bg-background py-14 lg:py-20">
@@ -106,36 +114,36 @@ const FacilitiesSection = ({ previewData }) => {
           </motion.div>
         )}
 
-        {/* Facilities Grid */}
+        {/* Facilities Marquee */}
         {showFacilities && facilitiesList.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto justify-items-center">
-            {facilitiesList.map((facility, index) => (
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
-                key={facility._id || index}
-                className="relative aspect-[4/5] w-full max-w-[350px] sm:max-w-none rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg hover:shadow-[0_15px_30px_rgba(27,37,89,0.3)] transition-all duration-500 hover:-translate-y-2"
-              >
-                {/* Background Image */}
-                <img
-                  src={facility.image}
-                  alt={facility.title}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
+          <div className="relative w-full overflow-hidden mt-8">
+            <div className="animate-marquee gap-4 sm:gap-6 lg:gap-8 flex">
+              {marqueeList.map((facility, index) => (
+                <div
+                  key={`${facility._id || index}-${index}`}
+                  className="flex-shrink-0 w-[85vw] md:w-[400px]"
+                >
+                  <div className="relative h-[340px] md:h-[340px] lg:h-[380px] w-full rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg hover:shadow-[0_15px_30px_rgba(27,37,89,0.3)] transition-all duration-500 hover:-translate-y-2">
+                    {/* Background Image */}
+                    <img
+                      src={facility.image}
+                      alt={facility.title}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
 
-                {/* Gradient Overlay for Text Readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1b2559]/95 via-[#1b2559]/40 to-transparent opacity-90 z-10 transition-opacity duration-500 group-hover:opacity-100"></div>
+                    {/* Gradient Overlay for Text Readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1b2559]/95 via-[#1b2559]/40 to-transparent opacity-90 z-10 transition-opacity duration-500 group-hover:opacity-100"></div>
 
-                {/* Title Content */}
-                <div className="absolute bottom-0 left-0 w-full z-20 p-5 lg:p-8">
-                  <h3 className="font-semibold text-white group-hover:text-white transition-colors duration-300 text-lg md:text-xl lg:text-2xl">
-                    {facility.title}
-                  </h3>
+                    {/* Title Content */}
+                    <div className="absolute bottom-0 left-0 w-full z-20 p-5 lg:p-8">
+                      <h3 className="font-semibold text-white group-hover:text-white transition-colors duration-300 text-lg md:text-xl lg:text-2xl">
+                        {facility.title}
+                      </h3>
+                    </div>
+                  </div>
                 </div>
-              </motion.div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
 
