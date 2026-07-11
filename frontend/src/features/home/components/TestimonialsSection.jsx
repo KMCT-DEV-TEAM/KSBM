@@ -36,7 +36,7 @@ const TestimonialsSection = () => {
 
   return (
     <section className="w-full bg-background py-12 lg:py-16">
-      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
 
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -49,14 +49,14 @@ const TestimonialsSection = () => {
         </div>
 
         {/* Desktop Interactive Accordion Layout */}
-        <div className="hidden lg:flex gap-6 h-[380px] max-w-[950px] mx-auto">
+        <div className="hidden lg:flex gap-6 h-[380px] w-full max-w-none mx-auto justify-center">
           {testimonials.map((testimonial, index) => {
             const isActive = activeIndex === index;
             return (
               <div
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}
-                className={`relative flex transition-all duration-700 ease-in-out cursor-pointer overflow-hidden ${isActive ? 'w-[55%] gap-6' : 'w-[22.5%] gap-0'
+                className={`relative flex transition-all duration-700 ease-in-out cursor-pointer overflow-hidden ${isActive ? 'w-[50%] gap-6' : 'w-[20%] gap-0'
                   }`}
               >
                 {/* Image Section */}
@@ -97,7 +97,7 @@ const TestimonialsSection = () => {
         </div>
 
         {/* Mobile / Tablet Layout (Standard Stacked) */}
-        <div className="block lg:hidden max-w-xl mx-auto">
+        <div className="block lg:hidden w-full mx-auto">
           {testimonials.map((testimonial, index) => (
             <div
               key={testimonial.id}
