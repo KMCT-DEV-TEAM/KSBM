@@ -15,7 +15,19 @@ import {
   getManagementSettings,
   updateManagementSettings,
   getPlacementSettings,
-  updatePlacementSettings
+  updatePlacementSettings,
+  getTestimonialsSettings,
+  updateTestimonialsSettings,
+  getAchievementsSettings,
+  updateAchievementsSettings,
+  getRecruitersSettings,
+  updateRecruitersSettings,
+  getLifeAtKsbmSettings,
+  updateLifeAtKsbmSettings,
+  getNewsSettings,
+  updateNewsSettings,
+  getFooterSettings,
+  updateFooterSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -52,5 +64,29 @@ router.route('/management')
 router.route('/placement')
   .get(getPlacementSettings)
   .put(protect, updatePlacementSettings);
+
+router.route('/testimonials')
+  .get(getTestimonialsSettings)
+  .put(protect, updateTestimonialsSettings);
+
+router.route('/achievements')
+  .get(getAchievementsSettings)
+  .put(protect, updateAchievementsSettings);
+
+router.route('/recruiters')
+  .get(getRecruitersSettings)
+  .put(protect, updateRecruitersSettings);
+
+router.route('/life-at-ksbm')
+  .get(getLifeAtKsbmSettings)
+  .put(protect, updateLifeAtKsbmSettings);
+
+router.route('/news')
+  .get(getNewsSettings)
+  .put(protect, updateNewsSettings);
+
+router.route('/footer')
+  .get(getFooterSettings)
+  .put(protect, updateFooterSettings);
 
 export default router;

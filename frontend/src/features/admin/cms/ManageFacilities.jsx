@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2, Edit2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
+import Loader from '../../../components/Loader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import FacilitiesSection from '../../home/components/FacilitiesSection';
 import LogoUploader from './components/LogoUploader';

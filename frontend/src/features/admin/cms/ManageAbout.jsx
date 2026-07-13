@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, Plus, Trash2, RefreshCw, Eye, Monitor, Smartphone, Tablet, X } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
+import Loader from '../../../components/Loader';
 import LogoUploader from './components/LogoUploader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 const graduateImg = '/assets/Images/graduate.png';
@@ -168,7 +169,7 @@ const ManageAbout = () => {
       const newStats = [...stats];
       newStats.splice(index, 1);
       setStats(newStats);
-      
+
       setIsSaving(true);
       try {
         await api.put('/cms/about', {
@@ -187,7 +188,7 @@ const ManageAbout = () => {
       const newParagraphs = [...paragraphs];
       newParagraphs.splice(index, 1);
       setParagraphs(newParagraphs);
-      
+
       setIsSaving(true);
       try {
         await api.put('/cms/about', {
@@ -206,11 +207,7 @@ const ManageAbout = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <Loader theme="light" text="Loading Settings..." />;
   }
 
   return (
@@ -457,7 +454,7 @@ const ManageAbout = () => {
 
       </div>
 
-      <ConfirmationModal 
+      <ConfirmationModal
         isOpen={confirmModal.isOpen}
         onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
         onConfirm={handleConfirmAction}

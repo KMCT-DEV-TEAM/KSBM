@@ -1,7 +1,7 @@
 "use client";
-import GenericCmsPage from "../../../../../features/admin/cms/GenericCmsPage";
+import ManageTestimonials from "../../../../../features/admin/cms/ManageTestimonials";
 
 export default function Page() {
-  return <GenericCmsPage title="Testimonials" />;
+  return <ManageTestimonials />;
 }
 

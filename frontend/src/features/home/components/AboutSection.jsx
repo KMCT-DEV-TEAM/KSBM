@@ -121,7 +121,7 @@ const AboutSection = ({ previewData }) => {
         <img src={watermarkImg} alt="Background Watermark" className={`${watermarkWidthClass} h-auto object-contain mix-blend-multiply contrast-150`} />
       </div>
 
-      <div className="w-full px-4 sm:px-6 lg:px-8">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Top Split Section */}
         {showTopSection && (
@@ -232,7 +232,7 @@ const AboutSection = ({ previewData }) => {
           }}
           className="w-full "
         >
-          <div className="w-full bg-[#f4fafe] py-12 mx-auto px-4 sm:px-6 lg:px-8 rounded-xl shadow-sm">
+          <div className="w-[98%] max-w-[1440px] bg-[#f4fafe] py-12 mx-auto px-4 sm:px-6 lg:px-8 rounded-xl shadow-sm">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 w-full">
 
               {cmsData.stats.map((stat, index) => (

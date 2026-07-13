@@ -38,7 +38,7 @@ const ManagementSection = ({ previewData }) => {
 
   return (
     <section className="w-full bg-white py-20 lg:py-32 relative z-10">
-      <div className="w-full px-4 sm:px-6 lg:px-8">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section (Centered) */}
         <div className="text-center max-w-4xl mx-auto mb-20 lg:mb-28">

@@ -1,7 +1,6 @@
 "use client";
-import GenericCmsPage from "../../../../../features/admin/cms/GenericCmsPage";
+import ManageLifeAtKsbm from '../../../../../features/admin/cms/ManageLifeAtKsbm';
 
 export default function Page() {
-  return <GenericCmsPage title="Life at KSBM" />;
+  return <ManageLifeAtKsbm />;
 }
-

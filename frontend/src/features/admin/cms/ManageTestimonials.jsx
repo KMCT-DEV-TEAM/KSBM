@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2, GripVertical, Image as ImageIcon } from 'lucide-react';
+import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
-import ManagementPreview from '../../home/components/ManagementSection';
+import Loader from '../../../components/Loader';
+import TestimonialsPreview from '../../home/components/TestimonialsSection';
 import LogoUploader from './components/LogoUploader';
 
 const Toast = Swal.mixin({
@@ -20,11 +20,10 @@ const Toast = Swal.mixin({
   }
 });
 
-const ManageManagement = () => {
+const ManageTestimonials = () => {
   const [subheading, setSubheading] = useState('');
   const [heading, setHeading] = useState('');
-  const [description, setDescription] = useState('');
-  const [members, setMembers] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -38,14 +37,13 @@ const ManageManagement = () => {
 
   const fetchSettings = async () => {
     try {
-      const { data } = await api.get('/cms/management');
+      const { data } = await api.get('/cms/testimonials');
       setSubheading(data.subheading || '');
       setHeading(data.heading || '');
-      setDescription(data.description || '');
-      setMembers(data.members || []);
+      setTestimonials(data.testimonials || []);
     } catch (error) {
-      console.error('Error fetching management settings:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to load management settings.' });
+      console.error('Error fetching testimonials settings:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to load testimonials settings.' });
     } finally {
       setIsLoading(false);
     }
@@ -54,12 +52,12 @@ const ManageManagement = () => {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await api.put('/cms/management', {
-        subheading, heading, description, members
+      await api.put('/cms/testimonials', {
+        subheading, heading, testimonials
       });
-      Toast.fire({ icon: 'success', title: 'Management section saved successfully!' });
+      Toast.fire({ icon: 'success', title: 'Testimonials section saved successfully!' });
     } catch (error) {
-      console.error('Error saving management settings:', error);
+      console.error('Error saving testimonials settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
     } finally {
       setIsSaving(false);
@@ -79,30 +77,35 @@ const ManageManagement = () => {
 
   const handleConfirmAction = async () => {
     if (confirmModal.action === 'reset') {
-      setSubheading('OUR MANAGEMENT');
-      setHeading('The Architects Of Excellence');
-      setDescription('Our leadership board combines decades of top-tier industry experience with a profound commitment to academic innovation.');
-      setMembers([
+      setSubheading('Testimonials');
+      setHeading('Voices of Success');
+      setTestimonials([
         {
           id: '1',
-          name: 'Dr. Sarah Mitchell',
-          role: 'MANAGING DIRECTOR',
-          verticalText: 'DIRECTOR',
-          image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          name: 'Anjali Menon',
+          course: 'MBA (2022-2024)',
+          quote: '"KSBM transformed my potential into professional success."',
+          body: 'From interactive classroom sessions to industry-oriented projects, every experience prepared me for real business challenges. The faculty, placement team, and supportive learning environment helped me grow both professionally and personally, giving me the confidence to excel in the corporate world.',
+          image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop',
+          avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=150&auto=format&fit=crop'
         },
         {
           id: '2',
-          name: 'Dr. Adrian Starlin',
-          role: 'CHAIRMAN DIRECTOR',
-          verticalText: 'CHAIRMAN',
-          image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          name: 'Rahul Sharma',
+          course: 'BBA (2021-2024)',
+          quote: '"The practical approach to learning is unmatched here."',
+          body: 'The practical approach to learning and the amazing campus life made my time at KSBM unforgettable. The placement cell was instrumental in getting me my dream job right out of college, providing excellent mentorship.',
+          image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop',
+          avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=150&auto=format&fit=crop'
         },
         {
           id: '3',
-          name: 'Dr. Elena Rostova',
-          role: 'EXECUTIVE DIRECTOR',
-          verticalText: 'EXECUTIVE',
-          image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          name: 'Priya Patel',
+          course: 'MBA (2021-2023)',
+          quote: '"A true stepping stone to global corporate opportunities."',
+          body: 'KSBM gave me the platform to interact with industry leaders and participate in global competitions. The rigorous curriculum is exactly what the corporate world demands, making the transition seamless and rewarding.',
+          image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1974&auto=format&fit=crop',
+          avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=150&auto=format&fit=crop'
         }
       ]);
       Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
@@ -110,55 +113,53 @@ const ManageManagement = () => {
     setConfirmModal({ ...confirmModal, isOpen: false });
   };
 
-  const handleAddMember = () => {
-    setMembers([
-      ...members,
+  const handleAddTestimonial = () => {
+    setTestimonials([
+      ...testimonials,
       {
         id: Date.now().toString(),
-        name: 'New Member',
-        role: 'ROLE',
-        verticalText: 'TEXT',
-        image: ''
+        name: 'New Student',
+        course: 'COURSE (YEAR)',
+        quote: '"Short impactful quote"',
+        body: 'Full testimonial body...',
+        image: '',
+        avatar: ''
       }
     ]);
   };
 
-  const handleUpdateMember = (id, field, value) => {
-    setMembers(members.map(member => 
-      member.id === id ? { ...member, [field]: value } : member
+  const handleUpdateTestimonial = (id, field, value) => {
+    setTestimonials(testimonials.map(item => 
+      item.id === id ? { ...item, [field]: value } : item
     ));
   };
 
-  const handleDeleteMember = async (id) => {
-    const updatedMembers = members.filter(member => member.id !== id);
-    setMembers(updatedMembers);
+  const handleDeleteTestimonial = async (id) => {
+    const updatedTestimonials = testimonials.filter(item => item.id !== id);
+    setTestimonials(updatedTestimonials);
     
     try {
-      await api.put('/cms/management', {
-        subheading, heading, description, members: updatedMembers
+      await api.put('/cms/testimonials', {
+        subheading, heading, testimonials: updatedTestimonials
       });
-      Toast.fire({ icon: 'success', title: 'Member deleted from database.' });
+      Toast.fire({ icon: 'success', title: 'Testimonial deleted from database.' });
     } catch (error) {
-      console.error('Error deleting member:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to delete member from database.' });
-      setMembers(members); // revert on failure
+      console.error('Error deleting testimonial:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to delete testimonial from database.' });
+      setTestimonials(testimonials); // revert on failure
     }
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
+    return <Loader theme="light" text="Loading Settings..." />;
   }
 
   return (
     <div className="space-y-6 w-full">
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Management Settings</h1>
-          <p className="text-[#697A8D] mt-1 text-sm">Manage the leadership board and management section.</p>
+          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Testimonials Settings</h1>
+          <p className="text-[#697A8D] mt-1 text-sm">Manage student voices and feedback displayed on the home page.</p>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -230,8 +231,8 @@ const ManageManagement = () => {
           </div>
           <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
             <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <ManagementPreview previewData={{
-                subheading, heading, description, members
+              <TestimonialsPreview previewData={{
+                subheading, heading, testimonials
               }} />
             </div>
           </div>
@@ -241,14 +242,14 @@ const ManageManagement = () => {
       <div className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] p-6 md:p-8 max-w-5xl mx-auto">
         <div className="mb-8 pb-8 border-b border-gray-100">
           <h3 className="text-lg font-bold text-[#566A7F] mb-4">Header Content</h3>
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Subheading</label>
               <input
                 type="text"
                 value={subheading}
                 onChange={(e) => setSubheading(e.target.value)}
-                placeholder="e.g. OUR MANAGEMENT"
+                placeholder="e.g. Testimonials"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
@@ -258,17 +259,7 @@ const ManageManagement = () => {
                 type="text"
                 value={heading}
                 onChange={(e) => setHeading(e.target.value)}
-                placeholder="e.g. The Architects Of Excellence"
-                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Description</label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={3}
-                placeholder="e.g. Our leadership board combines decades of top-tier industry experience..."
+                placeholder="e.g. Voices of Success"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
@@ -277,62 +268,81 @@ const ManageManagement = () => {
 
         <div>
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-bold text-[#566A7F]">Management Members</h3>
+            <h3 className="text-lg font-bold text-[#566A7F]">Testimonial Items</h3>
             <button
-              onClick={handleAddMember}
+              onClick={handleAddTestimonial}
               className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
             >
-              <Plus className="w-4 h-4" /> Add Member
+              <Plus className="w-4 h-4" /> Add Testimonial
             </button>
           </div>
 
           <div className="space-y-4">
-            {members.map((member, index) => (
-              <div key={member.id} className="p-4 border border-gray-200 rounded-lg bg-gray-50 flex gap-6 items-start relative group">
+            {testimonials.map((item, index) => (
+              <div key={item.id} className="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col md:flex-row gap-6 relative group">
                 <button
-                  onClick={() => handleDeleteMember(member.id)}
+                  onClick={() => handleDeleteTestimonial(item.id)}
                   className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
-                  title="Remove Member"
+                  title="Remove Testimonial"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
 
-                <div className="w-40 shrink-0">
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Profile Image</label>
-                  <LogoUploader
-                    currentLogoUrl={member.image || 'https://via.placeholder.com/150'}
-                    onUploadSuccess={(url) => handleUpdateMember(member.id, 'image', url)}
-                  />
+                <div className="flex flex-col gap-4 w-full md:w-40 shrink-0">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Main Image</label>
+                    <LogoUploader
+                      currentLogoUrl={item.image || 'https://via.placeholder.com/150'}
+                      onUploadSuccess={(url) => handleUpdateTestimonial(item.id, 'image', url)}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Avatar (Thumbnail)</label>
+                    <LogoUploader
+                      currentLogoUrl={item.avatar || 'https://via.placeholder.com/150'}
+                      onUploadSuccess={(url) => handleUpdateTestimonial(item.id, 'avatar', url)}
+                    />
+                  </div>
                 </div>
 
-                <div className="flex-1 grid grid-cols-2 gap-4">
-                  <div className="col-span-2">
-                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Name</label>
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Student Name</label>
                     <input
                       type="text"
-                      value={member.name}
-                      onChange={(e) => handleUpdateMember(member.id, 'name', e.target.value)}
-                      placeholder="e.g. Dr. Sarah Mitchell"
+                      value={item.name}
+                      onChange={(e) => handleUpdateTestimonial(item.id, 'name', e.target.value)}
+                      placeholder="e.g. Priya Patel"
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Role</label>
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Course & Year</label>
                     <input
                       type="text"
-                      value={member.role}
-                      onChange={(e) => handleUpdateMember(member.id, 'role', e.target.value)}
-                      placeholder="e.g. MANAGING DIRECTOR"
+                      value={item.course}
+                      onChange={(e) => handleUpdateTestimonial(item.id, 'course', e.target.value)}
+                      placeholder="e.g. MBA (2021-2023)"
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Vertical Text</label>
+                  <div className="md:col-span-2">
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Short Quote</label>
                     <input
                       type="text"
-                      value={member.verticalText}
-                      onChange={(e) => handleUpdateMember(member.id, 'verticalText', e.target.value)}
-                      placeholder="e.g. DIRECTOR"
+                      value={item.quote}
+                      onChange={(e) => handleUpdateTestimonial(item.id, 'quote', e.target.value)}
+                      placeholder="e.g. A true stepping stone to global corporate opportunities."
+                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Full Testimonial Body</label>
+                    <textarea
+                      value={item.body}
+                      onChange={(e) => handleUpdateTestimonial(item.id, 'body', e.target.value)}
+                      rows={3}
+                      placeholder="Enter full testimonial here..."
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
                   </div>
@@ -340,9 +350,9 @@ const ManageManagement = () => {
               </div>
             ))}
             
-            {members.length === 0 && (
+            {testimonials.length === 0 && (
               <div className="text-center py-8 text-gray-400 text-sm">
-                No management members added yet. Click "Add Member" to create one.
+                No testimonials added yet. Click "Add Testimonial" to create one.
               </div>
             )}
           </div>
@@ -364,5 +374,4 @@ const ManageManagement = () => {
   );
 };
 
-export default ManageManagement;
-
+export default ManageTestimonials;

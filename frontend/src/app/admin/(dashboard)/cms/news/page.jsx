@@ -1,7 +1,6 @@
 "use client";
-import GenericCmsPage from "../../../../../features/admin/cms/GenericCmsPage";
+import ManageNews from '../../../../../features/admin/cms/ManageNews';
 
 export default function Page() {
-  return <GenericCmsPage title="News" />;
+  return <ManageNews />;
 }
-

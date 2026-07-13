@@ -17,6 +17,8 @@ import ManageAccreditation from '../features/admin/cms/ManageAccreditation';
 import ManageManagement from '../features/admin/cms/ManageManagement';
 import ManageFacilities from '../features/admin/cms/ManageFacilities';
 import ManagePlacement from '../features/admin/cms/ManagePlacement';
+import ManageTestimonials from '../features/admin/cms/ManageTestimonials';
+import ManageAchievements from '../features/admin/cms/ManageAchievements';
 import ProtectedRoute from './ProtectedRoute';
 
 const AppRoutes = () => {
@@ -52,8 +54,8 @@ const AppRoutes = () => {
           <Route path="cms/facilities" element={<ManageFacilities />} />
           <Route path="cms/placement" element={<ManagePlacement />} />
           <Route path="cms/recruiters" element={<GenericCmsPage title="Recruiters" />} />
-          <Route path="cms/testimonials" element={<GenericCmsPage title="Testimonials" />} />
-          <Route path="cms/achievements" element={<GenericCmsPage title="Achievements" />} />
+          <Route path="cms/testimonials" element={<ManageTestimonials />} />
+          <Route path="cms/achievements" element={<ManageAchievements />} />
             <Route path="cms/news" element={<GenericCmsPage title="News" />} />
             <Route path="cms/life" element={<GenericCmsPage title="Life at KSBM" />} />
             <Route path="cms/footer" element={<GenericCmsPage title="Footer" />} />

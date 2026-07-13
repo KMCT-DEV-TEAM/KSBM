@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, Plus, Trash2, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Edit2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
+import Loader from '../../../components/Loader';
 import LogoUploader from './components/LogoUploader';
 import ProgramsPreview from '../../home/components/AcademicPrograms';
 
@@ -204,11 +205,7 @@ const ManagePrograms = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <Loader theme="light" text="Loading Settings..." />;
   }
 
   return (
