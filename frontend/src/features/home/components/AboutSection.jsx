@@ -10,10 +10,10 @@ import api from '../../../api/axios';
 const Counter = ({ value }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, amount: 0.5 });
-  
+
   const strValue = String(value);
   const match = strValue.match(/^(\d+)(.*)$/);
-  
+
   const count = useMotionValue(0);
   const numericValue = match ? parseInt(match[1], 10) : 0;
   const suffix = match ? match[2] : '';
@@ -129,7 +129,7 @@ const AboutSection = ({ previewData }) => {
 
             {/* Left: Image Container */}
             {cmsData.showImage && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
@@ -149,23 +149,23 @@ const AboutSection = ({ previewData }) => {
             )}
 
             {/* Right: Text Content */}
-            <motion.div 
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: false, amount: 0.3 }}
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: {
-                    opacity: 1,
-                    transition: {
-                      staggerChildren: 0.2,
-                    }
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: false, amount: 0.3 }}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.2,
                   }
-                }}
-                className={`${rightColClass} ${!cmsData.showImage ? 'lg:col-span-2 text-center flex flex-col items-center' : ''}`}
+                }
+              }}
+              className={`${rightColClass} ${!cmsData.showImage ? 'lg:col-span-2 text-center flex flex-col items-center' : ''}`}
             >
               {cmsData.showSubheading && (
-                <motion.h4 
+                <motion.h4
                   variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
                   className={`text-text-secondary ${subheadClass} tracking-widest uppercase mb-4 flex items-center gap-2 ${!cmsData.showImage ? 'justify-center' : ''}`}
                 >
@@ -174,15 +174,15 @@ const AboutSection = ({ previewData }) => {
               )}
 
               {cmsData.showHeading && (
-                <motion.h2 
+                <motion.h2
                   variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-                  className={`font-semibold text-primary leading-[1.2] mb-8 ${headClass}`} 
-                  dangerouslySetInnerHTML={{ __html: cmsData.heading }} 
+                  className={`font-semibold text-primary leading-[1.2] mb-8 ${headClass}`}
+                  dangerouslySetInnerHTML={{ __html: cmsData.heading }}
                 />
               )}
 
               {cmsData.showParagraphs && (
-                <motion.div 
+                <motion.div
                   variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
                   className="text-text-primary space-y-6 text-sm leading-relaxed max-w-4xl mx-auto"
                 >
@@ -193,11 +193,11 @@ const AboutSection = ({ previewData }) => {
               )}
 
               {/* 360 Button under text */}
-              <motion.div 
+              <motion.div
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
                 className={`mt-8 flex ${!cmsData.showImage ? 'justify-center' : 'justify-start'}`}
               >
-                <button className="group bg-primary text-white border border-transparent px-5 py-3 rounded-lg shadow-lg cursor-pointer hover:bg-white hover:text-primary hover:border-primary hover:-translate-y-1 transition-all flex items-center gap-2 overflow-hidden">
+                <button className="group bg-gradient-to-b from-primary/90 to-primary backdrop-blur-sm text-white border border-white/20 px-5 py-3 rounded-lg cursor-pointer hover:!bg-none hover:!bg-white hover:!text-primary hover:border-primary hover:-translate-y-1 transition-all flex items-center gap-2 overflow-hidden">
                   <Rotate3d className="w-5 h-5 shrink-0" />
                   <div className="flex items-center text-sm font-bold tracking-widest uppercase whitespace-nowrap">
                     <span>360°</span>
@@ -215,7 +215,7 @@ const AboutSection = ({ previewData }) => {
 
 
       {cmsData.showStats && cmsData.stats.length > 0 && (
-        <motion.div 
+        <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: false, amount: 0.2 }}
@@ -236,8 +236,8 @@ const AboutSection = ({ previewData }) => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 w-full">
 
               {cmsData.stats.map((stat, index) => (
-                <motion.div 
-                  key={index} 
+                <motion.div
+                  key={index}
                   variants={{ hidden: { opacity: 0, scale: 0.8 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } } }}
                   className="flex flex-col items-center justify-center text-center px-2"
                 >
