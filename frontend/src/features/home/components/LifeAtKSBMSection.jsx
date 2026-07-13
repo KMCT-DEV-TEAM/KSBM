@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/axios';
+import { motion } from 'framer-motion';
 const watermarkLogo = '/assets/Images/watermark_logo.png';
 
 const LifeAtKSBMSection = ({ previewData }) => {
@@ -75,7 +76,13 @@ const LifeAtKSBMSection = ({ previewData }) => {
 
         {/* Header Section */}
         {(showSubheading || showHeading || showDescription) && (
-          <div className="text-center max-w-3xl mx-auto mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
             {showSubheading && (
               <p className="text-text-secondary text-[0.65rem] lg:text-xs tracking-[0.25em] uppercase mb-4">
                 {subheading}
@@ -91,12 +98,18 @@ const LifeAtKSBMSection = ({ previewData }) => {
                 {description}
               </p>
             )}
-          </div>
+          </motion.div>
         )}
 
         {/* Collage Image Gallery */}
         {showImages && images && images.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 auto-rows-[120px] md:auto-rows-[160px] grid-flow-row">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 auto-rows-[120px] md:auto-rows-[160px] grid-flow-row"
+          >
             {images.map((img, index) => {
               // 2 rows layout on desktop (6 columns total per row)
               // Row 1: 2 + 1 + 1 + 2 = 6
@@ -121,7 +134,7 @@ const LifeAtKSBMSection = ({ previewData }) => {
                 </div>
               );
             })}
-          </div>
+          </motion.div>
         )}
 
       </div>

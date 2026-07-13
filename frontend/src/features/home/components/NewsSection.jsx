@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/axios';
+import { motion } from 'framer-motion';
 
 const NewsSection = ({ previewData }) => {
   const [data, setData] = useState({
@@ -74,7 +75,13 @@ const NewsSection = ({ previewData }) => {
 
         {/* Header Section */}
         {(showSubheading || showHeading) && (
-          <div className="text-center mb-10 lg:mb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-10 lg:mb-12"
+          >
             {showSubheading && (
               <p className="text-text-secondary text-[0.65rem] lg:text-xs tracking-[0.25em] uppercase mb-3">
                 {subheading}
@@ -85,7 +92,7 @@ const NewsSection = ({ previewData }) => {
                 {heading}
               </h2>
             )}
-          </div>
+          </motion.div>
         )}
 
         {/* Layout Grid */}
@@ -93,7 +100,13 @@ const NewsSection = ({ previewData }) => {
 
           {/* Left Column: Featured Article */}
           {featuredArticle && featuredArticle.image && (
-            <div className="w-full lg:w-[55%] group cursor-pointer">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="w-full lg:w-[55%] group cursor-pointer"
+            >
               {/* Image Wrapper */}
               <div className="relative w-full aspect-[4/3] lg:aspect-[4/5] rounded-[1.5rem] overflow-hidden mb-6 lg:mb-0 shadow-sm">
                 <img
@@ -128,12 +141,18 @@ const NewsSection = ({ previewData }) => {
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* Right Column: Side Articles */}
           {sideArticles && sideArticles.length > 0 && (
-            <div className="w-full lg:w-[45%] flex flex-col gap-6 lg:gap-0 lg:justify-between py-2">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="w-full lg:w-[45%] flex flex-col gap-6 lg:gap-0 lg:justify-between py-2"
+            >
               {sideArticles.map((article, index) => (
                 <div
                   key={index}
@@ -165,7 +184,7 @@ const NewsSection = ({ previewData }) => {
                   </div>
                 </div>
               ))}
-            </div>
+            </motion.div>
           )}
 
         </div>

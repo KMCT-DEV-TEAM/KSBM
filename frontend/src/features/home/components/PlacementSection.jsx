@@ -66,18 +66,39 @@ const PlacementSection = ({ previewData }) => {
   const isMobilePreview = previewDevice === 'mobile';
   const isTabletPreview = previewDevice === 'tablet';
 
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] } 
+    },
+  };
+
   return (
     <section className={`w-full bg-[#f4f7f9] py-16 lg:py-20 ${isMobilePreview ? 'max-w-[375px] mx-auto' : isTabletPreview ? 'max-w-[768px] mx-auto' : ''}`}>
-      <div className={`mx-auto px-4 sm:px-6 lg:px-8 ${isMobilePreview || isTabletPreview ? 'w-full' : 'w-[98%] max-w-[1440px]'}`}>
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.2 }}
+        className={`mx-auto px-4 sm:px-6 lg:px-8 ${isMobilePreview || isTabletPreview ? 'w-full' : 'w-[98%] max-w-[1440px]'}`}
+      >
 
         {/* Header Section */}
         <div className="text-center max-w-4xl mx-auto mb-16">
           {showSubheading && subheading && (
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6 }}
+              variants={itemVariants}
               className={`text-text-secondary tracking-[0.25em] uppercase mb-4 ${isMobilePreview ? 'text-[0.65rem]' : 'text-[0.65rem] lg:text-xs'}`}
             >
               {subheading}
@@ -86,10 +107,7 @@ const PlacementSection = ({ previewData }) => {
           
           {showHeading && heading && (
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+              variants={itemVariants}
               className={`font-semibold text-primary mb-6 ${isMobilePreview ? 'text-3xl' : 'text-3xl lg:text-5xl'}`}
             >
               {heading}
@@ -98,10 +116,7 @@ const PlacementSection = ({ previewData }) => {
           
           {showDescription && description && (
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              variants={itemVariants}
               className={`text-text-secondary leading-[1.8] max-w-4xl mx-auto ${isMobilePreview ? 'text-sm' : 'text-sm lg:text-[0.95rem]'}`}
             >
               {description}
@@ -112,10 +127,7 @@ const PlacementSection = ({ previewData }) => {
         {/* Statistics Section */}
         {showStats && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            variants={itemVariants}
             className={`flex items-center justify-center ${isMobilePreview ? 'gap-10 mt-12' : 'gap-10 lg:gap-24 mt-12 lg:mt-20'}`}
           >
             
@@ -145,7 +157,7 @@ const PlacementSection = ({ previewData }) => {
           </motion.div>
         )}
 
-      </div>
+      </motion.div>
     </section>
   );
 };
