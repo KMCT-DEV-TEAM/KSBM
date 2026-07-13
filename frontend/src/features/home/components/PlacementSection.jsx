@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import api from '../../../api/axios';
 
 const PlacementSection = ({ previewData }) => {
@@ -72,27 +73,51 @@ const PlacementSection = ({ previewData }) => {
         {/* Header Section */}
         <div className="text-center max-w-4xl mx-auto mb-16">
           {showSubheading && subheading && (
-            <p className={`text-text-secondary tracking-[0.25em] uppercase mb-4 ${isMobilePreview ? 'text-[0.65rem]' : 'text-[0.65rem] lg:text-xs'}`}>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6 }}
+              className={`text-text-secondary tracking-[0.25em] uppercase mb-4 ${isMobilePreview ? 'text-[0.65rem]' : 'text-[0.65rem] lg:text-xs'}`}
+            >
               {subheading}
-            </p>
+            </motion.p>
           )}
           
           {showHeading && heading && (
-            <h2 className={`font-semibold text-primary mb-6 ${isMobilePreview ? 'text-3xl' : 'text-3xl lg:text-5xl'}`}>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className={`font-semibold text-primary mb-6 ${isMobilePreview ? 'text-3xl' : 'text-3xl lg:text-5xl'}`}
+            >
               {heading}
-            </h2>
+            </motion.h2>
           )}
           
           {showDescription && description && (
-            <p className={`text-text-secondary leading-[1.8] max-w-4xl mx-auto ${isMobilePreview ? 'text-sm' : 'text-sm lg:text-[0.95rem]'}`}>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className={`text-text-secondary leading-[1.8] max-w-4xl mx-auto ${isMobilePreview ? 'text-sm' : 'text-sm lg:text-[0.95rem]'}`}
+            >
               {description}
-            </p>
+            </motion.p>
           )}
         </div>
 
         {/* Statistics Section */}
         {showStats && (
-          <div className={`flex items-center justify-center ${isMobilePreview ? 'gap-10 mt-12' : 'gap-10 lg:gap-24 mt-12 lg:mt-20'}`}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className={`flex items-center justify-center ${isMobilePreview ? 'gap-10 mt-12' : 'gap-10 lg:gap-24 mt-12 lg:mt-20'}`}
+          >
             
             {/* Stat 1 */}
             <div className="flex flex-col items-center text-center">
@@ -117,7 +142,7 @@ const PlacementSection = ({ previewData }) => {
               </span>
             </div>
 
-          </div>
+          </motion.div>
         )}
 
       </div>

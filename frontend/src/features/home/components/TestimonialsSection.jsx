@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const TestimonialsSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -34,33 +34,58 @@ const TestimonialsSection = () => {
     }
   ];
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % testimonials.length);
+    }, 4000); // cycle every 4 seconds
+    return () => clearInterval(timer);
+  }, [testimonials.length]);
+
   return (
     <section className="w-full bg-background py-12 lg:py-16">
       <div className="w-full px-4 sm:px-6 lg:px-8">
 
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-text-secondary text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-3">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6 }}
+            className="text-text-secondary text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-3"
+          >
             Testimonials
-          </p>
-          <h2 className="text-3xl lg:text-[2.75rem] font-bold text-primary">
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-3xl lg:text-[2.75rem] font-bold text-primary"
+          >
             Voices of Success
-          </h2>
+          </motion.h2>
         </div>
 
         {/* Desktop Interactive Accordion Layout */}
-        <div className="hidden lg:flex gap-6 h-[380px] w-full max-w-none mx-auto justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="hidden lg:flex gap-6 h-[380px] w-full max-w-none mx-auto justify-center"
+        >
           {testimonials.map((testimonial, index) => {
             const isActive = activeIndex === index;
             return (
               <div
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}
-                className={`relative flex transition-all duration-700 ease-in-out cursor-pointer overflow-hidden ${isActive ? 'w-[50%] gap-6' : 'w-[20%] gap-0'
+                className={`relative flex transition-all duration-1000 ease-in-out cursor-pointer overflow-hidden ${isActive ? 'w-[50%] gap-6' : 'w-[20%] gap-0'
                   }`}
               >
                 {/* Image Section */}
-                <div className={`h-full shrink-0 transition-all duration-700 ease-in-out ${isActive ? 'w-[41%]' : 'w-full'}`}>
+                <div className={`h-full shrink-0 transition-all duration-1000 ease-in-out ${isActive ? 'w-[41%]' : 'w-full'}`}>
                   <img
                     src={testimonial.image}
                     alt={testimonial.name}
@@ -69,7 +94,7 @@ const TestimonialsSection = () => {
                 </div>
 
                 {/* Text Content */}
-                <div className={`h-full py-4 flex flex-col justify-center transition-all duration-700 ease-in-out ${isActive ? 'w-[59%] opacity-100 translate-x-0' : 'w-0 opacity-0 translate-x-8'}`}>
+                <div className={`h-full py-4 flex flex-col justify-center transition-all duration-1000 ease-in-out ${isActive ? 'w-[59%] opacity-100 translate-x-0' : 'w-0 opacity-0 translate-x-8'}`}>
                   <div className="w-[280px]">
                     <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 leading-snug">
                       {testimonial.quote}
@@ -94,43 +119,55 @@ const TestimonialsSection = () => {
               </div>
             );
           })}
-        </div>
+        </motion.div>
 
         {/* Mobile / Tablet Layout (Standard Stacked) */}
-        <div className="block lg:hidden w-full mx-auto">
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={testimonial.id}
-              className={`flex-col bg-background rounded-3xl shadow-sm overflow-hidden mb-8 ${activeIndex === index ? 'flex' : 'hidden'}`}
-            >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+          className="block lg:hidden w-full mx-auto"
+        >
+          <div className="relative overflow-hidden min-h-[500px]">
+            <AnimatePresence mode="popLayout">
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0, filter: 'blur(10px)' }}
+                animate={{ opacity: 1, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, filter: 'blur(10px)' }}
+                transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+                className="flex-col bg-background rounded-3xl shadow-sm overflow-hidden mb-8 flex w-full"
+              >
               <div className="w-full h-[250px]">
                 <img
-                  src={testimonial.image}
-                  alt={testimonial.name}
+                  src={testimonials[activeIndex].image}
+                  alt={testimonials[activeIndex].name}
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="p-6 flex flex-col">
                 <h3 className="text-lg font-bold text-text-primary mb-3 leading-snug">
-                  {testimonial.quote}
+                  {testimonials[activeIndex].quote}
                 </h3>
                 <p className="text-text-secondary text-sm leading-[1.8] mb-6">
-                  {testimonial.body}
+                  {testimonials[activeIndex].body}
                 </p>
                 <div className="flex items-center gap-4 mt-auto">
                   <img
-                    src={testimonial.avatar}
-                    alt={testimonial.name}
+                    src={testimonials[activeIndex].avatar}
+                    alt={testimonials[activeIndex].name}
                     className="w-10 h-10 rounded-full object-cover"
                   />
                   <div>
-                    <p className="text-sm font-bold text-text-primary">{testimonial.name}</p>
-                    <p className="text-[0.65rem] font-semibold text-text-secondary uppercase tracking-widest mt-0.5">{testimonial.course}</p>
+                    <p className="text-sm font-bold text-text-primary">{testimonials[activeIndex].name}</p>
+                    <p className="text-[0.65rem] font-semibold text-text-secondary uppercase tracking-widest mt-0.5">{testimonials[activeIndex].course}</p>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
           {/* Mobile Thumbnails for switching */}
           <div className="flex items-center justify-center gap-4 mt-4">
@@ -144,7 +181,7 @@ const TestimonialsSection = () => {
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
       </div>
     </section>
