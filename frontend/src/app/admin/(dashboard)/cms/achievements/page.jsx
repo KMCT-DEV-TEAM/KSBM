@@ -1,7 +1,7 @@
 "use client";
-import GenericCmsPage from "../../../../../features/admin/cms/GenericCmsPage";
+import ManageAchievements from "../../../../../features/admin/cms/ManageAchievements";
 
 export default function Page() {
-  return <GenericCmsPage title="Achievements" />;
+  return <ManageAchievements />;
 }
 

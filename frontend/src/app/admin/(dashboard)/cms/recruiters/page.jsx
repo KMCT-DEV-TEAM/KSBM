@@ -1,7 +1,7 @@
 "use client";
-import GenericCmsPage from "../../../../../features/admin/cms/GenericCmsPage";
+import ManageRecruiters from "../../../../../features/admin/cms/ManageRecruiters";
 
 export default function Page() {
-  return <GenericCmsPage title="Recruiters" />;
+  return <ManageRecruiters />;
 }
 

@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2, GripVertical, Image as ImageIcon } from 'lucide-react';
+import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Plus, Trash2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
-import ManagementPreview from '../../home/components/ManagementSection';
+import Loader from '../../../components/Loader';
+import AchievementsPreview from '../../home/components/AchievementsSection';
 import LogoUploader from './components/LogoUploader';
 
 const Toast = Swal.mixin({
@@ -20,11 +20,14 @@ const Toast = Swal.mixin({
   }
 });
 
-const ManageManagement = () => {
+const ManageAchievements = () => {
   const [subheading, setSubheading] = useState('');
   const [heading, setHeading] = useState('');
-  const [description, setDescription] = useState('');
-  const [members, setMembers] = useState([]);
+  const [achievements, setAchievements] = useState([]);
+  
+  const [showSubheading, setShowSubheading] = useState(true);
+  const [showHeading, setShowHeading] = useState(true);
+  const [showAchievements, setShowAchievements] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -38,14 +41,16 @@ const ManageManagement = () => {
 
   const fetchSettings = async () => {
     try {
-      const { data } = await api.get('/cms/management');
+      const { data } = await api.get('/cms/achievements');
       setSubheading(data.subheading || '');
       setHeading(data.heading || '');
-      setDescription(data.description || '');
-      setMembers(data.members || []);
+      setAchievements(data.achievements || []);
+      setShowSubheading(data.showSubheading ?? true);
+      setShowHeading(data.showHeading ?? true);
+      setShowAchievements(data.showAchievements ?? true);
     } catch (error) {
-      console.error('Error fetching management settings:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to load management settings.' });
+      console.error('Error fetching achievements settings:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to load achievements settings.' });
     } finally {
       setIsLoading(false);
     }
@@ -54,12 +59,12 @@ const ManageManagement = () => {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await api.put('/cms/management', {
-        subheading, heading, description, members
+      await api.put('/cms/achievements', {
+        subheading, heading, achievements, showSubheading, showHeading, showAchievements
       });
-      Toast.fire({ icon: 'success', title: 'Management section saved successfully!' });
+      Toast.fire({ icon: 'success', title: 'Achievements section saved successfully!' });
     } catch (error) {
-      console.error('Error saving management settings:', error);
+      console.error('Error saving achievements settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
     } finally {
       setIsSaving(false);
@@ -79,30 +84,35 @@ const ManageManagement = () => {
 
   const handleConfirmAction = async () => {
     if (confirmModal.action === 'reset') {
-      setSubheading('OUR MANAGEMENT');
-      setHeading('The Architects Of Excellence');
-      setDescription('Our leadership board combines decades of top-tier industry experience with a profound commitment to academic innovation.');
-      setMembers([
+      setSubheading('College Achievements');
+      setHeading('Awards and Achievements');
+      setShowSubheading(true);
+      setShowHeading(true);
+      setShowAchievements(true);
+      setAchievements([
         {
-          id: '1',
-          name: 'Dr. Sarah Mitchell',
-          role: 'MANAGING DIRECTOR',
-          verticalText: 'DIRECTOR',
-          image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          id: Date.now().toString() + '1',
+          category: 'Academics',
+          date: 'Oct 30, 2024',
+          title: 'National Research Excellence Award',
+          description: 'Recognizing outstanding contributions to sustainable technology research.',
+          image: '/assets/Images/achievement_award.png'
         },
         {
-          id: '2',
-          name: 'Dr. Adrian Starlin',
-          role: 'CHAIRMAN DIRECTOR',
-          verticalText: 'CHAIRMAN',
-          image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          id: Date.now().toString() + '2',
+          category: 'Sports',
+          date: 'Oct 25, 2024',
+          title: 'Championship Victory in Inter-University League',
+          description: 'Our varsity team secures the gold in the regional finals.',
+          image: '/assets/Images/achievement_sports.png'
         },
         {
-          id: '3',
-          name: 'Dr. Elena Rostova',
-          role: 'EXECUTIVE DIRECTOR',
-          verticalText: 'EXECUTIVE',
-          image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          id: Date.now().toString() + '3',
+          category: 'Community',
+          date: 'Oct 20, 2024',
+          title: 'Social Impact Leadership Award',
+          description: 'Honoring our student volunteers for their dedication to local literacy programs.',
+          image: '/assets/Images/achievement_poster.png'
         }
       ]);
       Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
@@ -110,55 +120,52 @@ const ManageManagement = () => {
     setConfirmModal({ ...confirmModal, isOpen: false });
   };
 
-  const handleAddMember = () => {
-    setMembers([
-      ...members,
+  const handleAddAchievement = () => {
+    setAchievements([
+      ...achievements,
       {
         id: Date.now().toString(),
-        name: 'New Member',
-        role: 'ROLE',
-        verticalText: 'TEXT',
+        title: 'New Achievement',
+        category: 'Category',
+        date: 'Date',
+        description: 'Short description...',
         image: ''
       }
     ]);
   };
 
-  const handleUpdateMember = (id, field, value) => {
-    setMembers(members.map(member => 
-      member.id === id ? { ...member, [field]: value } : member
+  const handleUpdateAchievement = (id, field, value) => {
+    setAchievements(achievements.map(item => 
+      (item.id === id || item._id === id) ? { ...item, [field]: value } : item
     ));
   };
 
-  const handleDeleteMember = async (id) => {
-    const updatedMembers = members.filter(member => member.id !== id);
-    setMembers(updatedMembers);
+  const handleDeleteAchievement = async (id) => {
+    const updatedAchievements = achievements.filter(item => item.id !== id && item._id !== id);
+    setAchievements(updatedAchievements);
     
     try {
-      await api.put('/cms/management', {
-        subheading, heading, description, members: updatedMembers
+      await api.put('/cms/achievements', {
+        subheading, heading, achievements: updatedAchievements, showSubheading, showHeading, showAchievements
       });
-      Toast.fire({ icon: 'success', title: 'Member deleted from database.' });
+      Toast.fire({ icon: 'success', title: 'Achievement deleted from database.' });
     } catch (error) {
-      console.error('Error deleting member:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to delete member from database.' });
-      setMembers(members); // revert on failure
+      console.error('Error deleting achievement:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to delete achievement from database.' });
+      setAchievements(achievements); // revert on failure
     }
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
+    return <Loader theme="light" text="Loading Settings..." />;
   }
 
   return (
     <div className="space-y-6 w-full">
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Management Settings</h1>
-          <p className="text-[#697A8D] mt-1 text-sm">Manage the leadership board and management section.</p>
+          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Achievements Settings</h1>
+          <p className="text-[#697A8D] mt-1 text-sm">Manage the achievements displayed on the home page.</p>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -181,7 +188,7 @@ const ManageManagement = () => {
             className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-[0_2px_4px_0_var(--color-primary)] disabled:opacity-70"
           >
             {isSaving ? (
-              <Loader2 className="w-4 h-4 animate-spin text-white" />
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
             ) : (
               <Save className="w-4 h-4" />
             )}
@@ -230,8 +237,8 @@ const ManageManagement = () => {
           </div>
           <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
             <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <ManagementPreview previewData={{
-                subheading, heading, description, members
+              <AchievementsPreview previewData={{
+                subheading, heading, achievements, showSubheading, showHeading, showAchievements
               }} />
             </div>
           </div>
@@ -239,100 +246,124 @@ const ManageManagement = () => {
       )}
 
       <div className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] p-6 md:p-8 max-w-5xl mx-auto">
+        
+        {/* Header Text Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
           <h3 className="text-lg font-bold text-[#566A7F] mb-4">Header Content</h3>
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Subheading</label>
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={showSubheading} onChange={(e) => setShowSubheading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
+                  <span className="text-xs font-semibold text-gray-500">Show</span>
+                </label>
+              </div>
               <input
                 type="text"
                 value={subheading}
                 onChange={(e) => setSubheading(e.target.value)}
-                placeholder="e.g. OUR MANAGEMENT"
+                placeholder="e.g. College Achievements"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Main Heading</label>
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={showHeading} onChange={(e) => setShowHeading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
+                  <span className="text-xs font-semibold text-gray-500">Show</span>
+                </label>
+              </div>
               <input
                 type="text"
                 value={heading}
                 onChange={(e) => setHeading(e.target.value)}
-                placeholder="e.g. The Architects Of Excellence"
-                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Description</label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={3}
-                placeholder="e.g. Our leadership board combines decades of top-tier industry experience..."
+                placeholder="e.g. Awards and Achievements"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
           </div>
         </div>
 
+        {/* Achievements Builder */}
         <div>
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-bold text-[#566A7F]">Management Members</h3>
+            <div className="flex items-center gap-4">
+              <h3 className="text-lg font-bold text-[#566A7F]">Achievements Items</h3>
+              <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
+                <input type="checkbox" checked={showAchievements} onChange={(e) => setShowAchievements(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                <span className="text-sm font-semibold text-gray-500">Show Achievements Section</span>
+              </label>
+            </div>
             <button
-              onClick={handleAddMember}
+              onClick={handleAddAchievement}
               className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
             >
-              <Plus className="w-4 h-4" /> Add Member
+              <Plus className="w-4 h-4" /> Add Achievement
             </button>
           </div>
 
           <div className="space-y-4">
-            {members.map((member, index) => (
-              <div key={member.id} className="p-4 border border-gray-200 rounded-lg bg-gray-50 flex gap-6 items-start relative group">
+            {achievements.map((item, index) => (
+              <div key={item.id || item._id} className="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col md:flex-row gap-6 relative group">
                 <button
-                  onClick={() => handleDeleteMember(member.id)}
+                  onClick={() => handleDeleteAchievement(item.id || item._id)}
                   className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
-                  title="Remove Member"
+                  title="Remove Achievement"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
 
-                <div className="w-40 shrink-0">
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Profile Image</label>
-                  <LogoUploader
-                    currentLogoUrl={member.image || 'https://via.placeholder.com/150'}
-                    onUploadSuccess={(url) => handleUpdateMember(member.id, 'image', url)}
-                  />
+                <div className="flex flex-col gap-4 w-full md:w-48 shrink-0">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Image</label>
+                    <LogoUploader
+                      currentLogoUrl={item.image || 'https://via.placeholder.com/300x200?text=No+Image'}
+                      onUploadSuccess={(url) => handleUpdateAchievement(item.id || item._id, 'image', url)}
+                    />
+                  </div>
                 </div>
 
-                <div className="flex-1 grid grid-cols-2 gap-4">
-                  <div className="col-span-2">
-                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Name</label>
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="md:col-span-2">
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Title</label>
                     <input
                       type="text"
-                      value={member.name}
-                      onChange={(e) => handleUpdateMember(member.id, 'name', e.target.value)}
-                      placeholder="e.g. Dr. Sarah Mitchell"
+                      value={item.title}
+                      onChange={(e) => handleUpdateAchievement(item.id || item._id, 'title', e.target.value)}
+                      placeholder="e.g. National Research Excellence Award"
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Role</label>
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Category</label>
                     <input
                       type="text"
-                      value={member.role}
-                      onChange={(e) => handleUpdateMember(member.id, 'role', e.target.value)}
-                      placeholder="e.g. MANAGING DIRECTOR"
+                      value={item.category}
+                      onChange={(e) => handleUpdateAchievement(item.id || item._id, 'category', e.target.value)}
+                      placeholder="e.g. Academics"
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Vertical Text</label>
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Date</label>
                     <input
                       type="text"
-                      value={member.verticalText}
-                      onChange={(e) => handleUpdateMember(member.id, 'verticalText', e.target.value)}
-                      placeholder="e.g. DIRECTOR"
+                      value={item.date}
+                      onChange={(e) => handleUpdateAchievement(item.id || item._id, 'date', e.target.value)}
+                      placeholder="e.g. Oct 30, 2024"
+                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    />
+                  </div>
+                  
+                  <div className="md:col-span-2">
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Description</label>
+                    <textarea
+                      value={item.description}
+                      onChange={(e) => handleUpdateAchievement(item.id || item._id, 'description', e.target.value)}
+                      rows={3}
+                      placeholder="Enter description here..."
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
                   </div>
@@ -340,9 +371,9 @@ const ManageManagement = () => {
               </div>
             ))}
             
-            {members.length === 0 && (
+            {achievements.length === 0 && (
               <div className="text-center py-8 text-gray-400 text-sm">
-                No management members added yet. Click "Add Member" to create one.
+                No achievements added yet. Click "Add Achievement" to create one.
               </div>
             )}
           </div>
@@ -364,5 +395,4 @@ const ManageManagement = () => {
   );
 };
 
-export default ManageManagement;
-
+export default ManageAchievements;

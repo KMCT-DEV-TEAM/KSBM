@@ -55,7 +55,7 @@ const AccreditationSection = ({ previewData }) => {
 
   return (
     <section className="w-full bg-[#f4fafe] py-12 sm:py-16 lg:py-20 overflow-hidden">
-      <div className="w-full px-4 sm:px-6 lg:px-8">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-center justify-evenly gap-10 lg:gap-8 w-full max-w-7xl mx-auto">
 
           {/* Left Content */}

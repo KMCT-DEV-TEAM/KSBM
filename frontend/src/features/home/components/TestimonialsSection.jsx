@@ -1,49 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import api from '../../../api/axios';
 
-const TestimonialsSection = () => {
+const TestimonialsSection = ({ previewData }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const testimonials = [
-    {
-      id: 1,
-      name: 'Anjali Menon',
-      course: 'MBA (2022-2024)',
-      quote: '"KSBM transformed my potential into professional success."',
-      body: 'From interactive classroom sessions to industry-oriented projects, every experience prepared me for real business challenges. The faculty, placement team, and supportive learning environment helped me grow both professionally and personally, giving me the confidence to excel in the corporate world.',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=150&auto=format&fit=crop'
-    },
-    {
-      id: 2,
-      name: 'Rahul Sharma',
-      course: 'BBA (2021-2024)',
-      quote: '"The practical approach to learning is unmatched here."',
-      body: 'The practical approach to learning and the amazing campus life made my time at KSBM unforgettable. The placement cell was instrumental in getting me my dream job right out of college, providing excellent mentorship.',
-      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop',
-      avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=150&auto=format&fit=crop'
-    },
-    {
-      id: 3,
-      name: 'Priya Patel',
-      course: 'MBA (2021-2023)',
-      quote: '"A true stepping stone to global corporate opportunities."',
-      body: 'KSBM gave me the platform to interact with industry leaders and participate in global competitions. The rigorous curriculum is exactly what the corporate world demands, making the transition seamless and rewarding.',
-      image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1974&auto=format&fit=crop',
-      avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=150&auto=format&fit=crop'
-    }
-  ];
+  const [settings, setSettings] = useState({
+    subheading: 'Testimonials',
+    heading: 'Voices of Success',
+    testimonials: [
+      {
+        id: '1',
+        name: 'Anjali Menon',
+        course: 'MBA (2022-2024)',
+        quote: '"KSBM transformed my potential into professional success."',
+        body: 'From interactive classroom sessions to industry-oriented projects, every experience prepared me for real business challenges. The faculty, placement team, and supportive learning environment helped me grow both professionally and personally, giving me the confidence to excel in the corporate world.',
+        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop',
+        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=150&auto=format&fit=crop'
+      },
+      {
+        id: '2',
+        name: 'Rahul Sharma',
+        course: 'BBA (2021-2024)',
+        quote: '"The practical approach to learning is unmatched here."',
+        body: 'The practical approach to learning and the amazing campus life made my time at KSBM unforgettable. The placement cell was instrumental in getting me my dream job right out of college, providing excellent mentorship.',
+        image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop',
+        avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=150&auto=format&fit=crop'
+      },
+      {
+        id: '3',
+        name: 'Priya Patel',
+        course: 'MBA (2021-2023)',
+        quote: '"A true stepping stone to global corporate opportunities."',
+        body: 'KSBM gave me the platform to interact with industry leaders and participate in global competitions. The rigorous curriculum is exactly what the corporate world demands, making the transition seamless and rewarding.',
+        image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1974&auto=format&fit=crop',
+        avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=150&auto=format&fit=crop'
+      }
+    ]
+  });
 
   useEffect(() => {
+    if (previewData) {
+      setSettings(previewData);
+    } else {
+      const fetchSettings = async () => {
+        try {
+          const { data } = await api.get('/cms/testimonials');
+          if (data) {
+            setSettings({
+              subheading: data.subheading || 'Testimonials',
+              heading: data.heading || 'Voices of Success',
+              testimonials: data.testimonials && data.testimonials.length > 0 ? data.testimonials : settings.testimonials
+            });
+          }
+        } catch (error) {
+          console.error('Error fetching testimonials settings:', error);
+        }
+      };
+      fetchSettings();
+    }
+  }, [previewData]);
+
+  const { subheading, heading, testimonials } = settings;
+
+  useEffect(() => {
+    if (!testimonials || testimonials.length === 0) return;
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % testimonials.length);
     }, 4000); // cycle every 4 seconds
     return () => clearInterval(timer);
   }, [testimonials.length]);
 
+  if (!testimonials || testimonials.length === 0) return null;
+
   return (
     <section className="w-full bg-background py-12 lg:py-16">
-      <div className="w-full px-4 sm:px-6 lg:px-8">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -54,7 +85,7 @@ const TestimonialsSection = () => {
             transition={{ duration: 0.6 }}
             className="text-text-secondary text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-3"
           >
-            Testimonials
+            {subheading}
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -63,7 +94,7 @@ const TestimonialsSection = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-3xl lg:text-[2.75rem] font-bold text-primary"
           >
-            Voices of Success
+            {heading}
           </motion.h2>
         </div>
 
@@ -73,7 +104,7 @@ const TestimonialsSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="hidden lg:flex gap-6 h-[380px] w-full max-w-none mx-auto justify-center"
+          className="hidden lg:flex gap-6 h-[380px] w-full max-w-7xl mx-auto justify-center"
         >
           {testimonials.map((testimonial, index) => {
             const isActive = activeIndex === index;
@@ -81,11 +112,14 @@ const TestimonialsSection = () => {
               <div
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}
-                className={`relative flex transition-all duration-1000 ease-in-out cursor-pointer overflow-hidden ${isActive ? 'w-[50%] gap-6' : 'w-[20%] gap-0'
-                  }`}
+                className={`relative flex transition-all duration-1000 ease-in-out cursor-pointer overflow-hidden ${
+                  isActive 
+                    ? 'w-[550px] xl:w-[650px] 2xl:w-[750px] gap-6' 
+                    : 'w-[200px] xl:w-[240px] 2xl:w-[280px] gap-0'
+                }`}
               >
                 {/* Image Section */}
-                <div className={`h-full shrink-0 transition-all duration-1000 ease-in-out ${isActive ? 'w-[41%]' : 'w-full'}`}>
+                <div className="h-full shrink-0 w-[200px] xl:w-[240px] 2xl:w-[280px]">
                   <img
                     src={testimonial.image}
                     alt={testimonial.name}
@@ -94,9 +128,9 @@ const TestimonialsSection = () => {
                 </div>
 
                 {/* Text Content */}
-                <div className={`h-full py-4 flex flex-col justify-center transition-all duration-1000 ease-in-out ${isActive ? 'w-[59%] opacity-100 translate-x-0' : 'w-0 opacity-0 translate-x-8'}`}>
-                  <div className="w-[280px]">
-                    <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 leading-snug">
+                <div className={`h-full py-4 flex flex-col justify-center transition-all duration-1000 ease-in-out min-w-[280px] xl:min-w-[320px] ${isActive ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
+                  <div className="w-full">
+                    <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 leading-snug pr-4">
                       {testimonial.quote}
                     </h3>
                     <p className="text-gray-500 text-[0.85rem] leading-[1.8] mb-6 pr-6">
@@ -175,7 +209,7 @@ const TestimonialsSection = () => {
               <button
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}
-                className={`w-14 h-14 rounded-full overflow-hidden border-2${activeIndex === index ? 'border-primary scale-110 opacity-100' : 'border-transparent opacity-50 grayscale hover:grayscale-0 hover:opacity-100'}`}
+                className={`w-14 h-14 transition-all duration-300 rounded-full overflow-hidden border-2 ${activeIndex === index ? 'border-primary opacity-100' : 'border-transparent opacity-50 grayscale hover:grayscale-0 hover:opacity-100'}`}
               >
                 <img src={testimonial.avatar} alt={testimonial.name} className="w-full h-full object-cover" />
               </button>

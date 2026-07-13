@@ -1,7 +1,6 @@
 "use client";
-import GenericCmsPage from "../../../../../features/admin/cms/GenericCmsPage";
+import ManageFooter from '../../../../../features/admin/cms/ManageFooter';
 
 export default function Page() {
-  return <GenericCmsPage title="Footer" />;
+  return <ManageFooter />;
 }
-

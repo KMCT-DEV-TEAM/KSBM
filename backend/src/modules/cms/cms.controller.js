@@ -6,6 +6,12 @@ import Accreditation from './accreditation.model.js';
 import Facilities from './facilities.model.js';
 import Management from './management.model.js';
 import Placement from './placement.model.js';
+import Testimonials from './testimonials.model.js';
+import Achievements from './achievements.model.js';
+import Recruiters from './recruiters.model.js';
+import LifeAtKsbm from './lifeAtKsbm.model.js';
+import News from './news.model.js';
+import FooterModel from './footer.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -322,5 +328,215 @@ export const updatePlacementSettings = async (req, res) => {
       message: "Server error updating placement settings",
       error: error.message,
     });
+  }
+};
+
+// @desc    Get Testimonials settings
+// @route   GET /api/cms/testimonials
+// @access  Public
+export const getTestimonialsSettings = async (req, res) => {
+  try {
+    const settings = await Testimonials.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error fetching testimonials settings",
+      error: error.message,
+    });
+  }
+};
+
+// @desc    Update Testimonials settings
+// @route   PUT /api/cms/testimonials
+// @access  Private (Admin)
+export const updateTestimonialsSettings = async (req, res) => {
+  try {
+    const { subheading, heading, testimonials } = req.body;
+
+    const settings = await Testimonials.getSettings();
+
+    if (subheading !== undefined) settings.subheading = subheading;
+    if (heading !== undefined) settings.heading = heading;
+    if (testimonials !== undefined) settings.testimonials = testimonials;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error updating testimonials settings",
+      error: error.message,
+    });
+  }
+};
+
+// @desc    Get achievements settings
+// @route   GET /api/cms/achievements
+// @access  Public
+export const getAchievementsSettings = async (req, res) => {
+  try {
+    const settings = await Achievements.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching achievements settings', error: error.message });
+  }
+};
+
+// @desc    Update achievements settings
+// @route   PUT /api/cms/achievements
+// @access  Private (Admin)
+export const updateAchievementsSettings = async (req, res) => {
+  try {
+    const { subheading, heading, achievements, showSubheading, showHeading, showAchievements } = req.body;
+
+    const settings = await Achievements.getSettings();
+
+    if (subheading !== undefined) settings.subheading = subheading;
+    if (heading !== undefined) settings.heading = heading;
+    if (achievements !== undefined) settings.achievements = achievements;
+    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
+    if (showHeading !== undefined) settings.showHeading = showHeading;
+    if (showAchievements !== undefined) settings.showAchievements = showAchievements;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating achievements settings', error: error.message });
+  }
+};
+
+// @desc    Get recruiters settings
+// @route   GET /api/cms/recruiters
+// @access  Public
+export const getRecruitersSettings = async (req, res) => {
+  try {
+    const settings = await Recruiters.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching recruiters settings', error: error.message });
+  }
+};
+
+// @desc    Update recruiters settings
+// @route   PUT /api/cms/recruiters
+// @access  Private (Admin)
+export const updateRecruitersSettings = async (req, res) => {
+  try {
+    const { recruiters, showRecruiters } = req.body;
+
+    const settings = await Recruiters.getSettings();
+
+    if (recruiters !== undefined) settings.recruiters = recruiters;
+    if (showRecruiters !== undefined) settings.showRecruiters = showRecruiters;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating recruiters settings', error: error.message });
+  }
+};
+
+// @desc    Get Life at KSBM settings
+// @route   GET /api/cms/life-at-ksbm
+// @access  Public
+export const getLifeAtKsbmSettings = async (req, res) => {
+  try {
+    const settings = await LifeAtKsbm.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Life at KSBM settings', error: error.message });
+  }
+};
+
+// @desc    Update Life at KSBM settings
+// @route   PUT /api/cms/life-at-ksbm
+// @access  Private (Admin)
+export const updateLifeAtKsbmSettings = async (req, res) => {
+  try {
+    const { subheading, heading, description, images, showSubheading, showHeading, showDescription, showImages, showSection } = req.body;
+    const settings = await LifeAtKsbm.getSettings();
+
+    if (subheading !== undefined) settings.subheading = subheading;
+    if (heading !== undefined) settings.heading = heading;
+    if (description !== undefined) settings.description = description;
+    if (images !== undefined) settings.images = images;
+    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
+    if (showHeading !== undefined) settings.showHeading = showHeading;
+    if (showDescription !== undefined) settings.showDescription = showDescription;
+    if (showImages !== undefined) settings.showImages = showImages;
+    if (showSection !== undefined) settings.showSection = showSection;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Life at KSBM settings', error: error.message });
+  }
+};
+
+// @desc    Get News settings
+// @route   GET /api/cms/news
+// @access  Public
+export const getNewsSettings = async (req, res) => {
+  try {
+    const settings = await News.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching News settings', error: error.message });
+  }
+};
+
+// @desc    Update News settings
+// @route   PUT /api/cms/news
+// @access  Private (Admin)
+export const updateNewsSettings = async (req, res) => {
+  try {
+    const { subheading, heading, featuredArticle, sideArticles, showSubheading, showHeading, showSection } = req.body;
+    const settings = await News.getSettings();
+
+    if (subheading !== undefined) settings.subheading = subheading;
+    if (heading !== undefined) settings.heading = heading;
+    if (featuredArticle !== undefined) settings.featuredArticle = featuredArticle;
+    if (sideArticles !== undefined) settings.sideArticles = sideArticles;
+    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
+    if (showHeading !== undefined) settings.showHeading = showHeading;
+    if (showSection !== undefined) settings.showSection = showSection;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating News settings', error: error.message });
+  }
+};
+
+// @desc    Get Footer settings
+// @route   GET /api/cms/footer
+// @access  Public
+export const getFooterSettings = async (req, res) => {
+  try {
+    const settings = await FooterModel.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Footer settings', error: error.message });
+  }
+};
+
+// @desc    Update Footer settings
+// @route   PUT /api/cms/footer
+// @access  Private (Admin)
+export const updateFooterSettings = async (req, res) => {
+  try {
+    const { description, socialLinks, programs, quickLinks, contactInfo, copyrightText } = req.body;
+    const settings = await FooterModel.getSettings();
+
+    if (description !== undefined) settings.description = description;
+    if (socialLinks !== undefined) settings.socialLinks = socialLinks;
+    if (programs !== undefined) settings.programs = programs;
+    if (quickLinks !== undefined) settings.quickLinks = quickLinks;
+    if (contactInfo !== undefined) settings.contactInfo = contactInfo;
+    if (copyrightText !== undefined) settings.copyrightText = copyrightText;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Footer settings', error: error.message });
   }
 };
