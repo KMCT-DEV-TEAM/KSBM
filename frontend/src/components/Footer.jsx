@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Mail, Phone } from 'lucide-react';
 import api from '../api/axios';
+import { motion } from 'framer-motion';
 const watermarkLogo = '/assets/Images/watermark_logo.png';
 
 const Footer = ({ previewData }) => {
@@ -93,7 +94,13 @@ const Footer = ({ previewData }) => {
       <div className="relative w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 z-10">
 
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.1 }}
+          transition={{ duration: 0.6 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20"
+        >
 
           {/* Column 1: About & Social */}
           <div className="flex flex-col pr-4">
@@ -192,7 +199,7 @@ const Footer = ({ previewData }) => {
             </ul>
           </div>
 
-        </div>
+        </motion.div>
 
         {/* Footer Bottom */}
         <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10">
