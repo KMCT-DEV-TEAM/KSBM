@@ -156,7 +156,7 @@ const NewsSection = ({ previewData }) => {
               {sideArticles.map((article, index) => (
                 <div
                   key={index}
-                  className="flex gap-5 items-center group cursor-pointer rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] p-3 -ml-3 w-[calc(100%+1.5rem)]"
+                  className="flex gap-5 items-center group cursor-pointer rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] p-3 lg:-ml-3 lg:w-[calc(100%+1.5rem)] w-full"
                 >
                   {/* Small Image */}
                   <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-[1rem] overflow-hidden shrink-0 shadow-sm relative">
