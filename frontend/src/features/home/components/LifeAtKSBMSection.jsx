@@ -115,12 +115,8 @@ const LifeAtKSBMSection = ({ previewData }) => {
           <div className="relative w-[100vw] left-1/2 -translate-x-1/2 overflow-hidden mt-8 flex flex-col gap-3 md:gap-4">
             
             {/* Top Row (Scrolls Left) */}
-            <motion.div 
-              animate={{ x: ["0%", "-33.333%"] }}
-              transition={{ ease: "linear", duration: 40, repeat: Infinity }}
-              className="flex gap-3 md:gap-4 w-max pr-3 md:pr-4"
-            >
-              {[...Array(3)].map((_, arrayIndex) => (
+            <div className="animate-marquee gap-3 md:gap-4 pr-3 md:pr-4 will-change-transform" style={{ animationDuration: '40s' }}>
+              {[...Array(2)].map((_, arrayIndex) => (
                 <div key={arrayIndex} className="flex gap-3 md:gap-4 shrink-0">
                   {images.slice(0, Math.ceil(images.length / 2)).map((img, index) => {
                     const isWide = index % 4 === 0 || index % 4 === 3;
@@ -136,15 +132,11 @@ const LifeAtKSBMSection = ({ previewData }) => {
                   })}
                 </div>
               ))}
-            </motion.div>
+            </div>
 
             {/* Bottom Row (Scrolls Right) */}
-            <motion.div 
-              animate={{ x: ["-33.333%", "0%"] }}
-              transition={{ ease: "linear", duration: 45, repeat: Infinity }}
-              className="flex gap-3 md:gap-4 w-max pr-3 md:pr-4"
-            >
-              {[...Array(3)].map((_, arrayIndex) => (
+            <div className="animate-marquee-reverse gap-3 md:gap-4 pr-3 md:pr-4 will-change-transform" style={{ animationDuration: '45s' }}>
+              {[...Array(2)].map((_, arrayIndex) => (
                 <div key={arrayIndex} className="flex gap-3 md:gap-4 shrink-0">
                   {images.slice(Math.ceil(images.length / 2)).map((img, index) => {
                     const isWide = index % 4 === 1 || index % 4 === 2;
@@ -160,7 +152,7 @@ const LifeAtKSBMSection = ({ previewData }) => {
                   })}
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         )}
 
