@@ -64,7 +64,7 @@ const Footer = ({ previewData }) => {
       {/* Background Geometric Pattern */}
       {/* Left Pattern */}
       <div
-        className="absolute top-1/2 left-0 w-[400px] h-[400px] opacity-[0.50] pointer-events-none transform -translate-x-1/2 -translate-y-1/2 bg-secondary"
+        className="absolute top-0 md:top-1/2 left-0 w-[400px] h-[400px] opacity-[0.50] pointer-events-none transform -translate-x-1/2 -translate-y-1/2 bg-secondary"
         style={{
           maskImage: `url(${watermarkLogo})`,
           WebkitMaskImage: `url(${watermarkLogo})`,
@@ -78,7 +78,7 @@ const Footer = ({ previewData }) => {
       ></div>
       {/* Right Pattern */}
       <div
-        className="absolute top-1/2 right-0 w-[400px] h-[400px] opacity-[0.50] pointer-events-none transform translate-x-1/2 -translate-y-1/2 bg-secondary"
+        className="absolute top-auto bottom-0 md:top-1/2 md:bottom-auto right-0 w-[400px] h-[400px] opacity-[0.50] pointer-events-none transform translate-x-1/2 translate-y-1/2 md:-translate-y-1/2 bg-secondary"
         style={{
           maskImage: `url(${watermarkLogo})`,
           WebkitMaskImage: `url(${watermarkLogo})`,
@@ -202,7 +202,7 @@ const Footer = ({ previewData }) => {
         </motion.div>
 
         {/* Footer Bottom */}
-        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10">
+        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10 text-center md:text-left">
           <p>
             {copyrightText}
           </p>
