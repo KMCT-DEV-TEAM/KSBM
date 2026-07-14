@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import Loader from '../../../components/Loader';
 import LogoUploader from './components/LogoUploader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
+import confirmAction from '../../../utils/confirmAction';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -63,14 +64,29 @@ const ManageHeader = () => {
     setNavItems(copyListItems);
   };
 
-  const handleResetToDefault = () => {
-    setConfirmModal({
-      isOpen: true,
-      action: 'reset',
+  const handleResetToDefault = async () => {
+    await confirmAction({
       title: 'Reset to Defaults?',
       message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
       confirmText: 'Yes, reset it!',
-      variant: 'primary'
+      variant: 'primary',
+      action: async () => {
+      setNavItems([
+        { label: 'Home', link: '#home' },
+        { label: 'About Us', link: '#about-us' },
+        { label: 'Campus', link: '#campus' },
+        { label: 'People', link: '#people' },
+        { label: 'Placement', link: '#placement' },
+        { label: 'Programs', link: '#programs' },
+        { label: 'Events', link: '#events' },
+        { label: 'Admission', link: '#admission' },
+        { label: 'Examinations', link: '#examinations' },
+      ]);
+      setActionButton({ text: 'Apply Now', isVisible: true });
+      setLogoUrl('');
+      setAlignment('center');
+      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+    }
     });
   };
 
@@ -94,6 +110,12 @@ const ManageHeader = () => {
   };
 
   const handleSave = async () => {
+    await confirmAction({
+      title: 'Save Changes?',
+      message: 'Are you sure you want to save these changes to the website?',
+      confirmText: 'Yes, save it!',
+      variant: 'primary',
+      action: async () => {
     setIsSaving(true);
     try {
       await api.put('/cms/header', { navItems, actionButton, alignment, logoUrl }, { hideLoader: true });
@@ -104,6 +126,8 @@ const ManageHeader = () => {
     } finally {
       setIsSaving(false);
     }
+  }
+    });
   };
 
   const handleOpenAddLinkModal = () => {
@@ -133,23 +157,7 @@ const ManageHeader = () => {
   };
 
   const handleConfirmAction = async () => {
-    if (confirmModal.action === 'reset') {
-      setNavItems([
-        { label: 'Home', link: '#home' },
-        { label: 'About Us', link: '#about-us' },
-        { label: 'Campus', link: '#campus' },
-        { label: 'People', link: '#people' },
-        { label: 'Placement', link: '#placement' },
-        { label: 'Programs', link: '#programs' },
-        { label: 'Events', link: '#events' },
-        { label: 'Admission', link: '#admission' },
-        { label: 'Examinations', link: '#examinations' },
-      ]);
-      setActionButton({ text: 'Apply Now', isVisible: true });
-      setLogoUrl('');
-      setAlignment('center');
-      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-    } else if (confirmModal.action === 'removeLink') {
+    if (confirmModal.action === 'removeLink') {
       const index = confirmModal.index;
       const newItems = [...navItems];
       newItems.splice(index, 1);

@@ -6,6 +6,7 @@ import Loader from '../../../components/Loader';
 import LifeAtKSBMSectionPreview from '../../home/components/LifeAtKSBMSection';
 import SectionForm from './components/SectionForm';
 import PageHeader from './components/PageHeader';
+import confirmAction from '../../../utils/confirmAction';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -58,6 +59,12 @@ const ManageLifeAtKsbm = () => {
   };
 
   const handleSave = async () => {
+    await confirmAction({
+      title: 'Save Changes?',
+      message: 'Are you sure you want to save these changes to the website?',
+      confirmText: 'Yes, save it!',
+      variant: 'primary',
+      action: async () => {
     setIsSaving(true);
     try {
       await api.put('/cms/life-at-ksbm', {
@@ -71,6 +78,8 @@ const ManageLifeAtKsbm = () => {
     } finally {
       setIsSaving(false);
     }
+  }
+    });
   };
 
   const handleResetToDefault = async () => {

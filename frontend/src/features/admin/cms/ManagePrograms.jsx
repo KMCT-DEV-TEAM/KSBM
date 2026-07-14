@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import Loader from '../../../components/Loader';
 import LogoUploader from './components/LogoUploader';
 import ProgramsPreview from '../../home/components/AcademicPrograms';
+import confirmAction from '../../../utils/confirmAction';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -69,6 +70,12 @@ const ManagePrograms = () => {
   };
 
   const handleSave = async () => {
+    await confirmAction({
+      title: 'Save Changes?',
+      message: 'Are you sure you want to save these changes to the website?',
+      confirmText: 'Yes, save it!',
+      variant: 'primary',
+      action: async () => {
     setIsSaving(true);
     try {
       await api.put('/cms/programs', {
@@ -82,19 +89,17 @@ const ManagePrograms = () => {
     } finally {
       setIsSaving(false);
     }
+  }
+    });
   };
 
-  const handleResetToDefault = () => {
-    Swal.fire({
+  const handleResetToDefault = async () => {
+    await confirmAction({
       title: 'Reset to Defaults?',
-      text: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: 'var(--color-primary)',
-      cancelButtonColor: '#8592A3',
-      confirmButtonText: 'Yes, reset it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
+      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary',
+      action: async () => {
         setSubheading('Our Courses');
         setShowSubheading(true);
         setHeading('Academic Programs');

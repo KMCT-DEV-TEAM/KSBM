@@ -176,7 +176,7 @@ const Hero = ({ previewData }) => {
             }
           }
         }}
-        className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-20 flex flex-col justify-center"
+        className="relative z-10 w-[98%] max-w-[1440px] mx-auto pl-4 pr-16 sm:pl-6 sm:pr-20 lg:px-8 py-20 flex flex-col justify-center"
       >
 
         {/* Pill Badge */}
@@ -240,27 +240,27 @@ const Hero = ({ previewData }) => {
             hidden: { opacity: 0, y: 30 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
           }}
-          className="flex flex-wrap items-center gap-4 mt-10"
+          className="flex flex-col lg:flex-row items-start lg:items-center gap-4 mt-10"
         >
           {settings?.primaryButton?.isVisible !== false && (
-            <a href={settings?.primaryButton?.link || '#'} className="bg-secondary text-primary text-sm md:text-base font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
+            <a href={settings?.primaryButton?.link || '#'} className="bg-secondary text-primary text-sm md:text-base font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start">
               {settings?.primaryButton?.text || 'Apply Now'} <ArrowUpRight className="w-5 h-5" />
             </a>
           )}
           {settings?.secondaryButton?.isVisible !== false && (
-            <a href={settings?.secondaryButton?.link || '#'} className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
+            <a href={settings?.secondaryButton?.link || '#'} className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start">
               <Download className="w-5 h-5" /> {settings?.secondaryButton?.text || 'Download Brochure'}
             </a>
           )}
         </motion.div>
       </motion.div>
 
-      {/* Glassmorphism Floating Card */}
+      {/* Desktop Glassmorphism Floating Card */}
       <motion.div
         initial={{ opacity: 0, x: 50 }}
         animate={imagesLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
         transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
-        className="hidden md:block absolute bottom-10 right-10 z-20"
+        className="hidden md:block absolute bottom-4 lg:bottom-10 right-6 lg:right-10 z-20"
       >
         <div className="relative bg-background/20 backdrop-blur-md border border-white/30 rounded-2xl p-5 w-[280px] lg:w-[320px] shadow-2xl">
           {/* Blue Badge Icon Overlap */}
@@ -296,6 +296,31 @@ const Hero = ({ previewData }) => {
             Read Admission Guidelines
             <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </a>
+        </div>
+      </motion.div>
+
+      {/* Mobile Scrolling Ticker */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={imagesLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        transition={{ duration: 0.8, delay: 1, ease: "easeOut" }}
+        className="md:hidden absolute bottom-0 left-0 w-full bg-background/20 backdrop-blur-md border-t border-white/20 text-white py-3 z-20 overflow-hidden"
+      >
+        <div className="animate-marquee whitespace-nowrap flex items-center gap-10 text-xs sm:text-sm">
+          {/* First Set */}
+          <div className="flex items-center gap-10">
+            <span className="font-bold text-secondary flex items-center gap-2"><BadgeCheck className="w-4 h-4"/> Batch 2025–27</span>
+            <span className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-300"/> Limited Seats</span>
+            <span className="flex items-center gap-2"><Award className="w-4 h-4 text-gray-300"/> 100% Placement</span>
+            <a href="#" className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">Read Admission Guidelines <ExternalLink className="w-3.5 h-3.5"/></a>
+          </div>
+          {/* Second Set for seamless infinite scrolling */}
+          <div className="flex items-center gap-10">
+            <span className="font-bold text-secondary flex items-center gap-2"><BadgeCheck className="w-4 h-4"/> Batch 2025–27</span>
+            <span className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-300"/> Limited Seats</span>
+            <span className="flex items-center gap-2"><Award className="w-4 h-4 text-gray-300"/> 100% Placement</span>
+            <a href="#" className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">Read Admission Guidelines <ExternalLink className="w-3.5 h-3.5"/></a>
+          </div>
         </div>
       </motion.div>
 

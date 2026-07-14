@@ -7,6 +7,7 @@ import Loader from '../../../components/Loader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import FacilitiesSection from '../../home/components/FacilitiesSection';
 import LogoUploader from './components/LogoUploader';
+import confirmAction from '../../../utils/confirmAction';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -72,6 +73,12 @@ const ManageFacilities = () => {
   };
 
   const handleSave = async () => {
+    await confirmAction({
+      title: 'Save Changes?',
+      message: 'Are you sure you want to save these changes to the website?',
+      confirmText: 'Yes, save it!',
+      variant: 'primary',
+      action: async () => {
     setIsSaving(true);
     try {
       await api.put('/cms/facilities', {
@@ -85,6 +92,8 @@ const ManageFacilities = () => {
     } finally {
       setIsSaving(false);
     }
+  }
+    });
   };
 
   const openAddFacilityModal = () => {
@@ -131,22 +140,13 @@ const ManageFacilities = () => {
     });
   };
 
-  const handleResetToDefault = () => {
-    setConfirmModal({
-      isOpen: true,
-      action: 'reset',
+  const handleResetToDefault = async () => {
+    await confirmAction({
       title: 'Reset to Defaults?',
       message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
       confirmText: 'Yes, reset it!',
-      variant: 'primary'
-    });
-  };
-
-  const handleConfirmAction = async () => {
-    if (confirmModal.action === 'remove_facility') {
-      const updated = facilitiesList.filter((_, i) => i !== confirmModal.targetIndex);
-      setFacilitiesList(updated);
-    } else if (confirmModal.action === 'reset') {
+      variant: 'primary',
+      action: async () => {
       setSubheading('College Facilities');
       setShowSubheading(true);
       setHeading('Institutional Resources');
@@ -164,6 +164,14 @@ const ManageFacilities = () => {
       setShowFacilities(true);
       Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
     }
+    });
+  };
+
+  const handleConfirmAction = async () => {
+    if (confirmModal.action === 'remove_facility') {
+      const updated = facilitiesList.filter((_, i) => i !== confirmModal.targetIndex);
+      setFacilitiesList(updated);
+    } else 
     setConfirmModal({ ...confirmModal, isOpen: false });
   };
 

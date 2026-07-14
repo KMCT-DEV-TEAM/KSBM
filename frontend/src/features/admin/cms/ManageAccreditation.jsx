@@ -7,6 +7,7 @@ import Loader from '../../../components/Loader';
 import LogoUploader from './components/LogoUploader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import AccreditationPreview from '../../home/components/AccreditationSection';
+import confirmAction from '../../../utils/confirmAction';
 const defaultAccreditationImg = '/assets/Images/Group 47.png';
 
 const Toast = Swal.mixin({
@@ -59,6 +60,12 @@ const ManageAccreditation = () => {
   };
 
   const handleSave = async () => {
+    await confirmAction({
+      title: 'Save Changes?',
+      message: 'Are you sure you want to save these changes to the website?',
+      confirmText: 'Yes, save it!',
+      variant: 'primary',
+      action: async () => {
     setIsSaving(true);
     try {
       await api.put('/cms/accreditation', {
@@ -72,21 +79,17 @@ const ManageAccreditation = () => {
     } finally {
       setIsSaving(false);
     }
-  };
-
-  const handleResetToDefault = () => {
-    setConfirmModal({
-      isOpen: true,
-      action: 'reset',
-      title: 'Reset to Defaults?',
-      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
-      confirmText: 'Yes, reset it!',
-      variant: 'primary'
+  }
     });
   };
 
-  const handleConfirmAction = async () => {
-    if (confirmModal.action === 'reset') {
+  const handleResetToDefault = async () => {
+    await confirmAction({
+      title: 'Reset to Defaults?',
+      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary',
+      action: async () => {
       setSubheading('Institutional Credentials');
       setShowSubheading(true);
       setHeading('Accreditation & Affiliations');
@@ -95,6 +98,11 @@ const ManageAccreditation = () => {
       setShowImage(true);
       Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
     }
+    });
+  };
+
+  const handleConfirmAction = async () => {
+    
     setConfirmModal({ ...confirmModal, isOpen: false });
   };
 
