@@ -38,18 +38,18 @@ const NewsSection = ({ previewData }) => {
 
   if (isLoading) {
     return (
-      <section className="w-full bg-[#f4f7f9] py-10 lg:py-12 animate-pulse">
+      <section className="w-full bg-[#f4f7f9] py-12 lg:py-14 animate-pulse">
         <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10 lg:mb-12">
+          <div className="text-center max-w-2xl mx-auto mb-16">
             <div className="h-4 bg-gray-300 rounded w-32 mx-auto mb-3"></div>
             <div className="h-10 bg-gray-300 rounded w-64 mx-auto"></div>
           </div>
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 max-w-5xl mx-auto">
-            <div className="w-full lg:w-[55%] h-[400px] bg-gray-300 rounded-[1.5rem]"></div>
-            <div className="w-full lg:w-[45%] flex flex-col gap-6">
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 w-full mx-auto">
+            <div className="w-full lg:w-[55%] aspect-[4/3] lg:aspect-[4/3] bg-gray-300 rounded-[1.5rem]"></div>
+            <div className="w-full lg:w-[45%] flex flex-col gap-6 lg:gap-0 lg:justify-between">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="flex gap-5 items-center">
-                  <div className="w-24 h-24 sm:w-28 sm:h-28 bg-gray-300 rounded-[1rem] shrink-0"></div>
+                  <div className="w-28 h-28 sm:w-36 sm:h-36 bg-gray-300 rounded-[1rem] shrink-0"></div>
                   <div className="flex-1 space-y-3">
                     <div className="h-3 bg-gray-300 rounded w-24"></div>
                     <div className="h-5 bg-gray-300 rounded w-full"></div>
@@ -70,17 +70,17 @@ const NewsSection = ({ previewData }) => {
   }
 
   return (
-    <section className="w-full bg-[#f4f7f9] py-10 lg:py-12">
+    <section className="w-full bg-[#f4f7f9] py-12 lg:py-14">
       <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header Section */}
         {(showSubheading || showHeading) && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, amount: 0.2 }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-10 lg:mb-12"
+            className="text-center max-w-2xl mx-auto mb-16"
           >
             {showSubheading && (
               <p className="text-text-secondary text-[0.65rem] lg:text-xs tracking-[0.25em] uppercase mb-3">
@@ -96,11 +96,11 @@ const NewsSection = ({ previewData }) => {
         )}
 
         {/* Layout Grid */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 max-w-5xl mx-auto">
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 w-full mx-auto">
 
           {/* Left Column: Featured Article */}
           {featuredArticle && featuredArticle.image && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.2 }}
@@ -108,7 +108,7 @@ const NewsSection = ({ previewData }) => {
               className="w-full lg:w-[55%] group cursor-pointer"
             >
               {/* Image Wrapper */}
-              <div className="relative w-full aspect-[4/3] lg:aspect-[4/5] rounded-[1.5rem] overflow-hidden mb-6 lg:mb-0 shadow-sm">
+              <div className="relative w-full aspect-[4/3] lg:aspect-[4/3] rounded-[1.5rem] overflow-hidden mb-6 lg:mb-0 shadow-sm">
                 <img
                   src={featuredArticle.image}
                   alt={featuredArticle.title}
@@ -130,7 +130,7 @@ const NewsSection = ({ previewData }) => {
                     </p>
                   )}
                   {featuredArticle.title && (
-                    <h3 className="text-white text-xl sm:text-2xl lg:text-3xl font-bold leading-tight mb-3 group-hover:text-gray-200 transition-colors">
+                    <h3 className="text-white text-xl sm:text-2xl lg:text-3xl font-semibold leading-tight mb-3 group-hover:text-gray-200 transition-colors">
                       {featuredArticle.title}
                     </h3>
                   )}
@@ -146,20 +146,20 @@ const NewsSection = ({ previewData }) => {
 
           {/* Right Column: Side Articles */}
           {sideArticles && sideArticles.length > 0 && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.2 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="w-full lg:w-[45%] flex flex-col gap-6 lg:gap-0 lg:justify-between py-2"
             >
-              {sideArticles.map((article, index) => (
+              {sideArticles.slice(0, 3).map((article, index) => (
                 <div
                   key={index}
                   className="flex gap-5 items-center group cursor-pointer rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] p-3 lg:-ml-3 lg:w-[calc(100%+1.5rem)] w-full"
                 >
                   {/* Small Image */}
-                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-[1rem] overflow-hidden shrink-0 shadow-sm relative">
+                  <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-[1rem] overflow-hidden shrink-0 shadow-sm relative">
                     <img
                       src={article.image}
                       alt={article.title}
@@ -177,7 +177,7 @@ const NewsSection = ({ previewData }) => {
                       </p>
                     )}
                     {article.title && (
-                      <h4 className="text-base sm:text-lg font-bold text-primary leading-snug group-hover:text-[#1e2869] transition-colors line-clamp-3">
+                      <h4 className="text-base sm:text-lg font-semibold text-primary leading-snug group-hover:text-[#1e2869] transition-colors line-clamp-3">
                         {article.title}
                       </h4>
                     )}

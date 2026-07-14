@@ -121,9 +121,9 @@ const FacilitiesSection = ({ previewData }) => {
               {marqueeList.map((facility, index) => (
                 <div
                   key={`${facility._id || index}-${index}`}
-                  className="flex-shrink-0 w-[85vw] md:w-[400px]"
+                  className="flex-shrink-0 w-[70vw] sm:w-[50vw] md:w-[400px]"
                 >
-                  <div className="relative h-[340px] md:h-[340px] lg:h-[380px] w-full rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg hover:shadow-[0_15px_30px_rgba(27,37,89,0.3)] transition-all duration-500 hover:-translate-y-2">
+                  <div className="relative h-[260px] md:h-[340px] lg:h-[380px] w-full rounded-[1.5rem] md:rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg hover:shadow-[0_15px_30px_rgba(27,37,89,0.3)] transition-all duration-500 hover:-translate-y-2">
                     {/* Background Image */}
                     <img
                       src={facility.image}
