@@ -43,6 +43,15 @@
     }
   }
 
+  @keyframes scrollRight {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
   .animate-marquee {
     animation: scrollLeft 25s linear infinite;
     display: flex;
@@ -50,6 +59,16 @@
   }
   
   .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+
+  .animate-marquee-reverse {
+    animation: scrollRight 25s linear infinite;
+    display: flex;
+    width: max-content;
+  }
+  
+  .animate-marquee-reverse:hover {
     animation-play-state: paused;
   }
 }
