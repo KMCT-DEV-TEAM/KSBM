@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import api from '../api/axios';
+import Loader from '../components/Loader';
 
 const ProtectedRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -31,10 +32,7 @@ const ProtectedRoute = ({ children }) => {
 
   if (isAuthenticated === null || isAuthenticated === false) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#1a237e] mb-4"></div>
-        <p className="text-gray-500 font-medium">Verifying session...</p>
-      </div>
+      <Loader fullScreen={true} theme="dark" text="Verifying session..." />
     );
   }
 

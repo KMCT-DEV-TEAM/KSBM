@@ -7,6 +7,7 @@ import Loader from '../../../components/Loader';
 import LogoUploader from './components/LogoUploader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 const graduateImg = '/assets/Images/graduate.png';
+import confirmAction from '../../../utils/confirmAction';
 import AboutPreview from '../../home/components/AboutSection';
 
 const Toast = Swal.mixin({
@@ -41,6 +42,7 @@ const ManageAbout = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const iframeRef = React.useRef(null);
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, index: null, title: '', message: '', confirmText: '', variant: 'danger' });
 
   useEffect(() => {
@@ -73,8 +75,14 @@ const ManageAbout = () => {
   };
 
   const handleSave = async () => {
-    setIsSaving(true);
-    try {
+    await confirmAction({
+      title: 'Save Changes?',
+      message: 'Are you sure you want to save these changes to the website?',
+      confirmText: 'Yes, save it!',
+      variant: 'primary',
+      action: async () => {
+        setIsSaving(true);
+        try {
       await api.put('/cms/about', {
         subheading, heading, paragraphs, imageUrl, stats,
         showSubheading, showHeading, showParagraphs, showImage, showStats
@@ -84,18 +92,39 @@ const ManageAbout = () => {
       console.error('Error saving about settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
     } finally {
-      setIsSaving(false);
-    }
+          setIsSaving(false);
+        }
+      }
+    });
   };
 
-  const handleResetToDefault = () => {
-    setConfirmModal({
-      isOpen: true,
-      action: 'reset',
+  const handleResetToDefault = async () => {
+    await confirmAction({
       title: 'Reset to Defaults?',
       message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
       confirmText: 'Yes, reset it!',
-      variant: 'primary'
+      variant: 'primary',
+      action: async () => {
+      setSubheading('BUILDING EXCELLENCE SINCE 1995');
+      setShowSubheading(true);
+      setHeading("Shaping Tomorrow's Business Leaders");
+      setShowHeading(true);
+      setParagraphs([
+        "At KMCT School of Business Management (KSBM), we believe management education goes beyond academic excellence—it is about developing ethical leaders, innovative thinkers, and future-ready professionals. For over two decades, KSBM has been committed to delivering quality education through its MBA and BBA programs, combining academic rigor with practical learning, industry exposure, internships, and experiential training to prepare students for today's evolving business landscape.",
+        "Our MBA program equips students with advanced managerial knowledge, strategic thinking, and leadership skills for successful corporate careers, while the BBA program builds a strong foundation in business, communication, and management for higher studies and professional growth. Supported by experienced faculty, modern infrastructure, and strong industry collaborations, KSBM provides an inspiring environment that nurtures critical thinking, entrepreneurship, innovation, and lifelong learning."
+      ]);
+      setShowParagraphs(true);
+      setImageUrl('');
+      setShowImage(true);
+      setStats([
+        { value: '16+', label: 'YEARS OF EXCELLENCE' },
+        { value: '991+', label: 'ACTIVE STUDENTS' },
+        { value: '196+', label: 'GLOBAL RECRUITERS' },
+        { value: '196+', label: 'GLOBAL RECRUITERS' }
+      ]);
+      setShowStats(true);
+      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+    }
     });
   };
 
@@ -144,27 +173,7 @@ const ManageAbout = () => {
   };
 
   const handleConfirmAction = async () => {
-    if (confirmModal.action === 'reset') {
-      setSubheading('BUILDING EXCELLENCE SINCE 1995');
-      setShowSubheading(true);
-      setHeading("Shaping Tomorrow's Business Leaders");
-      setShowHeading(true);
-      setParagraphs([
-        "At KMCT School of Business Management (KSBM), we believe management education goes beyond academic excellence—it is about developing ethical leaders, innovative thinkers, and future-ready professionals. For over two decades, KSBM has been committed to delivering quality education through its MBA and BBA programs, combining academic rigor with practical learning, industry exposure, internships, and experiential training to prepare students for today's evolving business landscape.",
-        "Our MBA program equips students with advanced managerial knowledge, strategic thinking, and leadership skills for successful corporate careers, while the BBA program builds a strong foundation in business, communication, and management for higher studies and professional growth. Supported by experienced faculty, modern infrastructure, and strong industry collaborations, KSBM provides an inspiring environment that nurtures critical thinking, entrepreneurship, innovation, and lifelong learning."
-      ]);
-      setShowParagraphs(true);
-      setImageUrl('');
-      setShowImage(true);
-      setStats([
-        { value: '16+', label: 'YEARS OF EXCELLENCE' },
-        { value: '991+', label: 'ACTIVE STUDENTS' },
-        { value: '196+', label: 'GLOBAL RECRUITERS' },
-        { value: '196+', label: 'GLOBAL RECRUITERS' }
-      ]);
-      setShowStats(true);
-      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-    } else if (confirmModal.action === 'removeStat') {
+     if (confirmModal.action === 'removeStat') {
       const index = confirmModal.index;
       const newStats = [...stats];
       newStats.splice(index, 1);
@@ -205,6 +214,29 @@ const ManageAbout = () => {
     }
     setConfirmModal({ ...confirmModal, isOpen: false });
   };
+
+  
+  useEffect(() => {
+    if (isPreviewModalOpen) {
+      const pData = {
+        subheading, heading, paragraphs, imageUrl, stats,
+        showSubheading, showHeading, showParagraphs, showImage, showStats,
+        previewDevice: previewMode
+      };
+      const handleIframeReady = (e) => {
+        if (e.data?.type === 'iframe-ready' && e.data?.source === 'about' && iframeRef.current?.contentWindow) {
+          iframeRef.current.contentWindow.postMessage({ type: 'preview-about-data', payload: pData }, '*');
+        }
+      };
+      window.addEventListener('message', handleIframeReady);
+      setTimeout(() => {
+        if (iframeRef.current?.contentWindow) {
+          iframeRef.current.contentWindow.postMessage({ type: 'preview-about-data', payload: pData }, '*');
+        }
+      }, 500);
+      return () => window.removeEventListener('message', handleIframeReady);
+    }
+  }, [isPreviewModalOpen, previewMode, subheading, heading, paragraphs, imageUrl, stats, showSubheading, showHeading, showParagraphs, showImage, showStats]);
 
   if (isLoading) {
     return <Loader theme="light" text="Loading Settings..." />;
@@ -285,13 +317,14 @@ const ManageAbout = () => {
               <X className="w-5 h-5" />
             </button>
           </div>
-          <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
-            <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <AboutPreview previewData={{
-                subheading, heading, paragraphs, imageUrl, stats,
-                showSubheading, showHeading, showParagraphs, showImage, showStats,
-                previewDevice: previewMode
-              }} />
+          <div className="flex-1 bg-gray-100 overflow-hidden relative flex justify-center items-center p-4">
+            <div className={`bg-white shadow-2xl transition-all duration-300 h-full ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1920px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
+              <iframe 
+                ref={iframeRef}
+                src="/preview/about"
+                className="w-full h-full border-0"
+                title="About Preview"
+              />
             </div>
           </div>
         </div>

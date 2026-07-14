@@ -12,7 +12,7 @@ const MainLayout = ({ children }) => {
       <main className="flex-grow">
         {children}
       </main>
-      
+
       {/* Global Footer */}
       <Footer />
     </div>

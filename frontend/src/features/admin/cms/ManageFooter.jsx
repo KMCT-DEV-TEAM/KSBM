@@ -6,6 +6,7 @@ import Loader from '../../../components/Loader';
 import FooterPreview from '../../../components/Footer';
 import SectionForm from './components/SectionForm';
 import PageHeader from './components/PageHeader';
+import confirmAction from '../../../utils/confirmAction';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -50,6 +51,12 @@ const ManageFooter = () => {
   };
 
   const handleSave = async () => {
+    await confirmAction({
+      title: 'Save Changes?',
+      message: 'Are you sure you want to save these changes to the website?',
+      confirmText: 'Yes, save it!',
+      variant: 'primary',
+      action: async () => {
     setIsSaving(true);
     try {
       await api.put('/cms/footer', {
@@ -62,6 +69,8 @@ const ManageFooter = () => {
     } finally {
       setIsSaving(false);
     }
+  }
+    });
   };
 
   const handleResetToDefault = async () => {

@@ -7,6 +7,7 @@ import Loader from '../../../components/Loader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import ManagementPreview from '../../home/components/ManagementSection';
 import LogoUploader from './components/LogoUploader';
+import confirmAction from '../../../utils/confirmAction';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -30,6 +31,7 @@ const ManageManagement = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const iframeRef = React.useRef(null);
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, title: '', message: '', confirmText: '', variant: 'danger' });
 
   useEffect(() => {
@@ -52,6 +54,12 @@ const ManageManagement = () => {
   };
 
   const handleSave = async () => {
+    await confirmAction({
+      title: 'Save Changes?',
+      message: 'Are you sure you want to save these changes to the website?',
+      confirmText: 'Yes, save it!',
+      variant: 'primary',
+      action: async () => {
     setIsSaving(true);
     try {
       await api.put('/cms/management', {
@@ -64,21 +72,17 @@ const ManageManagement = () => {
     } finally {
       setIsSaving(false);
     }
-  };
-
-  const handleResetToDefault = () => {
-    setConfirmModal({
-      isOpen: true,
-      action: 'reset',
-      title: 'Reset to Defaults?',
-      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
-      confirmText: 'Yes, reset it!',
-      variant: 'primary'
+  }
     });
   };
 
-  const handleConfirmAction = async () => {
-    if (confirmModal.action === 'reset') {
+  const handleResetToDefault = async () => {
+    await confirmAction({
+      title: 'Reset to Defaults?',
+      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary',
+      action: async () => {
       setSubheading('OUR MANAGEMENT');
       setHeading('The Architects Of Excellence');
       setDescription('Our leadership board combines decades of top-tier industry experience with a profound commitment to academic innovation.');
@@ -107,6 +111,11 @@ const ManageManagement = () => {
       ]);
       Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
     }
+    });
+  };
+
+  const handleConfirmAction = async () => {
+    
     setConfirmModal({ ...confirmModal, isOpen: false });
   };
 
@@ -144,6 +153,29 @@ const ManageManagement = () => {
       setMembers(members); // revert on failure
     }
   };
+
+  
+  useEffect(() => {
+    if (isPreviewModalOpen) {
+      const pData = {
+        subheading, heading, cards,
+        showSubheading, showHeading, showCards,
+        previewDevice: previewMode
+      };
+      const handleIframeReady = (e) => {
+        if (e.data?.type === 'iframe-ready' && e.data?.source === 'management' && iframeRef.current?.contentWindow) {
+          iframeRef.current.contentWindow.postMessage({ type: 'preview-management-data', payload: pData }, '*');
+        }
+      };
+      window.addEventListener('message', handleIframeReady);
+      setTimeout(() => {
+        if (iframeRef.current?.contentWindow) {
+          iframeRef.current.contentWindow.postMessage({ type: 'preview-management-data', payload: pData }, '*');
+        }
+      }, 500);
+      return () => window.removeEventListener('message', handleIframeReady);
+    }
+  }, [isPreviewModalOpen, previewMode, subheading, heading, cards, showSubheading, showHeading, showCards]);
 
   if (isLoading) {
     return (
@@ -228,11 +260,14 @@ const ManageManagement = () => {
               <X className="w-5 h-5" />
             </button>
           </div>
-          <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
-            <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <ManagementPreview previewData={{
-                subheading, heading, description, members
-              }} />
+          <div className="flex-1 bg-gray-100 overflow-hidden relative flex justify-center items-center p-4">
+            <div className={`bg-white shadow-2xl transition-all duration-300 h-full ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1920px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
+              <iframe 
+                ref={iframeRef}
+                src="/preview/management"
+                className="w-full h-full border-0"
+                title="Management Preview"
+              />
             </div>
           </div>
         </div>

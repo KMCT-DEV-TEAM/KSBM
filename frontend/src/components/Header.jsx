@@ -101,7 +101,7 @@ const Header = ({ previewData }) => {
   const mobileDropdownClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? '' : 'lg:hidden';
 
   return (
-    <header className={`w-[98%] max-w-[1440px] fixed left-0 right-0 mx-auto mt-2 lg:mt-3 rounded-2xl z-50 transition-all duration-300 border ${isScrolled ? 'bg-primary border-transparent shadow-lg' : 'bg-white/20 border-white/30 backdrop-blur-lg shadow-[0_8px_32px_rgba(0,0,0,0.2)]'}`}>
+    <header className={`w-[98%] max-w-[1440px] fixed left-0 right-0 mx-auto mt-2 lg:mt-3 rounded-2xl z-[100] transition-all duration-300 border ${isScrolled ? 'bg-primary border-transparent shadow-lg' : 'bg-white/20 border-white/30 backdrop-blur-lg shadow-[0_8px_32px_rgba(0,0,0,0.2)]'}`}>
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16 sm:h-20">
         
         {/* Logo Section */}
