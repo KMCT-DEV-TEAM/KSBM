@@ -21,13 +21,16 @@ import ManageTestimonials from '../features/admin/cms/ManageTestimonials';
 import ManageAchievements from '../features/admin/cms/ManageAchievements';
 import ProtectedRoute from './ProtectedRoute';
 
+import AboutUs from '../features/about/AboutUs';
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
-          {/* Add more routes here later (e.g., /about, /campus) */}
+          <Route path="about" element={<AboutUs />} />
+          {/* Add more routes here later (e.g., /campus) */}
         </Route>
 
         {/* Admin Login Route (No Layout Wrapper) */}

@@ -3,18 +3,39 @@ import React, { useState, useEffect } from 'react';
 const logo = '/assets/Images/LOGO__KMCT School of Business Management (1).png';
 import { Menu, X } from 'lucide-react';
 import api from '../api/axios';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import AboutMegaMenu from './AboutMegaMenu';
 
 const Header = ({ previewData }) => {
+  const pathname = usePathname();
   const [activeNav, setActiveNav] = useState('Home');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeMegaMenu, setActiveMegaMenu] = useState(null);
+  
+  let menuTimeout;
+  const handleMouseEnter = (label) => {
+    clearTimeout(menuTimeout);
+    if (label.toLowerCase() === 'about us' || label.toLowerCase() === 'about') {
+      setActiveMegaMenu('about');
+    } else {
+      setActiveMegaMenu(null);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    menuTimeout = setTimeout(() => {
+      setActiveMegaMenu(null);
+    }, 200);
+  };
 
   // CMS States
   const [navItems, setNavItems] = useState([
-    { label: 'Home', link: '#home' },
-    { label: 'About Us', link: '#about-us' },
-    { label: 'Campus', link: '#campus' },
-    { label: 'Programs', link: '#programs' },
+    { label: 'Home', link: '/' },
+    { label: 'About Us', link: '/about' },
+    { label: 'Campus', link: '/#campus' },
+    { label: 'Programs', link: '/#programs' },
   ]); // Fallback
   const [actionButton, setActionButton] = useState({ text: 'Apply Now', isVisible: true });
   const [logoUrl, setLogoUrl] = useState('');
@@ -32,8 +53,15 @@ const Header = ({ previewData }) => {
         try {
           const { data } = await api.get('/cms/header');
           if (data.navItems && data.navItems.length > 0) {
-            setNavItems(data.navItems);
-            setActiveNav(data.navItems[0].label);
+            const formattedNavItems = data.navItems.map(item => {
+              const labelLower = item.label.toLowerCase();
+              if (labelLower === 'home' || item.link === '#home') return { ...item, link: '/' };
+              if (labelLower === 'about us' || labelLower === 'about' || item.link.includes('about')) return { ...item, link: '/about' };
+              if (item.link.startsWith('#')) return { ...item, link: '/' + item.link };
+              return item;
+            });
+            setNavItems(formattedNavItems);
+            setActiveNav(formattedNavItems[0].label);
           }
           if (data.actionButton) setActionButton(data.actionButton);
           if (data.logoUrl) setLogoUrl(data.logoUrl);
@@ -59,6 +87,18 @@ const Header = ({ previewData }) => {
 
     return () => window.removeEventListener('message', handleMessage);
   }, [previewData]);
+
+  // Sync activeNav with URL pathname for page navigations
+  useEffect(() => {
+    if (navItems.length > 0) {
+      const activeItem = navItems.find(item => item.link === pathname);
+      if (activeItem) {
+        setActiveNav(activeItem.label);
+      } else if (pathname === '/') {
+        setActiveNav('Home');
+      }
+    }
+  }, [pathname, navItems]);
 
   useEffect(() => {
 
@@ -105,13 +145,13 @@ const Header = ({ previewData }) => {
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16 sm:h-20">
         
         {/* Logo Section */}
-        <a href="/" className="flex items-center no-underline shrink-0">
+        <Link href="/" className="flex items-center no-underline shrink-0">
           <img 
             src={logoUrl || logo} 
             alt="KSBM Logo" 
             className="h-5 sm:h-6 lg:h-8 object-contain transition-all duration-300 brightness-0 invert" 
           />
-        </a>
+        </Link>
 
         {/* Right Section: Nav & Button */}
         <div className={`flex items-center gap-4 xl:gap-8 ${getAlignmentClass()}`}>
@@ -120,8 +160,13 @@ const Header = ({ previewData }) => {
           <nav className={`${desktopClass} items-center`}>
             <ul className="flex items-center list-none gap-3 xl:gap-5 m-0 p-0">
               {navItems.map((item, idx) => (
-                <li key={idx} className="relative">
-                  <a
+                <li 
+                  key={idx} 
+                  className="relative"
+                  onMouseEnter={() => handleMouseEnter(item.label)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <Link
                     href={item.link}
                     className={`no-underline text-sm py-2 transition-colors duration-300 inline-block hover:text-white ${activeNav === item.label
                       ? 'text-white font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[1px] after:bg-white after:rounded-sm'
@@ -130,7 +175,16 @@ const Header = ({ previewData }) => {
                     onClick={() => setActiveNav(item.label)}
                   >
                     {item.label}
-                  </a>
+                  </Link>
+
+                  {/* Mega Menu Injection */}
+                  {(item.label.toLowerCase() === 'about us' || item.label.toLowerCase() === 'about') && (
+                    <AboutMegaMenu 
+                      isOpen={activeMegaMenu === 'about'} 
+                      onMouseEnter={() => handleMouseEnter('about')} 
+                      onMouseLeave={handleMouseLeave} 
+                    />
+                  )}
                 </li>
               ))}
             </ul>
@@ -163,7 +217,7 @@ const Header = ({ previewData }) => {
           <ul className="flex flex-col gap-4 list-none m-0 p-0">
             {navItems.map((item, idx) => (
               <li key={idx}>
-                <a
+                <Link
                   href={item.link}
                   className={`block no-underline text-base font-medium ${activeNav === item.label ? 'text-primary font-bold' : 'text-slate-600'
                     }`}
@@ -173,7 +227,7 @@ const Header = ({ previewData }) => {
                   }}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
             {actionButton.isVisible && (
