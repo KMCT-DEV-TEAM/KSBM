@@ -12,6 +12,14 @@ import Recruiters from './recruiters.model.js';
 import LifeAtKsbm from './lifeAtKsbm.model.js';
 import News from './news.model.js';
 import FooterModel from './footer.model.js';
+import AboutUsHero from './aboutUsHero.model.js';
+import VisionMission from './visionMission.model.js';
+import Leadership from './leadership.model.js';
+import Legacy from './legacy.model.js';
+import AboutUsStats from './aboutUsStats.model.js';
+import AdvisoryBoard from './advisoryBoard.model.js';
+import GoverningBody from './governingBody.model.js';
+import AboutCta from './aboutCta.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -538,5 +546,232 @@ export const updateFooterSettings = async (req, res) => {
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating Footer settings', error: error.message });
+  }
+};
+
+// @desc    Get About Us Hero settings
+export const getAboutUsHeroSettings = async (req, res) => {
+  try {
+    const settings = await AboutUsHero.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching About Us Hero settings', error: error.message });
+  }
+};
+
+export const updateAboutUsHeroSettings = async (req, res) => {
+  try {
+    const { title, subtitle, backgroundImage } = req.body;
+    const settings = await AboutUsHero.getSettings();
+    if (title !== undefined) settings.title = title;
+    if (subtitle !== undefined) settings.subtitle = subtitle;
+    if (backgroundImage !== undefined) settings.backgroundImage = backgroundImage;
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating About Us Hero settings', error: error.message });
+  }
+};
+
+// @desc    Get Vision Mission settings
+export const getVisionMissionSettings = async (req, res) => {
+  try {
+    const settings = await VisionMission.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Vision Mission settings', error: error.message });
+  }
+};
+
+export const updateVisionMissionSettings = async (req, res) => {
+  try {
+    const { visionTitle, visionContent, visionImage, missionTitle, missionContent, missionImage } = req.body;
+    const settings = await VisionMission.getSettings();
+    if (visionTitle !== undefined) settings.visionTitle = visionTitle;
+    if (visionContent !== undefined) settings.visionContent = visionContent;
+    if (visionImage !== undefined) settings.visionImage = visionImage;
+    if (missionTitle !== undefined) settings.missionTitle = missionTitle;
+    if (missionContent !== undefined) settings.missionContent = missionContent;
+    if (missionImage !== undefined) settings.missionImage = missionImage;
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Vision Mission settings', error: error.message });
+  }
+};
+
+// @desc    Get Leadership settings
+export const getLeadershipSettings = async (req, res) => {
+  try {
+    const settings = await Leadership.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Leadership settings', error: error.message });
+  }
+};
+
+export const updateLeadershipSettings = async (req, res) => {
+  try {
+    const { subheading, heading, name, title, description, image, signatureImage, leader2Name, leader2Title, leader2Description, leader2Image } = req.body;
+    const settings = await Leadership.getSettings();
+    if (subheading !== undefined) settings.subheading = subheading;
+    if (heading !== undefined) settings.heading = heading;
+    if (name !== undefined) settings.name = name;
+    if (title !== undefined) settings.title = title;
+    if (description !== undefined) settings.description = description;
+    if (image !== undefined) settings.image = image;
+    if (signatureImage !== undefined) settings.signatureImage = signatureImage;
+    if (leader2Name !== undefined) settings.leader2Name = leader2Name;
+    if (leader2Title !== undefined) settings.leader2Title = leader2Title;
+    if (leader2Description !== undefined) settings.leader2Description = leader2Description;
+    if (leader2Image !== undefined) settings.leader2Image = leader2Image;
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Leadership settings', error: error.message });
+  }
+};
+
+// @desc    Get Legacy settings
+export const getLegacySettings = async (req, res) => {
+  try {
+    const settings = await Legacy.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Legacy settings', error: error.message });
+  }
+};
+
+export const updateLegacySettings = async (req, res) => {
+  try {
+    const { subheading, heading, description, cards } = req.body;
+    const settings = await Legacy.getSettings();
+    if (subheading !== undefined) settings.subheading = subheading;
+    if (heading !== undefined) settings.heading = heading;
+    if (description !== undefined) settings.description = description;
+    if (cards !== undefined) settings.cards = cards;
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Legacy settings', error: error.message });
+  }
+};
+
+// @desc    Get About Us Stats settings
+export const getAboutUsStatsSettings = async (req, res) => {
+  try {
+    const settings = await AboutUsStats.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching About Us Stats settings', error: error.message });
+  }
+};
+
+export const updateAboutUsStatsSettings = async (req, res) => {
+  try {
+    const { stats } = req.body;
+    const settings = await AboutUsStats.getSettings();
+    if (stats !== undefined) settings.stats = stats;
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating About Us Stats settings', error: error.message });
+  }
+};
+
+// @desc    Get Advisory Board settings
+export const getAdvisoryBoardSettings = async (req, res) => {
+  try {
+    const settings = await AdvisoryBoard.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Advisory Board settings', error: error.message });
+  }
+};
+
+export const updateAdvisoryBoardSettings = async (req, res) => {
+  try {
+    const { 
+      heroHeading, heroSubtext, heroBgImage, 
+      contentSubheading, contentHeading, contentDescription, 
+      members 
+    } = req.body;
+    const settings = await AdvisoryBoard.getSettings();
+    
+    if (heroHeading !== undefined) settings.heroHeading = heroHeading;
+    if (heroSubtext !== undefined) settings.heroSubtext = heroSubtext;
+    if (heroBgImage !== undefined) settings.heroBgImage = heroBgImage;
+    if (contentSubheading !== undefined) settings.contentSubheading = contentSubheading;
+    if (contentHeading !== undefined) settings.contentHeading = contentHeading;
+    if (contentDescription !== undefined) settings.contentDescription = contentDescription;
+    if (members !== undefined) settings.members = members;
+    
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Advisory Board settings', error: error.message });
+  }
+};
+
+// @desc    Get Governing Body settings
+export const getGoverningBodySettings = async (req, res) => {
+  try {
+    const settings = await GoverningBody.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Governing Body settings', error: error.message });
+  }
+};
+
+export const updateGoverningBodySettings = async (req, res) => {
+  try {
+    const { 
+      heroHeading, heroSubtext, heroBgImage, 
+      contentSubheading, contentHeading, contentDescription, 
+      members 
+    } = req.body;
+    const settings = await GoverningBody.getSettings();
+    
+    if (heroHeading !== undefined) settings.heroHeading = heroHeading;
+    if (heroSubtext !== undefined) settings.heroSubtext = heroSubtext;
+    if (heroBgImage !== undefined) settings.heroBgImage = heroBgImage;
+    if (contentSubheading !== undefined) settings.contentSubheading = contentSubheading;
+    if (contentHeading !== undefined) settings.contentHeading = contentHeading;
+    if (contentDescription !== undefined) settings.contentDescription = contentDescription;
+    if (members !== undefined) settings.members = members;
+    
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Governing Body settings', error: error.message });
+  }
+};
+
+// @desc    Get About Us CTA settings
+export const getAboutCtaSettings = async (req, res) => {
+  try {
+    const settings = await AboutCta.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching About Us CTA settings', error: error.message });
+  }
+};
+
+// @desc    Update About Us CTA settings
+export const updateAboutCtaSettings = async (req, res) => {
+  try {
+    const { heading, subtext, buttonText, buttonLink, backgroundColor } = req.body;
+    const settings = await AboutCta.getSettings();
+    
+    if (heading !== undefined) settings.heading = heading;
+    if (subtext !== undefined) settings.subtext = subtext;
+    if (buttonText !== undefined) settings.buttonText = buttonText;
+    if (buttonLink !== undefined) settings.buttonLink = buttonLink;
+    if (backgroundColor !== undefined) settings.backgroundColor = backgroundColor;
+    
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating About Us CTA settings', error: error.message });
   }
 };

@@ -1,6 +1,7 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
+import api from '../../../api/axios';
 
 const Counter = ({ value }) => {
   const ref = useRef(null);
@@ -38,12 +39,26 @@ const Counter = ({ value }) => {
 };
 
 const StatsSection = () => {
-  const stats = [
-    { number: '16+', label: 'YEARS OF EXCELLENCE' },
-    { number: '991+', label: 'ACTIVE STUDENTS' },
-    { number: '196+', label: 'GLOBAL RECRUITERS' },
-    { number: '196+', label: 'GLOBAL RECRUITERS' },
-  ];
+  const [stats, setStats] = useState([
+    { value: '16+', label: 'YEARS OF EXCELLENCE' },
+    { value: '991+', label: 'ACTIVE STUDENTS' },
+    { value: '196+', label: 'GLOBAL RECRUITERS' },
+    { value: '196+', label: 'GLOBAL RECRUITERS' },
+  ]);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await api.get('/cms/about-us-stats');
+        if (response.data && response.data.stats && response.data.stats.length > 0) {
+          setStats(response.data.stats);
+        }
+      } catch (error) {
+        console.error('Error fetching Stats data:', error);
+      }
+    };
+    fetchStats();
+  }, []);
 
   return (
     <section className="w-full pb-10">
@@ -72,7 +87,7 @@ const StatsSection = () => {
               className="flex flex-col items-center justify-center text-center px-2"
             >
               <span className="font-serif text-[#4e558e] mb-2 text-3xl md:text-4xl lg:text-5xl">
-                <Counter value={stat.number} />
+                <Counter value={stat.value} />
               </span>
               <span className="text-xs font-bold tracking-widest text-gray-600 uppercase">
                 {stat.label}

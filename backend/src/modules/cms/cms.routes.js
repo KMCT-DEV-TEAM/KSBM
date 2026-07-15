@@ -27,7 +27,23 @@ import {
   getNewsSettings,
   updateNewsSettings,
   getFooterSettings,
-  updateFooterSettings
+  updateFooterSettings,
+  getAboutUsHeroSettings,
+  updateAboutUsHeroSettings,
+  getVisionMissionSettings,
+  updateVisionMissionSettings,
+  getLeadershipSettings,
+  updateLeadershipSettings,
+  getLegacySettings,
+  updateLegacySettings,
+  getAboutUsStatsSettings,
+  updateAboutUsStatsSettings,
+  getAdvisoryBoardSettings,
+  updateAdvisoryBoardSettings,
+  getGoverningBodySettings,
+  updateGoverningBodySettings,
+  getAboutCtaSettings,
+  updateAboutCtaSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -88,5 +104,37 @@ router.route('/news')
 router.route('/footer')
   .get(getFooterSettings)
   .put(protect, updateFooterSettings);
+
+router.route('/about-us-hero')
+  .get(getAboutUsHeroSettings)
+  .put(protect, updateAboutUsHeroSettings);
+
+router.route('/vision-mission')
+  .get(getVisionMissionSettings)
+  .put(protect, updateVisionMissionSettings);
+
+router.route('/leadership')
+  .get(getLeadershipSettings)
+  .put(protect, updateLeadershipSettings);
+
+router.route('/legacy')
+  .get(getLegacySettings)
+  .put(protect, updateLegacySettings);
+
+router.route('/about-us-stats')
+  .get(getAboutUsStatsSettings)
+  .put(protect, updateAboutUsStatsSettings);
+
+router.route('/advisory-board')
+  .get(getAdvisoryBoardSettings)
+  .put(protect, updateAdvisoryBoardSettings);
+
+router.route('/governing-body')
+  .get(getGoverningBodySettings)
+  .put(protect, updateGoverningBodySettings);
+
+router.route('/about-us-cta')
+  .get(getAboutCtaSettings)
+  .put(protect, updateAboutCtaSettings);
 
 export default router;

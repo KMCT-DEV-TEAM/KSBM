@@ -5,6 +5,7 @@ import StatsSection from './components/StatsSection';
 import VisionMissionSection from './components/VisionMissionSection';
 import AccreditationSection from './components/AccreditationSection';
 import LeadershipSection from './components/LeadershipSection';
+import AboutCtaSection from './components/AboutCtaSection';
 
 const AboutUs = () => {
   return (
@@ -15,6 +16,7 @@ const AboutUs = () => {
       <VisionMissionSection />
       <AccreditationSection />
       <LeadershipSection />
+      <AboutCtaSection />
     </div>
   );
 };

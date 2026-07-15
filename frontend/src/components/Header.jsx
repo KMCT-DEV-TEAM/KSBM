@@ -91,7 +91,14 @@ const Header = ({ previewData }) => {
   // Sync activeNav with URL pathname for page navigations
   useEffect(() => {
     if (navItems.length > 0) {
-      const activeItem = navItems.find(item => item.link === pathname);
+      // Find exact match first
+      let activeItem = navItems.find(item => item.link === pathname);
+      
+      // If no exact match, check for partial match (e.g. /about/governing-body)
+      if (!activeItem) {
+        activeItem = navItems.find(item => item.link !== '/' && pathname.startsWith(item.link));
+      }
+
       if (activeItem) {
         setActiveNav(activeItem.label);
       } else if (pathname === '/') {

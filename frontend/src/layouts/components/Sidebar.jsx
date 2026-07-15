@@ -1,38 +1,71 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, Users, Settings, 
   MonitorPlay, Type, Image, BookOpen, 
   Award, Building2, Briefcase, Handshake, 
-  MessageSquare, Star, Newspaper, Heart, PanelBottom
+  MessageSquare, Star, Newspaper, Heart, PanelBottom,
+  ChevronDown, ChevronRight, Home, Info, Globe
 } from 'lucide-react';
 const logo = '/assets/Images/LOGO__KMCT School of Business Management (1).png';
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const [openSection, setOpenSection] = useState('Home');
+
+  const toggleSection = (section) => {
+    setOpenSection(openSection === section ? null : section);
+  };
+
   const mainLinks = [
     { name: 'Overview', path: '/admin/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
     { name: 'Users', path: '/admin/users', icon: <Users className="w-5 h-5" /> },
     { name: 'Settings', path: '/admin/settings', icon: <Settings className="w-5 h-5" /> },
   ];
 
-  const cmsLinks = [
-    { name: 'Header & Navbar', path: '/admin/cms/header', icon: <Type className="w-5 h-5" /> },
-    { name: 'Hero Section', path: '/admin/cms/hero', icon: <MonitorPlay className="w-5 h-5" /> },
-    { name: 'About KSBM', path: '/admin/cms/about', icon: <Image className="w-5 h-5" /> },
-    { name: 'Academic Programs', path: '/admin/cms/academics', icon: <BookOpen className="w-5 h-5" /> },
-    { name: 'Accreditation', path: '/admin/cms/accreditation', icon: <Award className="w-5 h-5" /> },
-    { name: 'Management', path: '/admin/cms/management', icon: <Users className="w-5 h-5" /> },
-    { name: 'Facilities', path: '/admin/cms/facilities', icon: <Building2 className="w-5 h-5" /> },
-    { name: 'Placement', path: '/admin/cms/placement', icon: <Briefcase className="w-5 h-5" /> },
-    { name: 'Recruiters', path: '/admin/cms/recruiters', icon: <Handshake className="w-5 h-5" /> },
-    { name: 'Testimonials', path: '/admin/cms/testimonials', icon: <MessageSquare className="w-5 h-5" /> },
-    { name: 'Achievements', path: '/admin/cms/achievements', icon: <Star className="w-5 h-5" /> },
-    { name: 'News', path: '/admin/cms/news', icon: <Newspaper className="w-5 h-5" /> },
-    { name: 'Life at KSBM', path: '/admin/cms/life', icon: <Heart className="w-5 h-5" /> },
-    { name: 'Footer', path: '/admin/cms/footer', icon: <PanelBottom className="w-5 h-5" /> },
+  const cmsSections = [
+    {
+      title: 'Global Content',
+      icon: <Globe className="w-5 h-5" />,
+      links: [
+        { name: 'Header & Navbar', path: '/admin/cms/header' },
+        { name: 'Footer', path: '/admin/cms/footer' },
+      ]
+    },
+    {
+      title: 'Home',
+      icon: <Home className="w-5 h-5" />,
+      links: [
+        { name: 'Hero Section', path: '/admin/cms/hero' },
+        { name: 'About KSBM', path: '/admin/cms/about' },
+        { name: 'Academic Programs', path: '/admin/cms/academics' },
+        { name: 'Accreditation', path: '/admin/cms/accreditation' },
+        { name: 'Management', path: '/admin/cms/management' },
+        { name: 'Facilities', path: '/admin/cms/facilities' },
+        { name: 'Placement', path: '/admin/cms/placement' },
+        { name: 'Recruiters', path: '/admin/cms/recruiters' },
+        { name: 'Testimonials', path: '/admin/cms/testimonials' },
+        { name: 'Achievements', path: '/admin/cms/achievements' },
+        { name: 'News', path: '/admin/cms/news' },
+        { name: 'Life at KSBM', path: '/admin/cms/life' },
+      ]
+    },
+    {
+      title: 'About Us',
+      icon: <Info className="w-5 h-5" />,
+      links: [
+        { name: 'Hero Section', path: '/admin/cms/about-us/hero' },
+        { name: 'Vision & Mission', path: '/admin/cms/about-us/vision' },
+        { name: 'Leadership', path: '/admin/cms/about-us/leadership' },
+        { name: 'Legacy', path: '/admin/cms/about-us/legacy' },
+        { name: 'Stats', path: '/admin/cms/about-us/stats' },
+        { name: 'Advisory Board', path: '/admin/cms/about-us/advisory' },
+        { name: 'Governing Body', path: '/admin/cms/about-us/governing' },
+        { name: 'Apply CTA', path: '/admin/cms/about-us/cta' },
+      ]
+    }
   ];
 
   return (
@@ -69,20 +102,53 @@ const Sidebar = () => {
         <div>
           <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Website Content</p>
           <div className="space-y-1">
-            {cmsLinks.map((link) => (
-              <Link
-                key={link.path}
-                href={link.path}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${
-                  pathname === link.path 
-                    ? 'bg-primary/10 text-primary font-semibold' 
-                    : 'text-[#697A8D] hover:bg-gray-50'
-                }`}
-              >
-                {link.icon}
-                <span className="text-sm">{link.name}</span>
-              </Link>
-            ))}
+            {cmsSections.map((section) => {
+              const isActiveSection = section.links.some(link => pathname.startsWith(link.path));
+              const isOpen = openSection === section.title;
+              
+              return (
+                <div key={section.title} className="space-y-1">
+                  <button
+                    onClick={() => toggleSection(section.title)}
+                    className={`w-full flex items-center justify-between px-4 py-2.5 rounded-lg transition-all duration-200 ${
+                      isActiveSection && !isOpen
+                        ? 'bg-primary/5 text-primary font-medium'
+                        : 'text-[#697A8D] hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className={isActiveSection ? 'text-primary' : 'text-gray-400'}>
+                        {section.icon}
+                      </span>
+                      <span className="text-sm font-medium">{section.title}</span>
+                    </div>
+                    {isOpen ? (
+                      <ChevronDown className="w-4 h-4 text-gray-400" />
+                    ) : (
+                      <ChevronRight className="w-4 h-4 text-gray-400" />
+                    )}
+                  </button>
+                  
+                  {isOpen && (
+                    <div className="pl-11 pr-2 space-y-1 py-1">
+                      {section.links.map((link) => (
+                        <Link
+                          key={link.path}
+                          href={link.path}
+                          className={`flex items-center px-4 py-2 rounded-lg transition-all duration-200 ${
+                            pathname === link.path 
+                              ? 'bg-primary/10 text-primary font-semibold' 
+                              : 'text-[#697A8D] hover:bg-gray-50'
+                          }`}
+                        >
+                          <span className="text-sm">{link.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 

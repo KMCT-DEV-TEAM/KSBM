@@ -2,15 +2,45 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Eye } from 'lucide-react';
+import api from '../../../api/axios';
 
 const VisionMissionSection = () => {
   const scrollRef = useRef(null);
   const floatScrollRef = useRef(0);
   const [isHovered, setIsHovered] = useState(false);
+  
+  const [data, setData] = useState({
+    visionTitle: 'Our Vision',
+    visionContent: ['"To mould to competent healthcare professionals with leadership qualities through comprehensive nursing education, practice and research."'],
+    visionImage: '/assets/Images/image 27.png',
+    missionTitle: 'Our Mission',
+    missionContent: [
+      'To mould to competent healthcare professionals with leadership qualities through comprehensive nursing education, practice and research.',
+      'To provide high-quality healthcare education that integrates academic excellence with clinical practice.',
+      'To foster a culture of continuous learning, ethical practice, and compassionate patient care.',
+      'To contribute to the healthcare sector by producing highly skilled and dedicated nursing professionals.'
+    ],
+    missionImage: '/assets/Images/image 28.png'
+  });
+
   const { scrollYProgress } = useScroll({ container: scrollRef });
 
   // Custom scrollbar thumb movement (track is 150px, thumb is 40px)
   const indicatorY = useTransform(scrollYProgress, [0, 1], [0, 110]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get('/cms/vision-mission');
+        if (response.data) {
+          setData(prev => ({ ...prev, ...response.data }));
+        }
+      } catch (error) {
+        console.error('Error fetching Vision Mission data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -75,7 +105,7 @@ const VisionMissionSection = () => {
           <div className="flex-1 relative rounded-2xl shadow-lg p-10 lg:p-14 flex flex-col justify-center items-center min-h-[300px] overflow-hidden group">
             {/* Background Image */}
             <img
-              src="/assets/Images/image 27.png"
+              src={data.visionImage}
               alt="Vision Background"
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0"
             />
@@ -90,13 +120,15 @@ const VisionMissionSection = () => {
 
               {/* Title */}
               <h3 className="text-white text-2xl md:text-3xl font-serif font-bold mb-8">
-                Our Vision
+                {data.visionTitle}
               </h3>
 
               {/* Content text */}
-              <p className="text-white/90 text-sm md:text-base leading-relaxed italic max-w-sm">
-                "To mould to competent healthcare professionals with leadership qualities through comprehensive nursing education, practice and research."
-              </p>
+              {data.visionContent.map((para, idx) => (
+                <p key={idx} className="text-white/90 text-sm md:text-base leading-relaxed italic max-w-sm mb-2">
+                  {para}
+                </p>
+              ))}
             </div>
           </div>
         </motion.div>
@@ -116,7 +148,7 @@ const VisionMissionSection = () => {
           <div className="flex-1 relative rounded-2xl shadow-lg p-10 lg:p-14 flex flex-col min-h-[300px] overflow-hidden group">
             {/* Background Image */}
             <img
-              src="/assets/Images/image 28.png"
+              src={data.missionImage}
               alt="Mission Background"
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0"
             />
@@ -126,14 +158,14 @@ const VisionMissionSection = () => {
             <div className="opacity-0 group-hover:opacity-100 transition-all duration-500 w-full h-full flex flex-col relative z-10">
               {/* Top Center Title */}
               <h3 className="text-white text-2xl md:text-3xl font-serif font-bold text-center mb-16">
-                Our Mission
+                {data.missionTitle}
               </h3>
 
               {/* Content Section */}
               <div className="flex flex-col pr-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-[2px] h-6 bg-white shrink-0"></div>
-                  <h4 className="text-white text-lg font-bold tracking-wide">Our Mission</h4>
+                  <h4 className="text-white text-lg font-bold tracking-wide">{data.missionTitle}</h4>
                 </div>
 
                 {/* Scrollable Container */}
@@ -145,18 +177,11 @@ const VisionMissionSection = () => {
                   onTouchEnd={() => setIsHovered(false)}
                   className="overflow-y-auto pr-2 h-[120px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] flex flex-col gap-6"
                 >
-                  <p className="text-white/90 text-sm md:text-base leading-relaxed italic pl-1">
-                    To mould to competent healthcare professionals with leadership qualities through comprehensive nursing education, practice and research.
-                  </p>
-                  <p className="text-white/90 text-sm md:text-base leading-relaxed italic pl-1">
-                    To provide high-quality healthcare education that integrates academic excellence with clinical practice.
-                  </p>
-                  <p className="text-white/90 text-sm md:text-base leading-relaxed italic pl-1">
-                    To foster a culture of continuous learning, ethical practice, and compassionate patient care.
-                  </p>
-                  <p className="text-white/90 text-sm md:text-base leading-relaxed italic pl-1">
-                    To contribute to the healthcare sector by producing highly skilled and dedicated nursing professionals.
-                  </p>
+                  {data.missionContent.map((para, idx) => (
+                    <p key={idx} className="text-white/90 text-sm md:text-base leading-relaxed italic pl-1">
+                      {para}
+                    </p>
+                  ))}
                 </div>
               </div>
 
