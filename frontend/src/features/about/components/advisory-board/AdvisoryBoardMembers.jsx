@@ -6,7 +6,7 @@ const membersData = [
   // First Row
   { id: 1, name: "Dr. Navas K M", title: "CHAIRMAN", img: "/assets/Images/image 31.png" },
   { id: 2, name: "Dr. Ayisha Nazreen", title: "SPECIAL INVITEE", img: "/assets/Images/image 31.png" },
-  { id: 3, name: "Dr. Sujith Varma", title: "MEMBER SECRETARY", img: "/assets/Images/image 31.png" },
+  { id: 3, name: "Dr. Shmmon M", title: "MEMBER SECRETARY", img: "/assets/Images/image 31.png" },
   // Second Row
   { id: 4, name: "Dr. Navas K M", title: "CHAIRMAN", img: "/assets/Images/image 31.png" },
   { id: 5, name: "Dr. Navas K M", title: "CHAIRMAN", img: "/assets/Images/image 31.png" },
@@ -19,7 +19,7 @@ const membersData = [
   { id: 11, name: "Dr. Navas K M", title: "CHAIRMAN", img: "/assets/Images/image 31.png" },
 ];
 
-const GoverningBodyMembers = () => {
+const AdvisoryBoardMembers = () => {
   return (
     <section className="pb-20 w-[98%] max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
       {/* Row 1 (3 items) */}
@@ -84,4 +84,4 @@ const MemberCard = ({ member, index }) => {
   );
 };
 
-export default GoverningBodyMembers;
+export default AdvisoryBoardMembers;

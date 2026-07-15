@@ -25,7 +25,7 @@ const tabContent = {
     links: [
       { label: 'ORGANOGRAM', icon: <Building2 className="w-5 h-5 text-primary" />, href: '/about#organogram' },
       { label: 'GOVERNING BODY', icon: <Users className="w-5 h-5 text-primary" />, href: '/about/governing-body' },
-      { label: 'INSTITUTIONAL ADVISORY BOARD', icon: <GraduationCap className="w-5 h-5 text-primary" />, href: '/about#advisory-board' },
+      { label: 'INSTITUTIONAL ADVISORY BOARD', icon: <GraduationCap className="w-5 h-5 text-primary" />, href: '/about/advisory-board' },
     ]
   },
   management: {

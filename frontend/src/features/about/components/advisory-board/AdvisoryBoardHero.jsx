@@ -2,10 +2,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const GoverningBodyHero = () => {
+const AdvisoryBoardHero = () => {
   return (
     <div className="relative w-full h-screen min-h-[600px] flex items-end justify-center overflow-hidden bg-gray-900 pb-24 md:pb-32">
-      {/* Background Image (Using placeholder since boardroom not provided) */}
+      {/* Background Image */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/assets/Images/image 2.png')" }}
@@ -20,7 +20,7 @@ const GoverningBodyHero = () => {
           transition={{ duration: 0.8 }}
           className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-4"
         >
-          KSBM Governing Body
+          Institutional Advisory Board
         </motion.h1>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
@@ -28,11 +28,11 @@ const GoverningBodyHero = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-white/90 text-xs md:text-sm lg:text-base max-w-3xl leading-relaxed"
         >
-          Strategizing for excellence: The leadership framework dedicated to advancing pharmaceutical management education through visionary governance, industrial synergy, and academic rigor.
+          The Institutional Advisory Board of KMCT School of Business Management plays a crucial role in guiding the institution's strategic vision and academic progress.
         </motion.p>
       </div>
     </div>
   );
 };
 
-export default GoverningBodyHero;
+export default AdvisoryBoardHero;
