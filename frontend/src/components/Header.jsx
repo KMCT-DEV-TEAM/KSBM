@@ -57,6 +57,7 @@ const Header = ({ previewData }) => {
               const labelLower = item.label.toLowerCase();
               if (labelLower === 'home' || item.link === '#home') return { ...item, link: '/' };
               if (labelLower === 'about us' || labelLower === 'about' || item.link.includes('about')) return { ...item, link: '/about' };
+              if (labelLower === 'facilities' || item.link.includes('facilities')) return { ...item, link: '/facilities' };
               if (item.link.startsWith('#')) return { ...item, link: '/' + item.link };
               return item;
             });

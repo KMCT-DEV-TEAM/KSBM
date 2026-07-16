@@ -33,10 +33,22 @@ const AdvisoryBoardMembers = () => {
   }, []);
   return (
     <section className="pb-20 w-[98%] max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex flex-wrap justify-center gap-x-6 gap-y-12">
-        {members.map((member, idx) => (
-          <MemberCard key={member._id || idx} member={member} index={idx} />
-        ))}
+      <div className="flex flex-col gap-y-12 lg:gap-y-16">
+        {members.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-12">
+            {members.slice(0, 3).map((member, idx) => (
+              <MemberCard key={member._id || idx} member={member} index={idx} />
+            ))}
+          </div>
+        )}
+        
+        {members.length > 3 && (
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-12">
+            {members.slice(3).map((member, idx) => (
+              <MemberCard key={member._id || (idx + 3)} member={member} index={idx + 3} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

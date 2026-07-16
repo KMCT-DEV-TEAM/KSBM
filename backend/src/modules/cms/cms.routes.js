@@ -43,7 +43,9 @@ import {
   getGoverningBodySettings,
   updateGoverningBodySettings,
   getAboutCtaSettings,
-  updateAboutCtaSettings
+  updateAboutCtaSettings,
+  getFacilitiesPageSettings,
+  updateFacilitiesPageSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -136,5 +138,9 @@ router.route('/governing-body')
 router.route('/about-us-cta')
   .get(getAboutCtaSettings)
   .put(protect, updateAboutCtaSettings);
+
+router.route('/facilities-page')
+  .get(getFacilitiesPageSettings)
+  .put(protect, updateFacilitiesPageSettings);
 
 export default router;

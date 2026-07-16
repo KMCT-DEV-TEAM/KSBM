@@ -43,7 +43,7 @@ const Sidebar = () => {
         { name: 'Academic Programs', path: '/admin/cms/academics' },
         { name: 'Accreditation', path: '/admin/cms/accreditation' },
         { name: 'Management', path: '/admin/cms/management' },
-        { name: 'Facilities', path: '/admin/cms/facilities' },
+        { name: 'Home Facilities', path: '/admin/cms/facilities' },
         { name: 'Placement', path: '/admin/cms/placement' },
         { name: 'Recruiters', path: '/admin/cms/recruiters' },
         { name: 'Testimonials', path: '/admin/cms/testimonials' },
@@ -64,6 +64,15 @@ const Sidebar = () => {
         { name: 'Advisory Board', path: '/admin/cms/about-us/advisory' },
         { name: 'Governing Body', path: '/admin/cms/about-us/governing' },
         { name: 'Apply CTA', path: '/admin/cms/about-us/cta' },
+      ]
+    },
+    {
+      title: 'Facilities',
+      icon: <Building2 className="w-5 h-5" />,
+      links: [
+        { name: 'Hero Section', path: '/admin/cms/facilities/hero' },
+        { name: 'Institutional Resources', path: '/admin/cms/facilities/institutional-resources' },
+        { name: 'Clubs', path: '/admin/cms/facilities/clubs' },
       ]
     }
   ];

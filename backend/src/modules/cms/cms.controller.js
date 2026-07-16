@@ -20,6 +20,7 @@ import AboutUsStats from './aboutUsStats.model.js';
 import AdvisoryBoard from './advisoryBoard.model.js';
 import GoverningBody from './governingBody.model.js';
 import AboutCta from './aboutCta.model.js';
+import FacilitiesPage from './facilitiesPage.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -773,5 +774,43 @@ export const updateAboutCtaSettings = async (req, res) => {
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating About Us CTA settings', error: error.message });
+  }
+};
+
+// @desc    Get Facilities Page settings
+export const getFacilitiesPageSettings = async (req, res) => {
+  try {
+    const settings = await FacilitiesPage.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Facilities Page settings', error: error.message });
+  }
+};
+
+// @desc    Update Facilities Page settings
+export const updateFacilitiesPageSettings = async (req, res) => {
+  try {
+    const { hero, institutionalResources, library, otherResources, clubs } = req.body;
+    const settings = await FacilitiesPage.getSettings();
+    
+    if (hero !== undefined) settings.hero = hero;
+    if (institutionalResources !== undefined) settings.institutionalResources = institutionalResources;
+    if (library !== undefined) {
+      settings.library = library;
+      settings.markModified('library');
+    }
+    if (otherResources !== undefined) {
+      settings.otherResources = otherResources;
+      settings.markModified('otherResources');
+    }
+    if (clubs !== undefined) {
+      settings.clubs = clubs;
+      settings.markModified('clubs');
+    }
+    
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Facilities Page settings', error: error.message });
   }
 };

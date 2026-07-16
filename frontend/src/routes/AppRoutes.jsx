@@ -22,6 +22,10 @@ import ManageAchievements from '../features/admin/cms/ManageAchievements';
 import ProtectedRoute from './ProtectedRoute';
 
 import AboutUs from '../features/about/AboutUs';
+import Facilities from '../features/facilities/Facilities';
+import ManageFacilitiesHero from '../features/admin/cms/ManageFacilitiesHero';
+import ManageInstitutionalResources from '../features/admin/cms/ManageInstitutionalResources';
+import ManageClubs from '../features/admin/cms/ManageClubs';
 
 const AppRoutes = () => {
   return (
@@ -30,6 +34,7 @@ const AppRoutes = () => {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="about" element={<AboutUs />} />
+          <Route path="facilities" element={<Facilities />} />
           {/* Add more routes here later (e.g., /campus) */}
         </Route>
 
@@ -62,6 +67,11 @@ const AppRoutes = () => {
             <Route path="cms/news" element={<GenericCmsPage title="News" />} />
             <Route path="cms/life" element={<GenericCmsPage title="Life at KSBM" />} />
             <Route path="cms/footer" element={<GenericCmsPage title="Footer" />} />
+            
+            {/* Facilities Page CMS */}
+            <Route path="cms/facilities/hero" element={<ManageFacilitiesHero />} />
+            <Route path="cms/facilities/institutional-resources" element={<ManageInstitutionalResources />} />
+            <Route path="cms/facilities/clubs" element={<ManageClubs />} />
 
             {/* Add future admin routes here */}
           </Route>
