@@ -6,6 +6,7 @@ import api from '../api/axios';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import AboutMegaMenu from './AboutMegaMenu';
+import PeopleMegaMenu from './PeopleMegaMenu';
 
 const Header = ({ previewData }) => {
   const pathname = usePathname();
@@ -17,8 +18,11 @@ const Header = ({ previewData }) => {
   let menuTimeout;
   const handleMouseEnter = (label) => {
     clearTimeout(menuTimeout);
-    if (label.toLowerCase() === 'about us' || label.toLowerCase() === 'about') {
+    const lower = label.toLowerCase();
+    if (lower === 'about us' || lower === 'about') {
       setActiveMegaMenu('about');
+    } else if (lower === 'people' || lower === 'faculty' || lower.includes('people') || lower.includes('faculty')) {
+      setActiveMegaMenu('people');
     } else {
       setActiveMegaMenu(null);
     }
@@ -35,6 +39,7 @@ const Header = ({ previewData }) => {
     { label: 'Home', link: '/' },
     { label: 'About Us', link: '/about' },
     { label: 'Campus', link: '/#campus' },
+    { label: 'Faculty', link: '/faculty' },
     { label: 'Programs', link: '/#programs' },
   ]); // Fallback
   const [actionButton, setActionButton] = useState({ text: 'Apply Now', isVisible: true });
@@ -58,6 +63,7 @@ const Header = ({ previewData }) => {
               if (labelLower === 'home' || item.link === '#home') return { ...item, link: '/' };
               if (labelLower === 'about us' || labelLower === 'about' || item.link.includes('about')) return { ...item, link: '/about' };
               if (labelLower === 'facilities' || item.link.includes('facilities')) return { ...item, link: '/facilities' };
+              if (labelLower === 'people' || labelLower === 'faculty' || item.link === '#people' || item.link === '#faculty' || item.link.includes('people') || item.link.includes('faculty')) return { ...item, link: '/faculty' };
               if (item.link.startsWith('#')) return { ...item, link: '/' + item.link };
               return item;
             });
@@ -190,6 +196,14 @@ const Header = ({ previewData }) => {
                     <AboutMegaMenu 
                       isOpen={activeMegaMenu === 'about'} 
                       onMouseEnter={() => handleMouseEnter('about')} 
+                      onMouseLeave={handleMouseLeave} 
+                    />
+                  )}
+
+                  {(item.label.toLowerCase() === 'people' || item.label.toLowerCase() === 'faculty' || item.label.toLowerCase().includes('people') || item.label.toLowerCase().includes('faculty')) && (
+                    <PeopleMegaMenu 
+                      isOpen={activeMegaMenu === 'people'} 
+                      onMouseEnter={() => handleMouseEnter('people')} 
                       onMouseLeave={handleMouseLeave} 
                     />
                   )}

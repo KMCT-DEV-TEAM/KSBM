@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 const watermarkImg = '/assets/Images/watermark_logo.png';
 
@@ -48,34 +49,42 @@ const ClubsSection = ({ data }) => {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
         >
           {items.map((item, idx) => (
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, scale: 0.95 },
-                visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } }
-              }}
-              key={idx}
-              className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-[350px] sm:h-[400px]"
-            >
-              {/* Image */}
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
+            <Link href={`/facilities/club/${item._id}`} key={idx}>
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, scale: 0.95 },
+                  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } }
+                }}
+                className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-[350px] sm:h-[400px]"
+              >
+                {/* Image */}
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
 
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0b1238]/90 via-[#1e2869]/40 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
+                {/* Primary Half Color Gradient Overlay */}
+                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary via-primary/85 to-transparent opacity-85 group-hover:h-full group-hover:from-primary/95 group-hover:via-primary/90 group-hover:to-primary/75 transition-all duration-500" />
 
-              {/* Content Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 transform transition-transform duration-500">
-                <h3 className="text-white font-bold text-xl sm:text-2xl tracking-wide group-hover:-translate-y-2 transition-transform duration-300">
-                  {item.title}
-                </h3>
+                {/* Content Overlay */}
+                <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end transform transition-all duration-500 z-10">
+                  <div className="transform transition-transform duration-500 group-hover:-translate-y-2">
+                    <h3 className="text-white font-bold text-xl sm:text-2xl tracking-wide">
+                      {item.title}
+                    </h3>
 
-                {/* Optional animated line on hover */}
-                <div className="w-0 h-[2px] bg-white mt-3 group-hover:w-12 transition-all duration-500 ease-out" />
-              </div>
-            </motion.div>
+                    {/* Description revealed on hover */}
+                    <p className="text-white/90 text-xs sm:text-sm mt-3 leading-relaxed opacity-0 max-h-0 overflow-hidden group-hover:opacity-100 group-hover:max-h-48 transition-all duration-500 line-clamp-4">
+                      {item.description || "Engage in dynamic activities, leadership workshops, and collaborative events designed to build practical business acumen and lifelong peer networks."}
+                    </p>
+
+                    {/* Animated line on hover */}
+                    <div className="w-0 h-[2px] bg-white mt-4 group-hover:w-16 transition-all duration-500 ease-out" />
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
           ))}
         </motion.div>
       </div>

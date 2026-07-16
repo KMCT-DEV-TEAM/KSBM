@@ -7,6 +7,8 @@ import Loader from '../../../components/Loader';
 import FacilitiesHero from '../../facilities/components/FacilitiesHero';
 import confirmAction from '../../../utils/confirmAction';
 import SingleImageUploader from './components/SingleImageUploader';
+import PageHeader from './components/PageHeader';
+import SectionForm from './components/SectionForm';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -82,35 +84,15 @@ const ManageFacilitiesHero = () => {
   if (isLoading) return <Loader theme="light" text="Loading Settings..." />;
 
   return (
-    <div className="space-y-6 w-full">
-      <div className="flex justify-between items-end">
-        <div>
-          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Facilities Hero Settings</h1>
-          <p className="text-[#697A8D] mt-1 text-sm">Manage the banner text and background image for the Facilities page.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsPreviewModalOpen(true)}
-            className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2.5 rounded-md font-semibold text-sm border border-primary/20 hover:bg-primary/20 transition-colors shadow-sm"
-          >
-            <Eye className="w-4 h-4" /> Live Preview
-          </button>
-          <button
-            onClick={handleResetToDefault}
-            className="flex items-center gap-2 bg-white text-[#697A8D] px-4 py-2.5 rounded-md font-semibold text-sm border border-[#D9DEE3] hover:bg-gray-50 transition-colors shadow-sm"
-          >
-            <RefreshCw className="w-4 h-4" /> Reset
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving || isUploading}
-            className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-70"
-          >
-            {isSaving || isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            {isSaving ? 'Saving...' : isUploading ? 'Uploading...' : 'Save Changes'}
-          </button>
-        </div>
-      </div>
+    <div className="max-w-6xl mx-auto pb-12">
+      <PageHeader
+        title="Facilities Hero Settings"
+        description="Manage the banner text and background image for the Facilities page."
+        onPreview={() => setIsPreviewModalOpen(true)}
+        onReset={handleResetToDefault}
+        onSave={handleSave}
+        isSaving={isSaving || isUploading}
+      />
 
       {isPreviewModalOpen && (
         <div className="fixed inset-0 z-[100] flex flex-col bg-gray-900/80 backdrop-blur-sm">
@@ -143,8 +125,7 @@ const ManageFacilitiesHero = () => {
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8 max-w-5xl mx-auto">
-        <h3 className="text-lg font-bold text-[#566A7F] mb-6">Text Content & Background</h3>
+      <SectionForm title="Text Content & Background">
         <div className="space-y-6">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Hero Heading</label>
@@ -174,7 +155,7 @@ const ManageFacilitiesHero = () => {
             />
           </div>
         </div>
-      </div>
+      </SectionForm>
     </div>
   );
 };

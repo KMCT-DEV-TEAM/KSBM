@@ -45,7 +45,9 @@ import {
   getAboutCtaSettings,
   updateAboutCtaSettings,
   getFacilitiesPageSettings,
-  updateFacilitiesPageSettings
+  updateFacilitiesPageSettings,
+  getFacultySettings,
+  updateFacultySettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -142,5 +144,9 @@ router.route('/about-us-cta')
 router.route('/facilities-page')
   .get(getFacilitiesPageSettings)
   .put(protect, updateFacilitiesPageSettings);
+
+router.route('/faculty')
+  .get(getFacultySettings)
+  .put(protect, updateFacultySettings);
 
 export default router;

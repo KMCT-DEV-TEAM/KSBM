@@ -23,6 +23,45 @@ const gridItemSchema = new mongoose.Schema({
   }
 });
 
+const clubItemSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  image: { type: String, required: true },
+  slug: { type: String },
+  hero: {
+    title: { type: String, default: '' },
+    subtitle: { type: String, default: '' },
+    backgroundImage: { type: String, default: '' }
+  },
+  about: {
+    heading: { type: String, default: '' },
+    paragraphs: { type: [String], default: [] },
+    image: { type: String, default: '' }
+  },
+  activities: {
+    heading: { type: String, default: '' },
+    items: {
+      type: [{ title: String, subtitle: String, image: String }],
+      default: []
+    }
+  },
+  faculty: {
+    heading: { type: String, default: '' },
+    subheading: { type: String, default: '' },
+    description: { type: String, default: '' },
+    members: {
+      type: [{ name: String, role: String, image: String }],
+      default: []
+    }
+  },
+  gallery: {
+    heading: { type: String, default: '' },
+    images: {
+      type: [{ title: String, image: String }],
+      default: []
+    }
+  }
+});
+
 const facilitiesPageSchema = new mongoose.Schema(
   {
     hero: {
@@ -64,7 +103,7 @@ const facilitiesPageSchema = new mongoose.Schema(
       heading: { type: String, default: 'Clubs And Association' },
       description: { type: String, default: 'Extracurricular activities at KSBM encompass academic clubs, professional societies, and cultural organizations that play an instrumental role in shaping holistic development. Through active participation in events, students forge long-lasting networks and acquire critical skills that transcend the classroom boundaries.' },
       items: {
-        type: [gridItemSchema],
+        type: [clubItemSchema],
         default: [
           { title: 'Cultural Club', image: 'https://images.unsplash.com/photo-1542840410-3092f99611a3?q=80&w=1974&auto=format&fit=crop' },
           { title: 'Sports Club', image: 'https://images.unsplash.com/photo-1526676037777-05a232554f77?q=80&w=2070&auto=format&fit=crop' },

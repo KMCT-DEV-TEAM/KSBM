@@ -26,6 +26,10 @@ import Facilities from '../features/facilities/Facilities';
 import ManageFacilitiesHero from '../features/admin/cms/ManageFacilitiesHero';
 import ManageInstitutionalResources from '../features/admin/cms/ManageInstitutionalResources';
 import ManageClubs from '../features/admin/cms/ManageClubs';
+import ManageClubDetails from '../features/admin/cms/ManageClubDetails';
+import ClubPage from '../features/facilities/ClubPage';
+import Faculty from '../features/faculty/Faculty';
+import ManageFaculty from '../features/admin/cms/ManageFaculty';
 
 const AppRoutes = () => {
   return (
@@ -35,6 +39,10 @@ const AppRoutes = () => {
           <Route index element={<Home />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="facilities" element={<Facilities />} />
+          <Route path="facilities/club/:clubId" element={<ClubPage />} />
+          <Route path="faculty" element={<Faculty />} />
+          <Route path="people" element={<Faculty />} />
+          <Route path="people/faculty" element={<Faculty />} />
           {/* Add more routes here later (e.g., /campus) */}
         </Route>
 
@@ -72,6 +80,9 @@ const AppRoutes = () => {
             <Route path="cms/facilities/hero" element={<ManageFacilitiesHero />} />
             <Route path="cms/facilities/institutional-resources" element={<ManageInstitutionalResources />} />
             <Route path="cms/facilities/clubs" element={<ManageClubs />} />
+            <Route path="cms/facilities/clubs/:clubId" element={<ManageClubDetails />} />
+            <Route path="cms/faculty" element={<ManageFaculty />} />
+            <Route path="cms/people/faculty" element={<ManageFaculty />} />
 
             {/* Add future admin routes here */}
           </Route>

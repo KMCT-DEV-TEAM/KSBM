@@ -21,6 +21,7 @@ import AdvisoryBoard from './advisoryBoard.model.js';
 import GoverningBody from './governingBody.model.js';
 import AboutCta from './aboutCta.model.js';
 import FacilitiesPage from './facilitiesPage.model.js';
+import Faculty from './faculty.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -814,3 +815,38 @@ export const updateFacilitiesPageSettings = async (req, res) => {
     res.status(500).json({ message: 'Server error updating Facilities Page settings', error: error.message });
   }
 };
+
+// @desc    Get Faculty settings
+export const getFacultySettings = async (req, res) => {
+  try {
+    const settings = await Faculty.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Faculty settings', error: error.message });
+  }
+};
+
+export const updateFacultySettings = async (req, res) => {
+  try {
+    const { 
+      heroHeading, heroSubtext, heroBgImage, 
+      introSubheading, introHeading, introText, 
+      ksbmFaculty, adjunctFaculty 
+    } = req.body;
+    const settings = await Faculty.getSettings();
+    
+    if (heroHeading !== undefined) settings.heroHeading = heroHeading;
+    if (heroSubtext !== undefined) settings.heroSubtext = heroSubtext;
+    if (heroBgImage !== undefined) settings.heroBgImage = heroBgImage;
+    if (introSubheading !== undefined) settings.introSubheading = introSubheading;
+    if (introHeading !== undefined) settings.introHeading = introHeading;
+    if (introText !== undefined) settings.introText = introText;
+    if (ksbmFaculty !== undefined) settings.ksbmFaculty = ksbmFaculty;
+    if (adjunctFaculty !== undefined) settings.adjunctFaculty = adjunctFaculty;
+    
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Faculty settings', error: error.message });
+  }
+};
