@@ -21,13 +21,29 @@ import ManageTestimonials from '../features/admin/cms/ManageTestimonials';
 import ManageAchievements from '../features/admin/cms/ManageAchievements';
 import ProtectedRoute from './ProtectedRoute';
 
+import AboutUs from '../features/about/AboutUs';
+import Facilities from '../features/facilities/Facilities';
+import ManageFacilitiesHero from '../features/admin/cms/ManageFacilitiesHero';
+import ManageInstitutionalResources from '../features/admin/cms/ManageInstitutionalResources';
+import ManageClubs from '../features/admin/cms/ManageClubs';
+import ManageClubDetails from '../features/admin/cms/ManageClubDetails';
+import ClubPage from '../features/facilities/ClubPage';
+import Faculty from '../features/faculty/Faculty';
+import ManageFaculty from '../features/admin/cms/ManageFaculty';
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
-          {/* Add more routes here later (e.g., /about, /campus) */}
+          <Route path="about" element={<AboutUs />} />
+          <Route path="facilities" element={<Facilities />} />
+          <Route path="facilities/club/:clubId" element={<ClubPage />} />
+          <Route path="faculty" element={<Faculty />} />
+          <Route path="people" element={<Faculty />} />
+          <Route path="people/faculty" element={<Faculty />} />
+          {/* Add more routes here later (e.g., /campus) */}
         </Route>
 
         {/* Admin Login Route (No Layout Wrapper) */}
@@ -59,6 +75,14 @@ const AppRoutes = () => {
             <Route path="cms/news" element={<GenericCmsPage title="News" />} />
             <Route path="cms/life" element={<GenericCmsPage title="Life at KSBM" />} />
             <Route path="cms/footer" element={<GenericCmsPage title="Footer" />} />
+            
+            {/* Facilities Page CMS */}
+            <Route path="cms/facilities/hero" element={<ManageFacilitiesHero />} />
+            <Route path="cms/facilities/institutional-resources" element={<ManageInstitutionalResources />} />
+            <Route path="cms/facilities/clubs" element={<ManageClubs />} />
+            <Route path="cms/facilities/clubs/:clubId" element={<ManageClubDetails />} />
+            <Route path="cms/faculty" element={<ManageFaculty />} />
+            <Route path="cms/people/faculty" element={<ManageFaculty />} />
 
             {/* Add future admin routes here */}
           </Route>

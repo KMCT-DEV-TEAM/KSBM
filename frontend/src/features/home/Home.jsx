@@ -17,8 +17,6 @@ import ManagementSection from './components/ManagementSection';
 const Home = () => {
   return (
     <div>
-
-      <Header />
       <Hero />
       <AboutSection />
       <AcademicPrograms />

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2, Edit2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
@@ -38,7 +39,7 @@ const ManageFacilities = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  
+
   // Facility Modal State
   const [isFacilityModalOpen, setIsFacilityModalOpen] = useState(false);
   const [editingFacilityIndex, setEditingFacilityIndex] = useState(-1);
@@ -55,10 +56,10 @@ const ManageFacilities = () => {
       const { data } = await api.get('/cms/facilities');
       setSubheading(data.subheading || '');
       setShowSubheading(data.showSubheading ?? true);
-      
+
       setHeading(data.heading || '');
       setShowHeading(data.showHeading ?? true);
-      
+
       setDescription(data.description || '');
       setShowDescription(data.showDescription ?? true);
 
@@ -79,20 +80,20 @@ const ManageFacilities = () => {
       confirmText: 'Yes, save it!',
       variant: 'primary',
       action: async () => {
-    setIsSaving(true);
-    try {
-      await api.put('/cms/facilities', {
-        subheading, heading, description, facilitiesList,
-        showSubheading, showHeading, showDescription, showFacilities
-      });
-      Toast.fire({ icon: 'success', title: 'Facilities section saved successfully!' });
-    } catch (error) {
-      console.error('Error saving facilities settings:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
-    } finally {
-      setIsSaving(false);
-    }
-  }
+        setIsSaving(true);
+        try {
+          await api.put('/cms/facilities', {
+            subheading, heading, description, facilitiesList,
+            showSubheading, showHeading, showDescription, showFacilities
+          });
+          Toast.fire({ icon: 'success', title: 'Facilities section saved successfully!' });
+        } catch (error) {
+          console.error('Error saving facilities settings:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
+        } finally {
+          setIsSaving(false);
+        }
+      }
     });
   };
 
@@ -147,23 +148,23 @@ const ManageFacilities = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-      setSubheading('College Facilities');
-      setShowSubheading(true);
-      setHeading('Institutional Resources');
-      setShowHeading(true);
-      setDescription('Our state-of-the-art campus offers modern classrooms, advanced learning resources, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.');
-      setShowDescription(true);
-      setFacilitiesList([
-        { title: 'Smart Classrooms', image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop' },
-        { title: 'Digital Library', image: 'https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=2030&auto=format&fit=crop' },
-        { title: 'Seminar Hall', image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?q=80&w=1925&auto=format&fit=crop' },
-        { title: 'Innovation Lab', image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop' },
-        { title: 'Auditorium', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop' },
-        { title: 'Sports & Fitness', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop' }
-      ]);
-      setShowFacilities(true);
-      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-    }
+        setSubheading('College Facilities');
+        setShowSubheading(true);
+        setHeading('Institutional Resources');
+        setShowHeading(true);
+        setDescription('Our state-of-the-art campus offers modern classrooms, advanced learning resources, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.');
+        setShowDescription(true);
+        setFacilitiesList([
+          { title: 'Smart Classrooms', image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop' },
+          { title: 'Digital Library', image: 'https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=2030&auto=format&fit=crop' },
+          { title: 'Seminar Hall', image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?q=80&w=1925&auto=format&fit=crop' },
+          { title: 'Innovation Lab', image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop' },
+          { title: 'Auditorium', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop' },
+          { title: 'Sports & Fitness', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop' }
+        ]);
+        setShowFacilities(true);
+        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+      }
     });
   };
 
@@ -171,8 +172,8 @@ const ManageFacilities = () => {
     if (confirmModal.action === 'remove_facility') {
       const updated = facilitiesList.filter((_, i) => i !== confirmModal.targetIndex);
       setFacilitiesList(updated);
-    } else 
-    setConfirmModal({ ...confirmModal, isOpen: false });
+    } else
+      setConfirmModal({ ...confirmModal, isOpen: false });
   };
 
   if (isLoading) {
@@ -360,11 +361,11 @@ const ManageFacilities = () => {
                     </div>
                   )}
                 </div>
-                
+
                 {/* Facility Content */}
                 <div className="p-4 flex-1 flex flex-col">
                   <h4 className="font-bold text-[#566A7F] text-lg mb-1">{facility.title || '(Untitled Facility)'}</h4>
-                  
+
                   {/* Actions */}
                   <div className="flex justify-end gap-2 mt-4 pt-3 border-t border-gray-100">
                     <button
@@ -415,7 +416,7 @@ const ManageFacilities = () => {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             <div className="p-6 overflow-y-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="col-span-1 md:col-span-2">
@@ -423,24 +424,24 @@ const ManageFacilities = () => {
                   <input
                     type="text"
                     value={currentFacility.title}
-                    onChange={(e) => setCurrentFacility({...currentFacility, title: e.target.value})}
+                    onChange={(e) => setCurrentFacility({ ...currentFacility, title: e.target.value })}
                     placeholder="e.g. Smart Classrooms"
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                 </div>
-                
+
                 <div className="col-span-1 md:col-span-2">
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Facility Image</label>
                   <div className="bg-gray-50 p-4 rounded-lg border border-[#D9DEE3]">
                     <LogoUploader
                       currentLogoUrl={currentFacility.image}
-                      onUploadSuccess={(url) => setCurrentFacility({...currentFacility, image: url})}
+                      onUploadSuccess={(url) => setCurrentFacility({ ...currentFacility, image: url })}
                     />
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
               <button
                 onClick={closeFacilityModal}
@@ -460,7 +461,7 @@ const ManageFacilities = () => {
         </div>
       )}
 
-      <ConfirmationModal 
+      <ConfirmationModal
         isOpen={confirmModal.isOpen}
         onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
         onConfirm={handleConfirmAction}

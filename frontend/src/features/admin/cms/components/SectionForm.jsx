@@ -1,14 +1,15 @@
 import React from 'react';
 
-const SectionForm = ({ title, children }) => {
+const SectionForm = ({ title, actionButton, children, className = "" }) => {
   return (
-    <div className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] overflow-hidden">
+    <div className={`bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6 ${className}`}>
       {title && (
-        <div className="bg-gray-50/50 px-6 py-4 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-[#566A7F]">{title}</h3>
+        <div className="flex items-center justify-between border-b border-gray-200/60 pb-3 mb-4">
+          <h2 className="text-lg font-bold text-[#1e2869] flex items-center gap-2">{title}</h2>
+          {actionButton && <div>{actionButton}</div>}
         </div>
       )}
-      <div className="p-6">
+      <div className="space-y-6">
         {children}
       </div>
     </div>
