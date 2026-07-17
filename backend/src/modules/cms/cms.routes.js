@@ -47,7 +47,11 @@ import {
   getFacilitiesPageSettings,
   updateFacilitiesPageSettings,
   getFacultySettings,
-  updateFacultySettings
+  updateFacultySettings,
+  getAlumniPageSettings,
+  updateAlumniPageSettings,
+  getManagementDeskSettings,
+  updateManagementDeskSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -148,5 +152,13 @@ router.route('/facilities-page')
 router.route('/faculty')
   .get(getFacultySettings)
   .put(protect, updateFacultySettings);
+
+router.route('/alumni-page')
+  .get(getAlumniPageSettings)
+  .put(protect, updateAlumniPageSettings);
+
+router.route('/management-desk')
+  .get(getManagementDeskSettings)
+  .put(protect, updateManagementDeskSettings);
 
 export default router;

@@ -14,11 +14,11 @@ const Counter = ({ value }) => {
   useEffect(() => {
     const strValue = String(value);
     const match = strValue.match(/^(\d+)(.*)$/);
-    
+
     if (isInView && match && ref.current) {
       const numericValue = parseInt(match[1], 10);
       const suffix = match[2];
-      
+
       const controls = animate(0, numericValue, {
         duration: 3,
         ease: "easeOut",
@@ -34,7 +34,7 @@ const Counter = ({ value }) => {
 
   const strValue = String(value);
   const match = strValue.match(/^(\d+)(.*)$/);
-  
+
   if (!match) {
     return <span>{value}</span>;
   }

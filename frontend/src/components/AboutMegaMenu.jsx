@@ -31,9 +31,10 @@ const tabContent = {
   management: {
     description: "The Management Desk provides strategic direction and steadfast support to ensure KSBM remains at the forefront of business education.",
     links: [
-      { label: 'CHAIRMAN\'S MESSAGE', icon: <Users className="w-5 h-5 text-primary" />, href: '/about#chairman' },
-      { label: 'DIRECTOR\'S DESK', icon: <Target className="w-5 h-5 text-primary" />, href: '/about#director' },
-      { label: 'LEADERSHIP TEAM', icon: <Users className="w-5 h-5 text-primary" />, href: '/about#leadership' },
+      { label: 'MANAGEMENT DESK OVERVIEW', icon: <Users className="w-5 h-5 text-primary" />, href: '/about/management-desk' },
+      { label: 'CHAIRMAN\'S MESSAGE', icon: <Users className="w-5 h-5 text-primary" />, href: '/about/management-desk#member-0' },
+      { label: 'VICE CHAIRMAN\'S MESSAGE', icon: <Target className="w-5 h-5 text-primary" />, href: '/about/management-desk#member-1' },
+      { label: 'DIRECTOR\'S MESSAGE', icon: <Users className="w-5 h-5 text-primary" />, href: '/about/management-desk#member-2' },
     ]
   },
   kmctGroup: {

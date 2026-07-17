@@ -15,7 +15,7 @@ const peopleLinks = [
     label: 'ALUMNI',
     description: 'Our global network of successful business leaders, innovators, and graduates.',
     icon: <GraduationCap className="w-5 h-5 text-primary" />,
-    href: '/#alumni'
+    href: '/alumni'
   }
 ];
 

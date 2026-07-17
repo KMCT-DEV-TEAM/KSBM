@@ -22,6 +22,8 @@ import GoverningBody from './governingBody.model.js';
 import AboutCta from './aboutCta.model.js';
 import FacilitiesPage from './facilitiesPage.model.js';
 import Faculty from './faculty.model.js';
+import AlumniPage from './alumniPage.model.js';
+import ManagementDesk from './managementDesk.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -848,5 +850,69 @@ export const updateFacultySettings = async (req, res) => {
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating Faculty settings', error: error.message });
+  }
+};
+
+// @desc    Get Alumni Page settings
+export const getAlumniPageSettings = async (req, res) => {
+  try {
+    const settings = await AlumniPage.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Alumni Page settings', error: error.message });
+  }
+};
+
+// @desc    Update Alumni Page settings
+export const updateAlumniPageSettings = async (req, res) => {
+  try {
+    const { hero, legacy, events, notableAlumni, gallery, cta } = req.body;
+    const settings = await AlumniPage.getSettings();
+
+    if (hero !== undefined) settings.hero = hero;
+    if (legacy !== undefined) settings.legacy = legacy;
+    if (events !== undefined) settings.events = events;
+    if (notableAlumni !== undefined) settings.notableAlumni = notableAlumni;
+    if (gallery !== undefined) settings.gallery = gallery;
+    if (cta !== undefined) settings.cta = cta;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Alumni Page settings', error: error.message });
+  }
+};
+
+// @desc    Get Management Desk settings
+export const getManagementDeskSettings = async (req, res) => {
+  try {
+    const settings = await ManagementDesk.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Management Desk settings', error: error.message });
+  }
+};
+
+// @desc    Update Management Desk settings
+export const updateManagementDeskSettings = async (req, res) => {
+  try {
+    const { showHero, heroHeading, heroSubtext, heroBgImage, showIntro, introSubheading, introHeading, introDescription, showMembers, members } = req.body;
+    const settings = await ManagementDesk.getSettings();
+
+    if (showHero !== undefined) settings.showHero = showHero;
+    if (heroHeading !== undefined) settings.heroHeading = heroHeading;
+    if (heroSubtext !== undefined) settings.heroSubtext = heroSubtext;
+    if (heroBgImage !== undefined) settings.heroBgImage = heroBgImage;
+    if (showIntro !== undefined) settings.showIntro = showIntro;
+    if (introSubheading !== undefined) settings.introSubheading = introSubheading;
+    if (introHeading !== undefined) settings.introHeading = introHeading;
+    if (introDescription !== undefined) settings.introDescription = introDescription;
+    if (showMembers !== undefined) settings.showMembers = showMembers;
+    if (members !== undefined) settings.members = members;
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Management Desk settings', error: error.message });
   }
 };

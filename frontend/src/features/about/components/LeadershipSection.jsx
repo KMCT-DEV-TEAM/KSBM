@@ -181,7 +181,9 @@ const LeadershipSection = () => {
             </div>
           </motion.div>
 
+
         </div>
+
 
       </div>
     </section>

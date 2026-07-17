@@ -7,7 +7,7 @@ import {
   MonitorPlay, Type, Image, BookOpen,
   Award, Building2, Briefcase, Handshake,
   MessageSquare, Star, Newspaper, Heart, PanelBottom,
-  ChevronDown, ChevronRight, Home, Info, Globe
+  ChevronDown, ChevronRight, Home, Info, Globe, GraduationCap
 } from 'lucide-react';
 const logo = '/assets/Images/LOGO__KMCT School of Business Management (1).png';
 
@@ -63,6 +63,7 @@ const Sidebar = () => {
         { name: 'Stats', path: '/admin/cms/about-us/stats' },
         { name: 'Advisory Board', path: '/admin/cms/about-us/advisory' },
         { name: 'Governing Body', path: '/admin/cms/about-us/governing' },
+        { name: 'Management Desk', path: '/admin/cms/about-us/management-desk' },
         { name: 'Faculty Members', path: '/admin/cms/faculty' },
         { name: 'Apply CTA', path: '/admin/cms/about-us/cta' },
       ]
@@ -72,6 +73,7 @@ const Sidebar = () => {
       icon: <Users className="w-5 h-5" />,
       links: [
         { name: 'Faculty Members', path: '/admin/cms/faculty' },
+        { name: 'Alumni Page Management', path: '/admin/cms/alumni' },
       ]
     },
     {
