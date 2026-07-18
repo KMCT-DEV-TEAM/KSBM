@@ -51,7 +51,11 @@ import {
   getAlumniPageSettings,
   updateAlumniPageSettings,
   getManagementDeskSettings,
-  updateManagementDeskSettings
+  updateManagementDeskSettings,
+  getMbaPageSettings,
+  updateMbaPageSettings,
+  getBbaPageSettings,
+  updateBbaPageSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -160,5 +164,13 @@ router.route('/alumni-page')
 router.route('/management-desk')
   .get(getManagementDeskSettings)
   .put(protect, updateManagementDeskSettings);
+
+router.route('/mba-page')
+  .get(getMbaPageSettings)
+  .put(protect, updateMbaPageSettings);
+
+router.route('/bba-page')
+  .get(getBbaPageSettings)
+  .put(protect, updateBbaPageSettings);
 
 export default router;

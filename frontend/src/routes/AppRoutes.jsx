@@ -30,6 +30,9 @@ import ManageClubDetails from '../features/admin/cms/ManageClubDetails';
 import ClubPage from '../features/facilities/ClubPage';
 import Faculty from '../features/faculty/Faculty';
 import ManageFaculty from '../features/admin/cms/ManageFaculty';
+import ProgramsLanding from '../features/programs/ProgramsLanding';
+import MbaPage from '../features/programs/MbaPage';
+import BbaPage from '../features/programs/BbaPage';
 
 const AppRoutes = () => {
   return (
@@ -43,6 +46,12 @@ const AppRoutes = () => {
           <Route path="faculty" element={<Faculty />} />
           <Route path="people" element={<Faculty />} />
           <Route path="people/faculty" element={<Faculty />} />
+          <Route path="programs" element={<ProgramsLanding />} />
+          <Route path="programs/mba" element={<MbaPage />} />
+          <Route path="programs/bba" element={<BbaPage />} />
+          <Route path="program" element={<ProgramsLanding />} />
+          <Route path="program/mba" element={<MbaPage />} />
+          <Route path="program/bba" element={<BbaPage />} />
           {/* Add more routes here later (e.g., /campus) */}
         </Route>
 

@@ -24,6 +24,8 @@ import FacilitiesPage from './facilitiesPage.model.js';
 import Faculty from './faculty.model.js';
 import AlumniPage from './alumniPage.model.js';
 import ManagementDesk from './managementDesk.model.js';
+import MbaPageSetting from './mbaPage.model.js';
+import BbaPageSetting from './bbaPage.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -914,5 +916,75 @@ export const updateManagementDeskSettings = async (req, res) => {
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating Management Desk settings', error: error.message });
+  }
+};
+
+// @desc    Get MBA Page settings
+export const getMbaPageSettings = async (req, res) => {
+  try {
+    const settings = await MbaPageSetting.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching MBA Page settings', error: error.message });
+  }
+};
+
+// @desc    Update MBA Page settings
+export const updateMbaPageSettings = async (req, res) => {
+  try {
+    const fields = [
+      'shortTitle', 'title', 'heroTitleLine1', 'heroTitleLine2', 'description', 'heroImage',
+      'heroPrimaryBtnText', 'heroSecondaryBtnText', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
+      'overviewTitle', 'overviewText', 'overviewSubtext', 'overviewImage',
+      'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
+      'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
+      'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
+      'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery'
+    ];
+    const settings = await MbaPageSetting.getSettings();
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        settings[field] = req.body[field];
+      }
+    });
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating MBA Page settings', error: error.message });
+  }
+};
+
+// @desc    Get BBA Page settings
+export const getBbaPageSettings = async (req, res) => {
+  try {
+    const settings = await BbaPageSetting.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching BBA Page settings', error: error.message });
+  }
+};
+
+// @desc    Update BBA Page settings
+export const updateBbaPageSettings = async (req, res) => {
+  try {
+    const fields = [
+      'shortTitle', 'title', 'heroTitleLine1', 'heroTitleLine2', 'description', 'heroImage',
+      'heroPrimaryBtnText', 'heroSecondaryBtnText', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
+      'overviewTitle', 'overviewText', 'overviewSubtext', 'overviewImage',
+      'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
+      'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
+      'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
+      'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery'
+    ];
+    const settings = await BbaPageSetting.getSettings();
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        settings[field] = req.body[field];
+      }
+    });
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating BBA Page settings', error: error.message });
   }
 };

@@ -53,6 +53,14 @@ const Sidebar = () => {
       ]
     },
     {
+      title: 'Programs (MBA/BBA)',
+      icon: <GraduationCap className="w-5 h-5" />,
+      links: [
+        { name: 'MBA Program Page', path: '/admin/cms/programs/mba' },
+        { name: 'BBA Program Page', path: '/admin/cms/programs/bba' },
+      ]
+    },
+    {
       title: 'About Us',
       icon: <Info className="w-5 h-5" />,
       links: [

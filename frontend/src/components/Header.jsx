@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import AboutMegaMenu from './AboutMegaMenu';
 import PeopleMegaMenu from './PeopleMegaMenu';
+import ProgramsMegaMenu from './ProgramsMegaMenu';
 
 const Header = ({ previewData }) => {
   const pathname = usePathname();
@@ -23,6 +24,8 @@ const Header = ({ previewData }) => {
       setActiveMegaMenu('about');
     } else if (lower === 'people' || lower === 'faculty' || lower.includes('people') || lower.includes('faculty')) {
       setActiveMegaMenu('people');
+    } else if (lower === 'programs' || lower === 'program' || lower.includes('program')) {
+      setActiveMegaMenu('programs');
     } else {
       setActiveMegaMenu(null);
     }
@@ -40,7 +43,7 @@ const Header = ({ previewData }) => {
     { label: 'About Us', link: '/about' },
     { label: 'Campus', link: '/#campus' },
     { label: 'Faculty', link: '/faculty' },
-    { label: 'Programs', link: '/#programs' },
+    { label: 'Programs', link: '/programs' },
   ]); // Fallback
   const [actionButton, setActionButton] = useState({ text: 'Apply Now', isVisible: true });
   const [logoUrl, setLogoUrl] = useState('');
@@ -64,6 +67,7 @@ const Header = ({ previewData }) => {
               if (labelLower === 'about us' || labelLower === 'about' || item.link.includes('about')) return { ...item, link: '/about' };
               if (labelLower === 'facilities' || item.link.includes('facilities')) return { ...item, link: '/facilities' };
               if (labelLower === 'people' || labelLower === 'faculty' || item.link === '#people' || item.link === '#faculty' || item.link.includes('people') || item.link.includes('faculty')) return { ...item, link: '/faculty' };
+              if (labelLower === 'programs' || labelLower === 'program' || item.link === '#programs' || item.link.includes('programs')) return { ...item, link: '/programs' };
               if (item.link.startsWith('#')) return { ...item, link: '/' + item.link };
               return item;
             });
@@ -207,6 +211,14 @@ const Header = ({ previewData }) => {
                       onMouseLeave={handleMouseLeave} 
                     />
                   )}
+
+                  {(item.label.toLowerCase() === 'programs' || item.label.toLowerCase() === 'program' || item.label.toLowerCase().includes('program')) && (
+                    <ProgramsMegaMenu 
+                      isOpen={activeMegaMenu === 'programs'} 
+                      onMouseEnter={() => handleMouseEnter('programs')} 
+                      onMouseLeave={handleMouseLeave} 
+                    />
+                  )}
                 </li>
               ))}
             </ul>
@@ -245,11 +257,39 @@ const Header = ({ previewData }) => {
                     }`}
                   onClick={() => {
                     setActiveNav(item.label);
-                    setIsMobileMenuOpen(false);
+                    if (!item.label.toLowerCase().includes('program')) {
+                      setIsMobileMenuOpen(false);
+                    }
                   }}
                 >
                   {item.label}
                 </Link>
+                {(item.label.toLowerCase() === 'programs' || item.label.toLowerCase().includes('program')) && (
+                  <div className="pl-4 mt-2 flex flex-col gap-2.5 border-l-2 border-primary/20 ml-2">
+                    <Link
+                      href="/programs/mba"
+                      className="text-sm text-slate-700 hover:text-primary font-medium py-1 flex items-center justify-between"
+                      onClick={() => {
+                        setActiveNav(item.label);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <span>MBA (Master of Business Administration)</span>
+                      <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded font-bold">2 YRS</span>
+                    </Link>
+                    <Link
+                      href="/programs/bba"
+                      className="text-sm text-slate-700 hover:text-primary font-medium py-1 flex items-center justify-between"
+                      onClick={() => {
+                        setActiveNav(item.label);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <span>BBA (Bachelor of Business Administration)</span>
+                      <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded font-bold">3 YRS</span>
+                    </Link>
+                  </div>
+                )}
               </li>
             ))}
             {actionButton.isVisible && (

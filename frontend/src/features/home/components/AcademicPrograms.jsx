@@ -4,6 +4,7 @@ import api from '../../../api/axios';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Loader from '../../../components/Loader';
+import Link from 'next/link';
 
 const AcademicPrograms = ({ previewData }) => {
   const [data, setData] = useState(null);
@@ -89,55 +90,62 @@ const AcademicPrograms = ({ previewData }) => {
 
   const hasMultiplePages = programs && programs.length > 2;
 
-  const renderProgramCard = (program, index, extraClasses = '') => (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, margin: "-50px" }}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
-      key={program.id || program._id}
-      className={`relative rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg hover:shadow-[0_15px_30px_rgba(27,37,89,0.3)] transition-all duration-500 hover:-translate-y-2 ${extraClasses}`}
-    >
-      {/* Background Image */}
-      {program.image && (
-        <img
-          src={program.image}
-          alt={program.title}
-          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-        />
-      )}
+  const renderProgramCard = (program, index, extraClasses = '') => {
+    const targetHref = program.id?.toLowerCase() === 'bba' || program.title?.toLowerCase().includes('bba') 
+      ? '/programs/bba' 
+      : '/programs/mba';
 
-      {/* Vertical Tag (Left Edge) */}
-      {program.tag && (
-        <div className={`absolute top-12 left-6 lg:left-8 flex flex-col items-center gap-4 z-20`}>
-          <div className="w-[1px] h-12 bg-background/40"></div>
-          <span
-            className="text-white/80 text-[8px] md:text-[10px] font-bold tracking-[0.3em] uppercase"
-            style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
-          >
-            {program.tag}
-          </span>
-        </div>
-      )}
+    return (
+      <Link href={targetHref} key={program.id || program._id || index} className={`block no-underline ${extraClasses}`}>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, margin: "-50px" }}
+          transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+          className={`relative rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg hover:shadow-[0_15px_30px_rgba(27,37,89,0.3)] transition-all duration-500 hover:-translate-y-2 w-full h-full`}
+        >
+          {/* Background Image */}
+          {program.image && (
+            <img
+              src={program.image}
+              alt={program.title}
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            />
+          )}
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1b2559]/95 via-[#1b2559]/40 to-transparent opacity-90 z-10 group-hover:opacity-100 transition-opacity duration-500"></div>
+          {/* Vertical Tag (Left Edge) */}
+          {program.tag && (
+            <div className={`absolute top-12 left-6 lg:left-8 flex flex-col items-center gap-4 z-20`}>
+              <div className="w-[1px] h-12 bg-background/40"></div>
+              <span
+                className="text-white/80 text-[8px] md:text-[10px] font-bold tracking-[0.3em] uppercase"
+                style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+              >
+                {program.tag}
+              </span>
+            </div>
+          )}
 
-      {/* Text Content */}
-      <div className={`absolute bottom-0 left-0 w-full z-20 p-5 lg:p-12`}>
-        {program.title && (
-          <h3 className={`font-bold text-white mb-2 md:mb-3 group-hover:text-white transition-colors duration-300 text-lg md:text-2xl lg:text-3xl`}>
-            {program.title}
-          </h3>
-        )}
-        {program.subtitle && (
-          <p className={`text-gray-200 leading-relaxed max-w-[100%] group-hover:text-gray-100 transition-colors duration-300 text-[11px] md:text-xs lg:text-[0.95rem]`}>
-            {program.subtitle}
-          </p>
-        )}
-      </div>
-    </motion.div>
-  );
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1b2559]/95 via-[#1b2559]/40 to-transparent opacity-90 z-10 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+          {/* Text Content */}
+          <div className={`absolute bottom-0 left-0 w-full z-20 p-5 lg:p-12`}>
+            {program.title && (
+              <h3 className={`font-bold text-white mb-2 md:mb-3 group-hover:text-white transition-colors duration-300 text-lg md:text-2xl lg:text-3xl`}>
+                {program.title}
+              </h3>
+            )}
+            {program.subtitle && (
+              <p className={`text-gray-200 leading-relaxed max-w-[100%] group-hover:text-gray-100 transition-colors duration-300 text-[11px] md:text-xs lg:text-[0.95rem]`}>
+                {program.subtitle}
+              </p>
+            )}
+          </div>
+        </motion.div>
+      </Link>
+    );
+  };
 
   return (
     <section className={`w-full bg-background py-12 lg:py-14`}>
