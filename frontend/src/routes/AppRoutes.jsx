@@ -33,6 +33,23 @@ import ManageFaculty from '../features/admin/cms/ManageFaculty';
 import ProgramsLanding from '../features/programs/ProgramsLanding';
 import MbaPage from '../features/programs/MbaPage';
 import BbaPage from '../features/programs/BbaPage';
+import ExaminationsLanding from '../features/examinations/ExaminationsLanding';
+import ManageExaminationsPage from '../features/admin/cms/ManageExaminationsPage';
+import ManageMbaPage from '../features/admin/cms/ManageMbaPage';
+import ManageRecruiters from '../features/admin/cms/ManageRecruiters';
+import ManageNews from '../features/admin/cms/ManageNews';
+import ManageLifeAtKsbm from '../features/admin/cms/ManageLifeAtKsbm';
+import ManageFooter from '../features/admin/cms/ManageFooter';
+import ManageAlumni from '../features/admin/cms/ManageAlumni';
+import ManageAboutUsHero from '../features/admin/cms/ManageAboutUsHero';
+import ManageVisionMission from '../features/admin/cms/ManageVisionMission';
+import ManageLeadership from '../features/admin/cms/ManageLeadership';
+import ManageLegacy from '../features/admin/cms/ManageLegacy';
+import ManageAboutUsStats from '../features/admin/cms/ManageAboutUsStats';
+import ManageAdvisoryBoard from '../features/admin/cms/ManageAdvisoryBoard';
+import ManageGoverningBody from '../features/admin/cms/ManageGoverningBody';
+import ManageManagementDesk from '../features/admin/cms/ManageManagementDesk';
+import ManageAboutCta from '../features/admin/cms/ManageAboutCta';
 
 const AppRoutes = () => {
   return (
@@ -52,6 +69,7 @@ const AppRoutes = () => {
           <Route path="program" element={<ProgramsLanding />} />
           <Route path="program/mba" element={<MbaPage />} />
           <Route path="program/bba" element={<BbaPage />} />
+          <Route path="examinations" element={<ExaminationsLanding />} />
           {/* Add more routes here later (e.g., /campus) */}
         </Route>
 
@@ -69,7 +87,7 @@ const AppRoutes = () => {
             <Route path="dashboard" element={<DashboardOverview />} />
             <Route path="users" element={<ManageUsers />} />
           
-          {/* CMS Stubs */}
+          {/* CMS Pages */}
           <Route path="cms/header" element={<ManageHeader />} />
           <Route path="cms/hero" element={<ManageHero />} />
           <Route path="cms/about" element={<ManageAbout />} />
@@ -78,20 +96,38 @@ const AppRoutes = () => {
           <Route path="cms/management" element={<ManageManagement />} />
           <Route path="cms/facilities" element={<ManageFacilities />} />
           <Route path="cms/placement" element={<ManagePlacement />} />
-          <Route path="cms/recruiters" element={<GenericCmsPage title="Recruiters" />} />
+          <Route path="cms/recruiters" element={<ManageRecruiters />} />
           <Route path="cms/testimonials" element={<ManageTestimonials />} />
           <Route path="cms/achievements" element={<ManageAchievements />} />
-            <Route path="cms/news" element={<GenericCmsPage title="News" />} />
-            <Route path="cms/life" element={<GenericCmsPage title="Life at KSBM" />} />
-            <Route path="cms/footer" element={<GenericCmsPage title="Footer" />} />
+          <Route path="cms/news" element={<ManageNews />} />
+          <Route path="cms/life" element={<ManageLifeAtKsbm />} />
+          <Route path="cms/footer" element={<ManageFooter />} />
+          <Route path="cms/alumni" element={<ManageAlumni />} />
+          
+          {/* Programs CMS */}
+          <Route path="cms/programs/mba" element={<ManageMbaPage isBba={false} />} />
+          <Route path="cms/programs/bba" element={<ManageMbaPage isBba={true} />} />
+          
+          {/* About Us CMS */}
+          <Route path="cms/about-us/hero" element={<ManageAboutUsHero />} />
+          <Route path="cms/about-us/vision" element={<ManageVisionMission />} />
+          <Route path="cms/about-us/leadership" element={<ManageLeadership />} />
+          <Route path="cms/about-us/legacy" element={<ManageLegacy />} />
+          <Route path="cms/about-us/stats" element={<ManageAboutUsStats />} />
+          <Route path="cms/about-us/advisory" element={<ManageAdvisoryBoard />} />
+          <Route path="cms/about-us/governing" element={<ManageGoverningBody />} />
+          <Route path="cms/about-us/management-desk" element={<ManageManagementDesk />} />
+          <Route path="cms/about-us/cta" element={<ManageAboutCta />} />
             
-            {/* Facilities Page CMS */}
-            <Route path="cms/facilities/hero" element={<ManageFacilitiesHero />} />
-            <Route path="cms/facilities/institutional-resources" element={<ManageInstitutionalResources />} />
-            <Route path="cms/facilities/clubs" element={<ManageClubs />} />
-            <Route path="cms/facilities/clubs/:clubId" element={<ManageClubDetails />} />
-            <Route path="cms/faculty" element={<ManageFaculty />} />
-            <Route path="cms/people/faculty" element={<ManageFaculty />} />
+          {/* Facilities Page CMS */}
+          <Route path="cms/facilities/hero" element={<ManageFacilitiesHero />} />
+          <Route path="cms/facilities/institutional-resources" element={<ManageInstitutionalResources />} />
+          <Route path="cms/facilities/clubs" element={<ManageClubs />} />
+          <Route path="cms/facilities/clubs/:clubId" element={<ManageClubDetails />} />
+          <Route path="cms/faculty" element={<ManageFaculty />} />
+          <Route path="cms/people/faculty" element={<ManageFaculty />} />
+          <Route path="cms/examinations" element={<ManageExaminationsPage />} />
+          <Route path="cms/examinations-page" element={<ManageExaminationsPage />} />
 
             {/* Add future admin routes here */}
           </Route>

@@ -7,6 +7,7 @@ import Loader from '../../../components/Loader';
 import InstitutionalResourcesSection from '../../facilities/components/InstitutionalResourcesSection';
 import confirmAction from '../../../utils/confirmAction';
 import SingleImageUploader from './components/SingleImageUploader';
+import PageHeader from './components/PageHeader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -142,34 +143,14 @@ const ManageInstitutionalResources = () => {
 
   return (
     <div className="space-y-6 w-full">
-      <div className="flex justify-between items-end">
-        <div>
-          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Institutional Resources</h1>
-          <p className="text-[#697A8D] mt-1 text-sm">Manage the Library and Other Resources sections.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsPreviewModalOpen(true)}
-            className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2.5 rounded-md font-semibold text-sm border border-primary/20 hover:bg-primary/20 transition-colors shadow-sm"
-          >
-            <Eye className="w-4 h-4" /> Live Preview
-          </button>
-          <button
-            onClick={handleResetToDefault}
-            className="flex items-center gap-2 bg-white text-[#697A8D] px-4 py-2.5 rounded-md font-semibold text-sm border border-[#D9DEE3] hover:bg-gray-50 transition-colors shadow-sm"
-          >
-            <RefreshCw className="w-4 h-4" /> Reset
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving || isUploading}
-            className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-70"
-          >
-            {isSaving || isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            {isSaving ? 'Saving...' : isUploading ? 'Uploading...' : 'Save Changes'}
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title="Institutional Resources"
+        description="Manage the Library and Other Resources sections."
+        onPreview={() => setIsPreviewModalOpen(true)}
+        onReset={handleResetToDefault}
+        onSave={handleSave}
+        isSaving={isSaving || isUploading}
+      />
 
       {isPreviewModalOpen && (
         <div className="fixed inset-0 z-[100] flex flex-col bg-gray-900/80 backdrop-blur-sm">
@@ -236,10 +217,10 @@ const ManageInstitutionalResources = () => {
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8 max-w-5xl mx-auto">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
         {activeTab === 'heading' ? (
           <div>
-            <h3 className="text-lg font-bold text-[#566A7F] mb-6">Section Heading Content</h3>
+            <h3 className="text-lg font-bold text-[#1e2869] mb-6">Section Heading Content</h3>
             <div className="space-y-6 max-w-2xl">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Heading</label>
@@ -263,7 +244,7 @@ const ManageInstitutionalResources = () => {
           </div>
         ) : activeTab === 'main' ? (
           <div>
-            <h3 className="text-lg font-bold text-[#566A7F] mb-6">Main Resource (Library) Content</h3>
+            <h3 className="text-lg font-bold text-[#1e2869] mb-6">Main Resource (Library) Content</h3>
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Section Heading</label>
@@ -327,7 +308,7 @@ const ManageInstitutionalResources = () => {
           </div>
         ) : (
           <div>
-            <h3 className="text-lg font-bold text-[#566A7F] mb-6">Other Resources Grid</h3>
+            <h3 className="text-lg font-bold text-[#1e2869] mb-6">Other Resources Grid</h3>
             <div className="space-y-6">
               <div className="max-w-2xl">
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Grid Heading</label>

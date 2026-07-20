@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import Loader from '../../../components/Loader';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
+import PageHeader from './components/PageHeader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -122,30 +123,22 @@ const ManageClubDetails = () => {
 
   return (
     <div className="space-y-6 w-full pb-20">
-      <div className="flex justify-between items-end">
-        <div>
-          <button 
-            onClick={() => router.push('/admin/cms/facilities/clubs')}
-            className="flex items-center text-sm font-semibold text-primary hover:underline mb-2"
-          >
-            <ArrowLeft className="w-4 h-4 mr-1" /> Back to Clubs
-          </button>
-          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Edit Club: {club.title}</h1>
-          <p className="text-[#697A8D] mt-1 text-sm">Manage the detailed page content for this club.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleSave}
-            disabled={isSaving || isUploading}
-            className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-70"
-          >
-            {isSaving || isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            {isSaving ? 'Saving...' : isUploading ? 'Uploading...' : 'Save Changes'}
-          </button>
-        </div>
+      <div>
+        <button 
+          onClick={() => router.push('/admin/cms/facilities/clubs')}
+          className="flex items-center text-sm font-semibold text-primary hover:underline mb-3 cursor-pointer"
+        >
+          <ArrowLeft className="w-4 h-4 mr-1" /> Back to Clubs
+        </button>
+        <PageHeader
+          title={`Edit Club: ${club.title}`}
+          description="Manage the detailed page content for this club."
+          onSave={handleSave}
+          isSaving={isSaving || isUploading}
+        />
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden max-w-5xl mx-auto">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden w-full">
         {/* Tabs Header */}
         <div className="flex overflow-x-auto border-b border-gray-100 hide-scrollbar">
           {tabs.map((tab) => (
@@ -204,7 +197,7 @@ const ManageClubDetails = () => {
 
           {/* ABOUT TAB */}
           {activeTab === 'about' && (
-            <div className="space-y-6 max-w-4xl">
+            <div className="space-y-6 w-full">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div>
@@ -349,7 +342,7 @@ const ManageClubDetails = () => {
           {/* FACULTY TAB */}
           {activeTab === 'faculty' && (
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Subheading (Top)</label>
                   <input

@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Save, RefreshCw, Loader2, Plus, Trash2 } from 'lucide-react';
+import { Save, RefreshCw, Loader2, Plus, Trash2, ArrowUp, ArrowDown, UserPlus } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import Loader from '../../../components/Loader';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
+import PageHeader from './components/PageHeader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -15,19 +16,38 @@ const Toast = Swal.mixin({
   timerProgressBar: true,
 });
 
+const defaultLeaders = [
+  {
+    id: '1',
+    subheading: 'OUR VISIONARY LEADER DR. NAVAS K.M',
+    heading: 'Leadership Vision',
+    name: 'Dr. Navas K M',
+    title: 'MANAGING TRUSTEE - KMCT',
+    description: [
+      `"The evolution of business continually shapes the experiences that define tomorrow's management culture. When understanding path in leadership starts to merge, a true perspective of real theoretical knowledge – they reveal the defining nature of KSBM."`,
+      `We believe that robust leaders are forged by instilling a commitment to personal excellence and inspiring organizational cultures. Our primary mandate is to groom talent that is ethically grounded, and as KSBM, this is our overarching commitment to shaping a transformative future.`,
+      `As KSBM accelerates towards already accelerating milestones, it is crucial to recognize that true leadership transcends beyond mere numbers; it is about human connections and impact, a mandate that echoes through our legacy. We are proud of what KSBM is accomplishing and its role in creating a future built on ethical, responsible, and visionary leadership."`
+    ],
+    image: '/assets/Images/Group 164.png',
+    signatureImage: '/assets/Images/image 32.png'
+  },
+  {
+    id: '2',
+    subheading: 'MEET OUR LEADER',
+    name: 'Dr. James Starlin',
+    title: 'PRINCIPAL',
+    description: [
+      `"The world of business demands a new caliber of professionals, one that navigates complexities with a balanced mindset and strong ethical compass. It is through comprehensive education and strategic insight that these future leaders are shaped, making KSBM a catalyst in creating capable minds."`,
+      `We continually strive to cultivate an environment where rigorous academics meet real-world strategy, ensuring our graduates are not just business operators, but management leaders. Our curriculum reflects KSBM's dedication to robust, responsible, and forward-looking education.`,
+      `KSBM focuses on instilling a culture of continuous learning and critical thinking. By nurturing entrepreneurship and values-driven leadership, we ensure that every individual leaving our doors is equipped not just to succeed, but to make a lasting impact. We empower our students to shape successful careers and turn ambitious goals into reality."`
+    ],
+    image: 'https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&q=80',
+    signatureImage: ''
+  }
+];
+
 const ManageLeadership = () => {
-  const [subheading, setSubheading] = useState('MEET OUR LEADER');
-  const [heading, setHeading] = useState('Visionary Leadership for a Better Tomorrow');
-  const [name, setName] = useState('Dr. Navas K M');
-  const [title, setTitle] = useState('MANAGING TRUSTEE - KMCT');
-  const [description, setDescription] = useState(['']);
-  const [image, setImage] = useState('/assets/Images/image 33.png');
-  const [signatureImage, setSignatureImage] = useState('/assets/Images/image 32.png');
-  
-  const [leader2Name, setLeader2Name] = useState('Dr. James Starlin');
-  const [leader2Title, setLeader2Title] = useState('PRINCIPAL');
-  const [leader2Description, setLeader2Description] = useState(['']);
-  const [leader2Image, setLeader2Image] = useState('https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&q=80');
+  const [leaders, setLeaders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -39,18 +59,33 @@ const ManageLeadership = () => {
   const fetchSettings = async () => {
     try {
       const { data } = await api.get('/cms/leadership');
-      if (data) {
-        if (data.subheading) setSubheading(data.subheading);
-        if (data.heading) setHeading(data.heading);
-        if (data.name) setName(data.name);
-        if (data.title) setTitle(data.title);
-        if (data.description && data.description.length > 0) setDescription(data.description);
-        if (data.image) setImage(data.image);
-        if (data.signatureImage) setSignatureImage(data.signatureImage);
-        if (data.leader2Name) setLeader2Name(data.leader2Name);
-        if (data.leader2Title) setLeader2Title(data.leader2Title);
-        if (data.leader2Description && data.leader2Description.length > 0) setLeader2Description(data.leader2Description);
-        if (data.leader2Image) setLeader2Image(data.leader2Image);
+      if (data && data.leaders && data.leaders.length > 0) {
+        setLeaders(data.leaders);
+      } else if (data) {
+        // Construct leaders from legacy fields if leaders array not present
+        setLeaders([
+          {
+            id: '1',
+            subheading: data.subheading || 'OUR VISIONARY LEADER DR. NAVAS K.M',
+            heading: data.heading || 'Leadership Vision',
+            name: data.name || 'Dr. Navas K M',
+            title: data.title || 'MANAGING TRUSTEE - KMCT',
+            description: data.description && data.description.length > 0 ? data.description : defaultLeaders[0].description,
+            image: data.image || '/assets/Images/Group 164.png',
+            signatureImage: data.signatureImage || '/assets/Images/image 32.png'
+          },
+          {
+            id: '2',
+            subheading: 'MEET OUR LEADER',
+            name: data.leader2Name || 'Dr. James Starlin',
+            title: data.leader2Title || 'PRINCIPAL',
+            description: data.leader2Description && data.leader2Description.length > 0 ? data.leader2Description : defaultLeaders[1].description,
+            image: data.leader2Image || 'https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&q=80',
+            signatureImage: ''
+          }
+        ]);
+      } else {
+        setLeaders(defaultLeaders);
       }
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -63,19 +98,30 @@ const ManageLeadership = () => {
   const handleSave = async () => {
     await confirmAction({
       title: 'Save Changes?',
-      message: 'Are you sure you want to save these changes to the website?',
+      message: 'Are you sure you want to save these leadership profiles to the website?',
       confirmText: 'Yes, save it!',
       variant: 'primary',
       action: async () => {
         setIsSaving(true);
         try {
-          await api.put('/cms/leadership', { 
-            subheading, heading, name, title, description, image, signatureImage, leader2Name, leader2Title, leader2Description, leader2Image
+          await api.put('/cms/leadership', {
+            leaders,
+            heading: leaders[0]?.heading || 'Visionary Leadership for a Better Tomorrow',
+            subheading: leaders[0]?.subheading,
+            name: leaders[0]?.name,
+            title: leaders[0]?.title,
+            description: leaders[0]?.description,
+            image: leaders[0]?.image,
+            signatureImage: leaders[0]?.signatureImage,
+            leader2Name: leaders[1]?.name,
+            leader2Title: leaders[1]?.title,
+            leader2Description: leaders[1]?.description,
+            leader2Image: leaders[1]?.image
           }, { hideLoader: true });
-          Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
+          Toast.fire({ icon: 'success', title: 'Leadership settings saved successfully!' });
         } catch (error) {
           console.error('Error saving settings:', error);
-          Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
+          Toast.fire({ icon: 'error', title: 'Failed to save leadership settings.' });
         } finally {
           setIsSaving(false);
         }
@@ -86,190 +132,291 @@ const ManageLeadership = () => {
   const handleResetToDefault = async () => {
     await confirmAction({
       title: 'Reset to Defaults?',
-      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
+      message: 'This will reset the leadership list to original defaults. Click "Save Changes" afterwards to apply.',
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setSubheading('MEET OUR LEADER');
-        setHeading('Visionary Leadership for a Better Tomorrow');
-        setName('Dr. Navas K M');
-        setTitle('MANAGING TRUSTEE - KMCT');
-        setDescription([
-          `"The evolution of business continually shapes the experiences that define tomorrow's management culture. When understanding path in leadership starts to merge, a true perspective of real theoretical knowledge – they reveal the defining nature of KSBM."`,
-          `We believe that robust leaders are forged by instilling a commitment to personal excellence and inspiring organizational cultures. Our primary mandate is to groom talent that is ethically grounded, and as KSBM, this is our overarching commitment to shaping a transformative future.`,
-          `As KSBM accelerates towards already accelerating milestones, it is crucial to recognize that true leadership transcends beyond mere numbers; it is about human connections and impact, a mandate that echoes through our legacy. We are proud of what KSBM is accomplishing and its role in creating a future built on ethical, responsible, and visionary leadership."`
-        ]);
-        setImage('/assets/Images/Group 164.png');
-        setSignatureImage('/assets/Images/image 32.png');
-        setLeader2Name('Dr. James Starlin');
-        setLeader2Title('PRINCIPAL');
-        setLeader2Description([
-          `"The world of business demands a new caliber of professionals, one that navigates complexities with a balanced mindset and strong ethical compass. It is through comprehensive education and strategic insight that these future leaders are shaped, making KSBM a catalyst in creating capable minds."`,
-          `We continually strive to cultivate an environment where rigorous academics meet real-world strategy, ensuring our graduates are not just business operators, but management leaders. Our curriculum reflects KSBM's dedication to robust, responsible, and forward-looking education.`,
-          `KSBM focuses on instilling a culture of continuous learning and critical thinking. By nurturing entrepreneurship and values-driven leadership, we ensure that every individual leaving our doors is equipped not just to succeed, but to make a lasting impact. We empower our students to shape successful careers and turn ambitious goals into reality."`
-        ]);
-        setLeader2Image('https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&q=80');
-        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+        setLeaders(defaultLeaders);
+        Toast.fire({ icon: 'info', title: 'Reset to default. Click Save Changes to apply.' });
       }
     });
   };
 
-  const updateDescription = (index, value) => {
-    const newDesc = [...description];
-    newDesc[index] = value;
-    setDescription(newDesc);
+  const handleAddLeader = () => {
+    const newLeader = {
+      id: Date.now().toString(),
+      subheading: 'MEET OUR LEADER',
+      heading: '',
+      name: 'New Leader Name',
+      title: 'LEADER DESIGNATION',
+      description: ['Add message or description here...'],
+      image: 'https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&q=80',
+      signatureImage: ''
+    };
+    setLeaders([...leaders, newLeader]);
+    Toast.fire({ icon: 'success', title: 'New leader added! Scroll down to edit.' });
   };
-  const addDescriptionPara = () => setDescription([...description, '']);
-  const removeDescriptionPara = (index) => setDescription(description.filter((_, i) => i !== index));
 
-  const updateLeader2Description = (index, value) => {
-    const newDesc = [...leader2Description];
-    newDesc[index] = value;
-    setLeader2Description(newDesc);
+  const handleRemoveLeader = (index) => {
+    if (leaders.length <= 1) {
+      Toast.fire({ icon: 'warning', title: 'You must keep at least one leader profile.' });
+      return;
+    }
+    const leaderName = leaders[index]?.name || 'Leader';
+    setLeaders((prevLeaders) => prevLeaders.filter((_, i) => i !== index));
+    Toast.fire({ icon: 'success', title: `${leaderName} removed! Click "Save Changes" at the top right to apply.` });
   };
-  const addLeader2DescriptionPara = () => setLeader2Description([...leader2Description, '']);
-  const removeLeader2DescriptionPara = (index) => setLeader2Description(leader2Description.filter((_, i) => i !== index));
 
-  if (isLoading) return <Loader theme="light" text="Loading Settings..." />;
+  const handleMoveLeader = (index, direction) => {
+    const newLeaders = [...leaders];
+    if (direction === 'up' && index > 0) {
+      [newLeaders[index - 1], newLeaders[index]] = [newLeaders[index], newLeaders[index - 1]];
+    } else if (direction === 'down' && index < newLeaders.length - 1) {
+      [newLeaders[index + 1], newLeaders[index]] = [newLeaders[index], newLeaders[index + 1]];
+    }
+    setLeaders(newLeaders);
+  };
+
+  const updateLeaderField = (index, field, value) => {
+    const newLeaders = [...leaders];
+    newLeaders[index] = { ...newLeaders[index], [field]: value };
+    setLeaders(newLeaders);
+  };
+
+  const addLeaderPara = (leaderIdx) => {
+    const newLeaders = [...leaders];
+    const currentDesc = Array.isArray(newLeaders[leaderIdx].description) ? newLeaders[leaderIdx].description : [newLeaders[leaderIdx].description || ''];
+    newLeaders[leaderIdx].description = [...currentDesc, ''];
+    setLeaders(newLeaders);
+  };
+
+  const updateLeaderPara = (leaderIdx, paraIdx, value) => {
+    const newLeaders = [...leaders];
+    const currentDesc = Array.isArray(newLeaders[leaderIdx].description) ? [...newLeaders[leaderIdx].description] : [newLeaders[leaderIdx].description || ''];
+    currentDesc[paraIdx] = value;
+    newLeaders[leaderIdx].description = currentDesc;
+    setLeaders(newLeaders);
+  };
+
+  const removeLeaderPara = (leaderIdx, paraIdx) => {
+    const newLeaders = [...leaders];
+    const currentDesc = Array.isArray(newLeaders[leaderIdx].description) ? [...newLeaders[leaderIdx].description] : [newLeaders[leaderIdx].description || ''];
+    newLeaders[leaderIdx].description = currentDesc.filter((_, i) => i !== paraIdx);
+    setLeaders(newLeaders);
+  };
+
+  if (isLoading) return <Loader theme="light" text="Loading Leadership Profiles..." />;
 
   return (
-    <div className="space-y-6 w-full">
-      <div className="flex justify-between items-end">
-        <div>
-          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Leadership Section</h1>
-          <p className="text-[#697A8D] mt-1 text-sm">Manage the leader profile and message.</p>
-        </div>
-        <div className="flex items-center gap-3">
+    <div className="space-y-6 w-full pb-16">
+      <PageHeader
+        title="About Us - Leadership Section"
+        description="Add and manage leaders. They automatically display on the About Us page in an alternating left/right layout."
+        onReset={handleResetToDefault}
+        onSave={handleSave}
+        isSaving={isSaving || isUploading}
+        extraButtons={
           <button
-            onClick={handleResetToDefault}
-            className="flex items-center gap-2 bg-white text-[#697A8D] px-4 py-2.5 rounded-md font-semibold text-sm border border-[#D9DEE3] hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
+            onClick={handleAddLeader}
+            className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-xl font-semibold text-sm hover:bg-emerald-700 transition-colors shadow-sm cursor-pointer"
           >
-            <RefreshCw className="w-4 h-4" />
-            Reset to Default
+            <UserPlus className="w-4 h-4" />
+            Add Person
           </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving || isUploading}
-            className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-[0_2px_4px_0_var(--color-primary)] disabled:opacity-70"
-          >
-            {isSaving || isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            {isSaving ? 'Saving...' : isUploading ? 'Uploading...' : 'Save Changes'}
-          </button>
-        </div>
-      </div>
+        }
+      />
 
-      <div className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] p-6 md:p-8 max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-6">
-            <h3 className="text-lg font-bold text-[#566A7F] border-b pb-2">Section Titles</h3>
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Subheading</label>
-              <input type="text" value={subheading} onChange={(e) => setSubheading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-            </div>
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Heading</label>
-              <input type="text" value={heading} onChange={(e) => setHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-            </div>
+      {/* Leaders List */}
+      <div className="space-y-8 w-full">
+        {leaders.map((leader, index) => {
+          const isEven = index % 2 === 0;
+          const layoutBadgeText = isEven ? "Alternative Layout: Image Left, Content Right" : "Alternative Layout: Content Left, Image Right";
 
-            <h3 className="text-lg font-bold text-[#566A7F] border-b pb-2 mt-8">Images</h3>
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Leader Image</label>
-              <SingleImageUploader 
-                imageUrl={image} 
-                onUploadComplete={setImage}
-                onUploadStateChange={setIsUploading}
-                label="Upload Leader Image"
-              />
-            </div>
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Signature Image</label>
-              <SingleImageUploader 
-                imageUrl={signatureImage} 
-                onUploadComplete={setSignatureImage}
-                onUploadStateChange={setIsUploading}
-                label="Upload Signature Image"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <h3 className="text-lg font-bold text-[#566A7F] border-b pb-2">Leader Details</h3>
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Name</label>
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-            </div>
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Title / Designation</label>
-              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-            </div>
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <div className="flex justify-between items-center mb-2">
-                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Message / Description</label>
-                <button onClick={addDescriptionPara} className="text-primary hover:bg-primary/10 p-1 rounded-full"><Plus className="w-4 h-4" /></button>
-              </div>
-              <div className="space-y-3">
-                {description.map((para, index) => (
-                  <div key={index} className="flex gap-2 items-start">
-                    <textarea 
-                      value={para}
-                      onChange={(e) => updateDescription(index, e.target.value)}
-                      rows={4}
-                      className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    />
-                    <button onClick={() => removeDescriptionPara(index)} className="p-2 text-red-500 hover:bg-red-50 rounded-md mt-1"><Trash2 className="w-4 h-4" /></button>
+          return (
+            <div
+              key={leader.id || index}
+              className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] border border-gray-100 overflow-hidden"
+            >
+              {/* Card Header */}
+              <div className="bg-[#f8f9fc] px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div className="flex items-center gap-3">
+                  <span className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+                    #{index + 1}
+                  </span>
+                  <div>
+                    <h3 className="font-bold text-[#566A7F] text-base">
+                      {leader.name || 'Untitled Leader'}
+                    </h3>
+                    <span className="text-xs font-semibold text-primary/80 bg-primary/10 px-2.5 py-0.5 rounded-full inline-block mt-0.5">
+                      {layoutBadgeText}
+                    </span>
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+                </div>
 
-        {/* Leader 2 Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 pt-8 border-t border-gray-200">
-          <div className="space-y-6">
-            <h3 className="text-lg font-bold text-[#566A7F] border-b pb-2">Leader 2 (Principal) Image</h3>
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Leader 2 Image</label>
-              <SingleImageUploader 
-                imageUrl={leader2Image} 
-                onUploadComplete={setLeader2Image}
-                onUploadStateChange={setIsUploading}
-                label="Upload Leader 2 Image"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <h3 className="text-lg font-bold text-[#566A7F] border-b pb-2">Leader 2 Details</h3>
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Name</label>
-              <input type="text" value={leader2Name} onChange={(e) => setLeader2Name(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-            </div>
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Title / Designation</label>
-              <input type="text" value={leader2Title} onChange={(e) => setLeader2Title(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-            </div>
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <div className="flex justify-between items-center mb-2">
-                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Message / Description</label>
-                <button onClick={addLeader2DescriptionPara} className="text-primary hover:bg-primary/10 p-1 rounded-full"><Plus className="w-4 h-4" /></button>
+                {/* Move & Delete Controls */}
+                <div className="flex items-center gap-2 self-end sm:self-auto">
+                  <button
+                    type="button"
+                    onClick={() => handleMoveLeader(index, 'up')}
+                    disabled={index === 0}
+                    className="p-1.5 rounded bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    title="Move Up"
+                  >
+                    <ArrowUp className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleMoveLeader(index, 'down')}
+                    disabled={index === leaders.length - 1}
+                    className="p-1.5 rounded bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    title="Move Down"
+                  >
+                    <ArrowDown className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveLeader(index)}
+                    className="p-1.5 rounded bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-colors ml-2"
+                    title="Remove Person"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
-              <div className="space-y-3">
-                {leader2Description.map((para, index) => (
-                  <div key={index} className="flex gap-2 items-start">
-                    <textarea 
-                      value={para}
-                      onChange={(e) => updateLeader2Description(index, e.target.value)}
-                      rows={4}
-                      className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    />
-                    <button onClick={() => removeLeader2DescriptionPara(index)} className="p-2 text-red-500 hover:bg-red-50 rounded-md mt-1"><Trash2 className="w-4 h-4" /></button>
+
+              {/* Card Body */}
+              <div className="p-6 md:p-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Left Column: Images */}
+                  <div className="space-y-6">
+                    <h4 className="text-sm font-bold text-[#566A7F] uppercase tracking-wider border-b pb-2">
+                      Images
+                    </h4>
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">
+                        Person Image / Photo
+                      </label>
+                      <SingleImageUploader
+                        imageUrl={leader.image}
+                        onUploadComplete={(url) => updateLeaderField(index, 'image', url)}
+                        onUploadStateChange={setIsUploading}
+                        label="Upload Photo"
+                      />
+                    </div>
+
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">
+                        Signature Image (Optional)
+                      </label>
+                      <SingleImageUploader
+                        imageUrl={leader.signatureImage}
+                        onUploadComplete={(url) => updateLeaderField(index, 'signatureImage', url)}
+                        onUploadStateChange={setIsUploading}
+                        label="Upload Signature"
+                      />
+                    </div>
                   </div>
-                ))}
+
+                  {/* Right Column: Titles and Description */}
+                  <div className="space-y-6">
+                    <h4 className="text-sm font-bold text-[#566A7F] uppercase tracking-wider border-b pb-2">
+                      Profile Details
+                    </h4>
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        value={leader.name || ''}
+                        onChange={(e) => updateLeaderField(index, 'name', e.target.value)}
+                        placeholder="e.g. Dr. Navas K.M"
+                        className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                      />
+                    </div>
+
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">
+                        Title / Designation
+                      </label>
+                      <input
+                        type="text"
+                        value={leader.title || ''}
+                        onChange={(e) => updateLeaderField(index, 'title', e.target.value)}
+                        placeholder="e.g. MANAGING TRUSTEE - KMCT"
+                        className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                      />
+                    </div>
+
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">
+                        Subheading Tag (Small Top Text)
+                      </label>
+                      <input
+                        type="text"
+                        value={leader.subheading || ''}
+                        onChange={(e) => updateLeaderField(index, 'subheading', e.target.value)}
+                        placeholder="e.g. MEET OUR LEADER"
+                        className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                      />
+                    </div>
+
+                    {index === 0 && (
+                      <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                        <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">
+                          Main Heading (Optional)
+                        </label>
+                        <input
+                          type="text"
+                          value={leader.heading || ''}
+                          onChange={(e) => updateLeaderField(index, 'heading', e.target.value)}
+                          placeholder="e.g. Leadership Vision"
+                          className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                        />
+                      </div>
+                    )}
+
+                    {/* Paragraphs */}
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                      <div className="flex justify-between items-center mb-2">
+                        <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">
+                          Message / Paragraphs
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => addLeaderPara(index)}
+                          className="text-primary hover:bg-primary/10 p-1.5 rounded font-semibold text-xs flex items-center gap-1"
+                        >
+                          <Plus className="w-3.5 h-3.5" /> Add Paragraph
+                        </button>
+                      </div>
+                      <div className="space-y-3">
+                        {(Array.isArray(leader.description) ? leader.description : [leader.description || '']).map((para, paraIndex) => (
+                          <div key={paraIndex} className="flex gap-2 items-start">
+                            <textarea
+                              value={para || ''}
+                              onChange={(e) => updateLeaderPara(index, paraIndex, e.target.value)}
+                              rows={3}
+                              className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeLeaderPara(index, paraIndex)}
+                              className="p-2 text-red-500 hover:bg-red-50 rounded-md mt-0.5"
+                              title="Remove Paragraph"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );

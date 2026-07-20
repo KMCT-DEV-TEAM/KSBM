@@ -26,6 +26,7 @@ import AlumniPage from './alumniPage.model.js';
 import ManagementDesk from './managementDesk.model.js';
 import MbaPageSetting from './mbaPage.model.js';
 import BbaPageSetting from './bbaPage.model.js';
+import ExaminationsPage from './examinationsPage.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -618,19 +619,44 @@ export const getLeadershipSettings = async (req, res) => {
 
 export const updateLeadershipSettings = async (req, res) => {
   try {
-    const { subheading, heading, name, title, description, image, signatureImage, leader2Name, leader2Title, leader2Description, leader2Image } = req.body;
+    const { leaders, subheading, heading, name, title, description, image, signatureImage, leader2Name, leader2Title, leader2Description, leader2Image } = req.body;
     const settings = await Leadership.getSettings();
-    if (subheading !== undefined) settings.subheading = subheading;
-    if (heading !== undefined) settings.heading = heading;
-    if (name !== undefined) settings.name = name;
-    if (title !== undefined) settings.title = title;
-    if (description !== undefined) settings.description = description;
-    if (image !== undefined) settings.image = image;
-    if (signatureImage !== undefined) settings.signatureImage = signatureImage;
-    if (leader2Name !== undefined) settings.leader2Name = leader2Name;
-    if (leader2Title !== undefined) settings.leader2Title = leader2Title;
-    if (leader2Description !== undefined) settings.leader2Description = leader2Description;
-    if (leader2Image !== undefined) settings.leader2Image = leader2Image;
+    if (leaders !== undefined) {
+      settings.leaders = leaders;
+      settings.markModified('leaders');
+      // Also sync first two entries to legacy fields if present
+      if (leaders[0]) {
+        if (leaders[0].subheading !== undefined) settings.subheading = leaders[0].subheading;
+        if (leaders[0].name !== undefined) settings.name = leaders[0].name;
+        if (leaders[0].title !== undefined) settings.title = leaders[0].title;
+        if (leaders[0].description !== undefined) settings.description = leaders[0].description;
+        if (leaders[0].image !== undefined) settings.image = leaders[0].image;
+        if (leaders[0].signatureImage !== undefined) settings.signatureImage = leaders[0].signatureImage;
+      }
+      if (leaders[1]) {
+        if (leaders[1].name !== undefined) settings.leader2Name = leaders[1].name;
+        if (leaders[1].title !== undefined) settings.leader2Title = leaders[1].title;
+        if (leaders[1].description !== undefined) settings.leader2Description = leaders[1].description;
+        if (leaders[1].image !== undefined) settings.leader2Image = leaders[1].image;
+      } else {
+        settings.leader2Name = '';
+        settings.leader2Title = '';
+        settings.leader2Description = [];
+        settings.leader2Image = '';
+      }
+    } else {
+      if (subheading !== undefined) settings.subheading = subheading;
+      if (heading !== undefined) settings.heading = heading;
+      if (name !== undefined) settings.name = name;
+      if (title !== undefined) settings.title = title;
+      if (description !== undefined) settings.description = description;
+      if (image !== undefined) settings.image = image;
+      if (signatureImage !== undefined) settings.signatureImage = signatureImage;
+      if (leader2Name !== undefined) settings.leader2Name = leader2Name;
+      if (leader2Title !== undefined) settings.leader2Title = leader2Title;
+      if (leader2Description !== undefined) settings.leader2Description = leader2Description;
+      if (leader2Image !== undefined) settings.leader2Image = leader2Image;
+    }
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
@@ -939,7 +965,7 @@ export const updateMbaPageSettings = async (req, res) => {
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
       'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
-      'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery'
+      'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner'
     ];
     const settings = await MbaPageSetting.getSettings();
     fields.forEach((field) => {
@@ -947,6 +973,9 @@ export const updateMbaPageSettings = async (req, res) => {
         settings[field] = req.body[field];
       }
     });
+    if (req.body.academicCalendarBanner !== undefined) {
+      settings.markModified('academicCalendarBanner');
+    }
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
@@ -974,9 +1003,48 @@ export const updateBbaPageSettings = async (req, res) => {
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
       'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
-      'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery'
+      'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner'
     ];
     const settings = await BbaPageSetting.getSettings();
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        settings[field] = req.body[field];
+      }
+    });
+    if (req.body.academicCalendarBanner !== undefined) {
+      settings.markModified('academicCalendarBanner');
+    }
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating BBA Page settings', error: error.message });
+  }
+};
+
+// @desc    Get Examinations Page settings
+// @route   GET /api/cms/examinations-page
+// @access  Public
+export const getExaminationsPageSettings = async (req, res) => {
+  try {
+    const settings = await ExaminationsPage.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Examinations Page settings', error: error.message });
+  }
+};
+
+// @desc    Update Examinations Page settings
+// @route   PUT /api/cms/examinations-page
+// @access  Private/Admin
+export const updateExaminationsPageSettings = async (req, res) => {
+  try {
+    const fields = [
+      'heroBadgeText', 'heroTitle', 'heroSubtitle', 'heroImage',
+      'overviewTitle', 'overviewText1', 'overviewText2', 'overviewImage',
+      'calendarTitle', 'calendarText', 'calendarViewBtnText', 'calendarViewBtnUrl', 'calendarDownloadBtnText', 'calendarDownloadBtnUrl', 'calendarImage',
+      'notifications', 'results'
+    ];
+    const settings = await ExaminationsPage.getSettings();
     fields.forEach((field) => {
       if (req.body[field] !== undefined) {
         settings[field] = req.body[field];
@@ -985,6 +1053,6 @@ export const updateBbaPageSettings = async (req, res) => {
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error updating BBA Page settings', error: error.message });
+    res.status(500).json({ message: 'Server error updating Examinations Page settings', error: error.message });
   }
 };

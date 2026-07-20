@@ -55,7 +55,9 @@ import {
   getMbaPageSettings,
   updateMbaPageSettings,
   getBbaPageSettings,
-  updateBbaPageSettings
+  updateBbaPageSettings,
+  getExaminationsPageSettings,
+  updateExaminationsPageSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -172,5 +174,13 @@ router.route('/mba-page')
 router.route('/bba-page')
   .get(getBbaPageSettings)
   .put(protect, updateBbaPageSettings);
+
+router.route('/examinations')
+  .get(getExaminationsPageSettings)
+  .put(protect, updateExaminationsPageSettings);
+
+router.route('/examinations-page')
+  .get(getExaminationsPageSettings)
+  .put(protect, updateExaminationsPageSettings);
 
 export default router;

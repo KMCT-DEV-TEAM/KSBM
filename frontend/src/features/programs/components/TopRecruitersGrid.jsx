@@ -42,7 +42,7 @@ const TopRecruitersGrid = ({ previewData }) => {
 
   if (isLoading) {
     return (
-      <section className="w-full bg-background py-12 lg:py-16">
+      <section className="w-full bg-background py-20 lg:py-32">
         <div className="w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden animate-pulse">
           <div className="w-full inline-flex flex-nowrap overflow-hidden">
             <ul className="flex items-center gap-12 lg:gap-24 opacity-90 pr-12 lg:pr-24">
@@ -67,7 +67,7 @@ const TopRecruitersGrid = ({ previewData }) => {
   const displayList = (recruiters && recruiters.length > 0) ? recruiters : defaultRecruiters;
 
   return (
-    <section className="w-full bg-background py-12 lg:py-16 border-t border-gray-100">
+    <section className="w-full bg-background py-28 lg:py-40 border-t border-gray-100 my-12">
       <div className="w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden text-center">
         <span className="text-xs sm:text-sm font-bold tracking-[0.25em] text-gray-400 uppercase mb-8 block">
           TOP RECRUITERS & CORPORATE PARTNERS

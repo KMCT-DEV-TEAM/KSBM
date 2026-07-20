@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import Loader from '../../../components/Loader';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
+import PageHeader from './components/PageHeader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -162,31 +163,14 @@ const ManageFaculty = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto pb-12">
-      {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <div>
-          <h1 className="text-2xl font-bold text-[#1e2869]">Manage Faculty & People Page</h1>
-          <p className="text-sm text-gray-500 mt-1">Configure the hero banner, intro section, KSBM full-time faculty, and adjunct faculty lists.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleResetToDefault}
-            disabled={isSaving || isUploading}
-            className="px-4 py-2 text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all flex items-center gap-2"
-          >
-            <RefreshCw className="w-4 h-4" /> Reset
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving || isUploading}
-            className="px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all flex items-center gap-2 disabled:opacity-50"
-          >
-            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            Save Changes
-          </button>
-        </div>
-      </div>
+    <div className="w-full pb-12">
+      <PageHeader
+        title="Manage Faculty & People Page"
+        description="Configure the hero banner, intro section, KSBM full-time faculty, and adjunct faculty lists."
+        onReset={handleResetToDefault}
+        onSave={handleSave}
+        isSaving={isSaving || isUploading}
+      />
 
       <div className="space-y-8">
         {/* Hero Banner Settings */}

@@ -7,6 +7,7 @@ import Loader from '../../../components/Loader';
 import confirmAction from '../../../utils/confirmAction';
 import LogoUploader from './components/LogoUploader';
 import ManageRecruiters from './ManageRecruiters';
+import PageHeader from './components/PageHeader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -20,9 +21,20 @@ const Toast = Swal.mixin({
   }
 });
 
+const defaultCalendarEvents = [
+  { id: '1', title: 'Orientation & Leadership Summit', date: 'July 15 - July 18, 2026', semester: 'Trimester 1', category: 'Leadership & Events', description: 'Inaugural session, corporate guest keynotes, and campus orientation for the incoming cohort.' },
+  { id: '2', title: 'Trimester 1 Mid-Term Assessments', date: 'September 10 - September 18, 2026', semester: 'Trimester 1', category: 'Exams & Assessments', description: 'Mid-term written and case-based evaluation across core foundational subjects.' },
+  { id: '3', title: 'Global Corporate Immersion & Industrial Tour', date: 'October 05 - October 10, 2026', semester: 'Trimester 1', category: 'Industrial Visits', description: 'On-site industrial visits to top tech hubs and financial conglomerates.' },
+  { id: '4', title: 'End-Semester Examinations & Project Defense', date: 'October 24 - October 30, 2026', semester: 'Trimester 1', category: 'Exams & Assessments', description: 'Final comprehensive examinations and viva-voce for Trimester 1 completion.' },
+  { id: '5', title: 'Inter-Term Break & Winter Internship Prep', date: 'November 01 - November 08, 2026', semester: 'Trimester 1', category: 'Term Breaks & Holidays', description: 'Semester break and career counseling workshops for summer internship placement readiness.' },
+  { id: '6', title: 'Trimester 2 Commencement & Core Electives', date: 'November 10, 2026', semester: 'Trimester 2', category: 'Leadership & Events', description: 'Start of Trimester 2 coursework focusing on advanced managerial electives.' },
+  { id: '7', title: 'Annual Management Fest & CXO Colloquium', date: 'January 14 - January 16, 2027', semester: 'Trimester 2', category: 'Leadership & Events', description: 'National level B-school symposium featuring industry leaders and management competitions.' },
+  { id: '8', title: 'Summer Internship Placement Drive', date: 'February 15 - February 28, 2027', semester: 'Trimester 2', category: 'Industrial Visits', description: 'On-campus recruitment process for 8-10 week corporate summer internships.' }
+];
+
 const ManageMbaPage = ({ isBba = false }) => {
   const endpoint = isBba ? '/cms/bba-page' : '/cms/mba-page';
-  const pageName = isBba ? 'BBA Program Page' : 'MBA Program Page';
+  const pageName = isBba ? 'BBA Program Page' : 'Page';
   const liveUrl = isBba ? '/programs/bba' : '/programs/mba';
 
   const [activeTab, setActiveTab] = useState('hero');
@@ -106,7 +118,8 @@ const ManageMbaPage = ({ isBba = false }) => {
     viewBtnUrl: '/assets/Images/image 64.png',
     downloadBtnText: 'Download Calendar',
     downloadBtnUrl: '/assets/Images/image 64.png',
-    image: '/assets/Images/image 64.png'
+    image: '/assets/Images/image 64.png',
+    events: defaultCalendarEvents
   });
 
   useEffect(() => {
@@ -198,15 +211,19 @@ const ManageMbaPage = ({ isBba = false }) => {
         ]
       });
 
-      setAcademicCalendarBanner(data.academicCalendarBanner || {
-        badgeText: 'ACADEMIC SCHEDULE 2026-27',
-        title: 'Download the Official Academic Calendar',
-        description: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
-        viewBtnText: 'View Calendar',
-        viewBtnUrl: '/assets/Images/image 64.png',
-        downloadBtnText: 'Download Calendar',
-        downloadBtnUrl: '/assets/Images/image 64.png',
-        image: '/assets/Images/image 64.png'
+      setAcademicCalendarBanner({
+        ...(data.academicCalendarBanner || {}),
+        badgeText: data.academicCalendarBanner?.badgeText || 'ACADEMIC SCHEDULE 2026-27',
+        title: data.academicCalendarBanner?.title || 'Download the Official Academic Calendar',
+        description: data.academicCalendarBanner?.description || 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
+        viewBtnText: data.academicCalendarBanner?.viewBtnText || 'View Calendar',
+        viewBtnUrl: data.academicCalendarBanner?.viewBtnUrl || '/assets/Images/image 64.png',
+        downloadBtnText: data.academicCalendarBanner?.downloadBtnText || 'Download Calendar',
+        downloadBtnUrl: data.academicCalendarBanner?.downloadBtnUrl || '/assets/Images/image 64.png',
+        image: data.academicCalendarBanner?.image || '/assets/Images/image 64.png',
+        events: (data.academicCalendarBanner?.events && data.academicCalendarBanner.events.length > 0)
+          ? data.academicCalendarBanner.events
+          : defaultCalendarEvents
       });
     } catch (error) {
       console.error(`Error fetching ${pageName} settings:`, error);
@@ -616,46 +633,14 @@ const ManageMbaPage = ({ isBba = false }) => {
 
   return (
     <div className="space-y-8 pb-16">
-      {/* Top Header Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-[#111836] tracking-tight">{pageName} CMS</h1>
-          <p className="text-xs sm:text-sm text-gray-500 mt-0.5">Manage titles, banner images, curriculum highlights, overview details, and eligibility criteria.</p>
-        </div>
-        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 whitespace-nowrap overflow-x-auto pb-1 lg:pb-0">
-          <button
-            onClick={() => setIsPreviewModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-blue-200 text-blue-700 font-semibold hover:bg-blue-50 transition-all text-xs shadow-sm"
-          >
-            <Eye className="w-3.5 h-3.5" />
-            <span>Preview</span>
-          </button>
-          <button
-            onClick={handleResetToDefault}
-            disabled={isSaving}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-red-200 text-red-600 font-semibold hover:bg-red-50 transition-all text-xs shadow-sm"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset</span>
-          </button>
-          <button
-            onClick={fetchSettings}
-            disabled={isLoading || isSaving}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-all disabled:opacity-50 text-xs shadow-sm"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-            <span>Reload</span>
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving || isLoading}
-            className="flex items-center gap-2 px-4.5 py-2 rounded-xl bg-primary text-white font-bold hover:bg-primary/90 transition-all shadow-md hover:shadow-lg disabled:opacity-50 text-xs"
-          >
-            <Save className="w-3.5 h-3.5 shrink-0" />
-            <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title={`${pageName} CMS`}
+        description="Manage titles, banner images, curriculum highlights, overview details, and eligibility criteria."
+        onPreview={() => setIsPreviewModalOpen(true)}
+        onReset={handleResetToDefault}
+        onSave={handleSave}
+        isSaving={isSaving}
+      />
 
       {/* Tabs with Scroll Arrows */}
       <div className="relative flex items-center gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
@@ -678,8 +663,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${activeTab === tab.id
-                  ? 'bg-primary text-white shadow-md'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
+                ? 'bg-primary text-white shadow-md'
+                : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
                 }`}
             >
               {tab.icon}
@@ -711,7 +696,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 value={shortTitle}
                 onChange={(e) => setShortTitle(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
-                placeholder="e.g. MBA"
+                placeholder="MBA"
               />
               <p className="text-xs text-gray-400 mt-1">Appears inside the top pill badge (`ACADEMIC PROGRAM • MBA`)</p>
             </div>
@@ -722,7 +707,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
-                placeholder="e.g. Master of Business Administration"
+                placeholder="Master of Business Administration"
               />
             </div>
           </div>
@@ -735,7 +720,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 value={heroTitleLine1}
                 onChange={(e) => setHeroTitleLine1(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm"
-                placeholder="e.g. Master of Business"
+                placeholder=" Master of Business"
               />
             </div>
             <div>
@@ -745,7 +730,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 value={heroTitleLine2}
                 onChange={(e) => setHeroTitleLine2(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm"
-                placeholder="e.g. Administration (MBA)"
+                placeholder="Administration (MBA)"
               />
             </div>
           </div>
@@ -1879,10 +1864,10 @@ const ManageMbaPage = ({ isBba = false }) => {
           <div className="flex-1 bg-gray-900 flex items-center justify-center p-4 overflow-hidden">
             <div
               className={`bg-white shadow-2xl transition-all duration-300 overflow-hidden ${previewDevice === 'desktop'
-                  ? 'w-full h-full rounded-none'
-                  : previewDevice === 'tablet'
-                    ? 'w-[768px] h-[90%] rounded-3xl border-[12px] border-gray-800'
-                    : 'w-[375px] h-[90%] rounded-[3rem] border-[14px] border-gray-800 shadow-2xl'
+                ? 'w-full h-full rounded-none'
+                : previewDevice === 'tablet'
+                  ? 'w-[768px] h-[90%] rounded-3xl border-[12px] border-gray-800'
+                  : 'w-[375px] h-[90%] rounded-[3rem] border-[14px] border-gray-800 shadow-2xl'
                 }`}
             >
               <iframe

@@ -68,6 +68,8 @@ const Header = ({ previewData }) => {
               if (labelLower === 'facilities' || item.link.includes('facilities')) return { ...item, link: '/facilities' };
               if (labelLower === 'people' || labelLower === 'faculty' || item.link === '#people' || item.link === '#faculty' || item.link.includes('people') || item.link.includes('faculty')) return { ...item, link: '/faculty' };
               if (labelLower === 'programs' || labelLower === 'program' || item.link === '#programs' || item.link.includes('programs')) return { ...item, link: '/programs' };
+              if (labelLower === 'examinations' || labelLower === 'examination' || item.link === '#examinations' || item.link.includes('examinations')) return { ...item, link: '/examinations' };
+              if (labelLower === 'alumni' || item.link.includes('alumni')) return { ...item, link: '/alumni' };
               if (item.link.startsWith('#')) return { ...item, link: '/' + item.link };
               return item;
             });

@@ -5,6 +5,7 @@ import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import Loader from '../../../components/Loader';
 import confirmAction from '../../../utils/confirmAction';
+import PageHeader from './components/PageHeader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -90,31 +91,15 @@ const ManageAboutCta = () => {
 
   return (
     <div className="space-y-6 w-full">
-      <div className="flex justify-between items-end">
-        <div>
-          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Apply CTA Section</h1>
-          <p className="text-[#697A8D] mt-1 text-sm">Manage the call to action banner on the About Us page.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleResetToDefault}
-            className="flex items-center gap-2 bg-white text-[#697A8D] px-4 py-2.5 rounded-md font-semibold text-sm border border-[#D9DEE3] hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
-          >
-            <RefreshCw className="w-4 h-4" />
-            Reset to Default
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-70"
-          >
-            {isSaving ? <Loader theme="light" size="sm" /> : <Save className="w-4 h-4" />}
-            {isSaving ? 'Saving...' : 'Save Changes'}
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title="Apply CTA Section"
+        description="Manage the call to action banner on the About Us page."
+        onReset={handleResetToDefault}
+        onSave={handleSave}
+        isSaving={isSaving}
+      />
 
-      <div className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] p-6 md:p-8 max-w-5xl mx-auto space-y-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full space-y-6">
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">

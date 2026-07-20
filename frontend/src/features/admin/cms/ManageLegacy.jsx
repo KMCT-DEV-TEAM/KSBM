@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import Loader from '../../../components/Loader';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
+import PageHeader from './components/PageHeader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -104,31 +105,15 @@ const ManageLegacy = () => {
 
   return (
     <div className="space-y-6 w-full">
-      <div className="flex justify-between items-end">
-        <div>
-          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Legacy Section</h1>
-          <p className="text-[#697A8D] mt-1 text-sm">Manage the timeline and history cards.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleResetToDefault}
-            className="flex items-center gap-2 bg-white text-[#697A8D] px-4 py-2.5 rounded-md font-semibold text-sm border border-[#D9DEE3] hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
-          >
-            <RefreshCw className="w-4 h-4" />
-            Reset to Default
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving || isUploading}
-            className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-[0_2px_4px_0_var(--color-primary)] disabled:opacity-70"
-          >
-            {isSaving || isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            {isSaving ? 'Saving...' : isUploading ? 'Uploading...' : 'Save Changes'}
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title="Legacy Section"
+        description="Manage the timeline and history cards."
+        onReset={handleResetToDefault}
+        onSave={handleSave}
+        isSaving={isSaving || isUploading}
+      />
 
-      <div className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] p-6 md:p-8 max-w-5xl mx-auto">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
         <div className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
@@ -147,7 +132,7 @@ const ManageLegacy = () => {
 
           <div>
             <div className="flex justify-between items-center mb-4 border-b pb-2">
-              <h3 className="text-lg font-bold text-[#566A7F]">Legacy Cards (Timeline)</h3>
+              <h3 className="text-lg font-bold text-[#1e2869]">Legacy Cards (Timeline)</h3>
               <button onClick={addCard} className="flex items-center gap-1 text-sm bg-primary/10 text-primary px-3 py-1.5 rounded hover:bg-primary/20 transition-colors">
                 <Plus className="w-4 h-4" /> Add Card
               </button>

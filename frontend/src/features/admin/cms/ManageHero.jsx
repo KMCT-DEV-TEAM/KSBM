@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import Loader from '../../../components/Loader';
 import BannerUploader from './components/BannerUploader';
 import confirmAction from '../../../utils/confirmAction';
+import PageHeader from './components/PageHeader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -152,40 +153,14 @@ const ManageHero = () => {
 
   return (
     <div className="space-y-6 w-full">
-      <div className="flex justify-between items-end">
-        <div>
-          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Hero Section Settings</h1>
-          <p className="text-[#697A8D] mt-1 text-sm">Manage the main hero banner text and action buttons.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsPreviewModalOpen(true)}
-            className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2.5 rounded-md font-semibold text-sm border border-primary/20 hover:bg-primary/20 hover:border-primary/30 transition-colors shadow-sm"
-          >
-            <Eye className="w-4 h-4" />
-            Live Preview
-          </button>
-          <button
-            onClick={handleResetToDefault}
-            className="flex items-center gap-2 bg-white text-[#697A8D] px-4 py-2.5 rounded-md font-semibold text-sm border border-[#D9DEE3] hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
-          >
-            <RefreshCw className="w-4 h-4" />
-            Reset to Default
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving || isUploading}
-            className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-[0_2px_4px_0_var(--color-primary)] disabled:opacity-70"
-          >
-            {isSaving || isUploading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4" />
-            )}
-            {isSaving ? 'Saving...' : isUploading ? 'Uploading...' : 'Save Changes'}
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title="Hero Section Settings"
+        description="Manage the main hero banner text and action buttons."
+        onPreview={() => setIsPreviewModalOpen(true)}
+        onReset={handleResetToDefault}
+        onSave={handleSave}
+        isSaving={isSaving || isUploading}
+      />
 
       {isPreviewModalOpen && (
         <div className="fixed inset-0 z-[100] flex flex-col bg-gray-900/80 backdrop-blur-sm">
@@ -239,11 +214,11 @@ const ManageHero = () => {
       )}
 
       {/* Main Form Card */}
-      <div className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] p-6 md:p-8 max-w-5xl mx-auto">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
         
         {/* Banner Images Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-[#566A7F] mb-4">Banner Background Images</h3>
+          <h3 className="text-lg font-bold text-[#1e2869] mb-4">Banner Background Images</h3>
           <BannerUploader 
             bannerImages={bannerImages} 
             setBannerImages={setBannerImages} 
@@ -253,7 +228,7 @@ const ManageHero = () => {
 
         {/* Text Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-[#566A7F] mb-4">Text Content</h3>
+          <h3 className="text-lg font-bold text-[#1e2869] mb-4">Text Content</h3>
           
           <div className="space-y-6">
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
@@ -317,8 +292,8 @@ const ManageHero = () => {
         </div>
 
         {/* Buttons Settings */}
-        <div className="mb-4">
-          <h3 className="text-lg font-bold text-[#566A7F] mb-4">Action Buttons</h3>
+        <div>
+          <h3 className="text-lg font-bold text-[#1e2869] mb-4">Action Buttons</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             
             {/* Primary Button */}

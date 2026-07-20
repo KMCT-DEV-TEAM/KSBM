@@ -152,7 +152,18 @@ const programConfigs = {
           'Personal Interview (PI) with expert panel'
         ]
       }
-    ]
+    ],
+    academicCalendarBanner: {
+      badgeText: 'ACADEMIC SCHEDULE 2026-27',
+      title: 'Download the Official Academic Calendar',
+      description: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
+      viewBtnText: 'View Calendar',
+      viewBtnUrl: '/assets/Images/image 64.png',
+      downloadBtnText: 'Download Calendar',
+      downloadBtnUrl: '/assets/Images/image 64.png',
+      image: '/assets/Images/image 64.png',
+      events: []
+    }
   },
   bba: {
     id: 'bba',
@@ -289,7 +300,18 @@ const programConfigs = {
           'Final admission offer & registration counseling'
         ]
       }
-    ]
+    ],
+    academicCalendarBanner: {
+      badgeText: 'ACADEMIC SCHEDULE 2026-27',
+      title: 'Download the Official Academic Calendar',
+      description: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
+      viewBtnText: 'View Calendar',
+      viewBtnUrl: '/assets/Images/image 64.png',
+      downloadBtnText: 'Download Calendar',
+      downloadBtnUrl: '/assets/Images/image 64.png',
+      image: '/assets/Images/image 64.png',
+      events: []
+    }
   }
 };
 
