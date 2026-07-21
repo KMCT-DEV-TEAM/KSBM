@@ -108,6 +108,7 @@ const ManageLegacy = () => {
       <PageHeader
         title="Legacy Section"
         description="Manage the timeline and history cards."
+        onPreview={() => window.open('/about', '_blank')}
         onReset={handleResetToDefault}
         onSave={handleSave}
         isSaving={isSaving || isUploading}

@@ -4,3 +4,4 @@ import ManageAdvisoryBoard from "../../../../../../features/admin/cms/ManageAdvi
 export default function Page() {
   return <ManageAdvisoryBoard />;
 }
+// touched

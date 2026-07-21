@@ -127,6 +127,7 @@ const ManageVisionMission = () => {
       <PageHeader
         title="Vision & Mission Section"
         description="Manage the Vision and Mission content."
+        onPreview={() => window.open('/about', '_blank')}
         onReset={handleResetToDefault}
         onSave={handleSave}
         isSaving={isSaving || isUploading}
