@@ -84,7 +84,7 @@ const ManageFacilitiesHero = () => {
   if (isLoading) return <Loader theme="light" text="Loading Settings..." />;
 
   return (
-    <div className="max-w-6xl mx-auto pb-12">
+    <div className="w-full pb-12">
       <PageHeader
         title="Facilities Hero Settings"
         description="Manage the banner text and background image for the Facilities page."

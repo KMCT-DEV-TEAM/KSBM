@@ -7,9 +7,25 @@ const recruiterItemSchema = new mongoose.Schema({
   },
   logo: {
     type: String,
-    required: true,
+    default: '',
   },
-});
+  category: {
+    type: String,
+    default: 'IT & Tech',
+  },
+  package: {
+    type: String,
+    default: '',
+  },
+  website: {
+    type: String,
+    default: '',
+  },
+  badge: {
+    type: String,
+    default: '',
+  },
+}, { strict: false });
 
 const recruitersSchema = new mongoose.Schema(
   {

@@ -11,14 +11,14 @@ const InstitutionalResourcesSection = ({ headerData, libraryData, otherResources
     setActiveIndex(null);
   }, [libraryData]);
 
-  if (!libraryData) return null;
-
-  const { heading, description, description2, mainImage, thumbnails } = activeResource;
+  const { heading, description, description2, mainImage, thumbnails } = activeResource || {};
   const [activeImage, setActiveImage] = useState(mainImage);
 
   useEffect(() => {
     setActiveImage(mainImage);
   }, [mainImage]);
+
+  if (!libraryData) return null;
 
   const handleOtherResourceClick = (item, idx) => {
     if (activeIndex === idx) {

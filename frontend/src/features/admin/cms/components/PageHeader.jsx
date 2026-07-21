@@ -1,7 +1,7 @@
 import React from 'react';
 import { Eye, RefreshCw, Save, Loader2 } from 'lucide-react';
 
-const PageHeader = ({ title, description, onPreview, onReset, onSave, isSaving }) => {
+const PageHeader = ({ title, description, onPreview, onReset, onSave, isSaving, extraButtons, children }) => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
       <div>
@@ -9,6 +9,8 @@ const PageHeader = ({ title, description, onPreview, onReset, onSave, isSaving }
         {description && <p className="text-sm text-gray-500 mt-1">{description}</p>}
       </div>
       <div className="flex flex-wrap items-center gap-3">
+        {extraButtons}
+        {children}
         {onPreview && (
           <button
             onClick={onPreview}

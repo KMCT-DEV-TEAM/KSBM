@@ -257,6 +257,11 @@ const ClubPage = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 auto-rows-[200px] md:auto-rows-[240px] gap-4 md:gap-6 grid-flow-dense">
                 {gallery.images.map((img, idx) => {
+                  if (!img) return null;
+                  const imgSrc = typeof img === 'string' ? img : img?.image || img?.url || '';
+                  const imgTitle = typeof img === 'object' && img !== null ? (img.title || '') : '';
+                  if (!imgSrc) return null;
+
                   const pattern = idx % 6;
                   let spanClasses = 'sm:col-span-1 sm:row-span-1';
                   if (pattern === 0 || pattern === 5) spanClasses = 'sm:col-span-2 sm:row-span-2';
@@ -272,11 +277,11 @@ const ClubPage = () => {
                       transition={{ delay: idx * 0.08 }}
                       className={`group relative rounded-2xl overflow-hidden cursor-pointer shadow-xl border border-white/10 ${spanClasses}`}
                     >
-                      <img src={img.image} alt={img.title || `Gallery ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                      <img src={imgSrc} alt={imgTitle || `Gallery ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      {img.title && (
+                      {imgTitle && (
                         <div className="absolute bottom-0 inset-x-0 p-5 text-white transform translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                          <p className="font-semibold text-base md:text-lg drop-shadow-md line-clamp-1">{img.title}</p>
+                          <p className="font-semibold text-base md:text-lg drop-shadow-md line-clamp-1">{imgTitle}</p>
                         </div>
                       )}
                     </motion.div>

@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import Loader from '../../../components/Loader';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
+import PageHeader from './components/PageHeader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -122,30 +123,22 @@ const ManageClubDetails = () => {
 
   return (
     <div className="space-y-6 w-full pb-20">
-      <div className="flex justify-between items-end">
-        <div>
-          <button 
-            onClick={() => router.push('/admin/cms/facilities/clubs')}
-            className="flex items-center text-sm font-semibold text-primary hover:underline mb-2"
-          >
-            <ArrowLeft className="w-4 h-4 mr-1" /> Back to Clubs
-          </button>
-          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Edit Club: {club.title}</h1>
-          <p className="text-[#697A8D] mt-1 text-sm">Manage the detailed page content for this club.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleSave}
-            disabled={isSaving || isUploading}
-            className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-70"
-          >
-            {isSaving || isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            {isSaving ? 'Saving...' : isUploading ? 'Uploading...' : 'Save Changes'}
-          </button>
-        </div>
+      <div>
+        <button 
+          onClick={() => router.push('/admin/cms/facilities/clubs')}
+          className="flex items-center text-sm font-semibold text-primary hover:underline mb-3 cursor-pointer"
+        >
+          <ArrowLeft className="w-4 h-4 mr-1" /> Back to Clubs
+        </button>
+        <PageHeader
+          title={`Edit Club: ${club.title}`}
+          description="Manage the detailed page content for this club."
+          onSave={handleSave}
+          isSaving={isSaving || isUploading}
+        />
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden max-w-5xl mx-auto">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden w-full">
         {/* Tabs Header */}
         <div className="flex overflow-x-auto border-b border-gray-100 hide-scrollbar">
           {tabs.map((tab) => (
@@ -204,7 +197,7 @@ const ManageClubDetails = () => {
 
           {/* ABOUT TAB */}
           {activeTab === 'about' && (
-            <div className="space-y-6 max-w-4xl">
+            <div className="space-y-6 w-full">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div>
@@ -349,7 +342,7 @@ const ManageClubDetails = () => {
           {/* FACULTY TAB */}
           {activeTab === 'faculty' && (
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Subheading (Top)</label>
                   <input
@@ -468,40 +461,53 @@ const ManageClubDetails = () => {
                 </div>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {club.gallery.images.map((img, idx) => (
-                    <div key={idx} className="p-3 border border-gray-200 rounded-xl bg-gray-50 relative group">
-                      <button onClick={() => {
-                          const newImgs = [...club.gallery.images];
-                          newImgs.splice(idx, 1);
-                          setClub({ ...club, gallery: { ...club.gallery, images: newImgs } });
-                        }} className="absolute top-2 right-2 text-red-400 hover:text-red-600 bg-white rounded p-1 shadow-sm opacity-0 group-hover:opacity-100 z-10">
-                        <Trash2 className="w-3 h-3" />
-                      </button>
-                      <div className="space-y-2">
-                        <SingleImageUploader 
-                          imageUrl={img.image} 
-                          onUploadComplete={(url) => {
+                  {club.gallery.images.map((img, idx) => {
+                    const imgSrc = typeof img === 'string' ? img : img?.image || '';
+                    const imgTitle = typeof img === 'object' && img !== null ? (img?.title || '') : '';
+
+                    return (
+                      <div key={idx} className="p-3 border border-gray-200 rounded-xl bg-gray-50 relative group">
+                        <button onClick={() => {
                             const newImgs = [...club.gallery.images];
-                            newImgs[idx].image = url;
+                            newImgs.splice(idx, 1);
                             setClub({ ...club, gallery: { ...club.gallery, images: newImgs } });
-                          }}
-                          onUploadStateChange={setIsUploading}
-                          label="Upload Image"
-                        />
-                        <input
-                          type="text"
-                          value={img.title}
-                          onChange={(e) => {
-                            const newImgs = [...club.gallery.images];
-                            newImgs[idx].title = e.target.value;
-                            setClub({ ...club, gallery: { ...club.gallery, images: newImgs } });
-                          }}
-                          className="w-full px-2 py-1.5 bg-white border border-gray-200 rounded-md text-xs"
-                          placeholder="Caption (Optional)"
-                        />
+                          }} className="absolute top-2 right-2 text-red-400 hover:text-red-600 bg-white rounded p-1 shadow-sm opacity-0 group-hover:opacity-100 z-10">
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                        <div className="space-y-2">
+                          <SingleImageUploader 
+                            imageUrl={imgSrc} 
+                            onUploadComplete={(url) => {
+                              const newImgs = [...club.gallery.images];
+                              if (typeof newImgs[idx] === 'string' || !newImgs[idx]) {
+                                newImgs[idx] = { title: '', image: url };
+                              } else {
+                                newImgs[idx].image = url;
+                              }
+                              setClub({ ...club, gallery: { ...club.gallery, images: newImgs } });
+                            }}
+                            onUploadStateChange={setIsUploading}
+                            label="Upload Image"
+                          />
+                          <input
+                            type="text"
+                            value={imgTitle}
+                            onChange={(e) => {
+                              const newImgs = [...club.gallery.images];
+                              if (typeof newImgs[idx] === 'string' || !newImgs[idx]) {
+                                newImgs[idx] = { title: e.target.value, image: typeof img === 'string' ? img : '' };
+                              } else {
+                                newImgs[idx].title = e.target.value;
+                              }
+                              setClub({ ...club, gallery: { ...club.gallery, images: newImgs } });
+                            }}
+                            className="w-full px-2 py-1.5 bg-white border border-gray-200 rounded-md text-xs"
+                            placeholder="Caption (Optional)"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                   {club.gallery.images.length === 0 && (
                     <div className="col-span-full py-8 text-center text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
                       No gallery images added.

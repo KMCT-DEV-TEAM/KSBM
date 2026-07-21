@@ -53,6 +53,28 @@ const Sidebar = () => {
       ]
     },
     {
+      title: 'Programs (MBA/BBA)',
+      icon: <GraduationCap className="w-5 h-5" />,
+      links: [
+        { name: 'MBA Program Page', path: '/admin/cms/programs/mba' },
+        { name: 'BBA Program Page', path: '/admin/cms/programs/bba' },
+      ]
+    },
+    {
+      title: 'Examinations',
+      icon: <BookOpen className="w-5 h-5" />,
+      links: [
+        { name: 'Manage Examinations Page', path: '/admin/cms/examinations' },
+      ]
+    },
+    {
+      title: 'Admissions',
+      icon: <Award className="w-5 h-5" />,
+      links: [
+        { name: 'Manage Admissions Page', path: '/admin/cms/admissions' },
+      ]
+    },
+    {
       title: 'About Us',
       icon: <Info className="w-5 h-5" />,
       links: [
@@ -105,8 +127,8 @@ const Sidebar = () => {
                 key={link.path}
                 href={link.path}
                 className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${pathname === link.path
-                    ? 'bg-primary/10 text-primary font-semibold'
-                    : 'text-[#697A8D] hover:bg-gray-50'
+                  ? 'bg-primary/10 text-primary font-semibold'
+                  : 'text-[#697A8D] hover:bg-gray-50'
                   }`}
               >
                 {link.icon}
@@ -129,8 +151,8 @@ const Sidebar = () => {
                   <button
                     onClick={() => toggleSection(section.title)}
                     className={`w-full flex items-center justify-between px-4 py-2.5 rounded-lg transition-all duration-200 ${isActiveSection && !isOpen
-                        ? 'bg-primary/5 text-primary font-medium'
-                        : 'text-[#697A8D] hover:bg-gray-50'
+                      ? 'bg-primary/5 text-primary font-medium'
+                      : 'text-[#697A8D] hover:bg-gray-50'
                       }`}
                   >
                     <div className="flex items-center gap-3">
@@ -153,8 +175,8 @@ const Sidebar = () => {
                           key={link.path}
                           href={link.path}
                           className={`flex items-center px-4 py-2 rounded-lg transition-all duration-200 ${pathname === link.path
-                              ? 'bg-primary/10 text-primary font-semibold'
-                              : 'text-[#697A8D] hover:bg-gray-50'
+                            ? 'bg-primary/10 text-primary font-semibold'
+                            : 'text-[#697A8D] hover:bg-gray-50'
                             }`}
                         >
                           <span className="text-sm">{link.name}</span>
