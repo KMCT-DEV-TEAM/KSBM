@@ -4,6 +4,10 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:5000/api' : 'https://ksbm-bs43.onrender.com/api'),
   withCredentials: true, // Crucial for sending and receiving httpOnly cookies
 });
+// const api = axios.create({
+//   baseURL: 'https://ksbm-bs43.onrender.com/api', // Adjust this in production
+//   withCredentials: true, // Crucial for sending and receiving httpOnly cookies
+// });
 
 let activeRequests = 0;
 let loadingTimer = null;
