@@ -7,6 +7,13 @@
   --color-background: #FCFCFD;
   --color-text-primary: #222222;
   --color-text-secondary: #777777;
+  --radius-xs: 18px;
+  --radius-sm: 18px;
+  --radius-md: 18px;
+  --radius-lg: 18px;
+  --radius-xl: 18px;
+  --radius-2xl: 18px;
+  --radius-3xl: 18px;
 }
 
 @layer base {
@@ -19,6 +26,24 @@
   
   html {
     overflow-x: hidden;
+  }
+
+  /* Global 18px border-radius enforcement across all pages for boxes, inputs, cards, and buttons */
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select,
+  button[class*="rounded"],
+  a[class*="rounded"],
+  div[class*="rounded-"],
+  div[class*="rounded-["],
+  article[class*="rounded"],
+  section[class*="rounded"]:not([class*="rounded-b-"]),
+  li[class*="rounded"],
+  span[class*="rounded-xl"],
+  span[class*="rounded-2xl"],
+  span[class*="rounded-3xl"],
+  span[class*="rounded-["] {
+    border-radius: 18px !important;
   }
 
   /* Hide scrollbar globally for Chrome, Safari and Opera */

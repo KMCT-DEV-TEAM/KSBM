@@ -27,6 +27,7 @@ import ManagementDesk from './managementDesk.model.js';
 import MbaPageSetting from './mbaPage.model.js';
 import BbaPageSetting from './bbaPage.model.js';
 import ExaminationsPage from './examinationsPage.model.js';
+import AdmissionsPage from './admissionsPage.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -1054,5 +1055,46 @@ export const updateExaminationsPageSettings = async (req, res) => {
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating Examinations Page settings', error: error.message });
+  }
+};
+
+// @desc    Get Admissions Page settings
+// @route   GET /api/cms/admissions-page
+// @access  Public
+export const getAdmissionsPageSettings = async (req, res) => {
+  try {
+    const settings = await AdmissionsPage.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Admissions Page settings', error: error.message });
+  }
+};
+
+// @desc    Update Admissions Page settings
+// @route   PUT /api/cms/admissions-page
+// @access  Private/Admin
+export const updateAdmissionsPageSettings = async (req, res) => {
+  try {
+    const fields = [
+      'heroBadgeText', 'heroTitle', 'heroSubtitle', 'heroApplyBtnText', 'heroApplyBtnUrl', 'heroBrochureBtnText', 'heroBrochureBtnUrl', 'heroBgImage', 'heroStats',
+      'eliteHeading', 'eliteSubtitle', 'eliteDesc', 'eliteImage', 'eliteAdvantages',
+      'journeyHeading', 'journeySubtitle', 'journeySteps',
+      'eligibilityHeading', 'eligibilitySubtitle', 'feeStructure', 'mba', 'bba',
+      'ctaHeading', 'ctaDesc', 'ctaApplyBtnText', 'ctaApplyBtnUrl', 'ctaEnquiryBtnText', 'ctaEnquiryBtnUrl', 'ctaImage',
+      'faqHeading', 'faqs'
+    ];
+    const settings = await AdmissionsPage.getSettings();
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        settings[field] = req.body[field];
+      }
+    });
+    settings.markModified('feeStructure');
+    settings.markModified('mba');
+    settings.markModified('bba');
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Admissions Page settings', error: error.message });
   }
 };

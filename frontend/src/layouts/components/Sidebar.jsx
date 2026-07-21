@@ -68,6 +68,13 @@ const Sidebar = () => {
       ]
     },
     {
+      title: 'Admissions',
+      icon: <Award className="w-5 h-5" />,
+      links: [
+        { name: 'Manage Admissions Page', path: '/admin/cms/admissions' },
+      ]
+    },
+    {
       title: 'About Us',
       icon: <Info className="w-5 h-5" />,
       links: [

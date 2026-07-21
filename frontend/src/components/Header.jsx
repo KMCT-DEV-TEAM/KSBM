@@ -44,6 +44,7 @@ const Header = ({ previewData }) => {
     { label: 'Campus', link: '/#campus' },
     { label: 'Faculty', link: '/faculty' },
     { label: 'Programs', link: '/programs' },
+    { label: 'Admission', link: '/admissions' },
   ]); // Fallback
   const [actionButton, setActionButton] = useState({ text: 'Apply Now', isVisible: true });
   const [logoUrl, setLogoUrl] = useState('');
@@ -70,6 +71,7 @@ const Header = ({ previewData }) => {
               if (labelLower === 'programs' || labelLower === 'program' || item.link === '#programs' || item.link.includes('programs')) return { ...item, link: '/programs' };
               if (labelLower === 'examinations' || labelLower === 'examination' || item.link === '#examinations' || item.link.includes('examinations')) return { ...item, link: '/examinations' };
               if (labelLower === 'alumni' || item.link.includes('alumni')) return { ...item, link: '/alumni' };
+              if (labelLower === 'admission' || labelLower === 'admissions' || item.link === '#admission' || item.link.includes('admission')) return { ...item, link: '/admissions' };
               if (item.link.startsWith('#')) return { ...item, link: '/' + item.link };
               return item;
             });
