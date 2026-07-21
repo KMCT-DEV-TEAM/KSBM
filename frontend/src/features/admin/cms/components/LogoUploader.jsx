@@ -5,8 +5,14 @@ import { UploadCloud, Image as ImageIcon, X, Loader2 } from 'lucide-react';
 import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
 
-const LogoUploader = ({ currentLogoUrl, onUploadSuccess, onUploadStateChange }) => {
+const LogoUploader = ({ currentLogoUrl, value, onUploadSuccess, onChange, onUploadStateChange, label }) => {
   const [isUploading, setIsUploading] = useState(false);
+  const displayUrl = currentLogoUrl || value;
+
+  const handleSuccess = useCallback((url) => {
+    if (onUploadSuccess) onUploadSuccess(url);
+    if (onChange) onChange(url);
+  }, [onUploadSuccess, onChange]);
 
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -26,13 +32,13 @@ const LogoUploader = ({ currentLogoUrl, onUploadSuccess, onUploadStateChange }) 
       });
 
       const { url } = response.data;
-      onUploadSuccess(url);
+      handleSuccess(url);
       
       Swal.fire({
         toast: true,
         position: 'top-end',
         icon: 'success',
-        title: 'Logo uploaded successfully!',
+        title: 'Image uploaded successfully!',
         showConfirmButton: false,
         timer: 3000
       });
@@ -42,15 +48,16 @@ const LogoUploader = ({ currentLogoUrl, onUploadSuccess, onUploadStateChange }) 
         toast: true,
         position: 'top-end',
         icon: 'error',
-        title: 'Failed to upload logo',
+        title: 'Upload failed',
+        text: error.response?.data?.message || 'Something went wrong while uploading.',
         showConfirmButton: false,
-        timer: 3000
+        timer: 4000
       });
     } finally {
       setIsUploading(false);
       if (onUploadStateChange) onUploadStateChange(false);
     }
-  }, [onUploadSuccess]);
+  }, [handleSuccess, onUploadStateChange]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -63,6 +70,7 @@ const LogoUploader = ({ currentLogoUrl, onUploadSuccess, onUploadStateChange }) 
 
   return (
     <div className="w-full">
+      {label && <label className="block text-xs font-bold uppercase text-gray-500 mb-2">{label}</label>}
       <div 
         {...getRootProps()} 
         className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors
@@ -85,7 +93,7 @@ const LogoUploader = ({ currentLogoUrl, onUploadSuccess, onUploadStateChange }) 
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-700">
-                  {isDragActive ? "Drop the logo here..." : "Drag & drop a new logo, or click to select"}
+                  {isDragActive ? "Drop image here..." : (label ? `Drag & drop ${label.toLowerCase()}, or click to select` : "Drag & drop a new image/logo, or click to select")}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">Supports PNG, JPG, SVG, WEBP up to 5MB</p>
               </div>
@@ -94,26 +102,26 @@ const LogoUploader = ({ currentLogoUrl, onUploadSuccess, onUploadStateChange }) 
         </div>
       </div>
 
-      {currentLogoUrl && (
+      {displayUrl && (
         <div className="mt-4 p-4 border border-gray-100 rounded-lg bg-gray-50 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 bg-white border border-gray-200 rounded flex items-center justify-center p-1 shadow-sm">
-              <img src={currentLogoUrl} alt="Current Logo" className="max-w-full max-h-full object-contain" />
+              <img src={displayUrl} alt="Uploaded Image" className="max-w-full max-h-full object-contain" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-700">Current Logo</p>
-              <a href={currentLogoUrl} target="_blank" rel="noreferrer" className="text-xs text-primary hover:underline truncate block max-w-xs">
-                {currentLogoUrl}
+              <p className="text-sm font-semibold text-gray-700">{label || "Current Image"}</p>
+              <a href={displayUrl} target="_blank" rel="noreferrer" className="text-xs text-primary hover:underline truncate block max-w-xs">
+                {displayUrl}
               </a>
             </div>
           </div>
           <button 
             onClick={(e) => {
               e.preventDefault();
-              onUploadSuccess('');
+              handleSuccess('');
             }}
             className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
-            title="Remove Custom Logo"
+            title="Remove Image"
           >
             <X className="w-5 h-5" />
           </button>

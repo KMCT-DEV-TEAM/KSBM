@@ -58,13 +58,28 @@ const Footer = ({ previewData }) => {
 
   const { description, socialLinks, programs, quickLinks, contactInfo, copyrightText } = data;
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
+
   return (
-    <footer className="relative bg-primary text-white pt-20 pb-8 overflow-hidden">
+    <footer id="main-footer" className="relative bg-primary text-white pt-20 pb-8 overflow-hidden">
 
       {/* Background Geometric Pattern */}
       {/* Left Pattern */}
       <div
-        className="absolute top-1/2 left-0 w-[400px] h-[400px] opacity-[0.50] pointer-events-none transform -translate-x-1/2 -translate-y-1/2 bg-secondary"
+        className="absolute top-0 md:top-1/2 left-0 w-[400px] h-[400px] opacity-[0.50] pointer-events-none transform -translate-x-1/2 -translate-y-1/2 bg-secondary"
         style={{
           maskImage: `url(${watermarkLogo})`,
           WebkitMaskImage: `url(${watermarkLogo})`,
@@ -78,7 +93,7 @@ const Footer = ({ previewData }) => {
       ></div>
       {/* Right Pattern */}
       <div
-        className="absolute top-1/2 right-0 w-[400px] h-[400px] opacity-[0.50] pointer-events-none transform translate-x-1/2 -translate-y-1/2 bg-secondary"
+        className="absolute top-auto bottom-0 md:top-1/2 md:bottom-auto right-0 w-[400px] h-[400px] opacity-[0.50] pointer-events-none transform translate-x-1/2 translate-y-1/2 md:-translate-y-1/2 bg-secondary"
         style={{
           maskImage: `url(${watermarkLogo})`,
           WebkitMaskImage: `url(${watermarkLogo})`,
@@ -95,15 +110,15 @@ const Footer = ({ previewData }) => {
 
         {/* Main Footer Grid */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: false, amount: 0.1 }}
-          transition={{ duration: 0.6 }}
+          variants={containerVariants}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20"
         >
 
           {/* Column 1: About & Social */}
-          <div className="flex flex-col pr-4">
+          <motion.div variants={itemVariants} className="flex flex-col pr-4">
             <h3 className="text-2xl font-semibold mb-6 tracking-wide text-white">KSBM</h3>
             {description && (
               <p className="text-secondary text-sm leading-relaxed mb-8 max-w-[90%] whitespace-pre-wrap">
@@ -142,10 +157,10 @@ const Footer = ({ previewData }) => {
                 </a>
               )}
             </div>
-          </div>
+          </motion.div>
 
           {/* Column 2: Programs */}
-          <div className="flex flex-col">
+          <motion.div variants={itemVariants} className="flex flex-col">
             <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
               PROGRAMS
             </h4>
@@ -154,10 +169,10 @@ const Footer = ({ previewData }) => {
                 <li key={idx}><a href={prog.url} className="hover:text-white transition-colors">{prog.label}</a></li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Column 3: Quick Links */}
-          <div className="flex flex-col">
+          <motion.div variants={itemVariants} className="flex flex-col">
             <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
               QUICK LINKS
             </h4>
@@ -166,10 +181,10 @@ const Footer = ({ previewData }) => {
                 <li key={idx}><a href={link.url} className="hover:text-white transition-colors">{link.label}</a></li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Column 4: Contact Info */}
-          <div className="flex flex-col">
+          <motion.div variants={itemVariants} className="flex flex-col">
             <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
               CONTACT INFORMATION
             </h4>
@@ -197,12 +212,18 @@ const Footer = ({ previewData }) => {
                 </li>
               )}
             </ul>
-          </div>
+          </motion.div>
 
         </motion.div>
 
         {/* Footer Bottom */}
-        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.1 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10 text-center md:text-left"
+        >
           <p>
             {copyrightText}
           </p>
@@ -211,7 +232,7 @@ const Footer = ({ previewData }) => {
             <span>|</span>
             <a href="#" className="hover:text-white transition-colors">Terms & Conditions</a>
           </div>
-        </div>
+        </motion.div>
 
       </div>
     </footer>

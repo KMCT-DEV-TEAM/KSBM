@@ -1,18 +1,20 @@
 import React from 'react';
-import { Eye, RefreshCw, Save } from 'lucide-react';
+import { Eye, RefreshCw, Save, Loader2 } from 'lucide-react';
 
-const PageHeader = ({ title, description, onPreview, onReset, onSave, isSaving }) => {
+const PageHeader = ({ title, description, onPreview, onReset, onSave, isSaving, extraButtons, children }) => {
   return (
-    <div className="flex justify-between items-end">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
       <div>
-        <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">{title}</h1>
-        {description && <p className="text-[#697A8D] mt-1 text-sm">{description}</p>}
+        <h1 className="text-2xl font-bold text-[#1e2869]">{title}</h1>
+        {description && <p className="text-sm text-gray-500 mt-1">{description}</p>}
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
+        {extraButtons}
+        {children}
         {onPreview && (
           <button
             onClick={onPreview}
-            className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2.5 rounded-md font-semibold text-sm border border-primary/20 hover:bg-primary/20 hover:border-primary/30 transition-colors shadow-sm"
+            className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-xl font-semibold text-sm border border-primary/20 hover:bg-primary/20 hover:border-primary/30 transition-all shadow-sm"
           >
             <Eye className="w-4 h-4" />
             Live Preview
@@ -21,7 +23,8 @@ const PageHeader = ({ title, description, onPreview, onReset, onSave, isSaving }
         {onReset && (
           <button
             onClick={onReset}
-            className="flex items-center gap-2 bg-white text-[#697A8D] px-4 py-2.5 rounded-md font-semibold text-sm border border-[#D9DEE3] hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
+            disabled={isSaving}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all disabled:opacity-50"
           >
             <RefreshCw className="w-4 h-4" />
             Reset to Default
@@ -31,13 +34,9 @@ const PageHeader = ({ title, description, onPreview, onReset, onSave, isSaving }
           <button
             onClick={onSave}
             disabled={isSaving}
-            className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-[0_2px_4px_0_var(--color-primary)] disabled:opacity-70"
+            className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all disabled:opacity-50"
           >
-            {isSaving ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-            ) : (
-              <Save className="w-4 h-4" />
-            )}
+            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Save Changes
           </button>
         )}

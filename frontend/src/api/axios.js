@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // Adjust this in production
+  baseURL: process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:5000/api' : 'https://ksbm-bs43.onrender.com/api'),
   withCredentials: true, // Crucial for sending and receiving httpOnly cookies
 });
 // const api = axios.create({

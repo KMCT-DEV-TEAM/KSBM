@@ -27,7 +27,39 @@ import {
   getNewsSettings,
   updateNewsSettings,
   getFooterSettings,
-  updateFooterSettings
+  updateFooterSettings,
+  getAboutUsHeroSettings,
+  updateAboutUsHeroSettings,
+  getVisionMissionSettings,
+  updateVisionMissionSettings,
+  getLeadershipSettings,
+  updateLeadershipSettings,
+  getLegacySettings,
+  updateLegacySettings,
+  getAboutUsStatsSettings,
+  updateAboutUsStatsSettings,
+  getAdvisoryBoardSettings,
+  updateAdvisoryBoardSettings,
+  getGoverningBodySettings,
+  updateGoverningBodySettings,
+  getAboutCtaSettings,
+  updateAboutCtaSettings,
+  getFacilitiesPageSettings,
+  updateFacilitiesPageSettings,
+  getFacultySettings,
+  updateFacultySettings,
+  getAlumniPageSettings,
+  updateAlumniPageSettings,
+  getManagementDeskSettings,
+  updateManagementDeskSettings,
+  getMbaPageSettings,
+  updateMbaPageSettings,
+  getBbaPageSettings,
+  updateBbaPageSettings,
+  getExaminationsPageSettings,
+  updateExaminationsPageSettings,
+  getAdmissionsPageSettings,
+  updateAdmissionsPageSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -88,5 +120,77 @@ router.route('/news')
 router.route('/footer')
   .get(getFooterSettings)
   .put(protect, updateFooterSettings);
+
+router.route('/about-us-hero')
+  .get(getAboutUsHeroSettings)
+  .put(protect, updateAboutUsHeroSettings);
+
+router.route('/vision-mission')
+  .get(getVisionMissionSettings)
+  .put(protect, updateVisionMissionSettings);
+
+router.route('/leadership')
+  .get(getLeadershipSettings)
+  .put(protect, updateLeadershipSettings);
+
+router.route('/legacy')
+  .get(getLegacySettings)
+  .put(protect, updateLegacySettings);
+
+router.route('/about-us-stats')
+  .get(getAboutUsStatsSettings)
+  .put(protect, updateAboutUsStatsSettings);
+
+router.route('/advisory-board')
+  .get(getAdvisoryBoardSettings)
+  .put(protect, updateAdvisoryBoardSettings);
+
+router.route('/governing-body')
+  .get(getGoverningBodySettings)
+  .put(protect, updateGoverningBodySettings);
+
+router.route('/about-us-cta')
+  .get(getAboutCtaSettings)
+  .put(protect, updateAboutCtaSettings);
+
+router.route('/facilities-page')
+  .get(getFacilitiesPageSettings)
+  .put(protect, updateFacilitiesPageSettings);
+
+router.route('/faculty')
+  .get(getFacultySettings)
+  .put(protect, updateFacultySettings);
+
+router.route('/alumni-page')
+  .get(getAlumniPageSettings)
+  .put(protect, updateAlumniPageSettings);
+
+router.route('/management-desk')
+  .get(getManagementDeskSettings)
+  .put(protect, updateManagementDeskSettings);
+
+router.route('/mba-page')
+  .get(getMbaPageSettings)
+  .put(protect, updateMbaPageSettings);
+
+router.route('/bba-page')
+  .get(getBbaPageSettings)
+  .put(protect, updateBbaPageSettings);
+
+router.route('/examinations')
+  .get(getExaminationsPageSettings)
+  .put(protect, updateExaminationsPageSettings);
+
+router.route('/examinations-page')
+  .get(getExaminationsPageSettings)
+  .put(protect, updateExaminationsPageSettings);
+
+router.route('/admissions')
+  .get(getAdmissionsPageSettings)
+  .put(protect, updateAdmissionsPageSettings);
+
+router.route('/admissions-page')
+  .get(getAdmissionsPageSettings)
+  .put(protect, updateAdmissionsPageSettings);
 
 export default router;

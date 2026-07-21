@@ -7,6 +7,7 @@ import Loader from '../../../components/Loader';
 import LogoUploader from './components/LogoUploader';
 import ProgramsPreview from '../../home/components/AcademicPrograms';
 import confirmAction from '../../../utils/confirmAction';
+import PageHeader from './components/PageHeader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -176,17 +177,13 @@ const ManagePrograms = () => {
     }
   };
 
-  const removeProgram = (index) => {
-    Swal.fire({
+  const removeProgram = async (index) => {
+    await confirmAction({
       title: 'Are you sure?',
-      text: "This program will be permanently deleted.",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#8592A3',
-      confirmButtonText: 'Yes, delete it!'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
+      message: 'This program will be permanently deleted.',
+      confirmText: 'Yes, delete it!',
+      variant: 'danger',
+      action: async () => {
         const newPrograms = [...programs];
         newPrograms.splice(index, 1);
         setPrograms(newPrograms);
@@ -215,40 +212,14 @@ const ManagePrograms = () => {
 
   return (
     <div className="space-y-6 w-full">
-      <div className="flex justify-between items-end">
-        <div>
-          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Academic Programs Settings</h1>
-          <p className="text-[#697A8D] mt-1 text-sm">Manage the text and programs in the Academic Programs section.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsPreviewModalOpen(true)}
-            className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2.5 rounded-md font-semibold text-sm border border-primary/20 hover:bg-primary/20 hover:border-primary/30 transition-colors shadow-sm"
-          >
-            <Eye className="w-4 h-4" />
-            Live Preview
-          </button>
-          <button
-            onClick={handleResetToDefault}
-            className="flex items-center gap-2 bg-white text-[#697A8D] px-4 py-2.5 rounded-md font-semibold text-sm border border-[#D9DEE3] hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
-          >
-            <RefreshCw className="w-4 h-4" />
-            Reset to Default
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-[0_2px_4px_0_var(--color-primary)] disabled:opacity-70"
-          >
-            {isSaving ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-            ) : (
-              <Save className="w-4 h-4" />
-            )}
-            Save Changes
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title="Academic Programs Settings"
+        description="Manage the text and programs in the Academic Programs section."
+        onPreview={() => setIsPreviewModalOpen(true)}
+        onReset={handleResetToDefault}
+        onSave={handleSave}
+        isSaving={isSaving}
+      />
 
       {/* Preview Modal */}
       {isPreviewModalOpen && (
@@ -383,11 +354,11 @@ const ManagePrograms = () => {
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] p-6 md:p-8 max-w-5xl mx-auto">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
 
         {/* Header Text Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-[#566A7F] mb-4">Header Content</h3>
+          <h3 className="text-lg font-bold text-[#1e2869] mb-4">Header Content</h3>
           <div className="grid grid-cols-1 gap-6">
             <div>
               <div className="flex justify-between items-center mb-1.5">
@@ -444,7 +415,7 @@ const ManagePrograms = () => {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-4">
-              <h3 className="text-lg font-bold text-[#566A7F]">Programs</h3>
+              <h3 className="text-lg font-bold text-[#1e2869]">Programs</h3>
               <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
                 <input type="checkbox" checked={showPrograms} onChange={(e) => setShowPrograms(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
                 <span className="text-sm font-semibold text-gray-500">Show Programs</span>

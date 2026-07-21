@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2, Edit2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
@@ -8,6 +9,7 @@ import ConfirmationModal from '../../../components/ConfirmationModal';
 import FacilitiesSection from '../../home/components/FacilitiesSection';
 import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
+import PageHeader from './components/PageHeader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -38,7 +40,7 @@ const ManageFacilities = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  
+
   // Facility Modal State
   const [isFacilityModalOpen, setIsFacilityModalOpen] = useState(false);
   const [editingFacilityIndex, setEditingFacilityIndex] = useState(-1);
@@ -55,10 +57,10 @@ const ManageFacilities = () => {
       const { data } = await api.get('/cms/facilities');
       setSubheading(data.subheading || '');
       setShowSubheading(data.showSubheading ?? true);
-      
+
       setHeading(data.heading || '');
       setShowHeading(data.showHeading ?? true);
-      
+
       setDescription(data.description || '');
       setShowDescription(data.showDescription ?? true);
 
@@ -79,20 +81,20 @@ const ManageFacilities = () => {
       confirmText: 'Yes, save it!',
       variant: 'primary',
       action: async () => {
-    setIsSaving(true);
-    try {
-      await api.put('/cms/facilities', {
-        subheading, heading, description, facilitiesList,
-        showSubheading, showHeading, showDescription, showFacilities
-      });
-      Toast.fire({ icon: 'success', title: 'Facilities section saved successfully!' });
-    } catch (error) {
-      console.error('Error saving facilities settings:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
-    } finally {
-      setIsSaving(false);
-    }
-  }
+        setIsSaving(true);
+        try {
+          await api.put('/cms/facilities', {
+            subheading, heading, description, facilitiesList,
+            showSubheading, showHeading, showDescription, showFacilities
+          });
+          Toast.fire({ icon: 'success', title: 'Facilities section saved successfully!' });
+        } catch (error) {
+          console.error('Error saving facilities settings:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
+        } finally {
+          setIsSaving(false);
+        }
+      }
     });
   };
 
@@ -147,23 +149,23 @@ const ManageFacilities = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-      setSubheading('College Facilities');
-      setShowSubheading(true);
-      setHeading('Institutional Resources');
-      setShowHeading(true);
-      setDescription('Our state-of-the-art campus offers modern classrooms, advanced learning resources, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.');
-      setShowDescription(true);
-      setFacilitiesList([
-        { title: 'Smart Classrooms', image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop' },
-        { title: 'Digital Library', image: 'https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=2030&auto=format&fit=crop' },
-        { title: 'Seminar Hall', image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?q=80&w=1925&auto=format&fit=crop' },
-        { title: 'Innovation Lab', image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop' },
-        { title: 'Auditorium', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop' },
-        { title: 'Sports & Fitness', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop' }
-      ]);
-      setShowFacilities(true);
-      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-    }
+        setSubheading('College Facilities');
+        setShowSubheading(true);
+        setHeading('Institutional Resources');
+        setShowHeading(true);
+        setDescription('Our state-of-the-art campus offers modern classrooms, advanced learning resources, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.');
+        setShowDescription(true);
+        setFacilitiesList([
+          { title: 'Smart Classrooms', image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop' },
+          { title: 'Digital Library', image: 'https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=2030&auto=format&fit=crop' },
+          { title: 'Seminar Hall', image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?q=80&w=1925&auto=format&fit=crop' },
+          { title: 'Innovation Lab', image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop' },
+          { title: 'Auditorium', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop' },
+          { title: 'Sports & Fitness', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop' }
+        ]);
+        setShowFacilities(true);
+        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+      }
     });
   };
 
@@ -171,8 +173,8 @@ const ManageFacilities = () => {
     if (confirmModal.action === 'remove_facility') {
       const updated = facilitiesList.filter((_, i) => i !== confirmModal.targetIndex);
       setFacilitiesList(updated);
-    } else 
-    setConfirmModal({ ...confirmModal, isOpen: false });
+    } else
+      setConfirmModal({ ...confirmModal, isOpen: false });
   };
 
   if (isLoading) {
@@ -185,40 +187,14 @@ const ManageFacilities = () => {
 
   return (
     <div className="space-y-6 w-full">
-      <div className="flex justify-between items-end">
-        <div>
-          <h1 className="text-2xl font-bold text-[#566A7F] tracking-tight">Facilities Settings</h1>
-          <p className="text-[#697A8D] mt-1 text-sm">Manage the text and images on the College Facilities section.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsPreviewModalOpen(true)}
-            className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2.5 rounded-md font-semibold text-sm border border-primary/20 hover:bg-primary/20 hover:border-primary/30 transition-colors shadow-sm"
-          >
-            <Eye className="w-4 h-4" />
-            Live Preview
-          </button>
-          <button
-            onClick={handleResetToDefault}
-            className="flex items-center gap-2 bg-white text-[#697A8D] px-4 py-2.5 rounded-md font-semibold text-sm border border-[#D9DEE3] hover:bg-gray-50 hover:border-gray-300 transition-colors shadow-sm"
-          >
-            <RefreshCw className="w-4 h-4" />
-            Reset to Default
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-[0_2px_4px_0_var(--color-primary)] disabled:opacity-70"
-          >
-            {isSaving ? (
-              <Loader2 className="w-4 h-4 animate-spin text-white" />
-            ) : (
-              <Save className="w-4 h-4" />
-            )}
-            Save Changes
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title="Facilities Settings"
+        description="Manage the text and images on the College Facilities section."
+        onPreview={() => setIsPreviewModalOpen(true)}
+        onReset={handleResetToDefault}
+        onSave={handleSave}
+        isSaving={isSaving}
+      />
 
       {isPreviewModalOpen && (
         <div className="fixed inset-0 z-[100] flex flex-col bg-gray-900/80 backdrop-blur-sm">
@@ -269,11 +245,11 @@ const ManageFacilities = () => {
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] p-6 md:p-8 max-w-5xl mx-auto">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
 
         {/* Text Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-[#566A7F] mb-4">Text Content</h3>
+          <h3 className="text-lg font-bold text-[#1e2869] mb-4">Text Content</h3>
           <div className="grid grid-cols-1 gap-6">
             <div>
               <div className="flex justify-between items-center mb-1.5">
@@ -330,7 +306,7 @@ const ManageFacilities = () => {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-4">
-              <h3 className="text-lg font-bold text-[#566A7F]">Facilities List</h3>
+              <h3 className="text-lg font-bold text-[#1e2869]">Facilities List</h3>
               <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
                 <input type="checkbox" checked={showFacilities} onChange={(e) => setShowFacilities(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
                 <span className="text-sm font-semibold text-gray-500">Show Facilities Grid</span>
@@ -360,11 +336,11 @@ const ManageFacilities = () => {
                     </div>
                   )}
                 </div>
-                
+
                 {/* Facility Content */}
                 <div className="p-4 flex-1 flex flex-col">
                   <h4 className="font-bold text-[#566A7F] text-lg mb-1">{facility.title || '(Untitled Facility)'}</h4>
-                  
+
                   {/* Actions */}
                   <div className="flex justify-end gap-2 mt-4 pt-3 border-t border-gray-100">
                     <button
@@ -405,7 +381,7 @@ const ManageFacilities = () => {
         <div className="fixed inset-0 z-[110] flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
             <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-              <h2 className="text-xl font-bold text-[#566A7F]">
+              <h2 className="text-xl font-bold text-[#1e2869]">
                 {editingFacilityIndex === -1 ? 'Add New Facility' : 'Edit Facility'}
               </h2>
               <button
@@ -415,7 +391,7 @@ const ManageFacilities = () => {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             <div className="p-6 overflow-y-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="col-span-1 md:col-span-2">
@@ -423,24 +399,24 @@ const ManageFacilities = () => {
                   <input
                     type="text"
                     value={currentFacility.title}
-                    onChange={(e) => setCurrentFacility({...currentFacility, title: e.target.value})}
+                    onChange={(e) => setCurrentFacility({ ...currentFacility, title: e.target.value })}
                     placeholder="e.g. Smart Classrooms"
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                 </div>
-                
+
                 <div className="col-span-1 md:col-span-2">
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Facility Image</label>
                   <div className="bg-gray-50 p-4 rounded-lg border border-[#D9DEE3]">
                     <LogoUploader
                       currentLogoUrl={currentFacility.image}
-                      onUploadSuccess={(url) => setCurrentFacility({...currentFacility, image: url})}
+                      onUploadSuccess={(url) => setCurrentFacility({ ...currentFacility, image: url })}
                     />
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
               <button
                 onClick={closeFacilityModal}
@@ -460,7 +436,7 @@ const ManageFacilities = () => {
         </div>
       )}
 
-      <ConfirmationModal 
+      <ConfirmationModal
         isOpen={confirmModal.isOpen}
         onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
         onConfirm={handleConfirmAction}

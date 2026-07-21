@@ -19,10 +19,10 @@ const ConfirmationModal = ({
 
     const variantStyles = {
         primary: {
-            button: 'bg-[#0A437A] text-white hover:bg-secondary',
+            button: 'bg-primary text-white',
         },
         danger: {
-            button: 'bg-red-500 text-white hover:bg-red-600',
+            button: 'bg-red-500 text-white',
         }
     };
 

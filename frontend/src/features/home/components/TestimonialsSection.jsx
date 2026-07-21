@@ -92,7 +92,7 @@ const TestimonialsSection = ({ previewData }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, amount: 0.2 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl lg:text-[2.75rem] font-bold text-primary"
+            className="text-3xl lg:text-[2.75rem] font-semibold text-primary"
           >
             {heading}
           </motion.h2>
@@ -112,11 +112,10 @@ const TestimonialsSection = ({ previewData }) => {
               <div
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}
-                className={`relative flex transition-all duration-1000 ease-in-out cursor-pointer overflow-hidden ${
-                  isActive 
-                    ? 'w-[550px] xl:w-[650px] 2xl:w-[750px] gap-6' 
-                    : 'w-[200px] xl:w-[240px] 2xl:w-[280px] gap-0'
-                }`}
+                className={`relative flex transition-all duration-1000 ease-in-out cursor-pointer overflow-hidden ${isActive
+                  ? 'w-[550px] xl:w-[650px] 2xl:w-[750px] gap-6'
+                  : 'w-[200px] xl:w-[240px] 2xl:w-[280px] gap-0'
+                  }`}
               >
                 {/* Image Section */}
                 <div className="h-full shrink-0 w-[200px] xl:w-[240px] 2xl:w-[280px]">
@@ -173,32 +172,32 @@ const TestimonialsSection = ({ previewData }) => {
                 transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                 className="flex-col bg-background rounded-3xl shadow-sm overflow-hidden mb-8 flex w-full"
               >
-              <div className="w-full h-[250px]">
-                <img
-                  src={testimonials[activeIndex].image}
-                  alt={testimonials[activeIndex].name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6 flex flex-col">
-                <h3 className="text-lg font-bold text-text-primary mb-3 leading-snug">
-                  {testimonials[activeIndex].quote}
-                </h3>
-                <p className="text-text-secondary text-sm leading-[1.8] mb-6">
-                  {testimonials[activeIndex].body}
-                </p>
-                <div className="flex items-center gap-4 mt-auto">
+                <div className="w-full h-[250px]">
                   <img
-                    src={testimonials[activeIndex].avatar}
+                    src={testimonials[activeIndex].image}
                     alt={testimonials[activeIndex].name}
-                    className="w-10 h-10 rounded-full object-cover"
+                    className="w-full h-full object-cover"
                   />
-                  <div>
-                    <p className="text-sm font-bold text-text-primary">{testimonials[activeIndex].name}</p>
-                    <p className="text-[0.65rem] font-semibold text-text-secondary uppercase tracking-widest mt-0.5">{testimonials[activeIndex].course}</p>
+                </div>
+                <div className="p-6 flex flex-col">
+                  <h3 className="text-lg font-semibold text-text-primary mb-3 leading-snug">
+                    {testimonials[activeIndex].quote}
+                  </h3>
+                  <p className="text-text-secondary text-sm leading-[1.8] mb-6">
+                    {testimonials[activeIndex].body}
+                  </p>
+                  <div className="flex items-center gap-4 mt-auto">
+                    <img
+                      src={testimonials[activeIndex].avatar}
+                      alt={testimonials[activeIndex].name}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="text-sm font-semibold text-text-primary">{testimonials[activeIndex].name}</p>
+                      <p className="text-[0.65rem] font-semibold text-text-secondary uppercase tracking-widest mt-0.5">{testimonials[activeIndex].course}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
               </motion.div>
             </AnimatePresence>
           </div>

@@ -9,28 +9,37 @@ import api from '../../../api/axios';
 
 const Counter = ({ value }) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.5 });
+  const isInView = useInView(ref, { once: true, amount: 0.1 });
+
+  useEffect(() => {
+    const strValue = String(value);
+    const match = strValue.match(/^(\d+)(.*)$/);
+
+    if (isInView && match && ref.current) {
+      const numericValue = parseInt(match[1], 10);
+      const suffix = match[2];
+
+      const controls = animate(0, numericValue, {
+        duration: 3,
+        ease: "easeOut",
+        onUpdate(val) {
+          if (ref.current) {
+            ref.current.textContent = Math.round(val) + suffix;
+          }
+        }
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, value]);
 
   const strValue = String(value);
   const match = strValue.match(/^(\d+)(.*)$/);
-
-  const count = useMotionValue(0);
-  const numericValue = match ? parseInt(match[1], 10) : 0;
-  const suffix = match ? match[2] : '';
-  const rounded = useTransform(count, (latest) => Math.round(latest) + suffix);
-
-  useEffect(() => {
-    if (isInView && match) {
-      const controls = animate(count, numericValue, { duration: 4.5, ease: "easeOut" });
-      return controls.stop;
-    }
-  }, [isInView, numericValue, count, match]);
 
   if (!match) {
     return <span>{value}</span>;
   }
 
-  return <motion.span ref={ref}>{rounded}</motion.span>;
+  return <span ref={ref}>0{match[2]}</span>;
 };
 
 const AboutSection = ({ previewData }) => {

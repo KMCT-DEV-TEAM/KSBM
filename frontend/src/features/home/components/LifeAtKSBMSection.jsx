@@ -41,17 +41,26 @@ const LifeAtKSBMSection = ({ previewData }) => {
 
   if (isLoading) {
     return (
-      <section className="relative w-full bg-background py-12 lg:py-14 overflow-hidden animate-pulse">
+      <section className="relative w-full bg-[#f4f7f9] py-12 lg:py-14 overflow-hidden animate-pulse">
         <div className="relative w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="h-4 bg-gray-200 rounded w-32 mx-auto mb-4"></div>
             <div className="h-10 bg-gray-200 rounded w-64 mx-auto mb-6"></div>
             <div className="h-4 bg-gray-200 rounded w-full max-w-2xl mx-auto"></div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 auto-rows-[120px] md:auto-rows-[160px]">
-            {[1,2,3,4,5,6,7,8].map((i) => (
-              <div key={i} className="bg-gray-200 rounded-[1rem] col-span-1"></div>
-            ))}
+          <div className="relative w-[100vw] left-1/2 -translate-x-1/2 overflow-hidden mt-8 flex flex-col gap-3 md:gap-4">
+            <div className="flex gap-3 md:gap-4 w-max px-3 md:px-4">
+              {[1,2,3,4].map((i, index) => {
+                const isWide = index % 4 === 0 || index % 4 === 3;
+                return <div key={i} className={`h-[160px] md:h-[240px] shrink-0 ${isWide ? 'w-[280px] md:w-[500px]' : 'w-[160px] md:w-[300px]'} bg-gray-300 rounded-[1rem] md:rounded-[1.5rem]`}></div>;
+              })}
+            </div>
+            <div className="flex gap-3 md:gap-4 w-max px-3 md:px-4 -ml-[100px] md:-ml-[200px]">
+              {[5,6,7,8].map((i, index) => {
+                const isWide = index % 4 === 1 || index % 4 === 2;
+                return <div key={i} className={`h-[160px] md:h-[240px] shrink-0 ${isWide ? 'w-[280px] md:w-[500px]' : 'w-[160px] md:w-[300px]'} bg-gray-300 rounded-[1rem] md:rounded-[1.5rem]`}></div>;
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -65,7 +74,7 @@ const LifeAtKSBMSection = ({ previewData }) => {
   }
 
   return (
-    <section className="relative w-full bg-background py-12 lg:py-14 overflow-hidden">
+    <section className="relative w-full bg-[#f4f7f9] py-12 lg:py-14 overflow-hidden">
 
       {/* Background Watermark Logo (Right) */}
       <div className="absolute top-1/2 right-0 translate-x-[50%] -translate-y-1/2 opacity-80 pointer-events-none z-0">
@@ -84,7 +93,7 @@ const LifeAtKSBMSection = ({ previewData }) => {
             className="text-center max-w-3xl mx-auto mb-16"
           >
             {showSubheading && (
-              <p className="text-text-secondary text-[0.65rem] lg:text-xs tracking-[0.25em] uppercase mb-4">
+              <p className="text-text-secondary text-[0.65rem] lg:text-xs font-semibold tracking-[0.25em] uppercase mb-4">
                 {subheading}
               </p>
             )}
@@ -101,40 +110,50 @@ const LifeAtKSBMSection = ({ previewData }) => {
           </motion.div>
         )}
 
-        {/* Collage Image Gallery */}
+        {/* Looping Collage Image Gallery */}
         {showImages && images && images.length > 0 && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 auto-rows-[120px] md:auto-rows-[160px] grid-flow-row"
-          >
-            {images.map((img, index) => {
-              // 2 rows layout on desktop (6 columns total per row)
-              // Row 1: 2 + 1 + 1 + 2 = 6
-              // Row 2: 1 + 2 + 2 + 1 = 6
-              let spanClass = "col-span-1 row-span-1";
-              if (index === 0 || index === 3 || index === 5 || index === 6) {
-                spanClass = "col-span-1 md:col-span-2 row-span-1";
-              }
-
-              return (
-                <div
-                  key={index}
-                  className={`${spanClass} rounded-[1rem] md:rounded-[1.25rem] overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-300 relative`}
-                >
-                  <img
-                    src={img.src}
-                    alt={img.alt}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out absolute inset-0 bg-gray-100"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
+          <div className="relative w-[100vw] left-1/2 -translate-x-1/2 overflow-hidden mt-8 flex flex-col gap-3 md:gap-4">
+            
+            {/* Top Row (Scrolls Left) */}
+            <div className="animate-marquee gap-3 md:gap-4 pr-3 md:pr-4 will-change-transform" style={{ animationDuration: '40s' }}>
+              {[...Array(2)].map((_, arrayIndex) => (
+                <div key={arrayIndex} className="flex gap-3 md:gap-4 shrink-0">
+                  {images.slice(0, Math.ceil(images.length / 2)).map((img, index) => {
+                    const isWide = index % 4 === 0 || index % 4 === 3;
+                    return (
+                      <div
+                        key={index}
+                        className={`h-[160px] md:h-[240px] shrink-0 ${isWide ? 'w-[280px] md:w-[500px]' : 'w-[160px] md:w-[300px]'} rounded-[1rem] md:rounded-[1.5rem] overflow-hidden group cursor-pointer shadow-sm relative`}
+                      >
+                        <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out absolute inset-0 bg-gray-100" loading="lazy" />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </motion.div>
+              ))}
+            </div>
+
+            {/* Bottom Row (Scrolls Right) */}
+            <div className="animate-marquee-reverse gap-3 md:gap-4 pr-3 md:pr-4 will-change-transform" style={{ animationDuration: '45s' }}>
+              {[...Array(2)].map((_, arrayIndex) => (
+                <div key={arrayIndex} className="flex gap-3 md:gap-4 shrink-0">
+                  {images.slice(Math.ceil(images.length / 2)).map((img, index) => {
+                    const isWide = index % 4 === 1 || index % 4 === 2;
+                    return (
+                      <div
+                        key={index}
+                        className={`h-[160px] md:h-[240px] shrink-0 ${isWide ? 'w-[280px] md:w-[500px]' : 'w-[160px] md:w-[300px]'} rounded-[1rem] md:rounded-[1.5rem] overflow-hidden group cursor-pointer shadow-sm relative`}
+                      >
+                        <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out absolute inset-0 bg-gray-100" loading="lazy" />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
         )}
 
       </div>
