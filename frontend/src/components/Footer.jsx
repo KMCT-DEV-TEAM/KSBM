@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { MapPin, Mail, Phone } from 'lucide-react';
+import { MapPin, Mail, Phone, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 import api from '../api/axios';
 import { motion } from 'framer-motion';
 const watermarkLogo = '/assets/Images/watermark_logo.png';
@@ -10,7 +11,12 @@ const Footer = ({ previewData }) => {
     description: 'Empowering global leaders through intellectual rigor and strategic excellence since 1998.',
     socialLinks: { instagram: '#', facebook: '#', whatsapp: '#' },
     programs: [],
-    quickLinks: [],
+    quickLinks: [
+      { label: 'Programs', url: '/programs' },
+      { label: 'Accreditations', url: '/about' },
+      { label: 'Gallery', url: '/#campus' },
+      { label: 'Contact Us', url: '/contact' }
+    ],
     contactInfo: { address: '', email: '', phone: '' },
     copyrightText: '© 2024 KMCT School of Business. All rights reserved. Accredited by AACSB & AMBA.'
   });
@@ -25,7 +31,27 @@ const Footer = ({ previewData }) => {
         try {
           const response = await api.get('/cms/footer', { hideLoader: true });
           if (response.data) {
-            setData(response.data);
+            let fetched = { ...response.data };
+            if (fetched.quickLinks && Array.isArray(fetched.quickLinks)) {
+              fetched.quickLinks = fetched.quickLinks.map(link => {
+                if (link.label?.toLowerCase().includes('contact') || link.url === '#contact') {
+                  return { ...link, url: '/contact' };
+                }
+                return link;
+              });
+              const hasContact = fetched.quickLinks.some(link => link.label?.toLowerCase().includes('contact') || link.url === '/contact');
+              if (!hasContact) {
+                fetched.quickLinks.push({ label: 'Contact Us', url: '/contact' });
+              }
+            } else {
+              fetched.quickLinks = [
+                { label: 'Programs', url: '/programs' },
+                { label: 'Accreditations', url: '/about' },
+                { label: 'Gallery', url: '/#campus' },
+                { label: 'Contact Us', url: '/contact' }
+              ];
+            }
+            setData(fetched);
           }
         } catch (error) {
           console.error("Error fetching Footer data:", error);
@@ -178,16 +204,27 @@ const Footer = ({ previewData }) => {
             </h4>
             <ul className="flex flex-col gap-4 text-sm text-secondary">
               {quickLinks && quickLinks.map((link, idx) => (
-                <li key={idx}><a href={link.url} className="hover:text-white transition-colors">{link.label}</a></li>
+                <li key={idx}>
+                  {link.url && link.url.startsWith('/') ? (
+                    <Link href={link.url} className="hover:text-white transition-colors">
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a href={link.url || '#'} className="hover:text-white transition-colors">
+                      {link.label}
+                    </a>
+                  )}
+                </li>
               ))}
             </ul>
           </motion.div>
 
           {/* Column 4: Contact Info */}
           <motion.div variants={itemVariants} className="flex flex-col">
-            <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
-              CONTACT INFORMATION
-            </h4>
+            <Link href="/contact" className="group inline-flex items-center gap-2 text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white hover:text-blue-300 transition-colors cursor-pointer">
+              <span>CONTACT INFORMATION</span>
+              <ArrowRight className="w-4 h-4 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+            </Link>
             <ul className="flex flex-col gap-5 text-sm text-secondary">
               {contactInfo?.address && (
                 <li className="flex items-start gap-3">
@@ -211,6 +248,15 @@ const Footer = ({ previewData }) => {
                   </a>
                 </li>
               )}
+              <li className="pt-2">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-white bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2.5 rounded-xl transition-all shadow-sm"
+                >
+                  <span>Go to Contact Form</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </li>
             </ul>
           </motion.div>
 

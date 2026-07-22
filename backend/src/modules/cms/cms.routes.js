@@ -59,7 +59,11 @@ import {
   getExaminationsPageSettings,
   updateExaminationsPageSettings,
   getAdmissionsPageSettings,
-  updateAdmissionsPageSettings
+  updateAdmissionsPageSettings,
+  getPlacementPageSettings,
+  updatePlacementPageSettings,
+  getContactPageSettings,
+  updateContactPageSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -192,5 +196,13 @@ router.route('/admissions')
 router.route('/admissions-page')
   .get(getAdmissionsPageSettings)
   .put(protect, updateAdmissionsPageSettings);
+
+router.route('/placement-page')
+  .get(getPlacementPageSettings)
+  .put(protect, updatePlacementPageSettings);
+
+router.route('/contact-page')
+  .get(getContactPageSettings)
+  .put(protect, updateContactPageSettings);
 
 export default router;

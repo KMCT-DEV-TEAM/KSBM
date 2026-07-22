@@ -7,7 +7,7 @@ import {
   MonitorPlay, Type, Image, BookOpen,
   Award, Building2, Briefcase, Handshake,
   MessageSquare, Star, Newspaper, Heart, PanelBottom,
-  ChevronDown, ChevronRight, Home, Info, Globe, GraduationCap
+  ChevronDown, ChevronRight, Home, Info, Globe, GraduationCap, Phone
 } from 'lucide-react';
 const logo = '/assets/Images/Header/LOGO__KMCT School of Business Management (1).png';
 
@@ -61,6 +61,20 @@ const Sidebar = () => {
       icon: <Award className="w-5 h-5" />,
       links: [
         { name: 'Manage Admissions Page', path: '/admin/cms/admissions' },
+      ]
+    },
+    {
+      title: 'Placement',
+      icon: <Briefcase className="w-5 h-5" />,
+      links: [
+        { name: 'Manage Placement Page', path: '/admin/cms/placement-page' },
+      ]
+    },
+    {
+      title: 'Contact Us',
+      icon: <Phone className="w-5 h-5" />,
+      links: [
+        { name: 'Manage Contact Page', path: '/admin/cms/contact-page' },
       ]
     },
     {
