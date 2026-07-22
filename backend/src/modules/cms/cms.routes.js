@@ -63,7 +63,13 @@ import {
   getPlacementPageSettings,
   updatePlacementPageSettings,
   getContactPageSettings,
-  updateContactPageSettings
+  updateContactPageSettings,
+  getPrivacyPolicySettings,
+  updatePrivacyPolicySettings,
+  getTermsAndConditionsSettings,
+  updateTermsAndConditionsSettings,
+  getFaqSettings,
+  updateFaqSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -204,5 +210,17 @@ router.route('/placement-page')
 router.route('/contact-page')
   .get(getContactPageSettings)
   .put(protect, updateContactPageSettings);
+
+router.route('/privacy-policy')
+  .get(getPrivacyPolicySettings)
+  .put(protect, updatePrivacyPolicySettings);
+
+router.route('/terms-and-conditions')
+  .get(getTermsAndConditionsSettings)
+  .put(protect, updateTermsAndConditionsSettings);
+
+router.route('/faq')
+  .get(getFaqSettings)
+  .put(protect, updateFaqSettings);
 
 export default router;

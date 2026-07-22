@@ -36,10 +36,16 @@ import BbaPage from '../features/programs/BbaPage';
 import ExaminationsLanding from '../features/examinations/ExaminationsLanding';
 import AdmissionLanding from '../features/admission/AdmissionLanding';
 import ContactLanding from '../features/contact/ContactLanding';
+import PrivacyPolicy from '../features/legal/PrivacyPolicy';
+import TermsAndConditions from '../features/legal/TermsAndConditions';
+import FaqPage from '../features/faq/FaqPage';
 import ManageExaminationsPage from '../features/admin/cms/ManageExaminationsPage';
 import ManageAdmissionsPage from '../features/admin/cms/ManageAdmissionsPage';
 import ManagePlacementPage from '../features/admin/cms/ManagePlacementPage';
 import ManageContactPage from '../features/admin/cms/ManageContactPage';
+import ManagePrivacyPolicy from '../features/admin/cms/ManagePrivacyPolicy';
+import ManageTermsAndConditions from '../features/admin/cms/ManageTermsAndConditions';
+import ManageFaqPage from '../features/admin/cms/ManageFaqPage';
 import ManageMbaPage from '../features/admin/cms/ManageMbaPage';
 import ManageRecruiters from '../features/admin/cms/ManageRecruiters';
 import ManageNews from '../features/admin/cms/ManageNews';
@@ -78,6 +84,12 @@ const AppRoutes = () => {
           <Route path="admission" element={<AdmissionLanding />} />
           <Route path="admissions" element={<AdmissionLanding />} />
           <Route path="contact" element={<ContactLanding />} />
+          <Route path="privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="privacy" element={<PrivacyPolicy />} />
+          <Route path="terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="terms" element={<TermsAndConditions />} />
+          <Route path="faq" element={<FaqPage />} />
+          <Route path="faqs" element={<FaqPage />} />
           {/* Add more routes here later (e.g., /campus) */}
         </Route>
 
@@ -140,6 +152,9 @@ const AppRoutes = () => {
           <Route path="cms/admissions-page" element={<ManageAdmissionsPage />} />
           <Route path="cms/placement-page" element={<ManagePlacementPage />} />
           <Route path="cms/contact-page" element={<ManageContactPage />} />
+          <Route path="cms/privacy-policy" element={<ManagePrivacyPolicy />} />
+          <Route path="cms/terms-and-conditions" element={<ManageTermsAndConditions />} />
+          <Route path="cms/faq" element={<ManageFaqPage />} />
 
             {/* Add future admin routes here */}
           </Route>

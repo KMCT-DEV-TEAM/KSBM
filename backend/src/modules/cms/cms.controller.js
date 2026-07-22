@@ -30,6 +30,9 @@ import ExaminationsPage from './examinationsPage.model.js';
 import AdmissionsPage from './admissionsPage.model.js';
 import PlacementPage from './placementPage.model.js';
 import ContactPage from './contactPage.model.js';
+import PrivacyPolicyModel from './privacyPolicy.model.js';
+import TermsAndConditionsModel from './termsAndConditions.model.js';
+import FaqModel from './faq.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -1169,5 +1172,104 @@ export const updateContactPageSettings = async (req, res) => {
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating Contact Page settings', error: error.message });
+  }
+};
+
+// @desc    Get Privacy Policy settings
+// @route   GET /api/cms/privacy-policy
+// @access  Public
+export const getPrivacyPolicySettings = async (req, res) => {
+  try {
+    const settings = await PrivacyPolicyModel.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Privacy Policy settings', error: error.message });
+  }
+};
+
+// @desc    Update Privacy Policy settings
+// @route   PUT /api/cms/privacy-policy
+// @access  Private/Admin
+export const updatePrivacyPolicySettings = async (req, res) => {
+  try {
+    const fields = ['hero', 'mainContent'];
+    const settings = await PrivacyPolicyModel.getSettings();
+    
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        settings[field] = req.body[field];
+      }
+    });
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Privacy Policy settings', error: error.message });
+  }
+};
+
+// @desc    Get Terms & Conditions settings
+// @route   GET /api/cms/terms-and-conditions
+// @access  Public
+export const getTermsAndConditionsSettings = async (req, res) => {
+  try {
+    const settings = await TermsAndConditionsModel.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Terms & Conditions settings', error: error.message });
+  }
+};
+
+// @desc    Update Terms & Conditions settings
+// @route   PUT /api/cms/terms-and-conditions
+// @access  Private/Admin
+export const updateTermsAndConditionsSettings = async (req, res) => {
+  try {
+    const fields = ['hero', 'mainContent'];
+    const settings = await TermsAndConditionsModel.getSettings();
+    
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        settings[field] = req.body[field];
+      }
+    });
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Terms & Conditions settings', error: error.message });
+  }
+};
+
+// @desc    Get FAQ settings
+// @route   GET /api/cms/faq
+// @access  Public
+export const getFaqSettings = async (req, res) => {
+  try {
+    const settings = await FaqModel.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching FAQ settings', error: error.message });
+  }
+};
+
+// @desc    Update FAQ settings
+// @route   PUT /api/cms/faq
+// @access  Private/Admin
+export const updateFaqSettings = async (req, res) => {
+  try {
+    const fields = ['hero', 'mainContent'];
+    const settings = await FaqModel.getSettings();
+    
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        settings[field] = req.body[field];
+      }
+    });
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating FAQ settings', error: error.message });
   }
 };

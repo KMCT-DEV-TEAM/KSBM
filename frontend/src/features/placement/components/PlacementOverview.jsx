@@ -57,12 +57,12 @@ const PlacementOverview = ({ data }) => {
           >
             <div>
               <div className="flex items-center gap-3">
-                <span className="text-xs font-semibold tracking-[0.25em] text-primary uppercase">
+                <span className="text-xs font-semibold tracking-[0.25em] text-text-secondary uppercase">
                   {data.deskBadge}
                 </span>
                 <div className="h-px bg-primary/30 w-12" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2 tracking-tight">
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2 tracking-tight">
                 {data.title}
               </h2>
             </div>
@@ -76,14 +76,33 @@ const PlacementOverview = ({ data }) => {
               </p>
             </div>
 
-            <div className="pt-6 grid grid-cols-2 gap-6 sm:gap-10 border-t border-gray-100">
+            {/* 3 Logos - without border & little size */}
+            <div className="pt-2 pb-1 flex items-center gap-6 sm:gap-8 flex-wrap">
+              {(data.overviewLogos && data.overviewLogos.length > 0
+                ? data.overviewLogos
+                : [
+                  '/assets/Images/icar_logo.jpg',
+                  '/assets/Images/vit_logo.jpg',
+                  '/assets/Images/rcc_logo.jpg'
+                ]
+              ).map((logo, idx) => (
+                <img
+                  key={idx}
+                  src={logo}
+                  alt={`Partner Logo ${idx + 1}`}
+                  className="h-10 sm:h-12 w-auto object-contain border-0 shadow-none transition-transform duration-300 hover:scale-105"
+                />
+              ))}
+            </div>
+
+            <div className="pt-2 flex items-center gap-8 sm:gap-12">
               <div>
-                <p className="text-3xl font-bold text-primary mb-1">{data.stat1Value}</p>
-                <p className="text-sm text-gray-500 font-medium">{data.stat1Label}</p>
+                <p className="text-3xl font-semibold text-primary mb-1">{data.stat1Value}</p>
+                <p className="text-sm text-text-secondary font-medium">{data.stat1Label}</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-primary mb-1">{data.stat2Value}</p>
-                <p className="text-sm text-gray-500 font-medium">{data.stat2Label}</p>
+                <p className="text-3xl font-semibold text-primary mb-1">{data.stat2Value}</p>
+                <p className="text-sm text-text-secondary font-medium">{data.stat2Label}</p>
               </div>
             </div>
           </motion.div>
