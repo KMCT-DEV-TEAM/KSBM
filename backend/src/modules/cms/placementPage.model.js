@@ -55,7 +55,15 @@ const placementPageSchema = new mongoose.Schema(
       stat2Label: { type: String, default: 'Companies Visited' },
       collageImage1: { type: String, default: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1000&auto=format&fit=crop' },
       collageImage2: { type: String, default: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1000&auto=format&fit=crop' },
-      floatingQuote: { type: String, default: '"KSBM graduates are consistently rated as \'Highly Adaptable\' by global recruiters."' }
+      floatingQuote: { type: String, default: '"KSBM graduates are consistently rated as \'Highly Adaptable\' by global recruiters."' },
+      overviewLogos: {
+        type: [String],
+        default: [
+          '/assets/Images/icar_logo.jpg',
+          '/assets/Images/vit_logo.jpg',
+          '/assets/Images/rcc_logo.jpg'
+        ]
+      }
     },
     proudAchievers: {
       title: { type: String, default: 'Proud Achievers' },

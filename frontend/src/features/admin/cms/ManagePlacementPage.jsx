@@ -35,7 +35,24 @@ const ManagePlacementPage = () => {
   const [hero, setHero] = useState({ title: '', subtitle: '', badge: '', backgroundImage: '' });
 
   // Overview State
-  const [overview, setOverview] = useState({ title: '', deskBadge: '', description1: '', description2: '', stat1Value: '', stat1Label: '', stat2Value: '', stat2Label: '', collageImage1: '', collageImage2: '', floatingQuote: '' });
+  const [overview, setOverview] = useState({
+    title: '',
+    deskBadge: '',
+    description1: '',
+    description2: '',
+    stat1Value: '',
+    stat1Label: '',
+    stat2Value: '',
+    stat2Label: '',
+    collageImage1: '',
+    collageImage2: '',
+    floatingQuote: '',
+    overviewLogos: [
+      '/assets/Images/icar_logo.jpg',
+      '/assets/Images/vit_logo.jpg',
+      '/assets/Images/rcc_logo.jpg'
+    ]
+  });
 
   // Proud Achievers State
   const [proudAchievers, setProudAchievers] = useState({ title: '', items: [] });
@@ -127,7 +144,12 @@ const ManagePlacementPage = () => {
           stat2Label: 'Companies Visited',
           collageImage1: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1000&auto=format&fit=crop',
           collageImage2: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1000&auto=format&fit=crop',
-          floatingQuote: '"KSBM graduates are consistently rated as \'Highly Adaptable\' by global recruiters."'
+          floatingQuote: '"KSBM graduates are consistently rated as \'Highly Adaptable\' by global recruiters."',
+          overviewLogos: [
+            '/assets/Images/icar_logo.jpg',
+            '/assets/Images/vit_logo.jpg',
+            '/assets/Images/rcc_logo.jpg'
+          ]
         });
 
         setProudAchievers({
@@ -396,6 +418,29 @@ const ManagePlacementPage = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-800 mb-1">Collage Image 2</label>
                   <LogoUploader value={overview.collageImage2} onChange={(url) => setOverview({ ...overview, collageImage2: url })} />
+                </div>
+              </div>
+
+              <div className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm space-y-4 mt-6">
+                <h4 className="text-sm font-semibold text-[#111836]">Overview Right-Side Partner Logos</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {(overview.overviewLogos || [
+                    '/assets/Images/icar_logo.jpg',
+                    '/assets/Images/vit_logo.jpg',
+                    '/assets/Images/rcc_logo.jpg'
+                  ]).map((logo, idx) => (
+                    <div key={idx} className="space-y-2">
+                      <label className="block text-xs font-semibold text-gray-600 uppercase">Logo {idx + 1}</label>
+                      <LogoUploader
+                        value={logo}
+                        onChange={(url) => {
+                          const updated = [...(overview.overviewLogos || ['/assets/Images/icar_logo.jpg', '/assets/Images/vit_logo.jpg', '/assets/Images/rcc_logo.jpg'])];
+                          updated[idx] = url;
+                          setOverview({ ...overview, overviewLogos: updated });
+                        }}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

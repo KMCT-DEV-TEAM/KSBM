@@ -43,11 +43,16 @@ const Footer = ({ previewData }) => {
               if (!hasContact) {
                 fetched.quickLinks.push({ label: 'Contact Us', url: '/contact' });
               }
+              const hasFaq = fetched.quickLinks.some(link => link.label?.toLowerCase().includes('faq') || link.url === '/faq');
+              if (!hasFaq) {
+                fetched.quickLinks.push({ label: 'FAQ', url: '/faq' });
+              }
             } else {
               fetched.quickLinks = [
                 { label: 'Programs', url: '/programs' },
                 { label: 'Accreditations', url: '/about' },
                 { label: 'Gallery', url: '/#campus' },
+                { label: 'FAQ', url: '/faq' },
                 { label: 'Contact Us', url: '/contact' }
               ];
             }
@@ -135,7 +140,7 @@ const Footer = ({ previewData }) => {
       <div className="relative w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 z-10">
 
         {/* Main Footer Grid */}
-        <motion.div 
+        <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: false, amount: 0.1 }}
@@ -248,22 +253,13 @@ const Footer = ({ previewData }) => {
                   </a>
                 </li>
               )}
-              <li className="pt-2">
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-white bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2.5 rounded-xl transition-all shadow-sm"
-                >
-                  <span>Go to Contact Form</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </li>
             </ul>
           </motion.div>
 
         </motion.div>
 
         {/* Footer Bottom */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.1 }}
@@ -274,9 +270,11 @@ const Footer = ({ previewData }) => {
             {copyrightText}
           </p>
           <div className="flex items-center gap-2">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+            <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <span>|</span>
-            <a href="#" className="hover:text-white transition-colors">Terms & Conditions</a>
+            <Link href="/terms-and-conditions" className="hover:text-white transition-colors">Terms & Conditions</Link>
+            <span>|</span>
+            <Link href="/faq" className="hover:text-white transition-colors">FAQ</Link>
           </div>
         </motion.div>
 

@@ -7,7 +7,7 @@ import {
   MonitorPlay, Type, Image, BookOpen,
   Award, Building2, Briefcase, Handshake,
   MessageSquare, Star, Newspaper, Heart, PanelBottom,
-  ChevronDown, ChevronRight, Home, Info, Globe, GraduationCap, Phone
+  ChevronDown, ChevronRight, Home, Info, Globe, GraduationCap, Phone, ShieldCheck
 } from 'lucide-react';
 const logo = '/assets/Images/Header/LOGO__KMCT School of Business Management (1).png';
 
@@ -75,6 +75,15 @@ const Sidebar = () => {
       icon: <Phone className="w-5 h-5" />,
       links: [
         { name: 'Manage Contact Page', path: '/admin/cms/contact-page' },
+      ]
+    },
+    {
+      title: 'Legal & Policies',
+      icon: <ShieldCheck className="w-5 h-5" />,
+      links: [
+        { name: 'Manage Privacy Policy', path: '/admin/cms/privacy-policy' },
+        { name: 'Manage Terms & Conditions', path: '/admin/cms/terms-and-conditions' },
+        { name: 'Manage FAQ Page', path: '/admin/cms/faq' },
       ]
     },
     {
