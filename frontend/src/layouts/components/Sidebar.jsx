@@ -9,7 +9,7 @@ import {
   MessageSquare, Star, Newspaper, Heart, PanelBottom,
   ChevronDown, ChevronRight, Home, Info, Globe, GraduationCap
 } from 'lucide-react';
-const logo = '/assets/Images/LOGO__KMCT School of Business Management (1).png';
+const logo = '/assets/Images/Header/LOGO__KMCT School of Business Management (1).png';
 
 const Sidebar = () => {
   const pathname = usePathname();

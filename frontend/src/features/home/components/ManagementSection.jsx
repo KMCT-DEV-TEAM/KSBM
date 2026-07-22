@@ -17,7 +17,7 @@ const ManagementSection = ({ previewData }) => {
     } else {
       const fetchSettings = async () => {
         try {
-          const { data } = await api.get('/cms/management');
+          const { data } = await api.get('/cms/management', { hideLoader: true });
           if (data) {
             setSettings({
               subheading: data.subheading || 'OUR MANAGEMENT',

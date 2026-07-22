@@ -25,7 +25,7 @@ const LifeAtKSBMSection = ({ previewData }) => {
     } else {
       const fetchLifeAtKsbm = async () => {
         try {
-          const response = await api.get('/cms/life-at-ksbm');
+          const response = await api.get('/cms/life-at-ksbm', { hideLoader: true });
           if (response.data) {
             setData(response.data);
           }

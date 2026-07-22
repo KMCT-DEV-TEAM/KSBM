@@ -44,7 +44,7 @@ const TestimonialsSection = ({ previewData }) => {
     } else {
       const fetchSettings = async () => {
         try {
-          const { data } = await api.get('/cms/testimonials');
+          const { data } = await api.get('/cms/testimonials', { hideLoader: true });
           if (data) {
             setSettings({
               subheading: data.subheading || 'Testimonials',

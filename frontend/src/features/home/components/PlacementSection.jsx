@@ -10,7 +10,7 @@ const PlacementSection = ({ previewData }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/cms/placement');
+        const response = await api.get('/cms/placement', { hideLoader: true });
         setData(response.data);
       } catch (error) {
         console.error('Error fetching placement data:', error);

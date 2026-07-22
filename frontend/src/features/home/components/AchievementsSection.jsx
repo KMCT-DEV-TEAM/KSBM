@@ -26,7 +26,7 @@ const AchievementsSection = ({ previewData }) => {
 
   const fetchAchievementsData = async () => {
     try {
-      const response = await api.get('/cms/achievements');
+      const response = await api.get('/cms/achievements', { hideLoader: true });
       if (response.data) {
         setData(response.data);
       }

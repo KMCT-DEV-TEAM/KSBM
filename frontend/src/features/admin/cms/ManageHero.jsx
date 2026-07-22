@@ -119,9 +119,9 @@ const ManageHero = () => {
         setPrimaryButton({ text: 'Apply Now', isVisible: true, link: '#' });
         setSecondaryButton({ text: 'Download Brochure', isVisible: true, link: '#' });
         setBannerImages([
-          { url: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop' },
-          { url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop' },
-          { url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop' }
+          { url: '/assets/Images/Home/hero_banner_1.png' },
+          { url: '/assets/Images/Home/hero_banner_2.png' },
+          { url: '/assets/Images/Home/hero_banner_3.png' }
         ]);
         setStatsCard({
           isVisible: true,
@@ -260,9 +260,13 @@ const ManageHero = () => {
               <input 
                 type="text" 
                 value={pillText.text}
+                maxLength={25}
                 onChange={(e) => setPillText({ ...pillText, text: e.target.value })}
                 className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-xs text-right mt-1 text-gray-500">
+                {pillText.text.length}/25 characters
+              </div>
               <label className="flex items-center gap-2 mt-2 cursor-pointer">
                 <input type="checkbox" checked={pillText.isVisible} onChange={(e) => setPillText({ ...pillText, isVisible: e.target.checked })} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
                 <span className="text-sm font-semibold text-[#566A7F]">Show Pill Badge</span>
@@ -275,9 +279,13 @@ const ManageHero = () => {
                 <input 
                   type="text" 
                   value={headingLine1.text}
+                  maxLength={36}
                   onChange={(e) => setHeadingLine1({ ...headingLine1, text: e.target.value })}
                   className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
+                <div className="text-xs text-right mt-1 text-gray-500">
+                  {headingLine1.text.length}/36 characters
+                </div>
                 <label className="flex items-center gap-2 mt-2 cursor-pointer">
                   <input type="checkbox" checked={headingLine1.isVisible} onChange={(e) => setHeadingLine1({ ...headingLine1, isVisible: e.target.checked })} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
                   <span className="text-sm font-semibold text-[#566A7F]">Show Heading Line 1</span>
@@ -289,9 +297,13 @@ const ManageHero = () => {
                 <input 
                   type="text" 
                   value={headingLine2.text}
+                  maxLength={25}
                   onChange={(e) => setHeadingLine2({ ...headingLine2, text: e.target.value })}
                   className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
+                <div className="text-xs text-right mt-1 text-gray-500">
+                  {headingLine2.text.length}/25 characters
+                </div>
                 <label className="flex items-center gap-2 mt-2 cursor-pointer">
                   <input type="checkbox" checked={headingLine2.isVisible} onChange={(e) => setHeadingLine2({ ...headingLine2, isVisible: e.target.checked })} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
                   <span className="text-sm font-semibold text-[#566A7F]">Show Heading Line 2</span>
@@ -303,10 +315,14 @@ const ManageHero = () => {
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Description</label>
               <textarea 
                 value={description.text}
+                maxLength={150}
                 onChange={(e) => setDescription({ ...description, text: e.target.value })}
                 rows={3}
                 className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               ></textarea>
+              <div className="text-xs text-right mt-1 text-gray-500">
+                {description.text.length}/150 characters
+              </div>
               <label className="flex items-center gap-2 mt-2 cursor-pointer">
                 <input type="checkbox" checked={description.isVisible} onChange={(e) => setDescription({ ...description, isVisible: e.target.checked })} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
                 <span className="text-sm font-semibold text-[#566A7F]">Show Description</span>
@@ -329,8 +345,9 @@ const ManageHero = () => {
                   <input 
                     type="text" 
                     value={primaryButton.text}
+                    disabled
                     onChange={(e) => setPrimaryButton({ ...primaryButton, text: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    className="w-full px-3 py-2 bg-gray-100 border border-[#D9DEE3] rounded-md text-gray-400 text-sm cursor-not-allowed"
                   />
                 </div>
                 <div>
@@ -365,8 +382,9 @@ const ManageHero = () => {
                   <input 
                     type="text" 
                     value={secondaryButton.text}
+                    disabled
                     onChange={(e) => setSecondaryButton({ ...secondaryButton, text: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    className="w-full px-3 py-2 bg-gray-100 border border-[#D9DEE3] rounded-md text-gray-400 text-sm cursor-not-allowed"
                   />
                 </div>
                 <div>
@@ -416,9 +434,11 @@ const ManageHero = () => {
               <input 
                 type="text" 
                 value={statsCard.batchText}
+                maxLength={15}
                 onChange={(e) => setStatsCard({ ...statsCard, batchText: e.target.value })}
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-xs text-right mt-1 text-gray-500">{statsCard.batchText.length}/15</div>
             </div>
             
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
@@ -429,18 +449,22 @@ const ManageHero = () => {
                   <input 
                     type="text" 
                     value={statsCard.stat1Title}
+                    maxLength={20}
                     onChange={(e) => setStatsCard({ ...statsCard, stat1Title: e.target.value })}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
+                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.stat1Title.length}/20</div>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Subtitle</label>
                   <input 
                     type="text" 
                     value={statsCard.stat1Subtitle}
+                    maxLength={30}
                     onChange={(e) => setStatsCard({ ...statsCard, stat1Subtitle: e.target.value })}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
+                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.stat1Subtitle.length}/30</div>
                 </div>
               </div>
             </div>
@@ -453,18 +477,22 @@ const ManageHero = () => {
                   <input 
                     type="text" 
                     value={statsCard.stat2Title}
+                    maxLength={20}
                     onChange={(e) => setStatsCard({ ...statsCard, stat2Title: e.target.value })}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
+                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.stat2Title.length}/20</div>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Subtitle</label>
                   <input 
                     type="text" 
                     value={statsCard.stat2Subtitle}
+                    maxLength={30}
                     onChange={(e) => setStatsCard({ ...statsCard, stat2Subtitle: e.target.value })}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
+                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.stat2Subtitle.length}/30</div>
                 </div>
               </div>
             </div>
@@ -477,9 +505,11 @@ const ManageHero = () => {
                   <input 
                     type="text" 
                     value={statsCard.linkText}
+                    maxLength={30}
                     onChange={(e) => setStatsCard({ ...statsCard, linkText: e.target.value })}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
+                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.linkText.length}/30</div>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Link URL</label>

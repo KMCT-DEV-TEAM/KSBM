@@ -1,39 +1,26 @@
 "use client";
 import React from 'react';
-import { motion } from 'framer-motion';
 
-const Loader = ({ fullScreen = false, theme = 'dark', text = 'Loading' }) => {
-  const isDark = theme === 'dark';
-  
-  const containerClasses = fullScreen 
-    ? "fixed inset-0 z-[9999] bg-slate-900 flex items-center justify-center"
-    : "w-full min-h-[400px] flex items-center justify-center";
+const Loader = ({ fullScreen = false }) => {
+  const containerClasses = fullScreen
+    ? "fixed inset-0 z-[9999] bg-slate-900 flex flex-col items-center justify-center"
+    : "w-full min-h-[400px] flex flex-col items-center justify-center bg-slate-900 rounded-xl";
 
-  const textColor = isDark ? "text-white" : "text-primary";
-  const subtextColor = isDark ? "text-[#bce0f0]/70" : "text-primary/70";
-  const spinnerBorder = isDark ? "border-white/10 border-t-[#bce0f0]" : "border-primary/10 border-t-primary";
-  const innerPulse = isDark ? "bg-white/5" : "bg-primary/5";
+  const logoFilter = "brightness-1 invert contrast-200 drop-shadow-[0_0_12px_rgba(255,255,255,0.8)]"; // Maximum brightness with a glowing effect
 
   return (
     <div className={containerClasses}>
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col items-center gap-6"
-      >
-        <div className="relative w-20 h-20">
-          <div className={`absolute inset-0 rounded-full border-[3px] ${spinnerBorder} animate-spin`}></div>
-          <div className={`absolute inset-2 rounded-full ${innerPulse} animate-pulse`}></div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className={`${textColor} font-serif font-bold text-2xl tracking-tighter`}>K</span>
-          </div>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <h2 className={`${textColor} text-lg font-semibold tracking-widest uppercase`}>KSBM</h2>
-          <p className={`${subtextColor} text-xs tracking-[0.3em] uppercase animate-pulse`}>{text}</p>
-        </div>
-      </motion.div>
+      <div className="relative w-28 h-28 flex items-center justify-center mb-6">
+        <img
+          src="/assets/Images/Home/watermark_logo1.png"
+          alt="Loading..."
+          className={`w-full h-full object-contain will-change-transform`}
+          style={{ animation: 'spin 6s linear infinite' }}
+        />
+      </div>
+      <p className="text-white font-bold tracking-widest uppercase text-sm animate-pulse">
+        KSBM LOADING..
+      </p>
     </div>
   );
 };
