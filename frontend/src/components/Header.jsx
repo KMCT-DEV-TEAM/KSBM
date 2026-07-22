@@ -70,6 +70,7 @@ const Header = ({ previewData }) => {
               if (labelLower === 'people' || labelLower === 'faculty' || item.link === '#people' || item.link === '#faculty' || item.link.includes('people') || item.link.includes('faculty')) return { ...item, link: '/faculty' };
               if (labelLower === 'programs' || labelLower === 'program' || item.link === '#programs' || item.link.includes('programs')) return { ...item, link: '/programs' };
               if (labelLower === 'examinations' || labelLower === 'examination' || item.link === '#examinations' || item.link.includes('examinations')) return { ...item, link: '/examinations' };
+              if (labelLower === 'placement' || labelLower === 'placements' || item.link === '#placement' || item.link.includes('placement')) return { ...item, link: '/placement' };
               if (labelLower === 'alumni' || item.link.includes('alumni')) return { ...item, link: '/alumni' };
               if (labelLower === 'admission' || labelLower === 'admissions' || item.link === '#admission' || item.link.includes('admission')) return { ...item, link: '/admissions' };
               if (item.link.startsWith('#')) return { ...item, link: '/' + item.link };

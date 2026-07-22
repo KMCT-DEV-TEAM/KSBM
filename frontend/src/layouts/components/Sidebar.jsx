@@ -64,6 +64,13 @@ const Sidebar = () => {
       ]
     },
     {
+      title: 'Placement',
+      icon: <Briefcase className="w-5 h-5" />,
+      links: [
+        { name: 'Manage Placement Page', path: '/admin/cms/placement-page' },
+      ]
+    },
+    {
       title: 'About Us',
       icon: <Info className="w-5 h-5" />,
       links: [

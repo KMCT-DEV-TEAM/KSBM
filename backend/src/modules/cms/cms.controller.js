@@ -28,6 +28,7 @@ import MbaPageSetting from './mbaPage.model.js';
 import BbaPageSetting from './bbaPage.model.js';
 import ExaminationsPage from './examinationsPage.model.js';
 import AdmissionsPage from './admissionsPage.model.js';
+import PlacementPage from './placementPage.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -1097,5 +1098,42 @@ export const updateAdmissionsPageSettings = async (req, res) => {
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating Admissions Page settings', error: error.message });
+  }
+};
+
+// @desc    Get Placement Page settings
+// @route   GET /api/cms/placement-page
+// @access  Public
+export const getPlacementPageSettings = async (req, res) => {
+  try {
+    const settings = await PlacementPage.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Placement Page settings', error: error.message });
+  }
+};
+
+// @desc    Update Placement Page settings
+// @route   PUT /api/cms/placement-page
+// @access  Private/Admin
+export const updatePlacementPageSettings = async (req, res) => {
+  try {
+    const fields = [
+      'hero', 'overview', 'proudAchievers', 'topRecruiters', 'excellenceSupport',
+      'facultyInCharge', 'placementCommittee', 'activities'
+    ];
+    
+    const settings = await PlacementPage.getSettings();
+    
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        settings[field] = req.body[field];
+      }
+    });
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Placement Page settings', error: error.message });
   }
 };
