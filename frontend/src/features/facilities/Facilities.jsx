@@ -4,8 +4,6 @@ import api from '../../api/axios';
 import FacilitiesHero from './components/FacilitiesHero';
 import InstitutionalResourcesSection from './components/InstitutionalResourcesSection';
 import ClubsSection from './components/ClubsSection';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 
 const Facilities = () => {
   const [data, setData] = useState(null);
@@ -16,7 +14,7 @@ const Facilities = () => {
   useEffect(() => {
     const fetchFacilitiesData = async () => {
       try {
-        const response = await api.get('/cms/facilities-page');
+        const response = await api.get('/cms/facilities-page', { hideLoader: true });
         setData(response.data);
       } catch (error) {
         console.error('Failed to fetch facilities data:', error);
@@ -41,7 +39,6 @@ const Facilities = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50/50">
-      <Header />
 
       <main className="flex-1">
         <FacilitiesHero data={data.hero} />
@@ -65,8 +62,6 @@ const Facilities = () => {
 
         <ClubsSection data={data.clubs} />
       </main>
-
-      <Footer />
     </div>
   );
 };

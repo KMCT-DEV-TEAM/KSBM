@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import VirtualTourButton from '../components/VirtualTourButton';
+import SideContact from '../components/SideContact';
 import Loader from '../components/Loader';
 
 const MainLayout = ({ children }) => {
@@ -38,6 +39,7 @@ const MainLayout = ({ children }) => {
       
       {/* Global Floating Buttons */}
       <VirtualTourButton />
+      <SideContact />
     </div>
   );
 };

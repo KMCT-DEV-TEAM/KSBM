@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+
 import ExaminationsHero from './components/ExaminationsHero';
 import ExaminationsOverview from './components/ExaminationsOverview';
 import ExamCalendarBanner from './components/ExamCalendarBanner';
@@ -17,7 +16,7 @@ const ExaminationsLanding = () => {
     window.scrollTo(0, 0);
     const fetchExaminationsData = async () => {
       try {
-        const res = await api.get('/cms/examinations-page');
+        const res = await api.get('/cms/examinations-page', { hideLoader: true });
         if (res && res.data) {
           setData(res.data);
         }
@@ -33,7 +32,6 @@ const ExaminationsLanding = () => {
   return (
     <div className="min-h-screen bg-white flex flex-col justify-between">
       <div>
-        <Header />
         <main>
           <ExaminationsHero data={data} />
           <ExaminationsOverview data={data} />
@@ -42,7 +40,6 @@ const ExaminationsLanding = () => {
           <ExamResultsTable data={data} />
         </main>
       </div>
-      <Footer />
     </div>
   );
 };

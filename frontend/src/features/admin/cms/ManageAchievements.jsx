@@ -292,13 +292,13 @@ const ManageAchievements = () => {
               <div key={item.id || item._id} className="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col md:flex-row gap-6 relative group">
                 <button
                   onClick={() => handleDeleteAchievement(item.id || item._id)}
-                  className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                  className="absolute top-4 right-4 p-1.5 bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 rounded-md transition-all shadow-sm opacity-0 group-hover:opacity-100"
                   title="Remove Achievement"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
 
-                <div className="flex flex-col gap-4 w-full md:w-48 shrink-0">
+                <div className="flex flex-col gap-4 w-full md:w-64 shrink-0">
                   <div>
                     <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Image</label>
                     <LogoUploader
@@ -308,7 +308,7 @@ const ManageAchievements = () => {
                   </div>
                 </div>
 
-                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 pr-8">
                   <div className="md:col-span-2">
                     <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Title</label>
                     <input

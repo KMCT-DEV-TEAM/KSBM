@@ -59,6 +59,28 @@ const heroSchema = new mongoose.Schema(
         { url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop' },
         { url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop' }
       ]
+    },
+    statsCard: {
+      type: {
+        isVisible: { type: Boolean, default: true },
+        batchText: { type: String, default: 'Batch 2025–27' },
+        stat1Title: { type: String, default: 'Limited Seats' },
+        stat1Subtitle: { type: String, default: 'Last few slots remaining' },
+        stat2Title: { type: String, default: '100% Placement' },
+        stat2Subtitle: { type: String, default: 'Consistent record over years' },
+        linkText: { type: String, default: 'Read Admission Guidelines' },
+        linkUrl: { type: String, default: '#' }
+      },
+      default: () => ({
+        isVisible: true,
+        batchText: 'Batch 2025–27',
+        stat1Title: 'Limited Seats',
+        stat1Subtitle: 'Last few slots remaining',
+        stat2Title: '100% Placement',
+        stat2Subtitle: 'Consistent record over years',
+        linkText: 'Read Admission Guidelines',
+        linkUrl: '#'
+      })
     }
   },
   {

@@ -116,7 +116,7 @@ export const getHeroSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateHeroSettings = async (req, res) => {
   try {
-    const { pillText, headingLine1, headingLine2, description, primaryButton, secondaryButton, bannerImages } = req.body;
+    const { pillText, headingLine1, headingLine2, description, primaryButton, secondaryButton, bannerImages, statsCard } = req.body;
 
     const settings = await Hero.getSettings();
 
@@ -127,6 +127,7 @@ export const updateHeroSettings = async (req, res) => {
     if (primaryButton !== undefined) settings.primaryButton = primaryButton;
     if (secondaryButton !== undefined) settings.secondaryButton = secondaryButton;
     if (bannerImages !== undefined) settings.bannerImages = bannerImages;
+    if (statsCard !== undefined) settings.statsCard = statsCard;
 
     const updatedSettings = await settings.save();
     res.json(updatedSettings);

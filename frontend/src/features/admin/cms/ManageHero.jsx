@@ -33,6 +33,17 @@ const ManageHero = () => {
 
   const [bannerImages, setBannerImages] = useState([]);
   
+  const [statsCard, setStatsCard] = useState({
+    isVisible: true,
+    batchText: 'Batch 2025–27',
+    stat1Title: 'Limited Seats',
+    stat1Subtitle: 'Last few slots remaining',
+    stat2Title: '100% Placement',
+    stat2Subtitle: 'Consistent record over years',
+    linkText: 'Read Admission Guidelines',
+    linkUrl: '#'
+  });
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -54,6 +65,7 @@ const ManageHero = () => {
         if (data.primaryButton) setPrimaryButton(data.primaryButton);
         if (data.secondaryButton) setSecondaryButton(data.secondaryButton);
         if (data.bannerImages) setBannerImages(data.bannerImages);
+        if (data.statsCard) setStatsCard(data.statsCard);
       }
     } catch (error) {
       console.error('Error fetching hero settings:', error);
@@ -79,7 +91,8 @@ const ManageHero = () => {
         description, 
         primaryButton, 
         secondaryButton,
-        bannerImages
+        bannerImages,
+        statsCard
       }, { hideLoader: true });
       Toast.fire({ icon: 'success', title: 'Hero settings saved successfully!' });
     } catch (error) {
@@ -110,6 +123,16 @@ const ManageHero = () => {
           { url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop' },
           { url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop' }
         ]);
+        setStatsCard({
+          isVisible: true,
+          batchText: 'Batch 2025–27',
+          stat1Title: 'Limited Seats',
+          stat1Subtitle: 'Last few slots remaining',
+          stat2Title: '100% Placement',
+          stat2Subtitle: 'Consistent record over years',
+          linkText: 'Read Admission Guidelines',
+          linkUrl: '#'
+        });
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -122,7 +145,8 @@ const ManageHero = () => {
     description,
     primaryButton,
     secondaryButton,
-    bannerImages
+    bannerImages,
+    statsCard
   };
 
   useEffect(() => {
@@ -368,6 +392,106 @@ const ManageHero = () => {
               </div>
             </div>
 
+          </div>
+        </div>
+
+        {/* Stats Card Settings */}
+        <div className="pt-8 mt-8 border-t border-gray-100">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-bold text-[#1e2869]">Stats Floating Card</h3>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input 
+                type="checkbox"
+                checked={statsCard.isVisible}
+                onChange={(e) => setStatsCard({ ...statsCard, isVisible: e.target.checked })}
+                className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
+              />
+              <span className="text-sm font-semibold text-gray-500">Show Stats Card</span>
+            </label>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 md:col-span-2">
+              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Batch Text</label>
+              <input 
+                type="text" 
+                value={statsCard.batchText}
+                onChange={(e) => setStatsCard({ ...statsCard, batchText: e.target.value })}
+                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+            </div>
+            
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+              <h4 className="font-semibold text-sm text-[#566A7F] mb-3 border-b pb-2">Statistic 1</h4>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Title</label>
+                  <input 
+                    type="text" 
+                    value={statsCard.stat1Title}
+                    onChange={(e) => setStatsCard({ ...statsCard, stat1Title: e.target.value })}
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Subtitle</label>
+                  <input 
+                    type="text" 
+                    value={statsCard.stat1Subtitle}
+                    onChange={(e) => setStatsCard({ ...statsCard, stat1Subtitle: e.target.value })}
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+              <h4 className="font-semibold text-sm text-[#566A7F] mb-3 border-b pb-2">Statistic 2</h4>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Title</label>
+                  <input 
+                    type="text" 
+                    value={statsCard.stat2Title}
+                    onChange={(e) => setStatsCard({ ...statsCard, stat2Title: e.target.value })}
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Subtitle</label>
+                  <input 
+                    type="text" 
+                    value={statsCard.stat2Subtitle}
+                    onChange={(e) => setStatsCard({ ...statsCard, stat2Subtitle: e.target.value })}
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 md:col-span-2">
+              <h4 className="font-semibold text-sm text-[#566A7F] mb-3 border-b pb-2">Admission Guidelines Link</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Link Text</label>
+                  <input 
+                    type="text" 
+                    value={statsCard.linkText}
+                    onChange={(e) => setStatsCard({ ...statsCard, linkText: e.target.value })}
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Link URL</label>
+                  <input 
+                    type="text" 
+                    value={statsCard.linkUrl}
+                    onChange={(e) => setStatsCard({ ...statsCard, linkUrl: e.target.value })}
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
