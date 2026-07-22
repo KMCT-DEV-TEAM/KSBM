@@ -94,6 +94,7 @@ const ManageAboutCta = () => {
       <PageHeader
         title="Apply CTA Section"
         description="Manage the call to action banner on the About Us page."
+        onPreview={() => window.open('/about', '_blank')}
         onReset={handleResetToDefault}
         onSave={handleSave}
         isSaving={isSaving}

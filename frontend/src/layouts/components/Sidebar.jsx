@@ -78,16 +78,10 @@ const Sidebar = () => {
       title: 'About Us',
       icon: <Info className="w-5 h-5" />,
       links: [
-        { name: 'Hero Section', path: '/admin/cms/about-us/hero' },
-        { name: 'Vision & Mission', path: '/admin/cms/about-us/vision' },
-        { name: 'Leadership', path: '/admin/cms/about-us/leadership' },
-        { name: 'Legacy', path: '/admin/cms/about-us/legacy' },
-        { name: 'Stats', path: '/admin/cms/about-us/stats' },
+        { name: 'About Us Page', path: '/admin/cms/about-us' },
         { name: 'Advisory Board', path: '/admin/cms/about-us/advisory' },
         { name: 'Governing Body', path: '/admin/cms/about-us/governing' },
         { name: 'Management Desk', path: '/admin/cms/about-us/management-desk' },
-        { name: 'Faculty Members', path: '/admin/cms/faculty' },
-        { name: 'Apply CTA', path: '/admin/cms/about-us/cta' },
       ]
     },
     {

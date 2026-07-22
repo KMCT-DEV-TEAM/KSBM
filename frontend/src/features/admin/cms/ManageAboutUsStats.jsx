@@ -92,6 +92,7 @@ const ManageAboutUsStats = () => {
       <PageHeader
         title="Stats Section"
         description="Manage the statistics displayed on the About Us page."
+        onPreview={() => window.open('/about', '_blank')}
         onReset={handleResetToDefault}
         onSave={handleSave}
         isSaving={isSaving}

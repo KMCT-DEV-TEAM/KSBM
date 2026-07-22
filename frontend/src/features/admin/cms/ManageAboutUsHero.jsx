@@ -88,6 +88,7 @@ const ManageAboutUsHero = () => {
       <PageHeader
         title="About Us - Hero Section"
         description="Manage the About Us hero banner."
+        onPreview={() => window.open('/about', '_blank')}
         onReset={handleResetToDefault}
         onSave={handleSave}
         isSaving={isSaving || isUploading}

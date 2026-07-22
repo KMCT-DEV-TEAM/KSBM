@@ -212,19 +212,22 @@ const ManageLeadership = () => {
       <PageHeader
         title="About Us - Leadership Section"
         description="Add and manage leaders. They automatically display on the About Us page in an alternating left/right layout."
+        onPreview={() => window.open('/about', '_blank')}
         onReset={handleResetToDefault}
         onSave={handleSave}
         isSaving={isSaving || isUploading}
-        extraButtons={
-          <button
-            onClick={handleAddLeader}
-            className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-xl font-semibold text-sm hover:bg-emerald-700 transition-colors shadow-sm cursor-pointer"
-          >
-            <UserPlus className="w-4 h-4" />
-            Add Person
-          </button>
-        }
       />
+
+      <div className="flex justify-between items-center w-full mt-4">
+        <h2 className="text-xl font-bold text-[#566A7F] font-heading">Leadership Profiles</h2>
+        <button
+          onClick={handleAddLeader}
+          className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-xl font-semibold text-sm hover:bg-[#1e2358] transition-colors shadow-sm cursor-pointer"
+        >
+          <UserPlus className="w-4 h-4" />
+          Add Person
+        </button>
+      </div>
 
       {/* Leaders List */}
       <div className="space-y-8 w-full">
