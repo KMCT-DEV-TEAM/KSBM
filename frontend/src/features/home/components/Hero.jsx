@@ -26,7 +26,7 @@ const Hero = ({ previewData }) => {
     }
     const fetchSettings = async () => {
       try {
-        const { data } = await api.get('/cms/hero');
+        const { data } = await api.get('/cms/hero', { hideLoader: true });
         setSettings(data);
       } catch (error) {
         console.error('Error fetching hero settings:', error);
@@ -41,9 +41,9 @@ const Hero = ({ previewData }) => {
     return settings?.bannerImages?.length > 0 
       ? settings.bannerImages.map(img => img.url)
       : [
-          'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop',
-          'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop',
-          'https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=2086&auto=format&fit=crop'
+          '/assets/Images/Home/hero_banner_1.png',
+          '/assets/Images/Home/hero_banner_2.png',
+          '/assets/Images/Home/hero_banner_3.png'
         ];
   }, [settings?.bannerImages]);
 

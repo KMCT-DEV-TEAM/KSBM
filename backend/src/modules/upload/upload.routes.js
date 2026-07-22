@@ -2,7 +2,22 @@ import express from 'express';
 import { upload, cloudinary } from '../../config/cloudinary.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
+import { uploadAssets } from '../../config/assetsUpload.js';
+
 const router = express.Router();
+
+router.post('/home', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/home/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to local assets/home',
+    url: fileUrl,
+  });
+});
 
 router.post('/', protect, upload.single('image'), async (req, res) => {
   if (!req.file) {
@@ -33,7 +48,7 @@ router.post('/', protect, upload.single('image'), async (req, res) => {
   }
 
   // Local URL fallback
-  const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  const fileUrl = `/uploads/${req.file.filename}`;
   
   res.status(200).json({
     message: 'Image uploaded successfully locally',

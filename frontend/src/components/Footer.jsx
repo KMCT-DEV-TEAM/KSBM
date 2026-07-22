@@ -23,7 +23,7 @@ const Footer = ({ previewData }) => {
     } else {
       const fetchFooter = async () => {
         try {
-          const response = await api.get('/cms/footer');
+          const response = await api.get('/cms/footer', { hideLoader: true });
           if (response.data) {
             setData(response.data);
           }

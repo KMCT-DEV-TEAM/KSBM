@@ -13,6 +13,18 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
   const onDrop = useCallback(async (acceptedFiles) => {
     if (acceptedFiles.length === 0) return;
 
+    if (bannerImages.length + acceptedFiles.length > 5) {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: 'You can only have up to 5 banner images.',
+        showConfirmButton: false,
+        timer: 3000
+      });
+      return;
+    }
+
     setIsUploading(true);
     if (onUploadStateChange) onUploadStateChange(true);
     let uploadedUrls = [];
@@ -22,7 +34,7 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
       const formData = new FormData();
       formData.append('image', file);
       try {
-        const response = await api.post('/upload', formData, {
+        const response = await api.post('/upload/home', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
           hideLoader: true
         });
@@ -66,14 +78,14 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
 
     setIsUploading(false);
     if (onUploadStateChange) onUploadStateChange(false);
-  }, [setBannerImages, onUploadStateChange]);
+  }, [setBannerImages, onUploadStateChange, bannerImages]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
       'image/*': ['.png', '.jpg', '.jpeg', '.webp']
     },
-    disabled: isUploading
+    disabled: isUploading || bannerImages.length >= 5
   });
 
   const removeImage = (index) => {
@@ -155,8 +167,9 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
     <div className="w-full space-y-6">
       <div 
         {...getRootProps()} 
-        className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
-          ${isDragActive ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-primary/50'}
+        className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors
+          ${bannerImages.length >= 5 ? 'border-gray-300 bg-gray-50 opacity-50 cursor-not-allowed' : 
+            isDragActive ? 'border-primary bg-primary/5 cursor-pointer' : 'border-gray-300 hover:border-primary/50 cursor-pointer'}
           ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}
         `}
       >
@@ -170,14 +183,14 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
             </>
           ) : (
             <>
-              <div className="p-4 bg-primary/10 text-primary rounded-full">
+              <div className={`p-4 rounded-full ${bannerImages.length >= 5 ? 'bg-gray-200 text-gray-400' : 'bg-primary/10 text-primary'}`}>
                 <UploadCloud className="w-8 h-8" />
               </div>
               <div>
                 <p className="text-base font-medium text-gray-700">
-                  {isDragActive ? "Drop the images here..." : "Drag & drop banner images, or click to select"}
+                  {bannerImages.length >= 5 ? "Maximum of 5 images reached." : isDragActive ? "Drop the images here..." : "Drag & drop banner images, or click to select"}
                 </p>
-                <p className="text-sm text-gray-500 mt-2">You can select multiple files. Supports PNG, JPG, WEBP up to 5MB</p>
+                <p className="text-sm text-gray-500 mt-2">Maximum 5 images allowed. You can select multiple files. Supports PNG, JPG, WEBP up to 5MB</p>
               </div>
             </>
           )}
@@ -191,7 +204,7 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
           </h4>
           <p className="text-xs text-gray-500 mb-4">Drag and drop to reorder the slides.</p>
           
-          <div className="space-y-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {bannerImages.map((img, index) => (
               <div 
                 key={index}
@@ -200,32 +213,33 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
                 onDragEnter={(e) => handleDragEnter(e, index)}
                 onDragEnd={handleDragEnd}
                 onDragOver={(e) => e.preventDefault()}
-                className="flex items-center gap-4 bg-[#F5F5F9] p-3 rounded-lg border border-gray-200 group transition-all"
+                className="relative group bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-all cursor-move"
               >
-                <div className="cursor-move p-2 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-600 transition-colors shrink-0">
-                  <GripVertical className="w-5 h-5" />
-                </div>
-                
-                <div className="w-24 h-16 bg-black rounded-md overflow-hidden shrink-0 border border-gray-300 relative shadow-inner">
-                  <img src={img.url} alt={`Slide ${index + 1}`} className="w-full h-full object-cover opacity-80" />
-                  <div className="absolute inset-0 flex items-center justify-center text-white text-xs font-bold bg-black/30">
+                <div className="aspect-[16/9] w-full bg-gray-100 relative">
+                  <img src={img.url} alt={`Slide ${index + 1}`} className="w-full h-full object-cover" />
+                  
+                  {/* Overlay on hover */}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                    <GripVertical className="w-8 h-8 text-white" />
+                  </div>
+
+                  {/* Badge */}
+                  <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded">
                     {index + 1}
                   </div>
-                </div>
 
-                <div className="flex-1 min-w-0">
-                  <a href={img.url} target="_blank" rel="noreferrer" className="text-sm text-primary hover:underline truncate block">
-                    {img.url}
-                  </a>
+                  {/* Remove Button */}
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeImage(index);
+                    }}
+                    className="absolute top-2 right-2 p-1.5 bg-white text-red-500 hover:bg-red-500 hover:text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all shadow-sm z-10"
+                    title="Remove Slide"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
-
-                <button 
-                  onClick={() => removeImage(index)}
-                  className="p-2 text-gray-400 hover:text-[#FF3E1D] hover:bg-[#FF3E1D]/10 rounded-md transition-colors shrink-0"
-                  title="Remove Slide"
-                >
-                  <X className="w-5 h-5" />
-                </button>
               </div>
             ))}
           </div>

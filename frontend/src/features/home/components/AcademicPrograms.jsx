@@ -37,7 +37,7 @@ const AcademicPrograms = ({ previewData }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/cms/programs');
+        const response = await api.get('/cms/programs', { hideLoader: true });
         setData(response.data);
       } catch (error) {
         console.error('Error fetching academic programs data:', error);

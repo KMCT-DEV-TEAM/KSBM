@@ -55,9 +55,9 @@ const heroSchema = new mongoose.Schema(
     bannerImages: {
       type: [{ url: String }],
       default: () => [
-        { url: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop' },
-        { url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop' },
-        { url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop' }
+        { url: '/assets/Images/Home/hero_banner_1.png' },
+        { url: '/assets/Images/Home/hero_banner_2.png' },
+        { url: '/assets/Images/Home/hero_banner_3.png' }
       ]
     },
     statsCard: {

@@ -26,8 +26,9 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-// Serve static uploads
+// Serve static uploads and assets
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
+app.use('/assets', express.static(path.join(__dirname, '../../assets')));
 
 // Routes
 app.use('/api/users', userRoutes);

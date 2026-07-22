@@ -4,7 +4,6 @@ import { Save, Plus, Trash2, GripVertical, AlertCircle, Eye, Monitor, Smartphone
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import Loader from '../../../components/Loader';
-import LogoUploader from './components/LogoUploader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
@@ -281,16 +280,6 @@ const ManageHeader = () => {
       {/* Main Form Card */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
         
-        {/* Logo URL Settings */}
-        <div className="mb-8 pb-8 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-[#1e2869] mb-4">Header Logo</h3>
-          <LogoUploader 
-            currentLogoUrl={logoUrl} 
-            onUploadSuccess={(url) => setLogoUrl(url)} 
-            onUploadStateChange={(uploading) => setIsUploading(uploading)}
-          />
-        </div>
-
         {/* Alignment Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
           <h3 className="text-lg font-bold text-[#1e2869] mb-4">Navigation Alignment</h3>
@@ -315,12 +304,6 @@ const ManageHeader = () => {
         <div className="mb-8 pb-8 border-b border-gray-100">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-bold text-[#1e2869]">Navigation Links</h3>
-            <button 
-              onClick={handleOpenAddLinkModal}
-              className="flex items-center gap-2 text-sm font-semibold text-primary bg-primary/10 px-3 py-1.5 rounded-md hover:bg-primary/20 transition-colors"
-            >
-              <Plus className="w-4 h-4" /> Add Link
-            </button>
           </div>
           
           <div className="space-y-3">

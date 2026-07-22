@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Rotate3d } from 'lucide-react';
 import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
-const graduateImg = '/assets/Images/graduate.png';
-const watermarkImg = '/assets/Images/watermark_logo.png';
+const graduateImg = '/assets/Images/Home/graduate.png';
+const watermarkImg = '/assets/Images/Home/watermark_logo.png';
 import api from '../../../api/axios';
 
 
@@ -83,7 +83,7 @@ const AboutSection = ({ previewData }) => {
 
     const fetchAboutData = async () => {
       try {
-        const { data } = await api.get('/cms/about');
+        const { data } = await api.get('/cms/about', { hideLoader: true });
         if (data) {
           setCmsData({
             subheading: data.subheading || cmsData.subheading,
@@ -225,6 +225,7 @@ const AboutSection = ({ previewData }) => {
 
       {cmsData.showStats && cmsData.stats.length > 0 && (
         <motion.div
+          key={cmsData.stats.length}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: false, amount: 0.2 }}
@@ -241,19 +242,19 @@ const AboutSection = ({ previewData }) => {
           }}
           className="w-full "
         >
-          <div className="w-[98%] max-w-[1440px] bg-[#f4fafe] py-12 mx-auto px-4 sm:px-6 lg:px-8 rounded-xl shadow-sm">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 w-full">
+          <div className="w-[98%] max-w-[1440px] bg-[#f4fafe] py-8 md:py-12 mx-auto px-2 sm:px-6 lg:px-8 rounded-xl shadow-sm">
+            <div className="flex flex-wrap md:flex-nowrap justify-center items-start gap-y-8 gap-x-2 md:gap-4 w-full">
 
               {cmsData.stats.map((stat, index) => (
                 <motion.div
                   key={index}
                   variants={{ hidden: { opacity: 0, scale: 0.8 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } } }}
-                  className="flex flex-col items-center justify-center text-center px-2"
+                  className="flex flex-col items-center justify-start text-center w-[47%] sm:w-[45%] md:w-auto md:flex-1 px-1"
                 >
-                  <span className={`font-serif text-[#4e558e] mb-2 ${statTextClass}`}>
+                  <span className={`font-serif text-[#4e558e] mb-1 md:mb-2 text-3xl md:text-3xl lg:text-4xl`}>
                     <Counter value={stat.value} />
                   </span>
-                  <span className="text-xs font-bold tracking-widest text-gray-600 uppercase">{stat.label}</span>
+                  <span className="text-[11px] sm:text-xs font-bold tracking-wider md:tracking-widest text-gray-600 uppercase break-words w-full leading-tight">{stat.label}</span>
                 </motion.div>
               ))}
 
