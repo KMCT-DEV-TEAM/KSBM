@@ -29,6 +29,7 @@ import BbaPageSetting from './bbaPage.model.js';
 import ExaminationsPage from './examinationsPage.model.js';
 import AdmissionsPage from './admissionsPage.model.js';
 import PlacementPage from './placementPage.model.js';
+import ContactPage from './contactPage.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -1135,5 +1136,38 @@ export const updatePlacementPageSettings = async (req, res) => {
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating Placement Page settings', error: error.message });
+  }
+};
+
+// @desc    Get Contact Page settings
+// @route   GET /api/cms/contact-page
+// @access  Public
+export const getContactPageSettings = async (req, res) => {
+  try {
+    const settings = await ContactPage.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Contact Page settings', error: error.message });
+  }
+};
+
+// @desc    Update Contact Page settings
+// @route   PUT /api/cms/contact-page
+// @access  Private/Admin
+export const updateContactPageSettings = async (req, res) => {
+  try {
+    const fields = ['hero', 'contactBox'];
+    const settings = await ContactPage.getSettings();
+    
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        settings[field] = req.body[field];
+      }
+    });
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Contact Page settings', error: error.message });
   }
 };

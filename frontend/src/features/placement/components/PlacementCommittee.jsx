@@ -11,7 +11,7 @@ const PlacementCommittee = ({ data }) => {
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
 
           {/* Left Side - Vector Graphic */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -26,7 +26,7 @@ const PlacementCommittee = ({ data }) => {
           </motion.div>
 
           {/* Right Side - Content & Profiles */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -45,20 +45,6 @@ const PlacementCommittee = ({ data }) => {
                 {data.buttonText}
               </button>
             </div>
-
-            {data.items && data.items.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                {data.items.map((member, idx) => (
-                  <div key={idx} className="flex flex-col items-center text-center group">
-                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 shadow-md border-4 border-white transition-transform duration-300 group-hover:scale-110">
-                      <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
-                    </div>
-                    <h4 className="text-gray-900 font-semibold text-[15px]">{member.name}</h4>
-                    <p className="text-primary text-[13px] font-medium">{member.role}</p>
-                  </div>
-                ))}
-              </div>
-            )}
 
           </motion.div>
 

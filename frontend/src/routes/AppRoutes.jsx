@@ -35,8 +35,11 @@ import MbaPage from '../features/programs/MbaPage';
 import BbaPage from '../features/programs/BbaPage';
 import ExaminationsLanding from '../features/examinations/ExaminationsLanding';
 import AdmissionLanding from '../features/admission/AdmissionLanding';
+import ContactLanding from '../features/contact/ContactLanding';
 import ManageExaminationsPage from '../features/admin/cms/ManageExaminationsPage';
 import ManageAdmissionsPage from '../features/admin/cms/ManageAdmissionsPage';
+import ManagePlacementPage from '../features/admin/cms/ManagePlacementPage';
+import ManageContactPage from '../features/admin/cms/ManageContactPage';
 import ManageMbaPage from '../features/admin/cms/ManageMbaPage';
 import ManageRecruiters from '../features/admin/cms/ManageRecruiters';
 import ManageNews from '../features/admin/cms/ManageNews';
@@ -74,6 +77,7 @@ const AppRoutes = () => {
           <Route path="examinations" element={<ExaminationsLanding />} />
           <Route path="admission" element={<AdmissionLanding />} />
           <Route path="admissions" element={<AdmissionLanding />} />
+          <Route path="contact" element={<ContactLanding />} />
           {/* Add more routes here later (e.g., /campus) */}
         </Route>
 
@@ -134,6 +138,8 @@ const AppRoutes = () => {
           <Route path="cms/examinations-page" element={<ManageExaminationsPage />} />
           <Route path="cms/admissions" element={<ManageAdmissionsPage />} />
           <Route path="cms/admissions-page" element={<ManageAdmissionsPage />} />
+          <Route path="cms/placement-page" element={<ManagePlacementPage />} />
+          <Route path="cms/contact-page" element={<ManageContactPage />} />
 
             {/* Add future admin routes here */}
           </Route>

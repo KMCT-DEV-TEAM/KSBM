@@ -33,25 +33,25 @@ const ManagePlacementPage = () => {
 
   // Hero State
   const [hero, setHero] = useState({ title: '', subtitle: '', badge: '', backgroundImage: '' });
-  
+
   // Overview State
   const [overview, setOverview] = useState({ title: '', deskBadge: '', description1: '', description2: '', stat1Value: '', stat1Label: '', stat2Value: '', stat2Label: '', collageImage1: '', collageImage2: '', floatingQuote: '' });
-  
+
   // Proud Achievers State
   const [proudAchievers, setProudAchievers] = useState({ title: '', items: [] });
-  
+
   // Top Recruiters State
   const [topRecruiters, setTopRecruiters] = useState({ title: '', description: '', items: [] });
-  
+
   // Excellence Support State
   const [excellenceSupport, setExcellenceSupport] = useState({ title: '', description: '', backgroundImage: '', listOne: [], listTwo: [] });
-  
+
   // Faculty In-Charge State
   const [facultyInCharge, setFacultyInCharge] = useState({ badge: '', title: '', description: '', items: [] });
-  
+
   // Placement Committee State
   const [placementCommittee, setPlacementCommittee] = useState({ title: '', description: '', buttonText: '', image: '', items: [] });
-  
+
   // Activities State
   const [activities, setActivities] = useState({ title: '', items: [] });
 
@@ -220,13 +220,13 @@ const ManagePlacementPage = () => {
   const handleArrayAdd = (setter, state, defaultItem) => {
     setter({ ...state, items: [...state.items, defaultItem] });
   };
-  
+
   const handleArrayRemove = (setter, state, index) => {
     const newItems = [...state.items];
     newItems.splice(index, 1);
     setter({ ...state, items: newItems });
   };
-  
+
   const handleArrayChange = (setter, state, index, field, value) => {
     const newItems = [...state.items];
     newItems[index][field] = value;
@@ -275,8 +275,8 @@ const ManagePlacementPage = () => {
 
   return (
     <div className="space-y-8 pb-16">
-      <PageHeader 
-        title="Manage Placement Page" 
+      <PageHeader
+        title="Manage Placement Page"
         description="Edit content and sections of the Placement Landing Page"
         onPreview={() => setIsPreviewModalOpen(true)}
         onReset={handleResetToDefault}
@@ -284,7 +284,7 @@ const ManagePlacementPage = () => {
         isSaving={isSaving}
       />
 
-      
+
       <div className="relative flex items-center gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
         <button
           type="button"
@@ -324,371 +324,342 @@ const ManagePlacementPage = () => {
       </div>
 
       <div>
-          {/* HERO TAB */}
-          {activeTab === 'hero' && (
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
-              <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Hero Section Settings</h2>
-              <div className="grid grid-cols-1 gap-6">
+        {/* HERO TAB */}
+        {activeTab === 'hero' && (
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
+            <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Hero Section Settings</h2>
+            <div className="grid grid-cols-1 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Badge Text</label>
+                <input type="text" value={hero.badge} onChange={(e) => setHero({ ...hero, badge: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Title</label>
+                <textarea value={hero.title} onChange={(e) => setHero({ ...hero, title: e.target.value })} rows="2" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium"></textarea>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Subtitle</label>
+                <textarea value={hero.subtitle} onChange={(e) => setHero({ ...hero, subtitle: e.target.value })} rows="3" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium"></textarea>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Background Image</label>
+                <LogoUploader value={hero.backgroundImage} onChange={(url) => setHero({ ...hero, backgroundImage: url })} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* OVERVIEW TAB */}
+        {activeTab === 'overview' && (
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
+            <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Overview Section Settings</h2>
+            <div className="grid grid-cols-1 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-800 mb-1">Badge Text</label>
-                  <input type="text" value={hero.badge} onChange={(e) => setHero({...hero, badge: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium" />
+                  <input type="text" value={overview.deskBadge} onChange={(e) => setOverview({ ...overview, deskBadge: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-800 mb-1">Title</label>
-                  <textarea value={hero.title} onChange={(e) => setHero({...hero, title: e.target.value})} rows="2" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium"></textarea>
+                  <input type="text" value={overview.title} onChange={(e) => setOverview({ ...overview, title: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Description Paragraph 1</label>
+                <textarea value={overview.description1} onChange={(e) => setOverview({ ...overview, description1: e.target.value })} rows="3" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium"></textarea>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Description Paragraph 2</label>
+                <textarea value={overview.description2} onChange={(e) => setOverview({ ...overview, description2: e.target.value })} rows="3" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium"></textarea>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Floating Quote</label>
+                <input type="text" value={overview.floatingQuote} onChange={(e) => setOverview({ ...overview, floatingQuote: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm">
+                  <h4 className="text-sm font-semibold mb-3">Statistic 1</h4>
+                  <input type="text" placeholder="Value (e.g. 100+)" value={overview.stat1Value} onChange={(e) => setOverview({ ...overview, stat1Value: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium mb-2" />
+                  <input type="text" placeholder="Label (e.g. Students Placed)" value={overview.stat1Label} onChange={(e) => setOverview({ ...overview, stat1Label: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+                </div>
+                <div className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm">
+                  <h4 className="text-sm font-semibold mb-3">Statistic 2</h4>
+                  <input type="text" placeholder="Value (e.g. 99%)" value={overview.stat2Value} onChange={(e) => setOverview({ ...overview, stat2Value: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium mb-2" />
+                  <input type="text" placeholder="Label (e.g. Placement Rate)" value={overview.stat2Label} onChange={(e) => setOverview({ ...overview, stat2Label: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-800 mb-1">Collage Image 1</label>
+                  <LogoUploader value={overview.collageImage1} onChange={(url) => setOverview({ ...overview, collageImage1: url })} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Subtitle</label>
-                  <textarea value={hero.subtitle} onChange={(e) => setHero({...hero, subtitle: e.target.value})} rows="3" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium"></textarea>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Background Image</label>
-                  <LogoUploader value={hero.backgroundImage} onChange={(url) => setHero({...hero, backgroundImage: url})} />
+                  <label className="block text-sm font-medium text-gray-800 mb-1">Collage Image 2</label>
+                  <LogoUploader value={overview.collageImage2} onChange={(url) => setOverview({ ...overview, collageImage2: url })} />
                 </div>
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* OVERVIEW TAB */}
-          {activeTab === 'overview' && (
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
-              <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Overview Section Settings</h2>
-              <div className="grid grid-cols-1 gap-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-800 mb-1">Badge Text</label>
-                    <input type="text" value={overview.deskBadge} onChange={(e) => setOverview({...overview, deskBadge: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-800 mb-1">Title</label>
-                    <input type="text" value={overview.title} onChange={(e) => setOverview({...overview, title: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Description Paragraph 1</label>
-                  <textarea value={overview.description1} onChange={(e) => setOverview({...overview, description1: e.target.value})} rows="3" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium"></textarea>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Description Paragraph 2</label>
-                  <textarea value={overview.description2} onChange={(e) => setOverview({...overview, description2: e.target.value})} rows="3" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium"></textarea>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Floating Quote</label>
-                  <input type="text" value={overview.floatingQuote} onChange={(e) => setOverview({...overview, floatingQuote: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium" />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm">
-                    <h4 className="text-sm font-semibold mb-3">Statistic 1</h4>
-                    <input type="text" placeholder="Value (e.g. 100+)" value={overview.stat1Value} onChange={(e) => setOverview({...overview, stat1Value: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium mb-2" />
-                    <input type="text" placeholder="Label (e.g. Students Placed)" value={overview.stat1Label} onChange={(e) => setOverview({...overview, stat1Label: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                  </div>
-                  <div className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm">
-                    <h4 className="text-sm font-semibold mb-3">Statistic 2</h4>
-                    <input type="text" placeholder="Value (e.g. 99%)" value={overview.stat2Value} onChange={(e) => setOverview({...overview, stat2Value: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium mb-2" />
-                    <input type="text" placeholder="Label (e.g. Placement Rate)" value={overview.stat2Label} onChange={(e) => setOverview({...overview, stat2Label: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-800 mb-1">Collage Image 1</label>
-                    <LogoUploader value={overview.collageImage1} onChange={(url) => setOverview({...overview, collageImage1: url})} />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-800 mb-1">Collage Image 2</label>
-                    <LogoUploader value={overview.collageImage2} onChange={(url) => setOverview({...overview, collageImage2: url})} />
-                  </div>
-                </div>
-              </div>
+        {/* ACHIEVERS TAB */}
+        {activeTab === 'proudAchievers' && (
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
+            <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Proud Achievers Settings</h2>
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-800 mb-1">Section Title</label>
+              <input type="text" value={proudAchievers.title} onChange={(e) => setProudAchievers({ ...proudAchievers, title: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium" />
             </div>
-          )}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold text-[#111836]">Achievers List ({proudAchievers.items.length})</h3>
+                <button onClick={() => handleArrayAdd(setProudAchievers, proudAchievers, { name: '', program: '', company: '', role: '', companyLogo: '', image: '' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
+                  <Plus className="w-4 h-4" /> Add Achiever
+                </button>
+              </div>
+              {proudAchievers.items.map((item, index) => (
+                <div key={index} className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm">
+                  <div className="flex justify-between items-center mb-5 border-b pb-3">
+                    <span className="font-semibold text-gray-800">Achiever #{index + 1}</span>
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => moveItem(setProudAchievers, proudAchievers, index, -1)} disabled={index === 0} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowUp className="w-4 h-4" /></button>
+                      <button onClick={() => moveItem(setProudAchievers, proudAchievers, index, 1)} disabled={index === proudAchievers.items.length - 1} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowDown className="w-4 h-4" /></button>
+                      <button onClick={() => handleArrayRemove(setProudAchievers, proudAchievers, index)} className="p-1 text-red-500 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4" /></button>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" placeholder="Name" value={item.name} onChange={(e) => handleArrayChange(setProudAchievers, proudAchievers, index, 'name', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+                    <input type="text" placeholder="Program (e.g. MBA 2022-24)" value={item.program} onChange={(e) => handleArrayChange(setProudAchievers, proudAchievers, index, 'program', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+                    <input type="text" placeholder="Company Name" value={item.company} onChange={(e) => handleArrayChange(setProudAchievers, proudAchievers, index, 'company', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+                    <input type="text" placeholder="Role/Designation" value={item.role} onChange={(e) => handleArrayChange(setProudAchievers, proudAchievers, index, 'role', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Student Photo</label>
+                      <LogoUploader value={item.image} onChange={(url) => handleArrayChange(setProudAchievers, proudAchievers, index, 'image', url)} />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1">Company Logo</label>
+                      <LogoUploader value={item.companyLogo} onChange={(url) => handleArrayChange(setProudAchievers, proudAchievers, index, 'companyLogo', url)} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
-          {/* ACHIEVERS TAB */}
-          {activeTab === 'proudAchievers' && (
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
-              <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Proud Achievers Settings</h2>
-              <div className="mb-6">
+        {/* RECRUITERS TAB */}
+        {activeTab === 'topRecruiters' && (
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
+            <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Top Recruiters Settings</h2>
+            <div className="mb-6 space-y-4">
+              <div>
                 <label className="block text-sm font-medium text-gray-800 mb-1">Section Title</label>
-                <input type="text" value={proudAchievers.title} onChange={(e) => setProudAchievers({...proudAchievers, title: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium" />
+                <input type="text" value={topRecruiters.title} onChange={(e) => setTopRecruiters({ ...topRecruiters, title: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
               </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-[#111836]">Achievers List ({proudAchievers.items.length})</h3>
-                  <button onClick={() => handleArrayAdd(setProudAchievers, proudAchievers, { name: '', program: '', company: '', role: '', companyLogo: '', image: '' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
-                    <Plus className="w-4 h-4" /> Add Achiever
-                  </button>
-                </div>
-                {proudAchievers.items.map((item, index) => (
-                  <div key={index} className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm">
-                    <div className="flex justify-between items-center mb-5 border-b pb-3">
-                      <span className="font-semibold text-gray-800">Achiever #{index + 1}</span>
-                      <div className="flex items-center gap-2">
-                        <button onClick={() => moveItem(setProudAchievers, proudAchievers, index, -1)} disabled={index === 0} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowUp className="w-4 h-4" /></button>
-                        <button onClick={() => moveItem(setProudAchievers, proudAchievers, index, 1)} disabled={index === proudAchievers.items.length - 1} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowDown className="w-4 h-4" /></button>
-                        <button onClick={() => handleArrayRemove(setProudAchievers, proudAchievers, index)} className="p-1 text-red-500 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4" /></button>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Description</label>
+                <textarea value={topRecruiters.description} onChange={(e) => setTopRecruiters({ ...topRecruiters, description: e.target.value })} rows="2" className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium"></textarea>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold text-[#111836]">Recruiters Logos ({topRecruiters.items.length})</h3>
+                <button onClick={() => handleArrayAdd(setTopRecruiters, topRecruiters, { name: '', logo: '' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
+                  <Plus className="w-4 h-4" /> Add Recruiter
+                </button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {topRecruiters.items.map((item, index) => (
+                  <div key={index} className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm flex flex-col gap-3">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium text-sm text-gray-800">Logo #{index + 1}</span>
+                      <div className="flex items-center gap-1">
+                        <button onClick={() => moveItem(setTopRecruiters, topRecruiters, index, -1)} disabled={index === 0} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowUp className="w-4 h-4" /></button>
+                        <button onClick={() => moveItem(setTopRecruiters, topRecruiters, index, 1)} disabled={index === topRecruiters.items.length - 1} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowDown className="w-4 h-4" /></button>
+                        <button onClick={() => handleArrayRemove(setTopRecruiters, topRecruiters, index)} className="p-1 text-red-500 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4" /></button>
                       </div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <input type="text" placeholder="Name" value={item.name} onChange={(e) => handleArrayChange(setProudAchievers, proudAchievers, index, 'name', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                      <input type="text" placeholder="Program (e.g. MBA 2022-24)" value={item.program} onChange={(e) => handleArrayChange(setProudAchievers, proudAchievers, index, 'program', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                      <input type="text" placeholder="Company Name" value={item.company} onChange={(e) => handleArrayChange(setProudAchievers, proudAchievers, index, 'company', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                      <input type="text" placeholder="Role/Designation" value={item.role} onChange={(e) => handleArrayChange(setProudAchievers, proudAchievers, index, 'role', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                      <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1">Student Photo</label>
-                        <LogoUploader value={item.image} onChange={(url) => handleArrayChange(setProudAchievers, proudAchievers, index, 'image', url)} />
+                    <input type="text" placeholder="Company Name" value={item.name} onChange={(e) => handleArrayChange(setTopRecruiters, topRecruiters, index, 'name', e.target.value)} className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded" />
+                    <LogoUploader value={item.logo} onChange={(url) => handleArrayChange(setTopRecruiters, topRecruiters, index, 'logo', url)} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* EXCELLENCE TAB */}
+        {activeTab === 'excellenceSupport' && (
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
+            <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Excellence Support Settings</h2>
+            <div className="grid grid-cols-1 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Section Title</label>
+                <input type="text" value={excellenceSupport.title} onChange={(e) => setExcellenceSupport({ ...excellenceSupport, title: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Description</label>
+                <textarea value={excellenceSupport.description} onChange={(e) => setExcellenceSupport({ ...excellenceSupport, description: e.target.value })} rows="2" className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium"></textarea>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Background Image</label>
+                <LogoUploader value={excellenceSupport.backgroundImage} onChange={(url) => setExcellenceSupport({ ...excellenceSupport, backgroundImage: url })} />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* List One */}
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <div className="flex justify-between items-center mb-5 border-b pb-3">
+                  <h3 className="font-semibold text-gray-800">Feature List 1</h3>
+                  <button onClick={() => handleFeatureListAdd('listOne')} className="text-primary hover:text-primary/80"><Plus className="w-5 h-5" /></button>
+                </div>
+                <div className="space-y-3">
+                  {excellenceSupport.listOne.map((item, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <input type="text" value={item.title} onChange={(e) => handleFeatureListChange('listOne', index, e.target.value)} className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded" placeholder="Feature..." />
+                      <button onClick={() => handleFeatureListRemove('listOne', index)} className="text-red-500 p-2"><Trash2 className="w-4 h-4" /></button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* List Two */}
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <div className="flex justify-between items-center mb-5 border-b pb-3">
+                  <h3 className="font-semibold text-gray-800">Feature List 2</h3>
+                  <button onClick={() => handleFeatureListAdd('listTwo')} className="text-primary hover:text-primary/80"><Plus className="w-5 h-5" /></button>
+                </div>
+                <div className="space-y-3">
+                  {excellenceSupport.listTwo.map((item, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <input type="text" value={item.title} onChange={(e) => handleFeatureListChange('listTwo', index, e.target.value)} className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded" placeholder="Feature..." />
+                      <button onClick={() => handleFeatureListRemove('listTwo', index)} className="text-red-500 p-2"><Trash2 className="w-4 h-4" /></button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* FACULTY TAB */}
+        {activeTab === 'facultyInCharge' && (
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
+            <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Faculty In-Charge Settings</h2>
+            <div className="mb-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Badge Text</label>
+                <input type="text" value={facultyInCharge.badge} onChange={(e) => setFacultyInCharge({ ...facultyInCharge, badge: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Section Title</label>
+                <input type="text" value={facultyInCharge.title} onChange={(e) => setFacultyInCharge({ ...facultyInCharge, title: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Description</label>
+                <textarea value={facultyInCharge.description} onChange={(e) => setFacultyInCharge({ ...facultyInCharge, description: e.target.value })} rows="3" className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium"></textarea>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold text-[#111836]">Faculty List ({facultyInCharge.items.length})</h3>
+                <button onClick={() => handleArrayAdd(setFacultyInCharge, facultyInCharge, { name: '', designation: '', image: '' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
+                  <Plus className="w-4 h-4" /> Add Faculty
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {facultyInCharge.items.map((item, index) => (
+                  <div key={index} className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm">
+                    <div className="flex justify-between items-center mb-5 border-b pb-3">
+                      <span className="font-semibold text-gray-800">Faculty #{index + 1}</span>
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => handleArrayRemove(setFacultyInCharge, facultyInCharge, index)} className="p-1 text-red-500 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4" /></button>
                       </div>
+                    </div>
+                    <div className="space-y-3">
+                      <input type="text" placeholder="Name" value={item.name} onChange={(e) => handleArrayChange(setFacultyInCharge, facultyInCharge, index, 'name', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+                      <input type="text" placeholder="Designation" value={item.designation} onChange={(e) => handleArrayChange(setFacultyInCharge, facultyInCharge, index, 'designation', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
                       <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1">Company Logo</label>
-                        <LogoUploader value={item.companyLogo} onChange={(url) => handleArrayChange(setProudAchievers, proudAchievers, index, 'companyLogo', url)} />
+                        <label className="block text-xs font-medium text-gray-500 mb-1">Photo</label>
+                        <LogoUploader value={item.image} onChange={(url) => handleArrayChange(setFacultyInCharge, facultyInCharge, index, 'image', url)} />
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* RECRUITERS TAB */}
-          {activeTab === 'topRecruiters' && (
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
-              <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Top Recruiters Settings</h2>
-              <div className="mb-6 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Section Title</label>
-                  <input type="text" value={topRecruiters.title} onChange={(e) => setTopRecruiters({...topRecruiters, title: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Description</label>
-                  <textarea value={topRecruiters.description} onChange={(e) => setTopRecruiters({...topRecruiters, description: e.target.value})} rows="2" className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium"></textarea>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-[#111836]">Recruiters Logos ({topRecruiters.items.length})</h3>
-                  <button onClick={() => handleArrayAdd(setTopRecruiters, topRecruiters, { name: '', logo: '' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
-                    <Plus className="w-4 h-4" /> Add Recruiter
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {topRecruiters.items.map((item, index) => (
-                    <div key={index} className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm flex flex-col gap-3">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium text-sm text-gray-800">Logo #{index + 1}</span>
-                        <div className="flex items-center gap-1">
-                          <button onClick={() => moveItem(setTopRecruiters, topRecruiters, index, -1)} disabled={index === 0} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowUp className="w-4 h-4" /></button>
-                          <button onClick={() => moveItem(setTopRecruiters, topRecruiters, index, 1)} disabled={index === topRecruiters.items.length - 1} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowDown className="w-4 h-4" /></button>
-                          <button onClick={() => handleArrayRemove(setTopRecruiters, topRecruiters, index)} className="p-1 text-red-500 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4" /></button>
-                        </div>
-                      </div>
-                      <input type="text" placeholder="Company Name" value={item.name} onChange={(e) => handleArrayChange(setTopRecruiters, topRecruiters, index, 'name', e.target.value)} className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded" />
-                      <LogoUploader value={item.logo} onChange={(url) => handleArrayChange(setTopRecruiters, topRecruiters, index, 'logo', url)} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* EXCELLENCE TAB */}
-          {activeTab === 'excellenceSupport' && (
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
-              <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Excellence Support Settings</h2>
-              <div className="grid grid-cols-1 gap-6 mb-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Section Title</label>
-                  <input type="text" value={excellenceSupport.title} onChange={(e) => setExcellenceSupport({...excellenceSupport, title: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Description</label>
-                  <textarea value={excellenceSupport.description} onChange={(e) => setExcellenceSupport({...excellenceSupport, description: e.target.value})} rows="2" className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium"></textarea>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Background Image</label>
-                  <LogoUploader value={excellenceSupport.backgroundImage} onChange={(url) => setExcellenceSupport({...excellenceSupport, backgroundImage: url})} />
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* List One */}
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <div className="flex justify-between items-center mb-5 border-b pb-3">
-                    <h3 className="font-semibold text-gray-800">Feature List 1</h3>
-                    <button onClick={() => handleFeatureListAdd('listOne')} className="text-primary hover:text-primary/80"><Plus className="w-5 h-5" /></button>
-                  </div>
-                  <div className="space-y-3">
-                    {excellenceSupport.listOne.map((item, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <input type="text" value={item.title} onChange={(e) => handleFeatureListChange('listOne', index, e.target.value)} className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded" placeholder="Feature..." />
-                        <button onClick={() => handleFeatureListRemove('listOne', index)} className="text-red-500 p-2"><Trash2 className="w-4 h-4" /></button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {/* List Two */}
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <div className="flex justify-between items-center mb-5 border-b pb-3">
-                    <h3 className="font-semibold text-gray-800">Feature List 2</h3>
-                    <button onClick={() => handleFeatureListAdd('listTwo')} className="text-primary hover:text-primary/80"><Plus className="w-5 h-5" /></button>
-                  </div>
-                  <div className="space-y-3">
-                    {excellenceSupport.listTwo.map((item, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <input type="text" value={item.title} onChange={(e) => handleFeatureListChange('listTwo', index, e.target.value)} className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded" placeholder="Feature..." />
-                        <button onClick={() => handleFeatureListRemove('listTwo', index)} className="text-red-500 p-2"><Trash2 className="w-4 h-4" /></button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* FACULTY TAB */}
-          {activeTab === 'facultyInCharge' && (
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
-              <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Faculty In-Charge Settings</h2>
-              <div className="mb-6 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Badge Text</label>
-                  <input type="text" value={facultyInCharge.badge} onChange={(e) => setFacultyInCharge({...facultyInCharge, badge: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Section Title</label>
-                  <input type="text" value={facultyInCharge.title} onChange={(e) => setFacultyInCharge({...facultyInCharge, title: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Description</label>
-                  <textarea value={facultyInCharge.description} onChange={(e) => setFacultyInCharge({...facultyInCharge, description: e.target.value})} rows="3" className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium"></textarea>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-[#111836]">Faculty List ({facultyInCharge.items.length})</h3>
-                  <button onClick={() => handleArrayAdd(setFacultyInCharge, facultyInCharge, { name: '', designation: '', image: '' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
-                    <Plus className="w-4 h-4" /> Add Faculty
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {facultyInCharge.items.map((item, index) => (
-                    <div key={index} className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm">
-                      <div className="flex justify-between items-center mb-5 border-b pb-3">
-                        <span className="font-semibold text-gray-800">Faculty #{index + 1}</span>
-                        <div className="flex items-center gap-2">
-                          <button onClick={() => handleArrayRemove(setFacultyInCharge, facultyInCharge, index)} className="p-1 text-red-500 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4" /></button>
-                        </div>
-                      </div>
-                      <div className="space-y-3">
-                        <input type="text" placeholder="Name" value={item.name} onChange={(e) => handleArrayChange(setFacultyInCharge, facultyInCharge, index, 'name', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                        <input type="text" placeholder="Designation" value={item.designation} onChange={(e) => handleArrayChange(setFacultyInCharge, facultyInCharge, index, 'designation', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                        <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1">Photo</label>
-                          <LogoUploader value={item.image} onChange={(url) => handleArrayChange(setFacultyInCharge, facultyInCharge, index, 'image', url)} />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* COMMITTEE TAB */}
-          {activeTab === 'placementCommittee' && (
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
-              <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Placement Committee Settings</h2>
-              <div className="mb-6 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Section Title</label>
-                  <input type="text" value={placementCommittee.title} onChange={(e) => setPlacementCommittee({...placementCommittee, title: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-800 mb-1">Description</label>
-                  <textarea value={placementCommittee.description} onChange={(e) => setPlacementCommittee({...placementCommittee, description: e.target.value})} rows="3" className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium"></textarea>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-800 mb-1">Button Text</label>
-                    <input type="text" value={placementCommittee.buttonText} onChange={(e) => setPlacementCommittee({...placementCommittee, buttonText: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-800 mb-1">Side Vector Image</label>
-                    <LogoUploader value={placementCommittee.image} onChange={(url) => setPlacementCommittee({...placementCommittee, image: url})} />
-                  </div>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-[#111836]">Committee Members ({placementCommittee.items.length})</h3>
-                  <button onClick={() => handleArrayAdd(setPlacementCommittee, placementCommittee, { name: '', role: '', image: '' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
-                    <Plus className="w-4 h-4" /> Add Member
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                  {placementCommittee.items.map((item, index) => (
-                    <div key={index} className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm">
-                      <div className="flex justify-between items-center mb-5 border-b pb-3">
-                        <span className="font-semibold text-gray-800">Member #{index + 1}</span>
-                        <div className="flex items-center gap-2">
-                          <button onClick={() => moveItem(setPlacementCommittee, placementCommittee, index, -1)} disabled={index === 0} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowUp className="w-4 h-4" /></button>
-                          <button onClick={() => moveItem(setPlacementCommittee, placementCommittee, index, 1)} disabled={index === placementCommittee.items.length - 1} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowDown className="w-4 h-4" /></button>
-                          <button onClick={() => handleArrayRemove(setPlacementCommittee, placementCommittee, index)} className="p-1 text-red-500 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4" /></button>
-                        </div>
-                      </div>
-                      <div className="space-y-3">
-                        <input type="text" placeholder="Name" value={item.name} onChange={(e) => handleArrayChange(setPlacementCommittee, placementCommittee, index, 'name', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                        <input type="text" placeholder="Role (e.g. President)" value={item.role} onChange={(e) => handleArrayChange(setPlacementCommittee, placementCommittee, index, 'role', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                        <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1">Photo</label>
-                          <LogoUploader value={item.image} onChange={(url) => handleArrayChange(setPlacementCommittee, placementCommittee, index, 'image', url)} />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ACTIVITIES TAB */}
-          {activeTab === 'activities' && (
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
-              <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Activities & Events Settings</h2>
-              <div className="mb-6">
+        {/* COMMITTEE TAB */}
+        {activeTab === 'placementCommittee' && (
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
+            <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Placement Committee Settings</h2>
+            <div className="mb-6 space-y-4">
+              <div>
                 <label className="block text-sm font-medium text-gray-800 mb-1">Section Title</label>
-                <input type="text" value={activities.title} onChange={(e) => setActivities({...activities, title: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+                <input type="text" value={placementCommittee.title} onChange={(e) => setPlacementCommittee({ ...placementCommittee, title: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
               </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-[#111836]">Activities List ({activities.items.length})</h3>
-                  <button onClick={() => handleArrayAdd(setActivities, activities, { title: '', description: '', image: '' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
-                    <Plus className="w-4 h-4" /> Add Activity
-                  </button>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Description</label>
+                <textarea value={placementCommittee.description} onChange={(e) => setPlacementCommittee({ ...placementCommittee, description: e.target.value })} rows="3" className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium"></textarea>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-800 mb-1">Button Text</label>
+                  <input type="text" value={placementCommittee.buttonText} onChange={(e) => setPlacementCommittee({ ...placementCommittee, buttonText: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {activities.items.map((item, index) => (
-                    <div key={index} className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm">
-                      <div className="flex justify-between items-center mb-5 border-b pb-3">
-                        <span className="font-semibold text-gray-800">Activity #{index + 1}</span>
-                        <div className="flex items-center gap-2">
-                          <button onClick={() => moveItem(setActivities, activities, index, -1)} disabled={index === 0} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowUp className="w-4 h-4" /></button>
-                          <button onClick={() => moveItem(setActivities, activities, index, 1)} disabled={index === activities.items.length - 1} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowDown className="w-4 h-4" /></button>
-                          <button onClick={() => handleArrayRemove(setActivities, activities, index)} className="p-1 text-red-500 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4" /></button>
-                        </div>
-                      </div>
-                      <div className="space-y-3">
-                        <input type="text" placeholder="Title" value={item.title} onChange={(e) => handleArrayChange(setActivities, activities, index, 'title', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
-                        <textarea placeholder="Description" value={item.description} onChange={(e) => handleArrayChange(setActivities, activities, index, 'description', e.target.value)} rows="2" className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium"></textarea>
-                        <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1">Image</label>
-                          <LogoUploader value={item.image} onChange={(url) => handleArrayChange(setActivities, activities, index, 'image', url)} />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                <div>
+                  <label className="block text-sm font-medium text-gray-800 mb-1">Side Vector Image</label>
+                  <LogoUploader value={placementCommittee.image} onChange={(url) => setPlacementCommittee({ ...placementCommittee, image: url })} />
                 </div>
               </div>
             </div>
-          )}
 
-        </div>
+          </div>
+        )}
+
+        {/* ACTIVITIES TAB */}
+        {activeTab === 'activities' && (
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
+            <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Activities & Events Settings</h2>
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-800 mb-1">Section Title</label>
+              <input type="text" value={activities.title} onChange={(e) => setActivities({ ...activities, title: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+            </div>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold text-[#111836]">Activities List ({activities.items.length})</h3>
+                <button onClick={() => handleArrayAdd(setActivities, activities, { title: '', description: '', image: '' })} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
+                  <Plus className="w-4 h-4" /> Add Activity
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {activities.items.map((item, index) => (
+                  <div key={index} className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200 relative shadow-sm">
+                    <div className="flex justify-between items-center mb-5 border-b pb-3">
+                      <span className="font-semibold text-gray-800">Activity #{index + 1}</span>
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => moveItem(setActivities, activities, index, -1)} disabled={index === 0} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowUp className="w-4 h-4" /></button>
+                        <button onClick={() => moveItem(setActivities, activities, index, 1)} disabled={index === activities.items.length - 1} className="p-1 text-gray-500 hover:text-primary disabled:opacity-50"><ArrowDown className="w-4 h-4" /></button>
+                        <button onClick={() => handleArrayRemove(setActivities, activities, index)} className="p-1 text-red-500 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4" /></button>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <input type="text" placeholder="Title" value={item.title} onChange={(e) => handleArrayChange(setActivities, activities, index, 'title', e.target.value)} className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium" />
+                      <textarea placeholder="Description" value={item.description} onChange={(e) => handleArrayChange(setActivities, activities, index, 'description', e.target.value)} rows="2" className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium"></textarea>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-500 mb-1">Image</label>
+                        <LogoUploader value={item.image} onChange={(url) => handleArrayChange(setActivities, activities, index, 'image', url)} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+      </div>
 
       {/* Live Preview Modal */}
       {isPreviewModalOpen && (
