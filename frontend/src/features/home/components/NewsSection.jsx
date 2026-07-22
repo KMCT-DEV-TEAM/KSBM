@@ -22,7 +22,7 @@ const NewsSection = ({ previewData }) => {
     } else {
       const fetchNews = async () => {
         try {
-          const response = await api.get('/cms/news');
+          const response = await api.get('/cms/news', { hideLoader: true });
           if (response.data) {
             setData(response.data);
           }

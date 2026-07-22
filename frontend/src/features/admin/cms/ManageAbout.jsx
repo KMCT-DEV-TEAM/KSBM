@@ -1,12 +1,11 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Save, Plus, Trash2, RefreshCw, Eye, Monitor, Smartphone, Tablet, X } from 'lucide-react';
+import { Save, Plus, Trash2, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, GripVertical } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import Loader from '../../../components/Loader';
-import LogoUploader from './components/LogoUploader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
-const graduateImg = '/assets/Images/graduate.png';
+const graduateImg = '/assets/Images/Home/graduate.png';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
@@ -45,6 +44,30 @@ const ManageAbout = () => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const iframeRef = React.useRef(null);
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, index: null, title: '', message: '', confirmText: '', variant: 'danger' });
+
+  const dragItem = React.useRef();
+  const dragOverItem = React.useRef();
+
+  const handleDragStart = (e, position) => {
+    dragItem.current = position;
+  };
+
+  const handleDragEnter = (e, position) => {
+    dragOverItem.current = position;
+  };
+
+  const handleDragEnd = () => {
+    if (dragItem.current === undefined || dragOverItem.current === undefined) return;
+    if (dragItem.current === dragOverItem.current) return;
+
+    const copyListItems = [...stats];
+    const dragItemContent = copyListItems[dragItem.current];
+    copyListItems.splice(dragItem.current, 1);
+    copyListItems.splice(dragOverItem.current, 0, dragItemContent);
+    dragItem.current = undefined;
+    dragOverItem.current = undefined;
+    setStats(copyListItems);
+  };
 
   useEffect(() => {
     fetchSettings();
@@ -130,6 +153,17 @@ const ManageAbout = () => {
   };
 
   const addStat = () => {
+    if (stats.length >= 5) {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: 'You can only have up to 5 statistics.',
+        showConfirmButton: false,
+        timer: 3000
+      });
+      return;
+    }
     setStats([...stats, { value: '', label: '' }]);
   };
 
@@ -322,10 +356,14 @@ const ManageAbout = () => {
               <input
                 type="text"
                 value={subheading}
+                maxLength={40}
                 onChange={(e) => setSubheading(e.target.value)}
                 placeholder="e.g. BUILDING EXCELLENCE SINCE 1995"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-xs text-right mt-1 text-gray-500">
+                {subheading.length}/40 characters
+              </div>
             </div>
             <div>
               <div className="flex justify-between items-center mb-1.5">
@@ -338,28 +376,19 @@ const ManageAbout = () => {
               <input
                 type="text"
                 value={heading}
+                maxLength={60}
                 onChange={(e) => setHeading(e.target.value)}
                 placeholder="e.g. Shaping Tomorrow's Business Leaders"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-xs text-right mt-1 text-gray-500">
+                {heading.length}/60 characters
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Image Settings */}
-        <div className="mb-8 pb-8 border-b border-gray-100">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-bold text-[#1e2869]">About Image</h3>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={showImage} onChange={(e) => setShowImage(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
-              <span className="text-sm font-semibold text-gray-500">Show Image</span>
-            </label>
-          </div>
-          <LogoUploader
-            currentLogoUrl={imageUrl || graduateImg}
-            onUploadSuccess={(url) => setImageUrl(url)}
-          />
-        </div>
+
 
         {/* Paragraphs Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
@@ -373,7 +402,7 @@ const ManageAbout = () => {
             </div>
             <button
               onClick={addParagraph}
-              className="flex items-center gap-2 text-sm font-semibold text-primary bg-primary/10 px-3 py-1.5 rounded-md hover:bg-primary/20 transition-colors"
+              className="flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
             >
               <Plus className="w-4 h-4" /> Add Paragraph
             </button>
@@ -381,12 +410,18 @@ const ManageAbout = () => {
           <div className="space-y-4">
             {paragraphs.map((para, index) => (
               <div key={index} className="flex gap-3">
-                <textarea
-                  value={para}
-                  onChange={(e) => updateParagraph(index, e.target.value)}
-                  rows="4"
-                  className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                />
+                <div className="flex-1">
+                  <textarea
+                    value={para}
+                    onChange={(e) => updateParagraph(index, e.target.value)}
+                    rows="4"
+                    maxLength={600}
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                  <div className="text-xs text-right mt-1 text-gray-500">
+                    {para.length}/600 characters
+                  </div>
+                </div>
                 <button
                   onClick={() => removeParagraph(index)}
                   className="p-2 h-fit text-gray-400 hover:text-[#FF3E1D] hover:bg-[#FF3E1D]/10 rounded-md transition-colors"
@@ -411,7 +446,8 @@ const ManageAbout = () => {
             </div>
             <button
               onClick={addStat}
-              className="flex items-center gap-2 text-sm font-semibold text-primary bg-primary/10 px-3 py-1.5 rounded-md hover:bg-primary/20 transition-colors"
+              disabled={stats.length >= 5}
+              className={`flex items-center gap-2 px-5 py-2 text-sm font-semibold rounded-xl shadow-md transition-all ${stats.length >= 5 ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none' : 'text-white bg-primary hover:bg-[#151c48]'}`}
             >
               <Plus className="w-4 h-4" /> Add Stat
             </button>
@@ -421,26 +457,41 @@ const ManageAbout = () => {
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="flex items-center gap-3 bg-[#F5F5F9] p-3 rounded-lg border border-gray-200"
+                draggable
+                onDragStart={(e) => handleDragStart(e, index)}
+                onDragEnter={(e) => handleDragEnter(e, index)}
+                onDragEnd={handleDragEnd}
+                onDragOver={(e) => e.preventDefault()}
+                className="flex items-center gap-3 bg-[#F5F5F9] p-3 rounded-lg border border-gray-200 group transition-all"
               >
+                <div className="cursor-move p-2 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-600 transition-colors shrink-0">
+                  <GripVertical className="w-5 h-5" />
+                </div>
                 <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
                     <input
                       type="text"
                       value={stat.value}
-                      onChange={(e) => updateStat(index, 'value', e.target.value)}
+                      maxLength={10}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/[^0-9+]/g, '');
+                        updateStat(index, 'value', val);
+                      }}
                       placeholder="Value (e.g., 16+)"
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
+                    <div className="text-xs text-right mt-1 text-gray-500">{stat.value?.length || 0}/10</div>
                   </div>
                   <div>
                     <input
                       type="text"
                       value={stat.label}
+                      maxLength={30}
                       onChange={(e) => updateStat(index, 'label', e.target.value)}
                       placeholder="Label (e.g., YEARS OF EXCELLENCE)"
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
+                    <div className="text-xs text-right mt-1 text-gray-500">{stat.label?.length || 0}/30</div>
                   </div>
                 </div>
 

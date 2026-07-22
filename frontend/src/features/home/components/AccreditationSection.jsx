@@ -20,7 +20,7 @@ const AccreditationSection = ({ previewData }) => {
 
     const fetchSettings = async () => {
       try {
-        const { data } = await api.get("/cms/accreditation");
+        const { data } = await api.get('/cms/accreditation', { hideLoader: true });
         setSettings(data);
       } catch (error) {
         console.error("Error fetching accreditation settings:", error);

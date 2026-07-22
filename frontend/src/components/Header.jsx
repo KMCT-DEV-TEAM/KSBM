@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-const logo = '/assets/Images/LOGO__KMCT School of Business Management (1).png';
+const logo = '/assets/Images/Header/LOGO__KMCT School of Business Management (1).png';
 import { Menu, X } from 'lucide-react';
 import api from '../api/axios';
 import Link from 'next/link';
@@ -60,7 +60,7 @@ const Header = ({ previewData }) => {
     } else {
       const fetchHeaderSettings = async () => {
         try {
-          const { data } = await api.get('/cms/header');
+          const { data } = await api.get('/cms/header', { hideLoader: true });
           if (data.navItems && data.navItems.length > 0) {
             const formattedNavItems = data.navItems.map(item => {
               const labelLower = item.label.toLowerCase();
@@ -171,7 +171,7 @@ const Header = ({ previewData }) => {
         {/* Logo Section */}
         <Link href="/" className="flex items-center no-underline shrink-0">
           <img 
-            src={logoUrl || logo} 
+            src={logo} 
             alt="KSBM Logo" 
             className="h-5 sm:h-6 lg:h-8 object-contain transition-all duration-300 brightness-0 invert" 
           />

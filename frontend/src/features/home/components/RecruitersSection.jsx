@@ -29,7 +29,7 @@ const RecruitersSection = ({ previewData }) => {
 
   const fetchRecruitersData = async () => {
     try {
-      const response = await api.get('/cms/recruiters');
+      const response = await api.get('/cms/recruiters', { hideLoader: true });
       if (response.data) {
         setData(response.data);
       }

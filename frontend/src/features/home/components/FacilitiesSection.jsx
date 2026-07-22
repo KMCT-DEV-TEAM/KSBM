@@ -16,7 +16,7 @@ const FacilitiesSection = ({ previewData }) => {
 
     const fetchSettings = async () => {
       try {
-        const { data } = await api.get('/cms/facilities');
+        const { data } = await api.get('/cms/facilities', { hideLoader: true });
         setSettings(data);
       } catch (error) {
         console.error('Error fetching facilities settings:', error);
