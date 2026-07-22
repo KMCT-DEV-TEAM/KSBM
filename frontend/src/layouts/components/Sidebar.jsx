@@ -38,18 +38,7 @@ const Sidebar = () => {
       title: 'Home',
       icon: <Home className="w-5 h-5" />,
       links: [
-        { name: 'Hero Section', path: '/admin/cms/hero' },
-        { name: 'About KSBM', path: '/admin/cms/about' },
-        { name: 'Academic Programs', path: '/admin/cms/academics' },
-        { name: 'Accreditation', path: '/admin/cms/accreditation' },
-        { name: 'Management', path: '/admin/cms/management' },
-        { name: 'Home Facilities', path: '/admin/cms/facilities' },
-        { name: 'Placement', path: '/admin/cms/placement' },
-        { name: 'Recruiters', path: '/admin/cms/recruiters' },
-        { name: 'Testimonials', path: '/admin/cms/testimonials' },
-        { name: 'Achievements', path: '/admin/cms/achievements' },
-        { name: 'News', path: '/admin/cms/news' },
-        { name: 'Life at KSBM', path: '/admin/cms/life' },
+        { name: 'Home Page Management', path: '/admin/cms/home' },
       ]
     },
     {

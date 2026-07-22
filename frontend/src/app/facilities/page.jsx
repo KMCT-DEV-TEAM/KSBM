@@ -1,4 +1,5 @@
 import Facilities from "../../features/facilities/Facilities";
+import MainLayout from "../../layouts/MainLayout";
 
 export const metadata = {
   title: "Facilities | KSBM",
@@ -6,5 +7,9 @@ export const metadata = {
 };
 
 export default function FacilitiesPage() {
-  return <Facilities />;
+  return (
+    <MainLayout>
+      <Facilities />
+    </MainLayout>
+  );
 }

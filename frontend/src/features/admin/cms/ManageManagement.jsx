@@ -159,8 +159,7 @@ const ManageManagement = () => {
   useEffect(() => {
     if (isPreviewModalOpen) {
       const pData = {
-        subheading, heading, cards,
-        showSubheading, showHeading, showCards,
+        subheading, heading, description, members,
         previewDevice: previewMode
       };
       const handleIframeReady = (e) => {
@@ -176,7 +175,7 @@ const ManageManagement = () => {
       }, 500);
       return () => window.removeEventListener('message', handleIframeReady);
     }
-  }, [isPreviewModalOpen, previewMode, subheading, heading, cards, showSubheading, showHeading, showCards]);
+  }, [isPreviewModalOpen, previewMode, subheading, heading, description, members]);
 
   if (isLoading) {
     return (
