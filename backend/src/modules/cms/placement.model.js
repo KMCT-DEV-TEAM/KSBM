@@ -30,6 +30,13 @@ const placementSchema = new mongoose.Schema(
       type: String,
       default: 'Highest Package',
     },
+    statistics: {
+      type: [{ value: String, label: String }],
+      default: [
+        { value: '99%', label: 'Placement Rate' },
+        { value: '12 LPA', label: 'Highest Package' }
+      ]
+    },
     showSubheading: {
       type: Boolean,
       default: true,

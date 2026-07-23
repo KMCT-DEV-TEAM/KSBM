@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2, Edit2 } from 'lucide-react';
+import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2, Edit2, GripHorizontal } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
@@ -74,6 +74,7 @@ const ManageFacilities = () => {
   }, [isPreviewModalOpen, subheading, heading, description, facilitiesList, showSubheading, showHeading, showDescription, showFacilities]);
   const [editingFacilityIndex, setEditingFacilityIndex] = useState(-1);
   const [currentFacility, setCurrentFacility] = useState(null);
+  const [draggedFacilityIndex, setDraggedFacilityIndex] = useState(null);
 
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, title: '', message: '', confirmText: '', variant: 'danger', targetIndex: null });
 
@@ -266,7 +267,36 @@ const ManageFacilities = () => {
 
       setFacilitiesList(updated);
     }
-    setConfirmModal({ ...confirmModal, isOpen: false });
+      setConfirmModal({ ...confirmModal, isOpen: false });
+  };
+
+  const handleDragStart = (e, index) => {
+    setDraggedFacilityIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', index);
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e, index) => {
+    e.preventDefault();
+    if (draggedFacilityIndex === null || draggedFacilityIndex === index) return;
+    
+    const newList = [...facilitiesList];
+    const draggedItem = newList[draggedFacilityIndex];
+    
+    newList.splice(draggedFacilityIndex, 1);
+    newList.splice(index, 0, draggedItem);
+    
+    setFacilitiesList(newList);
+    setDraggedFacilityIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedFacilityIndex(null);
   };
 
   if (isLoading) {
@@ -420,8 +450,18 @@ const ManageFacilities = () => {
             {facilitiesList.map((facility, index) => (
               <div
                 key={index}
-                className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col"
+                draggable
+                onDragStart={(e) => handleDragStart(e, index)}
+                onDragOver={(e) => handleDragOver(e, index)}
+                onDrop={(e) => handleDrop(e, index)}
+                onDragEnd={handleDragEnd}
+                className={`bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group flex flex-col cursor-grab active:cursor-grabbing relative ${draggedFacilityIndex === index ? 'opacity-50 border-primary border-dashed bg-primary/5' : 'border-gray-200'}`}
               >
+                {/* Drag Handle Icon */}
+                <div className="absolute top-2 left-2 z-10 bg-white/80 p-1.5 rounded-md text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm cursor-grab">
+                  <GripHorizontal className="w-4 h-4" />
+                </div>
+
                 {/* Facility Header Image / Placeholder */}
                 <div className="h-32 bg-gray-100 relative overflow-hidden flex-shrink-0">
                   {facility.image ? (

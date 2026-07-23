@@ -321,6 +321,7 @@ export const updatePlacementSettings = async (req, res) => {
       stat1Label,
       stat2Value,
       stat2Label,
+      statistics,
       showSubheading,
       showHeading,
       showDescription,
@@ -336,6 +337,7 @@ export const updatePlacementSettings = async (req, res) => {
     if (stat1Label !== undefined) settings.stat1Label = stat1Label;
     if (stat2Value !== undefined) settings.stat2Value = stat2Value;
     if (stat2Label !== undefined) settings.stat2Label = stat2Label;
+    if (statistics !== undefined) settings.statistics = statistics;
 
     if (showSubheading !== undefined)
       settings.showSubheading = showSubheading;
