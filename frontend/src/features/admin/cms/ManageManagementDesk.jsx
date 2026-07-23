@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Loader2, Plus, Trash2, Eye, Monitor, Smartphone, Tablet, X, ArrowUp, ArrowDown } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
@@ -256,7 +256,7 @@ const ManageManagementDesk = () => {
     setIntroDescription(newDesc);
   };
 
-  if (isLoading) return <Loader theme="light" text="Loading Management Desk Settings..." />;
+  if (isLoading) return <AdminSkeleton />;
 
   // Prepare current preview data object
   const previewData = {

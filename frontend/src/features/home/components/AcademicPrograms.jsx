@@ -130,14 +130,14 @@ const AcademicPrograms = ({ previewData }) => {
           <div className="absolute inset-0 bg-gradient-to-t from-[#1b2559]/95 via-[#1b2559]/40 to-transparent opacity-90 z-10 group-hover:opacity-100 transition-opacity duration-500"></div>
 
           {/* Text Content */}
-          <div className={`absolute bottom-0 left-0 w-full z-20 p-5 lg:p-12`}>
+          <div className={`absolute bottom-0 left-0 w-full z-20 p-5 ${isMobilePreview ? '' : 'lg:p-12'}`}>
             {program.title && (
-              <h3 className={`font-bold text-white mb-2 md:mb-3 group-hover:text-white transition-colors duration-300 text-lg md:text-2xl lg:text-3xl`}>
+              <h3 className={`font-bold text-white mb-2 md:mb-3 group-hover:text-white transition-colors duration-300 ${isMobilePreview ? 'text-lg' : 'text-lg md:text-2xl lg:text-3xl'}`}>
                 {program.title}
               </h3>
             )}
             {program.subtitle && (
-              <p className={`text-gray-200 leading-relaxed max-w-[100%] group-hover:text-gray-100 transition-colors duration-300 text-[11px] md:text-xs lg:text-[0.95rem]`}>
+              <p className={`text-gray-200 leading-relaxed max-w-[100%] group-hover:text-gray-100 transition-colors duration-300 ${isMobilePreview ? 'text-[11px]' : 'text-[11px] md:text-xs lg:text-[0.95rem]'}`}>
                 {program.subtitle}
               </p>
             )}
@@ -172,13 +172,13 @@ const AcademicPrograms = ({ previewData }) => {
           )}
 
           {showHeading && heading && (
-            <motion.h2 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }} className={`font-semibold text-primary mb-6 text-3xl md:text-4xl lg:text-5xl`}>
+            <motion.h2 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }} className={`font-semibold text-primary mb-6 ${isMobilePreview ? 'text-3xl' : 'text-3xl md:text-4xl lg:text-5xl'}`}>
               {heading}
             </motion.h2>
           )}
 
           {showDescription && description && (
-            <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }} className={`text-text-secondary leading-relaxed max-w-3xl mx-auto text-sm lg:text-base`}>
+            <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }} className={`text-text-secondary leading-relaxed max-w-3xl mx-auto ${isMobilePreview ? 'text-sm' : 'text-sm lg:text-base'}`}>
               {description}
             </motion.p>
           )}
@@ -189,18 +189,18 @@ const AcademicPrograms = ({ previewData }) => {
           <>
             {/* 1 or 2 Programs Layout (Centered Flex) */}
             {programs.length <= 2 && (
-              <div className={`flex flex-col md:flex-row justify-center gap-6 lg:gap-8 max-w-4xl mx-auto`}>
+              <div className={`flex ${isMobilePreview ? 'flex-col' : 'flex-col md:flex-row'} justify-center gap-6 lg:gap-8 max-w-4xl mx-auto`}>
                 {programs.map((program, index) =>
-                  renderProgramCard(program, index, `flex-none w-full md:w-[calc(50%-1rem)] h-[340px] lg:h-[380px]`)
+                  renderProgramCard(program, index, `flex-none ${isMobilePreview ? 'w-full h-[340px]' : 'w-full md:w-[calc(50%-1rem)] h-[340px] lg:h-[380px]'}`)
                 )}
               </div>
             )}
 
             {/* 3 Programs Layout (3-Column Flex) */}
             {programs.length === 3 && (
-              <div className={`flex flex-col md:flex-row justify-center gap-6 max-w-6xl mx-auto`}>
+              <div className={`flex ${isMobilePreview ? 'flex-col' : 'flex-col md:flex-row'} justify-center gap-6 max-w-6xl mx-auto`}>
                 {programs.map((program, index) =>
-                  renderProgramCard(program, index, `flex-none w-full md:w-[calc(33.333%-1rem)] h-[340px] md:h-[340px] lg:h-[380px]`)
+                  renderProgramCard(program, index, `flex-none ${isMobilePreview ? 'w-full h-[340px]' : 'w-full md:w-[calc(33.333%-1rem)] h-[340px] lg:h-[380px]'}`)
                 )}
               </div>
             )}
@@ -233,7 +233,7 @@ const AcademicPrograms = ({ previewData }) => {
 
                 <div
                   ref={scrollRef}
-                  className={`flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-4 px-4 md:px-0`}
+                  className={`flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 pt-4 px-4 ${isMobilePreview ? '' : 'md:px-0'}`}
                   style={{
                     scrollbarWidth: 'none',
                     msOverflowStyle: 'none'
@@ -243,7 +243,7 @@ const AcademicPrograms = ({ previewData }) => {
                     renderProgramCard(
                       program,
                       index,
-                      `flex-none snap-center md:snap-start w-[85vw] md:w-[400px] h-[340px] md:h-[340px] lg:h-[380px]`
+                      `flex-none snap-center ${isMobilePreview ? 'w-[280px] h-[340px]' : 'md:snap-start w-[85vw] md:w-[400px] h-[340px] lg:h-[380px]'}`
                     )
                   )}
                 </div>

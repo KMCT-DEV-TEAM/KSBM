@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Save, Loader2, ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
@@ -110,7 +110,7 @@ const ManageClubDetails = () => {
     });
   };
 
-  if (isLoading) return <Loader theme="light" text="Loading Club Details..." />;
+  if (isLoading) return <AdminSkeleton />;
   if (!club) return <div className="p-8 text-center text-gray-500">Club not found.</div>;
 
   const tabs = [

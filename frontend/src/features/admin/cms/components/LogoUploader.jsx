@@ -5,14 +5,22 @@ import { UploadCloud, Image as ImageIcon, X, Loader2 } from 'lucide-react';
 import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
 
-const LogoUploader = ({ currentLogoUrl, value, onUploadSuccess, onChange, onUploadStateChange, label }) => {
+const LogoUploader = ({ currentLogoUrl, value, onUploadSuccess, onChange, onUploadStateChange, label, uploadEndpoint = '/upload' }) => {
   const [isUploading, setIsUploading] = useState(false);
   const displayUrl = currentLogoUrl || value;
 
-  const handleSuccess = useCallback((url) => {
+  const handleSuccess = useCallback(async (url) => {
+    // If we are clearing the image (url === ''), delete the old image from server
+    if (url === '' && displayUrl) {
+      try {
+        await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
+      } catch (error) {
+        console.error('Failed to delete old image:', error);
+      }
+    }
     if (onUploadSuccess) onUploadSuccess(url);
     if (onChange) onChange(url);
-  }, [onUploadSuccess, onChange]);
+  }, [onUploadSuccess, onChange, displayUrl]);
 
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -24,7 +32,16 @@ const LogoUploader = ({ currentLogoUrl, value, onUploadSuccess, onChange, onUplo
     formData.append('image', file);
 
     try {
-      const response = await api.post('/upload', formData, {
+      // If there is already a displayUrl, delete the old file first to prevent orphaned files
+      if (displayUrl) {
+        try {
+          await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
+        } catch (error) {
+          console.error('Failed to delete old image before replacing:', error);
+        }
+      }
+
+      const response = await api.post(uploadEndpoint, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

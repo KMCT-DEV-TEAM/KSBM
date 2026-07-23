@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Loader2, Plus, Trash2, ArrowUp, ArrowDown, UserPlus } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
@@ -205,7 +205,7 @@ const ManageLeadership = () => {
     setLeaders(newLeaders);
   };
 
-  if (isLoading) return <Loader theme="light" text="Loading Leadership Profiles..." />;
+  if (isLoading) return <AdminSkeleton />;
 
   return (
     <div className="space-y-6 w-full pb-16">

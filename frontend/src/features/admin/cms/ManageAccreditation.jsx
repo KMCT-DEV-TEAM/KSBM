@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import LogoUploader from './components/LogoUploader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import AccreditationPreview from '../../home/components/AccreditationSection';
@@ -110,7 +110,7 @@ const ManageAccreditation = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Loader fullScreen={false} />
+        <AdminSkeleton />
       </div>
     );
   }

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, Plus, Trash2, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, GripVertical } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 const graduateImg = '/assets/Images/Home/graduate.png';
 import confirmAction from '../../../utils/confirmAction';
@@ -274,7 +274,7 @@ const ManageAbout = () => {
   }, [isPreviewModalOpen, previewMode, subheading, heading, paragraphs, imageUrl, stats, showSubheading, showHeading, showParagraphs, showImage, showStats]);
 
   if (isLoading) {
-    return <Loader theme="light" text="Loading Settings..." />;
+    return <AdminSkeleton />;
   }
 
   return (

@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Save, Plus, Trash2, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Edit2 } from 'lucide-react';
+import { Save, Plus, Trash2, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Edit2, GripVertical } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import LogoUploader from './components/LogoUploader';
 import ProgramsPreview from '../../home/components/AcademicPrograms';
 import confirmAction from '../../../utils/confirmAction';
@@ -43,6 +43,10 @@ const ManagePrograms = () => {
   const [isProgramModalOpen, setIsProgramModalOpen] = useState(false);
   const [editingProgramIndex, setEditingProgramIndex] = useState(-1);
   const [currentProgram, setCurrentProgram] = useState(null);
+
+  // Drag and Drop State
+  const [draggedIndex, setDraggedIndex] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
 
   useEffect(() => {
     fetchSettings();
@@ -111,15 +115,15 @@ const ManagePrograms = () => {
           {
             id: 'mba',
             title: 'MBA',
-            subtitle: 'Master of Business Administration. 2 - Year Full-time immersive leadership journey.',
-            image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop',
+            subtitle: 'Master of Business Administration is a postgraduate degree...',
+            image: '/assets/Images/Home/academic_mba.jpg',
             tag: 'GRADUATE'
           },
           {
             id: 'bba',
             title: 'BBA',
-            subtitle: 'Bachelor of Business Administration. Building the foundation for corporate excellence.',
-            image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop',
+            subtitle: 'Bachelor of Business Administration is an undergraduate program...',
+            image: '/assets/Images/Home/academic_bba.jpg',
             tag: 'UNDERGRADUATE'
           }
         ]);
@@ -206,8 +210,102 @@ const ManagePrograms = () => {
     });
   };
 
+  const moveProgramUp = async (index) => {
+    if (index === 0) return;
+    const newPrograms = [...programs];
+    [newPrograms[index - 1], newPrograms[index]] = [newPrograms[index], newPrograms[index - 1]];
+    setPrograms(newPrograms);
+
+    setIsSaving(true);
+    try {
+      await api.put('/cms/programs', {
+        subheading, heading, description, programs: newPrograms,
+        showSubheading, showHeading, showDescription, showPrograms
+      });
+      Toast.fire({ icon: 'success', title: 'Programs reordered!' });
+    } catch (error) {
+      console.error('Error reordering programs:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to save order to database.' });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const moveProgramDown = async (index) => {
+    if (index === programs.length - 1) return;
+    const newPrograms = [...programs];
+    [newPrograms[index + 1], newPrograms[index]] = [newPrograms[index], newPrograms[index + 1]];
+    setPrograms(newPrograms);
+
+    setIsSaving(true);
+    try {
+      await api.put('/cms/programs', {
+        subheading, heading, description, programs: newPrograms,
+        showSubheading, showHeading, showDescription, showPrograms
+      });
+      Toast.fire({ icon: 'success', title: 'Programs reordered!' });
+    } catch (error) {
+      console.error('Error reordering programs:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to save order to database.' });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Drag and Drop Handlers
+  const handleDragStart = (e, index) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragEnter = (e, index) => {
+    e.preventDefault();
+    setDragOverIndex(index);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = async (e, index) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === index) {
+      handleDragEnd();
+      return;
+    }
+    
+    const newPrograms = [...programs];
+    const draggedProgram = newPrograms[draggedIndex];
+    
+    newPrograms.splice(draggedIndex, 1);
+    newPrograms.splice(index, 0, draggedProgram);
+    
+    setPrograms(newPrograms);
+    handleDragEnd();
+
+    setIsSaving(true);
+    try {
+      await api.put('/cms/programs', {
+        subheading, heading, description, programs: newPrograms,
+        showSubheading, showHeading, showDescription, showPrograms
+      });
+      Toast.fire({ icon: 'success', title: 'Programs reordered successfully!' });
+    } catch (error) {
+      console.error('Error reordering programs:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to save order to database.' });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   if (isLoading) {
-    return <Loader theme="light" text="Loading Settings..." />;
+    return <AdminSkeleton />;
   }
 
   return (
@@ -297,8 +395,12 @@ const ManagePrograms = () => {
                     value={currentProgram.title}
                     onChange={(e) => setCurrentProgram({...currentProgram, title: e.target.value})}
                     placeholder="e.g. MBA"
+                    maxLength={50}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
+                  <div className="text-right text-xs text-gray-400 mt-1">
+                    {currentProgram.title.length} / 50
+                  </div>
                 </div>
                 
                 <div className="col-span-1 md:col-span-2">
@@ -308,8 +410,12 @@ const ManagePrograms = () => {
                     onChange={(e) => setCurrentProgram({...currentProgram, subtitle: e.target.value})}
                     rows="3"
                     placeholder="e.g. Master of Business Administration..."
+                    maxLength={200}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
+                  <div className="text-right text-xs text-gray-400 mt-1">
+                    {currentProgram.subtitle?.length || 0} / 200
+                  </div>
                 </div>
                 
                 <div className="col-span-1 md:col-span-2">
@@ -319,8 +425,12 @@ const ManagePrograms = () => {
                     value={currentProgram.tag}
                     onChange={(e) => setCurrentProgram({...currentProgram, tag: e.target.value})}
                     placeholder="e.g. GRADUATE"
+                    maxLength={15}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
+                  <div className="text-right text-xs text-gray-400 mt-1">
+                    {currentProgram.tag?.length || 0} / 15
+                  </div>
                 </div>
                 
                 <div className="col-span-1 md:col-span-2">
@@ -328,6 +438,7 @@ const ManagePrograms = () => {
                   <div className="bg-gray-50 p-4 rounded-lg border border-[#D9DEE3]">
                     <LogoUploader
                       currentLogoUrl={currentProgram.image}
+                      uploadEndpoint="/upload/programs"
                       onUploadSuccess={(url) => setCurrentProgram({...currentProgram, image: url})}
                     />
                   </div>
@@ -373,8 +484,12 @@ const ManagePrograms = () => {
                 value={subheading}
                 onChange={(e) => setSubheading(e.target.value)}
                 placeholder="e.g. Our Courses"
+                maxLength={60}
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-right text-xs text-gray-400 mt-1">
+                {subheading.length} / 60
+              </div>
             </div>
             <div>
               <div className="flex justify-between items-center mb-1.5">
@@ -389,8 +504,12 @@ const ManagePrograms = () => {
                 value={heading}
                 onChange={(e) => setHeading(e.target.value)}
                 placeholder="e.g. Academic Programs"
+                maxLength={60}
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-right text-xs text-gray-400 mt-1">
+                {heading.length} / 60
+              </div>
             </div>
             <div>
               <div className="flex justify-between items-center mb-1.5">
@@ -405,8 +524,12 @@ const ManagePrograms = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 rows="3"
                 placeholder="Description text..."
+                maxLength={300}
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-right text-xs text-gray-400 mt-1">
+                {description.length} / 300
+              </div>
             </div>
           </div>
         </div>
@@ -423,7 +546,7 @@ const ManagePrograms = () => {
             </div>
             <button
               onClick={openAddProgramModal}
-              className="flex items-center gap-2 text-sm font-semibold text-primary bg-primary/10 px-3 py-1.5 rounded-md hover:bg-primary/20 transition-colors"
+              className="flex items-center gap-2 text-sm font-semibold text-white bg-primary px-4 py-2 rounded-md hover:bg-primary/90 transition-colors shadow-sm"
             >
               <Plus className="w-4 h-4" /> Add Program
             </button>
@@ -432,8 +555,14 @@ const ManagePrograms = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {programs.map((program, index) => (
               <div
-                key={index}
-                className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col"
+                key={program.id || program._id || index}
+                draggable
+                onDragStart={(e) => handleDragStart(e, index)}
+                onDragEnter={(e) => handleDragEnter(e, index)}
+                onDragOver={handleDragOver}
+                onDragEnd={handleDragEnd}
+                onDrop={(e) => handleDrop(e, index)}
+                className={`bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group flex flex-col cursor-move ${draggedIndex === index ? 'opacity-50' : 'opacity-100'} ${dragOverIndex === index ? 'border-primary border-2 scale-105 shadow-lg' : 'border-gray-200'}`}
               >
                 {/* Program Header Image / Placeholder */}
                 <div className="h-32 bg-gray-100 relative overflow-hidden flex-shrink-0">
@@ -449,6 +578,9 @@ const ManagePrograms = () => {
                       {program.tag}
                     </div>
                   )}
+                  <div className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm p-1 rounded cursor-move shadow-sm group-hover:bg-white transition-colors">
+                    <GripVertical className="w-4 h-4 text-gray-600" />
+                  </div>
                 </div>
                 
                 {/* Program Content */}
@@ -458,6 +590,22 @@ const ManagePrograms = () => {
                   
                   {/* Actions */}
                   <div className="flex justify-end gap-2 mt-4 pt-3 border-t border-gray-100">
+                    <button
+                      onClick={() => moveProgramUp(index)}
+                      disabled={index === 0}
+                      className="p-1.5 text-gray-500 hover:text-primary hover:bg-primary/10 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Move Up"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      onClick={() => moveProgramDown(index)}
+                      disabled={index === programs.length - 1}
+                      className="p-1.5 text-gray-500 hover:text-primary hover:bg-primary/10 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Move Down"
+                    >
+                      ↓
+                    </button>
                     <button
                       onClick={() => openEditProgramModal(index)}
                       className="p-1.5 text-gray-500 hover:text-primary hover:bg-primary/10 rounded-md transition-colors flex items-center gap-1.5 text-xs font-semibold"

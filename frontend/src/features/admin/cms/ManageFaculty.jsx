@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Loader2, Plus, Trash2, Users, Briefcase } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
@@ -157,7 +157,7 @@ const ManageFaculty = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader theme="dark" text="Loading Faculty settings..." />
+        <AdminSkeleton />
       </div>
     );
   }

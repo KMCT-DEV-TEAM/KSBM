@@ -4,7 +4,7 @@ import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Plus, Trash2 } fr
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import ConfirmationModal from '../../../components/ConfirmationModal';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import AchievementsPreview from '../../home/components/AchievementsSection';
 import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
@@ -166,7 +166,7 @@ const ManageAchievements = () => {
   };
 
   if (isLoading) {
-    return <Loader theme="light" text="Loading Settings..." />;
+    return <AdminSkeleton />;
   }
 
   return (

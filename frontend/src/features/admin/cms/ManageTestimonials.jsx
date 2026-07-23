@@ -4,7 +4,7 @@ import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Tr
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import ConfirmationModal from '../../../components/ConfirmationModal';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import TestimonialsPreview from '../../home/components/TestimonialsSection';
 import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
@@ -160,7 +160,7 @@ const ManageTestimonials = () => {
   };
 
   if (isLoading) {
-    return <Loader theme="light" text="Loading Settings..." />;
+    return <AdminSkeleton />;
   }
 
   return (
