@@ -544,7 +544,9 @@ const ManageFacilities = () => {
                 </div>
 
                 <div className="col-span-1 md:col-span-2">
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Facility Image</label>
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">
+                    Facility Image { (editingFacilityIndex === -1 || editingFacilityIndex >= 6) && <span className="text-red-500">*</span> }
+                  </label>
                   <div className="bg-gray-50 p-4 rounded-lg border border-[#D9DEE3]">
                     {(() => {
                       const isDefaultCard = editingFacilityIndex >= 0 && editingFacilityIndex < 6;
@@ -574,7 +576,8 @@ const ManageFacilities = () => {
               </button>
               <button
                 onClick={saveFacilityFromModal}
-                className="px-5 py-2 rounded-md font-semibold text-sm text-white bg-primary hover:bg-primary/90 transition-colors shadow-sm flex items-center gap-2"
+                disabled={!currentFacility.title.trim() || (!currentFacility.image && (editingFacilityIndex === -1 || editingFacilityIndex >= 6))}
+                className="px-5 py-2 rounded-md font-semibold text-sm text-white bg-primary hover:bg-primary/90 transition-colors shadow-sm flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Save className="w-4 h-4" />
                 Save Facility

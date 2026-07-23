@@ -5,7 +5,6 @@ import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import AdminSkeleton from './components/AdminSkeleton';
-import RecruitersPreview from '../../home/components/RecruitersSection';
 import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
@@ -23,12 +22,20 @@ const Toast = Swal.mixin({
 });
 
 const defaultRecruiterSettings = [
-  { id: '1', name: 'Infosys', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg', category: 'IT & Tech', package: '18.5 LPA Highest', badge: 'Day-1 Recruiter', website: 'https://www.infosys.com/careers' },
-  { id: '2', name: 'Wipro', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg', category: 'IT & Tech', package: '16.0 LPA CTC', badge: 'Global Partner', website: 'https://careers.wipro.com' },
-  { id: '3', name: 'Cognizant', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Cognizant_logo_2022.svg', category: 'Consulting & Finance', package: '20.0 LPA CTC', badge: 'Super Dream', website: 'https://careers.cognizant.com' },
-  { id: '4', name: 'Google', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg', category: 'Core & Strategy', package: '28.0 LPA Highest', badge: 'Top Global Recruiter', website: 'https://careers.google.com' },
-  { id: '5', name: 'Microsoft', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg', category: 'IT & Tech', package: '25.0 LPA CTC', badge: 'Super Dream', website: 'https://careers.microsoft.com' }
+  { id: '1', name: 'Infosys', logo: '/assets/Images/Home/infosys_logo.svg' },
+  { id: '2', name: 'Wipro', logo: '/assets/Images/Home/wipro_logo.svg' },
+  { id: '3', name: 'Cognizant', logo: '/assets/Images/Home/cognizant_logo.svg' },
+  { id: '4', name: 'Google', logo: '/assets/Images/Home/google_logo.svg' },
+  { id: '5', name: 'Microsoft', logo: '/assets/Images/Home/microsoft_logo.svg' }
 ];
+
+const defaultLogoMap = {
+  'Infosys': '/assets/Images/Home/infosys_logo.svg',
+  'Wipro': '/assets/Images/Home/wipro_logo.svg',
+  'Cognizant': '/assets/Images/Home/cognizant_logo.svg',
+  'Google': '/assets/Images/Home/google_logo.svg',
+  'Microsoft': '/assets/Images/Home/microsoft_logo.svg'
+};
 
 const ManageRecruiters = () => {
   const [recruiters, setRecruiters] = useState([]);
@@ -39,6 +46,29 @@ const ManageRecruiters = () => {
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, title: '', message: '', confirmText: '', variant: 'danger' });
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newRecruiter, setNewRecruiter] = useState({ name: '', logo: '' });
+  const iframeRef = React.useRef(null);
+
+  const [draggedIndex, setDraggedIndex] = useState(null);
+
+  useEffect(() => {
+    if (isPreviewModalOpen) {
+      const pData = { recruiters, showRecruiters };
+      const handleIframeReady = (e) => {
+        if (e.data?.type === 'iframe-ready' && e.data?.source === 'recruiters' && iframeRef.current?.contentWindow) {
+          iframeRef.current.contentWindow.postMessage({ type: 'preview-recruiters-data', payload: pData }, '*');
+        }
+      };
+      window.addEventListener('message', handleIframeReady);
+      setTimeout(() => {
+        if (iframeRef.current?.contentWindow) {
+          iframeRef.current.contentWindow.postMessage({ type: 'preview-recruiters-data', payload: pData }, '*');
+        }
+      }, 500);
+      return () => window.removeEventListener('message', handleIframeReady);
+    }
+  }, [isPreviewModalOpen, recruiters, showRecruiters]);
 
   useEffect(() => {
     fetchSettings();
@@ -83,13 +113,26 @@ const ManageRecruiters = () => {
   const handleResetToDefault = async () => {
     await confirmAction({
       title: 'Reset to Defaults?',
-      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
+      message: 'This will reset all your settings and save them immediately.',
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
+        const newDefaults = defaultRecruiterSettings.map(item => ({ ...item, id: Date.now().toString() + Math.random().toString().slice(2, 6) }));
+        setRecruiters(newDefaults);
         setShowRecruiters(true);
-        setRecruiters(defaultRecruiterSettings.map(item => ({ ...item, id: Date.now().toString() + Math.random().toString().slice(2, 6) })));
-        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+        
+        setIsSaving(true);
+        try {
+          await api.put('/cms/recruiters', {
+            recruiters: newDefaults, showRecruiters: true
+          });
+          Toast.fire({ icon: 'success', title: 'Settings reset to default and saved.' });
+        } catch (error) {
+          console.error('Error saving recruiters settings:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to save defaults.' });
+        } finally {
+          setIsSaving(false);
+        }
       }
     });
   };
@@ -99,18 +142,52 @@ const ManageRecruiters = () => {
   };
 
   const handleAddRecruiter = () => {
-    setRecruiters([
-      ...recruiters,
-      {
-        id: Date.now().toString(),
-        name: 'New Company',
-        logo: '',
-        category: 'IT & Tech',
-        package: '15.0 LPA CTC',
-        badge: 'Global Partner',
-        website: 'https://www.google.com'
+    setNewRecruiter({ name: '', logo: '' });
+    setIsAddModalOpen(true);
+  };
+
+  const handleCloseAddModal = async () => {
+    if (newRecruiter.logo) {
+      try {
+        await api.delete('/upload', { data: { fileUrl: newRecruiter.logo }, hideLoader: true });
+      } catch (error) {
+        console.error('Failed to cleanup aborted recruiter image:', error);
       }
-    ]);
+    }
+    setIsAddModalOpen(false);
+  };
+
+  const handleConfirmAddRecruiter = async () => {
+    await confirmAction({
+      title: 'Add Recruiter?',
+      message: `Are you sure you want to add ${newRecruiter.name || 'this company'} to the recruiters list?`,
+      confirmText: 'Yes, add it!',
+      variant: 'primary',
+      action: async () => {
+        const addedRecruiter = {
+          id: Date.now().toString(),
+          name: newRecruiter.name,
+          logo: newRecruiter.logo
+        };
+        const updatedRecruiters = [...recruiters, addedRecruiter];
+        setRecruiters(updatedRecruiters);
+        
+        setIsSaving(true);
+        try {
+          await api.put('/cms/recruiters', {
+            recruiters: updatedRecruiters, showRecruiters
+          });
+          Toast.fire({ icon: 'success', title: 'Recruiter added successfully!' });
+          setIsAddModalOpen(false);
+        } catch (error) {
+          console.error('Error adding recruiter:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to add recruiter.' });
+          setRecruiters(recruiters); // revert on failure
+        } finally {
+          setIsSaving(false);
+        }
+      }
+    });
   };
 
   const handleUpdateRecruiter = (id, field, value) => {
@@ -128,20 +205,70 @@ const ManageRecruiters = () => {
     setRecruiters(updated);
   };
 
-  const handleDeleteRecruiter = async (id) => {
-    const updatedRecruiters = recruiters.filter(item => item.id !== id && item._id !== id);
-    setRecruiters(updatedRecruiters);
-    
-    try {
-      await api.put('/cms/recruiters', {
-        recruiters: updatedRecruiters, showRecruiters
-      });
-      Toast.fire({ icon: 'success', title: 'Recruiter deleted from database.' });
-    } catch (error) {
-      console.error('Error deleting recruiter:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to delete recruiter from database.' });
-      setRecruiters(recruiters); // revert on failure
+  const handleDeleteRecruiter = async (id, name) => {
+    await confirmAction({
+      title: 'Remove Recruiter?',
+      message: `Are you sure you want to remove ${name || 'this recruiter'}?`,
+      confirmText: 'Yes, remove it',
+      variant: 'danger',
+      action: async () => {
+        let updatedRecruiters = recruiters.filter(item => item.id !== id && item._id !== id);
+        
+        if (updatedRecruiters.length < 5) {
+          const missingCount = 5 - updatedRecruiters.length;
+          const defaultsToAdd = defaultRecruiterSettings
+            .filter(d => !updatedRecruiters.some(r => r.name === d.name))
+            .slice(0, missingCount)
+            .map(item => ({ ...item, id: Date.now().toString() + Math.random().toString().slice(2, 6) }));
+          
+          updatedRecruiters = [...updatedRecruiters, ...defaultsToAdd];
+        }
+        
+        setRecruiters(updatedRecruiters);
+        
+        setIsSaving(true);
+        try {
+          await api.put('/cms/recruiters', {
+            recruiters: updatedRecruiters, showRecruiters
+          });
+          Toast.fire({ icon: 'success', title: 'Recruiters updated.' });
+        } catch (error) {
+          console.error('Error deleting recruiter:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to update database.' });
+          setRecruiters(recruiters); // revert on failure
+        } finally {
+          setIsSaving(false);
+        }
+      }
+    });
+  };
+
+  const handleDragStart = (e, index) => {
+    setDraggedIndex(index);
+    // Needed for Firefox
+    if (e.dataTransfer) {
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", index);
     }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
+  };
+
+  const handleDrop = (e, targetIndex) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+    const newRecruiters = [...recruiters];
+    const draggedItem = newRecruiters[draggedIndex];
+    
+    newRecruiters.splice(draggedIndex, 1);
+    newRecruiters.splice(targetIndex, 0, draggedItem);
+    
+    setRecruiters(newRecruiters);
+    setDraggedIndex(null);
   };
 
   if (isLoading) {
@@ -152,7 +279,7 @@ const ManageRecruiters = () => {
     <div className="space-y-6 w-full">
       <PageHeader
         title="Recruiters Settings"
-        description="Manage corporate partners, placement statistics, categories, and packages."
+        description="Manage corporate partners and logos."
         onPreview={() => setIsPreviewModalOpen(true)}
         onReset={handleResetToDefault}
         onSave={handleSave}
@@ -198,11 +325,14 @@ const ManageRecruiters = () => {
             </button>
           </div>
 
-          <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
-            <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <RecruitersPreview previewData={{
-                recruiters, showRecruiters
-              }} />
+          <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center items-center">
+            <div className={`bg-white shadow-xl h-full transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
+              <iframe 
+                ref={iframeRef}
+                src="/preview/recruiters"
+                className="w-full h-full border-0 min-h-[500px]"
+                title="Recruiters Preview"
+              />
             </div>
           </div>
         </div>
@@ -222,23 +352,31 @@ const ManageRecruiters = () => {
             </div>
             <button
               onClick={handleAddRecruiter}
-              className="flex items-center gap-2 text-sm font-semibold bg-primary/10 text-primary px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors cursor-pointer"
+              className="flex items-center gap-2 text-sm font-semibold bg-primary text-white px-5 py-2.5 rounded-lg shadow-sm hover:bg-primary/90 hover:shadow transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Plus className="w-4 h-4" /> Add Recruiter Card
             </button>
           </div>
 
-          <div className="grid grid-cols-1 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {recruiters.map((item, idx) => (
-              <div key={item.id || item._id || idx} className="p-5 border border-gray-200 rounded-xl bg-gray-50 flex flex-col md:flex-row gap-6 relative group hover:border-primary/30 transition-all">
+              <div 
+                key={item.id || item._id || idx} 
+                draggable
+                onDragStart={(e) => handleDragStart(e, idx)}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, idx)}
+                onDragEnd={() => setDraggedIndex(null)}
+                className={`p-5 border border-gray-200 rounded-xl bg-gray-50 flex flex-col gap-4 relative group hover:border-primary/30 transition-all cursor-move ${draggedIndex === idx ? 'opacity-50 ring-2 ring-primary ring-offset-2' : ''}`}
+              >
                 
                 {/* Reorder and Delete Actions */}
-                <div className="absolute top-3 right-3 flex items-center gap-1">
+                <div className="absolute top-3 right-3 flex items-center gap-1 z-10">
                   <button
                     type="button"
                     onClick={() => handleMoveRecruiter(idx, -1)}
                     disabled={idx === 0}
-                    className="p-1.5 text-gray-400 hover:text-primary disabled:opacity-30 transition-colors bg-white rounded border border-gray-200 cursor-pointer"
+                    className="p-1.5 text-gray-400 hover:text-primary disabled:opacity-30 transition-colors bg-white/80 backdrop-blur-sm rounded border border-gray-200 cursor-pointer shadow-sm"
                     title="Move Up"
                   >
                     <ArrowUp className="w-3.5 h-3.5" />
@@ -247,96 +385,43 @@ const ManageRecruiters = () => {
                     type="button"
                     onClick={() => handleMoveRecruiter(idx, 1)}
                     disabled={idx === recruiters.length - 1}
-                    className="p-1.5 text-gray-400 hover:text-primary disabled:opacity-30 transition-colors bg-white rounded border border-gray-200 cursor-pointer"
+                    className="p-1.5 text-gray-400 hover:text-primary disabled:opacity-30 transition-colors bg-white/80 backdrop-blur-sm rounded border border-gray-200 cursor-pointer shadow-sm"
                     title="Move Down"
                   >
                     <ArrowDown className="w-3.5 h-3.5" />
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleDeleteRecruiter(item.id || item._id)}
-                    className="p-1.5 text-gray-400 hover:text-red-500 transition-colors bg-white hover:bg-red-50 rounded border border-gray-200 cursor-pointer ml-1"
+                    onClick={() => handleDeleteRecruiter(item.id || item._id, item.name)}
+                    className="p-1.5 text-gray-400 hover:text-red-500 transition-colors bg-white/80 backdrop-blur-sm hover:bg-red-50 rounded border border-gray-200 cursor-pointer ml-1 shadow-sm"
                     title="Remove Recruiter"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
-                {/* Left: Logo Upload */}
-                <div className="w-full md:w-36 shrink-0 flex flex-col items-center">
+                {/* Top: Logo Upload & Image */}
+                <div className="w-full shrink-0 flex flex-col">
                   <LogoUploader
-                    currentLogoUrl={item.logo || 'https://via.placeholder.com/300x150?text=No+Logo'}
+                    currentLogoUrl={item.logo || defaultLogoMap[item.name] || 'https://via.placeholder.com/300x150?text=No+Logo'}
                     onUploadSuccess={(url) => handleUpdateRecruiter(item.id || item._id, 'logo', url)}
+                    uploadEndpoint="/upload/home"
+                    disableDelete={true}
                   />
                 </div>
 
-                {/* Right: Fields Grid */}
-                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 md:pt-0">
-                  <div>
-                    <label className="block text-xs font-bold text-[#566A7F] uppercase tracking-wide mb-1.5">Company Name</label>
-                    <input
-                      type="text"
-                      value={item.name}
-                      onChange={(e) => handleUpdateRecruiter(item.id || item._id, 'name', e.target.value)}
-                      placeholder="e.g. Google"
-                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-[#566A7F] uppercase tracking-wide mb-1.5 flex items-center gap-1">
-                      <Briefcase className="w-3.5 h-3.5 text-primary" /> Category
-                    </label>
-                    <select
-                      value={item.category || 'IT & Tech'}
-                      onChange={(e) => handleUpdateRecruiter(item.id || item._id, 'category', e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    >
-                      <option value="IT & Tech">IT & Tech</option>
-                      <option value="Consulting & Finance">Consulting & Finance</option>
-                      <option value="Operations & Strategy">Operations & Strategy</option>
-                      <option value="Core & Analytics">Core & Analytics</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-[#566A7F] uppercase tracking-wide mb-1.5 flex items-center gap-1">
-                      <Award className="w-3.5 h-3.5 text-emerald-600" /> Package / CTC Highlight
-                    </label>
-                    <input
-                      type="text"
-                      value={item.package || ''}
-                      onChange={(e) => handleUpdateRecruiter(item.id || item._id, 'package', e.target.value)}
-                      placeholder="e.g. 24 LPA Highest"
-                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-[#566A7F] uppercase tracking-wide mb-1.5 flex items-center gap-1">
-                      <Tag className="w-3.5 h-3.5 text-blue-600" /> Placement Badge
-                    </label>
-                    <input
-                      type="text"
-                      value={item.badge || ''}
-                      onChange={(e) => handleUpdateRecruiter(item.id || item._id, 'badge', e.target.value)}
-                      placeholder="e.g. Super Dream"
-                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    />
-                  </div>
-
-                  <div className="sm:col-span-2 lg:col-span-4">
-                    <label className="block text-xs font-bold text-[#566A7F] uppercase tracking-wide mb-1.5 flex items-center gap-1">
-                      <Globe className="w-3.5 h-3.5 text-indigo-600" /> Official Website / Careers URL
-                    </label>
-                    <input
-                      type="url"
-                      value={item.website || ''}
-                      onChange={(e) => handleUpdateRecruiter(item.id || item._id, 'website', e.target.value)}
-                      placeholder="https://careers.google.com"
-                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    />
-                  </div>
+                {/* Bottom: Company Name */}
+                <div className="w-full mt-2">
+                  <label className="block text-xs font-bold text-[#566A7F] uppercase tracking-wide mb-1.5">Company Name</label>
+                  <input
+                    type="text"
+                    value={item.name}
+                    maxLength={20}
+                    onChange={(e) => handleUpdateRecruiter(item.id || item._id, 'name', e.target.value)}
+                    placeholder="e.g. Google"
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                  <div className="text-xs text-right mt-1 text-gray-500">{(item.name || '').length}/20</div>
                 </div>
 
               </div>
@@ -362,6 +447,58 @@ const ManageRecruiters = () => {
         variant={confirmModal.variant}
         isSubmitting={isSaving}
       />
+
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+            <div className="flex justify-between items-center p-6 border-b border-gray-100">
+              <h3 className="text-xl font-bold text-[#1e2869]">Add New Recruiter</h3>
+              <button onClick={handleCloseAddModal} className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 space-y-5">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Company Name <span className="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  value={newRecruiter.name}
+                  maxLength={20}
+                  onChange={(e) => setNewRecruiter({ ...newRecruiter, name: e.target.value })}
+                  placeholder="e.g. Amazon"
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                />
+                <div className="text-xs text-right mt-1 text-gray-500">{(newRecruiter.name || '').length}/20</div>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Company Logo <span className="text-red-500">*</span></label>
+                <LogoUploader
+                  currentLogoUrl={newRecruiter.logo}
+                  onUploadSuccess={(url) => setNewRecruiter({ ...newRecruiter, logo: url })}
+                  uploadEndpoint="/upload/home"
+                  layout="vertical"
+                  disableDelete={true}
+                />
+              </div>
+            </div>
+            <div className="p-6 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
+              <button
+                onClick={handleCloseAddModal}
+                className="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:bg-gray-200 bg-gray-100 rounded-xl transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmAddRecruiter}
+                disabled={!newRecruiter.name.trim() || !newRecruiter.logo}
+                className="px-5 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-xl shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              >
+                Add Recruiter
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

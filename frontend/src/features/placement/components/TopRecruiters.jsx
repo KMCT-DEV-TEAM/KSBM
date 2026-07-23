@@ -1,9 +1,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+const defaultRecruiters = [
+  { name: 'Infosys', logo: '/assets/Images/Home/infosys_logo.svg' },
+  { name: 'Wipro', logo: '/assets/Images/Home/wipro_logo.svg' },
+  { name: 'Cognizant', logo: '/assets/Images/Home/cognizant_logo.svg' },
+  { name: 'Google', logo: '/assets/Images/Home/google_logo.svg' },
+  { name: 'Microsoft', logo: '/assets/Images/Home/microsoft_logo.svg' }
+];
+
 const TopRecruiters = ({ data }) => {
   if (!data || !data.items || data.items.length === 0) return null;
-  const recruiters = data.items;
+  
+  let recruiters = data.items;
+  if (recruiters.length < 5) {
+    const missing = 5 - recruiters.length;
+    recruiters = [...recruiters, ...defaultRecruiters.slice(0, missing)];
+  }
   return (
     <section className="py-16 bg-white relative text-center overflow-hidden">
       <motion.div
@@ -22,17 +35,17 @@ const TopRecruiters = ({ data }) => {
         {/* Infinite Scroll Logo Marquee */}
         <div className="overflow-hidden w-full relative">
           {/* Gradient Edges for smooth fade */}
-          <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute inset-y-0 left-0 w-8 md:w-16 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute inset-y-0 right-0 w-8 md:w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
 
           {/* Line 1 - Moving Left */}
           <motion.div 
-            className="flex w-max gap-12 md:gap-20 py-4 mb-4"
+            className="flex w-max gap-8 md:gap-20 py-4 mb-4"
             animate={{ x: ["0%", "-50%"] }}
             transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
           >
             {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
-              <div key={`l1-${recruiter.id}-${index}`} className="w-24 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
+              <div key={`l1-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
                 <img src={recruiter.logo} alt={recruiter.name} className="w-full h-auto object-contain" />
               </div>
             ))}
@@ -40,12 +53,12 @@ const TopRecruiters = ({ data }) => {
 
           {/* Line 2 - Moving Left */}
           <motion.div 
-            className="flex w-max gap-12 md:gap-20 py-4 mb-4"
+            className="flex w-max gap-8 md:gap-20 py-4 mb-4"
             animate={{ x: ["0%", "-50%"] }}
             transition={{ repeat: Infinity, ease: "linear", duration: 35 }}
           >
             {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
-              <div key={`l2-${recruiter.id}-${index}`} className="w-24 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
+              <div key={`l2-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
                 <img src={recruiter.logo} alt={recruiter.name} className="w-full h-auto object-contain" />
               </div>
             ))}
@@ -53,12 +66,12 @@ const TopRecruiters = ({ data }) => {
 
           {/* Line 3 - Moving Left (Faster) */}
           <motion.div 
-            className="flex w-max gap-12 md:gap-20 py-4"
+            className="flex w-max gap-8 md:gap-20 py-4"
             animate={{ x: ["0%", "-50%"] }}
             transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
           >
             {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
-              <div key={`l3-${recruiter.id}-${index}`} className="w-24 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
+              <div key={`l3-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
                 <img src={recruiter.logo} alt={recruiter.name} className="w-full h-auto object-contain" />
               </div>
             ))}

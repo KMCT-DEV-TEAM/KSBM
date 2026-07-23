@@ -87,7 +87,9 @@ router.delete('/', protect, async (req, res) => {
     'watermark_logo.png', 'watermark_logo1.png',
     'management_1.jpg', 'management_2.jpg', 'management_3.jpg',
     'facility_1.jpg', 'facility_2.jpg', 'facility_3.jpg',
-    'facility_4.jpg', 'facility_5.jpg', 'facility_6.jpg'
+    'facility_4.jpg', 'facility_5.jpg', 'facility_6.jpg',
+    'infosys_logo.svg', 'wipro_logo.svg', 'cognizant_logo.svg',
+    'google_logo.svg', 'microsoft_logo.svg'
   ];
 
   const filename = fileUrl.split('/').pop();

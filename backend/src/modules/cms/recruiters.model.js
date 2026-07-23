@@ -8,23 +8,7 @@ const recruiterItemSchema = new mongoose.Schema({
   logo: {
     type: String,
     default: '',
-  },
-  category: {
-    type: String,
-    default: 'IT & Tech',
-  },
-  package: {
-    type: String,
-    default: '',
-  },
-  website: {
-    type: String,
-    default: '',
-  },
-  badge: {
-    type: String,
-    default: '',
-  },
+  }
 }, { strict: false });
 
 const recruitersSchema = new mongoose.Schema(
@@ -34,23 +18,23 @@ const recruitersSchema = new mongoose.Schema(
       default: [
         {
           name: 'Infosys',
-          logo: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg'
+          logo: '/assets/Images/Home/infosys_logo.svg'
         },
         {
           name: 'Wipro',
-          logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg'
+          logo: '/assets/Images/Home/wipro_logo.svg'
         },
         {
           name: 'Cognizant',
-          logo: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Cognizant_logo_2022.svg'
+          logo: '/assets/Images/Home/cognizant_logo.svg'
         },
         {
           name: 'Google',
-          logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg'
+          logo: '/assets/Images/Home/google_logo.svg'
         },
         {
           name: 'Microsoft',
-          logo: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg'
+          logo: '/assets/Images/Home/microsoft_logo.svg'
         }
       ]
     },
@@ -69,23 +53,23 @@ recruitersSchema.statics.getSettings = async function () {
       recruiters: [
         {
           name: 'Infosys',
-          logo: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg'
+          logo: '/assets/Images/Home/infosys_logo.svg'
         },
         {
           name: 'Wipro',
-          logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg'
+          logo: '/assets/Images/Home/wipro_logo.svg'
         },
         {
           name: 'Cognizant',
-          logo: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Cognizant_logo_2022.svg'
+          logo: '/assets/Images/Home/cognizant_logo.svg'
         },
         {
           name: 'Google',
-          logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg'
+          logo: '/assets/Images/Home/google_logo.svg'
         },
         {
           name: 'Microsoft',
-          logo: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg'
+          logo: '/assets/Images/Home/microsoft_logo.svg'
         }
       ],
       showRecruiters: true
