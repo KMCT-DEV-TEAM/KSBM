@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Eye, Save, Monitor, Tablet, Smartphone, X, RefreshCw, Plus, Trash2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import FooterPreview from '../../../components/Footer';
 import SectionForm from './components/SectionForm';
 import PageHeader from './components/PageHeader';
@@ -121,7 +121,7 @@ const ManageFooter = () => {
     setArray(updated);
   };
 
-  if (isLoading) return <Loader theme="light" text="Loading Settings..." />;
+  if (isLoading) return <AdminSkeleton />;
 
   return (
     <div className="space-y-6 w-full">

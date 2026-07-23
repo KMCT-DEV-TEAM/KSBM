@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Save, Plus, Trash2, ArrowUp, ArrowDown, Award, Sparkles, Route, GraduationCap, MessageSquareText, HelpCircle, CheckCircle2 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import api from '../../../api/axios';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import confirmAction from '../../../utils/confirmAction';
 import LogoUploader from './components/LogoUploader';
 import PageHeader from './components/PageHeader';
@@ -269,7 +269,7 @@ const ManageAdmissionsPage = () => {
 
   
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <AdminSkeleton />;
 
   return (
     <div className="space-y-8 pb-16">

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, Eye, Plus, Trash2, ArrowUp, ArrowDown, FileText, Calendar, Bell, Award, BookOpen } from 'lucide-react';
 import Swal from 'sweetalert2';
 import api from '../../../api/axios';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import confirmAction from '../../../utils/confirmAction';
 import LogoUploader from './components/LogoUploader';
 import PageHeader from './components/PageHeader';
@@ -181,7 +181,7 @@ const ManageExaminationsPage = () => {
     { id: 'results', name: 'Semester Results List', icon: <FileText className="w-4 h-4" /> },
   ];
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <AdminSkeleton />;
 
   return (
     <div className="max-w-[1400px] mx-auto p-4 sm:p-6 lg:p-8 space-y-6">

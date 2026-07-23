@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import FacilitiesHero from '../../facilities/components/FacilitiesHero';
 import confirmAction from '../../../utils/confirmAction';
 import SingleImageUploader from './components/SingleImageUploader';
@@ -81,7 +81,7 @@ const ManageFacilitiesHero = () => {
     });
   };
 
-  if (isLoading) return <Loader theme="light" text="Loading Settings..." />;
+  if (isLoading) return <AdminSkeleton />;
 
   return (
     <div className="w-full pb-12">

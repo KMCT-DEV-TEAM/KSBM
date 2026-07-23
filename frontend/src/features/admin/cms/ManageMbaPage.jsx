@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Save, RefreshCw, Plus, Trash2, GraduationCap, FileText, BookOpen, Briefcase, Award, Eye, Monitor, Tablet, Smartphone, X, RotateCcw, ChevronLeft, ChevronRight, Calendar, ArrowUp, ArrowDown } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import confirmAction from '../../../utils/confirmAction';
 import LogoUploader from './components/LogoUploader';
 import ManageRecruiters from './ManageRecruiters';
@@ -608,7 +608,7 @@ const ManageMbaPage = ({ isBba = false }) => {
   };
 
   if (isLoading) {
-    return <Loader text={`Loading ${pageName}...`} />;
+    return <AdminSkeleton />;
   }
 
   const tabs = [

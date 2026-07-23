@@ -1,4 +1,7 @@
 import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { upload, cloudinary } from '../../config/cloudinary.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -6,15 +9,31 @@ import { uploadAssets } from '../../config/assetsUpload.js';
 
 const router = express.Router();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 router.post('/home', protect, uploadAssets.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No image provided' });
   }
 
-  const fileUrl = `/assets/home/${req.file.filename}`;
+  const fileUrl = `/assets/Images/Home/${req.file.filename}`;
   
   res.status(200).json({
-    message: 'Image uploaded successfully to local assets/home',
+    message: 'Image uploaded successfully to /assets/Images/Home',
+    url: fileUrl,
+  });
+});
+
+router.post('/programs', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/Home/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/Home',
     url: fileUrl,
   });
 });
@@ -54,6 +73,50 @@ router.post('/', protect, upload.single('image'), async (req, res) => {
     message: 'Image uploaded successfully locally',
     url: fileUrl,
   });
+});
+
+router.delete('/', protect, async (req, res) => {
+  const { fileUrl } = req.body;
+  if (!fileUrl) return res.status(400).json({ message: 'No fileUrl provided' });
+
+  // Safety checks for defaults
+  const defaultImages = [
+    'hero_banner_1.png', 'hero_banner_2.png', 'hero_banner_3.png',
+    'academic_mba.jpg', 'academic_bba.jpg', 'graduate.png'
+  ];
+
+  const filename = fileUrl.split('/').pop();
+
+  if (defaultImages.includes(filename)) {
+    return res.status(200).json({ message: 'Default image, skipped deletion' });
+  }
+
+  // Multer generated files usually start with a timestamp (numbers)
+  if (!/^\d+-/.test(filename) && !filename.includes('cloudinary')) {
+     return res.status(200).json({ message: 'Not a multer generated file, skipped deletion' });
+  }
+
+  let filePath = '';
+  if (fileUrl.includes('/assets/Images/Home/')) {
+     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/Home', filename);
+  } else if (fileUrl.includes('/assets/home/')) {
+     filePath = path.join(__dirname, '../../../assets/home', filename);
+  } else if (fileUrl.includes('/uploads/')) {
+     filePath = path.join(__dirname, '../../../uploads', filename);
+  }
+
+  if (filePath && fs.existsSync(filePath)) {
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error("Failed to delete local file:", err);
+        return res.status(500).json({ message: 'Failed to delete file' });
+      }
+      return res.status(200).json({ message: 'File deleted successfully' });
+    });
+  } else {
+    // If not found locally, might be cloudinary or already deleted, which is fine
+    return res.status(200).json({ message: 'File not found on server or already deleted' });
+  }
 });
 
 export default router;

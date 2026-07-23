@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import ClubsSection from '../../facilities/components/ClubsSection';
 import confirmAction from '../../../utils/confirmAction';
 import SingleImageUploader from './components/SingleImageUploader';
@@ -105,7 +105,7 @@ const ManageClubs = () => {
     setClubs({ ...clubs, items: newItems });
   };
 
-  if (isLoading) return <Loader theme="light" text="Loading Settings..." />;
+  if (isLoading) return <AdminSkeleton />;
 
   return (
     <div className="space-y-6 w-full">

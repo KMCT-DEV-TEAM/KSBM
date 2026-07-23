@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import PlacementSection from '../../home/components/PlacementSection';
 import confirmAction from '../../../utils/confirmAction';
@@ -129,7 +129,7 @@ const ManagePlacement = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Loader fullScreen={false} />
+        <AdminSkeleton />
       </div>
     );
   }

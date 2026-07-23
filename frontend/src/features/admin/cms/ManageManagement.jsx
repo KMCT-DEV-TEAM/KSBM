@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2, GripVertical, Image as ImageIcon } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import ManagementPreview from '../../home/components/ManagementSection';
 import LogoUploader from './components/LogoUploader';
@@ -180,7 +180,7 @@ const ManageManagement = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Loader fullScreen={false} />
+        <AdminSkeleton />
       </div>
     );
   }

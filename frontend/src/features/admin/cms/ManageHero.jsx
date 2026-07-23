@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import BannerUploader from './components/BannerUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
@@ -172,7 +172,7 @@ const ManageHero = () => {
   }, [previewData, isPreviewModalOpen]);
 
   if (isLoading) {
-    return <Loader theme="light" text="Loading Settings..." />;
+    return <AdminSkeleton />;
   }
 
   return (

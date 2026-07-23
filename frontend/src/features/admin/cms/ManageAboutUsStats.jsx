@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw, Loader2, Plus, Trash2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 
@@ -85,7 +85,7 @@ const ManageAboutUsStats = () => {
   const addStat = () => setStats([...stats, { value: '', label: '' }]);
   const removeStat = (index) => setStats(stats.filter((_, i) => i !== index));
 
-  if (isLoading) return <Loader theme="light" text="Loading Settings..." />;
+  if (isLoading) return <AdminSkeleton />;
 
   return (
     <div className="space-y-6 w-full">
