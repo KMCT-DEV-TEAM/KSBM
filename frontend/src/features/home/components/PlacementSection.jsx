@@ -56,12 +56,19 @@ const PlacementSection = ({ previewData }) => {
     stat1Label,
     stat2Value,
     stat2Label,
+    statistics,
     showSubheading,
     showHeading,
     showDescription,
     showStats,
     previewDevice
   } = displayData;
+
+  const displayStats = statistics && statistics.length > 0 
+    ? statistics 
+    : (stat1Value || stat2Value) 
+      ? [{ value: stat1Value, label: stat1Label }, { value: stat2Value, label: stat2Label }].filter(s => s.value)
+      : [];
 
   const isMobilePreview = previewDevice === 'mobile';
   const isTabletPreview = previewDevice === 'tablet';
@@ -125,35 +132,41 @@ const PlacementSection = ({ previewData }) => {
         </div>
 
         {/* Statistics Section */}
-        {showStats && (
+        {showStats && displayStats.length > 0 && (
           <motion.div
             variants={itemVariants}
-            className={`flex items-center justify-center ${isMobilePreview ? 'gap-10 mt-12' : 'gap-10 lg:gap-24 mt-12 lg:mt-20'}`}
+            className={
+              isMobilePreview
+                ? `grid ${displayStats.length === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-y-8 gap-x-2 mt-10 w-full`
+                : isTabletPreview
+                ? 'flex flex-wrap items-center justify-center gap-8 mt-12 w-full'
+                : `grid ${displayStats.length === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-y-8 gap-x-4 mt-10 md:flex md:flex-wrap md:items-center md:justify-center md:gap-10 lg:gap-24 md:mt-12 lg:mt-20 w-full`
+            }
           >
-            
-            {/* Stat 1 */}
-            <div className="flex flex-col items-center text-center">
-              <span className={`text-primary mb-3 font-serif ${isMobilePreview ? 'text-2xl' : 'text-2xl lg:text-3xl'}`} style={{ fontFamily: 'Georgia, serif' }}>
-                {stat1Value}
-              </span>
-              <span className={`tracking-[0.2em] text-text-secondary uppercase ${isMobilePreview ? 'text-[0.65rem]' : 'text-[0.65rem] lg:text-xs'}`}>
-                {stat1Label}
-              </span>
-            </div>
+            {displayStats.map((stat, index) => (
+              <React.Fragment key={index}>
+                {/* Stat Item */}
+                <div className={`flex flex-col items-center text-center px-2 ${displayStats.length === 3 && index === 2 ? (isMobilePreview ? 'col-span-2' : 'col-span-2 md:col-span-1') : ''}`}>
+                  <span className={`text-primary mb-2 md:mb-3 font-serif ${isMobilePreview ? 'text-2xl' : 'text-2xl md:text-3xl'}`} style={{ fontFamily: 'Georgia, serif' }}>
+                    {stat.value}
+                  </span>
+                  <span className={`tracking-[0.15em] md:tracking-[0.2em] text-text-secondary uppercase ${isMobilePreview ? 'text-[0.6rem]' : 'text-[0.65rem] md:text-xs text-center'}`}>
+                    {stat.label}
+                  </span>
+                </div>
 
-            {/* Vertical Separator */}
-            <div className={`w-[1px] bg-gray-300 ${isMobilePreview ? 'h-12' : 'h-12 lg:h-16'}`}></div>
-
-            {/* Stat 2 */}
-            <div className="flex flex-col items-center text-center">
-              <span className={`text-primary mb-3 font-serif ${isMobilePreview ? 'text-2xl' : 'text-2xl lg:text-3xl'}`} style={{ fontFamily: 'Georgia, serif' }}>
-                {stat2Value}
-              </span>
-              <span className={`tracking-[0.2em] text-text-secondary uppercase ${isMobilePreview ? 'text-[0.65rem]' : 'text-[0.65rem] lg:text-xs'}`}>
-                {stat2Label}
-              </span>
-            </div>
-
+                {/* Vertical Separator (only show on desktop to avoid weird wrapping) */}
+                {index < displayStats.length - 1 && (
+                  <div 
+                    className={
+                      isMobilePreview || isTabletPreview
+                        ? 'hidden'
+                        : 'hidden lg:block w-[1px] bg-gray-300 h-12 lg:h-16'
+                    }
+                  ></div>
+                )}
+              </React.Fragment>
+            ))}
           </motion.div>
         )}
 
