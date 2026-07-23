@@ -1,5 +1,6 @@
 import Header from './header.model.js';
 import About from './about.model.js';
+import EventsPageModel from './eventsPage.model.js';
 import Hero from './hero.model.js';
 import Programs from './programs.model.js';
 import Accreditation from './accreditation.model.js';
@@ -33,6 +34,7 @@ import ContactPage from './contactPage.model.js';
 import PrivacyPolicyModel from './privacyPolicy.model.js';
 import TermsAndConditionsModel from './termsAndConditions.model.js';
 import FaqModel from './faq.model.js';
+import GalleryPageModel from './galleryPage.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -1272,4 +1274,71 @@ export const updateFaqSettings = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server error updating FAQ settings', error: error.message });
   }
-};
+};
+
+// @desc    Get Gallery Page settings
+// @route   GET /api/cms/gallery-page
+// @access  Public
+export const getGalleryPageSettings = async (req, res) => {
+  try {
+    const settings = await GalleryPageModel.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Gallery Page settings', error: error.message });
+  }
+};
+
+// @desc    Update Gallery Page settings
+// @route   PUT /api/cms/gallery-page
+// @access  Private/Admin
+export const updateGalleryPageSettings = async (req, res) => {
+  try {
+    const fields = ['hero', 'gallery'];
+    const settings = await GalleryPageModel.getSettings();
+    
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        settings[field] = req.body[field];
+      }
+    });
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Gallery Page settings', error: error.message });
+  }
+};
+
+// @desc    Get Events Page settings
+// @route   GET /api/cms/events-page
+// @access  Public
+export const getEventsPageSettings = async (req, res) => {
+  try {
+    const settings = await EventsPageModel.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Events Page settings', error: error.message });
+  }
+};
+
+// @desc    Update Events Page settings
+// @route   PUT /api/cms/events-page
+// @access  Private/Admin
+export const updateEventsPageSettings = async (req, res) => {
+  try {
+    const fields = ['hero', 'upcomingEvents', 'highlightedPrograms', 'essenceOfCulture', 'stayConnected', 'momentsCaptured'];
+    const settings = await EventsPageModel.getSettings();
+    
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        settings[field] = req.body[field];
+      }
+    });
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Events Page settings', error: error.message });
+  }
+};
+

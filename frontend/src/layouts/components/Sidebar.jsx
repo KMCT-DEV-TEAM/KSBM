@@ -84,6 +84,8 @@ const Sidebar = () => {
         { name: 'Manage Privacy Policy', path: '/admin/cms/privacy-policy' },
         { name: 'Manage Terms & Conditions', path: '/admin/cms/terms-and-conditions' },
         { name: 'Manage FAQ Page', path: '/admin/cms/faq' },
+        { name: 'Manage Gallery Page', path: '/admin/cms/gallery' },
+        { name: 'Manage Events Page', path: '/admin/cms/events' },
       ]
     },
     {

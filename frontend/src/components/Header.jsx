@@ -73,6 +73,7 @@ const Header = ({ previewData }) => {
               if (labelLower === 'placement' || labelLower === 'placements' || item.link === '#placement' || item.link.includes('placement')) return { ...item, link: '/placement' };
               if (labelLower === 'alumni' || item.link.includes('alumni')) return { ...item, link: '/alumni' };
               if (labelLower === 'admission' || labelLower === 'admissions' || item.link === '#admission' || item.link.includes('admission')) return { ...item, link: '/admissions' };
+              if (labelLower === 'events' || item.link === '#events' || item.link.includes('events')) return { ...item, link: '/events' };
               if (labelLower === 'contact' || labelLower === 'contact us' || item.link.includes('contact')) return { ...item, link: '/contact' };
               if (item.link.startsWith('#')) return { ...item, link: '/' + item.link };
               return item;
