@@ -37,6 +37,12 @@ const Footer = ({ previewData }) => {
                 if (link.label?.toLowerCase().includes('contact') || link.url === '#contact') {
                   return { ...link, url: '/contact' };
                 }
+                if (link.label?.toLowerCase().includes('faq') || link.url === '#faq') {
+                  return { ...link, url: '/faq' };
+                }
+                if (link.label?.toLowerCase().includes('gallery') || link.url === '#gallery') {
+                  return { ...link, url: '/gallery' };
+                }
                 return link;
               });
               const hasContact = fetched.quickLinks.some(link => link.label?.toLowerCase().includes('contact') || link.url === '/contact');
@@ -51,7 +57,7 @@ const Footer = ({ previewData }) => {
               fetched.quickLinks = [
                 { label: 'Programs', url: '/programs' },
                 { label: 'Accreditations', url: '/about' },
-                { label: 'Gallery', url: '/#campus' },
+                { label: 'Gallery', url: '/gallery' },
                 { label: 'FAQ', url: '/faq' },
                 { label: 'Contact Us', url: '/contact' }
               ];

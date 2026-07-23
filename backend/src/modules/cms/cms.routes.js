@@ -69,7 +69,11 @@ import {
   getTermsAndConditionsSettings,
   updateTermsAndConditionsSettings,
   getFaqSettings,
-  updateFaqSettings
+  updateFaqSettings,
+  getGalleryPageSettings,
+  updateGalleryPageSettings,
+  getEventsPageSettings,
+  updateEventsPageSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -222,5 +226,13 @@ router.route('/terms-and-conditions')
 router.route('/faq')
   .get(getFaqSettings)
   .put(protect, updateFaqSettings);
+
+router.route('/gallery-page')
+  .get(getGalleryPageSettings)
+  .put(protect, updateGalleryPageSettings);
+
+router.route('/events-page')
+  .get(getEventsPageSettings)
+  .put(protect, updateEventsPageSettings);
 
 export default router;

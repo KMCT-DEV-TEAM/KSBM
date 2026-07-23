@@ -39,6 +39,7 @@ import ContactLanding from '../features/contact/ContactLanding';
 import PrivacyPolicy from '../features/legal/PrivacyPolicy';
 import TermsAndConditions from '../features/legal/TermsAndConditions';
 import FaqPage from '../features/faq/FaqPage';
+import GalleryPage from '../features/gallery/GalleryPage';
 import ManageExaminationsPage from '../features/admin/cms/ManageExaminationsPage';
 import ManageAdmissionsPage from '../features/admin/cms/ManageAdmissionsPage';
 import ManagePlacementPage from '../features/admin/cms/ManagePlacementPage';
@@ -46,6 +47,7 @@ import ManageContactPage from '../features/admin/cms/ManageContactPage';
 import ManagePrivacyPolicy from '../features/admin/cms/ManagePrivacyPolicy';
 import ManageTermsAndConditions from '../features/admin/cms/ManageTermsAndConditions';
 import ManageFaqPage from '../features/admin/cms/ManageFaqPage';
+import ManageGalleryPage from '../features/admin/cms/ManageGalleryPage';
 import ManageMbaPage from '../features/admin/cms/ManageMbaPage';
 import ManageRecruiters from '../features/admin/cms/ManageRecruiters';
 import ManageNews from '../features/admin/cms/ManageNews';
@@ -90,6 +92,7 @@ const AppRoutes = () => {
           <Route path="terms" element={<TermsAndConditions />} />
           <Route path="faq" element={<FaqPage />} />
           <Route path="faqs" element={<FaqPage />} />
+          <Route path="gallery" element={<GalleryPage />} />
           {/* Add more routes here later (e.g., /campus) */}
         </Route>
 
@@ -155,6 +158,7 @@ const AppRoutes = () => {
           <Route path="cms/privacy-policy" element={<ManagePrivacyPolicy />} />
           <Route path="cms/terms-and-conditions" element={<ManageTermsAndConditions />} />
           <Route path="cms/faq" element={<ManageFaqPage />} />
+          <Route path="cms/gallery" element={<ManageGalleryPage />} />
 
             {/* Add future admin routes here */}
           </Route>
