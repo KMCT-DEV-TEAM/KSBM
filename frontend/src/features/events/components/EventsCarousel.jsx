@@ -9,63 +9,75 @@ const EventsCarousel = ({ highlightedPrograms, carouselIndex, setCarouselIndex }
   if (!highlightedPrograms || highlightedPrograms.images.length === 0) return null;
 
   return (
-    <section className="w-full py-20 px-6 overflow-hidden relative">
-      <h2 className="text-center text-xl md:text-2xl font-bold uppercase tracking-widest text-pink-500 mb-16">
+    <section className="w-full py-24 overflow-hidden relative bg-[#050505]">
+      {/* Background Subtle Vertical Lines to match the screenshot vibe */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(236, 72, 153, 0.1) 40px, rgba(236, 72, 153, 0.1) 41px)' }}></div>
+
+      <h2 className="text-center text-xl md:text-3xl font-bold uppercase tracking-widest text-[#ffccf0] mb-20 drop-shadow-[0_0_15px_rgba(219,39,119,0.8)] relative z-10">
         {highlightedPrograms.heading}
       </h2>
-      <div className="relative w-full max-w-5xl mx-auto h-[300px] md:h-[450px] flex items-center justify-center">
-        {highlightedPrograms.images.map((item, idx) => {
-          // Calculate relative position to active index
-          const diff = (idx - carouselIndex + highlightedPrograms.images.length) % highlightedPrograms.images.length;
-          let position = 0;
-          if (diff === 0) position = 0; // Center
-          else if (diff === 1 || diff === - (highlightedPrograms.images.length - 1)) position = 1; // Right
-          else if (diff === highlightedPrograms.images.length - 1 || diff === -1) position = -1; // Left
-          else position = 2; // Hidden
+      <div className="relative w-full h-[350px] md:h-[500px] flex items-center justify-center z-10" style={{ perspective: 2000 }}>
+        {[...highlightedPrograms.images, { img: '/assets/Images/carousel_extra_1.png' }, { img: '/assets/Images/carousel_extra_2.png' }].map((item, idx, extendedImages) => {
+          const len = extendedImages.length;
+          const diff = (idx - carouselIndex + len) % len;
 
-          const isVisible = position !== 2;
-          const zIndex = position === 0 ? 30 : 20;
-          const scale = position === 0 ? 1 : 0.8;
-          const xOffset = position === 0 ? 0 : position === 1 ? '50%' : '-50%';
-          const rotateY = position === 0 ? 0 : position === 1 ? -15 : 15;
-          const opacity = position === 0 ? 1 : position === 2 ? 0 : 0.6;
+          let position = 0;
+          if (diff === 0) position = 0;
+          else if (diff === 1 || diff === -(len - 1)) position = 1;
+          else if (diff === 2 || diff === -(len - 2)) position = 2;
+          else if (diff === 3 || diff === -(len - 3)) position = 3;
+          else if (diff === len - 1 || diff === -1) position = -1;
+          else if (diff === len - 2 || diff === -2) position = -2;
+          else if (diff === len - 3 || diff === -3) position = -3;
+          else position = 4; // hidden
+
+          const isVisible = position !== 4;
+          const zIndex = 10 + Math.abs(position) * 10;
+          
+          let rotateY = 0;
+          if (position > 0) rotateY = 35;
+          if (position < 0) rotateY = -35;
+          
+          let z = 0;
+          if (position === 0) z = -500;
+          else if (Math.abs(position) === 1) z = -350;
+          else if (Math.abs(position) === 2) z = -150;
+          else if (Math.abs(position) === 3) z = 0;
+          
+          let xOffset = 0;
+          if (position === 1) xOffset = '75%';
+          if (position === -1) xOffset = '-75%';
+          if (position === 2) xOffset = '150%';
+          if (position === -2) xOffset = '-150%';
+          if (position === 3) xOffset = '225%';
+          if (position === -3) xOffset = '-225%';
+          
+          const opacity = position === 4 ? 0 : 1;
 
           return (
             <motion.div
               key={idx}
-              className="absolute w-[250px] sm:w-[350px] md:w-[450px] h-full cursor-pointer"
+              className="absolute w-[220px] sm:w-[320px] md:w-[400px] h-full"
               initial={false}
               animate={{
                 x: xOffset,
-                scale: scale,
+                z: z,
                 rotateY: rotateY,
                 opacity: opacity,
                 zIndex: zIndex
               }}
-              transition={{ duration: 0.5, type: 'spring', stiffness: 100, damping: 20 }}
-              onClick={() => {
-                if (position === 1) handleNext();
-                if (position === -1) handlePrev();
-              }}
-              style={{ perspective: 1000, pointerEvents: isVisible ? 'auto' : 'none' }}
+              transition={{ duration: 0.6, type: 'spring', stiffness: 100, damping: 20 }}
+              style={{ perspective: 1200, pointerEvents: 'none' }}
             >
-              <div className="w-full h-full rounded-2xl overflow-hidden border-2 border-pink-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.8)] relative">
+              <div className="w-full h-full shadow-[0_15px_50px_rgba(0,0,0,0.9)] relative">
                 <img src={item.img} alt="Program" className="w-full h-full object-cover" />
-                {position !== 0 && <div className="absolute inset-0 bg-black/40"></div>}
               </div>
             </motion.div>
           );
         })}
       </div>
-      
-      <div className="flex justify-center mt-8 gap-4">
-        <button onClick={handlePrev} className="p-3 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-        </button>
-        <button onClick={handleNext} className="p-3 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-        </button>
-      </div>
+
+
     </section>
   );
 };

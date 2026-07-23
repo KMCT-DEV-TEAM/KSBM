@@ -11,19 +11,10 @@ const EventsAbout = () => {
         <img src="/assets/Images/mandala.png" alt="Mandala" className="w-full h-full object-contain" />
       </div>
 
-      {/* Decorative Floating Triangles */}
-      <div
-        className="absolute top-16 left-[25%] md:left-[35%] w-16 h-16  pointer-events-none"
-        style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
-      ></div>
-      <div
-        className="absolute top-8 left-[35%] md:left-[45%] w-10 h-10  pointer-events-none"
-        style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
-      ></div>
-      <div
-        className="absolute bottom-20 left-[30%] md:left-[40%] w-20 h-20 pointer-events-none"
-        style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
-      ></div>
+      {/* Overlapping Curved Lines Design (Left Edge of Screen) */}
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-10 md:w-10 h-auto pointer-events-none opacity-80 z-0">
+        <img src="/assets/Images/Group 254.png" alt="Decorative Curves" className="w-full h-full object-contain" />
+      </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
@@ -35,14 +26,15 @@ const EventsAbout = () => {
           viewport={{ once: true }}
           className="relative flex justify-center md:justify-start"
         >
-          {/* Circular decorative wireframe lines on the left edge (faint) */}
-          <div className="absolute -left-32 top-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full border-[1px] border-orange-500/10 pointer-events-none"></div>
-          <div className="absolute -left-40 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border-[1px] border-orange-500/5 pointer-events-none"></div>
+          {/* Decorative Polygon */}
+          <div className="absolute top-12 right-25 w-16 h-16 z-20 pointer-events-none drop-shadow-md opacity-80 animate-pulse">
+            <img src="/assets/Images/Polygon 7.png" alt="Decorative Polygon" className="w-full h-full object-contain" />
+          </div>
 
           <img
             src="/assets/Images/image 91.png"
             alt="The Spirit of Culture"
-            className="w-[85%] max-w-sm lg:max-w-md h-auto object-contain relative z-10"
+            className="w-full max-w-md lg:max-w-lg h-auto object-contain relative z-10"
           />
         </motion.div>
 
@@ -61,19 +53,24 @@ const EventsAbout = () => {
           ></div>
           {/* Subheading */}
           <h4
-            className="text-sm font-medium tracking-widest text-transparent bg-clip-text"
-            style={{ backgroundImage: 'linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)' }}
+            className="inline-block text-sm font-medium tracking-widest"
+            style={{
+              background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
           >
             About
           </h4>
 
           {/* Heading */}
-          <h2 className="text-3xl lg:text-[34px] font-bold text-white tracking-wide uppercase leading-tight drop-shadow-[0_0_15px_rgba(249,73,180,0.6)]">
+          <h2 className="text-[40px] font-bold text-white tracking-wide uppercase leading-tight drop-shadow-[0_0_15px_rgba(249,73,180,0.6)]">
             THE SPIRIT OF CULTURE
           </h2>
 
           {/* Paragraphs */}
-          <div className="text-gray-300 text-xs md:text-[14px] leading-relaxed space-y-6 font-medium">
+          <div className="text-gray-300 text-sm md:text-[15px] leading-relaxed space-y-6 font-medium">
             <p>
               Discover a celebration where creativity knows no limits and every performance tells a story worth remembering. Kaleido is more than a cultural festival—it's a vibrant platform where passion meets purpose, traditions blend with innovation, and talent shines without boundaries. Bringing together students, artists, performers, and creative minds from diverse backgrounds, the festival transforms the campus into a spectacular stage filled with energy, color, and inspiration.
             </p>
@@ -92,17 +89,9 @@ const EventsAbout = () => {
             </button>
           </div>
 
-          {/* Musical Notes Decorative Icon */}
+          {/* Decorative Icon */}
           <div className="absolute -bottom-8 -right-4 md:-right-8 opacity-60 animate-bounce" style={{ animationDuration: '3s' }}>
-            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 18C9 19.1046 8.10457 20 7 20C5.89543 20 5 19.1046 5 18C5 16.8954 5.89543 16 7 16C8.10457 16 9 16.8954 9 18ZM9 18V5L21 3V14M21 16C21 17.1046 20.1046 18 19 18C17.8954 18 17 17.1046 17 16C17 14.8954 17.8954 14 19 14C20.1046 14 21 14.8954 21 16ZM21 16V6M9 9L21 7" stroke="url(#paint0_linear)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              <defs>
-                <linearGradient id="paint0_linear" x1="5" y1="3" x2="21" y2="20" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#e74694" />
-                  <stop offset="1" stopColor="#9333ea" />
-                </linearGradient>
-              </defs>
-            </svg>
+            <img src="/assets/Images/image 117.png" alt="Decorative Icon" className="w-50 h-50 object-contain" />
           </div>
 
         </motion.div>
