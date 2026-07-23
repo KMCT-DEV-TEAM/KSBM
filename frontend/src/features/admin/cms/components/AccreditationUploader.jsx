@@ -6,7 +6,7 @@ import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
 import confirmAction from '../../../../utils/confirmAction';
 
-const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) => {
+const AccreditationUploader = ({ images, setImages, onUploadStateChange }) => {
   const [isUploading, setIsUploading] = useState(false);
   const dragItem = useRef();
   const dragOverItem = useRef();
@@ -14,12 +14,12 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
   const onDrop = useCallback(async (acceptedFiles) => {
     if (acceptedFiles.length === 0) return;
 
-    if (bannerImages.length + acceptedFiles.length > 5) {
+    if (images.length + acceptedFiles.length > 20) {
       Swal.fire({
         toast: true,
         position: 'top-end',
         icon: 'error',
-        title: 'You can only have up to 5 banner images.',
+        title: 'You can only have up to 20 images.',
         showConfirmButton: false,
         timer: 3000
       });
@@ -54,14 +54,14 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
     }
 
     if (uploadedUrls.length > 0) {
-      const newImages = [...bannerImages, ...uploadedUrls];
-      setBannerImages(newImages);
+      const newImages = [...images, ...uploadedUrls];
+      setImages(newImages);
       
       try {
-        const { data } = await api.get('/cms/hero');
-        await api.put('/cms/hero', {
+        const { data } = await api.get('/cms/accreditation');
+        await api.put('/cms/accreditation', {
           ...data,
-          bannerImages: newImages
+          images: newImages
         });
       } catch (error) {
         console.error('Failed to sync upload with database:', error);
@@ -79,31 +79,31 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
 
     setIsUploading(false);
     if (onUploadStateChange) onUploadStateChange(false);
-  }, [setBannerImages, onUploadStateChange, bannerImages]);
+  }, [setImages, onUploadStateChange, images]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
       'image/*': ['.png', '.jpg', '.jpeg', '.webp']
     },
-    disabled: isUploading || bannerImages.length >= 5
+    disabled: isUploading || images.length >= 20
   });
 
   const removeImage = async (index) => {
     await confirmAction({
       title: 'Are you sure?',
-      message: 'You want to remove this banner image?',
+      message: 'You want to remove this image?',
       confirmText: 'Yes, remove it!',
       variant: 'danger',
       action: async () => {
-        const deletedImageUrl = bannerImages[index].url;
-        let newImages = [...bannerImages];
+        const deletedImageUrl = images[index].url;
+        let newImages = [...images];
         newImages.splice(index, 1);
         
         const defaultBanners = [
-          '/assets/Images/Home/hero_banner_1.png',
-          '/assets/Images/Home/hero_banner_2.png',
-          '/assets/Images/Home/hero_banner_3.png'
+          '/assets/Images/Home/Component 86.png',
+          '/assets/Images/Home/Component 87.png',
+          '/assets/Images/Home/Component 88.png'
         ];
         
         while (newImages.length < 3) {
@@ -117,13 +117,13 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
           }
         }
         
-        setBannerImages(newImages);
+        setImages(newImages);
         
         try {
-          const { data } = await api.get('/cms/hero');
-          await api.put('/cms/hero', {
+          const { data } = await api.get('/cms/accreditation');
+          await api.put('/cms/accreditation', {
             ...data,
-            bannerImages: newImages
+            images: newImages
           });
           
           // Physically delete the image file from server
@@ -168,19 +168,19 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
     if (dragItem.current === undefined || dragOverItem.current === undefined) return;
     if (dragItem.current === dragOverItem.current) return;
 
-    const copyListItems = [...bannerImages];
+    const copyListItems = [...images];
     const dragItemContent = copyListItems[dragItem.current];
     copyListItems.splice(dragItem.current, 1);
     copyListItems.splice(dragOverItem.current, 0, dragItemContent);
     dragItem.current = undefined;
     dragOverItem.current = undefined;
-    setBannerImages(copyListItems);
+    setImages(copyListItems);
     
     try {
-      const { data } = await api.get('/cms/hero');
-      await api.put('/cms/hero', {
+      const { data } = await api.get('/cms/accreditation');
+      await api.put('/cms/accreditation', {
         ...data,
-        bannerImages: copyListItems
+        images: copyListItems
       });
     } catch (error) {
       console.error('Failed to sync reorder with database:', error);
@@ -192,7 +192,7 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
       <div 
         {...getRootProps()} 
         className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors
-          ${bannerImages.length >= 5 ? 'border-gray-300 bg-gray-50 opacity-50 cursor-not-allowed' : 
+          ${images.length >= 20 ? 'border-gray-300 bg-gray-50 opacity-50 cursor-not-allowed' : 
             isDragActive ? 'border-primary bg-primary/5 cursor-pointer' : 'border-gray-300 hover:border-primary/50 cursor-pointer'}
           ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}
         `}
@@ -207,29 +207,29 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
             </>
           ) : (
             <>
-              <div className={`p-4 rounded-full ${bannerImages.length >= 5 ? 'bg-gray-200 text-gray-400' : 'bg-primary/10 text-primary'}`}>
+              <div className={`p-4 rounded-full ${images.length >= 20 ? 'bg-gray-200 text-gray-400' : 'bg-primary/10 text-primary'}`}>
                 <UploadCloud className="w-8 h-8" />
               </div>
               <div>
                 <p className="text-base font-medium text-gray-700">
-                  {bannerImages.length >= 5 ? "Maximum of 5 images reached." : isDragActive ? "Drop the images here..." : "Drag & drop banner images, or click to select"}
+                  {images.length >= 20 ? "Maximum images reached." : isDragActive ? "Drop the images here..." : "Drag & drop images, or click to select"}
                 </p>
-                <p className="text-sm text-gray-500 mt-2">Maximum 5 images allowed. You can select multiple files. Supports PNG, JPG, WEBP up to 5MB</p>
+                <p className="text-sm text-gray-500 mt-2">You can select multiple files. Supports PNG, JPG, WEBP up to 5MB</p>
               </div>
             </>
           )}
         </div>
       </div>
 
-      {bannerImages && bannerImages.length > 0 && (
+      {images && images.length > 0 && (
         <div className="mt-6">
           <h4 className="text-sm font-bold text-[#566A7F] uppercase tracking-wide mb-3">
-            Active Banners ({bannerImages.length})
+            Images (Active) ({images.length})
           </h4>
-          <p className="text-xs text-gray-500 mb-4">Drag and drop to reorder the slides.</p>
+          <p className="text-xs text-gray-500 mb-4">Drag and drop to reorder the images.</p>
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {bannerImages.map((img, index) => (
+            {images.map((img, index) => (
               <div 
                 key={index}
                 draggable
@@ -239,8 +239,8 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
                 onDragOver={(e) => e.preventDefault()}
                 className="relative group bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-all cursor-move"
               >
-                <div className="aspect-[16/9] w-full bg-gray-100 relative">
-                  <img src={img.url} alt={`Slide ${index + 1}`} className="w-full h-full object-cover" />
+                <div className="aspect-[4/3] w-full bg-white relative p-4 flex items-center justify-center">
+                  <img src={img.url} alt={`Slide ${index + 1}`} className="max-w-full max-h-full object-contain mix-blend-multiply" />
                   
                   {/* Overlay on hover */}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
@@ -273,5 +273,5 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
   );
 };
 
-export default BannerUploader;
+export default AccreditationUploader;
 

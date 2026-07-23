@@ -45,21 +45,21 @@ const managementSchema = new mongoose.Schema(
           name: 'Dr. Sarah Mitchell',
           role: 'MANAGING DIRECTOR',
           verticalText: 'DIRECTOR',
-          image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          image: '/assets/Images/Home/management_1.jpg'
         },
         {
           id: '2',
           name: 'Dr. Adrian Starlin',
           role: 'CHAIRMAN DIRECTOR',
           verticalText: 'CHAIRMAN',
-          image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          image: '/assets/Images/Home/management_2.jpg'
         },
         {
           id: '3',
           name: 'Dr. Elena Rostova',
           role: 'EXECUTIVE DIRECTOR',
           verticalText: 'EXECUTIVE',
-          image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          image: '/assets/Images/Home/management_3.jpg'
         }
       ]
     }

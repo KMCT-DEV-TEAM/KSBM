@@ -12,7 +12,11 @@ const accreditationSchema = new mongoose.Schema(
     },
     imageUrl: {
       type: String,
-      default: '', // Empty means fallback to static image on frontend if needed
+      default: '', // Deprecated, use images
+    },
+    images: {
+      type: [{ url: String }],
+      default: [],
     },
     showSubheading: {
       type: Boolean,
@@ -40,6 +44,7 @@ accreditationSchema.statics.getSettings = async function () {
       subheading: 'Institutional Credentials',
       heading: 'Accreditation & Affiliations',
       imageUrl: '',
+      images: [],
       showSubheading: true,
       showHeading: true,
       showImage: true,

@@ -86,13 +86,11 @@ const ManagementSection = ({ previewData }) => {
                 className={`relative aspect-[4/5] w-full max-w-[320px] ${isCenter ? 'lg:max-w-[380px] lg:scale-110 z-20' : 'lg:max-w-[320px] z-10'} rounded-[2rem] overflow-hidden group cursor-pointer shadow-xl hover:shadow-[0_25px_50px_rgba(27,37,89,0.4)] transition-all duration-500 hover:-translate-y-4`}
               >
                 {/* Background Image */}
-                {member.image && (
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                )}
+                <img
+                  src={member.image || `/assets/Images/Home/management_${index + 1}.jpg`}
+                  alt={member.name}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
 
                 {/* Vertical Text (Left Edge) */}
                 {member.verticalText && (

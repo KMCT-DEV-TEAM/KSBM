@@ -1,15 +1,15 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
-import LogoUploader from './components/LogoUploader';
+import AccreditationUploader from './components/AccreditationUploader';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import AccreditationPreview from '../../home/components/AccreditationSection';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
-const defaultAccreditationImg = '/assets/Images/Group 47.png';
+
 
 const Toast = Swal.mixin({
   toast: true,
@@ -31,17 +31,45 @@ const ManageAccreditation = () => {
   const [showHeading, setShowHeading] = useState(true);
 
   const [imageUrl, setImageUrl] = useState('');
+  const [images, setImages] = useState([]);
   const [showImage, setShowImage] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, title: '', message: '', confirmText: '', variant: 'danger' });
+  const iframeRef = useRef(null);
+
+  const previewData = {
+    subheading, heading, imageUrl, images,
+    showSubheading, showHeading, showImage
+  };
 
   useEffect(() => {
     fetchSettings();
   }, []);
+
+  useEffect(() => {
+    if (isPreviewModalOpen && iframeRef.current) {
+      setTimeout(() => {
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage(
+            { type: 'preview-accreditation-data', payload: previewData },
+            '*'
+          );
+        }
+      }, 500);
+      
+      if (iframeRef.current.contentWindow) {
+        iframeRef.current.contentWindow.postMessage(
+          { type: 'preview-accreditation-data', payload: previewData },
+          '*'
+        );
+      }
+    }
+  }, [previewData, isPreviewModalOpen]);
 
   const fetchSettings = async () => {
     try {
@@ -51,6 +79,14 @@ const ManageAccreditation = () => {
       setHeading(data.heading || '');
       setShowHeading(data.showHeading ?? true);
       setImageUrl(data.imageUrl || '');
+      
+      const defaultBanners = [
+        { url: '/assets/Images/Home/Component 86.png' },
+        { url: '/assets/Images/Home/Component 87.png' },
+        { url: '/assets/Images/Home/Component 88.png' }
+      ];
+      setImages(data.images && data.images.length > 0 ? data.images : defaultBanners);
+      
       setShowImage(data.showImage ?? true);
     } catch (error) {
       console.error('Error fetching accreditation settings:', error);
@@ -70,7 +106,7 @@ const ManageAccreditation = () => {
     setIsSaving(true);
     try {
       await api.put('/cms/accreditation', {
-        subheading, heading, imageUrl,
+        subheading, heading, imageUrl, images,
         showSubheading, showHeading, showImage
       });
       Toast.fire({ icon: 'success', title: 'Accreditation section saved successfully!' });
@@ -96,6 +132,11 @@ const ManageAccreditation = () => {
       setHeading('Accreditation & Affiliations');
       setShowHeading(true);
       setImageUrl('');
+      setImages([
+        { url: '/assets/Images/Home/Component 86.png' },
+        { url: '/assets/Images/Home/Component 87.png' },
+        { url: '/assets/Images/Home/Component 88.png' }
+      ]);
       setShowImage(true);
       Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
     }
@@ -108,11 +149,7 @@ const ManageAccreditation = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <AdminSkeleton />
-      </div>
-    );
+    return <AdminSkeleton />;
   }
 
   return (
@@ -164,12 +201,14 @@ const ManageAccreditation = () => {
               <X className="w-5 h-5" />
             </button>
           </div>
-          <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
-            <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <AccreditationPreview previewData={{
-                subheading, heading, imageUrl,
-                showSubheading, showHeading, showImage
-              }} />
+          <div className="flex-1 bg-gray-100 overflow-hidden relative flex justify-center items-center">
+            <div className={`bg-white shadow-2xl transition-all duration-300 h-[85vh] ${previewMode === 'desktop' ? 'w-[100%] max-w-[1920px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
+              <iframe
+                ref={iframeRef}
+                src="/preview/accreditation"
+                className="w-full h-full border-0"
+                title="Accreditation Preview"
+              />
             </div>
           </div>
         </div>
@@ -192,10 +231,12 @@ const ManageAccreditation = () => {
               <input
                 type="text"
                 value={subheading}
+                maxLength={30}
                 onChange={(e) => setSubheading(e.target.value)}
                 placeholder="e.g. Institutional Credentials"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-xs text-right mt-1 text-gray-500">{subheading.length}/30</div>
             </div>
             <div>
               <div className="flex justify-between items-center mb-1.5">
@@ -208,10 +249,12 @@ const ManageAccreditation = () => {
               <input
                 type="text"
                 value={heading}
+                maxLength={40}
                 onChange={(e) => setHeading(e.target.value)}
                 placeholder="e.g. Accreditation & Affiliations"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-xs text-right mt-1 text-gray-500">{heading.length}/40</div>
             </div>
           </div>
         </div>
@@ -225,10 +268,11 @@ const ManageAccreditation = () => {
               <span className="text-sm font-semibold text-gray-500">Show Image</span>
             </label>
           </div>
-          <p className="text-sm text-gray-500 mb-4">Upload a single composite image containing all accreditation and affiliation logos.</p>
-          <LogoUploader
-            currentLogoUrl={imageUrl || defaultAccreditationImg}
-            onUploadSuccess={(url) => setImageUrl(url)}
+          <p className="text-sm text-gray-500 mb-4">Upload multiple images for accreditation and affiliation logos. These will be shown on the website.</p>
+          <AccreditationUploader
+            images={images}
+            setImages={setImages}
+            onUploadStateChange={(uploading) => setIsUploading(uploading)}
           />
         </div>
 

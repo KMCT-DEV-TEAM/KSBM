@@ -121,9 +121,9 @@ const FacilitiesSection = ({ previewData }) => {
               {marqueeList.map((facility, index) => (
                 <div
                   key={`${facility._id || index}-${index}`}
-                  className="flex-shrink-0 w-[70vw] sm:w-[50vw] md:w-[400px]"
+                  className="flex-shrink-0 w-[42vw] sm:w-[40vw] md:w-[300px] lg:w-[380px]"
                 >
-                  <div className="relative h-[260px] md:h-[340px] lg:h-[380px] w-full rounded-[1.5rem] md:rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg hover:shadow-[0_15px_30px_rgba(27,37,89,0.3)] transition-all duration-500 hover:-translate-y-2">
+                  <div className="relative h-[130px] sm:h-[180px] md:h-[260px] lg:h-[320px] w-full rounded-xl sm:rounded-2xl md:rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg hover:shadow-[0_15px_30px_rgba(27,37,89,0.3)] transition-all duration-500 hover:-translate-y-2">
                     {/* Background Image */}
                     <img
                       src={facility.image}
@@ -135,8 +135,8 @@ const FacilitiesSection = ({ previewData }) => {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#1b2559]/95 via-[#1b2559]/40 to-transparent opacity-90 z-10 transition-opacity duration-500 group-hover:opacity-100"></div>
 
                     {/* Title Content */}
-                    <div className="absolute bottom-0 left-0 w-full z-20 p-5 lg:p-8">
-                      <h3 className="font-semibold text-white group-hover:text-white transition-colors duration-300 text-lg md:text-xl lg:text-2xl">
+                    <div className="absolute bottom-0 left-0 w-full z-20 p-2 sm:p-4 lg:p-6">
+                      <h3 className="font-semibold text-white group-hover:text-white transition-colors duration-300 text-sm sm:text-base md:text-lg lg:text-xl">
                         {facility.title}
                       </h3>
                     </div>

@@ -82,18 +82,18 @@ router.delete('/', protect, async (req, res) => {
   // Safety checks for defaults
   const defaultImages = [
     'hero_banner_1.png', 'hero_banner_2.png', 'hero_banner_3.png',
-    'academic_mba.jpg', 'academic_bba.jpg', 'graduate.png'
+    'academic_mba.jpg', 'academic_bba.jpg', 'graduate.png',
+    'Component 86.png', 'Component 87.png', 'Component 88.png',
+    'watermark_logo.png', 'watermark_logo1.png',
+    'management_1.jpg', 'management_2.jpg', 'management_3.jpg',
+    'facility_1.jpg', 'facility_2.jpg', 'facility_3.jpg',
+    'facility_4.jpg', 'facility_5.jpg', 'facility_6.jpg'
   ];
 
   const filename = fileUrl.split('/').pop();
 
   if (defaultImages.includes(filename)) {
     return res.status(200).json({ message: 'Default image, skipped deletion' });
-  }
-
-  // Multer generated files usually start with a timestamp (numbers)
-  if (!/^\d+-/.test(filename) && !filename.includes('cloudinary')) {
-     return res.status(200).json({ message: 'Not a multer generated file, skipped deletion' });
   }
 
   let filePath = '';
@@ -105,15 +105,20 @@ router.delete('/', protect, async (req, res) => {
      filePath = path.join(__dirname, '../../../uploads', filename);
   }
 
+  console.log('DELETE request for:', fileUrl);
+  console.log('Resolved filePath:', filePath);
+
   if (filePath && fs.existsSync(filePath)) {
     fs.unlink(filePath, (err) => {
       if (err) {
         console.error("Failed to delete local file:", err);
         return res.status(500).json({ message: 'Failed to delete file' });
       }
+      console.log('File deleted successfully:', filePath);
       return res.status(200).json({ message: 'File deleted successfully' });
     });
   } else {
+    console.log('File not found or already deleted:', filePath);
     // If not found locally, might be cloudinary or already deleted, which is fine
     return res.status(200).json({ message: 'File not found on server or already deleted' });
   }

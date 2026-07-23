@@ -134,7 +134,7 @@ const AboutSection = ({ previewData }) => {
 
         {/* Top Split Section */}
         {showTopSection && (
-          <div className={`grid ${topGridClass} items-center`}>
+          <div className={`grid ${topGridClass} items-center mb-12 lg:mb-20`}>
 
             {/* Left: Image Container */}
             {cmsData.showImage && (
@@ -204,7 +204,7 @@ const AboutSection = ({ previewData }) => {
               {/* 360 Button under text */}
               <motion.div
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-                className={`mt-8 flex ${!cmsData.showImage ? 'justify-center' : 'justify-start'}`}
+                className={`mt-12 flex ${!cmsData.showImage ? 'justify-center' : 'justify-start'}`}
               >
                 <button className="group bg-gradient-to-b from-primary/90 to-primary backdrop-blur-sm text-white border border-white/20 px-5 py-3 rounded-lg cursor-pointer hover:!bg-none hover:!bg-white hover:!text-primary hover:border-primary hover:-translate-y-1 transition-all flex items-center gap-2 overflow-hidden">
                   <Rotate3d className="w-5 h-5 shrink-0" />
