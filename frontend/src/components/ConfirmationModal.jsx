@@ -27,7 +27,7 @@ const ConfirmationModal = ({
     };
 
     const modalContent = (
-        <div className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-[2px] flex items-end md:items-center justify-center p-0 md:p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-[2px] flex items-end md:items-center justify-center p-0 md:p-4 animate-in fade-in duration-200">
             <div className="bg-white rounded-t-2xl md:rounded-2xl rounded-b-none shadow-2xl w-full max-w-sm overflow-hidden animate-slide-up md:animate-in md:zoom-in-95 mt-auto md:mt-0">
                 <div className="p-6">
                     <h3 className="text-sm font-bold text-gray-900">{title}</h3>

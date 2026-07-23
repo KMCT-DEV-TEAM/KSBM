@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Trash2, Edit2 } from 'lucide-react';
 import api from '../../../api/axios';
@@ -40,9 +40,38 @@ const ManageFacilities = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const iframeRef = useRef(null);
 
   // Facility Modal State
   const [isFacilityModalOpen, setIsFacilityModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (isPreviewModalOpen && iframeRef.current) {
+      const payload = {
+        subheading, heading, description, facilitiesList,
+        showSubheading, showHeading, showDescription, showFacilities
+      };
+      
+      const sendUpdate = () => {
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage({
+            type: 'preview-facilities-data',
+            payload
+          }, '*');
+        }
+      };
+
+      sendUpdate();
+
+      const handleMessage = (e) => {
+        if (e.data?.type === 'iframe-ready' && e.data?.source === 'facilities') {
+          sendUpdate();
+        }
+      };
+      window.addEventListener('message', handleMessage);
+      return () => window.removeEventListener('message', handleMessage);
+    }
+  }, [isPreviewModalOpen, subheading, heading, description, facilitiesList, showSubheading, showHeading, showDescription, showFacilities]);
   const [editingFacilityIndex, setEditingFacilityIndex] = useState(-1);
   const [currentFacility, setCurrentFacility] = useState(null);
 
@@ -64,7 +93,24 @@ const ManageFacilities = () => {
       setDescription(data.description || '');
       setShowDescription(data.showDescription ?? true);
 
-      setFacilitiesList(data.facilitiesList || []);
+      let fetchedList = data.facilitiesList || [];
+      if (fetchedList.length < 6) {
+        const defaultFacilities = [
+          { title: 'Smart Classrooms', image: '/assets/Images/Home/facility_1.jpg' },
+          { title: 'Digital Library', image: '/assets/Images/Home/facility_2.jpg' },
+          { title: 'Seminar Hall', image: '/assets/Images/Home/facility_3.jpg' },
+          { title: 'Innovation Lab', image: '/assets/Images/Home/facility_4.jpg' },
+          { title: 'Auditorium', image: '/assets/Images/Home/facility_5.jpg' },
+          { title: 'Sports & Fitness', image: '/assets/Images/Home/facility_6.jpg' }
+        ];
+        const missingDefaults = defaultFacilities.filter(
+          def => !fetchedList.some(fac => fac.title === def.title)
+        );
+        while (fetchedList.length < 6 && missingDefaults.length > 0) {
+          fetchedList.push(missingDefaults.shift());
+        }
+      }
+      setFacilitiesList(fetchedList);
       setShowFacilities(data.showFacilities ?? true);
     } catch (error) {
       console.error('Error fetching facilities settings:', error);
@@ -115,19 +161,34 @@ const ManageFacilities = () => {
     setCurrentFacility(null);
   };
 
-  const saveFacilityFromModal = () => {
+  const saveFacilityFromModal = async () => {
     if (!currentFacility.title) {
       Toast.fire({ icon: 'error', title: 'Title is required' });
       return;
     }
-    const newList = [...facilitiesList];
-    if (editingFacilityIndex === -1) {
-      newList.push(currentFacility);
-    } else {
-      newList[editingFacilityIndex] = currentFacility;
-    }
-    setFacilitiesList(newList);
-    closeFacilityModal();
+    await confirmAction({
+      title: editingFacilityIndex === -1 ? 'Add Facility?' : 'Update Facility?',
+      message: 'Are you sure you want to save these changes to the facility?',
+      confirmText: 'Yes, save it!',
+      variant: 'primary',
+      action: async () => {
+        const newList = [...facilitiesList];
+        
+        const defaultImage = editingFacilityIndex >= 0 && editingFacilityIndex < 6 
+          ? `/assets/Images/Home/facility_${editingFacilityIndex + 1}.jpg` 
+          : '';
+        const finalImage = currentFacility.image || defaultImage;
+        const facilityToSave = { ...currentFacility, image: finalImage };
+
+        if (editingFacilityIndex === -1) {
+          newList.push(facilityToSave);
+        } else {
+          newList[editingFacilityIndex] = facilityToSave;
+        }
+        setFacilitiesList(newList);
+        closeFacilityModal();
+      }
+    });
   };
 
   const confirmRemoveFacility = (index) => {
@@ -156,12 +217,12 @@ const ManageFacilities = () => {
         setDescription('Our state-of-the-art campus offers modern classrooms, advanced learning resources, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.');
         setShowDescription(true);
         setFacilitiesList([
-          { title: 'Smart Classrooms', image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop' },
-          { title: 'Digital Library', image: 'https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=2030&auto=format&fit=crop' },
-          { title: 'Seminar Hall', image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?q=80&w=1925&auto=format&fit=crop' },
-          { title: 'Innovation Lab', image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop' },
-          { title: 'Auditorium', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop' },
-          { title: 'Sports & Fitness', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop' }
+          { title: 'Smart Classrooms', image: '/assets/Images/Home/facility_1.jpg' },
+          { title: 'Digital Library', image: '/assets/Images/Home/facility_2.jpg' },
+          { title: 'Seminar Hall', image: '/assets/Images/Home/facility_3.jpg' },
+          { title: 'Innovation Lab', image: '/assets/Images/Home/facility_4.jpg' },
+          { title: 'Auditorium', image: '/assets/Images/Home/facility_5.jpg' },
+          { title: 'Sports & Fitness', image: '/assets/Images/Home/facility_6.jpg' }
         ]);
         setShowFacilities(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
@@ -171,18 +232,45 @@ const ManageFacilities = () => {
 
   const handleConfirmAction = async () => {
     if (confirmModal.action === 'remove_facility') {
-      const updated = facilitiesList.filter((_, i) => i !== confirmModal.targetIndex);
+      const targetFacility = facilitiesList[confirmModal.targetIndex];
+      
+      // Physically delete the image file if it exists
+      if (targetFacility && targetFacility.image) {
+        try {
+          await api.delete('/upload', { data: { fileUrl: targetFacility.image }, hideLoader: true });
+        } catch (error) {
+          console.error('Failed to delete physical facility image:', error);
+        }
+      }
+
+      let updated = facilitiesList.filter((_, i) => i !== confirmModal.targetIndex);
+      
+      if (updated.length < 6) {
+        const defaultFacilities = [
+          { title: 'Smart Classrooms', image: '/assets/Images/Home/facility_1.jpg' },
+          { title: 'Digital Library', image: '/assets/Images/Home/facility_2.jpg' },
+          { title: 'Seminar Hall', image: '/assets/Images/Home/facility_3.jpg' },
+          { title: 'Innovation Lab', image: '/assets/Images/Home/facility_4.jpg' },
+          { title: 'Auditorium', image: '/assets/Images/Home/facility_5.jpg' },
+          { title: 'Sports & Fitness', image: '/assets/Images/Home/facility_6.jpg' }
+        ];
+        
+        const missingDefaults = defaultFacilities.filter(
+          def => !updated.some(fac => fac.title === def.title)
+        );
+        
+        while (updated.length < 6 && missingDefaults.length > 0) {
+          updated.push(missingDefaults.shift());
+        }
+      }
+
       setFacilitiesList(updated);
-    } else
-      setConfirmModal({ ...confirmModal, isOpen: false });
+    }
+    setConfirmModal({ ...confirmModal, isOpen: false });
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <AdminSkeleton />
-      </div>
-    );
+    return <AdminSkeleton />;
   }
 
   return (
@@ -236,10 +324,12 @@ const ManageFacilities = () => {
           </div>
           <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
             <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <FacilitiesSection previewData={{
-                subheading, heading, description, facilitiesList,
-                showSubheading, showHeading, showDescription, showFacilities
-              }} />
+              <iframe 
+                ref={iframeRef}
+                src="/preview/facilities"
+                className="w-full h-full border-0"
+                title="Facilities Preview"
+              />
             </div>
           </div>
         </div>
@@ -262,10 +352,12 @@ const ManageFacilities = () => {
               <input
                 type="text"
                 value={subheading}
+                maxLength={30}
                 onChange={(e) => setSubheading(e.target.value)}
                 placeholder="e.g. College Facilities"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-xs text-right mt-1 text-gray-500">{subheading.length}/30</div>
             </div>
             <div>
               <div className="flex justify-between items-center mb-1.5">
@@ -278,10 +370,12 @@ const ManageFacilities = () => {
               <input
                 type="text"
                 value={heading}
+                maxLength={40}
                 onChange={(e) => setHeading(e.target.value)}
                 placeholder="e.g. Institutional Resources"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-xs text-right mt-1 text-gray-500">{heading.length}/40</div>
             </div>
             <div>
               <div className="flex justify-between items-center mb-1.5">
@@ -293,11 +387,13 @@ const ManageFacilities = () => {
               </div>
               <textarea
                 value={description}
+                maxLength={150}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
                 placeholder="e.g. Our state-of-the-art campus offers modern classrooms..."
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-xs text-right mt-1 text-gray-500">{description.length}/150</div>
             </div>
           </div>
         </div>
@@ -314,7 +410,7 @@ const ManageFacilities = () => {
             </div>
             <button
               onClick={openAddFacilityModal}
-              className="flex items-center gap-2 text-sm font-semibold text-primary bg-primary/10 px-3 py-1.5 rounded-md hover:bg-primary/20 transition-colors"
+              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
             >
               <Plus className="w-4 h-4" /> Add Facility
             </button>
@@ -399,19 +495,31 @@ const ManageFacilities = () => {
                   <input
                     type="text"
                     value={currentFacility.title}
+                    maxLength={25}
                     onChange={(e) => setCurrentFacility({ ...currentFacility, title: e.target.value })}
                     placeholder="e.g. Smart Classrooms"
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
+                  <div className="text-xs text-right mt-1 text-gray-500">{(currentFacility.title || '').length}/25</div>
                 </div>
 
                 <div className="col-span-1 md:col-span-2">
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Facility Image</label>
                   <div className="bg-gray-50 p-4 rounded-lg border border-[#D9DEE3]">
-                    <LogoUploader
-                      currentLogoUrl={currentFacility.image}
-                      onUploadSuccess={(url) => setCurrentFacility({ ...currentFacility, image: url })}
-                    />
+                    {(() => {
+                      const isDefaultCard = editingFacilityIndex >= 0 && editingFacilityIndex < 6;
+                      const defaultImage = isDefaultCard 
+                        ? `/assets/Images/Home/facility_${editingFacilityIndex + 1}.jpg` 
+                        : '';
+                      return (
+                        <LogoUploader
+                          currentLogoUrl={currentFacility.image || defaultImage}
+                          onUploadSuccess={(url) => setCurrentFacility({ ...currentFacility, image: url })}
+                          uploadEndpoint="/upload/home"
+                          disableDelete={!currentFacility.image || (isDefaultCard ? currentFacility.image === defaultImage : true)}
+                        />
+                      );
+                    })()}
                   </div>
                 </div>
               </div>

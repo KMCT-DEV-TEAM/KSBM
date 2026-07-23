@@ -5,8 +5,11 @@ import { motion } from "framer-motion";
 import api from "../../../api/axios";
 import Loader from "../../../components/Loader";
 
-const accredential = "/assets/Images/Group 47.png";
-
+const defaultImages = [
+  "/assets/Images/Home/Component 86.png",
+  "/assets/Images/Home/Component 87.png",
+  "/assets/Images/Home/Component 88.png"
+];
 const AccreditationSection = ({ previewData }) => {
   const [settings, setSettings] = useState(null);
   const [isLoading, setIsLoading] = useState(!previewData);
@@ -102,25 +105,89 @@ const AccreditationSection = ({ previewData }) => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.3 }}
               transition={{ duration: 0.6 }}
-              className="flex-[1.5] flex justify-center lg:justify-end w-full"
+              className="flex-[1.5] flex flex-wrap justify-around items-center gap-4 sm:gap-6 lg:gap-8 w-full"
             >
-              <img
-                src={imageUrl || accredential}
-                alt="Accreditations"
-                className="
-                  w-full
-                  max-w-[220px]
-                  sm:max-w-[320px]
-                  md:max-w-[450px]
-                  lg:max-w-[550px]
-                  xl:max-w-[650px]
-                  2xl:max-w-[750px]
-                  h-auto
-                  object-contain
-                  mix-blend-multiply
-                  select-none
-                "
-              />
+              {settings?.images && settings.images.length > 4 ? (
+                <div className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_64px,_black_calc(100%-64px),transparent_100%)]">
+                  <div className="flex items-center animate-marquee gap-8 sm:gap-12 lg:gap-16 pr-8 lg:pr-16">
+                    {[...settings.images, ...settings.images].map((img, idx) => (
+                      <div key={idx} className="flex-shrink-0 flex items-center justify-center">
+                        <img
+                          src={img.url}
+                          alt={`Accreditation ${idx + 1}`}
+                          className="
+                            w-auto
+                            h-10
+                            sm:h-12
+                            md:h-14
+                            lg:h-16
+                            xl:h-20
+                            object-contain
+                            mix-blend-multiply
+                            select-none
+                          "
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : settings?.images && settings.images.length > 0 ? (
+                settings.images.map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={img.url}
+                    alt={`Accreditation ${idx + 1}`}
+                    className="
+                      w-auto
+                      h-10
+                      sm:h-12
+                      md:h-14
+                      lg:h-16
+                      xl:h-20
+                      object-contain
+                      mix-blend-multiply
+                      select-none
+                    "
+                  />
+                ))
+              ) : imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt="Accreditations"
+                  className="
+                    w-full
+                    max-w-[220px]
+                    sm:max-w-[320px]
+                    md:max-w-[450px]
+                    lg:max-w-[550px]
+                    xl:max-w-[650px]
+                    2xl:max-w-[750px]
+                    h-auto
+                    object-contain
+                    mix-blend-multiply
+                    select-none
+                  "
+                />
+              ) : (
+                defaultImages.map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={img}
+                    alt={`Accreditation ${idx + 1}`}
+                    className="
+                      w-auto
+                      h-10
+                      sm:h-12
+                      md:h-14
+                      lg:h-16
+                      xl:h-20
+                      object-contain
+                      mix-blend-multiply
+                      select-none
+                    "
+                  />
+                ))
+              )}
             </motion.div>
           )}
         </div>

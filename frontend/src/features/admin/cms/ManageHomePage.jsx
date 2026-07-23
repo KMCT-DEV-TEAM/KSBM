@@ -24,7 +24,7 @@ const ManageHomePage = () => {
     { id: 'academics', name: 'Academic Programs', icon: <GraduationCap className="w-4 h-4" /> },
     { id: 'accreditation', name: 'Accreditation', icon: <Award className="w-4 h-4" /> },
     { id: 'management', name: 'Management', icon: <Users className="w-4 h-4" /> },
-    { id: 'facilities', name: 'Home Facilities', icon: <Building2 className="w-4 h-4" /> },
+    { id: 'facilities', name: 'Facilities', icon: <Building2 className="w-4 h-4" /> },
     { id: 'placement', name: 'Placement', icon: <Briefcase className="w-4 h-4" /> },
     { id: 'recruiters', name: 'Recruiters', icon: <Briefcase className="w-4 h-4" /> },
     { id: 'testimonials', name: 'Testimonials', icon: <Star className="w-4 h-4" /> },

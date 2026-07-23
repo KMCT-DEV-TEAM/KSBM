@@ -165,7 +165,7 @@ const Header = ({ previewData }) => {
   const mobileDropdownClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? '' : 'lg:hidden';
 
   return (
-    <header className={`w-[98%] max-w-[1440px] fixed left-0 right-0 mx-auto mt-2 lg:mt-3 rounded-2xl z-[100] transition-all duration-300 border ${isScrolled ? 'bg-primary border-transparent shadow-lg' : 'bg-white/20 border-white/30 backdrop-blur-lg shadow-[0_8px_32px_rgba(0,0,0,0.2)]'}`}>
+    <header className={`w-[98%] max-w-[1440px] fixed left-0 right-0 mx-auto mt-2 lg:mt-3 rounded-2xl z-[100] transition-all duration-300 border bg-white ${isScrolled ? 'border-transparent shadow-lg' : 'border-gray-200 shadow-sm'}`}>
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16 sm:h-20">
         
         {/* Logo Section */}
@@ -173,7 +173,7 @@ const Header = ({ previewData }) => {
           <img 
             src={logo} 
             alt="KSBM Logo" 
-            className="h-5 sm:h-6 lg:h-8 object-contain transition-all duration-300 brightness-0 invert" 
+            className="h-5 sm:h-6 lg:h-8 object-contain transition-all duration-300" 
           />
         </Link>
 
@@ -192,9 +192,9 @@ const Header = ({ previewData }) => {
                 >
                   <Link
                     href={item.link}
-                    className={`no-underline text-sm py-2 transition-colors duration-300 inline-block hover:text-white ${activeNav === item.label
-                      ? 'text-white font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[1px] after:bg-white after:rounded-sm'
-                      : 'text-gray-200 font-medium'
+                    className={`no-underline text-sm py-2 transition-colors duration-300 inline-block hover:text-primary ${activeNav === item.label
+                      ? 'text-primary font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[2px] after:bg-primary after:rounded-sm'
+                      : 'text-gray-600 font-medium'
                       }`}
                     onClick={() => setActiveNav(item.label)}
                   >
@@ -233,7 +233,7 @@ const Header = ({ previewData }) => {
           {/* Action Button */}
           {actionButton.isVisible && (
             <div className={`${desktopClass} items-center`}>
-              <button className={`${isScrolled ? 'bg-white text-primary hover:bg-gray-100' : 'bg-primary text-white hover:bg-[#1e2869]'} border-none rounded-full py-2 px-5 text-[14px] font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_6px_14px_rgba(0,0,0,0.15)] shadow-[0_4px_10px_rgba(0,0,0,0.1)] active:translate-y-[1px] active:shadow-[0_2px_6px_rgba(0,0,0,0.1)]`}>
+              <button className="bg-primary text-white hover:bg-[#1e2869] border-none rounded-full py-2 px-5 text-[14px] font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_6px_14px_rgba(0,0,0,0.15)] shadow-[0_4px_10px_rgba(0,0,0,0.1)] active:translate-y-[1px] active:shadow-[0_2px_6px_rgba(0,0,0,0.1)]">
                 {actionButton.text}
               </button>
             </div>
@@ -243,7 +243,7 @@ const Header = ({ previewData }) => {
           <div className={`${mobileToggleClass} items-center ml-2`}>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-md text-white hover:bg-white/10"
+              className="p-2 rounded-md text-gray-700 hover:bg-gray-100"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>

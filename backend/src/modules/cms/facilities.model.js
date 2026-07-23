@@ -61,27 +61,27 @@ facilitiesSchema.statics.getSettings = async function () {
       facilitiesList: [
         {
           title: 'Smart Classrooms',
-          image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop'
+          image: '/assets/Images/Home/facility_1.jpg'
         },
         {
           title: 'Digital Library',
-          image: 'https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=2030&auto=format&fit=crop'
+          image: '/assets/Images/Home/facility_2.jpg'
         },
         {
           title: 'Seminar Hall',
-          image: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?q=80&w=1925&auto=format&fit=crop'
+          image: '/assets/Images/Home/facility_3.jpg'
         },
         {
           title: 'Innovation Lab',
-          image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop'
+          image: '/assets/Images/Home/facility_4.jpg'
         },
         {
           title: 'Auditorium',
-          image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2012&auto=format&fit=crop'
+          image: '/assets/Images/Home/facility_5.jpg'
         },
         {
           title: 'Sports & Fitness',
-          image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop'
+          image: '/assets/Images/Home/facility_6.jpg'
         }
       ],
       showSubheading: true,

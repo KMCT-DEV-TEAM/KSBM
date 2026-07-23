@@ -188,8 +188,40 @@ const ManagePrograms = () => {
       confirmText: 'Yes, delete it!',
       variant: 'danger',
       action: async () => {
-        const newPrograms = [...programs];
+        const deletedProgram = programs[index];
+        const deletedImageUrl = deletedProgram?.image;
+
+        let newPrograms = [...programs];
         newPrograms.splice(index, 1);
+        
+        const defaultPrograms = [
+          {
+            id: 'mba',
+            title: 'MBA',
+            subtitle: 'Master of Business Administration is a postgraduate degree...',
+            image: '/assets/Images/Home/academic_mba.jpg',
+            tag: 'GRADUATE'
+          },
+          {
+            id: 'bba',
+            title: 'BBA',
+            subtitle: 'Bachelor of Business Administration is an undergraduate program...',
+            image: '/assets/Images/Home/academic_bba.jpg',
+            tag: 'UNDERGRADUATE'
+          }
+        ];
+
+        while (newPrograms.length < 2) {
+          const availableDefault = defaultPrograms.find(
+            defProg => !newPrograms.some(p => p.id === defProg.id || p.title === defProg.title)
+          );
+          if (availableDefault) {
+            newPrograms.push(availableDefault);
+          } else {
+            break;
+          }
+        }
+
         setPrograms(newPrograms);
 
         // Auto-save deletion to database immediately
@@ -199,6 +231,15 @@ const ManagePrograms = () => {
             subheading, heading, description, programs: newPrograms,
             showSubheading, showHeading, showDescription, showPrograms
           });
+
+          if (deletedImageUrl) {
+            try {
+              await api.delete('/upload', { data: { fileUrl: deletedImageUrl } });
+            } catch (deleteErr) {
+              console.error('Failed to delete physical image file:', deleteErr);
+            }
+          }
+
           Toast.fire({ icon: 'success', title: 'Program deleted!' });
         } catch (error) {
           console.error('Error deleting program:', error);

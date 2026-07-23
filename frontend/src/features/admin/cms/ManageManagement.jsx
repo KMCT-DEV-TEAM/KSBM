@@ -140,6 +140,9 @@ const ManageManagement = () => {
   };
 
   const handleDeleteMember = async (id) => {
+    const memberToDelete = members.find(member => member.id === id);
+    const deletedImageUrl = memberToDelete?.image;
+
     const updatedMembers = members.filter(member => member.id !== id);
     setMembers(updatedMembers);
     
@@ -147,6 +150,15 @@ const ManageManagement = () => {
       await api.put('/cms/management', {
         subheading, heading, description, members: updatedMembers
       });
+
+      if (deletedImageUrl) {
+        try {
+          await api.delete('/upload', { data: { fileUrl: deletedImageUrl } });
+        } catch (deleteErr) {
+          console.error('Failed to delete physical image file:', deleteErr);
+        }
+      }
+
       Toast.fire({ icon: 'success', title: 'Member deleted from database.' });
     } catch (error) {
       console.error('Error deleting member:', error);
@@ -178,11 +190,7 @@ const ManageManagement = () => {
   }, [isPreviewModalOpen, previewMode, subheading, heading, description, members]);
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <AdminSkeleton />
-      </div>
-    );
+    return <AdminSkeleton />;
   }
 
   return (
@@ -256,30 +264,36 @@ const ManageManagement = () => {
               <input
                 type="text"
                 value={subheading}
+                maxLength={30}
                 onChange={(e) => setSubheading(e.target.value)}
                 placeholder="e.g. OUR MANAGEMENT"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-xs text-right mt-1 text-gray-500">{subheading.length}/30</div>
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Main Heading</label>
               <input
                 type="text"
                 value={heading}
+                maxLength={40}
                 onChange={(e) => setHeading(e.target.value)}
                 placeholder="e.g. The Architects Of Excellence"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-xs text-right mt-1 text-gray-500">{heading.length}/40</div>
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Description</label>
               <textarea
                 value={description}
+                maxLength={150}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
                 placeholder="e.g. Our leadership board combines decades of top-tier industry experience..."
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+              <div className="text-xs text-right mt-1 text-gray-500">{description.length}/150</div>
             </div>
           </div>
         </div>
@@ -287,64 +301,58 @@ const ManageManagement = () => {
         <div>
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-bold text-[#1e2869]">Management Members</h3>
-            <button
-              onClick={handleAddMember}
-              className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
-            >
-              <Plus className="w-4 h-4" /> Add Member
-            </button>
           </div>
 
           <div className="space-y-4">
             {members.map((member, index) => (
-              <div key={member.id} className="p-4 border border-gray-200 rounded-lg bg-gray-50 flex gap-6 items-start relative group">
-                <button
-                  onClick={() => handleDeleteMember(member.id)}
-                  className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
-                  title="Remove Member"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-
-                <div className="w-40 shrink-0">
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Profile Image</label>
-                  <LogoUploader
-                    currentLogoUrl={member.image || 'https://via.placeholder.com/150'}
-                    onUploadSuccess={(url) => handleUpdateMember(member.id, 'image', url)}
-                  />
-                </div>
-
-                <div className="flex-1 grid grid-cols-2 gap-4">
+              <div key={member.id} className="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col gap-6 relative group">                <div className="w-full grid grid-cols-2 gap-4">
                   <div className="col-span-2">
                     <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Name</label>
                     <input
                       type="text"
                       value={member.name}
+                      maxLength={40}
                       onChange={(e) => handleUpdateMember(member.id, 'name', e.target.value)}
                       placeholder="e.g. Dr. Sarah Mitchell"
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
+                    <div className="text-xs text-right mt-1 text-gray-500">{member.name.length}/40</div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Role</label>
                     <input
                       type="text"
                       value={member.role}
+                      maxLength={40}
                       onChange={(e) => handleUpdateMember(member.id, 'role', e.target.value)}
                       placeholder="e.g. MANAGING DIRECTOR"
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
+                    <div className="text-xs text-right mt-1 text-gray-500">{member.role.length}/40</div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Vertical Text</label>
                     <input
                       type="text"
                       value={member.verticalText}
+                      maxLength={15}
                       onChange={(e) => handleUpdateMember(member.id, 'verticalText', e.target.value)}
                       placeholder="e.g. DIRECTOR"
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
+                    <div className="text-xs text-right mt-1 text-gray-500">{member.verticalText.length}/15</div>
                   </div>
+                </div>
+
+                <div className="w-full">
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Profile Image</label>
+                  <LogoUploader
+                    currentLogoUrl={member.image || `/assets/Images/Home/management_${index + 1}.jpg`}
+                    onUploadSuccess={(url) => handleUpdateMember(member.id, 'image', url)}
+                    uploadEndpoint="/upload/home"
+                    layout="horizontal"
+                    disableDelete={!member.image || member.image === `/assets/Images/Home/management_${index + 1}.jpg`}
+                  />
                 </div>
               </div>
             ))}

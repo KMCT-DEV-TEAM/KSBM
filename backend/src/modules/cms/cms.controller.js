@@ -197,13 +197,14 @@ export const getAccreditationSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateAccreditationSettings = async (req, res) => {
   try {
-    const { subheading, heading, imageUrl, showSubheading, showHeading, showImage } = req.body;
+    const { subheading, heading, imageUrl, images, showSubheading, showHeading, showImage } = req.body;
 
     const settings = await Accreditation.getSettings();
 
     if (subheading !== undefined) settings.subheading = subheading;
     if (heading !== undefined) settings.heading = heading;
     if (imageUrl !== undefined) settings.imageUrl = imageUrl;
+    if (images !== undefined) settings.images = images;
     
     if (showSubheading !== undefined) settings.showSubheading = showSubheading;
     if (showHeading !== undefined) settings.showHeading = showHeading;

@@ -9,6 +9,7 @@ const graduateImg = '/assets/Images/Home/graduate.png';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
+import LogoUploader from './components/LogoUploader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -388,7 +389,25 @@ const ManageAbout = () => {
           </div>
         </div>
 
-
+        {/* Image Settings */}
+        <div className="mb-8 pb-8 border-b border-gray-100">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-bold text-[#1e2869]">Section Image</h3>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={showImage} onChange={(e) => setShowImage(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
+              <span className="text-sm font-semibold text-gray-500">Show Image</span>
+            </label>
+          </div>
+          <LogoUploader
+            currentLogoUrl={imageUrl || graduateImg}
+            disableDelete={!imageUrl}
+            onUploadSuccess={(url) => setImageUrl(url)}
+            uploadEndpoint="/upload/home"
+            title="Upload About Image"
+            subtitle="Drag & drop an image or click to browse."
+            helpText="Recommended format: vertical portrait image. Max 5MB (JPEG, PNG, WEBP)"
+          />
+        </div>
 
         {/* Paragraphs Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">

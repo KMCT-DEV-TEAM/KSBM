@@ -127,11 +127,7 @@ const ManagePlacement = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <AdminSkeleton />
-      </div>
-    );
+    return <AdminSkeleton />;
   }
 
   return (
