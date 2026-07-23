@@ -4,10 +4,34 @@ import { motion } from 'framer-motion';
 
 const EventsUpcoming = ({ upcomingEvents }) => {
   return (
-    <section className="w-full py-20 px-6 relative">
-      <div className="absolute left-10 top-10 w-64 h-64 bg-purple-600/10 blur-[100px] rounded-full"></div>
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-center text-xl md:text-2xl font-semibold uppercase tracking-widest text-pink-500 mb-12">
+    <section className="w-full px-6 relative z-0">
+      {/* Decorative Glow */}
+      <div className="absolute left-10 top-10 w-64 h-64 bg-purple-600/10 blur-[100px] rounded-full z-[-1]"></div>
+
+      {/* Decorative Curves (Right Edge) */}
+      <div className="absolute right-0 top-24 w-14 md:w-24 h-auto pointer-events-none opacity-80 z-[-1]">
+        <img src="/assets/Images/Group 254 (1).png" alt="Decorative Curves" className="w-full h-full object-contain" />
+      </div>
+
+      {/* Decorative Curves (Left Bottom Edge) */}
+      <div className="absolute left-0 bottom-24 w-14 md:w-24 h-auto pointer-events-none opacity-80 z-[-1] scale-x-[-1]">
+        <img src="/assets/Images/Group 254 (1).png" alt="Decorative Curves" className="w-full h-full object-contain" />
+      </div>
+
+      {/* Decorative Polygon (Left Side) */}
+      <div className="absolute left-10 md:left-24 top-[40%] w-12 md:w-16 h-auto pointer-events-none opacity-80 z-0 animate-pulse drop-shadow-[0_0_15px_rgba(200,55,171,0.5)]">
+        <img src="/assets/Images/Polygon 7.png" alt="Decorative Polygon" className="w-full h-full object-contain" />
+      </div>
+
+      <div className="max-w-5xl mx-auto relative z-10">
+        <h5 className="text-sm text-center mb-2 font-medium tracking-widest"
+          style={{
+            background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}>Coming Soon</h5>
+        <h2 className="text-center text-xl md:text-2xl font-bold uppercase tracking-widest mb-12 leading-tight drop-shadow-[0_0_15px_rgba(249,73,180,0.8)]">
           {upcomingEvents.heading}
         </h2>
         <div className="space-y-6">
@@ -18,19 +42,23 @@ const EventsUpcoming = ({ upcomingEvents }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="flex flex-col md:flex-row bg-[#0a0a0a] rounded-2xl overflow-hidden border border-pink-500/30 hover:border-pink-500/70 transition-colors shadow-[0_0_15px_rgba(219,39,119,0.1)] hover:shadow-[0_0_25px_rgba(219,39,119,0.3)]"
+              className="relative flex flex-col md:flex-row bg-[#050505] rounded-[2rem] overflow-hidden shadow-2xl p-4 gap-6 md:gap-8 border border-purple"
             >
-              <div className="w-full md:w-1/3 h-48 md:h-auto shrink-0 relative">
-                <img src={event.img} alt={event.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0a0a] hidden md:block"></div>
+              {/* Image Section */}
+              <div className="w-full md:w-[35%] shrink-0 h-40 md:h-48 lg:h-52 -ml-5">
+                <img src="/assets/Images/image 94.png" alt={event.title} className="w-full h-full object-cover rounded-2xl drop-shadow-[0_0_15px_rgba(200,55,171,0.2)]" />
               </div>
-              <div className="p-6 md:p-8 flex-1 flex flex-col justify-center">
-                <h3 className="text-2xl font-bold text-white mb-3 uppercase tracking-wide">{event.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{event.description}</p>
+
+              {/* Content Section */}
+              <div className="flex-1 flex flex-col justify-start pr-4 md:pr-28 pt-2">
+                <h3 className="text-xl md:text-2xl font-semibold text-white mb-3 uppercase tracking-wide">{event.title}</h3>
+                <p className="text-gray-300 text-sm leading-relaxed">{event.description}</p>
               </div>
-              <div className="w-full md:w-32 bg-gradient-to-b from-pink-600/20 to-purple-900/20 flex flex-row md:flex-col items-center justify-center p-4 border-t md:border-t-0 md:border-l border-pink-500/20">
-                <span className="text-4xl font-black text-pink-500">{event.date}</span>
-                <span className="text-sm font-bold text-gray-300 uppercase tracking-widest ml-2 md:ml-0 md:mt-1">{event.month}</span>
+
+              {/* Date Ribbon */}
+              <div className="absolute top-0 right-5 bg-[#c837ab] w-[80px] h-[110px] rounded-b-[18px] flex flex-col items-center justify-center z-10 shadow-lg">
+                <span className="text-white text-xs md:text-sm font-medium mb-1 capitalize">{event.month}</span>
+                <span className="text-white text-xl md:text-2xl font-bold">{event.date}</span>
               </div>
             </motion.div>
           ))}
