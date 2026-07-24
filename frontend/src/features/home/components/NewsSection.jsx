@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/axios';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const NewsSection = ({ previewData }) => {
@@ -14,6 +16,10 @@ const NewsSection = ({ previewData }) => {
     showSection: true
   });
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Local state for interactivity
+  const [activeFeatured, setActiveFeatured] = useState(null);
+  const [activeSideArticles, setActiveSideArticles] = useState([]);
 
   useEffect(() => {
     if (previewData) {
@@ -25,6 +31,8 @@ const NewsSection = ({ previewData }) => {
           const response = await api.get('/cms/news', { hideLoader: true });
           if (response.data) {
             setData(response.data);
+            setActiveFeatured(response.data.featuredArticle);
+            setActiveSideArticles(response.data.sideArticles || []);
           }
         } catch (error) {
           console.error("Error fetching News section data:", error);
@@ -35,6 +43,25 @@ const NewsSection = ({ previewData }) => {
       fetchNews();
     }
   }, [previewData]);
+
+  useEffect(() => {
+    if (previewData) {
+      setActiveFeatured(previewData.featuredArticle);
+      setActiveSideArticles(previewData.sideArticles || []);
+    }
+  }, [previewData]);
+
+  const handleArticleClick = (index) => {
+    if (!activeFeatured || !activeSideArticles[index]) return;
+    
+    // Swap the featured article with the clicked side article
+    const clickedArticle = activeSideArticles[index];
+    const newSideArticles = [...activeSideArticles];
+    newSideArticles[index] = activeFeatured;
+    
+    setActiveFeatured(clickedArticle);
+    setActiveSideArticles(newSideArticles);
+  };
 
   if (isLoading) {
     return (
@@ -99,19 +126,19 @@ const NewsSection = ({ previewData }) => {
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 w-full mx-auto">
 
           {/* Left Column: Featured Article */}
-          {featuredArticle && featuredArticle.image && (
+          {activeFeatured && activeFeatured.image && (
             <motion.div
+              key={activeFeatured.title} // Add key to force re-animation on swap
               initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: false, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
               className="w-full lg:w-[55%] group cursor-pointer"
             >
               {/* Image Wrapper */}
               <div className="relative w-full aspect-[4/3] lg:aspect-[4/3] rounded-[1.5rem] overflow-hidden mb-6 lg:mb-0 shadow-sm">
                 <img
-                  src={featuredArticle.image}
-                  alt={featuredArticle.title}
+                  src={activeFeatured.image}
+                  alt={activeFeatured.title}
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   loading="lazy"
                 />
@@ -119,24 +146,24 @@ const NewsSection = ({ previewData }) => {
 
                 {/* Content Overlay */}
                 <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8 flex flex-col justify-end">
-                  {featuredArticle.tag && (
+                  {activeFeatured.tag && (
                     <span className="bg-primary/90 text-white text-[0.65rem] font-semibold tracking-wider px-3 py-1 rounded-sm w-max mb-4 uppercase">
-                      {featuredArticle.tag}
+                      {activeFeatured.tag}
                     </span>
                   )}
-                  {featuredArticle.date && (
+                  {activeFeatured.date && (
                     <p className="text-white/80 text-xs font-medium tracking-wide mb-2 uppercase">
-                      {featuredArticle.date}
+                      {activeFeatured.date}
                     </p>
                   )}
-                  {featuredArticle.title && (
+                  {activeFeatured.title && (
                     <h3 className="text-white text-xl sm:text-2xl lg:text-3xl font-semibold leading-tight mb-3 group-hover:text-gray-200 transition-colors">
-                      {featuredArticle.title}
+                      {activeFeatured.title}
                     </h3>
                   )}
-                  {featuredArticle.description && (
+                  {activeFeatured.description && (
                     <p className="text-white/70 text-sm line-clamp-2 md:line-clamp-3">
-                      {featuredArticle.description}
+                      {activeFeatured.description}
                     </p>
                   )}
                 </div>
@@ -145,7 +172,7 @@ const NewsSection = ({ previewData }) => {
           )}
 
           {/* Right Column: Side Articles */}
-          {sideArticles && sideArticles.length > 0 && (
+          {activeSideArticles && activeSideArticles.length > 0 && (
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -153,9 +180,10 @@ const NewsSection = ({ previewData }) => {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="w-full lg:w-[45%] flex flex-col gap-6 lg:gap-0 lg:justify-between py-2"
             >
-              {sideArticles.slice(0, 3).map((article, index) => (
+              {activeSideArticles.slice(0, 3).map((article, index) => (
                 <div
-                  key={index}
+                  key={article.title + index}
+                  onClick={() => handleArticleClick(index)}
                   className="flex gap-5 items-center group cursor-pointer rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] p-3 lg:-ml-3 lg:w-[calc(100%+1.5rem)] w-full"
                 >
                   {/* Small Image */}
@@ -188,6 +216,23 @@ const NewsSection = ({ previewData }) => {
           )}
 
         </div>
+
+        {/* Show More Button */}
+        {sideArticles && sideArticles.length > 3 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="w-full flex justify-center mt-12 lg:mt-16"
+          >
+            <Link href="/news" className="group flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase hover:text-primary/80 transition-colors">
+              <span>View All News</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </motion.div>
+        )}
+
       </div>
     </section>
   );

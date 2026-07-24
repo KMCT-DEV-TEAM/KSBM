@@ -89,14 +89,14 @@ const ManageLifeAtKsbm = () => {
       heading: 'Beyond the Classroom',
       description: 'Experience a vibrant campus life that nurtures leadership, creativity, and lifelong connections through diverse clubs, cultural festivals, and community initiatives.',
       images: [
-        { src: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop', alt: 'Students in cafe' },
-        { src: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1973&auto=format&fit=crop', alt: 'Students jumping' },
-        { src: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=2070&auto=format&fit=crop', alt: 'Campus festival' },
-        { src: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?q=80&w=2070&auto=format&fit=crop', alt: 'Meeting room' },
-        { src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop', alt: 'Selfie' },
-        { src: 'https://images.unsplash.com/photo-1517502884422-41eaead166d4?q=80&w=1925&auto=format&fit=crop', alt: 'Dining hall' },
-        { src: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop', alt: 'Outdoor gathering' },
-        { src: 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?q=80&w=2070&auto=format&fit=crop', alt: 'Campus gate' }
+        { src: '/assets/Images/Home/life_at_ksbm_1.jpg', alt: 'Students in cafe' },
+        { src: '/assets/Images/Home/life_at_ksbm_2.jpg', alt: 'Students jumping' },
+        { src: '/assets/Images/Home/life_at_ksbm_3.jpg', alt: 'Campus festival' },
+        { src: '/assets/Images/Home/life_at_ksbm_4.jpg', alt: 'Meeting room' },
+        { src: '/assets/Images/Home/life_at_ksbm_5.jpg', alt: 'Selfie' },
+        { src: '/assets/Images/Home/life_at_ksbm_6.jpg', alt: 'Dining hall' },
+        { src: '/assets/Images/Home/life_at_ksbm_7.jpg', alt: 'Outdoor gathering' },
+        { src: '/assets/Images/Home/life_at_ksbm_8.jpg', alt: 'Campus gate' }
       ],
       showSubheading: true,
       showHeading: true,
@@ -116,20 +116,43 @@ const ManageLifeAtKsbm = () => {
     Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
   };
 
-  const handleImageChange = (index, field, value) => {
-    const updatedImages = [...images];
-    updatedImages[index] = { ...updatedImages[index], [field]: value };
-    setImages(updatedImages);
+  const handleNewImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await api.post('/upload/home', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.data.url) {
+        setImages([...images, { src: response.data.url, alt: 'Gallery Image' }]);
+        Toast.fire({ icon: 'success', title: 'Image uploaded successfully' });
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to upload image' });
+    }
   };
 
-  const addImage = () => {
-    setImages([...images, { src: '', alt: '' }]);
-  };
-
-  const removeImage = (index) => {
+  const removeImage = async (index) => {
+    const imgToRemove = images[index];
     const updatedImages = [...images];
     updatedImages.splice(index, 1);
     setImages(updatedImages);
+
+    if (imgToRemove.src && imgToRemove.src.startsWith('/assets/Images/Home/')) {
+      try {
+        await api.delete('/upload', { data: { fileUrl: imgToRemove.src } });
+      } catch (error) {
+        console.error('Failed to delete image from server', error);
+      }
+    }
   };
 
   if (isLoading) return <AdminSkeleton />;
@@ -181,14 +204,20 @@ const ManageLifeAtKsbm = () => {
                 <label className="text-sm font-medium text-gray-700">Subheading</label>
                 <input type="checkbox" checked={showSubheading} onChange={e => setShowSubheading(e.target.checked)} className="rounded text-primary focus:ring-primary" title="Show/Hide" />
               </div>
-              <input type="text" value={subheading} onChange={e => setSubheading(e.target.value)} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
+              <input type="text" value={subheading} onChange={e => setSubheading(e.target.value)} maxLength={30} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
+              <div className="text-right text-xs text-gray-400 mt-1">
+                {subheading?.length || 0} / 30
+              </div>
             </div>
             <div className="flex-1 space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-gray-700">Heading</label>
                 <input type="checkbox" checked={showHeading} onChange={e => setShowHeading(e.target.checked)} className="rounded text-primary focus:ring-primary" title="Show/Hide" />
               </div>
-              <input type="text" value={heading} onChange={e => setHeading(e.target.value)} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
+              <input type="text" value={heading} onChange={e => setHeading(e.target.value)} maxLength={50} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
+              <div className="text-right text-xs text-gray-400 mt-1">
+                {heading?.length || 0} / 50
+              </div>
             </div>
           </div>
           <div className="space-y-2">
@@ -196,7 +225,10 @@ const ManageLifeAtKsbm = () => {
               <label className="text-sm font-medium text-gray-700">Description</label>
               <input type="checkbox" checked={showDescription} onChange={e => setShowDescription(e.target.checked)} className="rounded text-primary focus:ring-primary" title="Show/Hide" />
             </div>
-            <textarea rows={3} value={description} onChange={e => setDescription(e.target.value)} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
+            <textarea rows={3} value={description} onChange={e => setDescription(e.target.value)} maxLength={250} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
+            <div className="text-right text-xs text-gray-400 mt-1">
+              {description?.length || 0} / 250
+            </div>
           </div>
         </div>
       </SectionForm>
@@ -207,31 +239,21 @@ const ManageLifeAtKsbm = () => {
             <span className="text-sm font-medium text-gray-700">Show Images Grid</span>
             <input type="checkbox" checked={showImages} onChange={e => setShowImages(e.target.checked)} className="rounded text-primary focus:ring-primary" />
           </div>
-          <button onClick={addImage} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
+          <label className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer">
             <Plus className="w-4 h-4" /> Add Image
-          </button>
+            <input type="file" className="hidden" accept="image/*" onChange={handleNewImageUpload} />
+          </label>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {images.map((img, idx) => (
-            <div key={idx} className="p-4 border border-gray-200 rounded-xl space-y-4 bg-gray-50/50">
-              <div className="flex justify-between items-center">
-                <h4 className="text-sm font-bold text-gray-600">Image {idx + 1}</h4>
-                <button onClick={() => removeImage(idx)} className="text-red-500 hover:text-red-700 p-1 bg-red-50 hover:bg-red-100 rounded transition-colors"><Trash2 className="w-4 h-4" /></button>
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-gray-500">Image URL</label>
-                <input type="text" value={img.src} onChange={e => handleImageChange(idx, 'src', e.target.value)} placeholder="https://example.com/image.jpg" className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-gray-500">Alt Text</label>
-                <input type="text" value={img.alt} onChange={e => handleImageChange(idx, 'alt', e.target.value)} placeholder="Description of image" className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
-              </div>
-              {img.src && (
-                <div className="mt-2 h-32 w-full rounded-md overflow-hidden bg-gray-100 border border-gray-200 flex items-center justify-center">
-                  <img src={img.src} alt="Preview" className="h-full w-full object-cover" onError={(e) => e.target.style.display = 'none'} />
-                </div>
-              )}
+            <div key={idx} className="relative group rounded-xl overflow-hidden border border-gray-200 h-40 bg-gray-100">
+               <img src={img.src} alt={img.alt} className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
+               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                 <button onClick={() => removeImage(idx)} className="text-white hover:text-red-400 p-2 rounded-full transition-colors bg-red-500/20 hover:bg-red-500/40">
+                   <Trash2 className="w-6 h-6" />
+                 </button>
+               </div>
             </div>
           ))}
         </div>

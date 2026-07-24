@@ -19,7 +19,7 @@ const newsSchema = new mongoose.Schema(
         date: 'OCTOBER 24, 2024',
         title: 'KSBM National Business Summit 2024: Navigating the AI Frontier',
         description: 'Over 50 industry experts converged at KSBM to discuss the transformative power of AI in modern business management. The summit highlighted key strategies for integrating AI into core business operations, creating new avenues for growth and innovation.',
-        image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop'
+        image: '/assets/Images/Home/news_featured.jpg'
       }
     },
     sideArticles: {
@@ -28,22 +28,22 @@ const newsSchema = new mongoose.Schema(
         {
           date: 'OCTOBER 15, 2024',
           title: 'KSBM Students Win National HR Conclave 2024',
-          image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop'
+          image: '/assets/Images/Home/news_side_1.jpg'
         },
         {
           date: 'OCTOBER 08, 2024',
           title: "Inauguration of the 'Innovate KSBM' Incubation Lab",
-          image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop'
+          image: '/assets/Images/Home/news_side_2.jpg'
         },
         {
           date: 'SEPTEMBER 28, 2024',
           title: 'New Global Faculty Partnership with Zurich School of Finance',
-          image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2000&auto=format&fit=crop'
+          image: '/assets/Images/Home/news_side_3.jpg'
         },
         {
           date: 'AUGUST 12, 2024',
           title: 'Annual Alumni Meet 2024: Bridging Generations',
-          image: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1973&auto=format&fit=crop'
+          image: '/assets/Images/Home/news_side_4.jpg'
         }
       ]
     },
