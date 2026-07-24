@@ -52,17 +52,13 @@ const EventsAbout = () => {
             style={{ backgroundImage: 'radial-gradient(circle at center, #C837AB 0%, rgba(115, 115, 115, 0) 100%)' }}
           ></div>
           {/* Subheading */}
-          <h4
-            className="inline-block text-sm font-medium tracking-widest"
+          <h5 className=" text-sm md:text-base font-semibold uppercase tracking-[0.2em] mb-2"
             style={{
               background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-            }}
-          >
-            About
-          </h4>
+            }}>About</h5>
 
           {/* Heading */}
           <h2 className="text-[40px] font-bold text-white tracking-wide uppercase leading-tight drop-shadow-[0_0_15px_rgba(249,73,180,0.6)]">

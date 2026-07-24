@@ -1,9 +1,9 @@
-"use client";
-import React from 'react';
+"use client"
 
 const EventsMoments = ({ momentsCaptured }) => {
   return (
     <section className="w-full py-20 px-6">
+
       <h2 className="text-center text-xl md:text-2xl font-bold uppercase tracking-widest text-pink-500 mb-12">
         {momentsCaptured.heading}
       </h2>
