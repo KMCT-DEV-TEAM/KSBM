@@ -9,6 +9,7 @@ import AchievementsPreview from '../../home/components/AchievementsSection';
 import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -36,6 +37,8 @@ const ManageAchievements = () => {
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, title: '', message: '', confirmText: '', variant: 'danger' });
+
+  const { markForDeletion, uploadFile, executeDeletions, clearDeletions } = useDeferredUpload();
 
   useEffect(() => {
     fetchSettings();
@@ -65,19 +68,32 @@ const ManageAchievements = () => {
       confirmText: 'Yes, save it!',
       variant: 'primary',
       action: async () => {
-    setIsSaving(true);
-    try {
-      await api.put('/cms/achievements', {
-        subheading, heading, achievements, showSubheading, showHeading, showAchievements
-      });
-      Toast.fire({ icon: 'success', title: 'Achievements section saved successfully!' });
-    } catch (error) {
-      console.error('Error saving achievements settings:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
-    } finally {
-      setIsSaving(false);
-    }
-  }
+        setIsSaving(true);
+        try {
+          const finalAchievements = await Promise.all(achievements.map(async (item) => {
+            let newItem = { ...item };
+            if (newItem.imageFile) {
+              const url = await uploadFile(newItem.imageFile);
+              newItem.image = url;
+              delete newItem.imageFile;
+            }
+            return newItem;
+          }));
+
+          await api.put('/cms/achievements', {
+            subheading, heading, achievements: finalAchievements, showSubheading, showHeading, showAchievements
+          });
+          
+          await executeDeletions();
+          setAchievements(finalAchievements);
+          Toast.fire({ icon: 'success', title: 'Achievements section saved successfully!' });
+        } catch (error) {
+          console.error('Error saving achievements settings:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
+        } finally {
+          setIsSaving(false);
+        }
+      }
     });
   };
 
@@ -143,26 +159,37 @@ const ManageAchievements = () => {
     ]);
   };
 
-  const handleUpdateAchievement = (id, field, value) => {
+  const handleUpdateAchievement = (id, field, value, file = null) => {
+    if (file) {
+      const oldItem = achievements.find(i => (i.id === id || i._id === id));
+      if (oldItem && oldItem[field]) markForDeletion(oldItem[field]);
+    } else if (value === '') {
+      const oldItem = achievements.find(i => (i.id === id || i._id === id));
+      if (oldItem && oldItem[field]) markForDeletion(oldItem[field]);
+    }
+
     setAchievements(achievements.map(item => 
-      (item.id === id || item._id === id) ? { ...item, [field]: value } : item
+      (item.id === id || item._id === id) ? { ...item, [field]: value, [`${field}File`]: file } : item
     ));
   };
 
   const handleDeleteAchievement = async (id) => {
-    const updatedAchievements = achievements.filter(item => item.id !== id && item._id !== id);
-    setAchievements(updatedAchievements);
-    
-    try {
-      await api.put('/cms/achievements', {
-        subheading, heading, achievements: updatedAchievements, showSubheading, showHeading, showAchievements
-      });
-      Toast.fire({ icon: 'success', title: 'Achievement deleted from database.' });
-    } catch (error) {
-      console.error('Error deleting achievement:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to delete achievement from database.' });
-      setAchievements(achievements); // revert on failure
-    }
+    await confirmAction({
+      title: 'Remove Achievement?',
+      message: 'Are you sure you want to remove this achievement?',
+      confirmText: 'Yes, remove it',
+      variant: 'danger',
+      action: async () => {
+        const achievementToDelete = achievements.find(item => item.id === id || item._id === id);
+        if (achievementToDelete && achievementToDelete.image) {
+          markForDeletion(achievementToDelete.image);
+        }
+        
+        const updatedAchievements = achievements.filter(item => item.id !== id && item._id !== id);
+        setAchievements(updatedAchievements);
+        Toast.fire({ icon: 'info', title: 'Achievement removed locally. Click Save Changes to apply.' });
+      }
+    });
   };
 
   if (isLoading) {
@@ -303,7 +330,8 @@ const ManageAchievements = () => {
                     <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Image</label>
                     <LogoUploader
                       currentLogoUrl={item.image || 'https://via.placeholder.com/300x200?text=No+Image'}
-                      onUploadSuccess={(url) => handleUpdateAchievement(item.id || item._id, 'image', url)}
+                      onUploadSuccess={(url, file) => handleUpdateAchievement(item.id || item._id, 'image', url, file)}
+                      deferredMode={true}
                     />
                   </div>
                 </div>

@@ -9,6 +9,7 @@ import ConfirmationModal from '../../../components/ConfirmationModal';
 import AccreditationPreview from '../../home/components/AccreditationSection';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
 
 
 const Toast = Swal.mixin({
@@ -41,6 +42,8 @@ const ManageAccreditation = () => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, title: '', message: '', confirmText: '', variant: 'danger' });
   const iframeRef = useRef(null);
+
+  const { markForDeletion, uploadFile, executeDeletions, clearDeletions } = useDeferredUpload();
 
   const previewData = {
     subheading, heading, imageUrl, images,
@@ -103,20 +106,31 @@ const ManageAccreditation = () => {
       confirmText: 'Yes, save it!',
       variant: 'primary',
       action: async () => {
-    setIsSaving(true);
-    try {
-      await api.put('/cms/accreditation', {
-        subheading, heading, imageUrl, images,
-        showSubheading, showHeading, showImage
-      });
-      Toast.fire({ icon: 'success', title: 'Accreditation section saved successfully!' });
-    } catch (error) {
-      console.error('Error saving accreditation settings:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
-    } finally {
-      setIsSaving(false);
-    }
-  }
+        setIsSaving(true);
+        try {
+          const finalImages = await Promise.all(images.map(async (img) => {
+            if (img.file) {
+              const url = await uploadFile(img.file);
+              return { url };
+            }
+            return img;
+          }));
+
+          await api.put('/cms/accreditation', {
+            subheading, heading, imageUrl, images: finalImages,
+            showSubheading, showHeading, showImage
+          });
+          
+          await executeDeletions();
+          setImages(finalImages);
+          Toast.fire({ icon: 'success', title: 'Accreditation section saved successfully!' });
+        } catch (error) {
+          console.error('Error saving accreditation settings:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
+        } finally {
+          setIsSaving(false);
+        }
+      }
     });
   };
 
@@ -273,6 +287,8 @@ const ManageAccreditation = () => {
             images={images}
             setImages={setImages}
             onUploadStateChange={(uploading) => setIsUploading(uploading)}
+            deferredMode={true}
+            onMarkForDeletion={markForDeletion}
           />
         </div>
 

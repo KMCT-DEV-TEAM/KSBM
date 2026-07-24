@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import api from '../../../api/axios';
 
 const TestimonialsSection = ({ previewData }) => {
@@ -14,8 +16,8 @@ const TestimonialsSection = ({ previewData }) => {
         course: 'MBA (2022-2024)',
         quote: '"KSBM transformed my potential into professional success."',
         body: 'From interactive classroom sessions to industry-oriented projects, every experience prepared me for real business challenges. The faculty, placement team, and supportive learning environment helped me grow both professionally and personally, giving me the confidence to excel in the corporate world.',
-        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop',
-        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=150&auto=format&fit=crop'
+        image: '/assets/Images/Home/testimonial_1.jpg',
+        avatar: '/assets/Images/Home/testimonial_1.jpg'
       },
       {
         id: '2',
@@ -23,8 +25,8 @@ const TestimonialsSection = ({ previewData }) => {
         course: 'BBA (2021-2024)',
         quote: '"The practical approach to learning is unmatched here."',
         body: 'The practical approach to learning and the amazing campus life made my time at KSBM unforgettable. The placement cell was instrumental in getting me my dream job right out of college, providing excellent mentorship.',
-        image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop',
-        avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=150&auto=format&fit=crop'
+        image: '/assets/Images/Home/testimonial_2.jpg',
+        avatar: '/assets/Images/Home/testimonial_2.jpg'
       },
       {
         id: '3',
@@ -32,8 +34,8 @@ const TestimonialsSection = ({ previewData }) => {
         course: 'MBA (2021-2023)',
         quote: '"A true stepping stone to global corporate opportunities."',
         body: 'KSBM gave me the platform to interact with industry leaders and participate in global competitions. The rigorous curriculum is exactly what the corporate world demands, making the transition seamless and rewarding.',
-        image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1974&auto=format&fit=crop',
-        avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=150&auto=format&fit=crop'
+        image: '/assets/Images/Home/testimonial_3.jpg',
+        avatar: '/assets/Images/Home/testimonial_3.jpg'
       }
     ]
   });
@@ -61,16 +63,17 @@ const TestimonialsSection = ({ previewData }) => {
   }, [previewData]);
 
   const { subheading, heading, testimonials } = settings;
+  const displayTestimonials = testimonials?.slice(0, 3) || [];
 
   useEffect(() => {
-    if (!testimonials || testimonials.length === 0) return;
+    if (displayTestimonials.length === 0) return;
     const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % testimonials.length);
+      setActiveIndex((prev) => (prev + 1) % displayTestimonials.length);
     }, 4000); // cycle every 4 seconds
     return () => clearInterval(timer);
-  }, [testimonials.length]);
+  }, [displayTestimonials.length]);
 
-  if (!testimonials || testimonials.length === 0) return null;
+  if (displayTestimonials.length === 0) return null;
 
   return (
     <section className="w-full bg-background py-12 lg:py-16">
@@ -106,7 +109,7 @@ const TestimonialsSection = ({ previewData }) => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="hidden lg:flex gap-6 h-[380px] w-full max-w-7xl mx-auto justify-center"
         >
-          {testimonials.map((testimonial, index) => {
+          {displayTestimonials.map((testimonial, index) => {
             const isActive = activeIndex === index;
             return (
               <div
@@ -174,27 +177,27 @@ const TestimonialsSection = ({ previewData }) => {
               >
                 <div className="w-full h-[250px]">
                   <img
-                    src={testimonials[activeIndex].image}
-                    alt={testimonials[activeIndex].name}
+                    src={displayTestimonials[activeIndex]?.image}
+                    alt={displayTestimonials[activeIndex]?.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="p-6 flex flex-col">
                   <h3 className="text-lg font-semibold text-text-primary mb-3 leading-snug">
-                    {testimonials[activeIndex].quote}
+                    {displayTestimonials[activeIndex]?.quote}
                   </h3>
                   <p className="text-text-secondary text-sm leading-[1.8] mb-6">
-                    {testimonials[activeIndex].body}
+                    {displayTestimonials[activeIndex]?.body}
                   </p>
                   <div className="flex items-center gap-4 mt-auto">
                     <img
-                      src={testimonials[activeIndex].avatar}
-                      alt={testimonials[activeIndex].name}
+                      src={displayTestimonials[activeIndex]?.avatar}
+                      alt={displayTestimonials[activeIndex]?.name}
                       className="w-10 h-10 rounded-full object-cover"
                     />
                     <div>
-                      <p className="text-sm font-semibold text-text-primary">{testimonials[activeIndex].name}</p>
-                      <p className="text-[0.65rem] font-semibold text-text-secondary uppercase tracking-widest mt-0.5">{testimonials[activeIndex].course}</p>
+                      <p className="text-sm font-semibold text-text-primary">{displayTestimonials[activeIndex]?.name}</p>
+                      <p className="text-[0.65rem] font-semibold text-text-secondary uppercase tracking-widest mt-0.5">{displayTestimonials[activeIndex]?.course}</p>
                     </div>
                   </div>
                 </div>
@@ -204,7 +207,7 @@ const TestimonialsSection = ({ previewData }) => {
 
           {/* Mobile Thumbnails for switching */}
           <div className="flex items-center justify-center gap-4 mt-4">
-            {testimonials.map((testimonial, index) => (
+            {displayTestimonials.map((testimonial, index) => (
               <button
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}
@@ -214,6 +217,20 @@ const TestimonialsSection = ({ previewData }) => {
               </button>
             ))}
           </div>
+        </motion.div>
+
+        {/* Show More Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="w-full flex justify-center mt-12 lg:mt-16"
+        >
+          <Link href="/testimonials" className="group flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase hover:text-primary/80 transition-colors">
+            <span>Read All Testimonials</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
         </motion.div>
 
       </div>

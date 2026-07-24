@@ -10,6 +10,7 @@ import FacilitiesSection from '../../home/components/FacilitiesSection';
 import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -78,6 +79,8 @@ const ManageFacilities = () => {
 
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, title: '', message: '', confirmText: '', variant: 'danger', targetIndex: null });
 
+  const { markForDeletion, uploadFile, executeDeletions, clearDeletions } = useDeferredUpload();
+
   useEffect(() => {
     fetchSettings();
   }, []);
@@ -130,10 +133,23 @@ const ManageFacilities = () => {
       action: async () => {
         setIsSaving(true);
         try {
+          const finalFacilitiesList = await Promise.all(facilitiesList.map(async (item) => {
+            let newItem = { ...item };
+            if (newItem.imageFile) {
+              const url = await uploadFile(newItem.imageFile);
+              newItem.image = url;
+              delete newItem.imageFile;
+            }
+            return newItem;
+          }));
+
           await api.put('/cms/facilities', {
-            subheading, heading, description, facilitiesList,
+            subheading, heading, description, facilitiesList: finalFacilitiesList,
             showSubheading, showHeading, showDescription, showFacilities
           });
+          
+          await executeDeletions();
+          setFacilitiesList(finalFacilitiesList);
           Toast.fire({ icon: 'success', title: 'Facilities section saved successfully!' });
         } catch (error) {
           console.error('Error saving facilities settings:', error);
@@ -184,6 +200,10 @@ const ManageFacilities = () => {
         if (editingFacilityIndex === -1) {
           newList.push(facilityToSave);
         } else {
+          const oldImage = facilitiesList[editingFacilityIndex].image;
+          if (oldImage && oldImage !== finalImage) {
+            markForDeletion(oldImage);
+          }
           newList[editingFacilityIndex] = facilityToSave;
         }
         setFacilitiesList(newList);
@@ -235,13 +255,8 @@ const ManageFacilities = () => {
     if (confirmModal.action === 'remove_facility') {
       const targetFacility = facilitiesList[confirmModal.targetIndex];
       
-      // Physically delete the image file if it exists
       if (targetFacility && targetFacility.image) {
-        try {
-          await api.delete('/upload', { data: { fileUrl: targetFacility.image }, hideLoader: true });
-        } catch (error) {
-          console.error('Failed to delete physical facility image:', error);
-        }
+        markForDeletion(targetFacility.image);
       }
 
       let updated = facilitiesList.filter((_, i) => i !== confirmModal.targetIndex);
@@ -556,8 +571,9 @@ const ManageFacilities = () => {
                       return (
                         <LogoUploader
                           currentLogoUrl={currentFacility.image || defaultImage}
-                          onUploadSuccess={(url) => setCurrentFacility({ ...currentFacility, image: url })}
+                          onUploadSuccess={(url, file) => setCurrentFacility({ ...currentFacility, image: url, imageFile: file })}
                           uploadEndpoint="/upload/home"
+                          deferredMode={true}
                           disableDelete={!currentFacility.image || (isDefaultCard ? currentFacility.image === defaultImage : true)}
                         />
                       );

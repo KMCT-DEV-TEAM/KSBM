@@ -6,7 +6,7 @@ import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
 import confirmAction from '../../../../utils/confirmAction';
 
-const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) => {
+const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange, deferredMode = false, onMarkForDeletion = null }) => {
   const [isUploading, setIsUploading] = useState(false);
   const dragItem = useRef();
   const dragOverItem = useRef();
@@ -23,6 +23,14 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
         showConfirmButton: false,
         timer: 3000
       });
+      return;
+    }
+    if (deferredMode) {
+      const newLocalImages = acceptedFiles.map(file => ({
+        url: URL.createObjectURL(file),
+        file
+      }));
+      setBannerImages([...bannerImages, ...newLocalImages]);
       return;
     }
 
@@ -79,7 +87,7 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
 
     setIsUploading(false);
     if (onUploadStateChange) onUploadStateChange(false);
-  }, [setBannerImages, onUploadStateChange, bannerImages]);
+  }, [setBannerImages, onUploadStateChange, bannerImages, deferredMode]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -119,6 +127,13 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
         
         setBannerImages(newImages);
         
+        if (deferredMode) {
+          if (deletedImageUrl && !deletedImageUrl.startsWith('blob:') && onMarkForDeletion) {
+            onMarkForDeletion(deletedImageUrl);
+          }
+          return;
+        }
+
         try {
           const { data } = await api.get('/cms/hero');
           await api.put('/cms/hero', {
@@ -176,6 +191,8 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange }) 
     dragOverItem.current = undefined;
     setBannerImages(copyListItems);
     
+    if (deferredMode) return;
+
     try {
       const { data } = await api.get('/cms/hero');
       await api.put('/cms/hero', {

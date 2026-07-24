@@ -8,6 +8,7 @@ import LogoUploader from './components/LogoUploader';
 import ProgramsPreview from '../../home/components/AcademicPrograms';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -48,6 +49,8 @@ const ManagePrograms = () => {
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [dragOverIndex, setDragOverIndex] = useState(null);
 
+  const { markForDeletion, uploadFile, executeDeletions, clearDeletions } = useDeferredUpload();
+
   useEffect(() => {
     fetchSettings();
   }, []);
@@ -81,20 +84,33 @@ const ManagePrograms = () => {
       confirmText: 'Yes, save it!',
       variant: 'primary',
       action: async () => {
-    setIsSaving(true);
-    try {
-      await api.put('/cms/programs', {
-        subheading, heading, description, programs,
-        showSubheading, showHeading, showDescription, showPrograms
-      });
-      Toast.fire({ icon: 'success', title: 'Programs section saved successfully!' });
-    } catch (error) {
-      console.error('Error saving programs settings:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
-    } finally {
-      setIsSaving(false);
-    }
-  }
+        setIsSaving(true);
+        try {
+          const finalPrograms = await Promise.all(programs.map(async (program) => {
+            let newProgram = { ...program };
+            if (newProgram.imageFile) {
+              const url = await uploadFile(newProgram.imageFile);
+              newProgram.image = url;
+              delete newProgram.imageFile;
+            }
+            return newProgram;
+          }));
+
+          await api.put('/cms/programs', {
+            subheading, heading, description, programs: finalPrograms,
+            showSubheading, showHeading, showDescription, showPrograms
+          });
+          
+          await executeDeletions();
+          setPrograms(finalPrograms);
+          Toast.fire({ icon: 'success', title: 'Programs section saved successfully!' });
+        } catch (error) {
+          console.error('Error saving programs settings:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
+        } finally {
+          setIsSaving(false);
+        }
+      }
     });
   };
 
@@ -152,33 +168,28 @@ const ManagePrograms = () => {
   };
 
   const saveProgramFromModal = async () => {
-    if (!currentProgram.title) {
-      Toast.fire({ icon: 'error', title: 'Title is required' });
+    if (!currentProgram.title?.trim() || !currentProgram.subtitle?.trim() || !currentProgram.tag?.trim() || !currentProgram.image) {
+      Toast.fire({ icon: 'error', title: 'All fields and an image are required' });
       return;
     }
-    const newPrograms = [...programs];
-    if (editingProgramIndex === -1) {
-      newPrograms.push(currentProgram);
-    } else {
-      newPrograms[editingProgramIndex] = currentProgram;
-    }
-    setPrograms(newPrograms);
-    closeProgramModal();
 
-    // Auto-save to database immediately
-    setIsSaving(true);
-    try {
-      await api.put('/cms/programs', {
-        subheading, heading, description, programs: newPrograms,
-        showSubheading, showHeading, showDescription, showPrograms
-      });
-      Toast.fire({ icon: 'success', title: 'Program saved successfully!' });
-    } catch (error) {
-      console.error('Error saving program:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to save program to database.' });
-    } finally {
-      setIsSaving(false);
-    }
+    await confirmAction({
+      title: editingProgramIndex === -1 ? 'Add Program?' : 'Update Program?',
+      message: 'Are you sure you want to save these details?',
+      confirmText: 'Yes, save it',
+      variant: 'primary',
+      action: async () => {
+        const newPrograms = [...programs];
+        if (editingProgramIndex === -1) {
+          newPrograms.push(currentProgram);
+        } else {
+          newPrograms[editingProgramIndex] = currentProgram;
+        }
+        setPrograms(newPrograms);
+        closeProgramModal();
+        Toast.fire({ icon: 'info', title: 'Program updated locally. Click Save Changes to apply.' });
+      }
+    });
   };
 
   const removeProgram = async (index) => {
@@ -224,29 +235,11 @@ const ManagePrograms = () => {
 
         setPrograms(newPrograms);
 
-        // Auto-save deletion to database immediately
-        setIsSaving(true);
-        try {
-          await api.put('/cms/programs', {
-            subheading, heading, description, programs: newPrograms,
-            showSubheading, showHeading, showDescription, showPrograms
-          });
-
-          if (deletedImageUrl) {
-            try {
-              await api.delete('/upload', { data: { fileUrl: deletedImageUrl } });
-            } catch (deleteErr) {
-              console.error('Failed to delete physical image file:', deleteErr);
-            }
-          }
-
-          Toast.fire({ icon: 'success', title: 'Program deleted!' });
-        } catch (error) {
-          console.error('Error deleting program:', error);
-          Toast.fire({ icon: 'error', title: 'Failed to delete program from database.' });
-        } finally {
-          setIsSaving(false);
+        if (deletedImageUrl) {
+          markForDeletion(deletedImageUrl);
         }
+
+        Toast.fire({ icon: 'info', title: 'Program deleted locally. Click Save Changes to apply.' });
       }
     });
   };
@@ -256,20 +249,6 @@ const ManagePrograms = () => {
     const newPrograms = [...programs];
     [newPrograms[index - 1], newPrograms[index]] = [newPrograms[index], newPrograms[index - 1]];
     setPrograms(newPrograms);
-
-    setIsSaving(true);
-    try {
-      await api.put('/cms/programs', {
-        subheading, heading, description, programs: newPrograms,
-        showSubheading, showHeading, showDescription, showPrograms
-      });
-      Toast.fire({ icon: 'success', title: 'Programs reordered!' });
-    } catch (error) {
-      console.error('Error reordering programs:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to save order to database.' });
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   const moveProgramDown = async (index) => {
@@ -277,20 +256,6 @@ const ManagePrograms = () => {
     const newPrograms = [...programs];
     [newPrograms[index + 1], newPrograms[index]] = [newPrograms[index], newPrograms[index + 1]];
     setPrograms(newPrograms);
-
-    setIsSaving(true);
-    try {
-      await api.put('/cms/programs', {
-        subheading, heading, description, programs: newPrograms,
-        showSubheading, showHeading, showDescription, showPrograms
-      });
-      Toast.fire({ icon: 'success', title: 'Programs reordered!' });
-    } catch (error) {
-      console.error('Error reordering programs:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to save order to database.' });
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   // Drag and Drop Handlers
@@ -329,20 +294,6 @@ const ManagePrograms = () => {
     
     setPrograms(newPrograms);
     handleDragEnd();
-
-    setIsSaving(true);
-    try {
-      await api.put('/cms/programs', {
-        subheading, heading, description, programs: newPrograms,
-        showSubheading, showHeading, showDescription, showPrograms
-      });
-      Toast.fire({ icon: 'success', title: 'Programs reordered successfully!' });
-    } catch (error) {
-      console.error('Error reordering programs:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to save order to database.' });
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   if (isLoading) {
@@ -479,8 +430,16 @@ const ManagePrograms = () => {
                   <div className="bg-gray-50 p-4 rounded-lg border border-[#D9DEE3]">
                     <LogoUploader
                       currentLogoUrl={currentProgram.image}
-                      uploadEndpoint="/upload/programs"
-                      onUploadSuccess={(url) => setCurrentProgram({...currentProgram, image: url})}
+                      onUploadSuccess={(url, file) => {
+                        if (file) {
+                          if (currentProgram.image) {
+                            markForDeletion(currentProgram.image);
+                          }
+                          setCurrentProgram({...currentProgram, image: url, imageFile: file});
+                        }
+                      }}
+                      deferredMode={true}
+                      disableDelete={true}
                     />
                   </div>
                 </div>

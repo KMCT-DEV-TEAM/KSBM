@@ -7,6 +7,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import BannerUploader from './components/BannerUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -50,6 +51,8 @@ const ManageHero = () => {
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
+  const { markForDeletion, uploadFile, executeDeletions, clearDeletions } = useDeferredUpload();
+
   useEffect(() => {
     fetchSettings();
   }, []);
@@ -82,26 +85,37 @@ const ManageHero = () => {
       confirmText: 'Yes, save it!',
       variant: 'primary',
       action: async () => {
-    setIsSaving(true);
-    try {
-      await api.put('/cms/hero', { 
-        pillText, 
-        headingLine1, 
-        headingLine2, 
-        description, 
-        primaryButton, 
-        secondaryButton,
-        bannerImages,
-        statsCard
-      }, { hideLoader: true });
-      Toast.fire({ icon: 'success', title: 'Hero settings saved successfully!' });
-    } catch (error) {
-      console.error('Error saving hero settings:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
-    } finally {
-      setIsSaving(false);
-    }
-  }
+        setIsSaving(true);
+        try {
+          const finalBannerImages = await Promise.all(bannerImages.map(async (img) => {
+            if (img.file) {
+              const url = await uploadFile(img.file);
+              return { url };
+            }
+            return img;
+          }));
+
+          await api.put('/cms/hero', { 
+            pillText, 
+            headingLine1, 
+            headingLine2, 
+            description, 
+            primaryButton, 
+            secondaryButton,
+            bannerImages: finalBannerImages,
+            statsCard
+          }, { hideLoader: true });
+          
+          await executeDeletions();
+          setBannerImages(finalBannerImages);
+          Toast.fire({ icon: 'success', title: 'Hero settings saved successfully!' });
+        } catch (error) {
+          console.error('Error saving hero settings:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
+        } finally {
+          setIsSaving(false);
+        }
+      }
     });
   };
 
@@ -247,6 +261,8 @@ const ManageHero = () => {
             bannerImages={bannerImages} 
             setBannerImages={setBannerImages} 
             onUploadStateChange={(uploading) => setIsUploading(uploading)}
+            deferredMode={true}
+            onMarkForDeletion={markForDeletion}
           />
         </div>
 
