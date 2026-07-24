@@ -9,6 +9,7 @@ import ManagementPreview from '../../home/components/ManagementSection';
 import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -34,6 +35,8 @@ const ManageManagement = () => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const iframeRef = React.useRef(null);
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, title: '', message: '', confirmText: '', variant: 'danger' });
+
+  const { markForDeletion, uploadFile, executeDeletions, clearDeletions } = useDeferredUpload();
 
   useEffect(() => {
     fetchSettings();
@@ -61,19 +64,32 @@ const ManageManagement = () => {
       confirmText: 'Yes, save it!',
       variant: 'primary',
       action: async () => {
-    setIsSaving(true);
-    try {
-      await api.put('/cms/management', {
-        subheading, heading, description, members
-      });
-      Toast.fire({ icon: 'success', title: 'Management section saved successfully!' });
-    } catch (error) {
-      console.error('Error saving management settings:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
-    } finally {
-      setIsSaving(false);
-    }
-  }
+        setIsSaving(true);
+        try {
+          const finalMembers = await Promise.all(members.map(async (item) => {
+            let newItem = { ...item };
+            if (newItem.imageFile) {
+              const url = await uploadFile(newItem.imageFile);
+              newItem.image = url;
+              delete newItem.imageFile;
+            }
+            return newItem;
+          }));
+
+          await api.put('/cms/management', {
+            subheading, heading, description, members: finalMembers
+          });
+          
+          await executeDeletions();
+          setMembers(finalMembers);
+          Toast.fire({ icon: 'success', title: 'Management section saved successfully!' });
+        } catch (error) {
+          console.error('Error saving management settings:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
+        } finally {
+          setIsSaving(false);
+        }
+      }
     });
   };
 
@@ -133,38 +149,34 @@ const ManageManagement = () => {
     ]);
   };
 
-  const handleUpdateMember = (id, field, value) => {
+  const handleUpdateMember = (id, field, value, file = null) => {
+    if (file) {
+      const oldItem = members.find(i => i.id === id);
+      if (oldItem && oldItem[field]) markForDeletion(oldItem[field]);
+    } else if (value === '') {
+      const oldItem = members.find(i => i.id === id);
+      if (oldItem && oldItem[field]) markForDeletion(oldItem[field]);
+    }
+
     setMembers(members.map(member => 
-      member.id === id ? { ...member, [field]: value } : member
+      member.id === id ? { ...member, [field]: value, [`${field}File`]: file } : member
     ));
   };
 
   const handleDeleteMember = async (id) => {
-    const memberToDelete = members.find(member => member.id === id);
-    const deletedImageUrl = memberToDelete?.image;
-
-    const updatedMembers = members.filter(member => member.id !== id);
-    setMembers(updatedMembers);
-    
-    try {
-      await api.put('/cms/management', {
-        subheading, heading, description, members: updatedMembers
-      });
-
-      if (deletedImageUrl) {
-        try {
-          await api.delete('/upload', { data: { fileUrl: deletedImageUrl } });
-        } catch (deleteErr) {
-          console.error('Failed to delete physical image file:', deleteErr);
+    await confirmAction({
+      title: 'Remove Member?',
+      message: 'Are you sure you want to remove this member?',
+      confirmText: 'Yes, remove it',
+      variant: 'danger',
+      action: async () => {
+        const memberToDelete = members.find(member => member.id === id);
+        if (memberToDelete) {
+          markForDeletion(memberToDelete.image);
         }
+        setMembers(members.filter(member => member.id !== id));
       }
-
-      Toast.fire({ icon: 'success', title: 'Member deleted from database.' });
-    } catch (error) {
-      console.error('Error deleting member:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to delete member from database.' });
-      setMembers(members); // revert on failure
-    }
+    });
   };
 
   
@@ -348,9 +360,10 @@ const ManageManagement = () => {
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Profile Image</label>
                   <LogoUploader
                     currentLogoUrl={member.image || `/assets/Images/Home/management_${index + 1}.jpg`}
-                    onUploadSuccess={(url) => handleUpdateMember(member.id, 'image', url)}
+                    onUploadSuccess={(url, file) => handleUpdateMember(member.id, 'image', url, file)}
                     uploadEndpoint="/upload/home"
                     layout="horizontal"
+                    deferredMode={true}
                     disableDelete={!member.image || member.image === `/assets/Images/Home/management_${index + 1}.jpg`}
                   />
                 </div>

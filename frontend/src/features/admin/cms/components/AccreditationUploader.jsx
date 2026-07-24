@@ -6,7 +6,7 @@ import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
 import confirmAction from '../../../../utils/confirmAction';
 
-const AccreditationUploader = ({ images, setImages, onUploadStateChange }) => {
+const AccreditationUploader = ({ images, setImages, onUploadStateChange, deferredMode = false, onMarkForDeletion = null }) => {
   const [isUploading, setIsUploading] = useState(false);
   const dragItem = useRef();
   const dragOverItem = useRef();
@@ -23,6 +23,14 @@ const AccreditationUploader = ({ images, setImages, onUploadStateChange }) => {
         showConfirmButton: false,
         timer: 3000
       });
+      return;
+    }
+    if (deferredMode) {
+      const newLocalImages = acceptedFiles.map(file => ({
+        url: URL.createObjectURL(file),
+        file
+      }));
+      setImages([...images, ...newLocalImages]);
       return;
     }
 
@@ -79,7 +87,7 @@ const AccreditationUploader = ({ images, setImages, onUploadStateChange }) => {
 
     setIsUploading(false);
     if (onUploadStateChange) onUploadStateChange(false);
-  }, [setImages, onUploadStateChange, images]);
+  }, [setImages, onUploadStateChange, images, deferredMode]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -119,6 +127,13 @@ const AccreditationUploader = ({ images, setImages, onUploadStateChange }) => {
         
         setImages(newImages);
         
+        if (deferredMode) {
+          if (deletedImageUrl && !deletedImageUrl.startsWith('blob:') && onMarkForDeletion) {
+            onMarkForDeletion(deletedImageUrl);
+          }
+          return;
+        }
+
         try {
           const { data } = await api.get('/cms/accreditation');
           await api.put('/cms/accreditation', {
@@ -176,6 +191,8 @@ const AccreditationUploader = ({ images, setImages, onUploadStateChange }) => {
     dragOverItem.current = undefined;
     setImages(copyListItems);
     
+    if (deferredMode) return;
+
     try {
       const { data } = await api.get('/cms/accreditation');
       await api.put('/cms/accreditation', {

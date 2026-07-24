@@ -6,22 +6,24 @@ import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
 import confirmAction from '../../../../utils/confirmAction';
 
-const LogoUploader = ({ currentLogoUrl, value, onUploadSuccess, onChange, onUploadStateChange, label, uploadEndpoint = '/upload', disableDelete = false, layout = 'vertical' }) => {
+const LogoUploader = ({ currentLogoUrl, value, onUploadSuccess, onChange, onUploadStateChange, label, uploadEndpoint = '/upload', disableDelete = false, layout = 'vertical', deferredMode = false }) => {
   const [isUploading, setIsUploading] = useState(false);
   const displayUrl = currentLogoUrl || value;
 
-  const handleSuccess = useCallback(async (url) => {
-    // If we are clearing the image (url === ''), delete the old image from server
-    if (url === '' && displayUrl) {
-      try {
-        await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
-      } catch (error) {
-        console.error('Failed to delete old image:', error);
+  const handleSuccess = useCallback(async (url, file = null) => {
+    if (!deferredMode) {
+      // If we are clearing the image (url === ''), delete the old image from server
+      if (url === '' && displayUrl && !displayUrl.startsWith('blob:')) {
+        try {
+          await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
+        } catch (error) {
+          console.error('Failed to delete old image:', error);
+        }
       }
     }
-    if (onUploadSuccess) onUploadSuccess(url);
-    if (onChange) onChange(url);
-  }, [onUploadSuccess, onChange, displayUrl]);
+    if (onUploadSuccess) onUploadSuccess(url, file);
+    if (onChange) onChange(url, file);
+  }, [onUploadSuccess, onChange, displayUrl, deferredMode]);
 
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -29,11 +31,19 @@ const LogoUploader = ({ currentLogoUrl, value, onUploadSuccess, onChange, onUplo
 
     setIsUploading(true);
     if (onUploadStateChange) onUploadStateChange(true);
+    if (deferredMode) {
+      const objectUrl = URL.createObjectURL(file);
+      handleSuccess(objectUrl, file);
+      setIsUploading(false);
+      if (onUploadStateChange) onUploadStateChange(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append('image', file);
 
     try {
-      if (displayUrl) {
+      if (displayUrl && !displayUrl.startsWith('blob:')) {
         try {
           await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
         } catch (error) {
@@ -142,11 +152,13 @@ const LogoUploader = ({ currentLogoUrl, value, onUploadSuccess, onChange, onUplo
                     confirmText: 'Yes, remove it!',
                     variant: 'danger',
                     action: async () => {
-                      if (displayUrl && !displayUrl.includes('placeholder')) {
-                        try {
-                          await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
-                        } catch (deleteErr) {
-                          console.error('Failed to delete physical file:', deleteErr);
+                      if (!deferredMode) {
+                        if (displayUrl && !displayUrl.includes('placeholder') && !displayUrl.startsWith('blob:')) {
+                          try {
+                            await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
+                          } catch (deleteErr) {
+                            console.error('Failed to delete physical file:', deleteErr);
+                          }
                         }
                       }
                       handleSuccess('');

@@ -10,6 +10,7 @@ import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
 import LogoUploader from './components/LogoUploader';
+import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -34,6 +35,7 @@ const ManageAbout = () => {
   const [showParagraphs, setShowParagraphs] = useState(true);
 
   const [imageUrl, setImageUrl] = useState('');
+  const [imageFile, setImageFile] = useState(null);
   const [showImage, setShowImage] = useState(true);
 
   const [stats, setStats] = useState([]);
@@ -45,6 +47,8 @@ const ManageAbout = () => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const iframeRef = React.useRef(null);
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, index: null, title: '', message: '', confirmText: '', variant: 'danger' });
+
+  const { markForDeletion, uploadFile, executeDeletions, clearDeletions } = useDeferredUpload();
 
   const dragItem = React.useRef();
   const dragOverItem = React.useRef();
@@ -108,15 +112,24 @@ const ManageAbout = () => {
       action: async () => {
         setIsSaving(true);
         try {
-      await api.put('/cms/about', {
-        subheading, heading, paragraphs, imageUrl, stats,
-        showSubheading, showHeading, showParagraphs, showImage, showStats
-      });
-      Toast.fire({ icon: 'success', title: 'About section saved successfully!' });
-    } catch (error) {
-      console.error('Error saving about settings:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
-    } finally {
+          let finalImageUrl = imageUrl;
+          if (imageFile) {
+            finalImageUrl = await uploadFile(imageFile);
+          }
+
+          await api.put('/cms/about', {
+            subheading, heading, paragraphs, imageUrl: finalImageUrl, stats,
+            showSubheading, showHeading, showParagraphs, showImage, showStats
+          });
+
+          await executeDeletions();
+          setImageUrl(finalImageUrl);
+          setImageFile(null);
+          Toast.fire({ icon: 'success', title: 'About section saved successfully!' });
+        } catch (error) {
+          console.error('Error saving about settings:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
+        } finally {
           setIsSaving(false);
         }
       }
@@ -401,7 +414,13 @@ const ManageAbout = () => {
           <LogoUploader
             currentLogoUrl={imageUrl || graduateImg}
             disableDelete={!imageUrl}
-            onUploadSuccess={(url) => setImageUrl(url)}
+            deferredMode={true}
+            onUploadSuccess={(url, file) => {
+              if (file && imageUrl) markForDeletion(imageUrl);
+              else if (url === '' && imageUrl) markForDeletion(imageUrl);
+              setImageUrl(url);
+              setImageFile(file);
+            }}
             uploadEndpoint="/upload/home"
             title="Upload About Image"
             subtitle="Drag & drop an image or click to browse."

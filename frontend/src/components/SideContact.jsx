@@ -44,15 +44,15 @@ const SideContact = () => {
   const isHomePage = pathname === '/';
   
   const getStyleClasses = () => {
-    if (isScrolled) {
-      return 'bg-background border border-gray-200 text-primary';
+    if (pathname === '/testimonials' || isScrolled) {
+      return 'bg-white border border-gray-200 text-primary';
     }
     // Universal style for first section (not scrolled) on all pages
     return 'bg-background/20 backdrop-blur-md border border-white/30 text-white';
   };
 
   const getHoverClasses = () => {
-    if (isScrolled) {
+    if (pathname === '/testimonials' || isScrolled) {
       return 'hover:bg-gray-100';
     }
     return 'hover:bg-background/30';

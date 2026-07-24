@@ -8,6 +8,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -47,10 +48,12 @@ const ManageRecruiters = () => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, title: '', message: '', confirmText: '', variant: 'danger' });
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [newRecruiter, setNewRecruiter] = useState({ name: '', logo: '' });
+  const [newRecruiter, setNewRecruiter] = useState({ name: '', logo: '', logoFile: null });
   const iframeRef = React.useRef(null);
 
   const [draggedIndex, setDraggedIndex] = useState(null);
+
+  const { markForDeletion, uploadFile, executeDeletions, clearDeletions } = useDeferredUpload();
 
   useEffect(() => {
     if (isPreviewModalOpen) {
@@ -96,9 +99,22 @@ const ManageRecruiters = () => {
       action: async () => {
         setIsSaving(true);
         try {
+          const finalRecruiters = await Promise.all(recruiters.map(async (item) => {
+            let newItem = { ...item };
+            if (newItem.logoFile) {
+              const url = await uploadFile(newItem.logoFile);
+              newItem.logo = url;
+              delete newItem.logoFile;
+            }
+            return newItem;
+          }));
+
           await api.put('/cms/recruiters', {
-            recruiters, showRecruiters
+            recruiters: finalRecruiters, showRecruiters
           });
+          
+          await executeDeletions();
+          setRecruiters(finalRecruiters);
           Toast.fire({ icon: 'success', title: 'Recruiters section saved successfully!' });
         } catch (error) {
           console.error('Error saving recruiters settings:', error);
@@ -142,18 +158,11 @@ const ManageRecruiters = () => {
   };
 
   const handleAddRecruiter = () => {
-    setNewRecruiter({ name: '', logo: '' });
+    setNewRecruiter({ name: '', logo: '', logoFile: null });
     setIsAddModalOpen(true);
   };
 
   const handleCloseAddModal = async () => {
-    if (newRecruiter.logo) {
-      try {
-        await api.delete('/upload', { data: { fileUrl: newRecruiter.logo }, hideLoader: true });
-      } catch (error) {
-        console.error('Failed to cleanup aborted recruiter image:', error);
-      }
-    }
     setIsAddModalOpen(false);
   };
 
@@ -167,32 +176,29 @@ const ManageRecruiters = () => {
         const addedRecruiter = {
           id: Date.now().toString(),
           name: newRecruiter.name,
-          logo: newRecruiter.logo
+          logo: newRecruiter.logo,
+          logoFile: newRecruiter.logoFile
         };
         const updatedRecruiters = [...recruiters, addedRecruiter];
         setRecruiters(updatedRecruiters);
         
-        setIsSaving(true);
-        try {
-          await api.put('/cms/recruiters', {
-            recruiters: updatedRecruiters, showRecruiters
-          });
-          Toast.fire({ icon: 'success', title: 'Recruiter added successfully!' });
-          setIsAddModalOpen(false);
-        } catch (error) {
-          console.error('Error adding recruiter:', error);
-          Toast.fire({ icon: 'error', title: 'Failed to add recruiter.' });
-          setRecruiters(recruiters); // revert on failure
-        } finally {
-          setIsSaving(false);
-        }
+        Toast.fire({ icon: 'info', title: 'Recruiter added locally. Click Save Changes to apply.' });
+        setIsAddModalOpen(false);
       }
     });
   };
 
-  const handleUpdateRecruiter = (id, field, value) => {
+  const handleUpdateRecruiter = (id, field, value, file = null) => {
+    if (file) {
+      const oldItem = recruiters.find(i => (i.id === id || i._id === id));
+      if (oldItem && oldItem[field]) markForDeletion(oldItem[field]);
+    } else if (value === '') {
+      const oldItem = recruiters.find(i => (i.id === id || i._id === id));
+      if (oldItem && oldItem[field]) markForDeletion(oldItem[field]);
+    }
+
     setRecruiters(recruiters.map(item => 
-      (item.id === id || item._id === id) ? { ...item, [field]: value } : item
+      (item.id === id || item._id === id) ? { ...item, [field]: value, [`${field}File`]: file } : item
     ));
   };
 
@@ -212,6 +218,11 @@ const ManageRecruiters = () => {
       confirmText: 'Yes, remove it',
       variant: 'danger',
       action: async () => {
+        const recruiterToDelete = recruiters.find(item => item.id === id || item._id === id);
+        if (recruiterToDelete && recruiterToDelete.logo) {
+          markForDeletion(recruiterToDelete.logo);
+        }
+
         let updatedRecruiters = recruiters.filter(item => item.id !== id && item._id !== id);
         
         if (updatedRecruiters.length < 5) {
@@ -225,20 +236,7 @@ const ManageRecruiters = () => {
         }
         
         setRecruiters(updatedRecruiters);
-        
-        setIsSaving(true);
-        try {
-          await api.put('/cms/recruiters', {
-            recruiters: updatedRecruiters, showRecruiters
-          });
-          Toast.fire({ icon: 'success', title: 'Recruiters updated.' });
-        } catch (error) {
-          console.error('Error deleting recruiter:', error);
-          Toast.fire({ icon: 'error', title: 'Failed to update database.' });
-          setRecruiters(recruiters); // revert on failure
-        } finally {
-          setIsSaving(false);
-        }
+        Toast.fire({ icon: 'info', title: 'Recruiter removed locally. Click Save Changes to apply.' });
       }
     });
   };
@@ -404,8 +402,9 @@ const ManageRecruiters = () => {
                 <div className="w-full shrink-0 flex flex-col">
                   <LogoUploader
                     currentLogoUrl={item.logo || defaultLogoMap[item.name] || 'https://via.placeholder.com/300x150?text=No+Logo'}
-                    onUploadSuccess={(url) => handleUpdateRecruiter(item.id || item._id, 'logo', url)}
+                    onUploadSuccess={(url, file) => handleUpdateRecruiter(item.id || item._id, 'logo', url, file)}
                     uploadEndpoint="/upload/home"
+                    deferredMode={true}
                     disableDelete={true}
                   />
                 </div>
@@ -474,9 +473,10 @@ const ManageRecruiters = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Company Logo <span className="text-red-500">*</span></label>
                 <LogoUploader
                   currentLogoUrl={newRecruiter.logo}
-                  onUploadSuccess={(url) => setNewRecruiter({ ...newRecruiter, logo: url })}
+                  onUploadSuccess={(url, file) => setNewRecruiter({ ...newRecruiter, logo: url, logoFile: file })}
                   uploadEndpoint="/upload/home"
                   layout="vertical"
+                  deferredMode={true}
                   disableDelete={true}
                 />
               </div>
