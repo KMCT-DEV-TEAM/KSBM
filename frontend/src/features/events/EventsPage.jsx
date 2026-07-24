@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import EventsFooter from './components/EventsFooter';
 import api from '../../api/axios';
 
 // Section Components
@@ -41,6 +41,7 @@ const EventsPage = () => {
   const essenceOfCulture = pageData?.essenceOfCulture || { heading: 'THE ESSENCE OF CULTURE', items: [] };
   const stayConnected = pageData?.stayConnected || { heading: 'STAY CONNECTED', posters: [] };
   const momentsCaptured = pageData?.momentsCaptured || { heading: 'MOMENTS CAPTURED', images: [] };
+  const footerGraphic = pageData?.footerGraphic || '/assets/Images/Group 339.png';
 
   return (
     <div className="min-h-screen flex flex-col bg-[#050505] text-white overflow-x-hidden font-sans">
@@ -49,23 +50,21 @@ const EventsPage = () => {
       <EventsHero hero={hero} />
       <EventsAbout />
       <EventsUpcoming upcomingEvents={upcomingEvents} />
-      <EventsCarousel 
-        highlightedPrograms={highlightedPrograms} 
-        carouselIndex={carouselIndex} 
-        setCarouselIndex={setCarouselIndex} 
+      <EventsCarousel
+        highlightedPrograms={highlightedPrograms}
+        carouselIndex={carouselIndex}
+        setCarouselIndex={setCarouselIndex}
       />
-      <EventsEssence 
-        essenceOfCulture={essenceOfCulture} 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
+      <EventsEssence
+        essenceOfCulture={essenceOfCulture}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
       />
       <EventsStayConnected stayConnected={stayConnected} />
       <EventsMoments momentsCaptured={momentsCaptured} />
 
-      {/* Bottom graphic element */}
-      <div className="w-full h-32 bg-repeat-x opacity-20 pointer-events-none" style={{ backgroundImage: "url('/assets/Images/pattern.png')", backgroundSize: 'contain' }}></div>
-
-      <Footer />
+      {/* Custom Events Footer */}
+      <EventsFooter footerGraphic={footerGraphic} />
     </div>
   );
 };
