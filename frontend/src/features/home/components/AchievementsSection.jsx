@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/axios';
-
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const AchievementsSection = ({ previewData }) => {
@@ -60,7 +61,11 @@ const AchievementsSection = ({ previewData }) => {
     );
   }
 
-  const { subheading, heading, achievements, showSubheading, showHeading, showAchievements } = data;
+  const { subheading, heading, achievements, showSubheading, showHeading, showAchievements, previewDevice } = data;
+  const displayAchievements = achievements?.slice(0, 3) || [];
+
+  const isMobilePreview = previewDevice === 'mobile';
+  const isTabletPreview = previewDevice === 'tablet';
 
   if (!showAchievements && !previewData) {
     return null;
@@ -122,9 +127,15 @@ const AchievementsSection = ({ previewData }) => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, margin: "-100px" }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 w-full mx-auto"
+            className={
+              isMobilePreview
+                ? "grid grid-cols-1 gap-10 lg:gap-12 w-full mx-auto"
+                : isTabletPreview
+                ? "grid grid-cols-2 gap-10 lg:gap-12 w-full mx-auto"
+                : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 w-full mx-auto"
+            }
           >
-            {achievements && achievements.map((item) => (
+            {displayAchievements && displayAchievements.map((item) => (
               <motion.div
                 key={item.id || item._id}
                 variants={cardVariants}
@@ -160,6 +171,22 @@ const AchievementsSection = ({ previewData }) => {
                 </p>
               </motion.div>
             ))}
+          </motion.div>
+        )}
+
+        {/* Show More Button */}
+        {achievements && achievements.length > 3 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="w-full flex justify-center mt-12 lg:mt-16"
+          >
+            <Link href="/achievements" className="group flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase hover:text-primary/80 transition-colors">
+              <span>View All Achievements</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </motion.div>
         )}
 

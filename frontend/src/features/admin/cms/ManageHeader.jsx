@@ -304,6 +304,13 @@ const ManageHeader = () => {
         <div className="mb-8 pb-8 border-b border-gray-100">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-bold text-[#1e2869]">Navigation Links</h3>
+            <button
+              onClick={handleOpenAddLinkModal}
+              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              Add Link
+            </button>
           </div>
           
           <div className="space-y-3">

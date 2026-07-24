@@ -10,13 +10,6 @@ const Footer = ({ previewData }) => {
   const [data, setData] = useState({
     description: 'Empowering global leaders through intellectual rigor and strategic excellence since 1998.',
     socialLinks: { instagram: '#', facebook: '#', whatsapp: '#' },
-    programs: [],
-    quickLinks: [
-      { label: 'Programs', url: '/programs' },
-      { label: 'Accreditations', url: '/about' },
-      { label: 'Gallery', url: '/#campus' },
-      { label: 'Contact Us', url: '/contact' }
-    ],
     contactInfo: { address: '', email: '', phone: '' },
     copyrightText: '© 2024 KMCT School of Business. All rights reserved. Accredited by AACSB & AMBA.'
   });
@@ -32,36 +25,8 @@ const Footer = ({ previewData }) => {
           const response = await api.get('/cms/footer', { hideLoader: true });
           if (response.data) {
             let fetched = { ...response.data };
-            if (fetched.quickLinks && Array.isArray(fetched.quickLinks)) {
-              fetched.quickLinks = fetched.quickLinks.map(link => {
-                if (link.label?.toLowerCase().includes('contact') || link.url === '#contact') {
-                  return { ...link, url: '/contact' };
-                }
-                if (link.label?.toLowerCase().includes('faq') || link.url === '#faq') {
-                  return { ...link, url: '/faq' };
-                }
-                if (link.label?.toLowerCase().includes('gallery') || link.url === '#gallery') {
-                  return { ...link, url: '/gallery' };
-                }
-                return link;
-              });
-              const hasContact = fetched.quickLinks.some(link => link.label?.toLowerCase().includes('contact') || link.url === '/contact');
-              if (!hasContact) {
-                fetched.quickLinks.push({ label: 'Contact Us', url: '/contact' });
-              }
-              const hasFaq = fetched.quickLinks.some(link => link.label?.toLowerCase().includes('faq') || link.url === '/faq');
-              if (!hasFaq) {
-                fetched.quickLinks.push({ label: 'FAQ', url: '/faq' });
-              }
-            } else {
-              fetched.quickLinks = [
-                { label: 'Programs', url: '/programs' },
-                { label: 'Accreditations', url: '/about' },
-                { label: 'Gallery', url: '/gallery' },
-                { label: 'FAQ', url: '/faq' },
-                { label: 'Contact Us', url: '/contact' }
-              ];
-            }
+            if (fetched.quickLinks) delete fetched.quickLinks;
+            if (fetched.programs) delete fetched.programs;
             setData(fetched);
           }
         } catch (error) {
@@ -93,7 +58,22 @@ const Footer = ({ previewData }) => {
     );
   }
 
-  const { description, socialLinks, programs, quickLinks, contactInfo, copyrightText } = data;
+  const { description, socialLinks, contactInfo, copyrightText } = data;
+
+  const staticPrograms = [
+    { label: 'MBA Full-time', url: '/programs/mba' },
+    { label: 'Executive MBA', url: '/programs/mba' },
+    { label: 'BBA Program', url: '/programs/bba' },
+    { label: 'PhD in Management', url: '/programs/mba' }
+  ];
+
+  const staticQuickLinks = [
+    { label: 'Programs', url: '/programs' },
+    { label: 'Accreditations', url: '/about' },
+    { label: 'Gallery', url: '/gallery' },
+    { label: 'FAQ', url: '/faq' },
+    { label: 'Contact Us', url: '/contact' }
+  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -202,8 +182,12 @@ const Footer = ({ previewData }) => {
               PROGRAMS
             </h4>
             <ul className="flex flex-col gap-4 text-sm text-secondary ">
-              {programs && programs.map((prog, idx) => (
-                <li key={idx}><a href={prog.url} className="hover:text-white transition-colors">{prog.label}</a></li>
+              {staticPrograms.map((prog, idx) => (
+                <li key={idx}>
+                  <Link href={prog.url} className="hover:text-white transition-colors">
+                    {prog.label}
+                  </Link>
+                </li>
               ))}
             </ul>
           </motion.div>
@@ -214,7 +198,7 @@ const Footer = ({ previewData }) => {
               QUICK LINKS
             </h4>
             <ul className="flex flex-col gap-4 text-sm text-secondary">
-              {quickLinks && quickLinks.map((link, idx) => (
+              {staticQuickLinks.map((link, idx) => (
                 <li key={idx}>
                   {link.url && link.url.startsWith('/') ? (
                     <Link href={link.url} className="hover:text-white transition-colors">

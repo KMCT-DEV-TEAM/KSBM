@@ -41,21 +41,21 @@ const achievementsSchema = new mongoose.Schema(
           date: 'Oct 30, 2024',
           title: 'National Research Excellence Award',
           description: 'Recognizing outstanding contributions to sustainable technology research.',
-          image: '/assets/Images/achievement_award.png'
+          image: '/assets/Images/Home/achievement_award.png'
         },
         {
           category: 'Sports',
           date: 'Oct 25, 2024',
           title: 'Championship Victory in Inter-University League',
           description: 'Our varsity team secures the gold in the regional finals.',
-          image: '/assets/Images/achievement_sports.png'
+          image: '/assets/Images/Home/achievement_sports.png'
         },
         {
           category: 'Community',
           date: 'Oct 20, 2024',
           title: 'Social Impact Leadership Award',
           description: 'Honoring our student volunteers for their dedication to local literacy programs.',
-          image: '/assets/Images/achievement_poster.png'
+          image: '/assets/Images/Home/achievement_poster.png'
         }
       ]
     },
@@ -81,21 +81,21 @@ achievementsSchema.statics.getSettings = async function () {
           date: 'Oct 30, 2024',
           title: 'National Research Excellence Award',
           description: 'Recognizing outstanding contributions to sustainable technology research.',
-          image: '/assets/Images/achievement_award.png'
+          image: '/assets/Images/Home/achievement_award.png'
         },
         {
           category: 'Sports',
           date: 'Oct 25, 2024',
           title: 'Championship Victory in Inter-University League',
           description: 'Our varsity team secures the gold in the regional finals.',
-          image: '/assets/Images/achievement_sports.png'
+          image: '/assets/Images/Home/achievement_sports.png'
         },
         {
           category: 'Community',
           date: 'Oct 20, 2024',
           title: 'Social Impact Leadership Award',
           description: 'Honoring our student volunteers for their dedication to local literacy programs.',
-          image: '/assets/Images/achievement_poster.png'
+          image: '/assets/Images/Home/achievement_poster.png'
         }
       ],
       showSubheading: true,
