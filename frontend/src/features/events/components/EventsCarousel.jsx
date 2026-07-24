@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 const EventsCarousel = ({ highlightedPrograms, carouselIndex, setCarouselIndex }) => {
   const handleNext = () => setCarouselIndex((prev) => (prev + 1) % (highlightedPrograms.images.length || 1));
   const handlePrev = () => setCarouselIndex((prev) => (prev - 1 + highlightedPrograms.images.length) % (highlightedPrograms.images.length || 1));
-
   const baseImages = [
     { img: '/assets/Images/Home/img1.jpeg' },
     { img: '/assets/Images/Home/img2.jpeg' },
@@ -27,7 +26,6 @@ const EventsCarousel = ({ highlightedPrograms, carouselIndex, setCarouselIndex }
   }, [allImages.length, setCarouselIndex]);
 
   if (!highlightedPrograms || !highlightedPrograms.images || highlightedPrograms.images.length === 0) return null;
-
   return (
     <section
       className="w-full py-24 overflow-hidden relative"

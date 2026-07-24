@@ -65,15 +65,15 @@ export default function TestimonialsPageContent() {
               className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group border border-gray-100"
             >
               {/* Card Image */}
-              <div className="w-full h-60 overflow-hidden relative">
+              <div className="w-full h-80 overflow-hidden relative">
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
                 <img 
                   src={testimonial.image} 
                   alt={testimonial.name} 
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute top-4 right-4 bg-primary text-white p-3 rounded-full z-20 shadow-lg">
-                  <Quote className="w-5 h-5 fill-current" />
+                <div className="absolute top-4 right-4 text-white/40 z-20 drop-shadow-sm">
+                  <Quote className="w-6 h-6 fill-current" stroke="none" />
                 </div>
               </div>
 
