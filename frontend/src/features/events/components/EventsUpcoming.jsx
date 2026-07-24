@@ -24,7 +24,7 @@ const EventsUpcoming = ({ upcomingEvents }) => {
       </div>
 
       <div className="max-w-5xl mx-auto relative z-10">
-        <h5 className="text-sm text-center mb-2 font-medium tracking-widest"
+        <h5 className="text-center text-sm md:text-base font-semibold uppercase tracking-[0.2em] mb-2"
           style={{
             background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
             WebkitBackgroundClip: "text",
