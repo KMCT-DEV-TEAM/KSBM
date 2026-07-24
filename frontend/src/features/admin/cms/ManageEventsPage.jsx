@@ -64,7 +64,8 @@ const ManageEventsPage = () => {
       images: [
         { img: 'https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop' }
       ]
-    }
+    },
+    footerGraphic: '/assets/Images/Group 339.png'
   };
 
   const [formData, setFormData] = useState(defaults);
@@ -421,6 +422,19 @@ const ManageEventsPage = () => {
                 />
               </div>
             ))}
+          </div>
+        </div>
+      </SectionForm>
+
+      {/* Custom Footer Graphic */}
+      <SectionForm title="Custom Footer Graphic">
+        <div className="space-y-4">
+          <label className="text-xs font-semibold text-gray-500">Footer Banner Image</label>
+          <div className="p-4 rounded-md border border-gray-200 bg-gray-50 max-w-sm">
+            <LogoUploader
+              currentImage={formData.footerGraphic}
+              onImageSelected={(url) => setFormData({ ...formData, footerGraphic: url })}
+            />
           </div>
         </div>
       </SectionForm>

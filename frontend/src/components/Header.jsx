@@ -165,16 +165,33 @@ const Header = ({ previewData }) => {
   const mobileToggleClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? 'flex' : 'flex lg:hidden';
   const mobileDropdownClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? '' : 'lg:hidden';
 
+  const isEventsPage = pathname === '/events';
+
+  const headerBgClass = isEventsPage 
+    ? `bg-white/10 backdrop-blur-md border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.3)] ${isScrolled ? 'bg-white/20 border-white/30' : ''}`
+    : `bg-white border-gray-200 ${isScrolled ? 'border-transparent shadow-lg' : 'shadow-sm'}`;
+
+  const getNavTextClass = (isActive) => {
+    if (isEventsPage) {
+      return isActive
+        ? 'text-white font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[2px] after:bg-white after:rounded-sm'
+        : 'text-white/80 font-medium hover:text-white';
+    }
+    return isActive
+      ? 'text-primary font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[2px] after:bg-primary after:rounded-sm'
+      : 'text-gray-600 font-medium hover:text-primary';
+  };
+
   return (
-    <header className={`w-[98%] max-w-[1440px] fixed left-0 right-0 mx-auto mt-2 lg:mt-3 rounded-2xl z-[100] transition-all duration-300 border bg-white ${isScrolled ? 'border-transparent shadow-lg' : 'border-gray-200 shadow-sm'}`}>
+    <header className={`w-[98%] max-w-[1440px] fixed left-0 right-0 mx-auto mt-2 lg:mt-3 rounded-2xl z-[100] transition-all duration-300 border ${headerBgClass}`}>
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16 sm:h-20">
         
         {/* Logo Section */}
         <Link href="/" className="flex items-center no-underline shrink-0">
           <img 
-            src={logo} 
+            src={logoUrl || logo} 
             alt="KSBM Logo" 
-            className="h-5 sm:h-6 lg:h-8 object-contain transition-all duration-300" 
+            className={`h-5 sm:h-6 lg:h-8 object-contain transition-all duration-300 ${isEventsPage ? 'brightness-0 invert' : ''}`} 
           />
         </Link>
 
@@ -193,10 +210,7 @@ const Header = ({ previewData }) => {
                 >
                   <Link
                     href={item.link}
-                    className={`no-underline text-sm py-2 transition-colors duration-300 inline-block hover:text-primary ${activeNav === item.label
-                      ? 'text-primary font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[2px] after:bg-primary after:rounded-sm'
-                      : 'text-gray-600 font-medium'
-                      }`}
+                    className={`no-underline text-sm py-2 transition-colors duration-300 inline-block ${getNavTextClass(activeNav === item.label)}`}
                     onClick={() => setActiveNav(item.label)}
                   >
                     {item.label}
@@ -244,7 +258,7 @@ const Header = ({ previewData }) => {
           <div className={`${mobileToggleClass} items-center ml-2`}>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-md text-gray-700 hover:bg-gray-100"
+              className={`p-2 rounded-md ${isEventsPage ? 'text-white hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100'}`}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
