@@ -15,14 +15,10 @@ const getSubLinks = (label) => {
   const lower = label.toLowerCase().trim();
   if (lower === 'about us' || lower === 'about' || lower.includes('about')) {
     return [
-      { label: 'Overview', href: '/about' },
-      { label: 'Vision & Mission', href: '/about#vision' },
-      { label: 'KMCT Legacy', href: '/about#legacy' },
-      { label: 'Campus & Facilities', href: '/about#campus' },
+      { label: 'About Us', href: '/about' },
       { label: 'Governing Body', href: '/about/governing-body' },
       { label: 'Advisory Board', href: '/about/advisory-board' },
       { label: 'Management Desk', href: '/about/management-desk' },
-      { label: 'KMCT Group', href: '/about#trust' },
     ];
   }
   if (lower === 'academics' || lower === 'people' || lower === 'faculty' || lower.includes('academics') || lower.includes('people') || lower.includes('faculty')) {

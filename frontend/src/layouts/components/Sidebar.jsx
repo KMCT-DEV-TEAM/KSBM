@@ -27,72 +27,10 @@ const Sidebar = () => {
 
   const cmsSections = [
     {
-      title: 'Global Content',
-      icon: <Globe className="w-5 h-5" />,
-      links: [
-        { name: 'Header & Navbar', path: '/admin/cms/header' },
-        { name: 'Footer', path: '/admin/cms/footer' },
-      ]
-    },
-    {
       title: 'Home',
       icon: <Home className="w-5 h-5" />,
       links: [
         { name: 'Home Page Management', path: '/admin/cms/home' },
-      ]
-    },
-    {
-      title: 'Programs (MBA/BBA)',
-      icon: <GraduationCap className="w-5 h-5" />,
-      links: [
-        { name: 'MBA Program Page', path: '/admin/cms/programs/mba' },
-        { name: 'BBA Program Page', path: '/admin/cms/programs/bba' },
-      ]
-    },
-    {
-      title: 'Examinations',
-      icon: <BookOpen className="w-5 h-5" />,
-      links: [
-        { name: 'Manage Examinations Page', path: '/admin/cms/examinations' },
-      ]
-    },
-    {
-      title: 'Admissions',
-      icon: <Award className="w-5 h-5" />,
-      links: [
-        { name: 'Manage Admissions Page', path: '/admin/cms/admissions' },
-      ]
-    },
-    {
-      title: 'Placement',
-      icon: <Briefcase className="w-5 h-5" />,
-      links: [
-        { name: 'Manage Placement Page', path: '/admin/cms/placement-page' },
-      ]
-    },
-    {
-      title: 'Contact Us',
-      icon: <Phone className="w-5 h-5" />,
-      links: [
-        { name: 'Manage Contact Page', path: '/admin/cms/contact-page' },
-      ]
-    },
-    {
-      title: 'Legal & Policies',
-      icon: <ShieldCheck className="w-5 h-5" />,
-      links: [
-        { name: 'Manage Privacy Policy', path: '/admin/cms/privacy-policy' },
-        { name: 'Manage Terms & Conditions', path: '/admin/cms/terms-and-conditions' },
-        { name: 'Manage FAQ Page', path: '/admin/cms/faq' },
-      ]
-    },
-    {
-      title: 'Campus Life',
-      icon: <Globe className="w-5 h-5" />,
-      links: [
-        { name: 'Manage Gallery Page', path: '/admin/cms/gallery' },
-        { name: 'Manage Events Page', path: '/admin/cms/events' },
-        { name: 'Manage Blogs Page', path: '/admin/cms/blogs' },
       ]
     },
     {
@@ -106,11 +44,21 @@ const Sidebar = () => {
       ]
     },
     {
-      title: 'Faculty',
-      icon: <Users className="w-5 h-5" />,
+      title: 'Academics',
+      icon: <BookOpen className="w-5 h-5" />,
       links: [
         { name: 'Faculty Members', path: '/admin/cms/faculty' },
         { name: 'Alumni Page Management', path: '/admin/cms/alumni' },
+        { name: 'Manage Placement Page', path: '/admin/cms/placement-page' },
+        { name: 'Manage Examinations Page', path: '/admin/cms/examinations' },
+      ]
+    },
+    {
+      title: 'Programs',
+      icon: <GraduationCap className="w-5 h-5" />,
+      links: [
+        { name: 'MBA Program Page', path: '/admin/cms/programs/mba' },
+        { name: 'BBA Program Page', path: '/admin/cms/programs/bba' },
       ]
     },
     {
@@ -120,6 +68,40 @@ const Sidebar = () => {
         { name: 'Hero Section', path: '/admin/cms/facilities/hero' },
         { name: 'Institutional Resources', path: '/admin/cms/facilities/institutional-resources' },
         { name: 'Clubs', path: '/admin/cms/facilities/clubs' },
+      ]
+    },
+    {
+      title: 'Admissions',
+      icon: <Award className="w-5 h-5" />,
+      links: [
+        { name: 'Manage Admissions Page', path: '/admin/cms/admissions' },
+      ]
+    },
+    {
+      title: 'Events & Blogs',
+      icon: <Newspaper className="w-5 h-5" />,
+      links: [
+        { name: 'Manage Events Page', path: '/admin/cms/events' },
+        { name: 'Manage Blogs Page', path: '/admin/cms/blogs' },
+        { name: 'Manage Gallery Page', path: '/admin/cms/gallery' },
+      ]
+    },
+    {
+      title: 'Contact & Policies',
+      icon: <ShieldCheck className="w-5 h-5" />,
+      links: [
+        { name: 'Manage Contact Page', path: '/admin/cms/contact-page' },
+        { name: 'Manage FAQ Page', path: '/admin/cms/faq' },
+        { name: 'Manage Privacy Policy', path: '/admin/cms/privacy-policy' },
+        { name: 'Manage Terms & Conditions', path: '/admin/cms/terms-and-conditions' },
+      ]
+    },
+    {
+      title: 'Global Content',
+      icon: <Globe className="w-5 h-5" />,
+      links: [
+        { name: 'Header & Navbar', path: '/admin/cms/header' },
+        { name: 'Footer', path: '/admin/cms/footer' },
       ]
     }
   ];
