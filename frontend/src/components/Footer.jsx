@@ -10,6 +10,7 @@ const Footer = ({ previewData }) => {
   const [data, setData] = useState({
     description: 'Empowering global leaders through intellectual rigor and strategic excellence since 1998.',
     socialLinks: { instagram: '#', facebook: '#', whatsapp: '#' },
+    programs: [],
     contactInfo: { address: '', email: '', phone: '' },
     copyrightText: '© 2024 KMCT School of Business. All rights reserved. Accredited by AACSB & AMBA.'
   });
@@ -26,7 +27,6 @@ const Footer = ({ previewData }) => {
           if (response.data) {
             let fetched = { ...response.data };
             if (fetched.quickLinks) delete fetched.quickLinks;
-            if (fetched.programs) delete fetched.programs;
             setData(fetched);
           }
         } catch (error) {
@@ -58,14 +58,7 @@ const Footer = ({ previewData }) => {
     );
   }
 
-  const { description, socialLinks, contactInfo, copyrightText } = data;
-
-  const staticPrograms = [
-    { label: 'MBA Full-time', url: '/programs/mba' },
-    { label: 'Executive MBA', url: '/programs/mba' },
-    { label: 'BBA Program', url: '/programs/bba' },
-    { label: 'PhD in Management', url: '/programs/mba' }
-  ];
+  const { description, socialLinks, programs, contactInfo, copyrightText } = data;
 
   const staticQuickLinks = [
     { label: 'Programs', url: '/programs' },
@@ -182,13 +175,13 @@ const Footer = ({ previewData }) => {
               PROGRAMS
             </h4>
             <ul className="flex flex-col gap-4 text-sm text-secondary ">
-              {staticPrograms.map((prog, idx) => (
-                <li key={idx}>
-                  <Link href={prog.url} className="hover:text-white transition-colors">
-                    {prog.label}
-                  </Link>
+              {programs && programs.length > 0 ? programs.map((prog, idx) => (
+                <li key={idx} className="hover:text-white transition-colors cursor-default">
+                  {prog.label}
                 </li>
-              ))}
+              )) : (
+                <li className="text-gray-500 italic text-xs">No programs configured.</li>
+              )}
             </ul>
           </motion.div>
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Eye, Save, Monitor, Tablet, Smartphone, X, RefreshCw, Plus, Trash2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
-import Loader from '../../../components/Loader';
+import AdminSkeleton from './components/AdminSkeleton';
 import FooterPreview from '../../../components/Footer';
 import SectionForm from './components/SectionForm';
 import PageHeader from './components/PageHeader';
@@ -19,6 +19,7 @@ const Toast = Swal.mixin({
 const ManageFooter = () => {
   const [description, setDescription] = useState('');
   const [socialLinks, setSocialLinks] = useState({ instagram: '', facebook: '', whatsapp: '' });
+  const [programs, setPrograms] = useState([]);
   const [contactInfo, setContactInfo] = useState({ address: '', email: '', phone: '' });
   const [copyrightText, setCopyrightText] = useState('');
 
@@ -36,6 +37,7 @@ const ManageFooter = () => {
       const { data } = await api.get('/cms/footer');
       setDescription(data.description || '');
       setSocialLinks(data.socialLinks || { instagram: '', facebook: '', whatsapp: '' });
+      setPrograms(data.programs || []);
       setContactInfo(data.contactInfo || { address: '', email: '', phone: '' });
       setCopyrightText(data.copyrightText || '');
     } catch (error) {
@@ -56,7 +58,7 @@ const ManageFooter = () => {
     setIsSaving(true);
     try {
       await api.put('/cms/footer', {
-        description, socialLinks, contactInfo, copyrightText
+        description, socialLinks, programs, contactInfo, copyrightText
       }, { hideLoader: true });
       Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
     } catch (error) {
@@ -73,6 +75,12 @@ const ManageFooter = () => {
     const defaults = {
       description: 'Empowering global leaders through intellectual rigor and strategic excellence since 1998.',
       socialLinks: { instagram: '#', facebook: '#', whatsapp: '#' },
+      programs: [
+        { label: 'MBA Full-time' },
+        { label: 'Executive MBA' },
+        { label: 'BBA Program' },
+        { label: 'PhD in Management' }
+      ],
       contactInfo: {
         address: 'KMCT Hills, Kerala, India',
         email: 'admissions@ksbm.ac.in',
@@ -82,16 +90,29 @@ const ManageFooter = () => {
     };
     setDescription(defaults.description);
     setSocialLinks(defaults.socialLinks);
+    setPrograms(defaults.programs);
     setContactInfo(defaults.contactInfo);
     setCopyrightText(defaults.copyrightText);
     Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
   };
 
-  if (isLoading) return (
-    <div className="flex-1 flex items-center justify-center h-full min-h-[60vh]">
-      <Loader fullScreen={false} transparent={true} />
-    </div>
-  );
+  const handleLinkChange = (array, setArray, index, field, value) => {
+    const updated = [...array];
+    updated[index] = { ...updated[index], [field]: value };
+    setArray(updated);
+  };
+
+  const addLink = (array, setArray) => {
+    setArray([...array, { label: '', url: '' }]);
+  };
+
+  const removeLink = (array, setArray, index) => {
+    const updated = [...array];
+    updated.splice(index, 1);
+    setArray(updated);
+  };
+
+  if (isLoading) return <AdminSkeleton />;
 
   return (
     <div className="space-y-6 w-full">
@@ -119,7 +140,7 @@ const ManageFooter = () => {
           </div>
           <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center items-end">
             <div className={`bg-white shadow-xl w-full mt-auto transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <FooterPreview previewData={{ description, socialLinks, contactInfo, copyrightText, previewDevice: previewMode }} />
+              <FooterPreview previewData={{ description, socialLinks, programs, contactInfo, copyrightText, previewDevice: previewMode }} />
             </div>
           </div>
         </div>
@@ -148,6 +169,31 @@ const ManageFooter = () => {
               <input type="text" value={socialLinks.whatsapp} onChange={e => setSocialLinks({...socialLinks, whatsapp: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" />
             </div>
           </div>
+        </div>
+      </SectionForm>
+
+      <SectionForm title="Programs Links">
+        <div className="flex justify-between items-center mb-4">
+          <p className="text-xs text-gray-500">Manage the program links displayed in the footer.</p>
+          <button onClick={() => addLink(programs, setPrograms)} className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">
+            <Plus className="w-4 h-4" /> Add Link
+          </button>
+        </div>
+        <div className="space-y-3">
+          {programs.map((link, idx) => (
+            <div key={idx} className="flex flex-col gap-1 bg-[#F5F5F9] p-3 rounded-lg border border-gray-200">
+              <div className="flex items-center gap-3">
+                <input type="text" placeholder="Program Name" value={link.label || ''} onChange={e => handleLinkChange(programs, setPrograms, idx, 'label', e.target.value)} maxLength={25} className="w-full p-2.5 bg-white border border-[#D9DEE3] rounded-md text-sm outline-none focus:ring-1 focus:ring-primary" />
+                <button onClick={() => removeLink(programs, setPrograms, idx)} className="p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors shrink-0">
+                  <Trash2 className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="text-right text-xs text-gray-400">
+                {(link.label || '').length} / 25
+              </div>
+            </div>
+          ))}
+          {programs.length === 0 && <p className="text-sm text-gray-400 text-center py-2">No programs added.</p>}
         </div>
       </SectionForm>
 
