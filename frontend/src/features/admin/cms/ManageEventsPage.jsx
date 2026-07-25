@@ -1,6 +1,7 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, ChevronUp, ChevronDown, Eye, Monitor, Tablet, Smartphone, X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Plus, Trash2, ChevronUp, ChevronDown, Eye, Monitor, Tablet, Smartphone, X, FileText, Info, Calendar, Sparkles, Music, Share2, Camera, Layout } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
@@ -22,12 +23,34 @@ const ManageEventsPage = () => {
   const [saving, setSaving] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
+  const [activeTab, setActiveTab] = useState('hero');
+  const tabsContainerRef = useRef(null);
+
+  const tabs = [
+    { id: 'hero', label: 'Hero Banner', icon: <FileText className="w-4 h-4" /> },
+    { id: 'about', label: 'About Section', icon: <Info className="w-4 h-4" /> },
+    { id: 'upcoming', label: 'Upcoming Events', icon: <Calendar className="w-4 h-4" /> },
+    { id: 'highlighted', label: 'Highlighted Programs', icon: <Sparkles className="w-4 h-4" /> },
+    { id: 'essence', label: 'Essence of Culture', icon: <Music className="w-4 h-4" /> },
+    { id: 'stayConnected', label: 'Stay Connected', icon: <Share2 className="w-4 h-4" /> },
+    { id: 'moments', label: 'Moments Captured', icon: <Camera className="w-4 h-4" /> },
+    { id: 'footer', label: 'Footer Graphic', icon: <Layout className="w-4 h-4" /> }
+  ];
 
   const defaults = {
     hero: {
       title: 'THE SPIRIT OF CULTURE',
       subtitle: 'Experience the vibrancy and dynamic energy of our college campus. From cultural extravaganzas to technical symposiums, our events are the heartbeat of student life, fostering creativity, leadership, and lifelong memories.',
       backgroundImage: '/assets/Images/Group 250.png'
+    },
+    about: {
+      subheading: 'About',
+      heading: 'THE SPIRIT OF CULTURE',
+      paragraph1: 'Discover a celebration where creativity knows no limits and every performance tells a story worth remembering. Kaleido is more than a cultural festival—it\'s a vibrant platform where passion meets purpose, traditions blend with innovation, and talent shines without boundaries. Bringing together students, artists, performers, and creative minds from diverse backgrounds, the festival transforms the campus into a spectacular stage filled with energy, color, and inspiration.',
+      paragraph2: 'Immerse yourself in a world of mesmerizing dance performances, soul-stirring music, captivating theatre, expressive fine arts, photography, fashion, literature, and countless cultural experiences that celebrate the richness of artistic expression. Whether you\'re stepping into the spotlight as a performer, competing to showcase your skills, cheering for your peers, or simply enjoying the electrifying atmosphere, every moment at Kaleido is designed to inspire, connect, and create lasting memories.',
+      image: '/assets/Images/image 91.png',
+      brochureUrl: '',
+      calendarUrl: ''
     },
     upcomingEvents: {
       heading: 'THE UPCOMING EVENTS',
@@ -82,6 +105,7 @@ const ManageEventsPage = () => {
           const d = res.data;
           return {
             hero: { ...prev.hero, ...(d.hero || {}) },
+            about: { ...prev.about, ...(d.about || {}) },
             upcomingEvents: { 
               ...prev.upcomingEvents, 
               ...(d.upcomingEvents || {}),
@@ -219,226 +243,331 @@ const ManageEventsPage = () => {
         </div>
       )}
 
-      {/* Hero Section */}
-      <SectionForm title="Hero Banner">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-500">Page Title</label>
-              <input type="text" value={formData.hero.title} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, title: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-500">Subtitle</label>
-              <textarea rows={4} value={formData.hero.subtitle} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, subtitle: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
-            </div>
-          </div>
-          <div>
-            <label className="text-xs font-semibold text-gray-500 mb-2 block">Hero Background Image</label>
-            <LogoUploader
-              label="Banner Background"
-              currentImage={formData.hero.backgroundImage}
-              onImageSelected={(url) => setFormData({ ...formData, hero: { ...formData.hero, backgroundImage: url } })}
-            />
-          </div>
-        </div>
-      </SectionForm>
-
-      {/* Upcoming Events */}
-      <SectionForm title="Upcoming Events">
-        <div className="space-y-4">
-          <div className="space-y-2 mb-6">
-            <label className="text-xs font-semibold text-gray-500">Section Heading</label>
-            <input type="text" value={formData.upcomingEvents.heading} onChange={e => setFormData({ ...formData, upcomingEvents: { ...formData.upcomingEvents, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-          </div>
-
-          <div className="flex justify-end mb-4">
-            <button onClick={() => handleAddArrayItem('upcomingEvents', 'events', { title: '', description: '', date: '', month: '', img: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
-              <Plus className="w-4 h-4" /> Add Event
+      {/* Tabs Navigation */}
+      <div className="relative flex items-center gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
+        <div
+          ref={tabsContainerRef}
+          className="flex overflow-x-auto gap-2 scroll-smooth flex-1 py-1 px-1 custom-scrollbar"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${
+                activeTab === tab.id
+                  ? 'bg-primary text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
+              }`}
+            >
+              {tab.icon}
+              <span>{tab.label}</span>
             </button>
-          </div>
+          ))}
+        </div>
+      </div>
 
-          <div className="space-y-4">
-            {formData.upcomingEvents.events?.map((item, idx) => (
-              <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50/50 relative group hover:border-primary/30 transition-all">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-bold text-gray-500 uppercase">Event #{idx + 1}</span>
-                  <div className="flex items-center gap-1">
-                    <button onClick={() => handleMoveArrayItem('upcomingEvents', 'events', idx, -1)} disabled={idx === 0} className="p-1.5 text-gray-400 hover:text-gray-700 disabled:opacity-30"><ChevronUp className="w-4 h-4" /></button>
-                    <button onClick={() => handleMoveArrayItem('upcomingEvents', 'events', idx, 1)} disabled={idx === (formData.upcomingEvents.events?.length - 1)} className="p-1.5 text-gray-400 hover:text-gray-700 disabled:opacity-30"><ChevronDown className="w-4 h-4" /></button>
-                    <button onClick={() => handleRemoveArrayItem('upcomingEvents', 'events', idx)} className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg ml-2"><Trash2 className="w-4 h-4" /></button>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+          className="w-full space-y-6 pb-12"
+        >
+          {/* Hero Section */}
+          {activeTab === 'hero' && (
+            <SectionForm title="Hero Banner">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-gray-500">Page Title</label>
+                    <input type="text" value={formData.hero.title} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, title: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-gray-500">Subtitle</label>
+                    <textarea rows={4} value={formData.hero.subtitle} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, subtitle: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
                   </div>
                 </div>
-                
-                <div className="flex flex-col md:flex-row gap-5">
-                  <div className="w-full md:w-1/3 shrink-0">
-                    <label className="text-xs font-semibold text-gray-500 mb-2 block">Event Poster/Image</label>
-                    <LogoUploader
-                      label="Upload Poster"
-                      currentImage={item.img}
-                      onImageSelected={(url) => handleUpdateArray('upcomingEvents', 'events', idx, 'img', url)}
-                    />
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 mb-2 block">Hero Background Image</label>
+                  <LogoUploader
+                    label="Banner Background"
+                    currentImage={formData.hero.backgroundImage}
+                    onImageSelected={(url) => setFormData({ ...formData, hero: { ...formData.hero, backgroundImage: url } })}
+                  />
+                </div>
+              </div>
+            </SectionForm>
+          )}
+
+          {/* About Section */}
+          {activeTab === 'about' && (
+            <SectionForm title="About Section">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold text-gray-500">Subheading (Ribbon)</label>
+                      <input type="text" value={formData.about?.subheading || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, subheading: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold text-gray-500">Main Heading</label>
+                      <input type="text" value={formData.about?.heading || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, heading: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                    </div>
                   </div>
-                  <div className="flex-1 space-y-4">
-                    <div className="space-y-1">
-                      <label className="text-xs font-semibold text-gray-500">Event Title</label>
-                      <input type="text" value={item.title} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'title', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. CELEBRITY VISIT" />
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-gray-500">Paragraph 1</label>
+                    <textarea rows={3} value={formData.about?.paragraph1 || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, paragraph1: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-gray-500">Paragraph 2</label>
+                    <textarea rows={3} value={formData.about?.paragraph2 || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, paragraph2: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold text-gray-500">Event Brochure URL (Optional)</label>
+                      <input type="text" placeholder="https://... or /assets/..." value={formData.about?.brochureUrl || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, brochureUrl: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-semibold text-gray-500">Event Description</label>
-                      <textarea rows={3} value={item.description} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'description', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold text-gray-500">Download Calendar URL (Optional)</label>
+                      <input type="text" placeholder="https://... or /assets/..." value={formData.about?.calendarUrl || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, calendarUrl: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-xs font-semibold text-gray-500">Date</label>
-                        <input type="text" value={item.date} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'date', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. 12" />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 mb-2 block">About Featured Image</label>
+                  <LogoUploader
+                    label="About Section Image"
+                    currentImage={formData.about?.image}
+                    onImageSelected={(url) => setFormData({ ...formData, about: { ...formData.about, image: url } })}
+                  />
+                </div>
+              </div>
+            </SectionForm>
+          )}
+
+          {/* Upcoming Events */}
+          {activeTab === 'upcoming' && (
+            <SectionForm title="Upcoming Events">
+              <div className="space-y-4">
+                <div className="space-y-2 mb-6">
+                  <label className="text-xs font-semibold text-gray-500">Section Heading</label>
+                  <input type="text" value={formData.upcomingEvents.heading} onChange={e => setFormData({ ...formData, upcomingEvents: { ...formData.upcomingEvents, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                </div>
+
+                <div className="flex justify-end mb-4">
+                  <button onClick={() => handleAddArrayItem('upcomingEvents', 'events', { title: '', description: '', date: '', month: '', img: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
+                    <Plus className="w-4 h-4" /> Add Event
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {formData.upcomingEvents.events?.map((item, idx) => (
+                    <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50/50 relative group hover:border-primary/30 transition-all">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-xs font-bold text-gray-500 uppercase">Event #{idx + 1}</span>
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => handleMoveArrayItem('upcomingEvents', 'events', idx, -1)} disabled={idx === 0} className="p-1.5 text-gray-400 hover:text-gray-700 disabled:opacity-30"><ChevronUp className="w-4 h-4" /></button>
+                          <button onClick={() => handleMoveArrayItem('upcomingEvents', 'events', idx, 1)} disabled={idx === (formData.upcomingEvents.events?.length - 1)} className="p-1.5 text-gray-400 hover:text-gray-700 disabled:opacity-30"><ChevronDown className="w-4 h-4" /></button>
+                          <button onClick={() => handleRemoveArrayItem('upcomingEvents', 'events', idx)} className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg ml-2"><Trash2 className="w-4 h-4" /></button>
+                        </div>
                       </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-semibold text-gray-500">Month</label>
-                        <input type="text" value={item.month} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'month', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. OCT" />
+                      
+                      <div className="flex flex-col md:flex-row gap-5">
+                        <div className="w-full md:w-1/3 shrink-0">
+                          <label className="text-xs font-semibold text-gray-500 mb-2 block">Event Poster/Image</label>
+                          <LogoUploader
+                            label="Upload Poster"
+                            currentImage={item.img}
+                            onImageSelected={(url) => handleUpdateArray('upcomingEvents', 'events', idx, 'img', url)}
+                          />
+                        </div>
+                        <div className="flex-1 space-y-4">
+                          <div className="space-y-1">
+                            <label className="text-xs font-semibold text-gray-500">Event Title</label>
+                            <input type="text" value={item.title} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'title', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. CELEBRITY VISIT" />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-xs font-semibold text-gray-500">Event Description</label>
+                            <textarea rows={3} value={item.description} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'description', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                              <label className="text-xs font-semibold text-gray-500">Date</label>
+                              <input type="text" value={item.date} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'date', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. 12" />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-xs font-semibold text-gray-500">Month</label>
+                              <input type="text" value={item.month} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'month', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. OCT" />
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </SectionForm>
+            </SectionForm>
+          )}
 
-      {/* Highlighted Programs Carousel */}
-      <SectionForm title="Highlighted Programs (3D Carousel)">
-        <div className="space-y-4">
-          <div className="space-y-2 mb-6">
-            <label className="text-xs font-semibold text-gray-500">Section Heading</label>
-            <input type="text" value={formData.highlightedPrograms.heading} onChange={e => setFormData({ ...formData, highlightedPrograms: { ...formData.highlightedPrograms, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-          </div>
-
-          <div className="flex justify-end mb-4">
-            <button onClick={() => handleAddArrayItem('highlightedPrograms', 'images', { img: '', alt: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
-              <Plus className="w-4 h-4" /> Add Image
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {formData.highlightedPrograms.images?.map((item, idx) => (
-              <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-bold text-gray-500 uppercase">Image #{idx + 1}</span>
-                  <button onClick={() => handleRemoveArrayItem('highlightedPrograms', 'images', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
+          {/* Highlighted Programs Carousel */}
+          {activeTab === 'highlighted' && (
+            <SectionForm title="Highlighted Programs (3D Carousel)">
+              <div className="space-y-4">
+                <div className="space-y-2 mb-6">
+                  <label className="text-xs font-semibold text-gray-500">Section Heading</label>
+                  <input type="text" value={formData.highlightedPrograms.heading} onChange={e => setFormData({ ...formData, highlightedPrograms: { ...formData.highlightedPrograms, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
                 </div>
-                <LogoUploader
-                  currentImage={item.img}
-                  onImageSelected={(url) => handleUpdateArray('highlightedPrograms', 'images', idx, 'img', url)}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </SectionForm>
-      
-      {/* Essence of Culture */}
-      <SectionForm title="Essence of Culture (Photo Collage)">
-        <div className="space-y-4">
-          <div className="space-y-2 mb-6">
-            <label className="text-xs font-semibold text-gray-500">Section Heading</label>
-            <input type="text" value={formData.essenceOfCulture.heading} onChange={e => setFormData({ ...formData, essenceOfCulture: { ...formData.essenceOfCulture, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-          </div>
 
-          <div className="flex justify-end mb-4">
-            <button onClick={() => handleAddArrayItem('essenceOfCulture', 'items', { img: '', category: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
-              <Plus className="w-4 h-4" /> Add Item
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {formData.essenceOfCulture.items?.map((item, idx) => (
-              <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group flex flex-col space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold text-gray-500 uppercase">Item #{idx + 1}</span>
-                  <button onClick={() => handleRemoveArrayItem('essenceOfCulture', 'items', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
+                <div className="flex justify-end mb-4">
+                  <button onClick={() => handleAddArrayItem('highlightedPrograms', 'images', { img: '', alt: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
+                    <Plus className="w-4 h-4" /> Add Image
+                  </button>
                 </div>
-                <input type="text" value={item.category} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'category', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="Category (e.g. Dance)" />
-                <LogoUploader
-                  currentImage={item.img}
-                  onImageSelected={(url) => handleUpdateArray('essenceOfCulture', 'items', idx, 'img', url)}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </SectionForm>
-      
-      {/* Stay Connected */}
-      <SectionForm title="Stay Connected (Posters)">
-        <div className="space-y-4">
-          <div className="space-y-2 mb-6">
-            <label className="text-xs font-semibold text-gray-500">Section Heading</label>
-            <input type="text" value={formData.stayConnected.heading} onChange={e => setFormData({ ...formData, stayConnected: { ...formData.stayConnected, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-          </div>
-          <div className="flex justify-end mb-4">
-            <button onClick={() => handleAddArrayItem('stayConnected', 'posters', { img: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
-              <Plus className="w-4 h-4" /> Add Poster
-            </button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {formData.stayConnected.posters?.map((item, idx) => (
-              <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-bold text-gray-500 uppercase">Poster #{idx + 1}</span>
-                  <button onClick={() => handleRemoveArrayItem('stayConnected', 'posters', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
-                </div>
-                <LogoUploader
-                  currentImage={item.img}
-                  onImageSelected={(url) => handleUpdateArray('stayConnected', 'posters', idx, 'img', url)}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </SectionForm>
-      
-      {/* Moments Captured */}
-      <SectionForm title="Moments Captured (Masonry Grid)">
-        <div className="space-y-4">
-          <div className="space-y-2 mb-6">
-            <label className="text-xs font-semibold text-gray-500">Section Heading</label>
-            <input type="text" value={formData.momentsCaptured.heading} onChange={e => setFormData({ ...formData, momentsCaptured: { ...formData.momentsCaptured, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-          </div>
-          <div className="flex justify-end mb-4">
-            <button onClick={() => handleAddArrayItem('momentsCaptured', 'images', { img: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
-              <Plus className="w-4 h-4" /> Add Moment
-            </button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {formData.momentsCaptured.images?.map((item, idx) => (
-              <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-bold text-gray-500 uppercase">Moment #{idx + 1}</span>
-                  <button onClick={() => handleRemoveArrayItem('momentsCaptured', 'images', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
-                </div>
-                <LogoUploader
-                  currentImage={item.img}
-                  onImageSelected={(url) => handleUpdateArray('momentsCaptured', 'images', idx, 'img', url)}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </SectionForm>
 
-      {/* Custom Footer Graphic */}
-      <SectionForm title="Custom Footer Graphic">
-        <div className="space-y-4">
-          <label className="text-xs font-semibold text-gray-500">Footer Banner Image</label>
-          <div className="p-4 rounded-md border border-gray-200 bg-gray-50 max-w-sm">
-            <LogoUploader
-              currentImage={formData.footerGraphic}
-              onImageSelected={(url) => setFormData({ ...formData, footerGraphic: url })}
-            />
-          </div>
-        </div>
-      </SectionForm>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {formData.highlightedPrograms.images?.map((item, idx) => (
+                    <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs font-bold text-gray-500 uppercase">Image #{idx + 1}</span>
+                        <button onClick={() => handleRemoveArrayItem('highlightedPrograms', 'images', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
+                      </div>
+                      <LogoUploader
+                        currentImage={item.img}
+                        onImageSelected={(url) => handleUpdateArray('highlightedPrograms', 'images', idx, 'img', url)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </SectionForm>
+          )}
+          
+          {/* Essence of Culture */}
+          {activeTab === 'essence' && (
+            <SectionForm title="Essence of Culture (Photo Collage)">
+              <div className="space-y-4">
+                <div className="space-y-2 mb-6">
+                  <label className="text-xs font-semibold text-gray-500">Section Heading</label>
+                  <input type="text" value={formData.essenceOfCulture.heading} onChange={e => setFormData({ ...formData, essenceOfCulture: { ...formData.essenceOfCulture, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                </div>
 
+                <div className="flex justify-end mb-4">
+                  <button onClick={() => handleAddArrayItem('essenceOfCulture', 'items', { img: '', category: '', description: '', programs: [] })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
+                    <Plus className="w-4 h-4" /> Add Item
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {formData.essenceOfCulture.items?.map((item, idx) => (
+                    <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group flex flex-col space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold text-gray-500 uppercase">Item #{idx + 1}</span>
+                        <button onClick={() => handleRemoveArrayItem('essenceOfCulture', 'items', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
+                      </div>
+                      <div>
+                        <label className="text-xs font-semibold text-gray-500">Category Name</label>
+                        <input type="text" value={item.category} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'category', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="Category (e.g. Dance)" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-semibold text-gray-500">Category Description</label>
+                        <textarea rows={2} value={item.description || ''} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'description', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="Short description of this cultural category..." />
+                      </div>
+                      <div>
+                        <label className="text-xs font-semibold text-gray-500">Programs List (Comma-separated)</label>
+                        <input type="text" value={Array.isArray(item.programs) ? item.programs.join(', ') : (item.programs || '')} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'programs', e.target.value.split(',').map(s => s.trim()))} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="e.g. Solo Dance, Folk Dance, Group Classical" />
+                      </div>
+                      <LogoUploader
+                        currentImage={item.img}
+                        onImageSelected={(url) => handleUpdateArray('essenceOfCulture', 'items', idx, 'img', url)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </SectionForm>
+          )}
+          
+          {/* Stay Connected */}
+          {activeTab === 'stayConnected' && (
+            <SectionForm title="Stay Connected (Posters)">
+              <div className="space-y-4">
+                <div className="space-y-2 mb-6">
+                  <label className="text-xs font-semibold text-gray-500">Section Heading</label>
+                  <input type="text" value={formData.stayConnected.heading} onChange={e => setFormData({ ...formData, stayConnected: { ...formData.stayConnected, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                </div>
+                <div className="flex justify-end mb-4">
+                  <button onClick={() => handleAddArrayItem('stayConnected', 'posters', { img: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
+                    <Plus className="w-4 h-4" /> Add Poster
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {formData.stayConnected.posters?.map((item, idx) => (
+                    <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs font-bold text-gray-500 uppercase">Poster #{idx + 1}</span>
+                        <button onClick={() => handleRemoveArrayItem('stayConnected', 'posters', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
+                      </div>
+                      <LogoUploader
+                        currentImage={item.img}
+                        onImageSelected={(url) => handleUpdateArray('stayConnected', 'posters', idx, 'img', url)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </SectionForm>
+          )}
+          
+          {/* Moments Captured */}
+          {activeTab === 'moments' && (
+            <SectionForm title="Moments Captured (Masonry Grid)">
+              <div className="space-y-4">
+                <div className="space-y-2 mb-6">
+                  <label className="text-xs font-semibold text-gray-500">Section Heading</label>
+                  <input type="text" value={formData.momentsCaptured.heading} onChange={e => setFormData({ ...formData, momentsCaptured: { ...formData.momentsCaptured, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                </div>
+                <div className="flex justify-end mb-4">
+                  <button onClick={() => handleAddArrayItem('momentsCaptured', 'images', { img: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
+                    <Plus className="w-4 h-4" /> Add Moment
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {formData.momentsCaptured.images?.map((item, idx) => (
+                    <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs font-bold text-gray-500 uppercase">Moment #{idx + 1}</span>
+                        <button onClick={() => handleRemoveArrayItem('momentsCaptured', 'images', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
+                      </div>
+                      <LogoUploader
+                        currentImage={item.img}
+                        onImageSelected={(url) => handleUpdateArray('momentsCaptured', 'images', idx, 'img', url)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </SectionForm>
+          )}
+
+          {/* Custom Footer Graphic */}
+          {activeTab === 'footer' && (
+            <SectionForm title="Custom Footer Graphic">
+              <div className="space-y-4">
+                <label className="text-xs font-semibold text-gray-500">Footer Banner Image</label>
+                <div className="p-4 rounded-md border border-gray-200 bg-gray-50 max-w-sm">
+                  <LogoUploader
+                    currentImage={formData.footerGraphic}
+                    onImageSelected={(url) => setFormData({ ...formData, footerGraphic: url })}
+                  />
+                </div>
+              </div>
+            </SectionForm>
+          )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };

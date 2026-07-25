@@ -49,7 +49,7 @@ const EventsMoments = ({ momentsCaptured }) => {
               >
                 {[...momentsCaptured.images, ...momentsCaptured.images].map((item, idx) => (
                   <div key={`col1-${idx}`} className="w-[90%] md:w-[85%] mx-auto rounded-xl overflow-hidden border border-white/5 transition-colors">
-                    <img src={item.img} alt="Moment" className="w-full h-[240px] lg:h-[320px] object-cover hover:scale-105 transition-transform duration-500" />
+                    <img src={item.img || "https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop"} alt="Moment" className="w-full h-[240px] lg:h-[320px] object-cover hover:scale-105 transition-transform duration-500" />
                   </div>
                 ))}
               </motion.div>
@@ -64,7 +64,7 @@ const EventsMoments = ({ momentsCaptured }) => {
               >
                 {[...momentsCaptured.images, ...momentsCaptured.images].reverse().map((item, idx) => (
                   <div key={`col2-${idx}`} className="w-[90%] md:w-[85%] mx-auto rounded-xl overflow-hidden border border-white/5 transition-colors">
-                    <img src={item.img} alt="Moment" className="w-full h-[240px] lg:h-[320px] object-cover hover:scale-105 transition-transform duration-500" />
+                    <img src={item.img || "https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop"} alt="Moment" className="w-full h-[240px] lg:h-[320px] object-cover hover:scale-105 transition-transform duration-500" />
                   </div>
                 ))}
               </motion.div>
@@ -79,7 +79,7 @@ const EventsMoments = ({ momentsCaptured }) => {
               >
                 {[...momentsCaptured.images, ...momentsCaptured.images].map((item, idx) => (
                   <div key={`col3-${idx}`} className="w-[90%] md:w-[85%] mx-auto rounded-xl overflow-hidden border border-white/5 hover:border-pink-500/40 transition-colors">
-                    <img src={item.img} alt="Moment" className="w-full h-[240px] lg:h-[320px] object-cover hover:scale-105 transition-transform duration-500" />
+                    <img src={item.img || "https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop"} alt="Moment" className="w-full h-[240px] lg:h-[320px] object-cover hover:scale-105 transition-transform duration-500" />
                   </div>
                 ))}
               </motion.div>

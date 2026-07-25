@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 const EventsCarousel = ({ highlightedPrograms, carouselIndex, setCarouselIndex }) => {
   const handleNext = () => setCarouselIndex((prev) => (prev + 1) % (highlightedPrograms.images.length || 1));
   const handlePrev = () => setCarouselIndex((prev) => (prev - 1 + highlightedPrograms.images.length) % (highlightedPrograms.images.length || 1));
-  const baseImages = [
+  const baseImages = highlightedPrograms?.images?.length > 0 ? highlightedPrograms.images : [
     { img: '/assets/Images/Home/img1.jpeg' },
     { img: '/assets/Images/Home/img2.jpeg' },
     { img: '/assets/Images/Home/img3.jpeg' },
@@ -142,7 +142,7 @@ const EventsCarousel = ({ highlightedPrograms, carouselIndex, setCarouselIndex }
             >
               <div className="w-full h-full shadow-[0_20px_50px_rgba(0,0,0,0.95)] overflow-hidden border border-white/10 flex items-center justify-center bg-black/40">
                 <img
-                  src={item.img}
+                  src={item.img || "/assets/Images/Home/img1.jpeg"}
                   alt="Program"
                   className="w-full h-full object-cover select-none pointer-events-none"
                 />
