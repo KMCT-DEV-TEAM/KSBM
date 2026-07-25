@@ -10,7 +10,7 @@ const AboutCtaSection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/cms/about-us-cta');
+        const response = await api.get('/cms/about-us-cta', { hideLoader: true });
         if (response.data) {
           setData(response.data);
         }

@@ -7,13 +7,13 @@ const AboutHero = () => {
   const [heroData, setHeroData] = useState({
     title: 'Advancing Business Integrity and Innovation.',
     subtitle: 'KMCT School of Business (KSBM) ignites a passion for intellectual discovery and lifelong learning. Empowering each individual to achieve their fullest potential.',
-    backgroundImage: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80'
+    backgroundImage: '/assets/Images/aboutus/about-hero-bg.jpg'
   });
 
   useEffect(() => {
     const fetchHeroData = async () => {
       try {
-        const { data } = await api.get('/cms/about-us-hero');
+        const { data } = await api.get('/cms/about-us-hero', { hideLoader: true });
         if (data) {
           setHeroData({
             title: data.title || heroData.title,

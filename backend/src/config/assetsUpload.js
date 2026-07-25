@@ -21,15 +21,25 @@ if (!fs.existsSync(programsAssetsDir)) {
   fs.mkdirSync(programsAssetsDir, { recursive: true });
 }
 
+const aboutusAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/aboutus');
+if (!fs.existsSync(aboutusAssetsDir)) {
+  fs.mkdirSync(aboutusAssetsDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
+    let targetDir = assetsDir;
     if (req.originalUrl.includes('/upload/programs')) {
-      cb(null, programsAssetsDir);
+      targetDir = programsAssetsDir;
     } else if (req.originalUrl.includes('/upload/home')) {
-      cb(null, homeAssetsDir);
-    } else {
-      cb(null, assetsDir);
+      targetDir = homeAssetsDir;
+    } else if (req.originalUrl.includes('/upload/aboutus')) {
+      targetDir = aboutusAssetsDir;
     }
+    if (!fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
+    cb(null, targetDir);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);

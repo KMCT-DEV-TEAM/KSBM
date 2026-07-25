@@ -31,7 +31,7 @@ const VisionMissionSection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/cms/vision-mission');
+        const response = await api.get('/cms/vision-mission', { hideLoader: true });
         if (response.data) {
           setData(prev => ({ ...prev, ...response.data }));
         }

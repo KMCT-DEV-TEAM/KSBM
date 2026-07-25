@@ -49,7 +49,7 @@ const StatsSection = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await api.get('/cms/about-us-stats');
+        const response = await api.get('/cms/about-us-stats', { hideLoader: true });
         if (response.data && response.data.stats && response.data.stats.length > 0) {
           setStats(response.data.stats);
         }
