@@ -1,6 +1,7 @@
 import Header from './header.model.js';
 import About from './about.model.js';
 import EventsPageModel from './eventsPage.model.js';
+import BlogsPageModel from './blogsPage.model.js';
 import Hero from './hero.model.js';
 import Programs from './programs.model.js';
 import Accreditation from './accreditation.model.js';
@@ -1342,6 +1343,39 @@ export const updateEventsPageSettings = async (req, res) => {
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating Events Page settings', error: error.message });
+  }
+};
+
+// @desc    Get Blogs Page settings
+// @route   GET /api/cms/blogs-page
+// @access  Public
+export const getBlogsPageSettings = async (req, res) => {
+  try {
+    const settings = await BlogsPageModel.getSettings();
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching Blogs Page settings', error: error.message });
+  }
+};
+
+// @desc    Update Blogs Page settings
+// @route   PUT /api/cms/blogs-page
+// @access  Private/Admin
+export const updateBlogsPageSettings = async (req, res) => {
+  try {
+    const fields = ['hero', 'blogs'];
+    const settings = await BlogsPageModel.getSettings();
+    
+    fields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        settings[field] = req.body[field];
+      }
+    });
+
+    const updatedSettings = await settings.save();
+    res.json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating Blogs Page settings', error: error.message });
   }
 };
 

@@ -92,6 +92,7 @@ const Sidebar = () => {
       links: [
         { name: 'Manage Gallery Page', path: '/admin/cms/gallery' },
         { name: 'Manage Events Page', path: '/admin/cms/events' },
+        { name: 'Manage Blogs Page', path: '/admin/cms/blogs' },
       ]
     },
     {

@@ -1,17 +1,23 @@
 "use client";
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import BlogCard from './BlogCard';
 
 const BlogGrid = ({ blogs = [], activeTopic = 'All Topics', onResetFilter }) => {
+  const router = useRouter();
   const [visibleCount, setVisibleCount] = useState(6);
 
   const displayedBlogs = blogs.slice(0, visibleCount);
   const hasMore = visibleCount < blogs.length;
 
-  const handleLoadMore = () => {
-    setVisibleCount(prev => prev + 3);
+  const handleToggleLoad = () => {
+    if (hasMore) {
+      setVisibleCount(prev => prev + 3);
+    } else {
+      setVisibleCount(6);
+    }
   };
 
   return (
@@ -26,7 +32,12 @@ const BlogGrid = ({ blogs = [], activeTopic = 'All Topics', onResetFilter }) => 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14 sm:gap-y-16"
         >
           {displayedBlogs.map((blog, index) => (
-            <BlogCard key={blog.id || index} blog={blog} index={index} />
+            <BlogCard 
+              key={blog._id || blog.id || index} 
+              blog={blog} 
+              index={index} 
+              onClick={() => router.push(`/blogs/${blog._id || blog.id}`)}
+            />
           ))}
         </motion.div>
       </AnimatePresence>
@@ -50,22 +61,28 @@ const BlogGrid = ({ blogs = [], activeTopic = 'All Topics', onResetFilter }) => 
               onResetFilter?.('All Topics');
               setVisibleCount(6);
             }}
-            className="px-6 py-2.5 bg-[#2B3175] text-white font-semibold rounded-lg text-xs sm:text-sm shadow-md hover:bg-[#21265C] transition-all"
+            className="px-6 py-2.5 bg-[#2B3175] text-white font-semibold rounded-lg text-xs sm:text-sm shadow-md hover:bg-[#21265C] transition-all cursor-pointer"
           >
             View All Topics
           </button>
         </motion.div>
       )}
 
-      {/* Load More Insights Button */}
-      {hasMore && (
-        <div className="flex justify-center mt-14 sm:mt-20">
+      {/* Load More / Load Less Insights Text Link - Visible only when total items exceed initial 6 */}
+      {blogs.length > 6 && (
+        <div className="w-full flex justify-center mt-12 sm:mt-16">
           <button
-            onClick={handleLoadMore}
-            className="bg-[#2B3175] hover:bg-[#21265C] text-white px-8 py-3.5 rounded-full text-xs sm:text-sm font-semibold shadow-[0_12px_28px_rgba(43,49,117,0.28)] transition-all duration-300 hover:shadow-[0_16px_35px_rgba(43,49,117,0.38)] hover:-translate-y-0.5 flex items-center gap-2.5 cursor-pointer group"
+            onClick={handleToggleLoad}
+            className="group flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase hover:text-primary/80 transition-colors cursor-pointer bg-transparent border-none p-0"
           >
-            <span>Load More Insights</span>
-            <ArrowUpRight className="w-4 h-4 text-white transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <span>{hasMore ? 'Load More Insights' : 'Load Less Insights'}</span>
+            <ArrowRight
+              className={`w-4 h-4 transition-transform duration-300 ${
+                hasMore
+                  ? 'group-hover:translate-x-1'
+                  : 'rotate-180 group-hover:-translate-x-1'
+              }`}
+            />
           </button>
         </div>
       )}
