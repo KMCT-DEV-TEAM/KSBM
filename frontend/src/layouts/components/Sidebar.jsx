@@ -13,7 +13,7 @@ const logo = '/assets/Images/Header/LOGO__KMCT School of Business Management (1)
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const [openSection, setOpenSection] = useState('Home');
+  const [openSection, setOpenSection] = useState(null);
 
   const toggleSection = (section) => {
     setOpenSection(openSection === section ? null : section);

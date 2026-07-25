@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { Save, Plus, Trash2, GripVertical, AlertCircle, Eye, Monitor, Smartphone, Tablet, RefreshCw, X, Loader2 } from 'lucide-react';
+import { Save, Plus, Trash2, GripVertical, AlertCircle, Eye, EyeOff, Monitor, Smartphone, Tablet, RefreshCw, X, Loader2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
@@ -72,15 +72,16 @@ const ManageHeader = () => {
       variant: 'primary',
       action: async () => {
       setNavItems([
-        { label: 'Home', link: '#home' },
-        { label: 'About Us', link: '#about-us' },
-        { label: 'Campus', link: '#campus' },
-        { label: 'People', link: '#people' },
-        { label: 'Placement', link: '#placement' },
-        { label: 'Programs', link: '#programs' },
-        { label: 'Events', link: '#events' },
-        { label: 'Admission', link: '#admission' },
-        { label: 'Examinations', link: '#examinations' },
+        { label: 'Home', link: '/', isVisible: true },
+        { label: 'About Us', link: '/about', isVisible: true },
+        { label: 'Academics', link: '/faculty', isVisible: true },
+        { label: 'Programs', link: '/programs', isVisible: true },
+        { label: 'Facility', link: '/facilities', isVisible: true },
+        { label: 'Admission', link: '/admissions', isVisible: true },
+        { label: 'Events', link: '/events', isVisible: true },
+        { label: 'Blogs', link: '/blogs', isVisible: true },
+        { label: 'Grievance', link: '/grievance', isVisible: true },
+        { label: 'Mandatory Disclosure', link: '/mandatory-disclosure', isVisible: true },
       ]);
       setActionButton({ text: 'Apply Now', isVisible: true });
       setLogoUrl('');
@@ -304,13 +305,7 @@ const ManageHeader = () => {
         <div className="mb-8 pb-8 border-b border-gray-100">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-bold text-[#1e2869]">Navigation Links</h3>
-            <button
-              onClick={handleOpenAddLinkModal}
-              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
-            >
-              <Plus className="w-4 h-4" />
-              Add Link
-            </button>
+            <span className="text-xs text-gray-400 font-medium bg-gray-100 px-3 py-1 rounded-full">Drag to reorder • Toggle visibility</span>
           </div>
           
           <div className="space-y-3">
@@ -322,7 +317,7 @@ const ManageHeader = () => {
                 onDragEnter={(e) => handleDragEnter(e, index)}
                 onDragEnd={handleDragEnd}
                 onDragOver={(e) => e.preventDefault()}
-                className="flex items-center gap-3 bg-[#F5F5F9] p-3 rounded-lg border border-gray-200 group transition-all"
+                className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${item.isVisible === false ? 'bg-gray-100 border-gray-200 opacity-60' : 'bg-[#F5F5F9] border-gray-200'}`}
               >
                 <div className="cursor-move p-1 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-600 transition-colors shrink-0">
                   <GripVertical className="w-5 h-5" />
@@ -350,11 +345,12 @@ const ManageHeader = () => {
                 </div>
 
                 <button 
-                  onClick={() => removeNavItem(index)}
-                  className="p-2 text-gray-400 hover:text-[#FF3E1D] hover:bg-[#FF3E1D]/10 rounded-md transition-colors"
-                  title="Remove Link"
+                  type="button"
+                  onClick={() => updateNavItem(index, 'isVisible', item.isVisible === false ? true : false)}
+                  className={`p-2 rounded-md transition-colors ${item.isVisible === false ? 'text-gray-500 bg-gray-200 hover:text-gray-700 hover:bg-gray-300' : 'text-primary bg-primary/10 hover:bg-primary/20'}`}
+                  title={item.isVisible === false ? "Show in Navbar" : "Hide from Navbar"}
                 >
-                  <Trash2 className="w-4 h-4" />
+                  {item.isVisible === false ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             ))}

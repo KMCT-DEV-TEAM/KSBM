@@ -58,14 +58,31 @@ const Footer = ({ previewData }) => {
     );
   }
 
-  const { description, socialLinks, programs, contactInfo, copyrightText } = data;
+  const { description, socialLinks, programs, contactInfo, copyrightText, previewDevice } = data;
+
+  const gridClassName = previewDevice === 'mobile'
+    ? 'grid grid-cols-1 gap-12 mb-20'
+    : previewDevice === 'tablet'
+    ? 'grid grid-cols-2 gap-8 mb-20'
+    : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20';
+
+  const bottomClassName = previewDevice === 'mobile'
+    ? 'pt-6 flex flex-col items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10 text-center'
+    : previewDevice === 'tablet'
+    ? 'pt-6 flex flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10 text-left'
+    : 'pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10 text-center md:text-left';
 
   const staticQuickLinks = [
-    { label: 'Programs', url: '/programs' },
-    { label: 'Accreditations', url: '/about' },
+    { label: 'Facility', url: '/facilities' },
+    { label: 'Admission', url: '/admissions' },
     { label: 'Gallery', url: '/gallery' },
     { label: 'FAQ', url: '/faq' },
     { label: 'Contact Us', url: '/contact' }
+  ];
+
+  const staticUsefulLinks = [
+    { label: 'Grievance', url: '/grievance' },
+    { label: 'Mandatory Disclosure', url: '/mandatory-disclosure' }
   ];
 
   const containerVariants = {
@@ -124,7 +141,7 @@ const Footer = ({ previewData }) => {
           whileInView="visible"
           viewport={{ once: false, amount: 0.1 }}
           variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20"
+          className={gridClassName}
         >
 
           {/* Column 1: About & Social */}
@@ -169,29 +186,35 @@ const Footer = ({ previewData }) => {
             </div>
           </motion.div>
 
-          {/* Column 2: Programs */}
-          <motion.div variants={itemVariants} className="flex flex-col">
-            <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
-              PROGRAMS
-            </h4>
-            <ul className="flex flex-col gap-4 text-sm text-secondary ">
-              {programs && programs.length > 0 ? programs.map((prog, idx) => (
-                <li key={idx} className="hover:text-white transition-colors cursor-default">
-                  {prog.label}
-                </li>
-              )) : (
-                <li className="text-gray-500 italic text-xs">No programs configured.</li>
-              )}
-            </ul>
-          </motion.div>
-
-          {/* Column 3: Quick Links */}
+          {/* Column 2: Quick Links */}
           <motion.div variants={itemVariants} className="flex flex-col">
             <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
               QUICK LINKS
             </h4>
             <ul className="flex flex-col gap-4 text-sm text-secondary">
               {staticQuickLinks.map((link, idx) => (
+                <li key={idx}>
+                  {link.url && link.url.startsWith('/') ? (
+                    <Link href={link.url} className="hover:text-white transition-colors">
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a href={link.url || '#'} className="hover:text-white transition-colors">
+                      {link.label}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Column 3: Useful Links */}
+          <motion.div variants={itemVariants} className="flex flex-col">
+            <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
+              USEFUL LINKS
+            </h4>
+            <ul className="flex flex-col gap-4 text-sm text-secondary">
+              {staticUsefulLinks.map((link, idx) => (
                 <li key={idx}>
                   {link.url && link.url.startsWith('/') ? (
                     <Link href={link.url} className="hover:text-white transition-colors">
@@ -247,7 +270,7 @@ const Footer = ({ previewData }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10 text-center md:text-left"
+          className={bottomClassName}
         >
           <p>
             {copyrightText}
@@ -256,8 +279,6 @@ const Footer = ({ previewData }) => {
             <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <span>|</span>
             <Link href="/terms-and-conditions" className="hover:text-white transition-colors">Terms & Conditions</Link>
-            <span>|</span>
-            <Link href="/faq" className="hover:text-white transition-colors">FAQ</Link>
           </div>
         </motion.div>
 
