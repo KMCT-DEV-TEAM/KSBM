@@ -21,11 +21,11 @@
     font-family: 'Poppins', system-ui, Avenir, Helvetica, Arial, sans-serif;
     background-color: var(--color-background);
     color: var(--color-text-primary);
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   html {
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   /* Global 18px border-radius enforcement across all pages for boxes, inputs, cards, and buttons */
