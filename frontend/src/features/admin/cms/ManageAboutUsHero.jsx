@@ -19,7 +19,7 @@ const Toast = Swal.mixin({
 const ManageAboutUsHero = () => {
   const [title, setTitle] = useState('About KSBM');
   const [subtitle, setSubtitle] = useState('Building Excellence Since 1995');
-  const [backgroundImage, setBackgroundImage] = useState('/assets/Images/about-hero-bg.jpg');
+  const [backgroundImage, setBackgroundImage] = useState('/assets/Images/aboutus/about-hero-bg.jpg');
   
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -35,7 +35,7 @@ const ManageAboutUsHero = () => {
       if (data) {
         setTitle(data.title || 'About KSBM');
         setSubtitle(data.subtitle || 'Building Excellence Since 1995');
-        setBackgroundImage(data.backgroundImage || '/assets/Images/about-hero-bg.jpg');
+        setBackgroundImage(data.backgroundImage || '/assets/Images/aboutus/about-hero-bg.jpg');
       }
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -75,7 +75,7 @@ const ManageAboutUsHero = () => {
       action: async () => {
         setTitle('About KSBM');
         setSubtitle('Building Excellence Since 1995');
-        setBackgroundImage('/assets/Images/about-hero-bg.jpg');
+        setBackgroundImage('/assets/Images/aboutus/about-hero-bg.jpg');
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -104,6 +104,8 @@ const ManageAboutUsHero = () => {
               onUploadComplete={setBackgroundImage}
               onUploadStateChange={setIsUploading}
               label="Drag & drop background image, or click to select"
+              uploadEndpoint="/upload/aboutus"
+              allowDelete={false}
             />
           </div>
 

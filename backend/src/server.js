@@ -1,5 +1,5 @@
 // Initialized server.js
-// trigger restart
+// trigger restart 2
 
 import app from './app.js';
 import connectDB from './config/db.js';

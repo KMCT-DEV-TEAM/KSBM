@@ -9,7 +9,7 @@ const LeadershipSection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/cms/leadership');
+        const response = await api.get('/cms/leadership', { hideLoader: true });
         if (response.data) {
           setData(response.data);
         }

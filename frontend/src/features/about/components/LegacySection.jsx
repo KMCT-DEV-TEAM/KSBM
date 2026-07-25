@@ -13,7 +13,7 @@ const LegacySection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/cms/legacy');
+        const response = await api.get('/cms/legacy', { hideLoader: true });
         if (response.data) {
           setData(prev => ({ ...prev, ...response.data }));
         }

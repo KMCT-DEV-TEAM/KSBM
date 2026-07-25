@@ -21,7 +21,7 @@ const AdvisoryBoardMembers = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/cms/advisory-board');
+        const response = await api.get('/cms/advisory-board', { hideLoader: true });
         if (response.data && response.data.members && response.data.members.length > 0) {
           setMembers(response.data.members);
         }

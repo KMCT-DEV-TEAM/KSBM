@@ -276,13 +276,22 @@ const Header = ({ previewData }) => {
                   onMouseEnter={() => handleMouseEnter(item.label)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <Link
-                    href={item.link}
-                    className={`no-underline text-[13.5px] py-2 transition-colors duration-300 inline-block ${getNavTextClass(activeNav === item.label)}`}
-                    onClick={() => setActiveNav(item.label)}
-                  >
-                    {item.label}
-                  </Link>
+                  {getSubLinks(item.label) ? (
+                    <span
+                      className={`cursor-pointer text-[13.5px] py-2 transition-colors duration-300 inline-block ${getNavTextClass(activeNav === item.label)}`}
+                      onClick={() => setActiveNav(item.label)}
+                    >
+                      {item.label}
+                    </span>
+                  ) : (
+                    <Link
+                      href={item.link}
+                      className={`no-underline text-[13.5px] py-2 transition-colors duration-300 inline-block ${getNavTextClass(activeNav === item.label)}`}
+                      onClick={() => setActiveNav(item.label)}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
 
                   {/* Mega Menu Injection */}
                   {(item.label.toLowerCase() === 'about us' || item.label.toLowerCase() === 'about') && (
@@ -364,19 +373,36 @@ const Header = ({ previewData }) => {
                     className="flex flex-col"
                   >
                     <div className="flex items-center justify-between w-full">
-                      <Link
-                        href={item.link}
-                        className={`block no-underline text-base font-medium py-1 flex-1 transition-colors ${
-                          activeNav === item.label ? 'text-primary font-bold' : 'text-slate-600 hover:text-primary'
-                        }`}
-                        onClick={() => {
-                          setActiveNav(item.label);
-                          setIsMobileMenuOpen(false);
-                          setExpandedMobileNav({});
-                        }}
-                      >
-                        {item.label}
-                      </Link>
+                      {hasSubs ? (
+                        <span
+                          className={`block text-base font-medium py-1 flex-1 transition-colors cursor-pointer ${
+                            activeNav === item.label ? 'text-primary font-bold' : 'text-slate-600 hover:text-primary'
+                          }`}
+                          onClick={() => {
+                            setActiveNav(item.label);
+                            setExpandedMobileNav(prev => ({
+                              ...prev,
+                              [item.label]: !prev[item.label]
+                            }));
+                          }}
+                        >
+                          {item.label}
+                        </span>
+                      ) : (
+                        <Link
+                          href={item.link}
+                          className={`block no-underline text-base font-medium py-1 flex-1 transition-colors ${
+                            activeNav === item.label ? 'text-primary font-bold' : 'text-slate-600 hover:text-primary'
+                          }`}
+                          onClick={() => {
+                            setActiveNav(item.label);
+                            setIsMobileMenuOpen(false);
+                            setExpandedMobileNav({});
+                          }}
+                        >
+                          {item.label}
+                        </Link>
+                      )}
                       {hasSubs && (
                         <button
                           type="button"

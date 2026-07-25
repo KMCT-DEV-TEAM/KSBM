@@ -38,6 +38,19 @@ router.post('/programs', protect, uploadAssets.single('image'), async (req, res)
   });
 });
 
+router.post('/aboutus', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/aboutus/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/aboutus',
+    url: fileUrl,
+  });
+});
+
 router.post('/', protect, upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No image provided' });
@@ -90,7 +103,8 @@ router.delete('/', protect, async (req, res) => {
     'facility_4.jpg', 'facility_5.jpg', 'facility_6.jpg',
     'infosys_logo.svg', 'wipro_logo.svg', 'cognizant_logo.svg',
     'google_logo.svg', 'microsoft_logo.svg',
-    'testimonial_1.jpg', 'testimonial_2.jpg', 'testimonial_3.jpg'
+    'testimonial_1.jpg', 'testimonial_2.jpg', 'testimonial_3.jpg',
+    'about-hero-bg.jpg'
   ];
 
   const filename = fileUrl.split('/').pop();
@@ -102,6 +116,8 @@ router.delete('/', protect, async (req, res) => {
   let filePath = '';
   if (fileUrl.includes('/assets/Images/Home/')) {
      filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/Home', filename);
+  } else if (fileUrl.includes('/assets/Images/aboutus/')) {
+     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/aboutus', filename);
   } else if (fileUrl.includes('/assets/home/')) {
      filePath = path.join(__dirname, '../../../assets/home', filename);
   } else if (fileUrl.includes('/uploads/')) {
