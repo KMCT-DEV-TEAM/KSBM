@@ -138,9 +138,19 @@ const ManageFooter = () => {
             </div>
             <button onClick={() => setIsPreviewModalOpen(false)} className="p-2 text-gray-500 hover:text-red-500 bg-gray-100 hover:bg-red-50 rounded-md transition-colors"><X className="w-5 h-5" /></button>
           </div>
-          <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center items-end">
-            <div className={`bg-white shadow-xl w-full mt-auto transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <FooterPreview previewData={{ description, socialLinks, programs, contactInfo, copyrightText, previewDevice: previewMode }} />
+          <div className="flex-1 bg-white flex justify-center items-center overflow-y-auto p-4 sm:p-8">
+            <div
+              className={`bg-white rounded-xl shadow-lg border border-gray-200 overflow-y-auto transition-all duration-300 max-h-full ${
+                previewMode === 'mobile'
+                  ? 'w-[375px] border-[12px] border-gray-800 rounded-[32px]'
+                  : previewMode === 'tablet'
+                  ? 'w-[768px] border-[12px] border-gray-800 rounded-[24px]'
+                  : 'w-full max-w-[1440px]'
+              }`}
+            >
+              <div className="bg-white min-h-full">
+                <FooterPreview previewData={{ description, socialLinks, programs, contactInfo, copyrightText, previewDevice: previewMode }} />
+              </div>
             </div>
           </div>
         </div>
@@ -169,31 +179,6 @@ const ManageFooter = () => {
               <input type="text" value={socialLinks.whatsapp} onChange={e => setSocialLinks({...socialLinks, whatsapp: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" />
             </div>
           </div>
-        </div>
-      </SectionForm>
-
-      <SectionForm title="Programs Links">
-        <div className="flex justify-between items-center mb-4">
-          <p className="text-xs text-gray-500">Manage the program links displayed in the footer.</p>
-          <button onClick={() => addLink(programs, setPrograms)} className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">
-            <Plus className="w-4 h-4" /> Add Link
-          </button>
-        </div>
-        <div className="space-y-3">
-          {programs.map((link, idx) => (
-            <div key={idx} className="flex flex-col gap-1 bg-[#F5F5F9] p-3 rounded-lg border border-gray-200">
-              <div className="flex items-center gap-3">
-                <input type="text" placeholder="Program Name" value={link.label || ''} onChange={e => handleLinkChange(programs, setPrograms, idx, 'label', e.target.value)} maxLength={25} className="w-full p-2.5 bg-white border border-[#D9DEE3] rounded-md text-sm outline-none focus:ring-1 focus:ring-primary" />
-                <button onClick={() => removeLink(programs, setPrograms, idx)} className="p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors shrink-0">
-                  <Trash2 className="w-5 h-5" />
-                </button>
-              </div>
-              <div className="text-right text-xs text-gray-400">
-                {(link.label || '').length} / 25
-              </div>
-            </div>
-          ))}
-          {programs.length === 0 && <p className="text-sm text-gray-400 text-center py-2">No programs added.</p>}
         </div>
       </SectionForm>
 

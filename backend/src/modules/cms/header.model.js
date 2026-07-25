@@ -9,6 +9,10 @@ const navItemSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isVisible: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const headerSchema = new mongoose.Schema(
@@ -42,24 +46,32 @@ const headerSchema = new mongoose.Schema(
 // We only need one settings document, so we can use a static method to always get the first one
 headerSchema.statics.getSettings = async function () {
   let settings = await this.findOne();
+  const defaultNavItems = [
+    { label: 'Home', link: '/', isVisible: true },
+    { label: 'About Us', link: '/about', isVisible: true },
+    { label: 'Academics', link: '/faculty', isVisible: true },
+    { label: 'Programs', link: '/programs', isVisible: true },
+    { label: 'Facility', link: '/facilities', isVisible: true },
+    { label: 'Admission', link: '/admissions', isVisible: true },
+    { label: 'Events', link: '/events', isVisible: true },
+    { label: 'Blogs', link: '/blogs', isVisible: true },
+    { label: 'Grievance', link: '/grievance', isVisible: true },
+    { label: 'Mandatory Disclosure', link: '/mandatory-disclosure', isVisible: true },
+  ];
+
   if (!settings) {
     settings = await this.create({
-      navItems: [
-        { label: 'Home', link: '#home' },
-        { label: 'About Us', link: '#about-us' },
-        { label: 'Campus', link: '#campus' },
-        { label: 'People', link: '#people' },
-        { label: 'Placement', link: '#placement' },
-        { label: 'Programs', link: '#programs' },
-        { label: 'Events', link: '#events' },
-        { label: 'Blogs', link: '#blogs' },
-        { label: 'Admission', link: '#admission' },
-        { label: 'Examinations', link: '#examinations' },
-      ],
+      navItems: defaultNavItems,
       actionButton: { text: 'Apply Now', isVisible: true },
       logoUrl: '',
       alignment: 'center',
     });
+  } else {
+    const hasAcademics = settings.navItems && settings.navItems.some(i => i.label && i.label.toLowerCase() === 'academics');
+    if (!hasAcademics) {
+      settings.navItems = defaultNavItems;
+      await settings.save();
+    }
   }
   return settings;
 };
