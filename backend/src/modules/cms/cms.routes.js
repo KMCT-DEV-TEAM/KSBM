@@ -73,7 +73,9 @@ import {
   getGalleryPageSettings,
   updateGalleryPageSettings,
   getEventsPageSettings,
-  updateEventsPageSettings
+  updateEventsPageSettings,
+  getBlogsPageSettings,
+  updateBlogsPageSettings
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -234,5 +236,9 @@ router.route('/gallery-page')
 router.route('/events-page')
   .get(getEventsPageSettings)
   .put(protect, updateEventsPageSettings);
+
+router.route('/blogs-page')
+  .get(getBlogsPageSettings)
+  .put(protect, updateBlogsPageSettings);
 
 export default router;
