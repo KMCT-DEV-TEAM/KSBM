@@ -7,6 +7,15 @@ const eventsPageSchema = new mongoose.Schema(
       subtitle: { type: String, default: 'Experience the vibrancy and dynamic energy of our college campus. From cultural extravaganzas to technical symposiums, our events are the heartbeat of student life, fostering creativity, leadership, and lifelong memories.' },
       backgroundImage: { type: String, default: '/assets/Images/Group 250.png' }
     },
+    about: {
+      subheading: { type: String, default: 'About' },
+      heading: { type: String, default: 'THE SPIRIT OF CULTURE' },
+      paragraph1: { type: String, default: 'Discover a celebration where creativity knows no limits and every performance tells a story worth remembering. Kaleido is more than a cultural festival—it\'s a vibrant platform where passion meets purpose, traditions blend with innovation, and talent shines without boundaries. Bringing together students, artists, performers, and creative minds from diverse backgrounds, the festival transforms the campus into a spectacular stage filled with energy, color, and inspiration.' },
+      paragraph2: { type: String, default: 'Immerse yourself in a world of mesmerizing dance performances, soul-stirring music, captivating theatre, expressive fine arts, photography, fashion, literature, and countless cultural experiences that celebrate the richness of artistic expression. Whether you\'re stepping into the spotlight as a performer, competing to showcase your skills, cheering for your peers, or simply enjoying the electrifying atmosphere, every moment at Kaleido is designed to inspire, connect, and create lasting memories.' },
+      image: { type: String, default: '/assets/Images/image 91.png' },
+      brochureUrl: { type: String, default: '' },
+      calendarUrl: { type: String, default: '' }
+    },
     upcomingEvents: {
       heading: { type: String, default: 'THE UPCOMING EVENTS' },
       events: {
@@ -61,13 +70,18 @@ const eventsPageSchema = new mongoose.Schema(
       heading: { type: String, default: 'THE ESSENCE OF CULTURE' },
       items: {
         type: [
-          { img: { type: String }, category: { type: String } }
+          { 
+            img: { type: String }, 
+            category: { type: String },
+            description: { type: String },
+            programs: { type: [String], default: [] }
+          }
         ],
         default: [
-          { img: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop', category: 'Concert' },
-          { img: 'https://images.unsplash.com/photo-1540039155732-6761b3464195?q=80&w=800&auto=format&fit=crop', category: 'Dance' },
-          { img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800&auto=format&fit=crop', category: 'Band' },
-          { img: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=800&auto=format&fit=crop', category: 'Theatre' },
+          { img: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop', category: 'Music', description: 'Feel the rhythm, embrace the energy, and immerse yourself in the electrifying world of music at Kaleido.', programs: ['Solo Light Music', 'Solo Singing Classical', 'Solo Singing Western', 'Group Song Malayalam', 'Group Song Western', 'Naadan Pattu'] },
+          { img: 'https://images.unsplash.com/photo-1540039155732-6761b3464195?q=80&w=800&auto=format&fit=crop', category: 'Dance', description: 'Immerse yourself in mesmerizing dance performances and high-energy choreographies.', programs: ['Solo Dance Classical', 'Solo Dance Folk', 'Group Dance Western', 'Group Dance Folk'] },
+          { img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800&auto=format&fit=crop', category: 'Fine Arts', description: 'Explore expressive fine arts, photography, fashion, and creative masterpieces.', programs: ['Pencil Drawing', 'Watercolor Painting', 'Oil Painting', 'Photography', 'Collage Making'] },
+          { img: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=800&auto=format&fit=crop', category: 'Drama', description: 'Experience captivating theatre and soul-stirring dramatic performances.', programs: ['Mime', 'Skit', 'One Act Play', 'Mono Act'] }
         ]
       }
     },

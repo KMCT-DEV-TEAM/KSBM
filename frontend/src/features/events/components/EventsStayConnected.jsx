@@ -86,7 +86,7 @@ const EventsStayConnected = ({ stayConnected }) => {
               backgroundClip: "text",
             }}>Stay Connected</h5>
           <h2 className="text-xl md:text-3xl font-bold uppercase tracking-widest text-[#ffccf0] drop-shadow-[0_0_15px_rgba(219,39,119,0.8)] mb-8 leading-snug">
-            Follow us on <br />Social Media
+            {stayConnected?.heading || "Follow us on Social Media"}
           </h2>
           <p className="text-lg md:text-xl text-gray-300 mb-8 font-light tracking-wide leading-relaxed">
             Don't miss out on the latest updates, behind-the-scenes moments, and exclusive announcements for KALEIDO KMCT 2025.
@@ -138,7 +138,7 @@ const EventsStayConnected = ({ stayConnected }) => {
                   style={{ perspective: 1000, pointerEvents: isVisible ? 'auto' : 'none' }}
                 >
                   <div className="w-full h-full rounded-2xl overflow-hidden border-2 border-pink-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.8)] relative">
-                    <img src={poster.img} alt="Poster" className="w-full h-full object-cover" />
+                    <img src={poster.img || "/assets/Images/asif_ali_poster.png"} alt="Poster" className="w-full h-full object-cover" />
                     {position !== 0 && <div className="absolute inset-0 bg-black/40"></div>}
                   </div>
                 </motion.div>

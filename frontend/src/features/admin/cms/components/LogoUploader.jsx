@@ -6,9 +6,9 @@ import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
 import confirmAction from '../../../../utils/confirmAction';
 
-const LogoUploader = ({ currentLogoUrl, value, onUploadSuccess, onChange, onUploadStateChange, label, uploadEndpoint = '/upload', disableDelete = false, layout = 'vertical', deferredMode = false }) => {
+const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, onChange, onUploadStateChange, label, uploadEndpoint = '/upload', disableDelete = false, layout = 'vertical', deferredMode = false }) => {
   const [isUploading, setIsUploading] = useState(false);
-  const displayUrl = currentLogoUrl || value;
+  const displayUrl = currentLogoUrl || value || currentImage;
 
   const handleSuccess = useCallback(async (url, file = null) => {
     if (!deferredMode) {

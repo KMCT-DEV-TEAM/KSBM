@@ -2,7 +2,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const EventsAbout = () => {
+const EventsAbout = ({ about }) => {
+  const defaultData = {
+    subheading: 'About',
+    heading: 'THE SPIRIT OF CULTURE',
+    paragraph1: "Discover a celebration where creativity knows no limits and every performance tells a story worth remembering. Kaleido is more than a cultural festival—it's a vibrant platform where passion meets purpose, traditions blend with innovation, and talent shines without boundaries. Bringing together students, artists, performers, and creative minds from diverse backgrounds, the festival transforms the campus into a spectacular stage filled with energy, color, and inspiration.",
+    paragraph2: "Immerse yourself in a world of mesmerizing dance performances, soul-stirring music, captivating theatre, expressive fine arts, photography, fashion, literature, and countless cultural experiences that celebrate the richness of artistic expression. Whether you're stepping into the spotlight as a performer, competing to showcase your skills, cheering for your peers, or simply enjoying the electrifying atmosphere, every moment at Kaleido is designed to inspire, connect, and create lasting memories.",
+    image: '/assets/Images/image 91.png',
+    brochureUrl: '',
+    calendarUrl: ''
+  };
+  const data = about || defaultData;
+
   return (
     <section className="relative w-full px-6 md:px-12 lg:px-24 overflow-hidden z-0">
 
@@ -32,8 +43,8 @@ const EventsAbout = () => {
           </div>
 
           <img
-            src="/assets/Images/image 91.png"
-            alt="The Spirit of Culture"
+            src={data.image || "/assets/Images/image 91.png"}
+            alt={data.heading || "The Spirit of Culture"}
             className="w-full max-w-md lg:max-w-lg h-auto object-contain relative z-10"
           />
         </motion.div>
@@ -58,31 +69,39 @@ const EventsAbout = () => {
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-            }}>About</h5>
+            }}>{data.subheading || 'About'}</h5>
 
           {/* Heading */}
           <h2 className="text-[40px] font-bold text-white tracking-wide uppercase leading-tight drop-shadow-[0_0_15px_rgba(249,73,180,0.6)]">
-            THE SPIRIT OF CULTURE
+            {data.heading || 'THE SPIRIT OF CULTURE'}
           </h2>
 
           {/* Paragraphs */}
           <div className="text-gray-300 text-sm md:text-[15px] leading-relaxed space-y-6 font-medium">
-            <p>
-              Discover a celebration where creativity knows no limits and every performance tells a story worth remembering. Kaleido is more than a cultural festival—it's a vibrant platform where passion meets purpose, traditions blend with innovation, and talent shines without boundaries. Bringing together students, artists, performers, and creative minds from diverse backgrounds, the festival transforms the campus into a spectacular stage filled with energy, color, and inspiration.
-            </p>
-            <p>
-              Immerse yourself in a world of mesmerizing dance performances, soul-stirring music, captivating theatre, expressive fine arts, photography, fashion, literature, and countless cultural experiences that celebrate the richness of artistic expression. Whether you're stepping into the spotlight as a performer, competing to showcase your skills, cheering for your peers, or simply enjoying the electrifying atmosphere, every moment at Kaleido is designed to inspire, connect, and create lasting memories.
-            </p>
+            {data.paragraph1 && <p>{data.paragraph1}</p>}
+            {data.paragraph2 && <p>{data.paragraph2}</p>}
           </div>
 
           {/* Buttons */}
           <div className="flex flex-wrap items-center gap-5 mt-6">
-            <button className="px-8 py-3 rounded-md bg-gradient-to-r from-[#e74694] to-[#f57451] text-white font-semibold text-sm hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(231,70,148,0.4)]">
-              Event Brochure
-            </button>
-            <button className="px-8 py-3 rounded-md border-[1.5px] border-[#e74694]/70 hover:border-[#e74694] text-white font-semibold text-sm hover:bg-[#e74694]/10 transition-colors duration-300">
-              Download Calender
-            </button>
+            {data.brochureUrl ? (
+              <a href={data.brochureUrl} target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-md bg-gradient-to-r from-[#e74694] to-[#f57451] text-white font-semibold text-sm hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(231,70,148,0.4)]">
+                Event Brochure
+              </a>
+            ) : (
+              <button className="px-8 py-3 rounded-md bg-gradient-to-r from-[#e74694] to-[#f57451] text-white font-semibold text-sm hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(231,70,148,0.4)]">
+                Event Brochure
+              </button>
+            )}
+            {data.calendarUrl ? (
+              <a href={data.calendarUrl} target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-md border-[1.5px] border-[#e74694]/70 hover:border-[#e74694] text-white font-semibold text-sm hover:bg-[#e74694]/10 transition-colors duration-300">
+                Download Calendar
+              </a>
+            ) : (
+              <button className="px-8 py-3 rounded-md border-[1.5px] border-[#e74694]/70 hover:border-[#e74694] text-white font-semibold text-sm hover:bg-[#e74694]/10 transition-colors duration-300">
+                Download Calendar
+              </button>
+            )}
           </div>
 
           {/* Decorative Icon */}

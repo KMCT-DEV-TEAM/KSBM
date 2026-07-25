@@ -20,7 +20,7 @@ const EventsHero = ({ hero }) => {
       {/* Background Image: Scaled Down */}
       <div className="absolute inset-0 z-0 flex items-center justify-center pt-10">
         <img
-          src="/assets/Images/Group 250.png"
+          src={hero?.backgroundImage || "/assets/Images/Group 250.png"}
           alt="Events Hero Background"
           className="w-[75%] md:w-[65%] lg:w-[55%] max-w-5xl h-auto object-contain opacity-90"
         />

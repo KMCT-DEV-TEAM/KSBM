@@ -52,6 +52,7 @@ headerSchema.statics.getSettings = async function () {
         { label: 'Placement', link: '#placement' },
         { label: 'Programs', link: '#programs' },
         { label: 'Events', link: '#events' },
+        { label: 'Blogs', link: '#blogs' },
         { label: 'Admission', link: '#admission' },
         { label: 'Examinations', link: '#examinations' },
       ],

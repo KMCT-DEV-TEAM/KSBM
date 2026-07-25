@@ -44,6 +44,8 @@ const Header = ({ previewData }) => {
     { label: 'Campus', link: '/#campus' },
     { label: 'Faculty', link: '/faculty' },
     { label: 'Programs', link: '/programs' },
+    { label: 'Events', link: '/events' },
+    { label: 'Blogs', link: '/blogs' },
     { label: 'Admission', link: '/admissions' },
   ]); // Fallback
   const [actionButton, setActionButton] = useState({ text: 'Apply Now', isVisible: true });
@@ -74,12 +76,24 @@ const Header = ({ previewData }) => {
               if (labelLower === 'alumni' || item.link.includes('alumni')) return { ...item, link: '/alumni' };
               if (labelLower === 'admission' || labelLower === 'admissions' || item.link === '#admission' || item.link.includes('admission')) return { ...item, link: '/admissions' };
               if (labelLower === 'events' || item.link === '#events' || item.link.includes('events')) return { ...item, link: '/events' };
+              if (labelLower === 'blogs' || labelLower === 'blog' || labelLower === 'insights' || item.link === '#blogs' || item.link === '#blog' || item.link.includes('blog')) return { ...item, link: '/blogs' };
               if (labelLower === 'contact' || labelLower === 'contact us' || item.link.includes('contact')) return { ...item, link: '/contact' };
               if (item.link.startsWith('#')) return { ...item, link: '/' + item.link };
               return item;
             });
+
+            // Ensure Blogs navigation item exists in Header
+            if (!formattedNavItems.some(item => item.link === '/blogs' || item.label.toLowerCase().includes('blog'))) {
+              const eventsIdx = formattedNavItems.findIndex(i => i.link === '/events' || i.label.toLowerCase() === 'events');
+              if (eventsIdx !== -1) {
+                formattedNavItems.splice(eventsIdx + 1, 0, { label: 'Blogs', link: '/blogs', _id: 'blogs-nav-item' });
+              } else {
+                formattedNavItems.push({ label: 'Blogs', link: '/blogs', _id: 'blogs-nav-item' });
+              }
+            }
+
             setNavItems(formattedNavItems);
-            setActiveNav(formattedNavItems[0].label);
+            setActiveNav(formattedNavItems[0]?.label || 'Home');
           }
           if (data.actionButton) setActionButton(data.actionButton);
           if (data.logoUrl) setLogoUrl(data.logoUrl);

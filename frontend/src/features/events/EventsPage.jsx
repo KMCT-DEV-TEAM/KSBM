@@ -36,6 +36,16 @@ const EventsPage = () => {
     backgroundImage: '/assets/Images/Group 250.png'
   };
 
+  const about = pageData?.about || {
+    subheading: 'About',
+    heading: 'THE SPIRIT OF CULTURE',
+    paragraph1: "Discover a celebration where creativity knows no limits and every performance tells a story worth remembering. Kaleido is more than a cultural festival—it's a vibrant platform where passion meets purpose, traditions blend with innovation, and talent shines without boundaries. Bringing together students, artists, performers, and creative minds from diverse backgrounds, the festival transforms the campus into a spectacular stage filled with energy, color, and inspiration.",
+    paragraph2: "Immerse yourself in a world of mesmerizing dance performances, soul-stirring music, captivating theatre, expressive fine arts, photography, fashion, literature, and countless cultural experiences that celebrate the richness of artistic expression. Whether you're stepping into the spotlight as a performer, competing to showcase your skills, cheering for your peers, or simply enjoying the electrifying atmosphere, every moment at Kaleido is designed to inspire, connect, and create lasting memories.",
+    image: '/assets/Images/image 91.png',
+    brochureUrl: '',
+    calendarUrl: ''
+  };
+
   const upcomingEvents = pageData?.upcomingEvents || { heading: 'THE UPCOMING EVENTS', events: [] };
   const highlightedPrograms = pageData?.highlightedPrograms || { heading: 'THE HIGHLIGHTED PROGRAMS', images: [] };
   const essenceOfCulture = pageData?.essenceOfCulture || { heading: 'THE ESSENCE OF CULTURE', items: [] };
@@ -48,7 +58,7 @@ const EventsPage = () => {
       <Header />
 
       <EventsHero hero={hero} />
-      <EventsAbout />
+      <EventsAbout about={about} />
       <EventsUpcoming upcomingEvents={upcomingEvents} />
       <EventsCarousel
         highlightedPrograms={highlightedPrograms}
