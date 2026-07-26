@@ -1,12 +1,13 @@
 "use client";
 import React, { useState } from 'react';
-import { FileText, Eye, Clock, Users, BarChart, MousePointerClick, ChevronLeft, ChevronRight } from 'lucide-react';
+import { FileText, Eye, Clock, Users, BarChart, MousePointerClick, ChevronLeft, ChevronRight, Award } from 'lucide-react';
 import ManageAboutUsHero from './ManageAboutUsHero';
 import ManageVisionMission from './ManageVisionMission';
 import ManageLegacy from './ManageLegacy';
 import ManageAboutUsStats from './ManageAboutUsStats';
 import ManageAboutCta from './ManageAboutCta';
 import ManageLeadership from './ManageLeadership';
+import ManageAccreditation from './ManageAccreditation';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ManageAboutUsPage = () => {
@@ -20,6 +21,7 @@ const ManageAboutUsPage = () => {
     { id: 'legacy', label: 'Legacy Timeline', icon: <Clock className="w-4 h-4" /> },
     { id: 'leadership', label: 'Leadership', icon: <Users className="w-4 h-4" /> },
     { id: 'stats', label: 'Stats', icon: <BarChart className="w-4 h-4" /> },
+    { id: 'accreditation', label: 'Accreditation', icon: <Award className="w-4 h-4" /> },
     { id: 'cta', label: 'Apply CTA', icon: <MousePointerClick className="w-4 h-4" /> }
   ];
 
@@ -31,7 +33,7 @@ const ManageAboutUsPage = () => {
   };
 
   return (
-    <div className="w-full space-y-8 pb-16">
+    <div className="w-full space-y-8">
 
       {/* Tabs with Scroll Arrows */}
       <div className="relative flex items-center gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
@@ -72,6 +74,7 @@ const ManageAboutUsPage = () => {
           {activeTab === 'legacy' && <ManageLegacy />}
           {activeTab === 'leadership' && <ManageLeadership />}
           {activeTab === 'stats' && <ManageAboutUsStats />}
+          {activeTab === 'accreditation' && <ManageAccreditation />}
           {activeTab === 'cta' && <ManageAboutCta />}
         </motion.div>
       </AnimatePresence>

@@ -12,7 +12,7 @@ const mbaPageSchema = new mongoose.Schema(
     },
     heroImage: {
       type: String,
-      default: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop'
+      default: '/assets/Images/mba/mba_hero_bg.png'
     },
     heroPrimaryBtnText: { type: String, default: 'EXPLORE PROGRAM' },
     heroSecondaryBtnText: { type: String, default: 'DOWNLOAD BROCHURE' },
@@ -32,7 +32,7 @@ const mbaPageSchema = new mongoose.Schema(
     },
     overviewImage: {
       type: String,
-      default: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop'
+      default: '/assets/Images/mba/mba_overview.png'
     },
     overviewBadgeText: { type: String, default: 'POSTGRADUATE EXCELLENCE' },
     overviewFloatingBadgeText: { type: String, default: '100% Case-Study Driven' },
@@ -59,42 +59,42 @@ const mbaPageSchema = new mongoose.Schema(
       default: [
         {
           number: '01',
-          title: 'Business Strategy & Leadership',
-          description: 'Cultivating executive presence, strategic decision-making, and organizational leadership capabilities.',
+          title: 'Strategic Management & Leadership',
+          description: 'Mastering corporate strategy, competitive advantage, organizational behavior, and executive leadership.',
           topics: [
-            'Strategic Management & Innovation',
-            'Corporate Governance & Ethics',
-            'Executive Decision Making'
+            'Corporate Strategy & Business Policy',
+            'Executive Leadership & Ethics',
+            'Organizational Dynamics & Change'
           ]
         },
         {
           number: '02',
-          title: 'Financial Management & Analytics',
-          description: 'Mastering corporate finance, investment valuation, risk management, and data-driven insights.',
+          title: 'Financial Management & Valuation',
+          description: 'Deep dive into corporate finance, investment banking, portfolio management, and financial modeling.',
           topics: [
-            'Corporate Finance & Modeling',
-            'Investment & Risk Management',
-            'Business Analytics & AI Tools'
+            'Corporate Finance & Valuations',
+            'Investment Banking & Markets',
+            'Financial Modeling & Risk Analysis'
           ]
         },
         {
           number: '03',
-          title: 'Marketing & Consumer Insights',
-          description: 'Building brand leadership, digital marketing dominance, and advanced market analysis skills.',
+          title: 'Marketing Strategy & Brand Mgmt',
+          description: 'Advanced marketing management, consumer analytics, digital transformation, and brand equity.',
           topics: [
-            'Global Strategic Marketing',
-            'Digital Brand Management',
-            'Consumer Behavior & Psychology'
+            'Strategic Marketing Management',
+            'Consumer Psychology & Analytics',
+            'Digital Marketing Transformation'
           ]
         },
         {
           number: '04',
           title: 'Operations & Supply Chain',
-          description: 'Optimizing global supply chains, lean management practices, and quality assurance.',
+          description: 'Optimizing global supply chains, quality management, logistics, and operational excellence.',
           topics: [
-            'Global Supply Chain Optimization',
-            'Lean Management & Six Sigma',
-            'Project Management Methodology'
+            'Global Supply Chain Management',
+            'Total Quality & Lean Management',
+            'Logistics & Resource Optimization'
           ]
         }
       ]
@@ -106,7 +106,7 @@ const mbaPageSchema = new mongoose.Schema(
     },
     internshipBgImage: {
       type: String,
-      default: '/assets/Images/image 67.png'
+      default: '/assets/Images/mba/mba_internship_1.png'
     },
     internshipBadge: { type: String, default: 'EXPERIENTIAL LEARNING' },
     internshipBtnText: { type: String, default: 'Apply Now' },
@@ -114,9 +114,9 @@ const mbaPageSchema = new mongoose.Schema(
     internshipImages: {
       type: [String],
       default: [
-        '/assets/Images/image 2.png',
-        '/assets/Images/image 27.png',
-        '/assets/Images/image 28.png'
+        '/assets/Images/mba/mba_internship_1.png',
+        '/assets/Images/mba/mba_internship_2.png',
+        '/assets/Images/mba/mba_internship_3.png'
       ]
     },
     eligibility: {
@@ -194,7 +194,7 @@ const mbaPageSchema = new mongoose.Schema(
       },
       images: {
         type: [String],
-        default: ['/assets/Images/image 49.png', '/assets/Images/image 60.png']
+        default: ['/assets/Images/mba/mba_internship_1.png', '/assets/Images/mba/mba_internship_2.png']
       },
       features: {
         type: [
@@ -226,11 +226,11 @@ const mbaPageSchema = new mongoose.Schema(
           }
         ],
         default: [
-          { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/image 67.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
-          { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/image 27.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-          { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/image 28.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-          { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/image 2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
-          { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/image 58.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
+          { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/mba/mba_gallery_1.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
+          { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/mba/mba_gallery_2.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
+          { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/mba/mba_gallery_1.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
+          { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/mba/mba_gallery_2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
+          { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/mba/mba_gallery_1.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
         ]
       }
     },
@@ -242,10 +242,10 @@ const mbaPageSchema = new mongoose.Schema(
         default: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.'
       },
       viewBtnText: { type: String, default: 'View Calendar' },
-      viewBtnUrl: { type: String, default: '/assets/Images/image 64.png' },
+      viewBtnUrl: { type: String, default: '/assets/Images/mba/mba_schedule.png' },
       downloadBtnText: { type: String, default: 'Download Calendar' },
-      downloadBtnUrl: { type: String, default: '/assets/Images/image 64.png' },
-      image: { type: String, default: '/assets/Images/image 64.png' },
+      downloadBtnUrl: { type: String, default: '/assets/Images/mba/mba_schedule.png' },
+      image: { type: String, default: '/assets/Images/mba/mba_schedule.png' },
       events: { type: [mongoose.Schema.Types.Mixed], default: [] }
     }
   },

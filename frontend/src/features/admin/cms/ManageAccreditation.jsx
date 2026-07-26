@@ -55,23 +55,24 @@ const ManageAccreditation = () => {
   }, []);
 
   useEffect(() => {
+    let interval;
     if (isPreviewModalOpen && iframeRef.current) {
-      setTimeout(() => {
+      const sendData = () => {
         if (iframeRef.current && iframeRef.current.contentWindow) {
-          iframeRef.current.contentWindow.postMessage(
-            { type: 'preview-accreditation-data', payload: previewData },
-            '*'
-          );
+          iframeRef.current.contentWindow.postMessage({ type: 'preview-accreditation-data', payload: previewData }, '*');
         }
-      }, 500);
+      };
       
-      if (iframeRef.current.contentWindow) {
-        iframeRef.current.contentWindow.postMessage(
-          { type: 'preview-accreditation-data', payload: previewData },
-          '*'
-        );
-      }
+      sendData();
+      
+      let count = 0;
+      interval = setInterval(() => {
+        sendData();
+        count++;
+        if (count > 10) clearInterval(interval);
+      }, 500);
     }
+    return () => clearInterval(interval);
   }, [previewData, isPreviewModalOpen]);
 
   const fetchSettings = async () => {
@@ -221,7 +222,7 @@ const ManageAccreditation = () => {
                 ref={iframeRef}
                 src="/preview/accreditation"
                 className="w-full h-full border-0"
-                title="Accreditation Preview"
+                title="Live Preview"
               />
             </div>
           </div>

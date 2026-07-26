@@ -1,9 +1,10 @@
 "use client";
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { UploadCloud, Loader2, X, RefreshCw } from 'lucide-react';
+import { UploadCloud, Loader2, X } from 'lucide-react';
 import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
+import confirmAction from '../../../../utils/confirmAction';
 
 const SingleImageUploader = ({ 
   imageUrl, 
@@ -11,21 +12,35 @@ const SingleImageUploader = ({
   onUploadStateChange, 
   label = "Drag & drop image, or click to select",
   uploadEndpoint = "/upload",
-  allowDelete = true
+  allowDelete = true,
+  deferredUpload = false,
+  defaultImage = "",
+  recommendedSize = "PNG, JPG, WEBP up to 5MB"
 }) => {
   const [isUploading, setIsUploading] = useState(false);
+  
+  const currentDisplayUrl = typeof imageUrl === 'object' && imageUrl?.previewUrl 
+    ? imageUrl.previewUrl 
+    : (imageUrl || defaultImage);
 
   const onDrop = useCallback(async (acceptedFiles) => {
     if (acceptedFiles.length === 0) return;
 
     const file = acceptedFiles[0]; // Only take the first file
+    
+    if (deferredUpload) {
+      const previewUrl = URL.createObjectURL(file);
+      onUploadComplete({ file, previewUrl });
+      return;
+    }
+
     setIsUploading(true);
     if (onUploadStateChange) onUploadStateChange(true);
 
     // If there is an old image and we are replacing it, request backend to delete old image
-    if (imageUrl) {
+    if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultImage) {
       try {
-        await api.delete('/upload', { data: { fileUrl: imageUrl }, hideLoader: true });
+        await api.delete('/upload', { data: { fileUrl: currentDisplayUrl }, hideLoader: true });
       } catch (err) {
         console.warn('Skipped deleting previous image:', err);
       }
@@ -62,7 +77,7 @@ const SingleImageUploader = ({
       setIsUploading(false);
       if (onUploadStateChange) onUploadStateChange(false);
     }
-  }, [onUploadComplete, onUploadStateChange, imageUrl, uploadEndpoint]);
+  }, [onUploadComplete, onUploadStateChange, currentDisplayUrl, defaultImage, uploadEndpoint, deferredUpload]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -73,89 +88,88 @@ const SingleImageUploader = ({
     multiple: false
   });
 
-  const removeImage = (e) => {
-    e.stopPropagation();
-    onUploadComplete('');
+  const removeImage = async (e) => {
+    if (e) e.stopPropagation();
+    await confirmAction({
+      title: 'Revert to Default?',
+      message: 'Are you sure you want to remove this image and revert to the default image setup?',
+      confirmText: 'Yes, revert to default',
+      variant: 'danger',
+      action: async () => {
+        if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultImage) {
+          try {
+            await api.delete('/upload', { data: { fileUrl: currentDisplayUrl }, hideLoader: true });
+          } catch (err) {
+            console.warn('Skipped deleting physical image:', err);
+          }
+        }
+        onUploadComplete(defaultImage);
+      }
+    });
   };
 
   return (
-    <div className="w-full space-y-4">
-      {imageUrl ? (
-        <div className="w-full max-w-sm space-y-3">
-          <div className="relative group border border-gray-200 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center p-2 h-48 w-full">
-            <img src={imageUrl} alt="Uploaded" className="max-w-full max-h-full object-contain drop-shadow-sm rounded" />
-            
-            {/* Overlay actions only when allowDelete is true */}
-            {allowDelete && (
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                 <button 
-                    onClick={removeImage}
-                    type="button"
-                    className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg transition-colors transform hover:scale-110"
-                    title="Remove Image"
-                 >
-                    <X className="w-5 h-5" />
-                 </button>
+    <div className="w-full space-y-6">
+      <div 
+        {...getRootProps()} 
+        className={`border-2 border-dashed rounded-lg p-6 md:p-8 text-center transition-colors
+          ${isDragActive ? 'border-primary bg-primary/5 cursor-pointer' : 'border-gray-300 hover:border-primary/50 cursor-pointer'}
+          ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}
+        `}
+      >
+        <input {...getInputProps()} />
+        
+        <div className="flex flex-col items-center justify-center space-y-3">
+          {isUploading ? (
+            <>
+              <Loader2 className="w-10 h-10 text-primary animate-spin" />
+              <p className="text-sm font-medium text-gray-500">Uploading Image...</p>
+            </>
+          ) : (
+            <>
+              <div className="p-3 bg-primary/10 text-primary rounded-full">
+                <UploadCloud className="w-6 h-6" />
               </div>
-            )}
-          </div>
-
-          {!allowDelete && (
-            <div 
-              {...getRootProps()} 
-              className={`border-2 border-dashed rounded-lg p-3 text-center cursor-pointer transition-all flex items-center justify-center gap-3 ${
-                isDragActive ? 'border-primary bg-primary/10' : 'border-gray-300 hover:border-primary/50 bg-white'
-              }`}
-            >
-              <input {...getInputProps()} />
-              {isUploading ? (
-                <div className="flex items-center gap-2 text-primary py-1">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span className="text-xs font-semibold">Uploading & Replacing Image...</span>
-                </div>
-              ) : (
-                <>
-                  <div className="p-1.5 bg-primary/10 text-primary rounded-full">
-                    <RefreshCw className="w-4 h-4" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-xs font-bold text-gray-700">Click to select or drag & drop</p>
-                    <p className="text-[11px] text-gray-500">Replaces current background image</p>
-                  </div>
-                </>
-              )}
-            </div>
+              <div>
+                <p className="text-sm font-medium text-gray-700">
+                  {isDragActive ? "Drop the image here..." : label}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">{recommendedSize}</p>
+              </div>
+            </>
           )}
         </div>
-      ) : (
-        <div 
-          {...getRootProps()} 
-          className={`border-2 border-dashed rounded-lg p-6 md:p-8 text-center cursor-pointer transition-colors max-w-sm
-            ${isDragActive ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-primary/50'}
-            ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}
-          `}
-        >
-          <input {...getInputProps()} />
+      </div>
+
+      {currentDisplayUrl && (
+        <div className="mt-4">
+          <h4 className="text-xs font-bold text-[#566A7F] uppercase tracking-wide mb-2">
+            Active Image
+          </h4>
           
-          <div className="flex flex-col items-center justify-center space-y-3">
-            {isUploading ? (
-              <>
-                <Loader2 className="w-10 h-10 text-primary animate-spin" />
-                <p className="text-sm font-medium text-gray-500">Uploading...</p>
-              </>
-            ) : (
-              <>
-                <div className="p-3 bg-primary/10 text-primary rounded-full">
-                  <UploadCloud className="w-6 h-6" />
+          <div className="max-w-md">
+            <div className="relative group bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-all">
+              <div className="aspect-[16/9] w-full bg-gray-50 relative flex items-center justify-center p-2">
+                <img src={currentDisplayUrl} alt="Uploaded" className="max-w-full max-h-full object-contain rounded drop-shadow-sm" />
+                
+                {/* Badge */}
+                <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                  {currentDisplayUrl === defaultImage ? "Default Image" : "Current Image"}
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-700">
-                    {isDragActive ? "Drop here..." : label}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">PNG, JPG, WEBP up to 5MB</p>
-                </div>
-              </>
-            )}
+
+                {/* Remove Button if allowDelete is true */}
+                {allowDelete && (
+                  <button 
+                    onClick={removeImage}
+                    type="button"
+                    className="absolute top-2 right-2 p-1.5 bg-white text-red-500 hover:bg-red-500 hover:text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all shadow-sm z-10"
+                    title="Revert to Default Image"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}

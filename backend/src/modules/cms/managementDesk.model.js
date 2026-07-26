@@ -27,7 +27,7 @@ const managementDeskSchema = new mongoose.Schema(
     },
     heroBgImage: {
       type: String,
-      default: '/assets/Images/image 2.png',
+      default: '/assets/Images/people/management_desk_main.png',
     },
     showIntro: {
       type: Boolean,
@@ -60,8 +60,8 @@ const managementDeskSchema = new mongoose.Schema(
           badgeRole: 'Chairman',
           tag: 'MESSAGE FROM OUR CHAIRMAN',
           title: 'Leadership Vision',
-          image: '/assets/Images/Group 164.png',
-          thumbnail: '/assets/Images/image 32.png',
+          image: '/assets/Images/people/management_desk_group.png',
+          thumbnail: '/assets/Images/people/management_desk_thumb.png',
           description: [
             "The evolution of business continually shapes the experiences that define tomorrow's management culture. When understanding path in leadership starts to merge, a true perspective of real theoretical knowledge — they reveal the defining nature of KSBM.",
             "We believe that robust leaders are forged by instilling a commitment to personal excellence and inspiring organizational cultures. Our primary mandate is to groom talent that is ethically grounded, and at KSBM, this is our overarching commitment to shaping a transformative future.",
@@ -74,8 +74,8 @@ const managementDeskSchema = new mongoose.Schema(
           badgeRole: 'Vice Chairman',
           tag: 'MESSAGE FROM OUR VICE CHAIRMAN',
           title: 'Leadership Vision',
-          image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-          thumbnail: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+          image: '/assets/Images/people/management_desk_group.png',
+          thumbnail: '/assets/Images/people/management_desk_thumb.png',
           description: [
             "The world of business demands a new caliber of professionals, one that navigates complexities with a balanced mindset and strong ethical compass. It is through comprehensive education and strategic insight that these future leaders are shaped, making KSBM a catalyst in creating capable minds.",
             "We continually strive to cultivate an environment where rigorous academics meet real-world strategy, ensuring our graduates are not just business operators, but management leaders. Our curriculum reflects KSBM's dedication to robust, responsible, and forward-looking education.",
@@ -88,8 +88,8 @@ const managementDeskSchema = new mongoose.Schema(
           badgeRole: 'Executive Director',
           tag: 'MESSAGE FROM OUR DIRECTOR',
           title: 'Leadership Vision',
-          image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-          thumbnail: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+          image: '/assets/Images/people/management_desk_group.png',
+          thumbnail: '/assets/Images/people/management_desk_thumb.png',
           description: [
             "In an era defined by rapid technological shifts and global transformation, management education must remain adaptive and innovative. At KSBM, we prepare our graduates to not only respond to industry evolution but to actively drive change and foster sustainable enterprises.",
             "Our commitment to academic excellence and industrial synergy empowers students with deep analytical rigor, strategic foresight, and hands-on leadership capabilities. We invite ambitious minds to embark on this transformative journey with us."

@@ -3,10 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../../api/axios';
 
-const LeadershipSection = () => {
+const LeadershipSection = ({ previewData }) => {
   const [data, setData] = useState({});
 
   useEffect(() => {
+    if (previewData) {
+      setData(previewData);
+      return;
+    }
     const fetchData = async () => {
       try {
         const response = await api.get('/cms/leadership', { hideLoader: true });
@@ -18,7 +22,7 @@ const LeadershipSection = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [previewData]);
 
   const leadersList = (data.leaders && data.leaders.length > 0) ? data.leaders : [
     {
@@ -157,17 +161,10 @@ const LeadershipSection = () => {
                       className="text-gray-600 text-sm md:text-base leading-relaxed space-y-6"
                     >
                       {(Array.isArray(leader.description) ? leader.description : [leader.description]).filter(Boolean).map((para, pIdx) => (
-                        <p key={pIdx}>{para}</p>
+                        <p key={pIdx} className="whitespace-pre-line">{para}</p>
                       ))}
                     </motion.div>
-                    {leader.signatureImage && (
-                      <motion.div
-                        variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-                        className="mt-6"
-                      >
-                        <img src={leader.signatureImage} alt="Signature" className="h-12 object-contain" />
-                      </motion.div>
-                    )}
+                    {/* Signature removed per request */}
                   </motion.div>
                 </>
               ) : (
@@ -220,17 +217,10 @@ const LeadershipSection = () => {
                       className="text-gray-600 text-sm md:text-base leading-relaxed space-y-6"
                     >
                       {(Array.isArray(leader.description) ? leader.description : [leader.description]).filter(Boolean).map((para, pIdx) => (
-                        <p key={pIdx}>{para}</p>
+                        <p key={pIdx} className="whitespace-pre-line">{para}</p>
                       ))}
                     </motion.div>
-                    {leader.signatureImage && (
-                      <motion.div
-                        variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-                        className="mt-6"
-                      >
-                        <img src={leader.signatureImage} alt="Signature" className="h-12 object-contain" />
-                      </motion.div>
-                    )}
+                    {/* Signature removed per request */}
                   </motion.div>
 
                   {/* Right Image */}

@@ -12,7 +12,7 @@ const bbaPageSchema = new mongoose.Schema(
     },
     heroImage: {
       type: String,
-      default: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop'
+      default: '/assets/Images/bba/bba_hero_bg.png'
     },
     heroPrimaryBtnText: { type: String, default: 'EXPLORE PROGRAM' },
     heroSecondaryBtnText: { type: String, default: 'DOWNLOAD BROCHURE' },
@@ -32,7 +32,7 @@ const bbaPageSchema = new mongoose.Schema(
     },
     overviewImage: {
       type: String,
-      default: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop'
+      default: '/assets/Images/bba/bba_overview.png'
     },
     overviewBadgeText: { type: String, default: 'UNDERGRADUATE EXCELLENCE' },
     overviewFloatingBadgeText: { type: String, default: '3-Year Foundation' },
@@ -106,7 +106,7 @@ const bbaPageSchema = new mongoose.Schema(
     },
     internshipBgImage: {
       type: String,
-      default: '/assets/Images/image 67.png'
+      default: '/assets/Images/bba/bba_internship_1.png'
     },
     internshipBadge: { type: String, default: 'EXPERIENTIAL LEARNING' },
     internshipBtnText: { type: String, default: 'Apply Now' },
@@ -114,9 +114,9 @@ const bbaPageSchema = new mongoose.Schema(
     internshipImages: {
       type: [String],
       default: [
-        '/assets/Images/image 2.png',
-        '/assets/Images/image 27.png',
-        '/assets/Images/image 28.png'
+        '/assets/Images/bba/bba_internship_1.png',
+        '/assets/Images/bba/bba_internship_2.png',
+        '/assets/Images/bba/bba_internship_3.png'
       ]
     },
     eligibility: {
@@ -194,7 +194,7 @@ const bbaPageSchema = new mongoose.Schema(
       },
       images: {
         type: [String],
-        default: ['/assets/Images/image 49.png', '/assets/Images/image 60.png']
+        default: ['/assets/Images/bba/bba_internship_1.png', '/assets/Images/bba/bba_internship_2.png']
       },
       features: {
         type: [
@@ -226,11 +226,11 @@ const bbaPageSchema = new mongoose.Schema(
           }
         ],
         default: [
-          { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/image 67.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
-          { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/image 27.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-          { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/image 28.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-          { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/image 2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
-          { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/image 58.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
+          { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/bba/bba_gallery_1.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
+          { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/bba/bba_gallery_2.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
+          { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/bba/bba_gallery_1.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
+          { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/bba/bba_gallery_2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
+          { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/bba/bba_gallery_1.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
         ]
       }
     },
@@ -242,10 +242,10 @@ const bbaPageSchema = new mongoose.Schema(
         default: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.'
       },
       viewBtnText: { type: String, default: 'View Calendar' },
-      viewBtnUrl: { type: String, default: '/assets/Images/image 64.png' },
+      viewBtnUrl: { type: String, default: '/assets/Images/bba/bba_schedule.png' },
       downloadBtnText: { type: String, default: 'Download Calendar' },
-      downloadBtnUrl: { type: String, default: '/assets/Images/image 64.png' },
-      image: { type: String, default: '/assets/Images/image 64.png' },
+      downloadBtnUrl: { type: String, default: '/assets/Images/bba/bba_schedule.png' },
+      image: { type: String, default: '/assets/Images/bba/bba_schedule.png' },
       events: { type: [mongoose.Schema.Types.Mixed], default: [] }
     }
   },

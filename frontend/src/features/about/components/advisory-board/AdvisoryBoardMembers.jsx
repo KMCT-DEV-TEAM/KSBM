@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../../../api/axios';
 
-const AdvisoryBoardMembers = () => {
+const AdvisoryBoardMembers = ({ data }) => {
   const [members, setMembers] = useState([
     { id: 1, name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
     { id: 2, name: "Dr. Ayisha Nazreen", title: "SPECIAL INVITEE", image: "/assets/Images/image 31.png" },
@@ -19,6 +19,10 @@ const AdvisoryBoardMembers = () => {
   ]);
 
   useEffect(() => {
+    if (data && data.members && data.members.length > 0) {
+      setMembers(data.members);
+      return;
+    }
     const fetchData = async () => {
       try {
         const response = await api.get('/cms/advisory-board', { hideLoader: true });
@@ -29,8 +33,10 @@ const AdvisoryBoardMembers = () => {
         console.error('Error fetching Advisory Board data:', error);
       }
     };
-    fetchData();
-  }, []);
+    if (!data) {
+      fetchData();
+    }
+  }, [data]);
   return (
     <section className="pb-20 w-[98%] max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-y-12 lg:gap-y-16">

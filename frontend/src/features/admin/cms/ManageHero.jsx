@@ -8,6 +8,7 @@ import BannerUploader from './components/BannerUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
+import Hero from '../../home/components/Hero';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -164,25 +165,24 @@ const ManageHero = () => {
   };
 
   useEffect(() => {
+    let interval;
     if (isPreviewModalOpen && iframeRef.current) {
-      // Small timeout to allow iframe to load if just opened
-      setTimeout(() => {
+      const sendData = () => {
         if (iframeRef.current && iframeRef.current.contentWindow) {
-          iframeRef.current.contentWindow.postMessage(
-            { type: 'preview-hero-data', payload: previewData },
-            '*'
-          );
+          iframeRef.current.contentWindow.postMessage({ type: 'preview-hero-data', payload: previewData }, '*');
         }
-      }, 500);
+      };
       
-      // Also send immediately in case it's already loaded and data changed
-      if (iframeRef.current.contentWindow) {
-        iframeRef.current.contentWindow.postMessage(
-          { type: 'preview-hero-data', payload: previewData },
-          '*'
-        );
-      }
+      sendData();
+      
+      let count = 0;
+      interval = setInterval(() => {
+        sendData();
+        count++;
+        if (count > 10) clearInterval(interval);
+      }, 500);
     }
+    return () => clearInterval(interval);
   }, [previewData, isPreviewModalOpen]);
 
   if (isLoading) {
@@ -240,11 +240,11 @@ const ManageHero = () => {
           </div>
           <div className="flex-1 bg-gray-100 overflow-hidden relative flex justify-center items-center">
             <div className={`bg-white shadow-2xl transition-all duration-300 h-[85vh] ${previewMode === 'desktop' ? 'w-[100%] max-w-[1920px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <iframe 
+              <iframe
                 ref={iframeRef}
                 src="/preview/hero"
                 className="w-full h-full border-0"
-                title="Hero Preview"
+                title="Live Preview"
               />
             </div>
           </div>

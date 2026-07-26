@@ -6,14 +6,14 @@ import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
 import confirmAction from '../../../../utils/confirmAction';
 
-const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, onChange, onUploadStateChange, label, uploadEndpoint = '/upload', disableDelete = false, layout = 'vertical', deferredMode = false }) => {
+const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, onChange, onUploadStateChange, label, uploadEndpoint = '/upload', disableDelete = false, layout = 'vertical', deferredMode = false, defaultImage = '' }) => {
   const [isUploading, setIsUploading] = useState(false);
-  const displayUrl = currentLogoUrl || value || currentImage;
+  const displayUrl = currentLogoUrl || value || currentImage || defaultImage;
 
   const handleSuccess = useCallback(async (url, file = null) => {
     if (!deferredMode) {
-      // If we are clearing the image (url === ''), delete the old image from server
-      if (url === '' && displayUrl && !displayUrl.startsWith('blob:')) {
+      // If we are clearing the image, delete the old image from server if it wasn't a default or blob
+      if (url === '' && displayUrl && !displayUrl.startsWith('blob:') && displayUrl !== defaultImage) {
         try {
           await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
         } catch (error) {
@@ -21,9 +21,10 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
         }
       }
     }
-    if (onUploadSuccess) onUploadSuccess(url, file);
-    if (onChange) onChange(url, file);
-  }, [onUploadSuccess, onChange, displayUrl, deferredMode]);
+    const finalUrl = url || defaultImage;
+    if (onUploadSuccess) onUploadSuccess(finalUrl, file);
+    if (onChange) onChange(finalUrl, file);
+  }, [onUploadSuccess, onChange, displayUrl, deferredMode, defaultImage]);
 
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -43,7 +44,7 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
     formData.append('image', file);
 
     try {
-      if (displayUrl && !displayUrl.startsWith('blob:')) {
+      if (displayUrl && !displayUrl.startsWith('blob:') && displayUrl !== defaultImage) {
         try {
           await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
         } catch (error) {
@@ -84,7 +85,7 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
       setIsUploading(false);
       if (onUploadStateChange) onUploadStateChange(false);
     }
-  }, [handleSuccess, onUploadStateChange, displayUrl, uploadEndpoint]);
+  }, [handleSuccess, onUploadStateChange, displayUrl, uploadEndpoint, defaultImage, deferredMode]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -135,11 +136,15 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
         {displayUrl && (
           <div className={`${layout === 'horizontal' ? 'flex-1 m-0' : 'mt-4'} p-4 border border-gray-100 rounded-lg bg-gray-50 flex items-center justify-between`}>
             <div className="flex items-center space-x-4">
-              <div className="w-20 h-20 bg-white border border-gray-200 rounded flex items-center justify-center p-1 shadow-sm">
+              <div className="w-20 h-20 bg-white border border-gray-200 rounded flex items-center justify-center p-1 shadow-sm relative">
                 <img src={displayUrl} alt="Uploaded Image" className="max-w-full max-h-full object-contain" />
+                <div className="absolute -top-2 -left-2 bg-black/60 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                  {displayUrl === defaultImage ? "Default" : "Current"}
+                </div>
               </div>
               <div>
                 <p className="text-sm font-semibold text-gray-700">{label || "Current Image"}</p>
+                <p className="text-xs text-gray-500">{displayUrl === defaultImage ? "Using default image setup" : "Active custom image"}</p>
               </div>
             </div>
             {!disableDelete && (
@@ -147,13 +152,13 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
                 onClick={async (e) => {
                   e.preventDefault();
                   await confirmAction({
-                    title: 'Are you sure?',
-                    message: 'You want to remove this image?',
-                    confirmText: 'Yes, remove it!',
+                    title: 'Revert to Default?',
+                    message: 'Are you sure you want to remove this image and revert to the default image setup?',
+                    confirmText: 'Yes, revert to default',
                     variant: 'danger',
                     action: async () => {
                       if (!deferredMode) {
-                        if (displayUrl && !displayUrl.includes('placeholder') && !displayUrl.startsWith('blob:')) {
+                        if (displayUrl && !displayUrl.includes('placeholder') && !displayUrl.startsWith('blob:') && displayUrl !== defaultImage) {
                           try {
                             await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
                           } catch (deleteErr) {
@@ -166,7 +171,7 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
                   });
                 }}
                 className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
-                title="Remove Image"
+                title="Revert to Default Image"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -179,4 +184,3 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
 };
 
 export default LogoUploader;
-

@@ -10,7 +10,7 @@ const advisoryBoardSchema = new mongoose.Schema(
   {
     heroHeading: { type: String, default: "Institutional Advisory Board" },
     heroSubtext: { type: String, default: "The Institutional Advisory Board of KMCT School of Business Management plays a crucial role in guiding the institution's strategic vision and academic progress." },
-    heroBgImage: { type: String, default: "/assets/Images/image 2.png" },
+    heroBgImage: { type: String, default: "/assets/Images/people/advisory_board_default.png" },
     contentSubheading: { type: String, default: "COMMITTEE" },
     contentHeading: { type: String, default: "Advisory Board" },
     contentDescription: { 
@@ -23,17 +23,17 @@ const advisoryBoardSchema = new mongoose.Schema(
     members: {
       type: [memberSchema],
       default: [
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Ayisha Nazreen", title: "SPECIAL INVITEE", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Shmmon M", title: "MEMBER SECRETARY", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" }
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/advisory_board_default.png" },
+        { name: "Dr. Ayisha Nazreen", title: "SPECIAL INVITEE", image: "/assets/Images/people/advisory_board_default.png" },
+        { name: "Dr. Shmmon M", title: "MEMBER SECRETARY", image: "/assets/Images/people/advisory_board_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/advisory_board_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/advisory_board_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/advisory_board_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/advisory_board_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/advisory_board_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/advisory_board_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/advisory_board_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/advisory_board_default.png" }
       ]
     },
   },

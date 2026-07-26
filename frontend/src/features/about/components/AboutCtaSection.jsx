@@ -4,10 +4,14 @@ import Link from 'next/link';
 import api from '../../../api/axios';
 const watermarkImg = '/assets/Images/watermark_logo.png';
 
-const AboutCtaSection = () => {
+const AboutCtaSection = ({ previewData }) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
+    if (previewData) {
+      setData(previewData);
+      return;
+    }
     const fetchData = async () => {
       try {
         const response = await api.get('/cms/about-us-cta', { hideLoader: true });
@@ -19,7 +23,7 @@ const AboutCtaSection = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [previewData]);
 
   const watermarkWidthClass = 'w-[200px] md:w-[250px] lg:w-[380px] #2B2F66';
   const heading = data?.heading || 'Begin Your Leadership Journey at KSBM';

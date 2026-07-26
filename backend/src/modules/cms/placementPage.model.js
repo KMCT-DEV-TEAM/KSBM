@@ -42,7 +42,7 @@ const placementPageSchema = new mongoose.Schema(
       title: { type: String, default: 'Stay Informed. Stay Prepared. \nExcel in Every Examination.' },
       subtitle: { type: String, default: 'Equip yourself with the tools, knowledge, and confidence to ace every examination. Prepare smartly and secure your future with structured learning.' },
       badge: { type: String, default: 'Placement 2026' },
-      backgroundImage: { type: String, default: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=2787&auto=format&fit=crop' }
+      backgroundImage: { type: String, default: '/assets/Images/placements/placement_hero_bg.png' }
     },
     overview: {
       title: { type: String, default: 'Placement Excellence' },
@@ -53,15 +53,15 @@ const placementPageSchema = new mongoose.Schema(
       stat1Label: { type: String, default: 'Students Placed' },
       stat2Value: { type: String, default: '100+' },
       stat2Label: { type: String, default: 'Companies Visited' },
-      collageImage1: { type: String, default: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1000&auto=format&fit=crop' },
-      collageImage2: { type: String, default: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1000&auto=format&fit=crop' },
+      collageImage1: { type: String, default: '/assets/Images/placements/collage_1.png' },
+      collageImage2: { type: String, default: '/assets/Images/placements/collage_2.png' },
       floatingQuote: { type: String, default: '"KSBM graduates are consistently rated as \'Highly Adaptable\' by global recruiters."' },
       overviewLogos: {
         type: [String],
         default: [
-          '/assets/Images/icar_logo.jpg',
-          '/assets/Images/vit_logo.jpg',
-          '/assets/Images/rcc_logo.jpg'
+          '/assets/Images/placements/icar_logo.jpg',
+          '/assets/Images/placements/vit_logo.jpg',
+          '/assets/Images/placements/rcc_logo.jpg'
         ]
       }
     },
@@ -70,10 +70,10 @@ const placementPageSchema = new mongoose.Schema(
       items: {
         type: [achieverSchema],
         default: [
-          { name: 'Pratik Patil', program: 'MBA 2022-24', company: 'Google', role: 'Business Analyst', companyLogo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=600&auto=format&fit=crop' },
-          { name: 'Megha Sharma', program: 'MBA 2022-24', company: 'Microsoft', role: 'Product Manager', companyLogo: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop' },
-          { name: 'Rohit Verma', program: 'MBA 2022-24', company: 'Infosys', role: 'Software Engineer', companyLogo: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop' },
-          { name: 'Neha Gupta', program: 'MBA 2022-24', company: 'Cognizant', role: 'Consultant', companyLogo: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Cognizant_logo_2022.svg', image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=600&auto=format&fit=crop' },
+          { name: 'Pratik Patil', program: 'MBA 2022-24', company: 'Google', role: 'Business Analyst', companyLogo: '/assets/Images/placements/google_logo.svg', image: '/assets/Images/placements/achiever_1.png' },
+          { name: 'Megha Sharma', program: 'MBA 2022-24', company: 'Microsoft', role: 'Product Manager', companyLogo: '/assets/Images/placements/microsoft_logo.svg', image: '/assets/Images/placements/achiever_2.png' },
+          { name: 'Rohit Verma', program: 'MBA 2022-24', company: 'Infosys', role: 'Software Engineer', companyLogo: '/assets/Images/placements/infosys_logo.svg', image: '/assets/Images/placements/achiever_1.png' },
+          { name: 'Neha Gupta', program: 'MBA 2022-24', company: 'Cognizant', role: 'Consultant', companyLogo: '/assets/Images/placements/cognizant_logo.svg', image: '/assets/Images/placements/achiever_2.png' },
         ]
       }
     },
@@ -83,11 +83,11 @@ const placementPageSchema = new mongoose.Schema(
       items: {
         type: [recruiterSchema],
         default: [
-          { name: 'Infosys', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg' },
-          { name: 'Wipro', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg' },
-          { name: 'Cognizant', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Cognizant_logo_2022.svg' },
-          { name: 'Google', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg' },
-          { name: 'Microsoft', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg' },
+          { name: 'Infosys', logo: '/assets/Images/placements/infosys_logo.svg' },
+          { name: 'Wipro', logo: '/assets/Images/placements/wipro_logo.svg' },
+          { name: 'Cognizant', logo: '/assets/Images/placements/cognizant_logo.svg' },
+          { name: 'Google', logo: '/assets/Images/placements/google_logo.svg' },
+          { name: 'Microsoft', logo: '/assets/Images/placements/microsoft_logo.svg' },
         ]
       }
     },
@@ -112,7 +112,7 @@ const placementPageSchema = new mongoose.Schema(
           { title: 'Personality Development' },
         ]
       },
-      backgroundImage: { type: String, default: '/assets/Images/Rectangle 67.png' }
+      backgroundImage: { type: String, default: '/assets/Images/placements/placement_main.png' }
     },
     facultyInCharge: {
       badge: { type: String, default: 'Faculty In-Charge' },
@@ -121,8 +121,8 @@ const placementPageSchema = new mongoose.Schema(
       items: {
         type: [facultySchema],
         default: [
-          { name: 'Dr. Sarah Johnson', designation: 'Head of Placements', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop' },
-          { name: 'Prof. David Chen', designation: 'Corporate Relations', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop' }
+          { name: 'Dr. Sarah Johnson', designation: 'Head of Placements', image: '/assets/Images/placements/committee_1.png' },
+          { name: 'Prof. David Chen', designation: 'Corporate Relations', image: '/assets/Images/placements/committee_1.png' }
         ]
       }
     },
@@ -130,13 +130,13 @@ const placementPageSchema = new mongoose.Schema(
       title: { type: String, default: 'Placement Committee' },
       description: { type: String, default: 'The Placement Committee consists of student representatives who actively coordinate with recruiters, schedule interviews, and ensure a smooth placement process.' },
       buttonText: { type: String, default: 'Connect with Committee' },
-      image: { type: String, default: '/assets/Images/placement.png' },
+      image: { type: String, default: '/assets/Images/placements/placement_main.png' },
       items: {
         type: [committeeSchema],
         default: [
-          { name: 'Rahul Sharma', role: 'President', image: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?q=80&w=800&auto=format&fit=crop' },
-          { name: 'Anita Patel', role: 'Corporate Outreach', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop' },
-          { name: 'Vikram Singh', role: 'Student Coordinator', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop' }
+          { name: 'Rahul Sharma', role: 'President', image: '/assets/Images/placements/committee_1.png' },
+          { name: 'Anita Patel', role: 'Corporate Outreach', image: '/assets/Images/placements/committee_1.png' },
+          { name: 'Vikram Singh', role: 'Student Coordinator', image: '/assets/Images/placements/committee_1.png' }
         ]
       }
     },
@@ -145,9 +145,9 @@ const placementPageSchema = new mongoose.Schema(
       items: {
         type: [activitySchema],
         default: [
-          { title: 'Mock Interview Session', description: 'Industry experts conduct one-on-one mock interviews to prepare students for real-world scenarios.', image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=800&auto=format&fit=crop' },
-          { title: 'Resume Building Workshop', description: 'Interactive workshop helping students craft compelling resumes that stand out to top recruiters.', image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop' },
-          { title: 'Pre-Placement Talk', description: 'An engaging session by top recruiters on expectations from fresh graduates and how to build a strong career trajectory.', image: 'https://images.unsplash.com/photo-1515169067868-5387ec356754?q=80&w=800&auto=format&fit=crop' }
+          { title: 'Mock Interview Session', description: 'Industry experts conduct one-on-one mock interviews to prepare students for real-world scenarios.', image: '/assets/Images/placements/activity_1.png' },
+          { title: 'Resume Building Workshop', description: 'Interactive workshop helping students craft compelling resumes that stand out to top recruiters.', image: '/assets/Images/placements/activity_2.png' },
+          { title: 'Pre-Placement Talk', description: 'An engaging session by top recruiters on expectations from fresh graduates and how to build a strong career trajectory.', image: '/assets/Images/placements/activity_1.png' }
         ]
       }
     }

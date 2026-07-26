@@ -19,7 +19,7 @@ const facultySchema = new mongoose.Schema(
     },
     heroBgImage: {
       type: String,
-      default: "/assets/Images/image 2.png"
+      default: "/assets/Images/faculty/faculty_default.png"
     },
     introSubheading: {
       type: String,
@@ -36,23 +36,23 @@ const facultySchema = new mongoose.Schema(
     ksbmFaculty: {
       type: [memberSchema],
       default: [
-        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 1 },
-        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 2 },
-        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 3 },
-        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 4 },
-        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 5 },
-        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 6 },
-        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 7 },
-        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 8 }
+        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/faculty/faculty_member_1.png", order: 1 },
+        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/faculty/faculty_member_2.png", order: 2 },
+        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/faculty/faculty_member_1.png", order: 3 },
+        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/faculty/faculty_member_2.png", order: 4 },
+        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/faculty/faculty_member_1.png", order: 5 },
+        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/faculty/faculty_member_2.png", order: 6 },
+        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/faculty/faculty_member_1.png", order: 7 },
+        { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/faculty/faculty_member_2.png", order: 8 }
       ]
     },
     adjunctFaculty: {
       type: [memberSchema],
       default: [
-        { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 1 },
-        { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 2 },
-        { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 3 },
-        { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 4 }
+        { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/faculty/faculty_member_1.png", order: 1 },
+        { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/faculty/faculty_member_2.png", order: 2 },
+        { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/faculty/faculty_member_1.png", order: 3 },
+        { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/faculty/faculty_member_2.png", order: 4 }
       ]
     }
   },

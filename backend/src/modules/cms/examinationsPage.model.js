@@ -23,7 +23,7 @@ const examinationsPageSchema = new mongoose.Schema(
       type: String,
       default: 'Access examination schedules, important notifications, and semester results in one place. Stay updated with key dates and academic announcements to ensure a smooth and well-organized examination experience throughout your MBA journey.'
     },
-    heroImage: { type: String, default: '/assets/Images/image 73.png' },
+    heroImage: { type: String, default: '/assets/Images/examinations/exam_hero_bg.png' },
 
     overviewTitle: { type: String, default: 'Examination Overview' },
     overviewText1: {
@@ -34,7 +34,7 @@ const examinationsPageSchema = new mongoose.Schema(
       type: String,
       default: 'The examination process follows the academic calendar and is conducted with fairness, consistency, and integrity. Students are encouraged to demonstrate analytical thinking, problem-solving abilities, and managerial competencies through various evaluation methods. Timely notifications, published examination schedules, and prompt result declarations help students stay informed and well-prepared.'
     },
-    overviewImage: { type: String, default: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop' },
+    overviewImage: { type: String, default: '/assets/Images/examinations/exam_main.png' },
 
     calendarTitle: { type: String, default: 'Download the Official Exam Calendar' },
     calendarText: {
@@ -42,10 +42,10 @@ const examinationsPageSchema = new mongoose.Schema(
       default: 'Stay informed with the official Exam Calendar. Access semester schedules, examination dates, academic milestones, holidays, project timelines, and important university events—all in one place.'
     },
     calendarViewBtnText: { type: String, default: 'View Calendar' },
-    calendarViewBtnUrl: { type: String, default: '/assets/Images/image 64.png' },
+    calendarViewBtnUrl: { type: String, default: '/assets/Images/examinations/exam_schedule.png' },
     calendarDownloadBtnText: { type: String, default: 'Download Calendar' },
-    calendarDownloadBtnUrl: { type: String, default: '/assets/Images/image 64.png' },
-    calendarImage: { type: String, default: '/assets/Images/image 64.png' },
+    calendarDownloadBtnUrl: { type: String, default: '/assets/Images/examinations/exam_schedule.png' },
+    calendarImage: { type: String, default: '/assets/Images/examinations/exam_schedule.png' },
 
     notifications: {
       type: [notificationItemSchema],

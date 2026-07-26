@@ -42,10 +42,7 @@ const ManageHomePage = () => {
 
   return (
     <div className="space-y-6 pb-16">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold text-gray-900">Home Page Management</h1>
-        <p className="text-sm text-gray-500">Manage all sections of the home page from a single unified interface. Select a tab below to edit its content.</p>
-      </div>
+
 
       {/* Tabs with Scroll Arrows */}
       <div className="relative flex items-center gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
