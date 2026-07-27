@@ -42,15 +42,15 @@ const PeopleMegaMenu = ({ isOpen, onMouseEnter, onMouseLeave }) => {
           transition={{ duration: 0.2 }}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
-          className="absolute top-[calc(100%+35px)] left-1/2 -translate-x-1/2 w-[380px] bg-white rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden flex flex-col p-8 z-50"
+          className="absolute top-[calc(100%+28px)] left-1/2 -translate-x-1/2 w-[280px] bg-white rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden flex flex-col p-5 z-50"
         >
-          <div className="flex items-center justify-between pb-3 mb-4 border-b border-gray-100">
+          <div className="flex items-center justify-between pb-2 mb-3 border-b border-gray-100">
             <span className="text-[11px] font-bold tracking-widest text-gray-400 uppercase">
               ACADEMICS & RESOURCES
             </span>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             {peopleLinks.map((link, idx) => (
               <Link
                 key={idx}

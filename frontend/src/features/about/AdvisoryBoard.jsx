@@ -62,9 +62,15 @@ const AdvisoryBoard = ({ previewData }) => {
       </div>
 
       <div className="bg-[#fcfcfd] min-h-screen">
-        <AdvisoryBoardHero data={{ ...data, ...previewData }} />
-        <AdvisoryBoardContent data={{ ...data, ...previewData }} />
-        <AdvisoryBoardMembers data={{ ...data, ...previewData }} />
+        {(!previewData || previewData.previewType !== 'members') && (
+          <>
+            <AdvisoryBoardHero data={{ ...data, ...previewData }} />
+            <AdvisoryBoardContent data={{ ...data, ...previewData }} />
+          </>
+        )}
+        {(!previewData || previewData.previewType !== 'hero') && (
+          <AdvisoryBoardMembers data={{ ...data, ...previewData }} />
+        )}
       </div>
     </>
   );

@@ -18,7 +18,7 @@ const ManagementDeskHero = ({ data }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white mb-3 tracking-tight"
+          className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
         >
           {data?.heroHeading || "Management Desk"}
         </motion.h1>
@@ -26,7 +26,7 @@ const ManagementDeskHero = ({ data }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-white/90 text-xs sm:text-sm max-w-4xl leading-relaxed font-normal"
+          className="text-white/90 text-xs md:text-sm lg:text-base max-w-3xl leading-relaxed whitespace-pre-wrap"
         >
           {data?.heroSubtext || "Our leaders stand at the forefront of delivering dynamic management education through innovative teaching, practical learning and personalized mentorship to shape today's students into tomorrow's successful business leaders."}
         </motion.p>

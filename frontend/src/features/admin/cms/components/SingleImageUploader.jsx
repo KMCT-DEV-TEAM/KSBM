@@ -157,8 +157,8 @@ const SingleImageUploader = ({
                   {currentDisplayUrl === defaultImage ? "Default Image" : "Current Image"}
                 </div>
 
-                {/* Remove Button if allowDelete is true */}
-                {allowDelete && (
+                {/* Remove Button if allowDelete is true and it's not the default image */}
+                {allowDelete && currentDisplayUrl !== defaultImage && (
                   <button 
                     onClick={removeImage}
                     type="button"

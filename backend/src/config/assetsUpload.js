@@ -26,6 +26,11 @@ if (!fs.existsSync(aboutusAssetsDir)) {
   fs.mkdirSync(aboutusAssetsDir, { recursive: true });
 }
 
+const managementAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/management');
+if (!fs.existsSync(managementAssetsDir)) {
+  fs.mkdirSync(managementAssetsDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     let targetDir = assetsDir;
@@ -35,6 +40,8 @@ const storage = multer.diskStorage({
       targetDir = homeAssetsDir;
     } else if (req.originalUrl.includes('/upload/aboutus')) {
       targetDir = aboutusAssetsDir;
+    } else if (req.originalUrl.includes('/upload/management')) {
+      targetDir = managementAssetsDir;
     }
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir, { recursive: true });

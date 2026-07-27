@@ -16,21 +16,26 @@ const ManageGoverningBody = () => {
   return (
     <div className="w-full space-y-8">
       {/* Tabs */}
-      <div className="flex flex-wrap gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm w-fit">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all ${
-              activeTab === tab.id
-                ? 'bg-primary text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
-            }`}
-          >
-            {tab.icon}
-            <span>{tab.label}</span>
-          </button>
-        ))}
+      <div className="relative flex items-center gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
+        <div
+          className="flex overflow-x-auto gap-2 scroll-smooth flex-1 py-1 px-1 custom-scrollbar"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${
+                activeTab === tab.id
+                  ? 'bg-primary text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
+              }`}
+            >
+              {tab.icon}
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       <AnimatePresence mode="wait">
