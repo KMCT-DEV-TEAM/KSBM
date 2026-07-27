@@ -15,6 +15,7 @@ const legacySchema = new mongoose.Schema(
       type: String, 
       default: 'Founded by the visionary leader Dr. Navas K.M., KMCT Group of Institutions has been a beacon of quality education and healthcare in Kerala. With over two decades of excellence, the group has established numerous institutions that shape the future of thousands of students.' 
     },
+    image: { type: String, default: '/assets/Images/image 2.png' },
     cards: {
       type: [legacyCardSchema],
       default: [
@@ -22,19 +23,19 @@ const legacySchema = new mongoose.Schema(
           year: '1994',
           title: 'The Beginning',
           description: 'KMCT was established by Dr. Navas K.M. with a vision to provide quality education and healthcare to the society.',
-          image: '/assets/Images/image 34.png'
+          image: '/assets/Images/legacy/legacy_timeline_1.png'
         },
         {
           year: '2008',
           title: 'Medical College',
           description: 'Establishment of KMCT Medical College, a milestone in providing world-class healthcare education.',
-          image: '/assets/Images/image 34.png'
+          image: '/assets/Images/legacy/legacy_timeline_2.png'
         },
         {
           year: '2024',
           title: 'University Status',
           description: 'KMCT Group achieved a historic milestone by becoming a full-fledged University.',
-          image: '/assets/Images/image 34.png'
+          image: '/assets/Images/legacy/legacy_timeline_3.png'
         }
       ]
     },

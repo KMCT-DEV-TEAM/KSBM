@@ -4,7 +4,7 @@ const visionMissionSchema = new mongoose.Schema(
   {
     visionTitle: { type: String, default: 'Our Vision' },
     visionContent: { type: [String], default: ['"To mould to competent healthcare professionals with leadership qualities through comprehensive nursing education, practice and research."'] },
-    visionImage: { type: String, default: '/assets/Images/image 27.png' },
+    visionImage: { type: String, default: '/assets/Images/aboutus/vision.png' },
     missionTitle: { type: String, default: 'Our Mission' },
     missionContent: { 
       type: [String], 
@@ -15,7 +15,7 @@ const visionMissionSchema = new mongoose.Schema(
         'To contribute to the healthcare sector by producing highly skilled and dedicated nursing professionals.'
       ]
     },
-    missionImage: { type: String, default: '/assets/Images/image 28.png' },
+    missionImage: { type: String, default: '/assets/Images/aboutus/mission.png' },
   },
   { timestamps: true }
 );

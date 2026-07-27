@@ -6,9 +6,9 @@ import AdvisoryBoardMembers from './components/advisory-board/AdvisoryBoardMembe
 import Loader from '../../components/Loader';
 import api from '../../api/axios';
 
-const AdvisoryBoard = () => {
+const AdvisoryBoard = ({ previewData }) => {
   const [data, setData] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(!!previewData);
 
   useEffect(() => {
     let windowLoaded = document.readyState === 'complete';
@@ -58,13 +58,13 @@ const AdvisoryBoard = () => {
       <div 
         className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
-        <Loader fullScreen={false} />
+        {!previewData && <Loader fullScreen={false} />}
       </div>
 
       <div className="bg-[#fcfcfd] min-h-screen">
-        <AdvisoryBoardHero data={data} />
-        <AdvisoryBoardContent data={data} />
-        <AdvisoryBoardMembers data={data} />
+        <AdvisoryBoardHero data={{ ...data, ...previewData }} />
+        <AdvisoryBoardContent data={{ ...data, ...previewData }} />
+        <AdvisoryBoardMembers data={{ ...data, ...previewData }} />
       </div>
     </>
   );

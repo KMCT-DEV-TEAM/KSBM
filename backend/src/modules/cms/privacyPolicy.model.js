@@ -5,7 +5,7 @@ const privacyPolicySchema = new mongoose.Schema(
     hero: {
       title: { type: String, default: 'Privacy Policy' },
       subtitle: { type: String, default: 'Browse our FAQs to learn more about admissions, course structure, eligibility, placement assistance, scholarships, and campus facilities before you apply.' },
-      backgroundImage: { type: String, default: '/assets/Images/image 73.png' }
+      backgroundImage: { type: String, default: '/assets/Images/privacy/privacy_hero_bg.png' }
     },
     mainContent: {
       heading: { type: String, default: 'Privacy Policy' },

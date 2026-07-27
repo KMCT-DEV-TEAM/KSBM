@@ -5,7 +5,7 @@ const termsAndConditionsSchema = new mongoose.Schema(
     hero: {
       title: { type: String, default: 'Terms & Conditions' },
       subtitle: { type: String, default: 'Please review our institutional terms of service, website usage agreement, and general guidelines governing access to KMCT School of Business Management platforms.' },
-      backgroundImage: { type: String, default: '/assets/Images/image 73.png' }
+      backgroundImage: { type: String, default: '/assets/Images/terms/terms_hero_bg.png' }
     },
     mainContent: {
       heading: { type: String, default: 'Terms of Use' },

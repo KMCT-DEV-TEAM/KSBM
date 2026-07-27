@@ -689,11 +689,12 @@ export const getLegacySettings = async (req, res) => {
 
 export const updateLegacySettings = async (req, res) => {
   try {
-    const { subheading, heading, description, cards } = req.body;
+    const { subheading, heading, description, cards, image } = req.body;
     const settings = await Legacy.getSettings();
     if (subheading !== undefined) settings.subheading = subheading;
     if (heading !== undefined) settings.heading = heading;
     if (description !== undefined) settings.description = description;
+    if (image !== undefined) settings.image = image;
     if (cards !== undefined) settings.cards = cards;
     const updatedSettings = await settings.save();
     res.json(updatedSettings);

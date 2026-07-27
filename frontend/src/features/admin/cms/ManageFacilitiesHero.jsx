@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
 import FacilitiesHero from '../../facilities/components/FacilitiesHero';
 import confirmAction from '../../../utils/confirmAction';
-import SingleImageUploader from './components/SingleImageUploader';
+import HeroImageUploader from './components/HeroImageUploader';
 import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
 
@@ -146,12 +146,20 @@ const ManageFacilitiesHero = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Background Image</label>
-            <SingleImageUploader 
+            <div className="flex justify-between items-baseline mb-2">
+              <label className="block text-sm font-semibold text-gray-700">Background Image</label>
+              <span className="text-xs font-semibold text-gray-600 bg-gray-100 px-3 py-1 rounded-full border border-gray-200">
+                Recommended Size: 1920 × 1080 px (16:9)
+              </span>
+            </div>
+            <HeroImageUploader 
               imageUrl={hero.backgroundImage} 
               onUploadComplete={(url) => setHero({ ...hero, backgroundImage: url })}
               onUploadStateChange={setIsUploading}
-              label="Upload Background Image"
+              label="Drag & drop hero background image, or click to select"
+              uploadEndpoint="/upload/facilities"
+              recommendedSize="1920 × 1080 px (16:9 aspect ratio)"
+              defaultImage="/assets/Images/fecilities/facilities_hero.png"
             />
           </div>
         </div>

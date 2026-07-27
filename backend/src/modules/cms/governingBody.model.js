@@ -10,7 +10,7 @@ const governingBodySchema = new mongoose.Schema(
   {
     heroHeading: { type: String, default: "KSBM Governing Body" },
     heroSubtext: { type: String, default: "Strategizing for excellence: The leadership framework dedicated to advancing pharmaceutical management education through visionary governance, industrial synergy, and academic rigor." },
-    heroBgImage: { type: String, default: "/assets/Images/image 2.png" },
+    heroBgImage: { type: String, default: "/assets/Images/people/governing_body_default.png" },
     contentSubheading: { type: String, default: "COMMITTEE" },
     contentHeading: { type: String, default: "Governing Body" },
     contentDescription: { 
@@ -23,17 +23,17 @@ const governingBodySchema = new mongoose.Schema(
     members: {
       type: [memberSchema],
       default: [
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Ayisha Nazreen", title: "SPECIAL INVITEE", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Sujith Varma", title: "MEMBER SECRETARY", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" }
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/governing_body_default.png" },
+        { name: "Dr. Ayisha Nazreen", title: "SPECIAL INVITEE", image: "/assets/Images/people/governing_body_default.png" },
+        { name: "Dr. Sujith Varma", title: "MEMBER SECRETARY", image: "/assets/Images/people/governing_body_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/governing_body_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/governing_body_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/governing_body_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/governing_body_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/governing_body_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/governing_body_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/governing_body_default.png" },
+        { name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/people/governing_body_default.png" }
       ]
     },
   },

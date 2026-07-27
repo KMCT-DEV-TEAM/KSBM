@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Eye } from 'lucide-react';
 import api from '../../../api/axios';
 
-const VisionMissionSection = () => {
+const VisionMissionSection = ({ previewData }) => {
   const scrollRef = useRef(null);
   const floatScrollRef = useRef(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -29,6 +29,10 @@ const VisionMissionSection = () => {
   const indicatorY = useTransform(scrollYProgress, [0, 1], [0, 110]);
 
   useEffect(() => {
+    if (previewData) {
+      setData(prev => ({ ...prev, ...previewData }));
+      return;
+    }
     const fetchData = async () => {
       try {
         const response = await api.get('/cms/vision-mission', { hideLoader: true });
@@ -40,7 +44,7 @@ const VisionMissionSection = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [previewData]);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -125,7 +129,7 @@ const VisionMissionSection = () => {
 
               {/* Content text */}
               {data.visionContent.map((para, idx) => (
-                <p key={idx} className="text-white/90 text-sm md:text-base leading-relaxed italic max-w-sm mb-2">
+                <p key={idx} className="text-white/90 text-sm md:text-base leading-relaxed italic max-w-sm mb-2 whitespace-pre-line">
                   {para}
                 </p>
               ))}
@@ -178,7 +182,7 @@ const VisionMissionSection = () => {
                   className="overflow-y-auto pr-2 h-[120px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] flex flex-col gap-6"
                 >
                   {data.missionContent.map((para, idx) => (
-                    <p key={idx} className="text-white/90 text-sm md:text-base leading-relaxed italic pl-1">
+                    <p key={idx} className="text-white/90 text-sm md:text-base leading-relaxed italic pl-1 whitespace-pre-line">
                       {para}
                     </p>
                   ))}

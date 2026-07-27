@@ -6,7 +6,7 @@ const contactPageSchema = new mongoose.Schema(
       title: { type: String, default: 'Stay Connected. \nStart Your Journey With KSBM.' },
       subtitle: { type: String, default: 'Reach out to our admissions office, placement cell, or general inquiry desk. We are here to answer your questions and guide you toward a transformative management education experience.' },
       badge: { type: String, default: 'CONTACT INFORMATION' },
-      backgroundImage: { type: String, default: '/assets/Images/image 73.png' }
+      backgroundImage: { type: String, default: '/assets/Images/contact/contact_hero_bg.png' }
     },
     contactBox: {
       badge: { type: String, default: 'CONTACT US' },

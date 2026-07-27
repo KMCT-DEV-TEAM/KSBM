@@ -6,11 +6,13 @@ import GoverningBodyMembers from './components/governing-body/GoverningBodyMembe
 import Loader from '../../components/Loader';
 import api from '../../api/axios';
 
-const GoverningBody = () => {
+const GoverningBody = ({ previewData }) => {
   const [data, setData] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(!!previewData);
 
   useEffect(() => {
+    if (previewData) return;
+
     let windowLoaded = document.readyState === 'complete';
     let dataLoaded = false;
 
@@ -51,20 +53,22 @@ const GoverningBody = () => {
       window.removeEventListener('load', handleWindowLoad);
       clearTimeout(fallback);
     };
-  }, []);
+  }, [previewData]);
 
   return (
     <>
-      <div 
-        className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-      >
-        <Loader fullScreen={false} />
-      </div>
+      {!previewData && (
+        <div 
+          className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        >
+          <Loader fullScreen={false} />
+        </div>
+      )}
 
       <div className="bg-[#fcfcfd] min-h-screen">
-        <GoverningBodyHero data={data} />
-        <GoverningBodyContent data={data} />
-        <GoverningBodyMembers data={data} />
+        <GoverningBodyHero data={{ ...data, ...previewData }} />
+        <GoverningBodyContent data={{ ...data, ...previewData }} />
+        <GoverningBodyMembers data={{ ...data, ...previewData }} />
       </div>
     </>
   );

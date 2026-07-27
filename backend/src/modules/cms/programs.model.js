@@ -38,21 +38,21 @@ const programsSchema = new mongoose.Schema(
       default:
         'Discover our MBA and BBA programmes, crafted to develop future-ready professionals through innovative learning, industry engagement, and leadership-focused education.',
     },
-    programs: {
+      programs: {
       type: [programSchema],
       default: [
         {
           id: 'mba',
           title: 'MBA',
           subtitle: 'Master of Business Administration. 2 - Year Full-time immersive leadership journey.',
-          image: '/assets/Images/Home/academic_mba.jpg',
+          image: '/assets/Images/programs/mba_program.png',
           tag: 'GRADUATE',
         },
         {
           id: 'bba',
           title: 'BBA',
           subtitle: 'Bachelor of Business Administration. Building the foundation for corporate excellence.',
-          image: '/assets/Images/Home/academic_bba.jpg',
+          image: '/assets/Images/programs/bba_program.png',
           tag: 'UNDERGRADUATE',
         },
       ],
@@ -79,14 +79,14 @@ programsSchema.statics.getSettings = async function () {
           id: 'mba',
           title: 'MBA',
           subtitle: 'Master of Business Administration. 2 - Year Full-time immersive leadership journey.',
-          image: '/assets/Images/Home/academic_mba.jpg',
+          image: '/assets/Images/programs/mba_program.png',
           tag: 'GRADUATE',
         },
         {
           id: 'bba',
           title: 'BBA',
           subtitle: 'Bachelor of Business Administration. Building the foundation for corporate excellence.',
-          image: '/assets/Images/Home/academic_bba.jpg',
+          image: '/assets/Images/programs/bba_program.png',
           tag: 'UNDERGRADUATE',
         },
       ],

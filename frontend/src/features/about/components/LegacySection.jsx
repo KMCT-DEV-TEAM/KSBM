@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../../api/axios';
 
-const LegacySection = () => {
+const LegacySection = ({ previewData }) => {
   const [data, setData] = useState({
     subheading: 'OUR IDENTITY',
     heading: 'A Legacy of Strategic Excellence.',
@@ -11,6 +11,10 @@ const LegacySection = () => {
   });
 
   useEffect(() => {
+    if (previewData) {
+      setData(prev => ({ ...prev, ...previewData }));
+      return;
+    }
     const fetchData = async () => {
       try {
         const response = await api.get('/cms/legacy', { hideLoader: true });
@@ -22,7 +26,7 @@ const LegacySection = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [previewData]);
 
   return (
     <section className="py-20 bg-transparent">
@@ -38,7 +42,7 @@ const LegacySection = () => {
             className="relative rounded-2xl overflow-hidden shadow-xl h-[400px] lg:h-[450px]"
           >
             <img
-              src="/assets/Images/image 2.png"
+              src={data.image || "/assets/Images/image 2.png"}
               alt="KSBM Legacy"
               className="w-full h-full object-cover"
             />

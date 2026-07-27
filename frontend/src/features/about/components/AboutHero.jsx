@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../../api/axios';
 
-const AboutHero = () => {
+const AboutHero = ({ previewData }) => {
   const [heroData, setHeroData] = useState({
     title: 'Advancing Business Integrity and Innovation.',
     subtitle: 'KMCT School of Business (KSBM) ignites a passion for intellectual discovery and lifelong learning. Empowering each individual to achieve their fullest potential.',
@@ -11,6 +11,14 @@ const AboutHero = () => {
   });
 
   useEffect(() => {
+    if (previewData) {
+      setHeroData({
+        title: previewData.title || heroData.title,
+        subtitle: previewData.subtitle || heroData.subtitle,
+        backgroundImage: previewData.backgroundImage || heroData.backgroundImage
+      });
+      return;
+    }
     const fetchHeroData = async () => {
       try {
         const { data } = await api.get('/cms/about-us-hero', { hideLoader: true });
@@ -26,7 +34,7 @@ const AboutHero = () => {
       }
     };
     fetchHeroData();
-  }, []);
+  }, [previewData]);
 
   return (
     <section className="relative w-full min-h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32">

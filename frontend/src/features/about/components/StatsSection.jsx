@@ -38,7 +38,7 @@ const Counter = ({ value }) => {
   return <span ref={ref}>0{match[2]}</span>;
 };
 
-const StatsSection = () => {
+const StatsSection = ({ previewData }) => {
   const [stats, setStats] = useState([
     { value: '16+', label: 'YEARS OF EXCELLENCE' },
     { value: '991+', label: 'ACTIVE STUDENTS' },
@@ -47,6 +47,10 @@ const StatsSection = () => {
   ]);
 
   useEffect(() => {
+    if (previewData && previewData.stats) {
+      setStats(previewData.stats);
+      return;
+    }
     const fetchStats = async () => {
       try {
         const response = await api.get('/cms/about-us-stats', { hideLoader: true });
@@ -58,7 +62,7 @@ const StatsSection = () => {
       }
     };
     fetchStats();
-  }, []);
+  }, [previewData]);
 
   return (
     <section className="w-full pb-10">

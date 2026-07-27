@@ -10,11 +10,16 @@ const defaultImages = [
   "/assets/Images/Home/Component 88.png"
 ];
 
-const AccreditationSection = () => {
+const AccreditationSection = ({ previewData }) => {
   const [settings, setSettings] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (previewData) {
+      setSettings(previewData);
+      setIsLoading(false);
+      return;
+    }
     const fetchSettings = async () => {
       try {
         const { data } = await api.get('/cms/accreditation', { hideLoader: true });
@@ -27,7 +32,7 @@ const AccreditationSection = () => {
     };
 
     fetchSettings();
-  }, []);
+  }, [previewData]);
 
   if (isLoading) {
     return (
@@ -88,20 +93,34 @@ const AccreditationSection = () => {
             variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.8 } } }}
             className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 lg:gap-12"
           >
-            {settings?.images && settings.images.length > 0 ? (
+            {settings?.images && settings.images.length > 4 ? (
+              <div className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_64px,_black_calc(100%-64px),transparent_100%)]">
+                <div className="flex items-center animate-marquee gap-8 sm:gap-12 lg:gap-16 pr-8 lg:pr-16">
+                  {[...settings.images, ...settings.images].map((img, idx) => (
+                    <div key={idx} className="flex-shrink-0 flex items-center justify-center">
+                      <img
+                        src={img.url}
+                        alt={`Accreditation ${idx + 1}`}
+                        className="w-auto h-12 sm:h-16 md:h-20 lg:h-24 object-contain mix-blend-multiply select-none"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : settings?.images && settings.images.length > 0 ? (
               settings.images.map((img, idx) => (
                 <img
                   key={idx}
                   src={img.url}
                   alt={`Accreditation ${idx + 1}`}
-                  className="w-auto h-20 sm:h-24 md:h-28 lg:h-32 object-contain mix-blend-multiply select-none"
+                  className="w-auto h-12 sm:h-16 md:h-20 lg:h-24 object-contain mix-blend-multiply select-none"
                 />
               ))
             ) : imageUrl ? (
               <img
                 src={imageUrl}
                 alt="Accreditations"
-                className="w-full max-w-4xl h-auto object-contain mix-blend-multiply select-none"
+                className="w-full max-w-2xl h-auto object-contain mix-blend-multiply select-none"
               />
             ) : (
               defaultImages.map((img, idx) => (
@@ -109,7 +128,7 @@ const AccreditationSection = () => {
                   key={idx}
                   src={img}
                   alt={`Accreditation ${idx + 1}`}
-                  className="w-auto h-20 sm:h-24 md:h-28 lg:h-32 object-contain mix-blend-multiply select-none"
+                  className="w-auto h-12 sm:h-16 md:h-20 lg:h-24 object-contain mix-blend-multiply select-none"
                 />
               ))
             )}

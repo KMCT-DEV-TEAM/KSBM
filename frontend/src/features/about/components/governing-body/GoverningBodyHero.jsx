@@ -26,7 +26,7 @@ const GoverningBodyHero = ({ data }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-white/90 text-xs md:text-sm lg:text-base max-w-3xl leading-relaxed"
+          className="text-white/90 text-xs md:text-sm lg:text-base max-w-3xl leading-relaxed whitespace-pre-wrap"
         >
           {data?.heroSubtext || "Strategizing for excellence: The leadership framework dedicated to advancing pharmaceutical management education through visionary governance, industrial synergy, and academic rigor."}
         </motion.p>
