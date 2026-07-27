@@ -10,9 +10,15 @@ const FacultyGridSection = ({ title, members, id }) => {
   return (
     <section
       id={id}
-      className={`py-12 md:py-16 relative border-b border-gray-200/60 ${isKsbmFaculty ? 'bg-cover bg-center' : 'bg-[#fcfcfd]'}`}
-      style={isKsbmFaculty ? { backgroundImage: "url('/assets/Images/image 58.png')" } : {}}
+      className={`py-12 md:py-16 relative border-b border-gray-200/60 ${isKsbmFaculty ? 'bg-[#fcfcfd]' : 'bg-[#fcfcfd]'}`}
     >
+      {/* Background image only on md+ screens */}
+      {isKsbmFaculty && (
+        <div
+          className="absolute inset-0 hidden md:block bg-cover bg-center"
+          style={{ backgroundImage: "url('/assets/Images/image 58.png')" }}
+        />
+      )}
       <div className="px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
         {/* Section Header with right divider line */}
         <div className="flex items-center gap-6 mb-10 md:mb-14">

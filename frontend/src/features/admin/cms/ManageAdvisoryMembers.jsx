@@ -7,6 +7,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { uploadDeferredImage } from './utils/uploadHelper';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -34,7 +35,7 @@ const ManageAdvisoryMembers = () => {
     previewType: 'members',
     members: members.map(m => ({
       ...m,
-      image: typeof m.image === 'object' && m.image?.file ? URL.createObjectURL(m.image.file) : m.image
+      image: typeof m.image === 'object' && m.image?.previewUrl ? m.image.previewUrl : m.image
     }))
   };
 
@@ -86,7 +87,17 @@ const ManageAdvisoryMembers = () => {
       action: async () => {
         setIsSaving(true);
         try {
-          await api.put('/cms/advisory-board', { members }, { hideLoader: true });
+          const newMembers = await Promise.all(members.map(async (m) => ({
+            ...m,
+            image: await uploadDeferredImage(m.image, '/upload/aboutus')
+          })));
+
+          await api.put('/cms/advisory-board', { 
+            members: newMembers 
+          }, { hideLoader: true });
+          
+          setMembers(newMembers);
+          
           Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
         } catch (error) {
           console.error('Error saving settings:', error);
@@ -201,14 +212,15 @@ const ManageAdvisoryMembers = () => {
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Member Image</label>
-                    <SingleImageUploader 
-                      imageUrl={member.image} 
-                      uploadEndpoint="/upload/aboutus"
-                      defaultImage="/assets/Images/image 31.png"
-                      onUploadComplete={(url) => updateMember(index, 'image', url)}
-                      onUploadStateChange={setIsUploading}
-                      label="Upload Member Image"
-                    />
+                        <SingleImageUploader 
+                          imageUrl={member.image} 
+                          uploadEndpoint="/upload/aboutus"
+                          defaultImage="/assets/Images/image 31.png"
+                          onUploadComplete={(urlObj) => updateMember(index, 'image', urlObj)}
+                          onUploadStateChange={setIsUploading}
+                          label="Upload Profile Image"
+                          deferredUpload={true}
+                        />
                   </div>
                 </div>
               </div>
@@ -260,14 +272,15 @@ const ManageAdvisoryMembers = () => {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Member Image</label>
-                <SingleImageUploader 
-                  imageUrl={newMember.image} 
-                  uploadEndpoint="/upload/aboutus"
-                  defaultImage="/assets/Images/image 31.png"
-                  onUploadComplete={(url) => setNewMember({ ...newMember, image: url })}
-                  onUploadStateChange={setIsUploading}
-                  label="Upload Image"
-                />
+                  <SingleImageUploader 
+                    imageUrl={newMember.image} 
+                    uploadEndpoint="/upload/aboutus"
+                    defaultImage="/assets/Images/image 31.png"
+                    onUploadComplete={(urlObj) => setNewMember({...newMember, image: urlObj})}
+                    onUploadStateChange={setIsUploading}
+                    label="Upload Profile Image"
+                    deferredUpload={true}
+                  />
               </div>
             </div>
 

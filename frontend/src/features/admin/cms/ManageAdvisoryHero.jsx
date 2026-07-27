@@ -7,6 +7,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { uploadDeferredImage } from './utils/uploadHelper';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -36,7 +37,7 @@ const ManageAdvisoryHero = () => {
     previewType: 'hero',
     heroHeading,
     heroSubtext,
-    heroBgImage: typeof heroBgImage === 'object' && heroBgImage?.file ? URL.createObjectURL(heroBgImage.file) : heroBgImage,
+    heroBgImage: typeof heroBgImage === 'object' && heroBgImage?.previewUrl ? heroBgImage.previewUrl : heroBgImage,
     contentSubheading,
     contentHeading,
     contentDescription
@@ -95,10 +96,15 @@ const ManageAdvisoryHero = () => {
       action: async () => {
         setIsSaving(true);
         try {
+          const newHeroBgImage = await uploadDeferredImage(heroBgImage, '/upload/aboutus');
+
           await api.put('/cms/advisory-board', { 
-            heroHeading, heroSubtext, heroBgImage,
+            heroHeading, heroSubtext, heroBgImage: newHeroBgImage,
             contentSubheading, contentHeading, contentDescription
           }, { hideLoader: true });
+          
+          setHeroBgImage(newHeroBgImage);
+          
           Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
         } catch (error) {
           console.error('Error saving settings:', error);
@@ -175,7 +181,7 @@ const ManageAdvisoryHero = () => {
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Background Image</label>
+              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Hero Background Image</label>
               <SingleImageUploader 
                 imageUrl={heroBgImage} 
                 uploadEndpoint="/upload/aboutus"
@@ -183,6 +189,7 @@ const ManageAdvisoryHero = () => {
                 onUploadComplete={setHeroBgImage}
                 onUploadStateChange={setIsUploading}
                 label="Upload Hero Bg"
+                deferredUpload={true}
               />
             </div>
           </div>
