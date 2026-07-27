@@ -43,16 +43,16 @@ const ManagementDeskIntro = ({ data }) => {
           className="flex flex-col relative max-w-5xl"
         >
           <div className="mb-4">
-            <span className="text-gray-400 text-[11px] font-semibold tracking-[0.2em] uppercase">
+            <span className="text-gray-500 text-[10px] font-bold tracking-[0.2em] uppercase">
               {data?.introSubheading || "MANAGEMENT DESK"}
             </span>
           </div>
 
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#2b2b68] mb-6 tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#454e7d] mb-8">
             {data?.introHeading || "A Vision That Inspires Excellence"}
           </h2>
 
-          <div className="space-y-4 text-gray-600 leading-relaxed text-xs sm:text-sm font-normal">
+          <div className="space-y-6 text-gray-600 leading-relaxed text-sm md:text-[15px]">
             {description.map((para, idx) => (
               <p key={idx}>{para}</p>
             ))}

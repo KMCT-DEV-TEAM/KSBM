@@ -1,17 +1,13 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { Save, RefreshCw, Loader2, Plus, Trash2, Eye, Monitor, Smartphone, Tablet, X, ArrowUp, ArrowDown } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Save, RefreshCw, Loader2, Plus, Trash2, Eye, Monitor, Smartphone, Tablet, X, ArrowUp, ArrowDown, FileText, Users, Edit, GripVertical } from 'lucide-react';
+import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
-
-// Import frontend components for live preview inside modal
-import ManagementDeskHero from '../../about/components/management-desk/ManagementDeskHero';
-import ManagementDeskIntro from '../../about/components/management-desk/ManagementDeskIntro';
-import ManagementDeskMembers from '../../about/components/management-desk/ManagementDeskMembers';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -35,13 +31,56 @@ const ManageManagementDesk = () => {
   const [showMembers, setShowMembers] = useState(true);
   const [members, setMembers] = useState([]);
   
+  const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
+  const [editingMemberIndex, setEditingMemberIndex] = useState(null);
+  const [currentMember, setCurrentMember] = useState(null);
+  
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   
-  // Live Preview state
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
+  const [activeTab, setActiveTab] = useState('hero');
+  const iframeRef = useRef(null);
+
+  const previewData = {
+    previewType: activeTab,
+    showHero, heroHeading, heroSubtext, heroBgImage,
+    showIntro, introSubheading, introHeading, introDescription,
+    showMembers,
+    members: members.map(m => ({
+      ...m,
+      image: typeof m.image === 'object' && m.image?.file ? URL.createObjectURL(m.image.file) : m.image
+    }))
+  };
+
+  useEffect(() => {
+    let interval;
+    if (isPreviewModalOpen && iframeRef.current) {
+      const sendData = () => {
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage({ type: 'preview-cms-data', componentName: 'ManagementDesk', payload: previewData }, '*');
+        }
+      };
+      
+      sendData();
+      
+      let count = 0;
+      interval = setInterval(() => {
+        sendData();
+        count++;
+        if (count > 10) clearInterval(interval);
+      }, 500);
+    }
+    return () => clearInterval(interval);
+  }, [previewData, isPreviewModalOpen]);
+
+  const tabs = [
+    { id: 'hero', label: 'Hero Section', icon: <FileText className="w-4 h-4" /> },
+    { id: 'intro', label: 'Intro Section', icon: <FileText className="w-4 h-4" /> },
+    { id: 'members', label: 'Leadership Profiles', icon: <Users className="w-4 h-4" /> }
+  ];
 
   useEffect(() => {
     fetchSettings();
@@ -165,71 +204,58 @@ const ManageManagementDesk = () => {
     });
   };
 
-  const updateMember = (index, field, value) => {
-    const newMembers = [...members];
-    newMembers[index][field] = value;
-    setMembers(newMembers);
-  };
-  const addMember = () => setMembers([...members, { id: Date.now().toString(), name: '', badgeRole: '', tag: 'MESSAGE FROM LEADER', title: 'Leadership Vision', image: '', thumbnail: '', description: [''] }]);
-  const removeMember = (index) => setMembers(members.filter((_, i) => i !== index));
-
-  // Reorder Leaders
-  const moveMemberUp = (index) => {
-    if (index === 0) return;
-    const newMembers = [...members];
-    const temp = newMembers[index - 1];
-    newMembers[index - 1] = newMembers[index];
-    newMembers[index] = temp;
-    setMembers(newMembers);
-  };
-  const moveMemberDown = (index) => {
-    if (index === members.length - 1) return;
-    const newMembers = [...members];
-    const temp = newMembers[index + 1];
-    newMembers[index + 1] = newMembers[index];
-    newMembers[index] = temp;
-    setMembers(newMembers);
+  const removeMember = async (index) => {
+    await confirmAction({
+      title: 'Remove Leader?',
+      message: 'Are you sure you want to remove this leader?',
+      confirmText: 'Yes, remove',
+      variant: 'danger',
+      action: () => setMembers(members.filter((_, i) => i !== index))
+    });
   };
 
-  const updateMemberDescription = (mIndex, pIndex, value) => {
+  const handleSaveMemberModal = () => {
+    if (!currentMember.name) {
+      Toast.fire({ icon: 'warning', title: 'Leader Name is required' });
+      return;
+    }
     const newMembers = [...members];
-    const newDesc = Array.isArray(newMembers[mIndex].description) ? [...newMembers[mIndex].description] : [];
+    if (editingMemberIndex !== null) {
+      newMembers[editingMemberIndex] = currentMember;
+    } else {
+      newMembers.push(currentMember);
+    }
+    setMembers(newMembers);
+    setIsMemberModalOpen(false);
+  };
+
+  const updateCurrentMemberPara = (pIndex, value) => {
+    const newDesc = [...(currentMember.description || [])];
     newDesc[pIndex] = value;
-    newMembers[mIndex].description = newDesc;
-    setMembers(newMembers);
+    setCurrentMember({ ...currentMember, description: newDesc });
   };
-  const addMemberDescriptionPara = (mIndex) => {
-    const newMembers = [...members];
-    const newDesc = Array.isArray(newMembers[mIndex].description) ? [...newMembers[mIndex].description, ''] : [''];
-    newMembers[mIndex].description = newDesc;
-    setMembers(newMembers);
+  const addCurrentMemberPara = () => {
+    setCurrentMember({ ...currentMember, description: [...(currentMember.description || []), ''] });
   };
-  const removeMemberDescriptionPara = (mIndex, pIndex) => {
-    const newMembers = [...members];
-    const newDesc = (newMembers[mIndex].description || []).filter((_, i) => i !== pIndex);
-    newMembers[mIndex].description = newDesc;
-    setMembers(newMembers);
+  const removeCurrentMemberPara = (pIndex) => {
+    setCurrentMember({ ...currentMember, description: (currentMember.description || []).filter((_, i) => i !== pIndex) });
   };
-  const moveMemberParaUp = (mIndex, pIndex) => {
+  const moveCurrentMemberParaUp = (pIndex) => {
     if (pIndex === 0) return;
-    const newMembers = [...members];
-    const newDesc = [...(newMembers[mIndex].description || [])];
+    const newDesc = [...(currentMember.description || [])];
     const temp = newDesc[pIndex - 1];
     newDesc[pIndex - 1] = newDesc[pIndex];
     newDesc[pIndex] = temp;
-    newMembers[mIndex].description = newDesc;
-    setMembers(newMembers);
+    setCurrentMember({ ...currentMember, description: newDesc });
   };
-  const moveMemberParaDown = (mIndex, pIndex) => {
-    const desc = members[mIndex].description || [];
+  const moveCurrentMemberParaDown = (pIndex) => {
+    const desc = currentMember.description || [];
     if (pIndex === desc.length - 1) return;
-    const newMembers = [...members];
     const newDesc = [...desc];
     const temp = newDesc[pIndex + 1];
     newDesc[pIndex + 1] = newDesc[pIndex];
     newDesc[pIndex] = temp;
-    newMembers[mIndex].description = newDesc;
-    setMembers(newMembers);
+    setCurrentMember({ ...currentMember, description: newDesc });
   };
 
   const updateIntroDescription = (index, value) => {
@@ -258,15 +284,32 @@ const ManageManagementDesk = () => {
 
   if (isLoading) return <AdminSkeleton />;
 
-  // Prepare current preview data object
-  const previewData = {
-    showHero, heroHeading, heroSubtext, heroBgImage,
-    showIntro, introSubheading, introHeading, introDescription,
-    showMembers, members
-  };
 
   return (
     <div className="space-y-6 w-full">
+      {/* Tabs */}
+      <div className="relative flex items-center gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
+        <div
+          className="flex overflow-x-auto gap-2 scroll-smooth flex-1 py-1 px-1 custom-scrollbar"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${
+                activeTab === tab.id
+                  ? 'bg-primary text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
+              }`}
+            >
+              {tab.icon}
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       <PageHeader
         title="Management Desk Section"
         description="Manage the Management Desk hero, introduction, leadership profiles, order, and visibility."
@@ -276,47 +319,58 @@ const ManageManagementDesk = () => {
         isSaving={isSaving || isUploading}
       />
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full space-y-12">
-        
-        {/* Hero & Intro Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-b pb-12 border-gray-200">
-          {/* Hero Section */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+          className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full"
+        >
+          {activeTab === 'hero' && (
+            <div className="w-full">
+              {/* Hero Section */}
           <div className="space-y-6">
             <div className="flex justify-between items-center border-b pb-2">
               <h3 className="text-lg font-bold text-[#1e2869]">Hero Section</h3>
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#566A7F]">
-                <span>Show</span>
-                <input
-                  type="checkbox"
-                  checked={showHero}
-                  onChange={(e) => setShowHero(e.target.checked)}
-                  className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary"
-                />
-              </label>
+
             </div>
             
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Hero Heading</label>
-              <input type="text" value={heroHeading} onChange={(e) => setHeroHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Hero Heading</label>
+                <span className="text-xs text-gray-400">{(heroHeading || '').length}/60</span>
+              </div>
+              <input type="text" maxLength={60} value={heroHeading} onChange={(e) => setHeroHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Hero Subtext</label>
-              <textarea value={heroSubtext} onChange={(e) => setHeroSubtext(e.target.value)} rows={4} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Hero Subtext</label>
+                <span className="text-xs text-gray-400">{(heroSubtext || '').length}/200</span>
+              </div>
+              <textarea maxLength={200} value={heroSubtext} onChange={(e) => setHeroSubtext(e.target.value)} rows={4} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Hero Background Image</label>
               <SingleImageUploader 
                 imageUrl={heroBgImage} 
+                uploadEndpoint="/upload/management"
+                defaultImage="/assets/Images/management/default-management-hero.jpg"
                 onUploadComplete={setHeroBgImage}
                 onUploadStateChange={setIsUploading}
                 label="Upload Hero Bg"
               />
             </div>
-          </div>
+            </div>
+            </div>
+          )}
 
-          {/* Intro Section */}
+          {activeTab === 'intro' && (
+            <div className="w-full">
+              {/* Intro Section */}
           <div className="space-y-6">
             <div className="flex justify-between items-center border-b pb-2">
               <h3 className="text-lg font-bold text-[#1e2869]">Intro Section</h3>
@@ -332,19 +386,25 @@ const ManageManagementDesk = () => {
             </div>
             
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Intro Subheading (Tag)</label>
-              <input type="text" value={introSubheading} onChange={(e) => setIntroSubheading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Intro Subheading (Tag)</label>
+                <span className="text-xs text-gray-400">{(introSubheading || '').length}/50</span>
+              </div>
+              <input type="text" maxLength={50} value={introSubheading} onChange={(e) => setIntroSubheading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Intro Heading</label>
-              <input type="text" value={introHeading} onChange={(e) => setIntroHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Intro Heading</label>
+                <span className="text-xs text-gray-400">{(introHeading || '').length}/60</span>
+              </div>
+              <input type="text" maxLength={60} value={introHeading} onChange={(e) => setIntroHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Intro Paragraphs</label>
-                <button onClick={addIntroDescriptionPara} className="text-primary hover:bg-primary/10 p-1 rounded-full"><Plus className="w-4 h-4" /></button>
+                <button onClick={addIntroDescriptionPara} className="flex items-center gap-2 px-4 py-1.5 text-xs font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"><Plus className="w-3.5 h-3.5" /> Add Paragraph</button>
               </div>
               <div className="space-y-3">
                 {introDescription.map((para, index) => (
@@ -353,178 +413,241 @@ const ManageManagementDesk = () => {
                       <button onClick={() => moveIntroParaUp(index)} disabled={index === 0} className="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-30" title="Move Up"><ArrowUp className="w-3.5 h-3.5" /></button>
                       <button onClick={() => moveIntroParaDown(index)} disabled={index === introDescription.length - 1} className="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-30" title="Move Down"><ArrowDown className="w-3.5 h-3.5" /></button>
                     </div>
-                    <textarea 
-                      value={para}
-                      onChange={(e) => updateIntroDescription(index, e.target.value)}
-                      rows={4}
-                      className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    />
-                    <button onClick={() => removeIntroDescriptionPara(index)} className="p-2 text-red-500 hover:bg-red-50 rounded-md mt-1"><Trash2 className="w-4 h-4" /></button>
+                    <div className="flex flex-col flex-1 relative">
+                      <textarea 
+                        maxLength={500}
+                        value={para}
+                        onChange={(e) => updateIntroDescription(index, e.target.value)}
+                        rows={4}
+                        className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                      />
+                      <span className="text-[10px] text-gray-400 absolute bottom-2 right-3 bg-white px-1 rounded-sm">{(para || '').length}/500</span>
+                    </div>
+                    <button onClick={() => removeIntroDescriptionPara(index)} className="p-2 text-red-500 hover:bg-red-50 rounded-md mt-1 shrink-0"><Trash2 className="w-4 h-4" /></button>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Members Section */}
-        <div>
-          <div className="flex justify-between items-center mb-6 border-b pb-2">
-            <div className="flex items-center gap-4">
-              <h3 className="text-lg font-bold text-[#1e2869]">Leadership Profiles (Alternating Zig-Zag)</h3>
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#566A7F]">
-                <span>Show Profiles</span>
-                <input
-                  type="checkbox"
-                  checked={showMembers}
-                  onChange={(e) => setShowMembers(e.target.checked)}
-                  className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary"
-                />
-              </label>
             </div>
-            <button onClick={addMember} className="flex items-center gap-1 text-sm bg-primary/10 text-primary px-3 py-1.5 rounded hover:bg-primary/20 transition-colors font-semibold">
-              <Plus className="w-4 h-4" /> Add Leader
-            </button>
-          </div>
-          <div className="space-y-8">
-            {members.map((member, index) => (
-              <div key={index} className="bg-gray-50 p-6 rounded-xl border border-gray-200 relative shadow-sm">
-                <div className="absolute top-4 right-4 flex items-center gap-1">
-                  <button onClick={() => moveMemberUp(index)} disabled={index === 0} className="p-1.5 text-gray-500 hover:bg-gray-200 rounded-md disabled:opacity-30" title="Move Leader Up"><ArrowUp className="w-4 h-4" /></button>
-                  <button onClick={() => moveMemberDown(index)} disabled={index === members.length - 1} className="p-1.5 text-gray-500 hover:bg-gray-200 rounded-md disabled:opacity-30" title="Move Leader Down"><ArrowDown className="w-4 h-4" /></button>
-                  <button onClick={() => removeMember(index)} className="text-red-500 hover:bg-red-50 p-1.5 rounded-md ml-2" title="Remove Leader"><Trash2 className="w-4 h-4" /></button>
-                </div>
+            </div>
+          )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pr-24">
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Leader Name</label>
-                      <input type="text" value={member.name} onChange={(e) => updateMember(index, 'name', e.target.value)} placeholder="e.g. Dr. Navas K. M" className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+          {activeTab === 'members' && (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center mb-2 border-b pb-2">
+              <div className="flex items-center gap-4">
+                <h3 className="text-lg font-bold text-[#1e2869]">Leadership Profiles (Alternating Zig-Zag)</h3>
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#566A7F]">
+                  <span>Show Profiles</span>
+                  <input
+                    type="checkbox"
+                    checked={showMembers}
+                    onChange={(e) => setShowMembers(e.target.checked)}
+                    className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary"
+                  />
+                </label>
+              </div>
+              <button onClick={() => {
+                setEditingMemberIndex(null);
+                setCurrentMember({ id: Date.now().toString(), name: '', badgeRole: '', tag: 'MESSAGE FROM LEADER', title: 'Leadership Vision', image: '', thumbnail: '', description: [''] });
+                setIsMemberModalOpen(true);
+              }} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">
+                <Plus className="w-4 h-4" /> Add Leader
+              </button>
+            </div>
+            
+            <Reorder.Group axis="y" values={members} onReorder={setMembers} className="space-y-4">
+              {members.map((member, index) => (
+                <Reorder.Item key={member.id} value={member} className="bg-white p-4 border border-gray-300 rounded-xl shadow-sm flex items-center justify-between group">
+                  <div className="flex items-center gap-4">
+                    <div className="cursor-grab active:cursor-grabbing p-2 text-gray-400 hover:text-gray-600 transition-colors">
+                      <GripVertical className="w-5 h-5" />
                     </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Floating Badge Role</label>
-                      <input type="text" value={member.badgeRole} onChange={(e) => updateMember(index, 'badgeRole', e.target.value)} placeholder="e.g. Chairman" className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Message Tag</label>
-                      <input type="text" value={member.tag} onChange={(e) => updateMember(index, 'tag', e.target.value)} placeholder="e.g. MESSAGE FROM OUR CHAIRMAN" className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Message Title</label>
-                      <input type="text" value={member.title} onChange={(e) => updateMember(index, 'title', e.target.value)} placeholder="e.g. Leadership Vision" className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 pt-2">
-                      <div>
-                        <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-2">Main Portrait Photo</label>
-                        <SingleImageUploader 
-                          imageUrl={member.image} 
-                          onUploadComplete={(url) => updateMember(index, 'image', url)}
-                          onUploadStateChange={setIsUploading}
-                          label="Upload Main Portrait"
-                        />
+                    {member.image ? (
+                      <img src={member.image} alt={member.name} className="w-12 h-12 rounded-full object-cover border border-gray-300" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center border border-gray-300">
+                        <Users className="w-5 h-5 text-gray-400" />
                       </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-2">Thumbnail (Floating Badge)</label>
-                        <SingleImageUploader 
-                          imageUrl={member.thumbnail} 
-                          onUploadComplete={(url) => updateMember(index, 'thumbnail', url)}
-                          onUploadStateChange={setIsUploading}
-                          label="Upload Thumbnail"
-                        />
-                      </div>
+                    )}
+                    <div>
+                      <h4 className="font-bold text-[#1e2869]">{member.name || 'Unnamed Leader'}</h4>
+                      <p className="text-xs text-gray-500 font-medium">{member.badgeRole || 'No Role Assigned'}</p>
                     </div>
                   </div>
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => {
+                      setEditingMemberIndex(index);
+                      setCurrentMember({...member});
+                      setIsMemberModalOpen(true);
+                    }} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Edit Leader">
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => removeMember(index)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Remove Leader">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </Reorder.Item>
+              ))}
+            </Reorder.Group>
+            {members.length === 0 && <p className="text-gray-500 text-sm italic mt-4 text-center">No leaders added yet.</p>}
+          </div>
+        )}
+        </motion.div>
+      </AnimatePresence>
 
-                  {/* Right side: Paragraphs */}
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center mb-1">
-                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Message Paragraphs</label>
-                      <button onClick={() => addMemberDescriptionPara(index)} className="text-primary hover:bg-primary/10 p-1 rounded-full text-xs font-semibold flex items-center gap-1"><Plus className="w-3.5 h-3.5" /> Add Paragraph</button>
-                    </div>
-                    <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-1">
-                      {(member.description || []).map((para, pIndex) => (
-                        <div key={pIndex} className="flex gap-2 items-start">
-                          <div className="flex flex-col gap-0.5 mt-1">
-                            <button onClick={() => moveMemberParaUp(index, pIndex)} disabled={pIndex === 0} className="p-0.5 text-gray-400 hover:text-gray-700 disabled:opacity-30" title="Move Para Up"><ArrowUp className="w-3 h-3" /></button>
-                            <button onClick={() => moveMemberParaDown(index, pIndex)} disabled={pIndex === (member.description || []).length - 1} className="p-0.5 text-gray-400 hover:text-gray-700 disabled:opacity-30" title="Move Para Down"><ArrowDown className="w-3 h-3" /></button>
-                          </div>
-                          <textarea 
-                            value={para}
-                            onChange={(e) => updateMemberDescription(index, pIndex, e.target.value)}
-                            rows={3}
-                            className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-xs focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                          />
-                          <button onClick={() => removeMemberDescriptionPara(index, pIndex)} className="p-1.5 text-red-500 hover:bg-red-50 rounded-md mt-1"><Trash2 className="w-3.5 h-3.5" /></button>
-                        </div>
-                      ))}
-                    </div>
+      {/* Member Edit Modal */}
+      {isMemberModalOpen && currentMember && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="flex justify-between items-center p-5 border-b border-gray-100 shrink-0">
+              <h3 className="text-lg font-bold text-[#1e2869]">{editingMemberIndex !== null ? 'Edit Leader' : 'Add New Leader'}</h3>
+              <button onClick={() => setIsMemberModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6">
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Leader Name</label>
+                    <span className="text-xs text-gray-400">{(currentMember.name || '').length}/50</span>
+                  </div>
+                  <input type="text" maxLength={50} value={currentMember.name} onChange={(e) => setCurrentMember({...currentMember, name: e.target.value})} placeholder="e.g. Dr. Navas K. M" className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+                </div>
+                <div>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Floating Badge Role</label>
+                    <span className="text-xs text-gray-400">{(currentMember.badgeRole || '').length}/50</span>
+                  </div>
+                  <input type="text" maxLength={50} value={currentMember.badgeRole} onChange={(e) => setCurrentMember({...currentMember, badgeRole: e.target.value})} placeholder="e.g. Chairman" className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+                </div>
+                <div>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Message Tag</label>
+                    <span className="text-xs text-gray-400">{(currentMember.tag || '').length}/50</span>
+                  </div>
+                  <input type="text" maxLength={50} value={currentMember.tag} onChange={(e) => setCurrentMember({...currentMember, tag: e.target.value})} placeholder="e.g. MESSAGE FROM OUR CHAIRMAN" className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+                </div>
+                <div>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Message Title</label>
+                    <span className="text-xs text-gray-400">{(currentMember.title || '').length}/60</span>
+                  </div>
+                  <input type="text" maxLength={60} value={currentMember.title} onChange={(e) => setCurrentMember({...currentMember, title: e.target.value})} placeholder="e.g. Leadership Vision" className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+                </div>
+                <div className="grid grid-cols-2 gap-4 pt-2">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-2">Main Portrait Photo</label>
+                    <SingleImageUploader 
+                      imageUrl={currentMember.image} 
+                      uploadEndpoint="/upload/management"
+                      defaultImage="/assets/Images/management/default-management-leader.jpg"
+                      onUploadComplete={(url) => setCurrentMember({...currentMember, image: url})}
+                      onUploadStateChange={setIsUploading}
+                      label="Upload Main Portrait"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-2">Thumbnail (Floating Badge)</label>
+                    <SingleImageUploader 
+                      imageUrl={currentMember.thumbnail} 
+                      uploadEndpoint="/upload/management"
+                      defaultImage="/assets/Images/management/default-management-badge.png"
+                      onUploadComplete={(url) => setCurrentMember({...currentMember, thumbnail: url})}
+                      onUploadStateChange={setIsUploading}
+                      label="Upload Thumbnail"
+                    />
                   </div>
                 </div>
               </div>
-            ))}
+
+              {/* Paragraphs */}
+              <div className="space-y-3">
+                <div className="flex justify-between items-center mb-1">
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Message Paragraphs</label>
+                  <button onClick={addCurrentMemberPara} className="text-primary hover:bg-primary/10 px-2 py-1 rounded-md text-xs font-semibold flex items-center gap-1"><Plus className="w-3.5 h-3.5" /> Add Paragraph</button>
+                </div>
+                <div className="space-y-2.5">
+                  {(currentMember.description || []).map((para, pIndex) => (
+                    <div key={pIndex} className="flex gap-2 items-start">
+                      <div className="flex flex-col gap-0.5 mt-1">
+                        <button onClick={() => moveCurrentMemberParaUp(pIndex)} disabled={pIndex === 0} className="p-0.5 text-gray-400 hover:text-gray-700 disabled:opacity-30" title="Move Para Up"><ArrowUp className="w-3 h-3" /></button>
+                        <button onClick={() => moveCurrentMemberParaDown(pIndex)} disabled={pIndex === (currentMember.description || []).length - 1} className="p-0.5 text-gray-400 hover:text-gray-700 disabled:opacity-30" title="Move Para Down"><ArrowDown className="w-3 h-3" /></button>
+                      </div>
+                      <div className="flex flex-col flex-1 relative">
+                        <textarea 
+                          maxLength={600}
+                          value={para}
+                          onChange={(e) => updateCurrentMemberPara(pIndex, e.target.value)}
+                          rows={3}
+                          className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-xs focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                        />
+                        <span className="text-[10px] text-gray-400 absolute bottom-1 right-2 bg-white px-1 rounded-sm">{(para || '').length}/600</span>
+                      </div>
+                      <button onClick={() => removeCurrentMemberPara(pIndex)} className="p-1.5 text-red-500 hover:bg-red-50 rounded-md mt-1 shrink-0"><Trash2 className="w-3.5 h-3.5" /></button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="p-5 border-t border-gray-100 flex justify-end gap-3 shrink-0">
+              <button onClick={() => setIsMemberModalOpen(false)} className="px-5 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-all">Cancel</button>
+              <button onClick={handleSaveMemberModal} className="px-5 py-2 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">Save Profile</button>
+            </div>
           </div>
-          {members.length === 0 && <p className="text-gray-500 text-sm italic mt-4">No leaders added yet.</p>}
         </div>
-      </div>
+      )}
 
       {/* Live Preview Modal */}
       {isPreviewModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex flex-col justify-between p-4 sm:p-6 overflow-hidden animate-fadeIn">
-          {/* Modal Header */}
-          <div className="flex items-center justify-between bg-gray-900 text-white px-6 py-3 rounded-t-xl shrink-0">
-            <div className="flex items-center gap-3">
-              <span className="font-bold text-sm tracking-wide">Live Preview: Management Desk Page</span>
+        <div className="fixed inset-0 z-[100] flex flex-col bg-gray-900/80 backdrop-blur-sm">
+          <div className="flex justify-between items-center bg-white px-4 py-3 border-b border-gray-200">
+            <div className="flex items-center gap-2 text-sm font-bold text-[#697A8D] uppercase tracking-wider">
+              <Eye className="w-5 h-5" /> Live Preview
             </div>
-            <div className="flex items-center gap-2 bg-gray-800 p-1 rounded-lg">
-              <button
+            
+            <div className="flex items-center bg-white rounded-md border border-gray-200 p-0.5">
+              <button 
                 onClick={() => setPreviewMode('desktop')}
-                className={`p-1.5 rounded flex items-center gap-1.5 text-xs font-semibold transition-colors ${previewMode === 'desktop' ? 'bg-primary text-white' : 'text-gray-400 hover:text-white'}`}
+                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'desktop' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Desktop View"
               >
                 <Monitor className="w-4 h-4" />
-                <span className="hidden sm:inline">Desktop</span>
               </button>
-              <button
+              <button 
                 onClick={() => setPreviewMode('tablet')}
-                className={`p-1.5 rounded flex items-center gap-1.5 text-xs font-semibold transition-colors ${previewMode === 'tablet' ? 'bg-primary text-white' : 'text-gray-400 hover:text-white'}`}
+                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'tablet' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Tablet View"
               >
                 <Tablet className="w-4 h-4" />
-                <span className="hidden sm:inline">Tablet</span>
               </button>
-              <button
+              <button 
                 onClick={() => setPreviewMode('mobile')}
-                className={`p-1.5 rounded flex items-center gap-1.5 text-xs font-semibold transition-colors ${previewMode === 'mobile' ? 'bg-primary text-white' : 'text-gray-400 hover:text-white'}`}
+                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'mobile' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Mobile View"
               >
                 <Smartphone className="w-4 h-4" />
-                <span className="hidden sm:inline">Mobile</span>
               </button>
             </div>
-            <button
+
+            <button 
               onClick={() => setIsPreviewModalOpen(false)}
-              className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-gray-800 transition-colors"
+              className="p-2 text-gray-500 hover:text-red-500 bg-gray-100 hover:bg-red-50 rounded-md transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
-
-          {/* Modal Body (Device Frame) */}
-          <div className="flex-1 bg-gray-950 flex justify-center items-center overflow-y-auto p-4 sm:p-8">
-            <div
-              className={`bg-white rounded-xl shadow-2xl overflow-y-auto transition-all duration-300 max-h-full ${
-                previewMode === 'mobile'
-                  ? 'w-[375px] border-[12px] border-gray-800 rounded-[32px]'
-                  : previewMode === 'tablet'
-                  ? 'w-[768px] border-[12px] border-gray-800 rounded-[24px]'
-                  : 'w-full max-w-[1440px]'
-              }`}
-            >
-              <div className="bg-[#fcfcfd] min-h-full pb-20">
-                {showHero && <ManagementDeskHero data={previewData} />}
-                {showIntro && <ManagementDeskIntro data={previewData} />}
-                {showMembers && <ManagementDeskMembers data={previewData} />}
-              </div>
+          <div className="flex-1 bg-gray-100 overflow-hidden relative flex justify-center items-center">
+            <div className={`bg-white shadow-2xl transition-all duration-300 h-[85vh] ${previewMode === 'desktop' ? 'w-[100%] max-w-[1920px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
+              <iframe
+                ref={iframeRef}
+                src="/preview/cms"
+                className="w-full h-full border-0"
+                title="Live Preview"
+              />
             </div>
           </div>
         </div>

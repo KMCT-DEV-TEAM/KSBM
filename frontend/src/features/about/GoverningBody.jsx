@@ -66,9 +66,15 @@ const GoverningBody = ({ previewData }) => {
       )}
 
       <div className="bg-[#fcfcfd] min-h-screen">
-        <GoverningBodyHero data={{ ...data, ...previewData }} />
-        <GoverningBodyContent data={{ ...data, ...previewData }} />
-        <GoverningBodyMembers data={{ ...data, ...previewData }} />
+        {(!previewData || previewData.previewType !== 'members') && (
+          <>
+            <GoverningBodyHero data={{ ...data, ...previewData }} />
+            <GoverningBodyContent data={{ ...data, ...previewData }} />
+          </>
+        )}
+        {(!previewData || previewData.previewType !== 'hero') && (
+          <GoverningBodyMembers data={{ ...data, ...previewData }} />
+        )}
       </div>
     </>
   );

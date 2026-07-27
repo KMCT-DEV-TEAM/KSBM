@@ -33,6 +33,7 @@ const ManageAdvisoryHero = () => {
   const iframeRef = useRef(null);
 
   const previewData = {
+    previewType: 'hero',
     heroHeading,
     heroSubtext,
     heroBgImage: typeof heroBgImage === 'object' && heroBgImage?.file ? URL.createObjectURL(heroBgImage.file) : heroBgImage,

@@ -31,6 +31,7 @@ const ManageAdvisoryMembers = () => {
   const iframeRef = useRef(null);
 
   const previewData = {
+    previewType: 'members',
     members: members.map(m => ({
       ...m,
       image: typeof m.image === 'object' && m.image?.file ? URL.createObjectURL(m.image.file) : m.image

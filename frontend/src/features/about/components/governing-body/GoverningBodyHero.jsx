@@ -18,7 +18,7 @@ const GoverningBodyHero = ({ data }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-4"
+          className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
         >
           {data?.heroHeading || "KSBM Governing Body"}
         </motion.h1>

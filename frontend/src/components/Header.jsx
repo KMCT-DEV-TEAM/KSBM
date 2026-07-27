@@ -15,8 +15,9 @@ const getSubLinks = (label) => {
   const lower = label.toLowerCase().trim();
   if (lower === 'about us' || lower === 'about' || lower.includes('about')) {
     return [
-      { label: 'About Us', href: '/about' },
+      { label: 'Overview', href: '/about' },
       { label: 'Governing Body', href: '/about/governing-body' },
+      { label: 'Organogram', href: '/assets/Organogram.pdf' },
       { label: 'Advisory Board', href: '/about/advisory-board' },
       { label: 'Management Desk', href: '/about/management-desk' },
     ];
