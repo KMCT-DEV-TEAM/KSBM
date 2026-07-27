@@ -7,6 +7,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { uploadDeferredImage } from './utils/uploadHelper';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -24,7 +25,7 @@ const ManageGoverningMembers = () => {
   const [isUploading, setIsUploading] = useState(false);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [newMember, setNewMember] = useState({ name: '', title: '', image: '/assets/Images/image 35.png' });
+  const [newMember, setNewMember] = useState({ name: '', title: '', image: '/assets/Images/image 31.png' });
 
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
@@ -34,7 +35,7 @@ const ManageGoverningMembers = () => {
     previewType: 'members',
     members: members.map(m => ({
       ...m,
-      image: typeof m.image === 'object' && m.image?.file ? URL.createObjectURL(m.image.file) : m.image
+      image: typeof m.image === 'object' && m.image?.previewUrl ? m.image.previewUrl : m.image
     }))
   };
 
@@ -86,9 +87,17 @@ const ManageGoverningMembers = () => {
       action: async () => {
         setIsSaving(true);
         try {
+          const newMembers = await Promise.all(members.map(async (m) => ({
+            ...m,
+            image: await uploadDeferredImage(m.image, '/upload/aboutus')
+          })));
+
           await api.put('/cms/governing-body', { 
-            members 
+            members: newMembers 
           }, { hideLoader: true });
+          
+          setMembers(newMembers);
+          
           Toast.fire({ icon: 'success', title: 'Members saved successfully!' });
         } catch (error) {
           console.error('Error saving settings:', error);
@@ -108,7 +117,7 @@ const ManageGoverningMembers = () => {
       variant: 'primary',
       action: async () => {
         setMembers([
-          { name: "Dr. Navas K M", title: "Managing Trustee", image: "/assets/Images/image 35.png" }
+          { name: "Dr. Navas K M", title: "Managing Trustee", image: "/assets/Images/image 31.png" }
         ]);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
@@ -127,7 +136,7 @@ const ManageGoverningMembers = () => {
       return;
     }
     setMembers([...members, newMember]);
-    setNewMember({ name: '', title: '', image: '/assets/Images/image 35.png' });
+    setNewMember({ name: '', title: '', image: '/assets/Images/image 31.png' });
     setIsAddModalOpen(false);
   };
 
@@ -139,7 +148,7 @@ const ManageGoverningMembers = () => {
       variant: 'danger',
       action: async () => {
         const member = members[index];
-        if (member.image && !member.image.startsWith('blob:') && !member.image.startsWith('http') && member.image !== '/assets/Images/image 35.png') {
+        if (member.image && !member.image.startsWith('blob:') && !member.image.startsWith('http') && member.image !== '/assets/Images/image 31.png') {
           try {
             const filename = member.image.split('/').pop();
             await api.delete(`/upload/aboutus/${filename}`);
@@ -208,10 +217,11 @@ const ManageGoverningMembers = () => {
                     <SingleImageUploader 
                       imageUrl={member.image} 
                       uploadEndpoint="/upload/aboutus"
-                      defaultImage="/assets/Images/image 35.png"
-                      onUploadComplete={(url) => updateMember(index, 'image', url)}
+                      defaultImage="/assets/Images/image 31.png"
+                      onUploadComplete={(urlObj) => updateMember(index, 'image', urlObj)}
                       onUploadStateChange={setIsUploading}
-                      label="Upload Member Image"
+                      label="Upload Profile Image"
+                      deferredUpload={true}
                     />
                   </div>
                 </div>
@@ -267,10 +277,11 @@ const ManageGoverningMembers = () => {
                 <SingleImageUploader 
                   imageUrl={newMember.image} 
                   uploadEndpoint="/upload/aboutus"
-                  defaultImage="/assets/Images/image 35.png"
-                  onUploadComplete={(url) => setNewMember({ ...newMember, image: url })}
+                  defaultImage="/assets/Images/image 31.png"
+                  onUploadComplete={(urlObj) => setNewMember({...newMember, image: urlObj})}
                   onUploadStateChange={setIsUploading}
-                  label="Upload Image"
+                  label="Upload Profile Image"
+                  deferredUpload={true}
                 />
               </div>
             </div>

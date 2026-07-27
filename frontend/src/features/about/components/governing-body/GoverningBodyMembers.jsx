@@ -5,7 +5,7 @@ import api from '../../../../api/axios';
 
 const GoverningBodyMembers = ({ data }) => {
   const [members, setMembers] = useState([
-    { id: 1, name: "Dr. Navas K M", title: "Managing Trustee", image: "/assets/Images/image 35.png" },
+    { id: 1, name: "Dr. Navas K M", title: "Managing Trustee", image: "/assets/Images/image 31.png" },
     { id: 2, name: "Dr. Ayisha Nazreen", title: "SPECIAL INVITEE", image: "/assets/Images/image 31.png" },
     { id: 3, name: "Dr. Sujith Varma", title: "MEMBER SECRETARY", image: "/assets/Images/image 31.png" },
     { id: 4, name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },

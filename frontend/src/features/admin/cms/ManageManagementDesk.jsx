@@ -8,6 +8,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { uploadDeferredImage } from './utils/uploadHelper';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -46,12 +47,14 @@ const ManageManagementDesk = () => {
 
   const previewData = {
     previewType: activeTab,
-    showHero, heroHeading, heroSubtext, heroBgImage,
+    showHero, heroHeading, heroSubtext, 
+    heroBgImage: typeof heroBgImage === 'object' && heroBgImage?.previewUrl ? heroBgImage.previewUrl : heroBgImage,
     showIntro, introSubheading, introHeading, introDescription,
     showMembers,
     members: members.map(m => ({
       ...m,
-      image: typeof m.image === 'object' && m.image?.file ? URL.createObjectURL(m.image.file) : m.image
+      image: typeof m.image === 'object' && m.image?.previewUrl ? m.image.previewUrl : m.image,
+      thumbnail: typeof m.thumbnail === 'object' && m.thumbnail?.previewUrl ? m.thumbnail.previewUrl : m.thumbnail
     }))
   };
 
@@ -120,11 +123,23 @@ const ManageManagementDesk = () => {
       action: async () => {
         setIsSaving(true);
         try {
+          const newHeroBgImage = await uploadDeferredImage(heroBgImage, '/upload/management');
+          
+          const newMembers = await Promise.all(members.map(async (m) => ({
+            ...m,
+            image: await uploadDeferredImage(m.image, '/upload/management'),
+            thumbnail: await uploadDeferredImage(m.thumbnail, '/upload/management')
+          })));
+
           await api.put('/cms/management-desk', { 
-            showHero, heroHeading, heroSubtext, heroBgImage,
+            showHero, heroHeading, heroSubtext, heroBgImage: newHeroBgImage,
             showIntro, introSubheading, introHeading, introDescription,
-            showMembers, members 
+            showMembers, members: newMembers 
           }, { hideLoader: true });
+          
+          setHeroBgImage(newHeroBgImage);
+          setMembers(newMembers);
+          
           Toast.fire({ icon: 'success', title: 'Management Desk saved successfully!' });
         } catch (error) {
           console.error('Error saving settings:', error);
@@ -362,6 +377,7 @@ const ManageManagementDesk = () => {
                 onUploadComplete={setHeroBgImage}
                 onUploadStateChange={setIsUploading}
                 label="Upload Hero Bg"
+                deferredUpload={true}
               />
             </div>
             </div>
@@ -544,9 +560,10 @@ const ManageManagementDesk = () => {
                       imageUrl={currentMember.image} 
                       uploadEndpoint="/upload/management"
                       defaultImage="/assets/Images/management/default-management-leader.jpg"
-                      onUploadComplete={(url) => setCurrentMember({...currentMember, image: url})}
+                      onUploadComplete={(urlObj) => setCurrentMember({...currentMember, image: urlObj})}
                       onUploadStateChange={setIsUploading}
                       label="Upload Main Portrait"
+                      deferredUpload={true}
                     />
                   </div>
                   <div>
@@ -555,9 +572,10 @@ const ManageManagementDesk = () => {
                       imageUrl={currentMember.thumbnail} 
                       uploadEndpoint="/upload/management"
                       defaultImage="/assets/Images/management/default-management-badge.png"
-                      onUploadComplete={(url) => setCurrentMember({...currentMember, thumbnail: url})}
+                      onUploadComplete={(urlObj) => setCurrentMember({...currentMember, thumbnail: urlObj})}
                       onUploadStateChange={setIsUploading}
                       label="Upload Thumbnail"
+                      deferredUpload={true}
                     />
                   </div>
                 </div>

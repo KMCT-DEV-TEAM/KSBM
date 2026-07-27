@@ -53,10 +53,6 @@ const Header = ({ previewData }) => {
       if (pathname.startsWith('/about') && pathname !== '/about') {
         newExpanded['About Us'] = true;
         newExpanded['About'] = true;
-      } else if (['/faculty', '/alumni', '/placement', '/examinations'].includes(pathname)) {
-        newExpanded['Academics'] = true;
-        newExpanded['Faculty'] = true;
-        newExpanded['People'] = true;
       } else if (pathname.startsWith('/programs/')) {
         newExpanded['Programs'] = true;
         newExpanded['Program'] = true;
