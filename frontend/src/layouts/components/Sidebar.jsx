@@ -95,6 +95,15 @@ const Sidebar = () => {
         { name: 'Manage FAQ Page', path: '/admin/cms/faq' },
         { name: 'Manage Privacy Policy', path: '/admin/cms/privacy-policy' },
         { name: 'Manage Terms & Conditions', path: '/admin/cms/terms-and-conditions' },
+        { name: 'Manage Grievance Page', path: '/admin/cms/grievance' },
+        { name: 'Manage Download Page', path: '/admin/cms/download' },
+      ]
+    },
+    {
+      title: 'Submissions & Tickets',
+      icon: <ShieldCheck className="w-5 h-5" />, 
+      links: [
+        { name: 'View Grievance Tickets', path: '/admin/grievances' },
       ]
     },
     {

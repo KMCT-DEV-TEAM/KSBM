@@ -150,9 +150,9 @@ const BlogDetailPage = ({ id }) => {
               {article.sections.map((section, idx) => (
                 <div key={idx} id={section.id} className="scroll-mt-32 mb-12">
                   {section.isQuote ? (
-                    <div className="bg-primary/5 border-l-[6px] border-primary rounded-r-2xl p-8 sm:p-10 my-10 relative shadow-sm">
-                      <span className="absolute top-4 left-6 text-6xl text-primary/20 font-serif leading-none">"</span>
-                      <p className="text-xl sm:text-2xl text-text-primary font-semibold italic relative z-10 leading-snug">
+                    <div className="bg-primary/5 border-l-[4px] sm:border-l-[6px] border-primary rounded-r-2xl p-6 sm:p-8 my-8 relative shadow-sm">
+                      <span className="absolute top-3 left-4 sm:top-4 sm:left-5 text-5xl sm:text-6xl text-primary/20 font-serif leading-none">"</span>
+                      <p className="text-lg sm:text-xl text-text-primary font-medium italic relative z-10 leading-snug">
                         {section.content}
                       </p>
                     </div>

@@ -1,0 +1,266 @@
+"use client";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import api from '../../../api/axios';
+import Swal from 'sweetalert2';
+import { Loader2 } from 'lucide-react';
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 4000,
+  timerProgressBar: true,
+});
+const GrievanceForm = ({ formData: cmsData }) => {
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    idNumber: '',
+    email: '',
+    department: '',
+    course: '',
+    complaint: '',
+    grievanceCell: []
+  });
+
+  const cells = cmsData?.cellOptions || [
+    "Student Grievance Cell",
+    "Student Grievance Cell",
+    "Student Grievance Cell",
+    "Student Grievance Cell",
+    "Student Grievance Cell",
+    "Student Grievance Cell"
+  ];
+
+  const bgImage = cmsData?.backgroundImage || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1600&auto=format&fit=crop';
+
+  const handleCheckboxChange = (index) => {
+    const newCells = [...formData.grievanceCell];
+    if (newCells.includes(index)) {
+      newCells.splice(newCells.indexOf(index), 1);
+    } else {
+      newCells.push(index);
+    }
+    setFormData({ ...formData, grievanceCell: newCells });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formData.grievanceCell.length === 0) {
+      Toast.fire({ icon: 'warning', title: 'Please select at least one Grievance Cell.' });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Map the selected indices to the actual cell names from the CMS
+      const selectedCells = formData.grievanceCell.map(idx => cells[idx]);
+
+      const submissionData = {
+        name: formData.name,
+        idNumber: formData.idNumber,
+        email: formData.email,
+        department: formData.department,
+        course: formData.course,
+        complaint: formData.complaint,
+        selectedCells: selectedCells
+      };
+
+      await api.post('/grievances', submissionData);
+
+      Toast.fire({
+        icon: 'success',
+        title: 'Grievance Submitted Successfully',
+        text: 'Your concern has been forwarded to the respective committee.'
+      });
+
+      // Clear the form
+      setFormData({
+        name: '',
+        idNumber: '',
+        email: '',
+        department: '',
+        course: '',
+        complaint: '',
+        grievanceCell: []
+      });
+
+    } catch (error) {
+      console.error('Submission error:', error);
+      Toast.fire({
+        icon: 'error',
+        title: 'Submission Failed',
+        text: 'There was a problem submitting your grievance. Please try again later.'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const inputClasses = "w-full bg-white/5 border border-white/20 rounded-xl px-5 py-4 text-white placeholder-white/70 outline-none focus:border-white/50 transition-colors appearance-none";
+
+  return (
+    <section className="relative w-full py-16 md:py-32 overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat bg-fixed"
+        style={{ backgroundImage: `url('${bgImage}')` }}
+      >
+        <div className="absolute inset-0 bg-primary/55 backdrop-blur-[2px]"></div>
+      </div>
+
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
+            Grievance Form
+          </h2>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <form
+            onSubmit={handleSubmit}
+            className="border border-white/20 rounded-3xl p-6 sm:p-10 md:p-14 backdrop-blur-sm bg-white/5 shadow-2xl"
+          >
+            <div className="space-y-6">
+
+              {/* Row 1 */}
+              <div>
+                <input
+                  type="text"
+                  placeholder="Name of student / Faculty / Non - teaching faculty *"
+                  className={inputClasses}
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Row 2 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input
+                  type="text"
+                  placeholder="Student Roll Call No. / Employee Id *"
+                  className={inputClasses}
+                  value={formData.idNumber}
+                  onChange={(e) => setFormData({ ...formData, idNumber: e.target.value })}
+                  required
+                />
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  className={inputClasses}
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                />
+              </div>
+
+              {/* Row 3 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="relative">
+                  <select
+                    className={inputClasses}
+                    value={formData.department}
+                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                    required
+                  >
+                    <option value="" disabled className="text-gray-900">Department *</option>
+                    <option value="dept1" className="text-gray-900">Department 1</option>
+                    <option value="dept2" className="text-gray-900">Department 2</option>
+                  </select>
+                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-white/70">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <select
+                    className={inputClasses}
+                    value={formData.course}
+                    onChange={(e) => setFormData({ ...formData, course: e.target.value })}
+                    required
+                  >
+                    <option value="" disabled className="text-gray-900">Course *</option>
+                    <option value="course1" className="text-gray-900">Course 1</option>
+                    <option value="course2" className="text-gray-900">Course 2</option>
+                  </select>
+                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-white/70">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 4 */}
+              <div>
+                <textarea
+                  placeholder="Complaint: *"
+                  rows="4"
+                  className={`${inputClasses} resize-none`}
+                  value={formData.complaint}
+                  onChange={(e) => setFormData({ ...formData, complaint: e.target.value })}
+                  required
+                ></textarea>
+              </div>
+
+              {/* Checkboxes */}
+              <div className="pt-6">
+                <h4 className="text-white font-medium mb-6">To Whom: Which Grievance Cell (Tick appropriate box)*</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
+                  {cells.map((cell, idx) => (
+                    <label key={idx} className="flex items-center gap-3 cursor-pointer group">
+                      <div className="relative flex items-center justify-center w-5 h-5 border border-white/40 rounded bg-white/5 group-hover:border-white/70 transition-colors">
+                        <input
+                          type="checkbox"
+                          className="opacity-0 absolute w-full h-full cursor-pointer"
+                          checked={formData.grievanceCell.includes(idx)}
+                          onChange={() => handleCheckboxChange(idx)}
+                        />
+                        {formData.grievanceCell.includes(idx) && (
+                          <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                        )}
+                      </div>
+                      <span className="text-white/80 text-sm group-hover:text-white transition-colors select-none">{cell}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div className="pt-4">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full sm:w-auto px-5 py-2 bg-white text-primary font-bold rounded-[10px] transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    'Submit Grievance'
+                  )}
+                </button>
+              </div>
+
+            </div>
+          </form>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+export default GrievanceForm;

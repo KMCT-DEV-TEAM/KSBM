@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import userRoutes from './modules/users/user.routes.js';
 import cmsRoutes from './modules/cms/cms.routes.js';
 import uploadRoutes from './modules/upload/upload.routes.js';
+import grievanceRoutes from './modules/grievances/grievance.routes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from "dotenv";
@@ -34,6 +35,7 @@ app.use('/assets', express.static(path.join(__dirname, '../../assets')));
 app.use('/api/users', userRoutes);
 app.use('/api/cms', cmsRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/grievances', grievanceRoutes);
 app.get('/', (req, res) => {
   res.send('API is running...');
 });

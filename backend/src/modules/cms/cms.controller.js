@@ -23,6 +23,8 @@ import AdvisoryBoard from './advisoryBoard.model.js';
 import GoverningBody from './governingBody.model.js';
 import AboutCta from './aboutCta.model.js';
 import FacilitiesPage from './facilitiesPage.model.js';
+import GrievancePage from './grievancePage.model.js';
+import DownloadPage from './downloadPage.model.js';
 import Faculty from './faculty.model.js';
 import AlumniPage from './alumniPage.model.js';
 import ManagementDesk from './managementDesk.model.js';
@@ -997,6 +999,62 @@ export const updateMbaPageSettings = async (req, res) => {
   }
 };
 
+// Update Facilities Page Content
+export const updateFacilitiesPage = async (req, res) => {
+  try {
+    const facilitiesPageData = req.body;
+    let facilitiesPage = await FacilitiesPage.findOne();
+
+    if (!facilitiesPage) {
+      facilitiesPage = new FacilitiesPage(facilitiesPageData);
+    } else {
+      Object.assign(facilitiesPage, facilitiesPageData);
+    }
+
+    await facilitiesPage.save();
+    res.status(200).json(facilitiesPage);
+  } catch (error) {
+    console.error('Error in updateFacilitiesPage:', error);
+    res.status(500).json({ message: 'Error updating Facilities Page content', error: error.message });
+  }
+};
+
+// --- Grievance Page Controllers ---
+
+// Get Grievance Page Content
+export const getGrievancePage = async (req, res) => {
+  try {
+    let page = await GrievancePage.findOne();
+    if (!page) {
+      page = await GrievancePage.create({});
+    }
+    res.status(200).json(page);
+  } catch (error) {
+    console.error('Error in getGrievancePage:', error);
+    res.status(500).json({ message: 'Error fetching Grievance Page content', error: error.message });
+  }
+};
+
+// Update Grievance Page Content
+export const updateGrievancePage = async (req, res) => {
+  try {
+    const pageData = req.body;
+    let page = await GrievancePage.findOne();
+
+    if (!page) {
+      page = new GrievancePage(pageData);
+    } else {
+      Object.assign(page, pageData);
+    }
+
+    await page.save();
+    res.status(200).json(page);
+  } catch (error) {
+    console.error('Error in updateGrievancePage:', error);
+    res.status(500).json({ message: 'Error updating Grievance Page content', error: error.message });
+  }
+};
+
 // @desc    Get BBA Page settings
 export const getBbaPageSettings = async (req, res) => {
   try {
@@ -1364,19 +1422,60 @@ export const getBlogsPageSettings = async (req, res) => {
 // @access  Private/Admin
 export const updateBlogsPageSettings = async (req, res) => {
   try {
-    const fields = ['hero', 'blogs'];
-    const settings = await BlogsPageModel.getSettings();
-    
-    fields.forEach((field) => {
-      if (req.body[field] !== undefined) {
-        settings[field] = req.body[field];
-      }
-    });
+    const { hero, ctaSection } = req.body;
+    let settings = await BlogsPageModel.findOne();
+
+    if (!settings) {
+      settings = new BlogsPageModel({ hero, ctaSection });
+    } else {
+      if (hero) settings.hero = hero;
+      if (ctaSection) settings.ctaSection = ctaSection;
+    }
 
     const updatedSettings = await settings.save();
-    res.json(updatedSettings);
+    res.status(200).json(updatedSettings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error updating Blogs Page settings', error: error.message });
+    res.status(500).json({ message: 'Error updating blogs page settings', error: error.message });
   }
 };
-
+
+// ==========================================
+// DOWNLOAD PAGE SETTINGS
+// ==========================================
+
+// @desc    Get Download Page settings
+// @route   GET /api/cms/download-page
+// @access  Public
+export const getDownloadPage = async (req, res) => {
+  try {
+    let settings = await DownloadPage.findOne();
+    if (!settings) {
+      settings = await DownloadPage.create({});
+    }
+    res.status(200).json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching download page settings', error: error.message });
+  }
+};
+
+// @desc    Update Download Page settings
+// @route   PUT /api/cms/download-page
+// @access  Private/Admin
+export const updateDownloadPage = async (req, res) => {
+  try {
+    const { hero, documents } = req.body;
+    let settings = await DownloadPage.findOne();
+
+    if (!settings) {
+      settings = new DownloadPage({ hero, documents });
+    } else {
+      if (hero) settings.hero = hero;
+      if (documents) settings.documents = documents;
+    }
+
+    const updatedSettings = await settings.save();
+    res.status(200).json(updatedSettings);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating download page settings', error: error.message });
+  }
+};
