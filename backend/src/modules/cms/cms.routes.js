@@ -75,7 +75,11 @@ import {
   getEventsPageSettings,
   updateEventsPageSettings,
   getBlogsPageSettings,
-  updateBlogsPageSettings
+  updateBlogsPageSettings,
+  getGrievancePage,
+  updateGrievancePage,
+  getDownloadPage,
+  updateDownloadPage,
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -240,5 +244,13 @@ router.route('/events-page')
 router.route('/blogs-page')
   .get(getBlogsPageSettings)
   .put(protect, updateBlogsPageSettings);
+
+router.route('/grievance-page')
+  .get(getGrievancePage)
+  .put(protect, updateGrievancePage);
+
+router.route('/download-page')
+  .get(getDownloadPage)
+  .put(protect, updateDownloadPage);
 
 export default router;

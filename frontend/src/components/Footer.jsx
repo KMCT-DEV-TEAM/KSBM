@@ -82,6 +82,7 @@ const Footer = ({ previewData }) => {
 
   const staticUsefulLinks = [
     { label: 'Grievance', url: '/grievance' },
+    { label: 'Download', url: '/download' },
     { label: 'Mandatory Disclosure', url: '/mandatory-disclosure' }
   ];
 
