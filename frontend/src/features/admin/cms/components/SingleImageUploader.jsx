@@ -30,7 +30,11 @@ const SingleImageUploader = ({
     
     if (deferredUpload) {
       const previewUrl = URL.createObjectURL(file);
-      onUploadComplete({ file, previewUrl });
+      onUploadComplete({ 
+        file, 
+        previewUrl, 
+        oldUrl: (currentDisplayUrl && currentDisplayUrl !== defaultImage && !currentDisplayUrl.startsWith('blob:')) ? currentDisplayUrl : null 
+      });
       return;
     }
 
