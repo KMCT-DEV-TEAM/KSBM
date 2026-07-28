@@ -37,7 +37,7 @@ const DynamicLearningSection = ({ program }) => {
   const desc2 = program?.dynamicLearning?.desc2 || 'We believe true leadership is forged through holistic development, peer collaboration, and continuous exposure to diverse real-world scenarios.';
   const images = program?.dynamicLearning?.images && program.dynamicLearning.images.length > 0
     ? program.dynamicLearning.images
-    : ['/assets/Images/image 49.png', '/assets/Images/image 60.png'];
+    : ['/assets/Images/mba/dynamic_49.png', '/assets/Images/mba/dynamic_60.png'];
   const features = program?.dynamicLearning?.features && program.dynamicLearning.features.length > 0
     ? program.dynamicLearning.features
     : defaultFeatures;
@@ -47,19 +47,24 @@ const DynamicLearningSection = ({ program }) => {
       return iconProp;
     }
     const IconComponent = iconMap[iconProp] || Sparkles;
-    return <IconComponent className="w-6 h-6 text-primary group-hover:text-white transition-colors duration-300" />;
+    return <IconComponent className="w-5 h-5 transition-colors duration-300" />;
   };
 
   return (
-    <section className="py-20 lg:py-28 bg-gradient-to-b from-[#303580]/95 via-[#303580]/80 to-[#303580]/60 relative overflow-hidden">
-      {/* Decorative Blur Elements */}
-      <div className="absolute top-1/4 right-10 w-96 h-96 bg-blue-400/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 left-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+    <section className="py-16 lg:py-24 bg-gradient-to-r from-primary via-primary/80 to-primary/40 relative overflow-hidden font-sans">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-      <div className="w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Centered ABOUT THE IV */}
+        <div className="flex items-center justify-center mb-16 w-full">
+          <div className="flex-1 h-[1px] bg-white/30"></div>
+          <span className="px-8 text-sm font-semibold tracking-widest text-white uppercase shrink-0">
+            {badgeText}
+          </span>
+          <div className="flex-1 h-[1px] bg-white/30"></div>
+        </div>
 
         {/* Top Split Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-20 relative">
 
           {/* Left Text */}
           <motion.div
@@ -67,62 +72,57 @@ const DynamicLearningSection = ({ program }) => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="lg:col-span-6 flex flex-col items-start text-left"
+            className="flex flex-col items-start text-left relative z-10"
           >
-            {/* Perfectly Aligned IV Badge & Accent Line */}
-            <div className="inline-flex items-center gap-3 text-xs sm:text-sm font-bold tracking-[0.25em] text-blue-200 uppercase mb-4">
-              <span className="w-10 sm:w-14 h-[2px] bg-gradient-to-r from-blue-300 to-blue-400 rounded-full shrink-0" />
-              <span>{badgeText}</span>
-            </div>
-
-            <h2 className="text-3xl sm:text-4xl lg:text-[46px] font-bold tracking-tight text-white mb-6 leading-[1.2] font-heading">
+            <h2 className="text-2xl sm:text-3xl lg:text-[35px] font-semibold tracking-normal text-white mb-6 leading-tight">
               {title}
             </h2>
-            <p className="text-blue-100/90 text-base sm:text-lg leading-relaxed mb-5 font-normal">
+            <p className="text-white/90 text-[15px] sm:text-[15px] leading-relaxed mb-4">
               {desc1}
             </p>
-            <p className="text-blue-100/90 text-base sm:text-lg leading-relaxed font-normal">
+            <p className="text-white/90 text-[15px] sm:text-[15px] leading-relaxed">
               {desc2}
             </p>
           </motion.div>
 
-          {/* Right Images Collage - Neatly Aligned Grid */}
+          {/* Right Images Collage */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="lg:col-span-6 flex justify-center w-full"
+            className="flex justify-center lg:justify-end w-full relative min-h-[350px]"
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 w-full items-center">
-              <div className="w-full">
-                <div className="rounded-[2.2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-4 border-white/20 h-[320px] sm:h-[380px] bg-gray-900 relative group">
-                  <img
-                    src={images[0] || '/assets/Images/image 49.png'}
-                    alt="Industrial Visit & Campus Life 1"
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
-                </div>
-              </div>
+            <div className="relative w-full max-w-[420px] h-[340px]">
+              <img
+                src={images[0] || '/assets/Images/mba/dynamic_49.png'}
+                alt="Industrial Visit 1"
+                className="absolute top-0 left-0 w-[240px] h-[280px] rounded-[10px] object-cover shadow-2xl z-10"
+              />
+              <img
+                src={images[1] || images[0] || '/assets/Images/mba/dynamic_60.png'}
+                alt="Industrial Visit 2"
+                className="absolute bottom-0 right-0 w-[240px] h-[280px] rounded-[10px] object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-20"
+              />
 
-              <div className="w-full sm:mt-8">
-                <div className="rounded-[2.2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-4 border-white/20 h-[320px] sm:h-[380px] bg-gray-900 relative group">
-                  <img
-                    src={images[1] || images[0] || '/assets/Images/image 60.png'}
-                    alt="Industrial Visit & Campus Life 2"
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
-                </div>
+              {/* Image 68 positioned in the empty space between images */}
+              <div className="absolute -bottom-16 left-1 lg:left-1 w-[180px] hidden sm:block opacity-100 z-[15] pointer-events-none">
+                <img src="/assets/Images/image 68.png" alt="Decorative element" className="w-full h-auto object-contain" />
               </div>
             </div>
           </motion.div>
-
         </div>
 
-        {/* Bottom Feature Cards - Perfectly Aligned Heights */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+        {/* What Included Title */}
+        <div className="flex items-center mb-8 relative">
+          <h3 className="text-[30px] font-semibold text-white pr-4 whitespace-nowrap z-10 relative">
+            What Included
+          </h3>
+          <div className="flex-1 h-[1px] border-t border-dashed border-white/40"></div>
+        </div>
+
+        {/* Bottom Feature Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch pb-10">
           {features.map((feat, idx) => (
             <motion.div
               key={idx}
@@ -130,23 +130,20 @@ const DynamicLearningSection = ({ program }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-30px" }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="bg-white/10 backdrop-blur-md rounded-[22px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.1)] border border-white/10 hover:border-white/30 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group h-full"
+              className="bg-[#666B9F] rounded-[10px] p-6 shadow-md flex flex-col justify-start group"
             >
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-white group-hover:bg-primary group-hover:text-white flex items-center justify-center mb-5 transition-colors duration-300 text-primary shrink-0 shadow-sm">
-                  {renderIcon(feat.icon)}
-                </div>
-                <h3 className="text-lg font-bold text-white group-hover:text-blue-200 transition-colors duration-300 mb-2.5 font-heading">
-                  {feat.title}
-                </h3>
+              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center mb-5 shrink-0">
+                <span className="text-[#666B9F]">{renderIcon(feat.icon)}</span>
               </div>
-              <p className="text-xs sm:text-sm text-blue-100/80 font-normal leading-relaxed mt-1">
+              <h3 className="text-[15px] font-bold text-white mb-2 leading-tight">
+                {feat.title}
+              </h3>
+              <p className="text-xs text-white/80 font-normal leading-relaxed">
                 {feat.desc}
               </p>
             </motion.div>
           ))}
         </div>
-
       </div>
     </section>
   );

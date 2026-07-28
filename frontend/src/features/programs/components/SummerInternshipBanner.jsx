@@ -11,9 +11,9 @@ const SummerInternshipBanner = ({ program }) => {
   const floatingImages = program?.internshipImages && program.internshipImages.length > 0
     ? program.internshipImages
     : [
-        "/assets/Images/image 2.png",
-        "/assets/Images/image 27.png",
-        "/assets/Images/image 28.png"
+        "/assets/Images/mba/internship_2.png",
+        "/assets/Images/mba/internship_27.png",
+        "/assets/Images/mba/internship_28.png"
       ];
 
   return (
@@ -21,7 +21,7 @@ const SummerInternshipBanner = ({ program }) => {
       {/* Full-width Scenic Background Image */}
       <div className="absolute inset-0 z-0">
         <img
-          src={program?.internshipBgImage || "/assets/Images/image 67.png"}
+          src={program?.internshipBgImage || "/assets/Images/mba/gallery_67.png"}
           alt="Summer Internship Background"
           className="w-full h-full object-cover object-center opacity-45 transform hover:scale-105 transition-transform duration-1000"
         />
@@ -30,7 +30,7 @@ const SummerInternshipBanner = ({ program }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#111836] via-transparent to-transparent opacity-60" />
       </div>
 
-      <div className="w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 my-auto">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 my-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
 
           {/* Left Text */}
@@ -73,9 +73,9 @@ const SummerInternshipBanner = ({ program }) => {
               {floatingImages.map((imgUrl, i) => (
                 <motion.div
                   key={i}
-                  whileHover={{ y: -8, scale: 1.05 }}
+                  whileHover={{ y: -10 }}
                   transition={{ duration: 0.3 }}
-                  className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.4)] border-4 border-white/20 aspect-[3/4] bg-gray-800"
+                  className="rounded-[10px] overflow-hidden shadow-2xl aspect-[3/4] bg-gray-800 border-none"
                 >
                   <img
                     src={imgUrl}

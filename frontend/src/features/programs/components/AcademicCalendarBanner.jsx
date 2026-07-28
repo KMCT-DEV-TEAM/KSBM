@@ -25,10 +25,10 @@ const AcademicCalendarBanner = ({ program }) => {
   const titleText = program?.academicCalendarBanner?.title || 'Download the Official Academic Calendar';
   const descriptionText = program?.academicCalendarBanner?.description || 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.';
   const viewBtnText = program?.academicCalendarBanner?.viewBtnText || 'View Calendar';
-  const viewBtnUrl = program?.academicCalendarBanner?.viewBtnUrl || '/assets/Images/image 64.png';
+  const viewBtnUrl = program?.academicCalendarBanner?.viewBtnUrl || '/assets/Images/mba/mba_calendar.png';
   const downloadBtnText = program?.academicCalendarBanner?.downloadBtnText || 'Download Calendar';
-  const downloadBtnUrl = program?.academicCalendarBanner?.downloadBtnUrl || '/assets/Images/image 64.png';
-  const image = program?.academicCalendarBanner?.image || '/assets/Images/image 64.png';
+  const downloadBtnUrl = program?.academicCalendarBanner?.downloadBtnUrl || '/assets/Images/mba/mba_calendar.png';
+  const image = program?.academicCalendarBanner?.image || '/assets/Images/mba/mba_calendar.png';
 
   const events = (program?.academicCalendarBanner?.events && program.academicCalendarBanner.events.length > 0)
     ? program.academicCalendarBanner.events
@@ -105,7 +105,7 @@ const AcademicCalendarBanner = ({ program }) => {
   };
 
   const handleViewAction = (e) => {
-    if (viewBtnUrl && viewBtnUrl !== '#' && viewBtnUrl !== '/assets/Images/image 64.png') {
+    if (viewBtnUrl && viewBtnUrl !== '#' && viewBtnUrl !== '/assets/Images/mba/mba_calendar.png') {
       window.open(viewBtnUrl, '_blank', 'noopener,noreferrer');
     } else {
       setIsScheduleOpen(!isScheduleOpen);
@@ -113,7 +113,7 @@ const AcademicCalendarBanner = ({ program }) => {
   };
 
   const handleDownloadAction = (e) => {
-    if (downloadBtnUrl && downloadBtnUrl !== '#' && downloadBtnUrl !== '/assets/Images/image 64.png') {
+    if (downloadBtnUrl && downloadBtnUrl !== '#' && downloadBtnUrl !== '/assets/Images/mba/mba_calendar.png') {
       window.open(downloadBtnUrl, '_blank', 'noopener,noreferrer');
     } else {
       e.preventDefault();
@@ -131,8 +131,8 @@ const AcademicCalendarBanner = ({ program }) => {
   };
 
   return (
-    <section className="py-28 lg:py-40 bg-white relative my-12 border-t border-b border-gray-100">
-      <div className="w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 lg:py-20 bg-white relative my-12">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -155,7 +155,7 @@ const AcademicCalendarBanner = ({ program }) => {
                 onClick={handleViewAction}
                 className="w-full sm:w-auto px-8 py-3.5 rounded-[12px] bg-[#1b2559] text-white font-semibold text-xs tracking-wide shadow-md hover:bg-[#151c44] hover:-translate-y-0.5 transition-all duration-300 text-center cursor-pointer"
               >
-                <span>{viewBtnUrl && viewBtnUrl !== '#' && viewBtnUrl !== '/assets/Images/image 64.png' ? viewBtnText : (isScheduleOpen ? 'Hide Interactive Schedule' : viewBtnText)}</span>
+                <span>{viewBtnUrl && viewBtnUrl !== '#' && viewBtnUrl !== '/assets/Images/mba/mba_calendar.png' ? viewBtnText : (isScheduleOpen ? 'Hide Interactive Schedule' : viewBtnText)}</span>
               </button>
 
               <button

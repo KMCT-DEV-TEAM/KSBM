@@ -8,6 +8,7 @@ import confirmAction from '../../../utils/confirmAction';
 import LogoUploader from './components/LogoUploader';
 import ManageRecruiters from './ManageRecruiters';
 import PageHeader from './components/PageHeader';
+import AddItemModal from './components/AddItemModal';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -32,14 +33,103 @@ const defaultCalendarEvents = [
   { id: '8', title: 'Summer Internship Placement Drive', date: 'February 15 - February 28, 2027', semester: 'Trimester 2', category: 'Industrial Visits', description: 'On-campus recruitment process for 8-10 week corporate summer internships.' }
 ];
 
+
+
+const TabSkeleton = () => (
+  <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 w-full animate-pulse">
+    <div className="h-6 bg-gray-200 rounded-md w-1/4 mb-6"></div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-4">
+        <div className="h-4 bg-gray-200 rounded-md w-1/3"></div>
+        <div className="h-10 bg-gray-200 rounded-md w-full"></div>
+        <div className="h-4 bg-gray-200 rounded-md w-1/3"></div>
+        <div className="h-10 bg-gray-200 rounded-md w-full"></div>
+      </div>
+      <div className="space-y-4">
+        <div className="h-32 bg-gray-200 rounded-md w-full"></div>
+      </div>
+    </div>
+  </div>
+);
+
+const CharCountLabel = ({ label, value, max }) => (
+  <div className="flex justify-between items-end mb-2">
+    <label className="block text-sm font-semibold text-gray-700">{label}</label>
+    <span className={`text-[11px] font-bold ${value?.length >= max ? 'text-red-500' : value?.length > max * 0.8 ? 'text-orange-500' : 'text-gray-400'}`}>
+      {value?.length || 0} / {max}
+    </span>
+  </div>
+);
+
+const extractImageUrls = (obj, urls = []) => {
+  if (!obj) return urls;
+  if (typeof obj === 'string') {
+    if (obj.startsWith('/assets/Images/') || obj.startsWith('/uploads/')) {
+      if (!urls.includes(obj)) urls.push(obj);
+    }
+    return urls;
+  }
+  if (Array.isArray(obj)) {
+    obj.forEach(item => extractImageUrls(item, urls));
+    return urls;
+  }
+  if (typeof obj === 'object') {
+    Object.values(obj).forEach(val => extractImageUrls(val, urls));
+    return urls;
+  }
+  return urls;
+};
+
+const processDeferredUploads = async (obj, apiInstance) => {
+  if (!obj) return obj;
+  if (typeof obj === 'string') {
+    if (obj.startsWith('blob:')) {
+      try {
+        const res = await fetch(obj);
+        const blob = await res.blob();
+        const file = new File([blob], 'upload.png', { type: blob.type });
+        const formData = new FormData();
+        formData.append('image', file);
+        const uploadRes = await apiInstance.post('/upload/mba', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          hideLoader: true
+        });
+        return uploadRes.data.url;
+      } catch (err) {
+        console.error("Failed to upload deferred image", obj, err);
+        return obj;
+      }
+    }
+    return obj;
+  }
+  if (Array.isArray(obj)) {
+    const newArr = [];
+    for (const item of obj) {
+      newArr.push(await processDeferredUploads(item, apiInstance));
+    }
+    return newArr;
+  }
+  if (typeof obj === 'object') {
+    const newObj = {};
+    for (const key of Object.keys(obj)) {
+      newObj[key] = await processDeferredUploads(obj[key], apiInstance);
+    }
+    return newObj;
+  }
+  return obj;
+};
+
 const ManageMbaPage = ({ isBba = false }) => {
   const endpoint = isBba ? '/cms/bba-page' : '/cms/mba-page';
   const pageName = isBba ? 'BBA Program Page' : 'Page';
   const liveUrl = isBba ? '/programs/bba' : '/programs/mba';
 
   const [activeTab, setActiveTab] = useState('hero');
+  const [isTabLoading, setIsTabLoading] = useState(false);
+  const [modalConfig, setModalConfig] = useState({ isOpen: false, title: '', fields: [], onSave: () => {} });
   const [isLoading, setIsLoading] = useState(true);
   const tabsContainerRef = useRef(null);
+  const originalImagesRef = useRef([]);
   const [isSaving, setIsSaving] = useState(false);
 
   // Preview Modal States
@@ -167,9 +257,9 @@ const ManageMbaPage = ({ isBba = false }) => {
       setInternshipBtnText(data.internshipBtnText || 'Apply Now');
       setInternshipBtnLink(data.internshipBtnLink || '/#contact');
       setInternshipImages(data.internshipImages && data.internshipImages.length > 0 ? data.internshipImages : [
-        '/assets/Images/image 2.png',
-        '/assets/Images/image 27.png',
-        '/assets/Images/image 28.png'
+        '/assets/Images/mba/internship_2.png',
+        '/assets/Images/mba/internship_27.png',
+        '/assets/Images/mba/internship_28.png'
       ]);
 
       setWhyChoosePills(data.whyChoosePills || {
@@ -189,7 +279,7 @@ const ManageMbaPage = ({ isBba = false }) => {
         title: 'Experience Dynamic Learning',
         desc1: 'Beyond the classroom, KSBM offers an electrifying campus ecosystem packed with management clubs, national-level conclaves, cultural extravaganzas, and executive workshops.',
         desc2: 'We believe true leadership is forged through holistic development, peer collaboration, and continuous exposure to diverse real-world scenarios.',
-        images: ['/assets/Images/image 49.png', '/assets/Images/image 60.png'],
+        images: ['/assets/Images/mba/dynamic_49.png', '/assets/Images/mba/dynamic_60.png'],
         features: [
           { title: 'Management Clubs', desc: 'Specialized student-led clubs in Finance, Marketing, HR, and Entrepreneurship.', icon: 'Users' },
           { title: 'Leadership Conclaves', desc: 'Annual summits bringing top business leaders and innovators to campus.', icon: 'Award' },
@@ -203,11 +293,11 @@ const ManageMbaPage = ({ isBba = false }) => {
         title: 'Moments Captured in Trip',
         bgImage: '',
         items: [
-          { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/image 67.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
-          { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/image 27.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-          { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/image 28.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-          { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/image 2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
-          { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/image 58.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
+          { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/mba/gallery_67.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
+          { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/mba/internship_27.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
+          { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/mba/internship_28.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
+          { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/mba/internship_2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
+          { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/mba/gallery_58.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
         ]
       });
 
@@ -217,14 +307,17 @@ const ManageMbaPage = ({ isBba = false }) => {
         title: data.academicCalendarBanner?.title || 'Download the Official Academic Calendar',
         description: data.academicCalendarBanner?.description || 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
         viewBtnText: data.academicCalendarBanner?.viewBtnText || 'View Calendar',
-        viewBtnUrl: data.academicCalendarBanner?.viewBtnUrl || '/assets/Images/image 64.png',
+        viewBtnUrl: data.academicCalendarBanner?.viewBtnUrl || '/assets/Images/mba/calendar_64.png',
         downloadBtnText: data.academicCalendarBanner?.downloadBtnText || 'Download Calendar',
-        downloadBtnUrl: data.academicCalendarBanner?.downloadBtnUrl || '/assets/Images/image 64.png',
-        image: data.academicCalendarBanner?.image || '/assets/Images/image 64.png',
+        downloadBtnUrl: data.academicCalendarBanner?.downloadBtnUrl || '/assets/Images/mba/calendar_64.png',
+        image: data.academicCalendarBanner?.image || '/assets/Images/mba/calendar_64.png',
         events: (data.academicCalendarBanner?.events && data.academicCalendarBanner.events.length > 0)
           ? data.academicCalendarBanner.events
           : defaultCalendarEvents
       });
+        
+      // Track original images for deletion later
+      originalImagesRef.current = extractImageUrls(data);
     } catch (error) {
       console.error(`Error fetching ${pageName} settings:`, error);
       Toast.fire({ icon: 'error', title: `Failed to load ${pageName} settings.` });
@@ -242,7 +335,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       action: async () => {
         setIsSaving(true);
         try {
-          await api.put(endpoint, {
+          const rawPayload = {
             shortTitle,
             title,
             heroTitleLine1,
@@ -278,7 +371,25 @@ const ManageMbaPage = ({ isBba = false }) => {
             dynamicLearning,
             momentsGallery,
             academicCalendarBanner
-          });
+          };
+          
+          const processedPayload = await processDeferredUploads(rawPayload, api);
+          
+          await api.put(endpoint, processedPayload);
+          
+          const newImages = extractImageUrls(processedPayload);
+          const deletedUrls = originalImagesRef.current.filter(url => !newImages.includes(url));
+          
+          for (const url of deletedUrls) {
+            try {
+              await api.delete('/upload', { data: { fileUrl: url }, hideLoader: true });
+            } catch (err) {
+              console.error('Failed to delete orphaned image:', url, err);
+            }
+          }
+          
+          originalImagesRef.current = newImages; // Update tracked images
+          
           Toast.fire({ icon: 'success', title: `${pageName} updated successfully!` });
         } catch (error) {
           console.error(`Error saving ${pageName} settings:`, error);
@@ -303,7 +414,7 @@ const ManageMbaPage = ({ isBba = false }) => {
           setHeroTitleLine1('Bachelor of Business');
           setHeroTitleLine2('Administration (BBA)');
           setDescription('A dynamic three-year undergraduate program designed to build strong business foundations, leadership capabilities, and practical skills for aspiring professionals and future entrepreneurs.');
-          setHeroImage('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop');
+          setHeroImage('/assets/Images/mba/mba_hero_bg.png');
           setHeroPrimaryBtnText('EXPLORE PROGRAM');
           setHeroSecondaryBtnText('DOWNLOAD BROCHURE');
           setHeroCardTitle('Batch 2025–27');
@@ -314,7 +425,7 @@ const ManageMbaPage = ({ isBba = false }) => {
           setOverviewTitle('Bachelor of Business Administration');
           setOverviewText('The BBA program at KSBM lays the essential groundwork for young minds aspiring to make an impact in the corporate world or launch their own ventures.');
           setOverviewSubtext('Combining fundamental business theory with practical workshops, presentation modules, and industry exposure, the curriculum ensures smooth transition to corporate careers or premier MBA programs.');
-          setOverviewImage('https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop');
+          setOverviewImage('/assets/Images/mba/mba_main.png');
           setOverviewBadgeText('UNDERGRADUATE EXCELLENCE');
           setOverviewFloatingBadgeText('3-Year Foundation');
           setOverviewPrimaryBtnText('Apply Now');
@@ -331,7 +442,7 @@ const ManageMbaPage = ({ isBba = false }) => {
           setHeroTitleLine1('Master of Business');
           setHeroTitleLine2('Administration (MBA)');
           setDescription('A rigorous two-year program designed to mold visionary business leaders, strategic thinkers, and dynamic entrepreneurs ready to navigate the global corporate landscape.');
-          setHeroImage('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop');
+          setHeroImage('/assets/Images/mba/mba_hero_bg.png');
           setHeroPrimaryBtnText('EXPLORE PROGRAM');
           setHeroSecondaryBtnText('DOWNLOAD BROCHURE');
           setHeroCardTitle('Batch 2025–27');
@@ -342,7 +453,7 @@ const ManageMbaPage = ({ isBba = false }) => {
           setOverviewTitle('Master of Business Administration');
           setOverviewText('Our MBA program combines rigorous academic foundations with experiential learning, empowering students to master complex global business challenges and lead with confidence.');
           setOverviewSubtext('Through case-study pedagogy, industry mentorship, and live corporate projects, students develop executive presence, analytical rigor, and entrepreneurial innovation.');
-          setOverviewImage('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop');
+          setOverviewImage('/assets/Images/mba/mba_main.png');
           setOverviewBadgeText('POSTGRADUATE EXCELLENCE');
           setOverviewFloatingBadgeText('100% Case-Study Driven');
           setOverviewPrimaryBtnText('Apply Now');
@@ -358,9 +469,9 @@ const ManageMbaPage = ({ isBba = false }) => {
         setInternshipBtnText('Apply Now');
         setInternshipBtnLink('/#contact');
         setInternshipImages([
-          '/assets/Images/image 2.png',
-          '/assets/Images/image 27.png',
-          '/assets/Images/image 28.png'
+          '/assets/Images/mba/internship_2.png',
+          '/assets/Images/mba/internship_27.png',
+          '/assets/Images/mba/internship_28.png'
         ]);
         setWhyChoosePills({
           badgeText: 'LEARNING GOALS',
@@ -378,7 +489,7 @@ const ManageMbaPage = ({ isBba = false }) => {
           title: 'Experience Dynamic Learning',
           desc1: 'Beyond the classroom, KSBM offers an electrifying campus ecosystem packed with management clubs, national-level conclaves, cultural extravaganzas, and executive workshops.',
           desc2: 'We believe true leadership is forged through holistic development, peer collaboration, and continuous exposure to diverse real-world scenarios.',
-          images: ['/assets/Images/image 49.png', '/assets/Images/image 60.png'],
+          images: ['/assets/Images/mba/dynamic_49.png', '/assets/Images/mba/dynamic_60.png'],
           features: [
             { title: 'Management Clubs', desc: 'Specialized student-led clubs in Finance, Marketing, HR, and Entrepreneurship.', icon: 'Users' },
             { title: 'Leadership Conclaves', desc: 'Annual summits bringing top business leaders and innovators to campus.', icon: 'Award' },
@@ -391,11 +502,11 @@ const ManageMbaPage = ({ isBba = false }) => {
           title: 'Moments Captured in Trip',
           bgImage: '',
           items: [
-            { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/image 67.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
-            { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/image 27.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-            { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/image 28.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-            { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/image 2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
-            { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/image 58.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
+            { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/mba/gallery_67.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
+            { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/mba/internship_27.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
+            { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/mba/internship_28.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
+            { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/mba/internship_2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
+            { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/mba/gallery_58.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
           ]
         });
         setAcademicCalendarBanner({
@@ -403,10 +514,10 @@ const ManageMbaPage = ({ isBba = false }) => {
           title: 'Download the Official Academic Calendar',
           description: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
           viewBtnText: 'View Calendar',
-          viewBtnUrl: '/assets/Images/image 64.png',
+          viewBtnUrl: '/assets/Images/mba/calendar_64.png',
           downloadBtnText: 'Download Calendar',
-          downloadBtnUrl: '/assets/Images/image 64.png',
-          image: '/assets/Images/image 64.png'
+          downloadBtnUrl: '/assets/Images/mba/calendar_64.png',
+          image: '/assets/Images/mba/calendar_64.png'
         });
         Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save Changes to confirm.' });
       }
@@ -414,13 +525,19 @@ const ManageMbaPage = ({ isBba = false }) => {
   };
 
   // Highlights helpers
-  const addHighlight = () => setHighlights([...highlights, '']);
+  const addHighlight = () => {
+    openAddModal(
+      'Add Highlight Item',
+      [{ name: 'text', label: 'Highlight Text', type: 'text', maxLength: 100, required: true, placeholder: 'New highlight item' }],
+      (data) => setHighlights([...highlights, data.text])
+    );
+  };
   const updateHighlight = (index, val) => {
     const updated = [...highlights];
     updated[index] = val;
     setHighlights(updated);
   };
-  const removeHighlight = (index) => setHighlights(highlights.filter((_, i) => i !== index));
+  const removeHighlight = (index) => confirmAction({ title: 'Remove Highlight', message: 'Are you sure you want to remove this highlight?', confirmText: 'Yes, remove', variant: 'danger', action: () => setHighlights(highlights.filter((_, i) => i !== index)) });
 
   // Dimensions helpers
   const addDimension = () => {
@@ -439,23 +556,25 @@ const ManageMbaPage = ({ isBba = false }) => {
     updated[index][field] = val;
     setDimensions(updated);
   };
-  const removeDimension = (index) => setDimensions(dimensions.filter((_, i) => i !== index));
+  const removeDimension = (index) => confirmAction({ title: 'Remove Dimension', message: 'Are you sure you want to remove this dimension card?', confirmText: 'Yes, remove', variant: 'danger', action: () => setDimensions(dimensions.filter((_, i) => i !== index)) });
 
   const addDimensionTopic = (dimIdx) => {
-    const updated = [...dimensions];
-    updated[dimIdx].topics.push('New Topic');
-    setDimensions(updated);
+    openAddModal(
+      'Add Dimension Topic',
+      [{ name: 'text', label: 'Topic Name', type: 'text', maxLength: 100, required: true }],
+      (data) => {
+        const updated = [...dimensions];
+        updated[dimIdx].topics.push(data.text);
+        setDimensions(updated);
+      }
+    );
   };
   const updateDimensionTopic = (dimIdx, topIdx, val) => {
     const updated = [...dimensions];
     updated[dimIdx].topics[topIdx] = val;
     setDimensions(updated);
   };
-  const removeDimensionTopic = (dimIdx, topIdx) => {
-    const updated = [...dimensions];
-    updated[dimIdx].topics = updated[dimIdx].topics.filter((_, i) => i !== topIdx);
-    setDimensions(updated);
-  };
+  const removeDimensionTopic = (dimIdx, topIdx) => confirmAction({ title: 'Remove Topic', message: 'Are you sure you want to remove this topic bullet?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updated = [...dimensions]; updated[dimIdx].topics = updated[dimIdx].topics.filter((_, i) => i !== topIdx); setDimensions(updated); }});
 
   // Eligibility helpers
   const addEligibilityStep = () => {
@@ -474,43 +593,46 @@ const ManageMbaPage = ({ isBba = false }) => {
     updated[index][field] = val;
     setEligibility(updated);
   };
-  const removeEligibilityStep = (index) => setEligibility(eligibility.filter((_, i) => i !== index));
+  const removeEligibilityStep = (index) => confirmAction({ title: 'Remove Eligibility Step', message: 'Are you sure you want to remove this eligibility card?', confirmText: 'Yes, remove', variant: 'danger', action: () => setEligibility(eligibility.filter((_, i) => i !== index)) });
 
   const addEligibilityBullet = (stepIdx) => {
-    const updated = [...eligibility];
-    updated[stepIdx].bullets.push('New bullet requirement');
-    setEligibility(updated);
+    openAddModal(
+      'Add Requirement Bullet',
+      [{ name: 'text', label: 'Requirement Details', type: 'textarea', maxLength: 200, required: true }],
+      (data) => {
+        const updated = [...eligibility];
+        updated[stepIdx].bullets.push(data.text);
+        setEligibility(updated);
+      }
+    );
   };
   const updateEligibilityBullet = (stepIdx, bulIdx, val) => {
     const updated = [...eligibility];
     updated[stepIdx].bullets[bulIdx] = val;
     setEligibility(updated);
   };
-  const removeEligibilityBullet = (stepIdx, bulIdx) => {
-    const updated = [...eligibility];
-    updated[stepIdx].bullets = updated[stepIdx].bullets.filter((_, i) => i !== bulIdx);
-    setEligibility(updated);
-  };
+  const removeEligibilityBullet = (stepIdx, bulIdx) => confirmAction({ title: 'Remove Requirement', message: 'Are you sure you want to remove this requirement bullet?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updated = [...eligibility]; updated[stepIdx].bullets = updated[stepIdx].bullets.filter((_, i) => i !== bulIdx); setEligibility(updated); }});
 
   // WhyChoosePills helpers
   const addPillItem = () => {
-    setWhyChoosePills({
-      ...whyChoosePills,
-      items: [
-        ...(whyChoosePills.items || []),
-        { title: 'New Dimension', description: 'Brief description.', icon: 'BookOpen' }
-      ]
-    });
+    openAddModal(
+      'Add Dimension Pill',
+      [
+        { name: 'title', label: 'Title', type: 'text', maxLength: 100, required: true },
+        { name: 'description', label: 'Description', type: 'textarea', maxLength: 200, required: true }
+      ],
+      (data) => {
+        const updatedItems = [...(whyChoosePills.items || []), { title: data.title, description: data.description, icon: 'BookOpen' }];
+        setWhyChoosePills({ ...whyChoosePills, items: updatedItems });
+      }
+    );
   };
   const updatePillItem = (idx, field, val) => {
     const updatedItems = [...(whyChoosePills.items || [])];
     updatedItems[idx] = { ...updatedItems[idx], [field]: val };
     setWhyChoosePills({ ...whyChoosePills, items: updatedItems });
   };
-  const removePillItem = (idx) => {
-    const updatedItems = (whyChoosePills.items || []).filter((_, i) => i !== idx);
-    setWhyChoosePills({ ...whyChoosePills, items: updatedItems });
-  };
+  const removePillItem = (idx) => confirmAction({ title: 'Remove Pill', message: 'Are you sure you want to remove this dimension pill?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updatedItems = (whyChoosePills.items || []).filter((_, i) => i !== idx); setWhyChoosePills({ ...whyChoosePills, items: updatedItems }); }});
 
   // Academic Calendar Events helpers
   const addCalendarEvent = () => {
@@ -534,10 +656,7 @@ const ManageMbaPage = ({ isBba = false }) => {
     updated[idx] = { ...updated[idx], [field]: val };
     setAcademicCalendarBanner({ ...academicCalendarBanner, events: updated });
   };
-  const removeCalendarEvent = (idx) => {
-    const updated = (academicCalendarBanner.events || []).filter((_, i) => i !== idx);
-    setAcademicCalendarBanner({ ...academicCalendarBanner, events: updated });
-  };
+  const removeCalendarEvent = (idx) => confirmAction({ title: 'Remove Event', message: 'Are you sure you want to remove this calendar event?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updated = (academicCalendarBanner.events || []).filter((_, i) => i !== idx); setAcademicCalendarBanner({ ...academicCalendarBanner, events: updated }); }});
   const moveCalendarEvent = (idx, direction) => {
     const current = [...(academicCalendarBanner.events || [])];
     const target = idx + direction;
@@ -549,23 +668,25 @@ const ManageMbaPage = ({ isBba = false }) => {
 
   // DynamicLearning helpers
   const addDynamicFeature = () => {
-    setDynamicLearning({
-      ...dynamicLearning,
-      features: [
-        ...(dynamicLearning.features || []),
-        { title: 'New Feature', desc: 'Brief feature description.', icon: 'Award' }
-      ]
-    });
+    openAddModal(
+      'Add Feature Card',
+      [
+        { name: 'title', label: 'Feature Title', type: 'text', maxLength: 100, required: true },
+        { name: 'desc', label: 'Feature Description', type: 'textarea', maxLength: 250, required: true },
+        { name: 'icon', label: 'Icon Name (lucide-react)', type: 'text', maxLength: 50, defaultValue: 'Award' }
+      ],
+      (data) => {
+        const updatedFeatures = [...(dynamicLearning.features || []), { title: data.title, desc: data.desc, icon: data.icon || 'Award' }];
+        setDynamicLearning({ ...dynamicLearning, features: updatedFeatures });
+      }
+    );
   };
   const updateDynamicFeature = (idx, field, val) => {
     const updatedFeatures = [...(dynamicLearning.features || [])];
     updatedFeatures[idx] = { ...updatedFeatures[idx], [field]: val };
     setDynamicLearning({ ...dynamicLearning, features: updatedFeatures });
   };
-  const removeDynamicFeature = (idx) => {
-    const updatedFeatures = (dynamicLearning.features || []).filter((_, i) => i !== idx);
-    setDynamicLearning({ ...dynamicLearning, features: updatedFeatures });
-  };
+  const removeDynamicFeature = (idx) => confirmAction({ title: 'Remove Feature', message: 'Are you sure you want to remove this feature card?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updatedFeatures = (dynamicLearning.features || []).filter((_, i) => i !== idx); setDynamicLearning({ ...dynamicLearning, features: updatedFeatures }); }});
   const updateDynamicImage = (idx, url) => {
     const updatedImages = [...(dynamicLearning.images || ['', ''])];
     updatedImages[idx] = url;
@@ -581,24 +702,31 @@ const ManageMbaPage = ({ isBba = false }) => {
       'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]',
       'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]'
     ];
-    const span = defaultSpans[(momentsGallery.items || []).length % defaultSpans.length];
-    setMomentsGallery({
-      ...momentsGallery,
-      items: [
-        ...(momentsGallery.items || []),
-        { title: 'New Moment', subtitle: 'Moment Subtitle', image: '/assets/Images/image 67.png', span }
-      ]
-    });
+    openAddModal(
+      'Add Gallery Photo',
+      [
+        { name: 'title', label: 'Photo Title', type: 'text', maxLength: 60, required: true },
+        { name: 'subtitle', label: 'Subtitle', type: 'text', maxLength: 60, required: true },
+        { name: 'image', label: 'Upload Photo', type: 'image', required: true }
+      ],
+      (data) => {
+        const span = defaultSpans[(momentsGallery.items || []).length % defaultSpans.length];
+        setMomentsGallery({
+          ...momentsGallery,
+          items: [
+            ...(momentsGallery.items || []),
+            { title: data.title, subtitle: data.subtitle, image: data.image, span }
+          ]
+        });
+      }
+    );
   };
   const updateGalleryItem = (idx, field, val) => {
     const updatedItems = [...(momentsGallery.items || [])];
     updatedItems[idx] = { ...updatedItems[idx], [field]: val };
     setMomentsGallery({ ...momentsGallery, items: updatedItems });
   };
-  const removeGalleryItem = (idx) => {
-    const updatedItems = (momentsGallery.items || []).filter((_, i) => i !== idx);
-    setMomentsGallery({ ...momentsGallery, items: updatedItems });
-  };
+  const removeGalleryItem = (idx) => confirmAction({ title: 'Remove Gallery Item', message: 'Are you sure you want to remove this gallery photo?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updatedItems = (momentsGallery.items || []).filter((_, i) => i !== idx); setMomentsGallery({ ...momentsGallery, items: updatedItems }); }});
 
   // Internship Images helpers
   const updateInternshipImage = (idx, url) => {
@@ -624,6 +752,29 @@ const ManageMbaPage = ({ isBba = false }) => {
     { id: 'topRecruiters', name: 'Top Recruiters & Partners', icon: <Briefcase className="w-4 h-4" /> }
   ];
 
+  
+  
+  const openAddModal = (title, fields, onSaveCallback) => {
+    setModalConfig({
+      isOpen: true,
+      title,
+      fields,
+      onSave: (data) => {
+        onSaveCallback(data);
+        setModalConfig(prev => ({ ...prev, isOpen: false }));
+      }
+    });
+  };
+  
+  const handleTabClick = (tabId) => {
+    if (activeTab === tabId) return;
+    setIsTabLoading(true);
+    setActiveTab(tabId);
+    setTimeout(() => {
+      setIsTabLoading(false);
+    }, 400);
+  };
+  
   const scrollTabs = (direction) => {
     if (tabsContainerRef.current) {
       const scrollAmount = direction === 'left' ? -320 : 320;
@@ -633,15 +784,6 @@ const ManageMbaPage = ({ isBba = false }) => {
 
   return (
     <div className="space-y-8 pb-16">
-      <PageHeader
-        title={`${pageName} CMS`}
-        description="Manage titles, banner images, curriculum highlights, overview details, and eligibility criteria."
-        onPreview={() => setIsPreviewModalOpen(true)}
-        onReset={handleResetToDefault}
-        onSave={handleSave}
-        isSaving={isSaving}
-      />
-
       {/* Tabs with Scroll Arrows */}
       <div className="relative flex items-center gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
         <button
@@ -661,7 +803,7 @@ const ManageMbaPage = ({ isBba = false }) => {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => handleTabClick(tab.id)}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${activeTab === tab.id
                 ? 'bg-primary text-white shadow-md'
                 : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
@@ -682,16 +824,28 @@ const ManageMbaPage = ({ isBba = false }) => {
           <ChevronRight className="w-5 h-5" />
         </button>
       </div>
+      <PageHeader
+        title={`${pageName} CMS`}
+        description="Manage titles, banner images, curriculum highlights, overview details, and eligibility criteria."
+        onPreview={() => setIsPreviewModalOpen(true)}
+        onReset={handleResetToDefault}
+        onSave={handleSave}
+        isSaving={isSaving}
+      />
 
-      {/* Tab 1: Hero Section */}
+
+
+      {isTabLoading ? <TabSkeleton /> : (
+        <>
+        {/* Tab 1: Hero Section */}
       {activeTab === 'hero' && (
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
           <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Hero Banner Settings</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Short Badge Title</label>
-              <input
+              <CharCountLabel label="Short Badge Title" value={shortTitle} max={60} />
+                <input maxLength={60} 
                 type="text"
                 value={shortTitle}
                 onChange={(e) => setShortTitle(e.target.value)}
@@ -701,8 +855,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               <p className="text-xs text-gray-400 mt-1">Appears inside the top pill badge (`ACADEMIC PROGRAM • MBA`)</p>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Full Program Title</label>
-              <input
+              <CharCountLabel label="Full Program Title" value={title} max={60} />
+                <input maxLength={60} 
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -714,8 +868,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 border-t border-gray-100">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Hero Heading Line 1 (White Text)</label>
-              <input
+              <CharCountLabel label="Hero Heading Line 1 (White Text)" value={heroTitleLine1} max={50} />
+                <input maxLength={50} 
                 type="text"
                 value={heroTitleLine1}
                 onChange={(e) => setHeroTitleLine1(e.target.value)}
@@ -724,8 +878,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Hero Heading Line 2 (Blue Text)</label>
-              <input
+              <CharCountLabel label="Hero Heading Line 2 (Blue Text)" value={heroTitleLine2} max={50} />
+                <input maxLength={50} 
                 type="text"
                 value={heroTitleLine2}
                 onChange={(e) => setHeroTitleLine2(e.target.value)}
@@ -736,8 +890,8 @@ const ManageMbaPage = ({ isBba = false }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Hero Description Paragraph</label>
-            <textarea
+            <CharCountLabel label="Hero Description Paragraph" value={description} max={400} />
+                <textarea maxLength={400} 
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -748,8 +902,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Primary Action Button Text</label>
-              <input
+              <CharCountLabel label="Primary Action Button Text" value={heroPrimaryBtnText} max={30} />
+                <input maxLength={30} 
                 type="text"
                 value={heroPrimaryBtnText}
                 onChange={(e) => setHeroPrimaryBtnText(e.target.value)}
@@ -758,8 +912,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Secondary Action Button Text</label>
-              <input
+              <CharCountLabel label="Secondary Action Button Text" value={heroSecondaryBtnText} max={30} />
+                <input maxLength={30} 
                 type="text"
                 value={heroSecondaryBtnText}
                 onChange={(e) => setHeroSecondaryBtnText(e.target.value)}
@@ -772,13 +926,15 @@ const ManageMbaPage = ({ isBba = false }) => {
           <div className="pt-4 border-t border-gray-100">
             <label className="block text-sm font-semibold text-gray-700 mb-3">Hero Background Image</label>
             <div className="space-y-4">
-              <LogoUploader
+              <LogoUploader deferredMode={true}
+                uploadEndpoint="/upload/mba"
                 currentLogoUrl={heroImage}
+                defaultImage="/assets/Images/mba/mba_hero_bg.png"
                 onUploadSuccess={(url) => setHeroImage(url)}
               />
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Or paste image URL directly:</label>
-                <input
+                <CharCountLabel label="Or paste image URL directly:" value={heroImage} max={200} />
+                <input maxLength={200} 
                   type="text"
                   value={heroImage}
                   onChange={(e) => setHeroImage(e.target.value)}
@@ -797,8 +953,8 @@ const ManageMbaPage = ({ isBba = false }) => {
           <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Program Overview Settings</h2>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Overview Section Heading</label>
-            <input
+            <CharCountLabel label="Overview Section Heading" value={overviewTitle} max={100} />
+                <input maxLength={100} 
               type="text"
               value={overviewTitle}
               onChange={(e) => setOverviewTitle(e.target.value)}
@@ -807,8 +963,8 @@ const ManageMbaPage = ({ isBba = false }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Primary Overview Paragraph</label>
-            <textarea
+            <CharCountLabel label="Primary Overview Paragraph" value={overviewText} max={400} />
+                <textarea maxLength={400} 
               rows={4}
               value={overviewText}
               onChange={(e) => setOverviewText(e.target.value)}
@@ -817,8 +973,8 @@ const ManageMbaPage = ({ isBba = false }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Secondary Overview Paragraph</label>
-            <textarea
+            <CharCountLabel label="Secondary Overview Paragraph" value={overviewSubtext} max={400} />
+                <textarea maxLength={400} 
               rows={3}
               value={overviewSubtext}
               onChange={(e) => setOverviewSubtext(e.target.value)}
@@ -828,8 +984,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Top Pill Badge Text</label>
-              <input
+              <CharCountLabel label="Top Pill Badge Text" value={overviewBadgeText} max={50} />
+                <input maxLength={50} 
                 type="text"
                 value={overviewBadgeText}
                 onChange={(e) => setOverviewBadgeText(e.target.value)}
@@ -838,8 +994,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Floating Image Badge Text</label>
-              <input
+              <CharCountLabel label="Floating Image Badge Text" value={overviewFloatingBadgeText} max={50} />
+                <input maxLength={50} 
                 type="text"
                 value={overviewFloatingBadgeText}
                 onChange={(e) => setOverviewFloatingBadgeText(e.target.value)}
@@ -848,8 +1004,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Primary Action Button Text</label>
-              <input
+              <CharCountLabel label="Primary Action Button Text" value={overviewPrimaryBtnText} max={30} />
+                <input maxLength={30} 
                 type="text"
                 value={overviewPrimaryBtnText}
                 onChange={(e) => setOverviewPrimaryBtnText(e.target.value)}
@@ -858,8 +1014,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Secondary Action Button Text</label>
-              <input
+              <CharCountLabel label="Secondary Action Button Text" value={overviewSecondaryBtnText} max={30} />
+                <input maxLength={30} 
                 type="text"
                 value={overviewSecondaryBtnText}
                 onChange={(e) => setOverviewSecondaryBtnText(e.target.value)}
@@ -872,13 +1028,15 @@ const ManageMbaPage = ({ isBba = false }) => {
           <div className="pt-4 border-t border-gray-100">
             <label className="block text-sm font-semibold text-gray-700 mb-3">Showcase Image (Right side)</label>
             <div className="space-y-4">
-              <LogoUploader
+              <LogoUploader deferredMode={true}
+                uploadEndpoint="/upload/mba"
                 currentLogoUrl={overviewImage}
+                defaultImage="/assets/Images/mba/mba_main.png"
                 onUploadSuccess={(url) => setOverviewImage(url)}
               />
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Or paste image URL directly:</label>
-                <input
+                <CharCountLabel label="Or paste image URL directly:" value={overviewImage} max={200} />
+                <input maxLength={200} 
                   type="text"
                   value={overviewImage}
                   onChange={(e) => setOverviewImage(e.target.value)}
@@ -894,7 +1052,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               <button
                 type="button"
                 onClick={addHighlight}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary/10 text-primary text-xs font-bold hover:bg-primary/20 transition-all shadow-sm"
+                className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
               >
                 <Plus className="w-4 h-4" /> Add Highlight Item
               </button>
@@ -932,7 +1090,7 @@ const ManageMbaPage = ({ isBba = false }) => {
             <button
               type="button"
               onClick={addDimension}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-all shadow"
+              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" /> Add Dimension Card
             </button>
@@ -952,8 +1110,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                   <div className="sm:col-span-1">
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Card Number / Step</label>
-                    <input
+                    <CharCountLabel label="Card Number / Step" value={dim.number} max={100} />
+                <input maxLength={100} 
                       type="text"
                       value={dim.number}
                       onChange={(e) => updateDimension(idx, 'number', e.target.value)}
@@ -962,8 +1120,8 @@ const ManageMbaPage = ({ isBba = false }) => {
                     />
                   </div>
                   <div className="sm:col-span-3">
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Dimension Card Title</label>
-                    <input
+                    <CharCountLabel label="Dimension Card Title" value={dim.title} max={60} />
+                <input maxLength={60} 
                       type="text"
                       value={dim.title}
                       onChange={(e) => updateDimension(idx, 'title', e.target.value)}
@@ -973,8 +1131,8 @@ const ManageMbaPage = ({ isBba = false }) => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1">Dimension Description</label>
-                  <textarea
+                  <CharCountLabel label="Dimension Description" value={dim.description} max={300} />
+                <textarea maxLength={300} 
                     rows={2}
                     value={dim.description}
                     onChange={(e) => updateDimension(idx, 'description', e.target.value)}
@@ -1027,7 +1185,7 @@ const ManageMbaPage = ({ isBba = false }) => {
             <button
               type="button"
               onClick={addPillItem}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-all shadow"
+              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" /> Add Dimension Pill
             </button>
@@ -1035,8 +1193,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Top Badge Text</label>
-              <input
+              <CharCountLabel label="Top Badge Text" value={whyChoosePills.badgeText || ''} max={50} />
+                <input maxLength={50} 
                 type="text"
                 value={whyChoosePills.badgeText || ''}
                 onChange={(e) => setWhyChoosePills({ ...whyChoosePills, badgeText: e.target.value })}
@@ -1045,8 +1203,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Section Title</label>
-              <input
+              <CharCountLabel label="Section Title" value={whyChoosePills.title || ''} max={60} />
+                <input maxLength={60} 
                 type="text"
                 value={whyChoosePills.title || ''}
                 onChange={(e) => setWhyChoosePills({ ...whyChoosePills, title: e.target.value })}
@@ -1070,8 +1228,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Card Title</label>
-                    <input
+                    <CharCountLabel label="Card Title" value={item.title || ''} max={60} />
+                <input maxLength={60} 
                       type="text"
                       value={item.title || ''}
                       onChange={(e) => updatePillItem(idx, 'title', e.target.value)}
@@ -1100,8 +1258,8 @@ const ManageMbaPage = ({ isBba = false }) => {
                     </select>
                   </div>
                   <div className="sm:col-span-3">
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Description</label>
-                    <input
+                    <CharCountLabel label="Description" value={item.description || ''} max={300} />
+                <input maxLength={300} 
                       type="text"
                       value={item.description || ''}
                       onChange={(e) => updatePillItem(idx, 'description', e.target.value)}
@@ -1122,8 +1280,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Top Badge Text</label>
-              <input
+              <CharCountLabel label="Top Badge Text" value={internshipBadge} max={50} />
+                <input maxLength={50} 
                 type="text"
                 value={internshipBadge}
                 onChange={(e) => setInternshipBadge(e.target.value)}
@@ -1132,8 +1290,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Banner Title</label>
-              <input
+              <CharCountLabel label="Banner Title" value={internshipTitle} max={60} />
+                <input maxLength={60} 
                 type="text"
                 value={internshipTitle}
                 onChange={(e) => setInternshipTitle(e.target.value)}
@@ -1143,8 +1301,8 @@ const ManageMbaPage = ({ isBba = false }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Banner Description</label>
-            <textarea
+            <CharCountLabel label="Banner Description" value={internshipDesc} max={300} />
+                <textarea maxLength={300} 
               rows={4}
               value={internshipDesc}
               onChange={(e) => setInternshipDesc(e.target.value)}
@@ -1154,8 +1312,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Button Text</label>
-              <input
+              <CharCountLabel label="Button Text" value={internshipBtnText} max={30} />
+                <input maxLength={30} 
                 type="text"
                 value={internshipBtnText}
                 onChange={(e) => setInternshipBtnText(e.target.value)}
@@ -1163,8 +1321,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Button Link URL</label>
-              <input
+              <CharCountLabel label="Button Link URL" value={internshipBtnLink} max={30} />
+                <input maxLength={30} 
                 type="text"
                 value={internshipBtnLink}
                 onChange={(e) => setInternshipBtnLink(e.target.value)}
@@ -1176,13 +1334,14 @@ const ManageMbaPage = ({ isBba = false }) => {
           <div className="pt-4 border-t border-gray-100">
             <label className="block text-sm font-semibold text-gray-700 mb-3">Banner Background Image</label>
             <div className="space-y-4">
-              <LogoUploader
+              <LogoUploader deferredMode={true}
+                uploadEndpoint="/upload/mba"
                 currentLogoUrl={internshipBgImage}
                 onUploadSuccess={(url) => setInternshipBgImage(url)}
               />
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Or paste image URL directly:</label>
-                <input
+                <CharCountLabel label="Or paste image URL directly:" value={internshipBgImage} max={200} />
+                <input maxLength={200} 
                   type="text"
                   value={internshipBgImage}
                   onChange={(e) => setInternshipBgImage(e.target.value)}
@@ -1198,8 +1357,10 @@ const ManageMbaPage = ({ isBba = false }) => {
               {[0, 1, 2].map((i) => (
                 <div key={i} className="p-4 rounded-xl bg-gray-50 border border-gray-200 space-y-3">
                   <label className="block text-xs font-bold text-gray-600">Card Image #{i + 1}</label>
-                  <LogoUploader
+                  <LogoUploader deferredMode={true}
+                    uploadEndpoint="/upload/mba"
                     currentLogoUrl={(internshipImages || [])[i] || ''}
+                    defaultImage={i === 0 ? '/assets/Images/mba/internship_2.png' : i === 1 ? '/assets/Images/mba/internship_27.png' : '/assets/Images/mba/internship_28.png'}
                     onUploadSuccess={(url) => updateInternshipImage(i, url)}
                   />
                   <input
@@ -1224,7 +1385,7 @@ const ManageMbaPage = ({ isBba = false }) => {
             <button
               type="button"
               onClick={addDynamicFeature}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-all shadow"
+              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" /> Add Feature Card
             </button>
@@ -1232,8 +1393,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Top Badge Text</label>
-              <input
+              <CharCountLabel label="Top Badge Text" value={dynamicLearning.badgeText || ''} max={50} />
+                <input maxLength={50} 
                 type="text"
                 value={dynamicLearning.badgeText || ''}
                 onChange={(e) => setDynamicLearning({ ...dynamicLearning, badgeText: e.target.value })}
@@ -1241,8 +1402,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Section Title</label>
-              <input
+              <CharCountLabel label="Section Title" value={dynamicLearning.title || ''} max={60} />
+                <input maxLength={60} 
                 type="text"
                 value={dynamicLearning.title || ''}
                 onChange={(e) => setDynamicLearning({ ...dynamicLearning, title: e.target.value })}
@@ -1253,8 +1414,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Paragraph 1</label>
-              <textarea
+              <CharCountLabel label="Paragraph 1" value={dynamicLearning.desc1 || ''} max={400} />
+                <textarea maxLength={400} 
                 rows={3}
                 value={dynamicLearning.desc1 || ''}
                 onChange={(e) => setDynamicLearning({ ...dynamicLearning, desc1: e.target.value })}
@@ -1262,8 +1423,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Paragraph 2</label>
-              <textarea
+              <CharCountLabel label="Paragraph 2" value={dynamicLearning.desc2 || ''} max={400} />
+                <textarea maxLength={400} 
                 rows={3}
                 value={dynamicLearning.desc2 || ''}
                 onChange={(e) => setDynamicLearning({ ...dynamicLearning, desc2: e.target.value })}
@@ -1278,8 +1439,10 @@ const ManageMbaPage = ({ isBba = false }) => {
               {[0, 1].map((i) => (
                 <div key={i} className="p-4 rounded-xl bg-gray-50 border border-gray-200 space-y-3">
                   <label className="block text-xs font-bold text-gray-600">Collage Image #{i + 1}</label>
-                  <LogoUploader
+                  <LogoUploader deferredMode={true}
+                    uploadEndpoint="/upload/mba"
                     currentLogoUrl={(dynamicLearning.images || [])[i] || ''}
+                    defaultImage={i === 0 ? '/assets/Images/mba/dynamic_49.png' : '/assets/Images/mba/dynamic_60.png'}
                     onUploadSuccess={(url) => updateDynamicImage(i, url)}
                   />
                   <input
@@ -1308,8 +1471,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Feature Title</label>
-                    <input
+                    <CharCountLabel label="Feature Title" value={feat.title || ''} max={60} />
+                <input maxLength={60} 
                       type="text"
                       value={feat.title || ''}
                       onChange={(e) => updateDynamicFeature(idx, 'title', e.target.value)}
@@ -1336,8 +1499,8 @@ const ManageMbaPage = ({ isBba = false }) => {
                     </select>
                   </div>
                   <div className="sm:col-span-3">
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Description</label>
-                    <input
+                    <CharCountLabel label="Description" value={feat.desc || ''} max={300} />
+                <input maxLength={300} 
                       type="text"
                       value={feat.desc || ''}
                       onChange={(e) => updateDynamicFeature(idx, 'desc', e.target.value)}
@@ -1359,7 +1522,7 @@ const ManageMbaPage = ({ isBba = false }) => {
             <button
               type="button"
               onClick={addGalleryItem}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-all shadow"
+              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" /> Add Gallery Photo
             </button>
@@ -1367,8 +1530,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Top Badge Text</label>
-              <input
+              <CharCountLabel label="Top Badge Text" value={momentsGallery.badgeText || ''} max={50} />
+                <input maxLength={50} 
                 type="text"
                 value={momentsGallery.badgeText || ''}
                 onChange={(e) => setMomentsGallery({ ...momentsGallery, badgeText: e.target.value })}
@@ -1376,8 +1539,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Section Title</label>
-              <input
+              <CharCountLabel label="Section Title" value={momentsGallery.title || ''} max={60} />
+                <input maxLength={60} 
                 type="text"
                 value={momentsGallery.title || ''}
                 onChange={(e) => setMomentsGallery({ ...momentsGallery, title: e.target.value })}
@@ -1389,13 +1552,14 @@ const ManageMbaPage = ({ isBba = false }) => {
           <div className="pt-4 border-t border-gray-100">
             <label className="block text-sm font-semibold text-gray-700 mb-2">Section Background Image (Optional)</label>
             <div className="space-y-3 max-w-md">
-              <LogoUploader
+              <LogoUploader deferredMode={true}
+                uploadEndpoint="/upload/mba"
                 currentLogoUrl={momentsGallery.bgImage || ''}
                 onUploadSuccess={(url) => setMomentsGallery({ ...momentsGallery, bgImage: url })}
               />
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Or paste background image URL directly:</label>
-                <input
+                <CharCountLabel label="Or paste background image URL directly:" value={momentsGallery.bgImage || ''} max={200} />
+                <input maxLength={200} 
                   type="text"
                   value={momentsGallery.bgImage || ''}
                   onChange={(e) => setMomentsGallery({ ...momentsGallery, bgImage: e.target.value })}
@@ -1420,8 +1584,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Photo Title</label>
-                    <input
+                    <CharCountLabel label="Photo Title" value={item.title || ''} max={60} />
+                <input maxLength={60} 
                       type="text"
                       value={item.title || ''}
                       onChange={(e) => updateGalleryItem(idx, 'title', e.target.value)}
@@ -1429,8 +1593,8 @@ const ManageMbaPage = ({ isBba = false }) => {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Subtitle</label>
-                    <input
+                    <CharCountLabel label="Subtitle" value={item.subtitle || ''} max={60} />
+                <input maxLength={60} 
                       type="text"
                       value={item.subtitle || ''}
                       onChange={(e) => updateGalleryItem(idx, 'subtitle', e.target.value)}
@@ -1454,13 +1618,15 @@ const ManageMbaPage = ({ isBba = false }) => {
                 <div className="pt-2">
                   <label className="block text-xs font-semibold text-gray-600 mb-2">Photo Image</label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
-                    <LogoUploader
+                    <LogoUploader deferredMode={true}
+                      uploadEndpoint="/upload/mba"
                       currentLogoUrl={item.image || ''}
+                      defaultImage={idx === 0 ? '/assets/Images/mba/gallery_67.png' : idx === 1 ? '/assets/Images/mba/internship_27.png' : idx === 2 ? '/assets/Images/mba/internship_28.png' : idx === 3 ? '/assets/Images/mba/internship_2.png' : idx === 4 ? '/assets/Images/mba/gallery_58.png' : ''}
                       onUploadSuccess={(url) => updateGalleryItem(idx, 'image', url)}
                     />
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">Or paste image URL directly:</label>
-                      <input
+                      <CharCountLabel label="Or paste image URL directly:" value={item.image || ''} max={200} />
+                <input maxLength={200} 
                         type="text"
                         value={item.image || ''}
                         onChange={(e) => updateGalleryItem(idx, 'image', e.target.value)}
@@ -1485,8 +1651,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Top Badge Text</label>
-              <input
+              <CharCountLabel label="Top Badge Text" value={academicCalendarBanner.badgeText || ''} max={50} />
+                <input maxLength={50} 
                 type="text"
                 value={academicCalendarBanner.badgeText || ''}
                 onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, badgeText: e.target.value })}
@@ -1494,8 +1660,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Main Title</label>
-              <input
+              <CharCountLabel label="Main Title" value={academicCalendarBanner.title || ''} max={60} />
+                <input maxLength={60} 
                 type="text"
                 value={academicCalendarBanner.title || ''}
                 onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, title: e.target.value })}
@@ -1505,8 +1671,8 @@ const ManageMbaPage = ({ isBba = false }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
-            <textarea
+            <CharCountLabel label="Description" value={academicCalendarBanner.description || ''} max={300} />
+                <textarea maxLength={300} 
               rows={3}
               value={academicCalendarBanner.description || ''}
               onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, description: e.target.value })}
@@ -1516,8 +1682,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">View Button Text</label>
-              <input
+              <CharCountLabel label="View Button Text" value={academicCalendarBanner.viewBtnText || ''} max={30} />
+                <input maxLength={30} 
                 type="text"
                 value={academicCalendarBanner.viewBtnText || ''}
                 onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, viewBtnText: e.target.value })}
@@ -1525,8 +1691,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">View Button URL / File Path</label>
-              <input
+              <CharCountLabel label="View Button URL / File Path" value={academicCalendarBanner.viewBtnUrl || ''} max={30} />
+                <input maxLength={30} 
                 type="text"
                 value={academicCalendarBanner.viewBtnUrl || ''}
                 onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, viewBtnUrl: e.target.value })}
@@ -1538,8 +1704,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Download Button Text</label>
-              <input
+              <CharCountLabel label="Download Button Text" value={academicCalendarBanner.downloadBtnText || ''} max={30} />
+                <input maxLength={30} 
                 type="text"
                 value={academicCalendarBanner.downloadBtnText || ''}
                 onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, downloadBtnText: e.target.value })}
@@ -1547,8 +1713,8 @@ const ManageMbaPage = ({ isBba = false }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Download Button URL / File Path</label>
-              <input
+              <CharCountLabel label="Download Button URL / File Path" value={academicCalendarBanner.downloadBtnUrl || ''} max={30} />
+                <input maxLength={30} 
                 type="text"
                 value={academicCalendarBanner.downloadBtnUrl || ''}
                 onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, downloadBtnUrl: e.target.value })}
@@ -1561,13 +1727,15 @@ const ManageMbaPage = ({ isBba = false }) => {
           <div className="pt-4 border-t border-gray-100">
             <label className="block text-sm font-semibold text-gray-700 mb-2">Right Side Illustration Image</label>
             <div className="space-y-3 max-w-md">
-              <LogoUploader
+              <LogoUploader deferredMode={true}
+                uploadEndpoint="/upload/mba"
                 currentLogoUrl={academicCalendarBanner.image || ''}
+                defaultImage="/assets/Images/mba/calendar_64.png"
                 onUploadSuccess={(url) => setAcademicCalendarBanner({ ...academicCalendarBanner, image: url })}
               />
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Or paste image URL directly:</label>
-                <input
+                <CharCountLabel label="Or paste image URL directly:" value={academicCalendarBanner.image || ''} max={200} />
+                <input maxLength={200} 
                   type="text"
                   value={academicCalendarBanner.image || ''}
                   onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, image: e.target.value })}
@@ -1589,7 +1757,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               <button
                 type="button"
                 onClick={addCalendarEvent}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-all shadow cursor-pointer"
+                className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
               >
                 <Plus className="w-4 h-4" /> Add Schedule Event
               </button>
@@ -1629,8 +1797,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pr-24">
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1">Event Title</label>
-                      <input
+                      <CharCountLabel label="Event Title" value={ev.title || ''} max={60} />
+                <input maxLength={60} 
                         type="text"
                         value={ev.title || ''}
                         onChange={(e) => updateCalendarEvent(idx, 'title', e.target.value)}
@@ -1639,8 +1807,8 @@ const ManageMbaPage = ({ isBba = false }) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1">Date Range</label>
-                      <input
+                      <CharCountLabel label="Date Range" value={ev.date || ''} max={100} />
+                <input maxLength={100} 
                         type="text"
                         value={ev.date || ''}
                         onChange={(e) => updateCalendarEvent(idx, 'date', e.target.value)}
@@ -1678,8 +1846,8 @@ const ManageMbaPage = ({ isBba = false }) => {
                       </select>
                     </div>
                     <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold text-gray-700 mb-1">Brief Description</label>
-                      <input
+                      <CharCountLabel label="Brief Description" value={ev.description || ''} max={300} />
+                <input maxLength={300} 
                         type="text"
                         value={ev.description || ''}
                         onChange={(e) => updateCalendarEvent(idx, 'description', e.target.value)}
@@ -1709,7 +1877,7 @@ const ManageMbaPage = ({ isBba = false }) => {
             <button
               type="button"
               onClick={addEligibilityStep}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-all shadow"
+              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" /> Add Eligibility Card
             </button>
@@ -1728,8 +1896,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                   <div className="sm:col-span-1">
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Step Number</label>
-                    <input
+                    <CharCountLabel label="Step Number" value={item.step} max={100} />
+                <input maxLength={100} 
                       type="text"
                       value={item.step}
                       onChange={(e) => updateEligibilityStep(idx, 'step', e.target.value)}
@@ -1737,8 +1905,8 @@ const ManageMbaPage = ({ isBba = false }) => {
                     />
                   </div>
                   <div className="sm:col-span-3">
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Step Title</label>
-                    <input
+                    <CharCountLabel label="Step Title" value={item.title} max={60} />
+                <input maxLength={60} 
                       type="text"
                       value={item.title}
                       onChange={(e) => updateEligibilityStep(idx, 'title', e.target.value)}
@@ -1748,8 +1916,8 @@ const ManageMbaPage = ({ isBba = false }) => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1">Step Summary Description</label>
-                  <textarea
+                  <CharCountLabel label="Step Summary Description" value={item.description} max={300} />
+                <textarea maxLength={300} 
                     rows={2}
                     value={item.description}
                     onChange={(e) => updateEligibilityStep(idx, 'description', e.target.value)}
@@ -1806,6 +1974,17 @@ const ManageMbaPage = ({ isBba = false }) => {
           </div>
         </div>
       )}
+
+        </>
+      )}
+
+      <AddItemModal
+        isOpen={modalConfig.isOpen}
+        onClose={() => setModalConfig({ ...modalConfig, isOpen: false })}
+        title={modalConfig.title}
+        fields={modalConfig.fields}
+        onSave={modalConfig.onSave}
+      />
 
       {/* Live Preview Modal */}
       {isPreviewModalOpen && (

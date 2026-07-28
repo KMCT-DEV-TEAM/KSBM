@@ -111,13 +111,13 @@ const LearningDimensionsGrid = ({ dimensions = [] }) => {
     <section className="py-12 lg:py-16 bg-[#303580] relative overflow-hidden text-white">
       {/* Background Image Rectangle 52 */}
       <img
-        src="/assets/Images/Rectangle%2052.png"
+        src="/assets/Images/mba/mba_feature_1.png"
         alt="Background Pattern"
         className="absolute inset-0 w-full h-full object-cover pointer-events-none"
       />
       <div className="absolute inset-0 bg-[#303580]/85 pointer-events-none" />
 
-      <div className="w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Section Header */}
         <motion.div

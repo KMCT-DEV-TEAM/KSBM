@@ -137,7 +137,12 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
           <div className={`${layout === 'horizontal' ? 'flex-1 m-0' : 'mt-4'} p-4 border border-gray-100 rounded-lg bg-gray-50 flex items-center justify-between`}>
             <div className="flex items-center space-x-4">
               <div className="w-20 h-20 bg-white border border-gray-200 rounded flex items-center justify-center p-1 shadow-sm relative">
-                <img src={displayUrl} alt="Uploaded Image" className="max-w-full max-h-full object-contain" />
+                <img 
+                  src={displayUrl} 
+                  onError={(e) => { e.target.onerror = null; e.target.src = defaultImage || 'https://via.placeholder.com/150?text=Error'; }}
+                  alt="Uploaded Image" 
+                  className="max-w-full max-h-full object-contain" 
+                />
                 <div className="absolute -top-2 -left-2 bg-black/60 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
                   {displayUrl === defaultImage ? "Default" : "Current"}
                 </div>
@@ -147,7 +152,7 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
                 <p className="text-xs text-gray-500">{displayUrl === defaultImage ? "Using default image setup" : "Active custom image"}</p>
               </div>
             </div>
-            {!disableDelete && (
+            {(!disableDelete && displayUrl !== defaultImage) && (
               <button 
                 onClick={async (e) => {
                   e.preventDefault();

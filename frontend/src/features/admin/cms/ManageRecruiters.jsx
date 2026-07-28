@@ -23,19 +23,19 @@ const Toast = Swal.mixin({
 });
 
 const defaultRecruiterSettings = [
-  { id: '1', name: 'Infosys', logo: '/assets/Images/Home/infosys_logo.svg' },
-  { id: '2', name: 'Wipro', logo: '/assets/Images/Home/wipro_logo.svg' },
-  { id: '3', name: 'Cognizant', logo: '/assets/Images/Home/cognizant_logo.svg' },
-  { id: '4', name: 'Google', logo: '/assets/Images/Home/google_logo.svg' },
-  { id: '5', name: 'Microsoft', logo: '/assets/Images/Home/microsoft_logo.svg' }
+  { id: '1', name: 'Infosys', logo: '/assets/Images/mba/infosys_logo.svg' },
+  { id: '2', name: 'Wipro', logo: '/assets/Images/mba/wipro_logo.svg' },
+  { id: '3', name: 'Cognizant', logo: '/assets/Images/mba/cognizant_logo.svg' },
+  { id: '4', name: 'Google', logo: '/assets/Images/mba/google_logo.svg' },
+  { id: '5', name: 'Microsoft', logo: '/assets/Images/mba/microsoft_logo.svg' }
 ];
 
 const defaultLogoMap = {
-  'Infosys': '/assets/Images/Home/infosys_logo.svg',
-  'Wipro': '/assets/Images/Home/wipro_logo.svg',
-  'Cognizant': '/assets/Images/Home/cognizant_logo.svg',
-  'Google': '/assets/Images/Home/google_logo.svg',
-  'Microsoft': '/assets/Images/Home/microsoft_logo.svg'
+  'Infosys': '/assets/Images/mba/infosys_logo.svg',
+  'Wipro': '/assets/Images/mba/wipro_logo.svg',
+  'Cognizant': '/assets/Images/mba/cognizant_logo.svg',
+  'Google': '/assets/Images/mba/google_logo.svg',
+  'Microsoft': '/assets/Images/mba/microsoft_logo.svg'
 };
 
 const ManageRecruiters = () => {
@@ -112,7 +112,7 @@ const ManageRecruiters = () => {
           await api.put('/cms/recruiters', {
             recruiters: finalRecruiters, showRecruiters
           });
-          
+
           await executeDeletions();
           setRecruiters(finalRecruiters);
           Toast.fire({ icon: 'success', title: 'Recruiters section saved successfully!' });
@@ -136,7 +136,7 @@ const ManageRecruiters = () => {
         const newDefaults = defaultRecruiterSettings.map(item => ({ ...item, id: Date.now().toString() + Math.random().toString().slice(2, 6) }));
         setRecruiters(newDefaults);
         setShowRecruiters(true);
-        
+
         setIsSaving(true);
         try {
           await api.put('/cms/recruiters', {
@@ -181,7 +181,7 @@ const ManageRecruiters = () => {
         };
         const updatedRecruiters = [...recruiters, addedRecruiter];
         setRecruiters(updatedRecruiters);
-        
+
         Toast.fire({ icon: 'info', title: 'Recruiter added locally. Click Save Changes to apply.' });
         setIsAddModalOpen(false);
       }
@@ -197,7 +197,7 @@ const ManageRecruiters = () => {
       if (oldItem && oldItem[field]) markForDeletion(oldItem[field]);
     }
 
-    setRecruiters(recruiters.map(item => 
+    setRecruiters(recruiters.map(item =>
       (item.id === id || item._id === id) ? { ...item, [field]: value, [`${field}File`]: file } : item
     ));
   };
@@ -224,17 +224,17 @@ const ManageRecruiters = () => {
         }
 
         let updatedRecruiters = recruiters.filter(item => item.id !== id && item._id !== id);
-        
+
         if (updatedRecruiters.length < 5) {
           const missingCount = 5 - updatedRecruiters.length;
           const defaultsToAdd = defaultRecruiterSettings
             .filter(d => !updatedRecruiters.some(r => r.name === d.name))
             .slice(0, missingCount)
             .map(item => ({ ...item, id: Date.now().toString() + Math.random().toString().slice(2, 6) }));
-          
+
           updatedRecruiters = [...updatedRecruiters, ...defaultsToAdd];
         }
-        
+
         setRecruiters(updatedRecruiters);
         Toast.fire({ icon: 'info', title: 'Recruiter removed locally. Click Save Changes to apply.' });
       }
@@ -261,10 +261,10 @@ const ManageRecruiters = () => {
 
     const newRecruiters = [...recruiters];
     const draggedItem = newRecruiters[draggedIndex];
-    
+
     newRecruiters.splice(draggedIndex, 1);
     newRecruiters.splice(targetIndex, 0, draggedItem);
-    
+
     setRecruiters(newRecruiters);
     setDraggedIndex(null);
   };
@@ -275,14 +275,6 @@ const ManageRecruiters = () => {
 
   return (
     <div className="space-y-6 w-full">
-      <PageHeader
-        title="Recruiters Settings"
-        description="Manage corporate partners and logos."
-        onPreview={() => setIsPreviewModalOpen(true)}
-        onReset={handleResetToDefault}
-        onSave={handleSave}
-        isSaving={isSaving}
-      />
 
       {isPreviewModalOpen && (
         <div className="fixed inset-0 z-[100] flex flex-col bg-gray-900/80 backdrop-blur-sm">
@@ -325,7 +317,7 @@ const ManageRecruiters = () => {
 
           <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center items-center">
             <div className={`bg-white shadow-xl h-full transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <iframe 
+              <iframe
                 ref={iframeRef}
                 src="/preview/recruiters"
                 className="w-full h-full border-0 min-h-[500px]"
@@ -337,7 +329,7 @@ const ManageRecruiters = () => {
       )}
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
-        
+
         {/* Recruiters Builder */}
         <div>
           <div className="flex justify-between items-center mb-6">
@@ -358,8 +350,8 @@ const ManageRecruiters = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {recruiters.map((item, idx) => (
-              <div 
-                key={item.id || item._id || idx} 
+              <div
+                key={item.id || item._id || idx}
                 draggable
                 onDragStart={(e) => handleDragStart(e, idx)}
                 onDragOver={handleDragOver}
@@ -367,7 +359,7 @@ const ManageRecruiters = () => {
                 onDragEnd={() => setDraggedIndex(null)}
                 className={`p-5 border border-gray-200 rounded-xl bg-gray-50 flex flex-col gap-4 relative group hover:border-primary/30 transition-all cursor-move ${draggedIndex === idx ? 'opacity-50 ring-2 ring-primary ring-offset-2' : ''}`}
               >
-                
+
                 {/* Reorder and Delete Actions */}
                 <div className="absolute top-3 right-3 flex items-center gap-1 z-10">
                   <button
@@ -402,6 +394,7 @@ const ManageRecruiters = () => {
                 <div className="w-full shrink-0 flex flex-col">
                   <LogoUploader
                     currentLogoUrl={item.logo || defaultLogoMap[item.name] || 'https://via.placeholder.com/300x150?text=No+Logo'}
+                    defaultImage={defaultLogoMap[item.name] || 'https://via.placeholder.com/300x150?text=No+Logo'}
                     onUploadSuccess={(url, file) => handleUpdateRecruiter(item.id || item._id, 'logo', url, file)}
                     uploadEndpoint="/upload/home"
                     deferredMode={true}
@@ -425,7 +418,7 @@ const ManageRecruiters = () => {
 
               </div>
             ))}
-            
+
             {recruiters.length === 0 && (
               <div className="col-span-full text-center py-10 text-gray-400 text-sm border-2 border-dashed border-gray-200 rounded-xl">
                 No recruiters added yet. Click "Add Recruiter Card" to create one.
@@ -436,7 +429,7 @@ const ManageRecruiters = () => {
 
       </div>
 
-      <ConfirmationModal 
+      <ConfirmationModal
         isOpen={confirmModal.isOpen}
         onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
         onConfirm={handleConfirmAction}
