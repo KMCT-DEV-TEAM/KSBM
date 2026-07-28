@@ -6,31 +6,31 @@ const defaultGalleryItems = [
   {
     title: 'Industrial Visit 2025',
     subtitle: 'Corporate Tour & Leadership Insights',
-    image: '/assets/Images/image 67.png',
+    image: '/assets/Images/mba/gallery_67.png',
     span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[260px] sm:h-[280px]'
   },
   {
     title: 'Leadership Camp',
     subtitle: 'Outbound Team Building',
-    image: '/assets/Images/image 27.png',
+    image: '/assets/Images/mba/internship_27.png',
     span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[260px] sm:h-[280px]'
   },
   {
     title: 'Outbound Learning',
     subtitle: 'Nature & Strategic Reflection',
-    image: '/assets/Images/image 28.png',
+    image: '/assets/Images/mba/internship_28.png',
     span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[260px] sm:h-[280px]'
   },
   {
     title: 'Global Immersion',
     subtitle: 'Cross-Cultural Case Discussions',
-    image: '/assets/Images/image 2.png',
+    image: '/assets/Images/mba/internship_2.png',
     span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[260px] sm:h-[280px]'
   },
   {
     title: 'Corporate Night Tour',
     subtitle: 'Metropolitan Industry Networking',
-    image: '/assets/Images/image 58.png',
+    image: '/assets/Images/mba/gallery_58.png',
     span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[260px] sm:h-[280px]'
   }
 ];
@@ -95,7 +95,7 @@ const MomentsGallery = ({ program }) => {
       {/* Starry subtle pattern */}
       <div className="absolute inset-0" />
 
-      <div className="w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Section Header */}
         <motion.div
@@ -152,10 +152,10 @@ const MomentsGallery = ({ program }) => {
           {[...items, ...items, ...items, ...items].map((item, idx) => (
             <div
               key={`row1-${idx}`}
-              className={`${getCardDimensions(item, idx, 1)} relative rounded-3xl overflow-hidden group cursor-pointer shadow-2xl border-2 border-white/15 bg-gray-900`}
+              className={`${getCardDimensions(item, idx, 1)} relative rounded-[10px] overflow-hidden group cursor-pointer shadow-2xl border-none bg-gray-900`}
             >
               <img
-                src={item.image || '/assets/Images/image 67.png'}
+                src={item.image || '/assets/Images/mba/gallery_67.png'}
                 alt={item.title || `Gallery image ${idx + 1}`}
                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
               />
@@ -175,10 +175,10 @@ const MomentsGallery = ({ program }) => {
           {[...items.slice().reverse(), ...items.slice().reverse(), ...items.slice().reverse(), ...items.slice().reverse()].map((item, idx) => (
             <div
               key={`row2-${idx}`}
-              className={`${getCardDimensions(item, idx, 2)} relative rounded-3xl overflow-hidden group cursor-pointer shadow-2xl border-2 border-white/15 bg-gray-900`}
+              className={`${getCardDimensions(item, idx, 2)} relative rounded-[10px] overflow-hidden group cursor-pointer shadow-2xl border-none bg-gray-900`}
             >
               <img
-                src={item.image || '/assets/Images/image 67.png'}
+                src={item.image || '/assets/Images/mba/gallery_67.png'}
                 alt={item.title || `Gallery image ${idx + 1}`}
                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
               />

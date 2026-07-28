@@ -9,9 +9,12 @@ const AdmissionEligibility = ({ eligibility }) => {
     <section id="admission" className="py-20 sm:py-28 bg-primary relative overflow-hidden text-white">
       {/* Decorative Gradient / Grid */}
       <div className="absolute inset-0 opacity-10 " />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blue-600/15 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Right Side Light Shadow/Glow (Long to small size) */}
+      <div className="absolute top-1/2 right-[-100px] -translate-y-1/2 w-[250px] md:w-[300px] h-[80%] bg-white/10 blur-[120px] rounded-full pointer-events-none z-0" />
+
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Section Header */}
         <motion.div

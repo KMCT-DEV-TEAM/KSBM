@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 import api from '../../../api/axios';
 
 const defaultRecruiters = [
-  { name: 'Infosys', logo: '/assets/Images/Home/infosys_logo.svg', logoText: 'Infosys', color: 'text-[#007cc3]' },
-  { name: 'Wipro', logo: '/assets/Images/Home/wipro_logo.svg', logoText: 'wipro', color: 'text-[#002855]' },
-  { name: 'Cognizant', logo: '/assets/Images/Home/cognizant_logo.svg', logoText: 'Cognizant', color: 'text-[#0033a0]' },
-  { name: 'Google', logo: '/assets/Images/Home/google_logo.svg', logoText: 'Google', color: 'text-[#4285F4]' },
-  { name: 'Microsoft', logo: '/assets/Images/Home/microsoft_logo.svg', logoText: 'Microsoft', color: 'text-[#F25022]' }
+  { name: 'Infosys', logo: '/assets/Images/mba/infosys_logo.svg', logoText: 'Infosys', color: 'text-[#007cc3]' },
+  { name: 'Wipro', logo: '/assets/Images/mba/wipro_logo.svg', logoText: 'wipro', color: 'text-[#002855]' },
+  { name: 'Cognizant', logo: '/assets/Images/mba/cognizant_logo.svg', logoText: 'Cognizant', color: 'text-[#0033a0]' },
+  { name: 'Google', logo: '/assets/Images/mba/google_logo.svg', logoText: 'Google', color: 'text-[#4285F4]' },
+  { name: 'Microsoft', logo: '/assets/Images/mba/microsoft_logo.svg', logoText: 'Microsoft', color: 'text-[#F25022]' }
 ];
 
 const TopRecruitersGrid = ({ previewData }) => {
@@ -43,7 +43,7 @@ const TopRecruitersGrid = ({ previewData }) => {
   if (isLoading) {
     return (
       <section className="w-full bg-background py-20 lg:py-32">
-        <div className="w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden animate-pulse">
+        <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden animate-pulse">
           <div className="w-full inline-flex flex-nowrap overflow-hidden">
             <ul className="flex items-center gap-8 md:gap-12 lg:gap-24 opacity-90 pr-8 md:pr-12 lg:pr-24">
               {[1, 2, 3, 4, 5].map((i) => (
@@ -71,9 +71,9 @@ const TopRecruitersGrid = ({ previewData }) => {
   }
 
   return (
-    <section className="w-full bg-background py-28 lg:py-40 border-t border-gray-100 my-12">
-      <div className="w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden text-center">
-        <span className="text-xs sm:text-sm font-bold tracking-[0.25em] text-gray-400 uppercase mb-8 block">
+    <section className="w-full bg-background py-16 lg:py-20  my-12">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden text-center">
+        <span className="text-xs sm:text-sm font-bold tracking-[0.25em] text-gray-400 uppercase mb-12 block">
           TOP RECRUITERS & CORPORATE PARTNERS
         </span>
 

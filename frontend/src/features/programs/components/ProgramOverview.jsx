@@ -40,7 +40,7 @@ const ProgramOverview = ({ program }) => {
 
   return (
     <section id="overview" className="py-20 lg:py-28 bg-white relative overflow-hidden">
-      <div className="w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
           {/* Left Text Content */}
@@ -97,9 +97,9 @@ const ProgramOverview = ({ program }) => {
           >
             <div className="relative mx-auto max-w-[500px] lg:max-w-none">
               {/* Main Image Container */}
-              <div className="relative rounded-[2.5rem] overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.2)] border-8 border-white bg-gray-100 aspect-[4/3]">
+              <div className="relative rounded-[10px] overflow-hidden shadow-2xl bg-gray-100 aspect-[4/3]">
                 <img
-                  src={program.overviewImage || "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop"}
+                  src={program.overviewImage || "/assets/Images/mba/mba_main.png"}
                   alt={`${program.shortTitle} Overview`}
                   className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
                 />

@@ -64,11 +64,16 @@ router.post('/management', protect, uploadAssets.single('image'), async (req, re
   });
 });
 
+router.post('/mba', protect, uploadAssets.single('image'), async (req, res) => {
 router.post('/faculty', protect, uploadAssets.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No image provided' });
   }
 
+  const fileUrl = `/assets/Images/mba/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/mba',
   const fileUrl = `/assets/Images/faculty/${req.file.filename}`;
   
   res.status(200).json({
@@ -132,6 +137,12 @@ router.delete('/', protect, async (req, res) => {
     'testimonial_1.jpg', 'testimonial_2.jpg', 'testimonial_3.jpg',
     'about-hero-bg.jpg',
     'default-management-hero.jpg', 'default-management-leader.jpg', 'default-management-badge.png',
+    'mba_hero_bg.png', 'mba_main.png', 'mba_feature_1.png', 'mba_feature_2.png',
+    'internship_2.png', 'internship_27.png', 'internship_28.png', 
+    'dynamic_49.png', 'dynamic_60.png', 'calendar_64.png',
+    'gallery_67.png', 'gallery_58.png', 'gallery_69.png', 'gallery_70.png',
+    'gallery_71.png', 'gallery_72.png', 'gallery_73.png', 'gallery_74.png',
+    'gallery_75.png', 'gallery_76.png', 'gallery_77.png', 'gallery_78.png'
     'default-faculty-hero.jpg', 'default-faculty-leader.jpg',
     'image 2.png', 'image 31.png'
   ];
@@ -149,6 +160,8 @@ router.delete('/', protect, async (req, res) => {
      filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/aboutus', filename);
   } else if (fileUrl.includes('/assets/Images/management/')) {
      filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/management', filename);
+  } else if (fileUrl.includes('/assets/Images/mba/')) {
+     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/mba', filename);
   } else if (fileUrl.includes('/assets/Images/faculty/')) {
      filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/faculty', filename);
   } else if (fileUrl.includes('/assets/home/')) {

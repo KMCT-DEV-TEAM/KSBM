@@ -80,6 +80,8 @@ import {
   updateGrievancePage,
   getDownloadPage,
   updateDownloadPage,
+  getCommitteesAndCellsSettings,
+  updateCommitteesAndCellsSettings,
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -252,5 +254,9 @@ router.route('/grievance-page')
 router.route('/download-page')
   .get(getDownloadPage)
   .put(protect, updateDownloadPage);
+
+router.route('/committees-and-cells')
+  .get(getCommitteesAndCellsSettings)
+  .put(protect, updateCommitteesAndCellsSettings);
 
 export default router;

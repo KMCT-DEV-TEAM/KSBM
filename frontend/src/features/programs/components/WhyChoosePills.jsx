@@ -52,7 +52,7 @@ const WhyChoosePills = ({ program }) => {
 
   return (
     <section className="py-20 lg:py-24 bg-[#fcfcfd] relative border-y border-gray-100">
-      <div className="w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}
         <motion.div

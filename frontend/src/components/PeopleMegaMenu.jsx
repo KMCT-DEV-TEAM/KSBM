@@ -28,6 +28,12 @@ const peopleLinks = [
     description: 'Academic schedules, examination rules, assessment guidelines, and portals.',
     icon: <Award className="w-5 h-5 text-primary" />,
     href: '/examinations'
+  },
+  {
+    label: 'COMMITTEES & CELLS',
+    description: 'Explore the various statutory committees and institutional cells.',
+    icon: <ShieldCheck className="w-5 h-5 text-primary" />,
+    href: '/committees-and-cells'
   }
 ];
 

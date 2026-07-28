@@ -57,7 +57,7 @@ const ProgramHero = ({ program }) => {
         className="absolute inset-0"
       >
         <img
-          src={program.heroImage || "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop"}
+          src={program.heroImage || "/assets/Images/mba/mba_hero_bg.png"}
           alt={program.title}
           className="w-full h-full object-cover"
         />
@@ -76,7 +76,7 @@ const ProgramHero = ({ program }) => {
             transition: { staggerChildren: 0.15, delayChildren: 0.2 }
           }
         }}
-        className="relative z-10 w-[94%] max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 md:py-32"
+        className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 md:py-32"
       >
         {/* Pill Badge */}
         <motion.div

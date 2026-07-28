@@ -28,6 +28,7 @@ const getSubLinks = (label) => {
       { label: 'Alumni', href: '/alumni' },
       { label: 'Placement', href: '/placement' },
       { label: 'Examination', href: '/examinations' },
+      { label: 'Committees & Cells', href: '/committees-and-cells' },
     ];
   }
   if (lower === 'programs' || lower === 'program' || lower.includes('program')) {

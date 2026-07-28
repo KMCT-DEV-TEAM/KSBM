@@ -51,6 +51,7 @@ const Sidebar = () => {
         { name: 'Alumni Page Management', path: '/admin/cms/alumni' },
         { name: 'Manage Placement Page', path: '/admin/cms/placement-page' },
         { name: 'Manage Examinations Page', path: '/admin/cms/examinations' },
+        { name: 'Committees & Cells', path: '/admin/cms/committees-and-cells' },
       ]
     },
     {
