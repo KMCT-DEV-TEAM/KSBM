@@ -65,7 +65,6 @@ router.post('/management', protect, uploadAssets.single('image'), async (req, re
 });
 
 router.post('/mba', protect, uploadAssets.single('image'), async (req, res) => {
-router.post('/faculty', protect, uploadAssets.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No image provided' });
   }
@@ -74,6 +73,15 @@ router.post('/faculty', protect, uploadAssets.single('image'), async (req, res) 
   
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/mba',
+    url: fileUrl,
+  });
+});
+
+router.post('/faculty', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
   const fileUrl = `/assets/Images/faculty/${req.file.filename}`;
   
   res.status(200).json({
@@ -142,7 +150,7 @@ router.delete('/', protect, async (req, res) => {
     'dynamic_49.png', 'dynamic_60.png', 'calendar_64.png',
     'gallery_67.png', 'gallery_58.png', 'gallery_69.png', 'gallery_70.png',
     'gallery_71.png', 'gallery_72.png', 'gallery_73.png', 'gallery_74.png',
-    'gallery_75.png', 'gallery_76.png', 'gallery_77.png', 'gallery_78.png'
+    'gallery_75.png', 'gallery_76.png', 'gallery_77.png', 'gallery_78.png',
     'default-faculty-hero.jpg', 'default-faculty-leader.jpg',
     'image 2.png', 'image 31.png'
   ];

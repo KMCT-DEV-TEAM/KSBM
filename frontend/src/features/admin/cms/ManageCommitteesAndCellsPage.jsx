@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import api from '../../../../api/axios';
+import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
 import PageHeader from './components/PageHeader';
-import confirmAction from '../../../../utils/confirmAction';
+import confirmAction from '../../../utils/confirmAction';
 import { Plus, Trash2, ShieldCheck, Link2 } from 'lucide-react';
 import AddItemModal from './components/AddItemModal';
 
