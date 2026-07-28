@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { Save, RefreshCw, Plus, Trash2, GraduationCap, FileText, BookOpen, Briefcase, Award, Eye, Monitor, Tablet, Smartphone, X, RotateCcw, ChevronLeft, ChevronRight, Calendar, ArrowUp, ArrowDown } from 'lucide-react';
+import { Save, RefreshCw, Plus, Trash2, GraduationCap, FileText, BookOpen, Briefcase, Award, Eye, Monitor, Tablet, Smartphone, X, RotateCcw, ChevronLeft, ChevronRight, Calendar, ArrowUp, ArrowDown, GripVertical, Edit2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
@@ -135,6 +135,7 @@ const ManageMbaPage = ({ isBba = false }) => {
   // Preview Modal States
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [previewDevice, setPreviewDevice] = useState('desktop');
+  const iframeRef = useRef(null);
 
   // Form states
   const [shortTitle, setShortTitle] = useState(isBba ? 'BBA' : 'MBA');
@@ -199,6 +200,9 @@ const ManageMbaPage = ({ isBba = false }) => {
     bgImage: '',
     items: []
   });
+  const [draggedGalleryIndex, setDraggedGalleryIndex] = useState(null);
+  const [draggedPillIndex, setDraggedPillIndex] = useState(null);
+  const [draggedDynamicIndex, setDraggedDynamicIndex] = useState(null);
 
   const [academicCalendarBanner, setAcademicCalendarBanner] = useState({
     badgeText: 'ACADEMIC SCHEDULE 2026-27',
@@ -216,6 +220,63 @@ const ManageMbaPage = ({ isBba = false }) => {
     fetchSettings();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endpoint]);
+
+  const currentDraftData = {
+    shortTitle, title, description, heroImage,
+    heroTitleLine1, heroTitleLine2, heroPrimaryBtnText, heroSecondaryBtnText,
+    heroCardTitle, heroCardStat1Title, heroCardStat1Sub, heroCardStat2Title, heroCardStat2Sub,
+    overviewTitle, overviewText, overviewSubtext, overviewImage,
+    overviewBadgeText, overviewFloatingBadgeText, overviewPrimaryBtnText, overviewSecondaryBtnText,
+    highlights,
+    dimensions,
+    whyChoosePills: {
+      badgeText: whyChoosePills.badgeText,
+      title: whyChoosePills.title,
+      items: whyChoosePills.items
+    },
+    internshipBanner: {
+      internshipBgImage,
+      internshipTitle,
+      internshipDesc,
+      internshipBadge,
+      internshipBtnText,
+      internshipBtnLink,
+      internshipImages
+    },
+    dynamicLearning: {
+      badgeText: dynamicLearning.badgeText,
+      title: dynamicLearning.title,
+      desc1: dynamicLearning.desc1,
+      desc2: dynamicLearning.desc2,
+      images: dynamicLearning.images,
+      features: dynamicLearning.features
+    },
+    gallery: {
+      badgeText: momentsGallery.badgeText,
+      title: momentsGallery.title,
+      bgImage: momentsGallery.bgImage,
+      items: momentsGallery.items
+    },
+    academicCalendarBanner: {
+      badgeText: academicCalendarBanner.badgeText,
+      title: academicCalendarBanner.title,
+      description: academicCalendarBanner.description,
+      viewBtnText: academicCalendarBanner.viewBtnText,
+      viewBtnUrl: academicCalendarBanner.viewBtnUrl,
+      downloadBtnText: academicCalendarBanner.downloadBtnText,
+      downloadBtnUrl: academicCalendarBanner.downloadBtnUrl,
+      image: academicCalendarBanner.image,
+      events: academicCalendarBanner.events
+    },
+    eligibility
+  };
+
+  // Live Preview Data Poster
+  useEffect(() => {
+    if (isPreviewModalOpen && iframeRef.current) {
+      iframeRef.current.contentWindow.postMessage({ type: 'LIVE_PREVIEW_UPDATE', data: currentDraftData }, '*');
+    }
+  }, [isPreviewModalOpen, currentDraftData]);
 
   const fetchSettings = async () => {
     setIsLoading(true);
@@ -541,15 +602,24 @@ const ManageMbaPage = ({ isBba = false }) => {
 
   // Dimensions helpers
   const addDimension = () => {
-    setDimensions([
-      ...dimensions,
-      {
-        number: `0${dimensions.length + 1}`,
-        title: 'New Dimension Title',
-        description: 'Dimension description goes here.',
-        topics: ['Topic 1', 'Topic 2']
+    openAddModal(
+      'Add New Dimension',
+      [
+        { name: 'title', label: 'Dimension Title', type: 'text', maxLength: 100, required: true },
+        { name: 'description', label: 'Dimension Description', type: 'textarea', maxLength: 200, required: true }
+      ],
+      (data) => {
+        setDimensions([
+          ...dimensions,
+          {
+            number: `0${dimensions.length + 1}`,
+            title: data.title,
+            description: data.description,
+            topics: []
+          }
+        ]);
       }
-    ]);
+    );
   };
   const updateDimension = (index, field, val) => {
     const updated = [...dimensions];
@@ -578,15 +648,24 @@ const ManageMbaPage = ({ isBba = false }) => {
 
   // Eligibility helpers
   const addEligibilityStep = () => {
-    setEligibility([
-      ...eligibility,
-      {
-        step: `0${eligibility.length + 1}`,
-        title: 'New Step Title',
-        description: 'Step description goes here.',
-        bullets: ['Requirement 1', 'Requirement 2']
+    openAddModal(
+      'Add Admission Step',
+      [
+        { name: 'title', label: 'Step Title', type: 'text', maxLength: 100, required: true },
+        { name: 'description', label: 'Step Description', type: 'textarea', maxLength: 200, required: true }
+      ],
+      (data) => {
+        setEligibility([
+          ...eligibility,
+          {
+            step: `0${eligibility.length + 1}`,
+            title: data.title,
+            description: data.description,
+            bullets: []
+          }
+        ]);
       }
-    ]);
+    );
   };
   const updateEligibilityStep = (index, field, val) => {
     const updated = [...eligibility];
@@ -634,22 +713,60 @@ const ManageMbaPage = ({ isBba = false }) => {
   };
   const removePillItem = (idx) => confirmAction({ title: 'Remove Pill', message: 'Are you sure you want to remove this dimension pill?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updatedItems = (whyChoosePills.items || []).filter((_, i) => i !== idx); setWhyChoosePills({ ...whyChoosePills, items: updatedItems }); }});
 
+  // WhyChoosePills drag-and-drop handlers
+  const handlePillDragStart = (e, index) => {
+    setDraggedPillIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(() => { if (e.target) e.target.style.opacity = '0.5'; }, 0);
+  };
+  const handlePillDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+  const handlePillDrop = (e, targetIndex) => {
+    e.preventDefault();
+    if (e.target) e.target.style.opacity = '1';
+    if (draggedPillIndex === null || draggedPillIndex === targetIndex) return;
+    const items = [...(whyChoosePills.items || [])];
+    const draggedItem = items[draggedPillIndex];
+    items.splice(draggedPillIndex, 1);
+    items.splice(targetIndex, 0, draggedItem);
+    setWhyChoosePills({ ...whyChoosePills, items });
+    setDraggedPillIndex(null);
+  };
+  const handlePillDragEnd = (e) => {
+    if (e.target) e.target.style.opacity = '1';
+    setDraggedPillIndex(null);
+  };
+
   // Academic Calendar Events helpers
   const addCalendarEvent = () => {
-    setAcademicCalendarBanner({
-      ...academicCalendarBanner,
-      events: [
-        ...(academicCalendarBanner.events || []),
-        {
-          id: Date.now().toString(),
-          title: 'New Schedule Milestone',
-          date: 'November 15, 2026',
-          semester: 'Trimester 1',
-          category: 'Exams & Assessments',
-          description: 'Brief details about this academic event or schedule.'
-        }
-      ]
-    });
+    openAddModal(
+      'Add Calendar Event',
+      [
+        { name: 'title', label: 'Event Title', type: 'text', maxLength: 100, required: true },
+        { name: 'date', label: 'Date', type: 'text', maxLength: 100, required: true, placeholder: 'e.g. November 15, 2026' },
+        { name: 'semester', label: 'Semester / Term', type: 'text', maxLength: 50, required: true, placeholder: 'e.g. Trimester 1' },
+        { name: 'category', label: 'Category', type: 'text', maxLength: 50, required: true, placeholder: 'e.g. Exams & Assessments' },
+        { name: 'description', label: 'Description', type: 'textarea', maxLength: 200, required: true }
+      ],
+      (data) => {
+        setAcademicCalendarBanner({
+          ...academicCalendarBanner,
+          events: [
+            ...(academicCalendarBanner.events || []),
+            {
+              id: Date.now().toString(),
+              title: data.title,
+              date: data.date,
+              semester: data.semester,
+              category: data.category,
+              description: data.description
+            }
+          ]
+        });
+      }
+    );
   };
   const updateCalendarEvent = (idx, field, val) => {
     const updated = [...(academicCalendarBanner.events || [])];
@@ -687,6 +804,32 @@ const ManageMbaPage = ({ isBba = false }) => {
     setDynamicLearning({ ...dynamicLearning, features: updatedFeatures });
   };
   const removeDynamicFeature = (idx) => confirmAction({ title: 'Remove Feature', message: 'Are you sure you want to remove this feature card?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updatedFeatures = (dynamicLearning.features || []).filter((_, i) => i !== idx); setDynamicLearning({ ...dynamicLearning, features: updatedFeatures }); }});
+
+  // DynamicLearning drag-and-drop handlers
+  const handleDynamicDragStart = (e, index) => {
+    setDraggedDynamicIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(() => { if (e.target) e.target.style.opacity = '0.5'; }, 0);
+  };
+  const handleDynamicDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+  const handleDynamicDrop = (e, targetIndex) => {
+    e.preventDefault();
+    if (e.target) e.target.style.opacity = '1';
+    if (draggedDynamicIndex === null || draggedDynamicIndex === targetIndex) return;
+    const features = [...(dynamicLearning.features || [])];
+    const draggedItem = features[draggedDynamicIndex];
+    features.splice(draggedDynamicIndex, 1);
+    features.splice(targetIndex, 0, draggedItem);
+    setDynamicLearning({ ...dynamicLearning, features });
+    setDraggedDynamicIndex(null);
+  };
+  const handleDynamicDragEnd = (e) => {
+    if (e.target) e.target.style.opacity = '1';
+    setDraggedDynamicIndex(null);
+  };
   const updateDynamicImage = (idx, url) => {
     const updatedImages = [...(dynamicLearning.images || ['', ''])];
     updatedImages[idx] = url;
@@ -728,6 +871,33 @@ const ManageMbaPage = ({ isBba = false }) => {
   };
   const removeGalleryItem = (idx) => confirmAction({ title: 'Remove Gallery Item', message: 'Are you sure you want to remove this gallery photo?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updatedItems = (momentsGallery.items || []).filter((_, i) => i !== idx); setMomentsGallery({ ...momentsGallery, items: updatedItems }); }});
 
+  const handleGalleryDragStart = (e, index) => {
+    setDraggedGalleryIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(() => { if (e.target) e.target.style.opacity = '0.5'; }, 0);
+  };
+  const handleGalleryDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+  const handleGalleryDrop = (e, targetIndex) => {
+    e.preventDefault();
+    if (e.target) e.target.style.opacity = '1';
+    if (draggedGalleryIndex === null || draggedGalleryIndex === targetIndex) return;
+
+    const items = [...(momentsGallery.items || [])];
+    const draggedItem = items[draggedGalleryIndex];
+    items.splice(draggedGalleryIndex, 1);
+    items.splice(targetIndex, 0, draggedItem);
+    
+    setMomentsGallery({ ...momentsGallery, items });
+    setDraggedGalleryIndex(null);
+  };
+  const handleGalleryDragEnd = (e) => {
+    if (e.target) e.target.style.opacity = '1';
+    setDraggedGalleryIndex(null);
+  };
+
   // Internship Images helpers
   const updateInternshipImage = (idx, url) => {
     const updated = [...(internshipImages || ['', '', ''])];
@@ -762,7 +932,21 @@ const ManageMbaPage = ({ isBba = false }) => {
       onSave: (data) => {
         onSaveCallback(data);
         setModalConfig(prev => ({ ...prev, isOpen: false }));
-      }
+      },
+      initialData: null
+    });
+  };
+  
+  const openEditModal = (title, fields, initialData, onSaveCallback) => {
+    setModalConfig({
+      isOpen: true,
+      title,
+      fields,
+      onSave: (data) => {
+        onSaveCallback(data);
+        setModalConfig(prev => ({ ...prev, isOpen: false }));
+      },
+      initialData
     });
   };
   
@@ -1098,77 +1282,58 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="space-y-6">
             {dimensions.map((dim, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-gray-50/80 border border-gray-200 relative space-y-4 shadow-sm">
-                <button
-                  type="button"
-                  onClick={() => removeDimension(idx)}
-                  className="absolute top-4 right-4 p-2 rounded-lg text-red-500 hover:bg-red-50 transition-colors"
-                  title="Remove Dimension Card"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                  <div className="sm:col-span-1">
-                    <CharCountLabel label="Card Number / Step" value={dim.number} max={100} />
-                <input maxLength={100} 
-                      type="text"
-                      value={dim.number}
-                      onChange={(e) => updateDimension(idx, 'number', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold"
-                      placeholder="01"
-                    />
-                  </div>
-                  <div className="sm:col-span-3">
-                    <CharCountLabel label="Dimension Card Title" value={dim.title} max={60} />
-                <input maxLength={60} 
-                      type="text"
-                      value={dim.title}
-                      onChange={(e) => updateDimension(idx, 'title', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-900"
-                    />
-                  </div>
+              <div key={idx} className="p-6 rounded-2xl bg-gray-50/80 border border-gray-200 relative space-y-4 shadow-sm flex flex-col">
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      openEditModal(
+                        'Edit Dimension Card',
+                        [
+                          { name: 'number', label: 'Card Number / Step', type: 'text', maxLength: 10, required: true },
+                          { name: 'title', label: 'Dimension Card Title', type: 'text', maxLength: 60, required: true },
+                          { name: 'description', label: 'Dimension Description', type: 'textarea', maxLength: 300, required: true },
+                          { name: 'topicsText', label: 'Topics (Comma Separated)', type: 'textarea', maxLength: 500, placeholder: 'e.g. Finance, Marketing, Leadership' }
+                        ],
+                        { ...dim, topicsText: dim.topics?.join(', ') || '' },
+                        (data) => {
+                          const updated = [...dimensions];
+                          const topicsArray = (data.topicsText || '').split(',').map(t => t.trim()).filter(Boolean);
+                          updated[idx] = { number: data.number, title: data.title, description: data.description, topics: topicsArray };
+                          setDimensions(updated);
+                        }
+                      );
+                    }}
+                    className="p-2 rounded-lg text-blue-500 hover:bg-blue-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
+                    title="Edit Item"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeDimension(idx)}
+                    className="p-2 rounded-lg text-red-500 hover:bg-red-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
+                    title="Remove Item"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
 
-                <div>
-                  <CharCountLabel label="Dimension Description" value={dim.description} max={300} />
-                <textarea maxLength={300} 
-                    rows={2}
-                    value={dim.description}
-                    onChange={(e) => updateDimension(idx, 'description', e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm"
-                  />
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="block text-xs font-semibold text-gray-600">Curriculum Topics (Bullets)</label>
-                    <button
-                      type="button"
-                      onClick={() => addDimensionTopic(idx)}
-                      className="text-xs text-primary font-bold hover:underline"
-                    >
-                      + Add Topic Bullet
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {dim.topics && dim.topics.map((topic, tIdx) => (
-                      <div key={tIdx} className="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-gray-200">
-                        <input
-                          type="text"
-                          value={topic}
-                          onChange={(e) => updateDimensionTopic(idx, tIdx, e.target.value)}
-                          className="flex-1 px-2.5 py-1 text-xs border-none focus:ring-0 font-medium"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeDimensionTopic(idx, tIdx)}
-                          className="p-1 text-red-500 hover:bg-red-50 rounded"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                <div className="flex gap-4 pr-20">
+                  <div className="text-3xl font-black text-gray-200">{dim.number || '00'}</div>
+                  <div className="space-y-1">
+                    <h4 className="font-bold text-gray-900">{dim.title || 'Untitled'}</h4>
+                    <p className="text-sm text-gray-600 line-clamp-2">{dim.description || 'No description provided.'}</p>
+                    
+                    {dim.topics && dim.topics.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {dim.topics.map((t, i) => (
+                          <span key={i} className="text-[10px] font-bold uppercase tracking-wider bg-white border border-gray-200 px-2 py-1 rounded text-gray-500">
+                            {t}
+                          </span>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
               </div>
@@ -1217,54 +1382,78 @@ const ManageMbaPage = ({ isBba = false }) => {
           <div className="space-y-4 pt-4 border-t border-gray-100">
             <h3 className="text-sm font-bold text-gray-700">Dimension Cards Grid (Max 5 recommended)</h3>
             {(whyChoosePills.items || []).map((item, idx) => (
-              <div key={idx} className="p-5 rounded-2xl bg-gray-50/80 border border-gray-200 relative space-y-4 shadow-sm">
-                <button
-                  type="button"
-                  onClick={() => removePillItem(idx)}
-                  className="absolute top-4 right-4 p-2 rounded-lg text-red-500 hover:bg-red-50 transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+              <div
+                key={idx}
+                draggable
+                onDragStart={(e) => handlePillDragStart(e, idx)}
+                onDragOver={handlePillDragOver}
+                onDrop={(e) => handlePillDrop(e, idx)}
+                onDragEnd={handlePillDragEnd}
+                className={`p-5 rounded-2xl bg-gray-50/80 border ${draggedPillIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative space-y-4 shadow-sm transition-all duration-200`}
+              >
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      openEditModal(
+                        'Edit Dimension Pill',
+                        [
+                          { name: 'title', label: 'Dimension Title', type: 'text', maxLength: 100, required: true },
+                          { name: 'description', label: 'Description', type: 'textarea', maxLength: 300, required: true },
+                          { 
+                            name: 'icon', 
+                            label: 'Icon Name', 
+                            type: 'select', 
+                            required: true, 
+                            options: [
+                              { value: 'BookOpen', label: 'BookOpen (Management)' },
+                              { value: 'Users', label: 'Users (Leadership/Team)' },
+                              { value: 'Briefcase', label: 'Briefcase (Analytics/Business)' },
+                              { value: 'Globe', label: 'Globe (Collaboration/Global)' },
+                              { value: 'Award', label: 'Award (Innovation/Excellence)' },
+                              { value: 'Sparkles', label: 'Sparkles' },
+                              { value: 'Trophy', label: 'Trophy' },
+                              { value: 'Target', label: 'Target' },
+                              { value: 'TrendingUp', label: 'TrendingUp' },
+                              { value: 'Zap', label: 'Zap' },
+                              { value: 'Shield', label: 'Shield' },
+                              { value: 'Heart', label: 'Heart' }
+                            ]
+                          }
+                        ],
+                        item,
+                        (data) => {
+                          const updatedItems = [...(whyChoosePills.items || [])];
+                          updatedItems[idx] = { ...updatedItems[idx], ...data };
+                          setWhyChoosePills({ ...whyChoosePills, items: updatedItems });
+                        }
+                      );
+                    }}
+                    className="p-2 rounded-lg text-blue-500 hover:bg-blue-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
+                    title="Edit Item"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removePillItem(idx)}
+                    className="p-2 rounded-lg text-red-500 hover:bg-red-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
+                    title="Remove Item"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <CharCountLabel label="Card Title" value={item.title || ''} max={60} />
-                <input maxLength={60} 
-                      type="text"
-                      value={item.title || ''}
-                      onChange={(e) => updatePillItem(idx, 'title', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-900"
-                    />
+                <div className="flex items-start gap-3 pr-20">
+                  <div className="absolute top-4 left-4 text-gray-400 hover:text-gray-600 cursor-move" title="Drag to reorder">
+                    <GripVertical className="w-5 h-5" />
                   </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Icon Name</label>
-                    <select
-                      value={item.icon || 'Sparkles'}
-                      onChange={(e) => updatePillItem(idx, 'icon', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium bg-white"
-                    >
-                      <option value="BookOpen">BookOpen (Management)</option>
-                      <option value="Users">Users (Leadership/Team)</option>
-                      <option value="Briefcase">Briefcase (Analytics/Business)</option>
-                      <option value="Globe">Globe (Collaboration/Global)</option>
-                      <option value="Award">Award (Innovation/Excellence)</option>
-                      <option value="Sparkles">Sparkles</option>
-                      <option value="Trophy">Trophy</option>
-                      <option value="Target">Target</option>
-                      <option value="TrendingUp">TrendingUp</option>
-                      <option value="Zap">Zap</option>
-                      <option value="Shield">Shield</option>
-                      <option value="Heart">Heart</option>
-                    </select>
+                  <div className="flex flex-col gap-1 pl-6">
+                  <h4 className="font-bold text-gray-900">{item.title || 'Untitled Dimension'}</h4>
+                  <p className="text-sm text-gray-600 line-clamp-2">{item.description || 'No description provided.'}</p>
+                  <div className="text-[10px] font-mono bg-white px-2 py-1 rounded border border-gray-200 inline-block mt-2 text-gray-400 self-start">
+                    Icon: {item.icon || 'Sparkles'}
                   </div>
-                  <div className="sm:col-span-3">
-                    <CharCountLabel label="Description" value={item.description || ''} max={300} />
-                <input maxLength={300} 
-                      type="text"
-                      value={item.description || ''}
-                      onChange={(e) => updatePillItem(idx, 'description', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm"
-                    />
                   </div>
                 </div>
               </div>
@@ -1460,7 +1649,18 @@ const ManageMbaPage = ({ isBba = false }) => {
           <div className="space-y-4 pt-4 border-t border-gray-100">
             <h3 className="text-sm font-bold text-gray-700">Bottom Feature Cards Grid</h3>
             {(dynamicLearning.features || []).map((feat, idx) => (
-              <div key={idx} className="p-5 rounded-2xl bg-gray-50/80 border border-gray-200 relative space-y-4 shadow-sm">
+              <div
+                key={idx}
+                draggable
+                onDragStart={(e) => handleDynamicDragStart(e, idx)}
+                onDragOver={handleDynamicDragOver}
+                onDrop={(e) => handleDynamicDrop(e, idx)}
+                onDragEnd={handleDynamicDragEnd}
+                className={`p-5 rounded-2xl bg-gray-50/80 border ${draggedDynamicIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative space-y-4 shadow-sm transition-all duration-200`}
+              >
+                <div className="absolute top-4 left-4 text-gray-400 hover:text-gray-600 cursor-move" title="Drag to reorder">
+                  <GripVertical className="w-5 h-5" />
+                </div>
                 <button
                   type="button"
                   onClick={() => removeDynamicFeature(idx)}
@@ -1573,65 +1773,76 @@ const ManageMbaPage = ({ isBba = false }) => {
           <div className="space-y-6 pt-4 border-t border-gray-100">
             <h3 className="text-sm font-bold text-gray-700">Gallery Items Grid</h3>
             {(momentsGallery.items || []).map((item, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-gray-50/80 border border-gray-200 relative space-y-4 shadow-sm">
-                <button
-                  type="button"
-                  onClick={() => removeGalleryItem(idx)}
-                  className="absolute top-4 right-4 p-2 rounded-lg text-red-500 hover:bg-red-50 transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <CharCountLabel label="Photo Title" value={item.title || ''} max={60} />
-                <input maxLength={60} 
-                      type="text"
-                      value={item.title || ''}
-                      onChange={(e) => updateGalleryItem(idx, 'title', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-900"
-                    />
-                  </div>
-                  <div>
-                    <CharCountLabel label="Subtitle" value={item.subtitle || ''} max={60} />
-                <input maxLength={60} 
-                      type="text"
-                      value={item.subtitle || ''}
-                      onChange={(e) => updateGalleryItem(idx, 'subtitle', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">Grid Layout Size (Span)</label>
-                    <select
-                      value={item.span || 'col-span-1 md:col-span-2 lg:col-span-4 h-[260px] sm:h-[280px]'}
-                      onChange={(e) => updateGalleryItem(idx, 'span', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs bg-white font-medium"
-                    >
-                      <option value="col-span-1 md:col-span-2 lg:col-span-4 h-[260px] sm:h-[280px]">Small Card (col-span-4)</option>
-                      <option value="col-span-1 md:col-span-2 lg:col-span-6 h-[260px] sm:h-[280px]">Wide Card (col-span-6)</option>
-                      <option value="col-span-1 md:col-span-2 lg:col-span-12 h-[320px]">Full Width (col-span-12)</option>
-                    </select>
-                  </div>
+              <div 
+                key={idx} 
+                draggable
+                onDragStart={(e) => handleGalleryDragStart(e, idx)}
+                onDragOver={(e) => handleGalleryDragOver(e, idx)}
+                onDrop={(e) => handleGalleryDrop(e, idx)}
+                onDragEnd={handleGalleryDragEnd}
+                className={`p-6 rounded-2xl bg-gray-50/80 border ${draggedGalleryIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative space-y-4 shadow-sm transition-all duration-200`}
+              >
+                <div className="absolute top-4 left-4 text-gray-400 hover:text-gray-600 cursor-move">
+                  <GripVertical className="w-5 h-5" />
+                </div>
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      openEditModal(
+                        'Edit Gallery Photo',
+                        [
+                          { name: 'title', label: 'Photo Title', type: 'text', maxLength: 60, required: true },
+                          { name: 'subtitle', label: 'Subtitle', type: 'text', maxLength: 60, required: true },
+                          { 
+                            name: 'span', 
+                            label: 'Grid Layout Size (Span)', 
+                            type: 'select', 
+                            required: true, 
+                            options: [
+                              { value: 'col-span-1 md:col-span-2 lg:col-span-4 h-[260px] sm:h-[280px]', label: 'Small Card (col-span-4)' },
+                              { value: 'col-span-1 md:col-span-2 lg:col-span-6 h-[260px] sm:h-[280px]', label: 'Wide Card (col-span-6)' },
+                              { value: 'col-span-1 md:col-span-2 lg:col-span-12 h-[320px]', label: 'Full Width (col-span-12)' }
+                            ]
+                          },
+                          { name: 'image', label: 'Upload Photo', type: 'image', required: true }
+                        ],
+                        item,
+                        (data) => {
+                          const updatedItems = [...(momentsGallery.items || [])];
+                          updatedItems[idx] = { ...updatedItems[idx], ...data };
+                          setMomentsGallery({ ...momentsGallery, items: updatedItems });
+                        }
+                      );
+                    }}
+                    className="p-2 rounded-lg text-blue-500 hover:bg-blue-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
+                    title="Edit Item"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeGalleryItem(idx)}
+                    className="p-2 rounded-lg text-red-500 hover:bg-red-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
+                    title="Remove Item"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
 
-                <div className="pt-2">
-                  <label className="block text-xs font-semibold text-gray-600 mb-2">Photo Image</label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
-                    <LogoUploader deferredMode={true}
-                      uploadEndpoint="/upload/mba"
-                      currentLogoUrl={item.image || ''}
-                      defaultImage={idx === 0 ? '/assets/Images/mba/gallery_67.png' : idx === 1 ? '/assets/Images/mba/internship_27.png' : idx === 2 ? '/assets/Images/mba/internship_28.png' : idx === 3 ? '/assets/Images/mba/internship_2.png' : idx === 4 ? '/assets/Images/mba/gallery_58.png' : ''}
-                      onUploadSuccess={(url) => updateGalleryItem(idx, 'image', url)}
-                    />
-                    <div>
-                      <CharCountLabel label="Or paste image URL directly:" value={item.image || ''} max={200} />
-                <input maxLength={200} 
-                        type="text"
-                        value={item.image || ''}
-                        onChange={(e) => updateGalleryItem(idx, 'image', e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs"
-                      />
+                <div className="flex gap-4 items-center pt-2 ml-6">
+                  {item.image ? (
+                    <img src={item.image} alt={item.title} className="w-24 h-24 object-cover rounded-xl shadow-sm border border-gray-200" />
+                  ) : (
+                    <div className="w-24 h-24 bg-gray-100 rounded-xl border border-dashed border-gray-300 flex items-center justify-center">
+                      <span className="text-xs text-gray-400">No Image</span>
+                    </div>
+                  )}
+                  <div>
+                    <h4 className="font-bold text-gray-900">{item.title || 'Untitled Photo'}</h4>
+                    <p className="text-sm text-gray-500">{item.subtitle}</p>
+                    <div className="text-[10px] font-mono bg-white px-2 py-1 rounded border border-gray-200 inline-block mt-2 text-gray-400">
+                      Layout: {item.span?.includes('col-span-4') ? 'Small Card' : item.span?.includes('col-span-6') ? 'Wide Card' : 'Full Width'}
                     </div>
                   </div>
                 </div>
@@ -1795,66 +2006,72 @@ const ManageMbaPage = ({ isBba = false }) => {
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pr-24">
-                    <div>
-                      <CharCountLabel label="Event Title" value={ev.title || ''} max={60} />
-                <input maxLength={60} 
-                        type="text"
-                        value={ev.title || ''}
-                        onChange={(e) => updateCalendarEvent(idx, 'title', e.target.value)}
-                        placeholder="e.g. Orientation & Leadership Summit"
-                        className="w-full px-3 py-2 rounded-lg border bg-white text-xs font-semibold"
-                      />
-                    </div>
-                    <div>
-                      <CharCountLabel label="Date Range" value={ev.date || ''} max={100} />
-                <input maxLength={100} 
-                        type="text"
-                        value={ev.date || ''}
-                        onChange={(e) => updateCalendarEvent(idx, 'date', e.target.value)}
-                        placeholder="e.g. July 15 - July 18, 2026"
-                        className="w-full px-3 py-2 rounded-lg border bg-white text-xs font-semibold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1">Semester / Term</label>
-                      <select
-                        value={ev.semester || 'Trimester 1'}
-                        onChange={(e) => updateCalendarEvent(idx, 'semester', e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border bg-white text-xs font-semibold"
-                      >
-                        <option value="Trimester 1">Trimester 1</option>
-                        <option value="Trimester 2">Trimester 2</option>
-                        <option value="Trimester 3">Trimester 3</option>
-                        <option value="Key Events">Key Events</option>
-                      </select>
-                    </div>
+                  <div className="absolute top-4 right-4 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        openEditModal(
+                          'Edit Schedule Event',
+                          [
+                            { name: 'title', label: 'Event Title', type: 'text', maxLength: 60, required: true },
+                            { name: 'date', label: 'Date Range', type: 'text', maxLength: 100, required: true },
+                            { 
+                              name: 'semester', 
+                              label: 'Semester / Term', 
+                              type: 'select', 
+                              required: true,
+                              options: [
+                                { value: 'Trimester 1', label: 'Trimester 1' },
+                                { value: 'Trimester 2', label: 'Trimester 2' },
+                                { value: 'Trimester 3', label: 'Trimester 3' },
+                                { value: 'Key Events', label: 'Key Events' }
+                              ]
+                            },
+                            { 
+                              name: 'category', 
+                              label: 'Category', 
+                              type: 'select', 
+                              required: true,
+                              options: [
+                                { value: 'Leadership & Events', label: 'Leadership & Events' },
+                                { value: 'Exams & Assessments', label: 'Exams & Assessments' },
+                                { value: 'Industrial Visits', label: 'Industrial Visits' },
+                                { value: 'Term Breaks & Holidays', label: 'Term Breaks & Holidays' }
+                              ]
+                            },
+                            { name: 'description', label: 'Brief Description', type: 'textarea', maxLength: 300, required: true }
+                          ],
+                          ev,
+                          (data) => {
+                            const updatedEvents = [...(academicCalendarBanner.events || [])];
+                            updatedEvents[idx] = { ...updatedEvents[idx], ...data };
+                            setAcademicCalendarBanner({ ...academicCalendarBanner, events: updatedEvents });
+                          }
+                        );
+                      }}
+                      className="p-2 rounded-lg text-blue-500 hover:bg-blue-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
+                      title="Edit Item"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeCalendarEvent(idx)}
+                      className="p-2 rounded-lg text-red-500 hover:bg-red-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
+                      title="Remove Event"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1">Category</label>
-                      <select
-                        value={ev.category || 'Leadership & Events'}
-                        onChange={(e) => updateCalendarEvent(idx, 'category', e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border bg-white text-xs font-semibold"
-                      >
-                        <option value="Leadership & Events">Leadership & Events</option>
-                        <option value="Exams & Assessments">Exams & Assessments</option>
-                        <option value="Industrial Visits">Industrial Visits</option>
-                        <option value="Term Breaks & Holidays">Term Breaks & Holidays</option>
-                      </select>
+                  <div className="flex flex-col gap-1 pr-20">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">{ev.semester || 'Trimester 1'}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 bg-gray-200 px-2 py-0.5 rounded">{ev.category || 'Event'}</span>
                     </div>
-                    <div className="sm:col-span-2">
-                      <CharCountLabel label="Brief Description" value={ev.description || ''} max={300} />
-                <input maxLength={300} 
-                        type="text"
-                        value={ev.description || ''}
-                        onChange={(e) => updateCalendarEvent(idx, 'description', e.target.value)}
-                        placeholder="e.g. Inaugural session and guest keynotes."
-                        className="w-full px-3 py-2 rounded-lg border bg-white text-xs"
-                      />
-                    </div>
+                    <h4 className="font-bold text-gray-900 text-sm">{ev.title || 'Untitled Event'}</h4>
+                    <p className="text-xs font-semibold text-gray-500 flex items-center gap-1"><Calendar className="w-3 h-3" /> {ev.date || 'No date set'}</p>
+                    <p className="text-xs text-gray-600 mt-2">{ev.description || 'No description provided.'}</p>
                   </div>
                 </div>
               ))}
@@ -1885,75 +2102,59 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           <div className="space-y-6">
             {eligibility.map((item, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-gray-50/80 border border-gray-200 relative space-y-4 shadow-sm">
-                <button
-                  type="button"
-                  onClick={() => removeEligibilityStep(idx)}
-                  className="absolute top-4 right-4 p-2 rounded-lg text-red-500 hover:bg-red-50 transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                  <div className="sm:col-span-1">
-                    <CharCountLabel label="Step Number" value={item.step} max={100} />
-                <input maxLength={100} 
-                      type="text"
-                      value={item.step}
-                      onChange={(e) => updateEligibilityStep(idx, 'step', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold"
-                    />
-                  </div>
-                  <div className="sm:col-span-3">
-                    <CharCountLabel label="Step Title" value={item.title} max={60} />
-                <input maxLength={60} 
-                      type="text"
-                      value={item.title}
-                      onChange={(e) => updateEligibilityStep(idx, 'title', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-900"
-                    />
-                  </div>
+              <div key={idx} className="p-6 rounded-2xl bg-gray-50/80 border border-gray-200 relative space-y-4 shadow-sm flex flex-col">
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      openEditModal(
+                        'Edit Eligibility Step',
+                        [
+                          { name: 'step', label: 'Step Number', type: 'text', maxLength: 10, required: true },
+                          { name: 'title', label: 'Step Title', type: 'text', maxLength: 60, required: true },
+                          { name: 'description', label: 'Step Summary Description', type: 'textarea', maxLength: 300, required: true },
+                          { name: 'bulletsText', label: 'Requirements (Comma Separated)', type: 'textarea', maxLength: 500, placeholder: 'e.g. 50% Marks, Entrance Exam, Interview' }
+                        ],
+                        { ...item, bulletsText: item.bullets?.join(', ') || '' },
+                        (data) => {
+                          const updated = [...eligibility];
+                          const bulletsArray = (data.bulletsText || '').split(',').map(t => t.trim()).filter(Boolean);
+                          updated[idx] = { step: data.step, title: data.title, description: data.description, bullets: bulletsArray };
+                          setEligibility(updated);
+                        }
+                      );
+                    }}
+                    className="p-2 rounded-lg text-blue-500 hover:bg-blue-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
+                    title="Edit Item"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeEligibilityStep(idx)}
+                    className="p-2 rounded-lg text-red-500 hover:bg-red-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
+                    title="Remove Item"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
 
-                <div>
-                  <CharCountLabel label="Step Summary Description" value={item.description} max={300} />
-                <textarea maxLength={300} 
-                    rows={2}
-                    value={item.description}
-                    onChange={(e) => updateEligibilityStep(idx, 'description', e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm"
-                  />
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="block text-xs font-semibold text-gray-600">Specific Requirements (Checkmarks)</label>
-                    <button
-                      type="button"
-                      onClick={() => addEligibilityBullet(idx)}
-                      className="text-xs text-primary font-bold hover:underline"
-                    >
-                      + Add Requirement
-                    </button>
-                  </div>
-                  <div className="space-y-2">
-                    {item.bullets && item.bullets.map((bul, bIdx) => (
-                      <div key={bIdx} className="flex items-center gap-2 bg-white p-1.5 rounded-lg border border-gray-200">
-                        <input
-                          type="text"
-                          value={bul}
-                          onChange={(e) => updateEligibilityBullet(idx, bIdx, e.target.value)}
-                          className="flex-1 px-3 py-1.5 text-xs border-none focus:ring-0 font-medium"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeEligibilityBullet(idx, bIdx)}
-                          className="p-1.5 text-red-500 hover:bg-red-50 rounded"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                <div className="flex gap-4 pr-20">
+                  <div className="text-3xl font-black text-gray-200">{item.step || '00'}</div>
+                  <div className="space-y-1">
+                    <h4 className="font-bold text-gray-900">{item.title || 'Untitled Step'}</h4>
+                    <p className="text-sm text-gray-600 line-clamp-2">{item.description || 'No description provided.'}</p>
+                    
+                    {item.bullets && item.bullets.length > 0 && (
+                      <div className="mt-3 flex flex-col gap-1">
+                        {item.bullets.map((b, i) => (
+                          <div key={i} className="text-xs text-gray-500 flex items-start gap-1.5">
+                            <span className="text-primary mt-0.5">•</span>
+                            {b}
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
               </div>
@@ -1984,6 +2185,7 @@ const ManageMbaPage = ({ isBba = false }) => {
         title={modalConfig.title}
         fields={modalConfig.fields}
         onSave={modalConfig.onSave}
+        initialData={modalConfig.initialData}
       />
 
       {/* Live Preview Modal */}
@@ -2050,9 +2252,15 @@ const ManageMbaPage = ({ isBba = false }) => {
                 }`}
             >
               <iframe
+                ref={iframeRef}
                 src={liveUrl}
                 title="Live Program Page Preview"
                 className="w-full h-full border-none"
+                onLoad={() => {
+                  if (iframeRef.current) {
+                    iframeRef.current.contentWindow.postMessage({ type: 'LIVE_PREVIEW_UPDATE', data: currentDraftData }, '*');
+                  }
+                }}
               />
             </div>
           </div>

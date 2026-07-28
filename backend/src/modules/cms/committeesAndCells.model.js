@@ -30,7 +30,7 @@ const committeesAndCellsSchema = new mongoose.Schema({
   },
   heroBgImage: {
     type: String,
-    default: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop',
+    default: '/assets/Images/committees/default-committees-hero.png',
   },
   committees: [committeeSchema],
 }, {
