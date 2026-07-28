@@ -38,6 +38,7 @@ import PrivacyPolicyModel from './privacyPolicy.model.js';
 import TermsAndConditionsModel from './termsAndConditions.model.js';
 import FaqModel from './faq.model.js';
 import GalleryPageModel from './galleryPage.model.js';
+import CommitteesAndCellsCms from './committeesAndCells.model.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -1477,5 +1478,37 @@ export const updateDownloadPage = async (req, res) => {
     res.status(200).json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Error updating download page settings', error: error.message });
+  }
+};
+
+// @desc    Get committees and cells settings
+// @route   GET /api/cms/committees-and-cells
+// @access  Public
+export const getCommitteesAndCellsSettings = async (req, res) => {
+  try {
+    let settings = await CommitteesAndCellsCms.findOne();
+    if (!settings) {
+      settings = await CommitteesAndCellsCms.create({});
+    }
+    res.status(200).json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching committees settings', error: error.message });
+  }
+};
+
+// @desc    Update committees and cells settings
+// @route   PUT /api/cms/committees-and-cells
+// @access  Private/Admin
+export const updateCommitteesAndCellsSettings = async (req, res) => {
+  try {
+    let settings = await CommitteesAndCellsCms.findOne();
+    if (!settings) {
+      settings = await CommitteesAndCellsCms.create(req.body);
+    } else {
+      settings = await CommitteesAndCellsCms.findOneAndUpdate({}, req.body, { new: true, runValidators: true });
+    }
+    res.status(200).json(settings);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating committees settings', error: error.message });
   }
 };
