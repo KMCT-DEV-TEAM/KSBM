@@ -3,23 +3,24 @@ import React, { useState, useEffect } from 'react';
 import { Search, FileText } from 'lucide-react';
 
 import api from '../../api/axios';
+import PageTransition from '../../components/PageTransition';
 
 const CommitteesAndCellsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/cms/committees-and-cells');
+        const response = await api.get('/cms/committees-and-cells', { hideLoader: true });
         if (response.data) {
           setData(response.data);
         }
       } catch (error) {
         console.error("Failed to fetch Committees and Cells data", error);
       } finally {
-        setIsLoading(false);
+        setDataLoaded(true);
       }
     };
     fetchData();
@@ -40,10 +41,10 @@ const CommitteesAndCellsPage = () => {
     item.coordinator.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (!data) return null;
-
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <>
+      <PageTransition dataLoaded={dataLoaded} />
+      <div className="min-h-screen bg-[#fafafa]">
 
       {/* Hero Section (Matching Blogs Page) */}
       <div className="relative">
@@ -137,6 +138,7 @@ const CommitteesAndCellsPage = () => {
       )}
 
     </div>
+    </>
   );
 };
 

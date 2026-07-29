@@ -4,6 +4,7 @@ import FacultyHero from './components/FacultyHero';
 import FacultyIntro from './components/FacultyIntro';
 import FacultyGridSection from './components/FacultyGridSection';
 import api from '../../api/axios';
+import PageTransition from '../../components/PageTransition';
 
 const defaultFacultyData = {
   heroHeading: "Faculty Members",
@@ -32,24 +33,29 @@ const defaultFacultyData = {
 
 const Faculty = () => {
   const [data, setData] = useState(defaultFacultyData);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     const fetchFacultyData = async () => {
       try {
-        const response = await api.get('/cms/faculty');
+        const response = await api.get('/cms/faculty', { hideLoader: true });
         if (response.data) {
           setData(response.data);
         }
       } catch (error) {
         console.error('Error fetching Faculty data, using defaults:', error);
+      } finally {
+        setDataLoaded(true);
       }
     };
     fetchFacultyData();
   }, []);
 
   return (
-    <div className="bg-[#fcfcfd] min-h-screen">
-      <FacultyHero data={data} />
+    <>
+      <PageTransition dataLoaded={dataLoaded} />
+      <div className="bg-[#fcfcfd] min-h-screen">
+        <FacultyHero data={data} />
       <FacultyIntro data={data} />
       {data?.showKsbmFaculty !== false && (
         <FacultyGridSection id="ksbm-faculty" title="KSBM Faculty" members={data?.ksbmFaculty} />
@@ -57,7 +63,8 @@ const Faculty = () => {
       {data?.showAdjunctFaculty !== false && (
         <FacultyGridSection id="adjunct-faculty" title="Adjunct Faculty" members={data?.adjunctFaculty} />
       )}
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -9,7 +9,7 @@ const ExaminationsHero = ({ data }) => {
   const bgImage = data?.heroImage || '/assets/Images/image 73.png';
 
   return (
-    <section className="relative w-full min-h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32" style={{ backgroundColor: data?.showHeroImage === false ? '#1b2559' : undefined }}>
+    <section className="relative w-full min-h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32 bg-[#1b2559]">
       {/* Background Image */}
       {data?.showHeroImage !== false && (
         <div className="absolute inset-0 z-0">
