@@ -49,26 +49,32 @@ const FacultyCard = ({ member, index }) => {
       className="rounded-2xl md:rounded-[24px] overflow-hidden relative aspect-[3/4] bg-gray-200/60 group cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100/80 flex flex-col justify-end"
     >
       {/* Photo */}
-      <img
-        src={member.image || "/assets/Images/image 31.png"}
-        alt={member.name}
-        className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-        onError={(e) => {
-          e.target.src = "/assets/Images/image 31.png";
-        }}
-      />
+      {member.showImage !== false && (
+        <img
+          src={member.image || "/assets/Images/image 31.png"}
+          alt={member.name}
+          className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+          onError={(e) => {
+            e.target.src = "/assets/Images/image 31.png";
+          }}
+        />
+      )}
 
       {/* Subtle Gradient protection for overlay card */}
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/40 via-black/10 to-transparent pointer-events-none transition-opacity duration-300 group-hover:opacity-80"></div>
 
       {/* Floating Bottom Info Card */}
       <div className="relative z-10 mx-3.5 mb-3.5 bg-white/75 backdrop-blur-md rounded-xl p-3.5 sm:p-4 shadow-lg border border-white/50 transition-all duration-300 group-hover:bg-white/90 group-hover:-translate-y-1">
-        <h4 className="font-semibold text-sm sm:text-base text-gray-900 mb-1 line-clamp-1">
-          {member.name}
-        </h4>
-        <p className="text-[11px] sm:text-xs text-gray-500 font-medium line-clamp-2 leading-snug">
-          {member.title}
-        </p>
+        {member.showName !== false && (
+          <h4 className="font-semibold text-sm sm:text-base text-gray-900 mb-1 line-clamp-1">
+            {member.name}
+          </h4>
+        )}
+        {member.showTitle !== false && (
+          <p className="text-[11px] sm:text-xs text-gray-500 font-medium line-clamp-2 leading-snug">
+            {member.title}
+          </p>
+        )}
       </div>
     </motion.div>
   );

@@ -36,15 +36,21 @@ const PlacementCommittee = ({ data }) => {
           >
 
             <div>
-              <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-4">
-                {data.title}
-              </h2>
-              <p className="text-text-secondary text-[15px] mb-8 leading-relaxed max-w-xl">
-                {data.description}
-              </p>
-              <button className="px-6 py-2 rounded-[18px] border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-all duration-300">
-                {data.buttonText}
-              </button>
+              {data?.showHeading !== false && (
+                <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-4">
+                  {data.title}
+                </h2>
+              )}
+              {data?.showDescription !== false && (
+                <p className="text-text-secondary text-[15px] mb-8 leading-relaxed max-w-xl">
+                  {data.description}
+                </p>
+              )}
+              {data?.showButtonText !== false && (
+                <button className="px-6 py-2 rounded-[18px] border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-all duration-300">
+                  {data.buttonText}
+                </button>
+              )}
             </div>
 
           </motion.div>

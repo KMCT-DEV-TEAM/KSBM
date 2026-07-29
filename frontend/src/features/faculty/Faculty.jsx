@@ -51,8 +51,12 @@ const Faculty = () => {
     <div className="bg-[#fcfcfd] min-h-screen">
       <FacultyHero data={data} />
       <FacultyIntro data={data} />
-      <FacultyGridSection id="ksbm-faculty" title="KSBM Faculty" members={data?.ksbmFaculty} />
-      <FacultyGridSection id="adjunct-faculty" title="Adjunct Faculty" members={data?.adjunctFaculty} />
+      {data?.showKsbmFaculty !== false && (
+        <FacultyGridSection id="ksbm-faculty" title="KSBM Faculty" members={data?.ksbmFaculty} />
+      )}
+      {data?.showAdjunctFaculty !== false && (
+        <FacultyGridSection id="adjunct-faculty" title="Adjunct Faculty" members={data?.adjunctFaculty} />
+      )}
     </div>
   );
 };

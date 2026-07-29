@@ -19,6 +19,7 @@ const Toast = Swal.mixin({
 
 const ManageAboutUsHero = () => {
   const [title, setTitle] = useState('About KSBM');
+  const [showSection, setShowSection] = useState(true);
   const [subtitle, setSubtitle] = useState('Building Excellence Since 1995');
   const [backgroundImage, setBackgroundImage] = useState('/assets/Images/aboutus/about-hero-bg.jpg');
   
@@ -63,6 +64,7 @@ const ManageAboutUsHero = () => {
     try {
       const { data } = await api.get('/cms/about-us-hero');
       if (data) {
+        setShowSection(data.showSection ?? true);
         setTitle(data.title || 'About KSBM');
         setSubtitle(data.subtitle || 'Building Excellence Since 1995');
         setBackgroundImage(data.backgroundImage || '/assets/Images/aboutus/about-hero-bg.jpg');
@@ -213,30 +215,32 @@ const ManageAboutUsHero = () => {
             <h3 className="text-lg font-bold text-[#1e2869] mb-4">Text Content</h3>
             <div className="space-y-6">
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Hero Title</label>
-                  <span className="text-xs text-gray-500">{title.length}/50</span>
-                </div>
-                <input 
+                <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Hero Title</label>
+                  
+</div>
+<input 
                   type="text" 
                   maxLength={50}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
+<div className="text-right text-xs text-gray-400 mt-1">{title.length}/50 characters</div>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Hero Subtitle</label>
-                  <span className="text-xs text-gray-500">{subtitle.length}/100</span>
-                </div>
-                <input 
+                <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Hero Subtitle</label>
+                  
+</div>
+<input 
                   type="text" 
                   maxLength={100}
                   value={subtitle}
                   onChange={(e) => setSubtitle(e.target.value)}
                   className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
+<div className="text-right text-xs text-gray-400 mt-1">{subtitle.length}/100 characters</div>
               </div>
             </div>
           </div>

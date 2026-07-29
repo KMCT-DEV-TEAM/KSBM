@@ -19,6 +19,7 @@ const Toast = Swal.mixin({
 
 const ManageLegacy = () => {
   const [subheading, setSubheading] = useState('OUR LEGACY');
+  const [showSection, setShowSection] = useState(true);
   const [heading, setHeading] = useState('A Journey of Educational Excellence');
   const [description, setDescription] = useState('Founded by the visionary leader...');
   const [image, setImage] = useState('/assets/Images/image 2.png');
@@ -63,6 +64,7 @@ const ManageLegacy = () => {
     try {
       const { data } = await api.get('/cms/legacy');
       if (data) {
+        setShowSection(data.showSection ?? true);
         if (data.subheading) setSubheading(data.subheading);
         if (data.heading) setHeading(data.heading);
         if (data.description) setDescription(data.description);
@@ -191,18 +193,20 @@ const ManageLegacy = () => {
         <div className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
-                <span className="text-xs text-gray-500">{subheading.length}/50</span>
-              </div>
-              <input type="text" maxLength={50} value={subheading} onChange={(e) => setSubheading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+              <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
+                
+</div>
+<input type="text" maxLength={50} value={subheading} onChange={(e) => setSubheading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+<div className="text-right text-xs text-gray-400 mt-1">{subheading.length}/50 characters</div>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Heading</label>
-                <span className="text-xs text-gray-500">{heading.length}/50</span>
-              </div>
-              <input type="text" maxLength={50} value={heading} onChange={(e) => setHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+              <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Heading</label>
+                
+</div>
+<input type="text" maxLength={50} value={heading} onChange={(e) => setHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+<div className="text-right text-xs text-gray-400 mt-1">{heading.length}/50 characters</div>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 md:col-span-2">
               <div className="flex justify-between items-center mb-1.5">

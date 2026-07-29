@@ -42,21 +42,27 @@ const ManagementDeskIntro = ({ data }) => {
           transition={{ duration: 0.6 }}
           className="flex flex-col relative max-w-5xl"
         >
-          <div className="mb-4">
-            <span className="text-gray-500 text-[10px] font-bold tracking-[0.2em] uppercase">
-              {data?.introSubheading || "MANAGEMENT DESK"}
-            </span>
-          </div>
+          {data?.showIntroSubheading !== false && (
+            <div className="mb-4">
+              <span className="text-gray-500 text-[10px] font-bold tracking-[0.2em] uppercase">
+                {data?.introSubheading || "MANAGEMENT DESK"}
+              </span>
+            </div>
+          )}
 
-          <h2 className="text-3xl md:text-4xl font-bold text-[#454e7d] mb-8">
-            {data?.introHeading || "A Vision That Inspires Excellence"}
-          </h2>
+          {data?.showIntroHeading !== false && (
+            <h2 className="text-3xl md:text-4xl font-bold text-[#454e7d] mb-8">
+              {data?.introHeading || "A Vision That Inspires Excellence"}
+            </h2>
+          )}
 
-          <div className="space-y-6 text-gray-600 leading-relaxed text-sm md:text-[15px]">
-            {description.map((para, idx) => (
-              <p key={idx}>{para}</p>
-            ))}
-          </div>
+          {data?.showIntroDescription !== false && (
+            <div className="space-y-6 text-gray-600 leading-relaxed text-sm md:text-[15px]">
+              {description.map((para, idx) => (
+                <p key={idx}>{para}</p>
+              ))}
+            </div>
+          )}
         </motion.div>
       </div>
     </section>

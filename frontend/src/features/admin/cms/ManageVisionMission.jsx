@@ -19,6 +19,7 @@ const Toast = Swal.mixin({
 
 const ManageVisionMission = () => {
   const [visionTitle, setVisionTitle] = useState('Our Vision');
+  const [showSection, setShowSection] = useState(true);
   const [visionContent, setVisionContent] = useState('"To mould to competent healthcare professionals with leadership qualities through comprehensive nursing education, practice and research."');
   const [visionImage, setVisionImage] = useState('/assets/Images/aboutus/vision.png');
   
@@ -71,6 +72,7 @@ const ManageVisionMission = () => {
     try {
       const { data } = await api.get('/cms/vision-mission');
       if (data) {
+        setShowSection(data.showSection ?? true);
         if (data.visionTitle) setVisionTitle(data.visionTitle);
         if (data.visionContent && Array.isArray(data.visionContent)) setVisionContent(data.visionContent.join('\n\n'));
         if (data.visionImage) setVisionImage(data.visionImage);
@@ -220,17 +222,18 @@ const ManageVisionMission = () => {
           <div className="space-y-6">
             <h3 className="text-lg font-bold text-[#1e2869] border-b pb-2">Our Vision</h3>
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Vision Title</label>
-                <span className="text-xs text-gray-500">{visionTitle.length}/50</span>
-              </div>
-              <input 
+              <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Vision Title</label>
+                
+</div>
+<input 
                 type="text" 
                 maxLength={50}
                 value={visionTitle}
                 onChange={(e) => setVisionTitle(e.target.value)}
                 className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+<div className="text-right text-xs text-gray-400 mt-1">{visionTitle.length}/50 characters</div>
             </div>
             
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
@@ -264,17 +267,18 @@ const ManageVisionMission = () => {
           <div className="space-y-6">
             <h3 className="text-lg font-bold text-[#1e2869] border-b pb-2">Our Mission</h3>
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Mission Title</label>
-                <span className="text-xs text-gray-500">{missionTitle.length}/50</span>
-              </div>
-              <input 
+              <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Mission Title</label>
+                
+</div>
+<input 
                 type="text" 
                 maxLength={50}
                 value={missionTitle}
                 onChange={(e) => setMissionTitle(e.target.value)}
                 className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
+<div className="text-right text-xs text-gray-400 mt-1">{missionTitle.length}/50 characters</div>
             </div>
             
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">

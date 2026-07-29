@@ -291,14 +291,14 @@ const ManagePlacement = () => {
           <h3 className="text-lg font-bold text-[#1e2869] mb-4">Text Content</h3>
           <div className="grid grid-cols-1 gap-6">
             <div>
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
+              <div className="flex items-center gap-3 mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" checked={showSubheading} onChange={(e) => setShowSubheading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
                   <span className="text-xs font-semibold text-gray-500">Show</span>
                 </label>
-              </div>
-              <input
+</div>
+<input
                 type="text"
                 value={subheading}
                 maxLength={50}
@@ -309,14 +309,14 @@ const ManagePlacement = () => {
               <p className="text-xs text-gray-400 mt-1 text-right">{subheading.length}/50 letters</p>
             </div>
             <div>
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
+              <div className="flex items-center gap-3 mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" checked={showHeading} onChange={(e) => setShowHeading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
                   <span className="text-xs font-semibold text-gray-500">Show</span>
                 </label>
-              </div>
-              <input
+</div>
+<input
                 type="text"
                 value={heading}
                 maxLength={100}

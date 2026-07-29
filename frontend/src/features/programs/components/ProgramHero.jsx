@@ -120,7 +120,7 @@ const ProgramHero = ({ program }) => {
             hidden: { opacity: 0, y: 30 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
           }}
-          className="max-w-[85%] sm:max-w-xl md:max-w-2xl text-xs md:text-sm mt-6 text-gray-200 leading-relaxed font-medium"
+          className="max-w-[75%] sm:max-w-xl md:max-w-2xl text-xs md:text-sm mt-6 text-gray-200 leading-relaxed font-medium"
         >
           {program.description}
         </motion.p>

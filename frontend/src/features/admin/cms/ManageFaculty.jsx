@@ -426,22 +426,23 @@ const ManageFaculty = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
-                <div className="flex justify-between mb-1.5">
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Hero Heading</label>
-                  <span className="text-xs text-gray-400">{heroHeading?.length || 0}/50</span>
-                </div>
-                <input
+                <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Hero Heading</label>
+                  
+</div>
+<input
                   type="text"
                   value={heroHeading}
                   maxLength={50}
                   onChange={(e) => setHeroHeading(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
+<div className="text-right text-xs text-gray-400 mt-1">{heroHeading?.length || 0}/50 characters</div>
               </div>
               <div>
-                <div className="flex justify-between mb-1.5">
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Hero Description</label>
-                  <span className="text-xs text-gray-400">{heroSubtext?.length || 0}/300</span>
+                <div className="flex items-center gap-3 mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Hero Description</label>
+                  
                 </div>
                 <textarea
                   rows="4"
@@ -477,33 +478,35 @@ const ManageFaculty = () => {
                 <div className="flex justify-between mb-1.5">
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Intro Subheading Tag</label>
                   <span className="text-xs text-gray-400">{introSubheading?.length || 0}/50</span>
-                </div>
-                <input
+</div>
+<input
                   type="text"
                   value={introSubheading}
                   maxLength={50}
                   onChange={(e) => setIntroSubheading(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
+<div className="text-right text-xs text-gray-400 mt-1">{heroSubtext?.length || 0}/300 characters</div>
               </div>
               <div>
-                <div className="flex justify-between mb-1.5">
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Intro Heading</label>
-                  <span className="text-xs text-gray-400">{introHeading?.length || 0}/100</span>
-                </div>
-                <input
+                <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Intro Heading</label>
+                  
+</div>
+<input
                   type="text"
                   value={introHeading}
                   maxLength={100}
                   onChange={(e) => setIntroHeading(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
+<div className="text-right text-xs text-gray-400 mt-1">{introHeading?.length || 0}/100 characters</div>
               </div>
             </div>
             <div>
-              <div className="flex justify-between mb-1.5">
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Intro Paragraph Text</label>
-                <span className="text-xs text-gray-400">{introText?.length || 0}/600</span>
+              <div className="flex items-center gap-3 mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Intro Paragraph Text</label>
+                
               </div>
               <textarea
                 rows="4"
@@ -631,8 +634,8 @@ const ManageFaculty = () => {
                     <div className="flex justify-between mb-1.5">
                       <label className="block text-sm font-semibold text-gray-700">Full Name</label>
                       <span className="text-xs text-gray-400">{currentMember?.name?.length || 0}/50</span>
-                    </div>
-                    <input
+</div>
+<input
                       type="text"
                       value={currentMember.name}
                       maxLength={50}
@@ -640,14 +643,15 @@ const ManageFaculty = () => {
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       placeholder="e.g. Dr. Navas K. M"
                     />
+<div className="text-right text-xs text-gray-400 mt-1">{introText?.length || 0}/600 characters</div>
                   </div>
                   
                   <div>
-                    <div className="flex justify-between mb-1.5">
-                      <label className="block text-sm font-semibold text-gray-700">Title / Designation</label>
-                      <span className="text-xs text-gray-400">{currentMember?.title?.length || 0}/100</span>
-                    </div>
-                    <input
+                    <div className="mb-1.5">
+<label className="block text-sm font-semibold text-gray-700">Title / Designation</label>
+                      
+</div>
+<input
                       type="text"
                       value={currentMember.title}
                       maxLength={100}
@@ -655,6 +659,7 @@ const ManageFaculty = () => {
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       placeholder="e.g. Managing Trustee"
                     />
+<div className="text-right text-xs text-gray-400 mt-1">{currentMember?.title?.length || 0}/100 characters</div>
                   </div>
                   
                   <div>

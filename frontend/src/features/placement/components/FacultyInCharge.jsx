@@ -19,11 +19,17 @@ const FacultyInCharge = ({ data }) => {
             transition={{ duration: 0.6 }}
             className="lg:w-1/2"
           >
-            <h2 className="text-[18px] font-medium text-text-secondary mb-3">{data.badge}</h2>
-            <h1 className='text-primary text-[28px] font-semibold mb-4'>{data.title}</h1>
-            <p className="text-text-secondary text-[15px] leading-relaxed max-w-lg">
-              {data.description}
-            </p>
+            {data?.showBadge !== false && (
+              <h2 className="text-[18px] font-medium text-text-secondary mb-3">{data.badge}</h2>
+            )}
+            {data?.showTitle !== false && (
+              <h1 className='text-primary text-[28px] font-semibold mb-4'>{data.title}</h1>
+            )}
+            {data?.showDescription !== false && (
+              <p className="text-text-secondary text-[15px] leading-relaxed max-w-lg">
+                {data.description}
+              </p>
+            )}
           </motion.div>
 
           {/* Right Images */}

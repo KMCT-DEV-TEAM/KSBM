@@ -28,7 +28,9 @@ const TopRecruiters = ({ data }) => {
         className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8"
       >
 
-        <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-4">{data.title}</h2>
+        {data?.showHeading !== false && (
+          <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-4">{data.title}</h2>
+        )}
         <p className="text-text-secondary text-sm md:text-base max-w-2xl mx-auto mb-12 leading-relaxed">
           {data.description}
         </p>

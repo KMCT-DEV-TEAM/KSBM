@@ -24,45 +24,55 @@ const ExamCalendarBanner = ({ data }) => {
         >
           {/* Left Content */}
           <div className="lg:col-span-7 flex flex-col items-start z-10">
-            <h3 className="text-2xl sm:text-3xl lg:text-[36px] font-semibold text-[#1b2559] tracking-tight mb-4 font-heading leading-tight">
-              {title}
-            </h3>
-            <p className="text-gray-600 text-sm sm:text-[15px] leading-relaxed mb-8 max-w-xl font-normal">
-              {text}
-            </p>
+            {data?.showCalendarTitle !== false && (
+              <h3 className="text-2xl sm:text-3xl lg:text-[36px] font-semibold text-[#1b2559] tracking-tight mb-4 font-heading leading-tight">
+                {title}
+              </h3>
+            )}
+            {data?.showCalendarText !== false && (
+              <p className="text-gray-600 text-sm sm:text-[15px] leading-relaxed mb-8 max-w-xl font-normal">
+                {text}
+              </p>
+            )}
 
             <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto">
-              <a
-                href={viewBtnUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto px-8 py-3.5 rounded-[12px] bg-[#1b2559] text-white font-semibold text-xs tracking-wide shadow-md hover:bg-[#151c44] hover:-translate-y-0.5 transition-all duration-300 text-center"
-              >
-                {viewBtnText}
-              </a>
+              {data?.showCalendarViewBtn !== false && (
+                <a
+                  href={viewBtnUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-[12px] bg-[#1b2559] text-white font-semibold text-xs tracking-wide shadow-md hover:bg-[#151c44] hover:-translate-y-0.5 transition-all duration-300 text-center"
+                >
+                  {viewBtnText}
+                </a>
+              )}
 
-              <a
-                href={downloadBtnUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto px-8 py-3.5 rounded-[12px] bg-white border border-gray-300 text-[#1b2559] font-semibold text-xs tracking-wide hover:bg-gray-50/80 hover:border-[#1b2559] transition-all duration-300 flex items-center justify-center gap-2 shadow-2xs"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>{downloadBtnText}</span>
-              </a>
+              {data?.showCalendarDownloadBtn !== false && (
+                <a
+                  href={downloadBtnUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-[12px] bg-white border border-gray-300 text-[#1b2559] font-semibold text-xs tracking-wide hover:bg-gray-50/80 hover:border-[#1b2559] transition-all duration-300 flex items-center justify-center gap-2 shadow-2xs"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>{downloadBtnText}</span>
+                </a>
+              )}
             </div>
           </div>
 
           {/* Right Illustration */}
-          <div className="lg:col-span-5 flex justify-center items-center z-10">
-            <div className="relative max-h-[300px] w-full max-w-[380px] flex justify-center">
-              <img
-                src={image}
-                alt={title}
-                className="w-full h-auto object-contain max-h-[260px] transform hover:scale-103 transition-transform duration-500"
-              />
+          {data?.showCalendarImage !== false && (
+            <div className="lg:col-span-5 flex justify-center items-center z-10">
+              <div className="relative max-h-[300px] w-full max-w-[380px] flex justify-center">
+                <img
+                  src={image}
+                  alt={title}
+                  className="w-full h-auto object-contain max-h-[260px] transform hover:scale-103 transition-transform duration-500"
+                />
+              </div>
             </div>
-          </div>
+          )}
         </motion.div>
       </div>
     </section>

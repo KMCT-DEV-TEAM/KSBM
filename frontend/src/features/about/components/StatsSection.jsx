@@ -64,6 +64,8 @@ const StatsSection = ({ previewData }) => {
     fetchStats();
   }, [previewData]);
 
+  if (statsData.showSection === false) return null;
+
   return (
     <section className="w-full pb-10">
       <motion.div 

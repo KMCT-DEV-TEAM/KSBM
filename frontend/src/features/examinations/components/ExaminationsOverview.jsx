@@ -21,33 +21,41 @@ const ExaminationsOverview = ({ data }) => {
             transition={{ duration: 0.7 }}
             className="lg:col-span-7 flex flex-col items-start text-left"
           >
-            <h2 className="text-2xl sm:text-3xl lg:text-[38px] font-semibold text-[#1b2559] tracking-tight leading-tight mb-6 font-heading">
-              {title}
-            </h2>
-            <p className="text-gray-600 text-sm sm:text-[15px] leading-relaxed mb-5 font-normal">
-              {text1}
-            </p>
-            <p className="text-gray-600 text-sm sm:text-[15px] leading-relaxed font-normal">
-              {text2}
-            </p>
+            {data?.showOverviewTitle !== false && (
+              <h2 className="text-2xl sm:text-3xl lg:text-[38px] font-semibold text-[#1b2559] tracking-tight leading-tight mb-6 font-heading">
+                {title}
+              </h2>
+            )}
+            {data?.showOverviewText1 !== false && (
+              <p className="text-gray-600 text-sm sm:text-[15px] leading-relaxed mb-5 font-normal">
+                {text1}
+              </p>
+            )}
+            {data?.showOverviewText2 !== false && (
+              <p className="text-gray-600 text-sm sm:text-[15px] leading-relaxed font-normal">
+                {text2}
+              </p>
+            )}
           </motion.div>
 
           {/* Right Image */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="lg:col-span-5 relative flex justify-center"
-          >
-            <div className="rounded-[28px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.12)] border border-gray-100 aspect-[4/3] w-full max-w-lg lg:max-w-none bg-gray-100">
-              <img
-                src={image}
-                alt={title}
-                className="w-full h-full object-cover transform hover:scale-103 transition-transform duration-500 ease-out"
-              />
-            </div>
-          </motion.div>
+          {data?.showOverviewImage !== false && (
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="lg:col-span-5 relative flex justify-center"
+            >
+              <div className="rounded-[28px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.12)] border border-gray-100 aspect-[4/3] w-full max-w-lg lg:max-w-none bg-gray-100">
+                <img
+                  src={image}
+                  alt={title}
+                  className="w-full h-full object-cover transform hover:scale-103 transition-transform duration-500 ease-out"
+                />
+              </div>
+            </motion.div>
+          )}
 
         </div>
       </div>

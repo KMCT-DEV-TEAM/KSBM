@@ -151,6 +151,7 @@ const ManageMbaPage = ({ isBba = false }) => {
   const [heroCardStat1Sub, setHeroCardStat1Sub] = useState('Last few slots remaining');
   const [heroCardStat2Title, setHeroCardStat2Title] = useState('100% Placement');
   const [heroCardStat2Sub, setHeroCardStat2Sub] = useState('Consistent record over years');
+  const [showSections, setShowSections] = useState({ hero: true, overview: true, dimensions: true, whyChoose: true, internships: true, dynamic: true, gallery: true, calendar: true, eligibility: true, recruiters: true });
 
   const [overviewTitle, setOverviewTitle] = useState('');
   const [overviewText, setOverviewText] = useState('');
@@ -223,6 +224,7 @@ const ManageMbaPage = ({ isBba = false }) => {
   }, [endpoint]);
 
   const currentDraftData = {
+    showSections,
     shortTitle, title, description, heroImage,
     heroTitleLine1, heroTitleLine2, heroPrimaryBtnText, heroSecondaryBtnText,
     heroCardTitle, heroCardStat1Title, heroCardStat1Sub, heroCardStat2Title, heroCardStat2Sub,
@@ -244,7 +246,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       internshipBtnLink,
       internshipImages
     },
-    dynamicLearning: {
+    dynamic: {
       badgeText: dynamicLearning.badgeText,
       title: dynamicLearning.title,
       desc1: dynamicLearning.desc1,
@@ -258,7 +260,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       bgImage: momentsGallery.bgImage,
       items: momentsGallery.items
     },
-    academicCalendarBanner: {
+    calendar: {
       badgeText: academicCalendarBanner.badgeText,
       title: academicCalendarBanner.title,
       description: academicCalendarBanner.description,
@@ -279,10 +281,10 @@ const ManageMbaPage = ({ isBba = false }) => {
     overview: 'ProgramOverview',
     dimensions: 'LearningDimensionsGrid',
     whyChoose: 'WhyChoosePills',
-    internship: 'SummerInternshipBanner',
-    dynamicLearning: 'DynamicLearningSection',
+    internships: 'SummerInternshipBanner',
+    dynamic: 'DynamicLearningSection',
     momentsGallery: 'MomentsGallery',
-    academicCalendarBanner: 'AcademicCalendarBanner',
+    calendar: 'AcademicCalendarBanner',
     eligibility: 'AdmissionEligibility',
     topRecruiters: 'TopRecruitersGrid'
   };
@@ -327,17 +329,18 @@ const ManageMbaPage = ({ isBba = false }) => {
       setHighlights(data.highlights || []);
 
       setDimensions(data.dimensions || []);
+      setShowSections(data.showSections || { hero: true, overview: true, dimensions: true, whyChoose: true, internships: true, dynamic: true, gallery: true, calendar: true, eligibility: true, recruiters: true });
 
-      setInternshipTitle(data.internshipTitle || '');
-      setInternshipDesc(data.internshipDesc || '');
-      setInternshipBgImage(data.internshipBgImage || '');
+      setInternshipTitle(data.internshipsTitle || '');
+      setInternshipDesc(data.internshipsDesc || '');
+      setInternshipBgImage(data.internshipsBgImage || '');
 
       setEligibility(data.eligibility || []);
 
-      setInternshipBadge(data.internshipBadge || 'EXPERIENTIAL LEARNING');
-      setInternshipBtnText(data.internshipBtnText || 'Apply Now');
-      setInternshipBtnLink(data.internshipBtnLink || '/#contact');
-      setInternshipImages(data.internshipImages && data.internshipImages.length > 0 ? data.internshipImages : [
+      setInternshipBadge(data.internshipsBadge || 'EXPERIENTIAL LEARNING');
+      setInternshipBtnText(data.internshipsBtnText || 'Apply Now');
+      setInternshipBtnLink(data.internshipsBtnLink || '/#contact');
+      setInternshipImages(data.internshipsImages && data.internshipsImages.length > 0 ? data.internshipsImages : [
         '/assets/Images/mba/internship_2.png',
         '/assets/Images/mba/internship_27.png',
         '/assets/Images/mba/internship_28.png'
@@ -355,7 +358,7 @@ const ManageMbaPage = ({ isBba = false }) => {
         ]
       });
 
-      setDynamicLearning(data.dynamicLearning || {
+      setDynamicLearning(data.dynamic || {
         badgeText: 'ABOUT THE IV',
         title: 'Experience Dynamic Learning',
         desc1: 'Beyond the classroom, KSBM offers an electrifying campus ecosystem packed with management clubs, national-level conclaves, cultural extravaganzas, and executive workshops.',
@@ -383,17 +386,17 @@ const ManageMbaPage = ({ isBba = false }) => {
       });
 
       setAcademicCalendarBanner({
-        ...(data.academicCalendarBanner || {}),
-        badgeText: data.academicCalendarBanner?.badgeText || 'ACADEMIC SCHEDULE 2026-27',
-        title: data.academicCalendarBanner?.title || 'Download the Official Academic Calendar',
-        description: data.academicCalendarBanner?.description || 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
-        viewBtnText: data.academicCalendarBanner?.viewBtnText || 'View Calendar',
-        viewBtnUrl: data.academicCalendarBanner?.viewBtnUrl || '/assets/Images/mba/calendar_64.png',
-        downloadBtnText: data.academicCalendarBanner?.downloadBtnText || 'Download Calendar',
-        downloadBtnUrl: data.academicCalendarBanner?.downloadBtnUrl || '/assets/Images/mba/calendar_64.png',
-        image: data.academicCalendarBanner?.image || '/assets/Images/mba/calendar_64.png',
-        events: (data.academicCalendarBanner?.events && data.academicCalendarBanner.events.length > 0)
-          ? data.academicCalendarBanner.events
+        ...(data.calendar || {}),
+        badgeText: data.calendar?.badgeText || 'ACADEMIC SCHEDULE 2026-27',
+        title: data.calendar?.title || 'Download the Official Academic Calendar',
+        description: data.calendar?.description || 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
+        viewBtnText: data.calendar?.viewBtnText || 'View Calendar',
+        viewBtnUrl: data.calendar?.viewBtnUrl || '/assets/Images/mba/calendar_64.png',
+        downloadBtnText: data.calendar?.downloadBtnText || 'Download Calendar',
+        downloadBtnUrl: data.calendar?.downloadBtnUrl || '/assets/Images/mba/calendar_64.png',
+        image: data.calendar?.image || '/assets/Images/mba/calendar_64.png',
+        events: (data.calendar?.events && data.calendar.events.length > 0)
+          ? data.calendar.events
           : defaultCalendarEvents
       });
 
@@ -772,7 +775,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       ],
       (data) => {
         setAcademicCalendarBanner({
-          ...academicCalendarBanner,
+          ...calendar,
           events: [
             ...(academicCalendarBanner.events || []),
             {
@@ -791,7 +794,7 @@ const ManageMbaPage = ({ isBba = false }) => {
   const updateCalendarEvent = (idx, field, val) => {
     const updated = [...(academicCalendarBanner.events || [])];
     updated[idx] = { ...updated[idx], [field]: val };
-    setAcademicCalendarBanner({ ...academicCalendarBanner, events: updated });
+    setAcademicCalendarBanner({ ...calendar, events: updated });
   };
   const handleCalendarDragStart = (e, index) => {
     setDraggedCalendarIndex(index);
@@ -809,21 +812,21 @@ const ManageMbaPage = ({ isBba = false }) => {
     const draggedItem = items[draggedCalendarIndex];
     items.splice(draggedCalendarIndex, 1);
     items.splice(targetIndex, 0, draggedItem);
-    setAcademicCalendarBanner({ ...academicCalendarBanner, events: items });
+    setAcademicCalendarBanner({ ...calendar, events: items });
     setDraggedCalendarIndex(null);
   };
   const handleCalendarDragEnd = (e) => {
     if (e.target) e.target.style.opacity = '1';
     setDraggedCalendarIndex(null);
   };
-  const removeCalendarEvent = (idx) => confirmAction({ title: 'Remove Event', message: 'Are you sure you want to remove this calendar event?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updated = (academicCalendarBanner.events || []).filter((_, i) => i !== idx); setAcademicCalendarBanner({ ...academicCalendarBanner, events: updated }); } });
+  const removeCalendarEvent = (idx) => confirmAction({ title: 'Remove Event', message: 'Are you sure you want to remove this calendar event?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updated = (academicCalendarBanner.events || []).filter((_, i) => i !== idx); setAcademicCalendarBanner({ ...calendar, events: updated }); } });
   const moveCalendarEvent = (idx, direction) => {
     const current = [...(academicCalendarBanner.events || [])];
     const target = idx + direction;
     if (target < 0 || target >= current.length) return;
     const [item] = current.splice(idx, 1);
     current.splice(target, 0, item);
-    setAcademicCalendarBanner({ ...academicCalendarBanner, events: current });
+    setAcademicCalendarBanner({ ...calendar, events: current });
   };
 
   // DynamicLearning helpers
@@ -837,16 +840,16 @@ const ManageMbaPage = ({ isBba = false }) => {
       ],
       (data) => {
         const updatedFeatures = [...(dynamicLearning.features || []), { title: data.title, desc: data.desc, icon: data.icon || 'Award' }];
-        setDynamicLearning({ ...dynamicLearning, features: updatedFeatures });
+        setDynamicLearning({ ...dynamic, features: updatedFeatures });
       }
     );
   };
   const updateDynamicFeature = (idx, field, val) => {
     const updatedFeatures = [...(dynamicLearning.features || [])];
     updatedFeatures[idx] = { ...updatedFeatures[idx], [field]: val };
-    setDynamicLearning({ ...dynamicLearning, features: updatedFeatures });
+    setDynamicLearning({ ...dynamic, features: updatedFeatures });
   };
-  const removeDynamicFeature = (idx) => confirmAction({ title: 'Remove Feature', message: 'Are you sure you want to remove this feature card?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updatedFeatures = (dynamicLearning.features || []).filter((_, i) => i !== idx); setDynamicLearning({ ...dynamicLearning, features: updatedFeatures }); } });
+  const removeDynamicFeature = (idx) => confirmAction({ title: 'Remove Feature', message: 'Are you sure you want to remove this feature card?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updatedFeatures = (dynamicLearning.features || []).filter((_, i) => i !== idx); setDynamicLearning({ ...dynamic, features: updatedFeatures }); } });
 
   // DynamicLearning drag-and-drop handlers
   const handleDynamicDragStart = (e, index) => {
@@ -866,7 +869,7 @@ const ManageMbaPage = ({ isBba = false }) => {
     const draggedItem = features[draggedDynamicIndex];
     features.splice(draggedDynamicIndex, 1);
     features.splice(targetIndex, 0, draggedItem);
-    setDynamicLearning({ ...dynamicLearning, features });
+    setDynamicLearning({ ...dynamic, features });
     setDraggedDynamicIndex(null);
   };
   const handleDynamicDragEnd = (e) => {
@@ -876,7 +879,7 @@ const ManageMbaPage = ({ isBba = false }) => {
   const updateDynamicImage = (idx, url) => {
     const updatedImages = [...(dynamicLearning.images || ['', ''])];
     updatedImages[idx] = url;
-    setDynamicLearning({ ...dynamicLearning, images: updatedImages });
+    setDynamicLearning({ ...dynamic, images: updatedImages });
   };
 
   // MomentsGallery helpers
@@ -1066,6 +1069,20 @@ const ManageMbaPage = ({ isBba = false }) => {
         <>
           {/* Tab 1: Hero Section */}
           {activeTab === 'hero' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-gray-800">Show Section</h3>
+                  <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" className="sr-only peer" checked={showSections.hero ?? true} onChange={(e) => setShowSections({...showSections, hero: e.target.checked})} />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+          )}
+          {activeTab === 'hero' && (
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
               <h2 className="text-lg font-bold text-primary border-b pb-2">Hero Banner Settings</h2>
 
@@ -1163,6 +1180,20 @@ const ManageMbaPage = ({ isBba = false }) => {
           )}
 
           {/* Tab 2: Program Overview */}
+          {activeTab === 'overview' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-gray-800">Show Section</h3>
+                  <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" className="sr-only peer" checked={showSections.overview ?? true} onChange={(e) => setShowSections({...showSections, overview: e.target.checked})} />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+          )}
           {activeTab === 'overview' && (
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
               <h2 className="text-lg font-bold text-primary border-b pb-2">Program Overview Settings</h2>
@@ -1288,6 +1319,20 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           {/* Tab 3: Dimensions */}
           {activeTab === 'dimensions' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-gray-800">Show Section</h3>
+                  <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" className="sr-only peer" checked={showSections.dimensions ?? true} onChange={(e) => setShowSections({...showSections, dimensions: e.target.checked})} />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+          )}
+          {activeTab === 'dimensions' && (
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
               <div className="flex items-center justify-between border-b pb-4">
                 <h2 className="text-lg font-bold text-primary">4 Core Curriculum Dimensions Cards</h2>
@@ -1363,6 +1408,20 @@ const ManageMbaPage = ({ isBba = false }) => {
           )}
 
           {/* Tab: Key Learning Dimensions (Why Choose Pills) */}
+          {activeTab === 'whyChoose' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-gray-800">Show Section</h3>
+                  <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" className="sr-only peer" checked={showSections.whyChoose ?? true} onChange={(e) => setShowSections({...showSections, whyChoose: e.target.checked})} />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+          )}
           {activeTab === 'whyChoose' && (
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
               <div className="flex items-center justify-between border-b pb-4">
@@ -1464,11 +1523,11 @@ const ManageMbaPage = ({ isBba = false }) => {
                       </button>
                     </div>
 
-                    <div className="flex items-start gap-3 pr-20">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 cursor-grab text-gray-400 hover:text-primary active:cursor-grabbing" title="Drag to reorder">
+                    <div className="flex-1 w-full flex items-start gap-3 pr-20">
+                      <div className="flex-shrink-0 cursor-grab text-gray-400 active:cursor-grabbing p-1 hover:bg-gray-100 rounded transition-colors" title="Drag to reorder">
                         <GripVertical className="w-5 h-5" />
                       </div>
-                      <div className="flex flex-col gap-1 pl-6">
+                      <div className="flex flex-col gap-1">
                         <h4 className="text-sm font-bold text-gray-800">{item.title || 'Untitled Dimension'}</h4>
                         <p className="text-sm text-gray-600 line-clamp-2">{item.description || 'No description provided.'}</p>
                         <div className="text-[10px] font-mono bg-white px-2 py-1 rounded border border-gray-200 inline-block mt-2 text-gray-400 self-start">
@@ -1483,6 +1542,20 @@ const ManageMbaPage = ({ isBba = false }) => {
           )}
 
           {/* Tab 4: Internship Banner */}
+          {activeTab === 'internship' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-gray-800">Show Section</h3>
+                  <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" className="sr-only peer" checked={showSections.internships ?? true} onChange={(e) => setShowSections({...showSections, internships: e.target.checked})} />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+          )}
           {activeTab === 'internship' && (
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
               <h2 className="text-lg font-bold text-primary border-b pb-2">Summer Internship Banner Settings</h2>
@@ -1567,6 +1640,20 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           {/* Tab: Dynamic Learning Section */}
           {activeTab === 'dynamicLearning' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-gray-800">Show Section</h3>
+                  <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" className="sr-only peer" checked={showSections.dynamic ?? true} onChange={(e) => setShowSections({...showSections, dynamic: e.target.checked})} />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+          )}
+          {activeTab === 'dynamicLearning' && (
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
               <div className="flex items-center justify-between border-b pb-4">
                 <h2 className="text-lg font-bold text-primary">Dynamic Learning Section Settings</h2>
@@ -1585,7 +1672,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <input maxLength={50}
                     type="text"
                     value={dynamicLearning.badgeText || ''}
-                    onChange={(e) => setDynamicLearning({ ...dynamicLearning, badgeText: e.target.value })}
+                    onChange={(e) => setDynamicLearning({ ...dynamic, badgeText: e.target.value })}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                 </div>
@@ -1594,7 +1681,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <input maxLength={60}
                     type="text"
                     value={dynamicLearning.title || ''}
-                    onChange={(e) => setDynamicLearning({ ...dynamicLearning, title: e.target.value })}
+                    onChange={(e) => setDynamicLearning({ ...dynamic, title: e.target.value })}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                 </div>
@@ -1606,7 +1693,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <textarea maxLength={400}
                     rows={3}
                     value={dynamicLearning.desc1 || ''}
-                    onChange={(e) => setDynamicLearning({ ...dynamicLearning, desc1: e.target.value })}
+                    onChange={(e) => setDynamicLearning({ ...dynamic, desc1: e.target.value })}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                 </div>
@@ -1615,7 +1702,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <textarea maxLength={400}
                     rows={3}
                     value={dynamicLearning.desc2 || ''}
-                    onChange={(e) => setDynamicLearning({ ...dynamicLearning, desc2: e.target.value })}
+                    onChange={(e) => setDynamicLearning({ ...dynamic, desc2: e.target.value })}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                 </div>
@@ -1644,10 +1731,10 @@ const ManageMbaPage = ({ isBba = false }) => {
                     onDragOver={handleDynamicDragOver}
                     onDrop={(e) => handleDynamicDrop(e, idx)}
                     onDragEnd={handleDynamicDragEnd}
-                    className={`p-5 pl-16 rounded-2xl bg-gray-50/80 border ${draggedDynamicIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative space-y-4 shadow-sm transition-all duration-200`}
+                    className={`p-5 rounded-2xl bg-gray-50/80 border ${draggedDynamicIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative shadow-sm transition-all duration-200 flex flex-col md:flex-row items-center gap-6`}
                   >
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 cursor-grab text-gray-400 hover:text-primary active:cursor-grabbing" title="Drag to reorder">
-                      <GripVertical className="w-5 h-5" />
+                    <div className="flex-shrink-0 flex items-center justify-center cursor-grab text-gray-400 active:cursor-grabbing p-2 hover:bg-gray-100 rounded transition-colors self-start md:self-center" title="Drag to reorder">
+                      <GripVertical className="w-6 h-6" />
                     </div>
                     <button
                       type="button"
@@ -1757,10 +1844,10 @@ const ManageMbaPage = ({ isBba = false }) => {
                     onDragOver={(e) => handleGalleryDragOver(e, idx)}
                     onDrop={(e) => handleGalleryDrop(e, idx)}
                     onDragEnd={handleGalleryDragEnd}
-                    className={`p-6 rounded-2xl bg-gray-50/80 border ${draggedGalleryIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative space-y-4 shadow-sm transition-all duration-200`}
+                    className={`p-6 rounded-2xl bg-gray-50/80 border ${draggedGalleryIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative shadow-sm transition-all duration-200 group flex flex-col md:flex-row gap-6 items-center`}
                   >
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 cursor-grab text-gray-400 hover:text-primary active:cursor-grabbing">
-                      <GripVertical className="w-5 h-5" />
+                    <div className="flex-shrink-0 cursor-grab text-gray-400 active:cursor-grabbing p-2 hover:bg-gray-100 rounded transition-colors" title="Drag to reorder">
+                      <GripVertical className="w-6 h-6" />
                     </div>
                     <div className="absolute top-4 right-4 flex gap-2">
                       <button
@@ -1807,7 +1894,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                       </button>
                     </div>
 
-                    <div className="flex gap-4 items-center pt-2 ml-6">
+                    <div className="flex-1 w-full flex gap-4 items-center pr-20">
                       {item.image ? (
                         <img src={item.image} alt={item.title} className="w-24 h-24 object-cover rounded-xl shadow-sm border border-gray-200" />
                       ) : (
@@ -1831,6 +1918,20 @@ const ManageMbaPage = ({ isBba = false }) => {
 
           {/* Tab: Academic Calendar Banner */}
           {activeTab === 'academicCalendarBanner' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-gray-800">Show Section</h3>
+                  <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" className="sr-only peer" checked={showSections.calendar ?? true} onChange={(e) => setShowSections({...showSections, calendar: e.target.checked})} />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+          )}
+          {activeTab === 'academicCalendarBanner' && (
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
               <div className="border-b pb-4">
                 <h2 className="text-lg font-bold text-primary">Academic Calendar Banner Settings</h2>
@@ -1843,7 +1944,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <input maxLength={50}
                     type="text"
                     value={academicCalendarBanner.badgeText || ''}
-                    onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, badgeText: e.target.value })}
+                    onChange={(e) => setAcademicCalendarBanner({ ...calendar, badgeText: e.target.value })}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                 </div>
@@ -1852,7 +1953,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <input maxLength={60}
                     type="text"
                     value={academicCalendarBanner.title || ''}
-                    onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, title: e.target.value })}
+                    onChange={(e) => setAcademicCalendarBanner({ ...calendar, title: e.target.value })}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                 </div>
@@ -1863,7 +1964,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 <textarea maxLength={300}
                   rows={3}
                   value={academicCalendarBanner.description || ''}
-                  onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, description: e.target.value })}
+                  onChange={(e) => setAcademicCalendarBanner({ ...calendar, description: e.target.value })}
                   className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
               </div>
@@ -1874,7 +1975,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <input maxLength={30}
                     type="text"
                     value={academicCalendarBanner.viewBtnText || ''}
-                    onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, viewBtnText: e.target.value })}
+                    onChange={(e) => setAcademicCalendarBanner({ ...calendar, viewBtnText: e.target.value })}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                 </div>
@@ -1883,7 +1984,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <input maxLength={30}
                     type="text"
                     value={academicCalendarBanner.viewBtnUrl || ''}
-                    onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, viewBtnUrl: e.target.value })}
+                    onChange={(e) => setAcademicCalendarBanner({ ...calendar, viewBtnUrl: e.target.value })}
                     placeholder="/assets/Images/image 64.png or https://..."
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
@@ -1896,7 +1997,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <input maxLength={30}
                     type="text"
                     value={academicCalendarBanner.downloadBtnText || ''}
-                    onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, downloadBtnText: e.target.value })}
+                    onChange={(e) => setAcademicCalendarBanner({ ...calendar, downloadBtnText: e.target.value })}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                 </div>
@@ -1905,7 +2006,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <input maxLength={30}
                     type="text"
                     value={academicCalendarBanner.downloadBtnUrl || ''}
-                    onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, downloadBtnUrl: e.target.value })}
+                    onChange={(e) => setAcademicCalendarBanner({ ...calendar, downloadBtnUrl: e.target.value })}
                     placeholder="/assets/Images/image 64.png or https://..."
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
@@ -1915,7 +2016,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               <div className="pt-4 border-t border-gray-100">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-2">Right Side Illustration Image</label>
                 <div className="space-y-3 max-w-md">
-                  <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={academicCalendarBanner.image || ''} defaultImage="/assets/Images/mba/calendar_64.png" onUploadSuccess={(url) => setAcademicCalendarBanner({ ...academicCalendarBanner, image: url })} />
+                  <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={academicCalendarBanner.image || ''} defaultImage="/assets/Images/mba/calendar_64.png" onUploadSuccess={(url) => setAcademicCalendarBanner({ ...calendar, image: url })} />
                   <div>
 
                   </div>
@@ -1948,11 +2049,11 @@ const ManageMbaPage = ({ isBba = false }) => {
                       onDragOver={handleCalendarDragOver}
                       onDrop={(e) => handleCalendarDrop(e, idx)}
                       onDragEnd={handleCalendarDragEnd}
-                      className={`p-5 pl-12 rounded-xl bg-gray-50/80 border ${draggedCalendarIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative space-y-4 shadow-sm transition-all duration-200 group`}
+                      className={`p-5 rounded-xl bg-gray-50/80 border ${draggedCalendarIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative shadow-sm transition-all duration-200 group flex items-start gap-4`}
                     >
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 cursor-grab text-gray-400 hover:text-primary active:cursor-grabbing">
-                        <GripVertical className="w-5 h-5" />
-                      </div>
+                      <div className="flex-shrink-0 cursor-grab text-gray-400 active:cursor-grabbing p-2 hover:bg-gray-100 rounded transition-colors" title="Drag to reorder">
+                      <GripVertical className="w-6 h-6" />
+                    </div>
 
                       <div className="absolute top-4 right-4 flex gap-2">
                         <button
@@ -1993,7 +2094,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                               (data) => {
                                 const updatedEvents = [...(academicCalendarBanner.events || [])];
                                 updatedEvents[idx] = { ...updatedEvents[idx], ...data };
-                                setAcademicCalendarBanner({ ...academicCalendarBanner, events: updatedEvents });
+                                setAcademicCalendarBanner({ ...calendar, events: updatedEvents });
                               }
                             );
                           }}
@@ -2012,7 +2113,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                         </button>
                       </div>
 
-                      <div className="flex flex-col gap-1 pr-20">
+                      <div className="flex-grow flex flex-col gap-1 pr-20">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">{ev.semester || 'Trimester 1'}</span>
                           <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 bg-gray-200 px-2 py-0.5 rounded">{ev.category || 'Event'}</span>
@@ -2035,6 +2136,20 @@ const ManageMbaPage = ({ isBba = false }) => {
           )}
 
           {/* Tab 5: Admission & Eligibility */}
+          {activeTab === 'eligibility' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-gray-800">Show Section</h3>
+                  <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" className="sr-only peer" checked={showSections.eligibility ?? true} onChange={(e) => setShowSections({...showSections, eligibility: e.target.checked})} />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+          )}
           {activeTab === 'eligibility' && (
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
               <div className="flex items-center justify-between border-b pb-4">
@@ -2112,6 +2227,20 @@ const ManageMbaPage = ({ isBba = false }) => {
           )}
 
           {/* Tab 10: Top Recruiters & Corporate Partners */}
+          {activeTab === 'topRecruiters' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-gray-800">Show Section</h3>
+                  <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" className="sr-only peer" checked={showSections.recruiters ?? true} onChange={(e) => setShowSections({...showSections, recruiters: e.target.checked})} />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+          )}
           {activeTab === 'topRecruiters' && (
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
               <div className="border-b pb-4">

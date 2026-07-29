@@ -38,16 +38,18 @@ const AlumniEvents = ({ data }) => {
       <div className="px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
 
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <span className="text-xs md:text-sm font-semibold tracking-[0.3em] text-[#2b2b68] uppercase">
-            {heading}
-          </span>
-        </motion.div>
+        {data?.showHeading !== false && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="text-xs md:text-sm font-semibold tracking-[0.3em] text-[#2b2b68] uppercase">
+              {heading}
+            </span>
+          </motion.div>
+        )}
 
         {/* Events Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">

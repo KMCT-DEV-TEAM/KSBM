@@ -18,6 +18,7 @@ const Toast = Swal.mixin({
 
 const ManageAboutCta = () => {
   const [heading, setHeading] = useState('');
+  const [showSection, setShowSection] = useState(true);
   const [subtext, setSubtext] = useState('');
   const [buttonText, setButtonText] = useState('');
   const [buttonLink, setButtonLink] = useState('');
@@ -59,6 +60,7 @@ const ManageAboutCta = () => {
     try {
       const { data } = await api.get('/cms/about-us-cta');
       if (data) {
+        setShowSection(data.showSection ?? true);
         if (data.heading) setHeading(data.heading);
         if (data.subtext) setSubtext(data.subtext);
         if (data.buttonText) setButtonText(data.buttonText);
@@ -179,11 +181,12 @@ const ManageAboutCta = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-            <div className="flex justify-between items-center mb-1.5">
-              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Heading</label>
-              <span className="text-xs text-gray-500">{heading.length}/50</span>
-            </div>
-            <input type="text" maxLength={50} value={heading} onChange={(e) => setHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+            <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Heading</label>
+              
+</div>
+<input type="text" maxLength={50} value={heading} onChange={(e) => setHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+<div className="text-right text-xs text-gray-400 mt-1">{heading.length}/50 characters</div>
           </div>
         </div>
 

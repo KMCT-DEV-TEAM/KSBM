@@ -47,12 +47,12 @@ const PlacementLanding = ({ previewData }) => {
       <main>
         {shouldRender('hero') && <PlacementHero data={data?.hero} />}
         {shouldRender('overview') && <PlacementOverview data={data?.overview} />}
-        {shouldRender('proudAchievers') && <ProudAchievers data={data?.proudAchievers} />}
-        {shouldRender('topRecruiters') && <TopRecruiters data={data?.topRecruiters} />}
-        {shouldRender('excellenceSupport') && <ExcellenceSupport data={data?.excellenceSupport} />}
-        {shouldRender('facultyInCharge') && <FacultyInCharge data={data?.facultyInCharge} />}
-        {shouldRender('placementCommittee') && <PlacementCommittee data={data?.placementCommittee} />}
-        {shouldRender('activities') && <PlacementActivities data={data?.activities} />}
+        {shouldRender('proudAchievers') && data?.proudAchievers?.showSection !== false && <ProudAchievers data={data?.proudAchievers} />}
+        {shouldRender('topRecruiters') && data?.topRecruiters?.showSection !== false && <TopRecruiters data={data?.topRecruiters} />}
+        {shouldRender('excellenceSupport') && data?.excellenceSupport?.showSection !== false && <ExcellenceSupport data={data?.excellenceSupport} />}
+        {shouldRender('facultyInCharge') && data?.facultyInCharge?.showSection !== false && <FacultyInCharge data={data?.facultyInCharge} />}
+        {shouldRender('placementCommittee') && data?.placementCommittee?.showSection !== false && <PlacementCommittee data={data?.placementCommittee} />}
+        {shouldRender('activities') && data?.activities?.showSection !== false && <PlacementActivities data={data?.activities} />}
       </main>
     </div>
   );

@@ -90,7 +90,13 @@ export default function CMSPreviewPage() {
 
   return (
     <div className="w-full min-h-screen bg-[#FCFCFD] overflow-x-hidden">
-      <Component previewData={previewState.data} />
+      <Component 
+        previewData={previewState.data}
+        data={previewState.data}
+        program={previewState.data}
+        dimensions={previewState.data?.dimensions || []}
+        eligibility={previewState.data?.eligibility || []}
+      />
     </div>
   );
 }

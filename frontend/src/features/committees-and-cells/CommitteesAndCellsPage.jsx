@@ -49,18 +49,22 @@ const CommitteesAndCellsPage = () => {
       <div className="relative">
         <section className="relative w-full min-h-[70vh] sm:min-h-[78vh] md:min-h-[82vh] lg:min-h-[86vh] flex items-end bg-[#1B2155] overflow-hidden pt-28 sm:pt-32 pb-24 sm:pb-32 lg:pb-36">
           {/* Background Image & Deep Navy Overlay */}
-          <div className="absolute inset-0 z-0">
-            {data?.heroBgImage ? (
-              <img
-                src={data.heroBgImage}
-                alt="Committees Backdrop"
-                className="w-full h-full object-cover opacity-35 object-center scale-105 transform duration-1000"
-              />
-            ) : (
-              <div className="w-full h-full bg-[#1B2155]"></div>
+          <div className="absolute inset-0 z-0" style={{ backgroundColor: data?.showHeroBgImage === false ? '#1B2155' : undefined }}>
+            {data?.showHeroBgImage !== false && (
+              <>
+                {data?.heroBgImage ? (
+                  <img
+                    src={data.heroBgImage}
+                    alt="Committees Backdrop"
+                    className="w-full h-full object-cover opacity-35 object-center scale-105 transform duration-1000"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#1B2155]"></div>
+                )}
+                <div className="absolute inset-0 bg-primary/50"></div>
+                <div className="absolute inset-0 bg-primary/40"></div>
+              </>
             )}
-            <div className="absolute inset-0 bg-primary/50"></div>
-            <div className="absolute inset-0 bg-primary/40"></div>
           </div>
 
           {/* Decorative Blur Spheres */}
@@ -70,12 +74,16 @@ const CommitteesAndCellsPage = () => {
           {/* Full Size Content Container matching Footer width */}
           <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mt-auto">
             <div className="max-w-3xl">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4 drop-shadow-md leading-tight">
-                {data?.heroHeading || 'Committees & Cells'}
-              </h1>
-              <p className="text-white/90 text-xs md:text-sm lg:text-base leading-relaxed drop-shadow-sm max-w-2xl whitespace-pre-wrap">
-                {data?.heroSubtext || 'Explore the various statutory committees...'}
-              </p>
+              {data?.showHeroHeading !== false && (
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4 drop-shadow-md leading-tight">
+                  {data?.heroHeading || 'Committees & Cells'}
+                </h1>
+              )}
+              {data?.showHeroSubtext !== false && (
+                <p className="text-white/90 text-xs md:text-sm lg:text-base leading-relaxed drop-shadow-sm max-w-2xl whitespace-pre-wrap">
+                  {data?.heroSubtext || 'Explore the various statutory committees...'}
+                </p>
+              )}
             </div>
           </div>
         </section>
@@ -96,35 +104,37 @@ const CommitteesAndCellsPage = () => {
       </div>
 
       {/* List Section matching Footer width */}
-      <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 space-y-6">
-        {filteredData.length > 0 ? (
-          filteredData.map((item, idx) => (
-            <div key={item._id || idx} className="bg-white rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-              <div>
-                <h3 className="text-[#3b4c8a] font-semibold text-lg">{item.title}</h3>
-                <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-widest mt-5 mb-1">COORDINATOR</p>
-                <p className="text-gray-900 font-semibold text-sm md:text-base">{item.coordinator}</p>
-                <p className="text-gray-500 text-xs md:text-sm mt-0.5">{item.designation}</p>
+      {data?.showCommitteesSection !== false && (
+        <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 space-y-6">
+          {filteredData.length > 0 ? (
+            filteredData.map((item, idx) => (
+              <div key={item._id || idx} className="bg-white rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100">
+                <div>
+                  <h3 className="text-[#3b4c8a] font-semibold text-lg">{item.title}</h3>
+                  <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-widest mt-5 mb-1">COORDINATOR</p>
+                  <p className="text-gray-900 font-semibold text-sm md:text-base">{item.coordinator}</p>
+                  <p className="text-gray-500 text-xs md:text-sm mt-0.5">{item.designation}</p>
+                </div>
+                {item.pdfLink && item.pdfLink !== '#' && (
+                  <a
+                    href={item.pdfLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1b2559] hover:underline justify-end group cursor-pointer"
+                  >
+                    <FileText className="w-4 h-4 text-[#1b2559] group-hover:scale-110 transition-transform" />
+                    <span>View PDF</span>
+                  </a>
+                )}
               </div>
-              {item.pdfLink && item.pdfLink !== '#' && (
-                <a
-                  href={item.pdfLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1b2559] hover:underline justify-end group cursor-pointer"
-                >
-                  <FileText className="w-4 h-4 text-[#1b2559] group-hover:scale-110 transition-transform" />
-                  <span>View PDF</span>
-                </a>
-              )}
+            ))
+          ) : (
+            <div className="text-center py-20">
+              <p className="text-gray-500">No committees found matching your search.</p>
             </div>
-          ))
-        ) : (
-          <div className="text-center py-20">
-            <p className="text-gray-500">No committees found matching your search.</p>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
     </div>
   );

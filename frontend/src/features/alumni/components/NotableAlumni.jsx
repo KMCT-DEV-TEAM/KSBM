@@ -51,12 +51,16 @@ const NotableAlumni = ({ data }) => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="text-xs font-semibold tracking-[0.25em] text-white/70 uppercase block mb-3">
-            {subtitle}
-          </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-white">
-            {heading}
-          </h2>
+          {data?.showSubtitle !== false && (
+            <span className="text-xs font-semibold tracking-[0.25em] text-white/70 uppercase block mb-3">
+              {subtitle}
+            </span>
+          )}
+          {data?.showHeading !== false && (
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-white">
+              {heading}
+            </h2>
+          )}
         </motion.div>
 
         {/* Alumni Profiles Grid */}

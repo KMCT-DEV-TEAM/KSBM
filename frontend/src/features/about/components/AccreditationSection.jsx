@@ -35,8 +35,10 @@ const AccreditationSection = ({ previewData }) => {
   }, [previewData]);
 
   if (isLoading) {
-    return (
-      <section className="py-20 w-full bg-[#f4fafe] flex justify-center items-center">
+    if (data.showSection === false) return null;
+
+  return (
+    <section className="py-20 w-full bg-[#f4fafe] flex justify-center items-center">
         <Loader theme="light" />
       </section>
     );
