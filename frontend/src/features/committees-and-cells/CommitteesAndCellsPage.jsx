@@ -1,19 +1,12 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Search, Info } from 'lucide-react';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import { Search, FileText } from 'lucide-react';
+
 import api from '../../api/axios';
-import Loader from '../../components/Loader';
 
 const CommitteesAndCellsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [data, setData] = useState({
-    heroHeading: 'Committees & Cells',
-    heroSubtext: 'Explore the various statutory committees and institutional cells established to ensure transparency, student welfare, academic excellence, and regulatory compliance. View committee documents and coordinator details in one place.',
-    heroBgImage: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop',
-    committees: []
-  });
+  const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -47,22 +40,17 @@ const CommitteesAndCellsPage = () => {
     item.coordinator.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  if (!data) return null;
+
   return (
     <div className="min-h-screen bg-[#fafafa]">
-      <Header />
-
-      {isLoading && (
-        <div className="fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center">
-          <Loader fullScreen={false} />
-        </div>
-      )}
 
       {/* Hero Section (Matching Blogs Page) */}
       <div className="relative">
         <section className="relative w-full min-h-[70vh] sm:min-h-[78vh] md:min-h-[82vh] lg:min-h-[86vh] flex items-end bg-[#1B2155] overflow-hidden pt-28 sm:pt-32 pb-24 sm:pb-32 lg:pb-36">
           {/* Background Image & Deep Navy Overlay */}
           <div className="absolute inset-0 z-0">
-            {data.heroBgImage ? (
+            {data?.heroBgImage ? (
               <img
                 src={data.heroBgImage}
                 alt="Committees Backdrop"
@@ -83,10 +71,10 @@ const CommitteesAndCellsPage = () => {
           <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mt-auto">
             <div className="max-w-3xl">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4 drop-shadow-md leading-tight">
-                {data.heroHeading}
+                {data?.heroHeading || 'Committees & Cells'}
               </h1>
               <p className="text-white/90 text-xs md:text-sm lg:text-base leading-relaxed drop-shadow-sm max-w-2xl whitespace-pre-wrap">
-                {data.heroSubtext}
+                {data?.heroSubtext || 'Explore the various statutory committees...'}
               </p>
             </div>
           </div>
@@ -118,15 +106,15 @@ const CommitteesAndCellsPage = () => {
                 <p className="text-gray-900 font-semibold text-sm md:text-base">{item.coordinator}</p>
                 <p className="text-gray-500 text-xs md:text-sm mt-0.5">{item.designation}</p>
               </div>
-              {item.pdfLink && (
+              {item.pdfLink && item.pdfLink !== '#' && (
                 <a
                   href={item.pdfLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 flex items-center justify-center gap-2 px-5 py-2.5 border border-gray-200 rounded-lg text-gray-500 text-sm font-semibold hover:border-[#3b4c8a] hover:text-[#3b4c8a] hover:bg-blue-50/30 transition-colors w-full md:w-auto"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1b2559] hover:underline justify-end group cursor-pointer"
                 >
-                  <Info className="w-4 h-4" />
-                  View PDF
+                  <FileText className="w-4 h-4 text-[#1b2559] group-hover:scale-110 transition-transform" />
+                  <span>View PDF</span>
                 </a>
               )}
             </div>
@@ -138,7 +126,6 @@ const CommitteesAndCellsPage = () => {
         )}
       </div>
 
-      <Footer />
     </div>
   );
 };

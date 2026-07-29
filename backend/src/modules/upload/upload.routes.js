@@ -129,6 +129,19 @@ router.post('/committees', protect, uploadAssets.single('image'), async (req, re
   });
 });
 
+router.post('/examinations', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/examinations/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/examinations',
+    url: fileUrl,
+  });
+});
+
 router.post('/', protect, upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No image provided' });
@@ -196,7 +209,8 @@ router.delete('/', protect, async (req, res) => {
     'default-excellence-bg.png', 'default-committee-vector.png', 'default-avatar.png',
     'default-partner-1.jpg', 'default-partner-2.jpg', 'default-partner-3.jpg',
     'default-faculty-hero.jpg', 'default-faculty-leader.jpg', 'default-committees-hero.png',
-    'image 2.png', 'image 31.png'
+    'image 2.png', 'image 31.png',
+    'exam_hero_bg.png', 'exam_main.png', 'exam_schedule.png', 'image 64.png'
   ];
 
   const filename = fileUrl.split('/').pop();
@@ -221,6 +235,8 @@ router.delete('/', protect, async (req, res) => {
   } else if (fileUrl.includes('/assets/Images/placements/')) {
      filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/placements', filename);
   } else if (fileUrl.includes('/assets/Images/committees/')) {
+    filePath = path.join(__dirname, '../../../../frontend/public', fileUrl);
+  } else if (fileUrl.includes('/assets/Images/examinations/')) {
     filePath = path.join(__dirname, '../../../../frontend/public', fileUrl);
   } else if (fileUrl.includes('/assets/home/')) {
      filePath = path.join(__dirname, '../../../../assets/home', filename);

@@ -59,7 +59,7 @@ const ExamCalendarBanner = ({ data }) => {
               <img
                 src={image}
                 alt={title}
-                className="w-full h-auto object-contain max-h-[260px] drop-shadow-md transform hover:scale-103 transition-transform duration-500"
+                className="w-full h-auto object-contain max-h-[260px] transform hover:scale-103 transition-transform duration-500"
               />
             </div>
           </div>

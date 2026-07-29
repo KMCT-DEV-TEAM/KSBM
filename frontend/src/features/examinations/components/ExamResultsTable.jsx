@@ -140,16 +140,18 @@ const ExamResultsTable = ({ data }) => {
                   </div>
 
                   <div className="col-span-2 text-right">
-                    <a
-                      href={item.pdfUrl || '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => handleViewPdf(e, item.pdfUrl, item.courseName)}
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1b2559] hover:underline justify-end group cursor-pointer"
-                    >
-                      <FileText className="w-3.5 h-3.5 text-[#1b2559] group-hover:scale-110 transition-transform" />
-                      <span>View PDF</span>
-                    </a>
+                    {item.pdfUrl && item.pdfUrl !== '#' && (
+                      <a
+                        href={item.pdfUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => handleViewPdf(e, item.pdfUrl, item.courseName)}
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1b2559] hover:underline justify-end group cursor-pointer"
+                      >
+                        <FileText className="w-3.5 h-3.5 text-[#1b2559] group-hover:scale-110 transition-transform" />
+                        <span>View PDF</span>
+                      </a>
+                    )}
                   </div>
                 </div>
               ))}
