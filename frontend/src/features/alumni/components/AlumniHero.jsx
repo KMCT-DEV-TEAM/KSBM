@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 const AlumniHero = ({ data }) => {
   return (
-    <section className="relative h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32">
+    <section className="relative h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32 bg-[#0b1238]">
       {/* Background Image */}
       {data?.showBackgroundImage !== false && (
         <img

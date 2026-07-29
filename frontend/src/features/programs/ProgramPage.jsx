@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import api from '../../api/axios';
+import PageTransition from '../../components/PageTransition';
 import ProgramHero from './components/ProgramHero';
 import ProgramOverview from './components/ProgramOverview';
 import LearningDimensionsGrid from './components/LearningDimensionsGrid';
@@ -318,6 +319,7 @@ const programConfigs = {
 const ProgramPage = ({ programType = 'mba' }) => {
   const [config, setConfig] = useState(programConfigs[programType?.toLowerCase()] || programConfigs.mba);
   const [activePreviewTab, setActivePreviewTab] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -325,7 +327,7 @@ const ProgramPage = ({ programType = 'mba' }) => {
     setConfig(programConfigs[programType?.toLowerCase()] || programConfigs.mba);
     const fetchCmsData = async () => {
       try {
-        const { data } = await api.get(endpoint);
+        const { data } = await api.get(endpoint, { hideLoader: true });
         if (data && (data.title || data.description || data.overviewText)) {
           setConfig((prev) => ({
             ...prev,
@@ -335,6 +337,8 @@ const ProgramPage = ({ programType = 'mba' }) => {
         }
       } catch (err) {
         console.error('Error fetching program CMS settings:', err);
+      } finally {
+        setDataLoaded(true);
       }
     };
     fetchCmsData();
@@ -354,7 +358,9 @@ const ProgramPage = ({ programType = 'mba' }) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <>
+      <PageTransition dataLoaded={dataLoaded} />
+      <div className="min-h-screen bg-[#fafafa]">
       {(!activePreviewTab || activePreviewTab === 'hero') && config?.showSections?.hero !== false && <ProgramHero program={config} />}
       {(!activePreviewTab || activePreviewTab === 'overview') && config?.showSections?.overview !== false && <ProgramOverview program={config} />}
       {(!activePreviewTab || activePreviewTab === 'dimensions') && config?.showSections?.dimensions !== false && <LearningDimensionsGrid dimensions={config.dimensions} />}
@@ -365,7 +371,8 @@ const ProgramPage = ({ programType = 'mba' }) => {
       {(!activePreviewTab || activePreviewTab === 'academicCalendarBanner') && config?.showSections?.calendar !== false && <AcademicCalendarBanner program={config} />}
       {(!activePreviewTab || activePreviewTab === 'eligibility') && config?.showSections?.eligibility !== false && <AdmissionEligibility eligibility={config.eligibility} />}
       {(!activePreviewTab || activePreviewTab === 'topRecruiters') && config?.showSections?.recruiters !== false && <TopRecruitersGrid />}
-    </div>
+      </div>
+    </>
   );
 };
 

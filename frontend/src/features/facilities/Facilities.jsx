@@ -1,13 +1,14 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import api from '../../api/axios';
+import PageTransition from '../../components/PageTransition';
 import FacilitiesHero from './components/FacilitiesHero';
 import InstitutionalResourcesSection from './components/InstitutionalResourcesSection';
 import ClubsSection from './components/ClubsSection';
 
 const Facilities = () => {
   const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const watermarkImg = '/assets/Images/watermark_logo.png';
 
@@ -19,7 +20,7 @@ const Facilities = () => {
       } catch (error) {
         console.error('Failed to fetch facilities data:', error);
       } finally {
-        setIsLoading(false);
+        setDataLoaded(true);
       }
     };
 
@@ -27,29 +28,20 @@ const Facilities = () => {
   }, []);
 
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  if (!data) return null;
-
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50/50">
+    <>
+      <PageTransition dataLoaded={dataLoaded} />
+      <div className="min-h-screen flex flex-col bg-gray-50/50">
+        <main className="flex-1">
+          <FacilitiesHero data={data?.hero} />
 
-      <main className="flex-1">
-        <FacilitiesHero data={data.hero} />
+          {/* Pattern Separator */}
 
-        {/* Pattern Separator */}
-
-        <InstitutionalResourcesSection
-          headerData={data.institutionalResources}
-          libraryData={data.library}
-          otherResourcesData={data.otherResources}
-        />
+          <InstitutionalResourcesSection
+            headerData={data?.institutionalResources}
+            libraryData={data?.library}
+            otherResourcesData={data?.otherResources}
+          />
 
         {/* Pattern Separator */}
         <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-10">
@@ -60,9 +52,10 @@ const Facilities = () => {
           </div>
         </div>
 
-        <ClubsSection data={data.clubs} />
+        <ClubsSection data={data?.clubs} />
       </main>
     </div>
+    </>
   );
 };
 

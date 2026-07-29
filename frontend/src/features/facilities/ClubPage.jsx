@@ -16,7 +16,7 @@ const ClubPage = () => {
   useEffect(() => {
     const fetchClubData = async () => {
       try {
-        const response = await api.get('/cms/facilities-page');
+        const response = await api.get('/cms/facilities-page', { hideLoader: true });
         const data = response.data;
         if (data && data.clubs && data.clubs.items) {
           const club = data.clubs.items.find((item) => item._id === clubId);
@@ -63,7 +63,7 @@ const ClubPage = () => {
 
       <main className="flex-1">
         {/* 1. Hero Section */}
-        <section className="relative h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32">
+        <section className="relative h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32 bg-[#0b1238]">
           <img
             src={heroBg}
             alt={heroTitle}
