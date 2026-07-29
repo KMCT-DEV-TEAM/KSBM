@@ -259,8 +259,8 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange, de
                 <div className="aspect-[16/9] w-full bg-gray-100 relative">
                   <img src={img.url} alt={`Slide ${index + 1}`} className="w-full h-full object-cover" />
                   
-                  {/* Overlay on hover */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                  {/* Overlay for drag handle */}
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center pointer-events-none">
                     <GripVertical className="w-8 h-8 text-white" />
                   </div>
 

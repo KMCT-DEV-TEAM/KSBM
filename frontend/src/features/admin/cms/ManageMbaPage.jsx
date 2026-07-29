@@ -272,10 +272,29 @@ const ManageMbaPage = ({ isBba = false }) => {
     eligibility
   };
 
+  const isBbaMode = typeof window !== 'undefined' && window.location.pathname.includes('bba');
+
+  const componentMap = {
+    hero: 'ProgramHero',
+    overview: 'ProgramOverview',
+    dimensions: 'LearningDimensionsGrid',
+    whyChoose: 'WhyChoosePills',
+    internship: 'SummerInternshipBanner',
+    dynamicLearning: 'DynamicLearningSection',
+    momentsGallery: 'MomentsGallery',
+    academicCalendarBanner: 'AcademicCalendarBanner',
+    eligibility: 'AdmissionEligibility',
+    topRecruiters: 'TopRecruitersGrid'
+  };
+
   // Live Preview Data Poster
   useEffect(() => {
     if (isPreviewModalOpen && iframeRef.current) {
-      iframeRef.current.contentWindow.postMessage({ type: 'LIVE_PREVIEW_UPDATE', data: currentDraftData, activeTab }, '*');
+      iframeRef.current.contentWindow.postMessage({ 
+        type: 'preview-cms-data', 
+        componentName: componentMap[activeTab], 
+        payload: { ...currentDraftData, programType: isBbaMode ? 'bba' : 'mba' }
+      }, '*');
     }
   }, [isPreviewModalOpen, currentDraftData, activeTab]);
 
@@ -2162,18 +2181,16 @@ const ManageMbaPage = ({ isBba = false }) => {
             <div className={`bg-white shadow-2xl transition-all duration-300 h-[85vh] ${previewDevice === 'desktop' ? 'w-[100%] max-w-[1920px]' : previewDevice === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
               <iframe
                 ref={iframeRef}
-                src={liveUrl}
+                src="/preview/cms"
                 className="w-full h-full border-0"
                 title="Live Preview"
                 onLoad={() => {
                   if (iframeRef.current) {
-                    iframeRef.current.contentWindow.postMessage({ type: 'LIVE_PREVIEW_UPDATE', data: currentDraftData, activeTab }, '*');
-                    setTimeout(() => {
-                      if (iframeRef.current) iframeRef.current.contentWindow.postMessage({ type: 'LIVE_PREVIEW_UPDATE', data: currentDraftData, activeTab }, '*');
-                    }, 500);
-                    setTimeout(() => {
-                      if (iframeRef.current) iframeRef.current.contentWindow.postMessage({ type: 'LIVE_PREVIEW_UPDATE', data: currentDraftData, activeTab }, '*');
-                    }, 1500);
+                    iframeRef.current.contentWindow.postMessage({ 
+                      type: 'preview-cms-data', 
+                      componentName: componentMap[activeTab], 
+                      payload: { ...currentDraftData, programType: isBbaMode ? 'bba' : 'mba' }
+                    }, '*');
                   }
                 }}
               />
