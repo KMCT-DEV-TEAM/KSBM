@@ -340,8 +340,18 @@ const ProgramPage = ({ programType = 'mba' }) => {
     fetchCmsData();
   }, [programType]);
 
+  useEffect(() => {
+    const handleMessage = (event) => {
+      if (event.data?.type === 'LIVE_PREVIEW_UPDATE' && event.data.data) {
+        setConfig(prev => ({ ...prev, ...event.data.data }));
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#fafafa]">
       <ProgramHero program={config} />
       <ProgramOverview program={config} />
       <LearningDimensionsGrid dimensions={config.dimensions} />
