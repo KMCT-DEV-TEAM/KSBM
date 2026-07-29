@@ -316,8 +316,8 @@ const programConfigs = {
 };
 
 const ProgramPage = ({ programType = 'mba' }) => {
-  const defaultConfig = programConfigs[programType?.toLowerCase()] || programConfigs.mba;
-  const [config, setConfig] = useState(defaultConfig);
+  const [config, setConfig] = useState(programConfigs[programType?.toLowerCase()] || programConfigs.mba);
+  const [activePreviewTab, setActivePreviewTab] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -344,6 +344,9 @@ const ProgramPage = ({ programType = 'mba' }) => {
     const handleMessage = (event) => {
       if (event.data?.type === 'LIVE_PREVIEW_UPDATE' && event.data.data) {
         setConfig(prev => ({ ...prev, ...event.data.data }));
+        if (event.data.activeTab) {
+          setActivePreviewTab(event.data.activeTab);
+        }
       }
     };
     window.addEventListener('message', handleMessage);
@@ -352,16 +355,16 @@ const ProgramPage = ({ programType = 'mba' }) => {
 
   return (
     <div className="min-h-screen bg-[#fafafa]">
-      <ProgramHero program={config} />
-      <ProgramOverview program={config} />
-      <LearningDimensionsGrid dimensions={config.dimensions} />
-      <WhyChoosePills program={config} />
-      <SummerInternshipBanner program={config} />
-      <DynamicLearningSection program={config} />
-      <MomentsGallery program={config} />
-      <AcademicCalendarBanner program={config} />
-      <AdmissionEligibility eligibility={config.eligibility} />
-      <TopRecruitersGrid />
+      {(!activePreviewTab || activePreviewTab === 'hero') && <ProgramHero program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'overview') && <ProgramOverview program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'dimensions') && <LearningDimensionsGrid dimensions={config.dimensions} />}
+      {(!activePreviewTab || activePreviewTab === 'whyChoose') && <WhyChoosePills program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'internship') && <SummerInternshipBanner program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'dynamicLearning') && <DynamicLearningSection program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'momentsGallery') && <MomentsGallery program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'academicCalendarBanner') && <AcademicCalendarBanner program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'eligibility') && <AdmissionEligibility eligibility={config.eligibility} />}
+      {(!activePreviewTab || activePreviewTab === 'topRecruiters') && <TopRecruitersGrid />}
     </div>
   );
 };
