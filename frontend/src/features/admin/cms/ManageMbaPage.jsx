@@ -53,9 +53,9 @@ const TabSkeleton = () => (
 );
 
 const CharCountLabel = ({ label, value, max }) => (
-  <div className="flex justify-between items-end mb-2">
-    <label className="block text-sm font-semibold text-gray-700">{label}</label>
-    <span className={`text-[11px] font-bold ${value?.length >= max ? 'text-red-500' : value?.length > max * 0.8 ? 'text-orange-500' : 'text-gray-400'}`}>
+  <div className="flex justify-between items-center mb-1.5">
+    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">{label}</label>
+    <span className={`text-[9px] font-medium ${value?.length >= max ? 'text-red-500' : value?.length > max * 0.8 ? 'text-orange-500' : 'text-gray-400'}`}>
       {value?.length || 0} / {max}
     </span>
   </div>
@@ -174,9 +174,9 @@ const ManageMbaPage = ({ isBba = false }) => {
   const [internshipBtnText, setInternshipBtnText] = useState('Apply Now');
   const [internshipBtnLink, setInternshipBtnLink] = useState('/#contact');
   const [internshipImages, setInternshipImages] = useState([
-    '/assets/Images/image 2.png',
-    '/assets/Images/image 27.png',
-    '/assets/Images/image 28.png'
+    '/assets/Images/mba/internship_2.png',
+    '/assets/Images/mba/internship_27.png',
+    '/assets/Images/mba/internship_28.png'
   ]);
 
   const [whyChoosePills, setWhyChoosePills] = useState({
@@ -190,7 +190,7 @@ const ManageMbaPage = ({ isBba = false }) => {
     title: 'Experience Dynamic Learning',
     desc1: '',
     desc2: '',
-    images: ['/assets/Images/image 49.png', '/assets/Images/image 60.png'],
+    images: ['/assets/Images/mba/dynamic_49.png', '/assets/Images/mba/dynamic_60.png'],
     features: []
   });
 
@@ -209,10 +209,10 @@ const ManageMbaPage = ({ isBba = false }) => {
     title: 'Download the Official Academic Calendar',
     description: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
     viewBtnText: 'View Calendar',
-    viewBtnUrl: '/assets/Images/image 64.png',
+    viewBtnUrl: '/assets/Images/mba/calendar_64.png',
     downloadBtnText: 'Download Calendar',
-    downloadBtnUrl: '/assets/Images/image 64.png',
-    image: '/assets/Images/image 64.png',
+    downloadBtnUrl: '/assets/Images/mba/calendar_64.png',
+    image: '/assets/Images/mba/calendar_64.png',
     events: defaultCalendarEvents
   });
 
@@ -973,7 +973,7 @@ const ManageMbaPage = ({ isBba = false }) => {
         <button
           type="button"
           onClick={() => scrollTabs('left')}
-          className="shrink-0 flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-100 hover:text-[#111836] transition-all shadow-sm focus:outline-none"
+          className="shrink-0 flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-[#566A7F] hover:bg-gray-100 hover:text-primary transition-all shadow-sm focus:outline-none"
           title="Scroll Left"
         >
           <ChevronLeft className="w-5 h-5" />
@@ -990,7 +990,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               onClick={() => handleTabClick(tab.id)}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${activeTab === tab.id
                 ? 'bg-primary text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
+                : 'text-gray-600 hover:bg-gray-50 hover:text-primary'
                 }`}
             >
               {tab.icon}
@@ -1002,7 +1002,7 @@ const ManageMbaPage = ({ isBba = false }) => {
         <button
           type="button"
           onClick={() => scrollTabs('right')}
-          className="shrink-0 flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-100 hover:text-[#111836] transition-all shadow-sm focus:outline-none"
+          className="shrink-0 flex items-center justify-center w-10 h-10 rounded-xl border border-gray-200 text-[#566A7F] hover:bg-gray-100 hover:text-primary transition-all shadow-sm focus:outline-none"
           title="Scroll Right"
         >
           <ChevronRight className="w-5 h-5" />
@@ -1024,7 +1024,7 @@ const ManageMbaPage = ({ isBba = false }) => {
         {/* Tab 1: Hero Section */}
       {activeTab === 'hero' && (
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
-          <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Hero Banner Settings</h2>
+          <h2 className="text-lg font-bold text-primary border-b pb-2">Hero Banner Settings</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -1033,7 +1033,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={shortTitle}
                 onChange={(e) => setShortTitle(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder="MBA"
               />
               <p className="text-xs text-gray-400 mt-1">Appears inside the top pill badge (`ACADEMIC PROGRAM • MBA`)</p>
@@ -1044,7 +1044,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder="Master of Business Administration"
               />
             </div>
@@ -1057,7 +1057,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={heroTitleLine1}
                 onChange={(e) => setHeroTitleLine1(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder=" Master of Business"
               />
             </div>
@@ -1067,7 +1067,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={heroTitleLine2}
                 onChange={(e) => setHeroTitleLine2(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder="Administration (MBA)"
               />
             </div>
@@ -1079,7 +1079,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm"
+              className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               placeholder="Enter comprehensive hero description..."
             />
           </div>
@@ -1091,7 +1091,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={heroPrimaryBtnText}
                 onChange={(e) => setHeroPrimaryBtnText(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder="EXPLORE PROGRAM"
               />
             </div>
@@ -1101,14 +1101,14 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={heroSecondaryBtnText}
                 onChange={(e) => setHeroSecondaryBtnText(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder="DOWNLOAD BROCHURE"
               />
             </div>
           </div>
 
           <div className="pt-4 border-t border-gray-100">
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Hero Background Image</label>
+            <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Hero Background Image</label>
             <div className="space-y-4">
               <LogoUploader deferredMode={true}
                 uploadEndpoint="/upload/mba"
@@ -1117,14 +1117,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 onUploadSuccess={(url) => setHeroImage(url)}
               />
               <div>
-                <CharCountLabel label="Or paste image URL directly:" value={heroImage} max={200} />
-                <input maxLength={200} 
-                  type="text"
-                  value={heroImage}
-                  onChange={(e) => setHeroImage(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm"
-                  placeholder="https://images.unsplash.com/..."
-                />
+                
               </div>
             </div>
           </div>
@@ -1134,7 +1127,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       {/* Tab 2: Program Overview */}
       {activeTab === 'overview' && (
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
-          <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Program Overview Settings</h2>
+          <h2 className="text-lg font-bold text-primary border-b pb-2">Program Overview Settings</h2>
 
           <div>
             <CharCountLabel label="Overview Section Heading" value={overviewTitle} max={100} />
@@ -1142,7 +1135,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               type="text"
               value={overviewTitle}
               onChange={(e) => setOverviewTitle(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
+              className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
 
@@ -1152,7 +1145,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               rows={4}
               value={overviewText}
               onChange={(e) => setOverviewText(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm"
+              className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
 
@@ -1162,7 +1155,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               rows={3}
               value={overviewSubtext}
               onChange={(e) => setOverviewSubtext(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm"
+              className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
 
@@ -1173,7 +1166,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={overviewBadgeText}
                 onChange={(e) => setOverviewBadgeText(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder="POSTGRADUATE EXCELLENCE"
               />
             </div>
@@ -1183,7 +1176,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={overviewFloatingBadgeText}
                 onChange={(e) => setOverviewFloatingBadgeText(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder="100% Case-Study Driven"
               />
             </div>
@@ -1193,7 +1186,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={overviewPrimaryBtnText}
                 onChange={(e) => setOverviewPrimaryBtnText(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder="Apply Now"
               />
             </div>
@@ -1203,14 +1196,14 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={overviewSecondaryBtnText}
                 onChange={(e) => setOverviewSecondaryBtnText(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder="Download Brochure"
               />
             </div>
           </div>
 
           <div className="pt-4 border-t border-gray-100">
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Showcase Image (Right side)</label>
+            <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Showcase Image (Right side)</label>
             <div className="space-y-4">
               <LogoUploader deferredMode={true}
                 uploadEndpoint="/upload/mba"
@@ -1219,20 +1212,14 @@ const ManageMbaPage = ({ isBba = false }) => {
                 onUploadSuccess={(url) => setOverviewImage(url)}
               />
               <div>
-                <CharCountLabel label="Or paste image URL directly:" value={overviewImage} max={200} />
-                <input maxLength={200} 
-                  type="text"
-                  value={overviewImage}
-                  onChange={(e) => setOverviewImage(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm"
-                />
+                
               </div>
             </div>
           </div>
 
           <div className="pt-4 border-t border-gray-100">
             <div className="flex items-center justify-between mb-4">
-              <label className="block text-sm font-semibold text-gray-700">Checklist Highlights (Left Column)</label>
+              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Checklist Highlights (Left Column)</label>
               <button
                 type="button"
                 onClick={addHighlight}
@@ -1249,7 +1236,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                     type="text"
                     value={item}
                     onChange={(e) => updateHighlight(idx, e.target.value)}
-                    className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-primary focus:outline-none font-medium"
+                    className="flex-1 px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     placeholder="Enter checkmark highlight..."
                   />
                   <button
@@ -1270,7 +1257,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       {activeTab === 'dimensions' && (
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
           <div className="flex items-center justify-between border-b pb-4">
-            <h2 className="text-lg font-bold text-[#111836]">4 Core Curriculum Dimensions Cards</h2>
+            <h2 className="text-lg font-bold text-primary">4 Core Curriculum Dimensions Cards</h2>
             <button
               type="button"
               onClick={addDimension}
@@ -1322,7 +1309,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 <div className="flex gap-4 pr-20">
                   <div className="text-3xl font-black text-gray-200">{dim.number || '00'}</div>
                   <div className="space-y-1">
-                    <h4 className="font-bold text-gray-900">{dim.title || 'Untitled'}</h4>
+                    <h4 className="text-sm font-bold text-gray-800">{dim.title || 'Untitled'}</h4>
                     <p className="text-sm text-gray-600 line-clamp-2">{dim.description || 'No description provided.'}</p>
                     
                     {dim.topics && dim.topics.length > 0 && (
@@ -1346,7 +1333,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       {activeTab === 'whyChoose' && (
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
           <div className="flex items-center justify-between border-b pb-4">
-            <h2 className="text-lg font-bold text-[#111836]">Key Learning Dimensions Settings</h2>
+            <h2 className="text-lg font-bold text-primary">Key Learning Dimensions Settings</h2>
             <button
               type="button"
               onClick={addPillItem}
@@ -1363,7 +1350,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={whyChoosePills.badgeText || ''}
                 onChange={(e) => setWhyChoosePills({ ...whyChoosePills, badgeText: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder="e.g. LEARNING GOALS"
               />
             </div>
@@ -1373,14 +1360,14 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={whyChoosePills.title || ''}
                 onChange={(e) => setWhyChoosePills({ ...whyChoosePills, title: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder="e.g. Key Learning Dimensions"
               />
             </div>
           </div>
 
           <div className="space-y-4 pt-4 border-t border-gray-100">
-            <h3 className="text-sm font-bold text-gray-700">Dimension Cards Grid (Max 5 recommended)</h3>
+            <h3 className="text-sm font-bold text-[#566A7F]">Dimension Cards Grid (Max 5 recommended)</h3>
             {(whyChoosePills.items || []).map((item, idx) => (
               <div
                 key={idx}
@@ -1449,7 +1436,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                     <GripVertical className="w-5 h-5" />
                   </div>
                   <div className="flex flex-col gap-1 pl-6">
-                  <h4 className="font-bold text-gray-900">{item.title || 'Untitled Dimension'}</h4>
+                  <h4 className="text-sm font-bold text-gray-800">{item.title || 'Untitled Dimension'}</h4>
                   <p className="text-sm text-gray-600 line-clamp-2">{item.description || 'No description provided.'}</p>
                   <div className="text-[10px] font-mono bg-white px-2 py-1 rounded border border-gray-200 inline-block mt-2 text-gray-400 self-start">
                     Icon: {item.icon || 'Sparkles'}
@@ -1465,7 +1452,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       {/* Tab 4: Internship Banner */}
       {activeTab === 'internship' && (
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
-          <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Summer Internship Banner Settings</h2>
+          <h2 className="text-lg font-bold text-primary border-b pb-2">Summer Internship Banner Settings</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -1474,7 +1461,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={internshipBadge}
                 onChange={(e) => setInternshipBadge(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 placeholder="e.g. EXPERIENTIAL LEARNING"
               />
             </div>
@@ -1484,7 +1471,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={internshipTitle}
                 onChange={(e) => setInternshipTitle(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
           </div>
@@ -1495,7 +1482,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               rows={4}
               value={internshipDesc}
               onChange={(e) => setInternshipDesc(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm"
+              className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
 
@@ -1506,7 +1493,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={internshipBtnText}
                 onChange={(e) => setInternshipBtnText(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
             <div>
@@ -1515,50 +1502,39 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={internshipBtnLink}
                 onChange={(e) => setInternshipBtnLink(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
           </div>
 
           <div className="pt-4 border-t border-gray-100">
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Banner Background Image</label>
+            <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Banner Background Image</label>
             <div className="space-y-4">
               <LogoUploader deferredMode={true}
                 uploadEndpoint="/upload/mba"
                 currentLogoUrl={internshipBgImage}
+                defaultImage="/assets/Images/mba/internship_bg.png"
                 onUploadSuccess={(url) => setInternshipBgImage(url)}
               />
               <div>
-                <CharCountLabel label="Or paste image URL directly:" value={internshipBgImage} max={200} />
-                <input maxLength={200} 
-                  type="text"
-                  value={internshipBgImage}
-                  onChange={(e) => setInternshipBgImage(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm"
-                />
+                
               </div>
             </div>
           </div>
 
           <div className="pt-4 border-t border-gray-100 space-y-4">
-            <h3 className="text-sm font-bold text-gray-700">3 Floating Highlight Cards (Right side)</h3>
+            <h3 className="text-sm font-bold text-[#566A7F]">3 Floating Highlight Cards (Right side)</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[0, 1, 2].map((i) => (
                 <div key={i} className="p-4 rounded-xl bg-gray-50 border border-gray-200 space-y-3">
                   <label className="block text-xs font-bold text-gray-600">Card Image #{i + 1}</label>
                   <LogoUploader deferredMode={true}
-                    uploadEndpoint="/upload/mba"
-                    currentLogoUrl={(internshipImages || [])[i] || ''}
-                    defaultImage={i === 0 ? '/assets/Images/mba/internship_2.png' : i === 1 ? '/assets/Images/mba/internship_27.png' : '/assets/Images/mba/internship_28.png'}
-                    onUploadSuccess={(url) => updateInternshipImage(i, url)}
-                  />
-                  <input
-                    type="text"
-                    value={(internshipImages || [])[i] || ''}
-                    onChange={(e) => updateInternshipImage(i, e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs"
-                    placeholder="Image URL"
-                  />
+                      uploadEndpoint="/upload/mba"
+                      currentLogoUrl={(internshipImages || [])[i] || ''}
+                      defaultImage={i === 0 ? '/assets/Images/mba/internship_2.png' : i === 1 ? '/assets/Images/mba/internship_27.png' : '/assets/Images/mba/internship_28.png'}
+                      onUploadSuccess={(url) => updateInternshipImage(i, url)}
+                    />
+                  
                 </div>
               ))}
             </div>
@@ -1570,7 +1546,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       {activeTab === 'dynamicLearning' && (
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
           <div className="flex items-center justify-between border-b pb-4">
-            <h2 className="text-lg font-bold text-[#111836]">Dynamic Learning Section Settings</h2>
+            <h2 className="text-lg font-bold text-primary">Dynamic Learning Section Settings</h2>
             <button
               type="button"
               onClick={addDynamicFeature}
@@ -1587,7 +1563,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={dynamicLearning.badgeText || ''}
                 onChange={(e) => setDynamicLearning({ ...dynamicLearning, badgeText: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
             <div>
@@ -1596,7 +1572,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={dynamicLearning.title || ''}
                 onChange={(e) => setDynamicLearning({ ...dynamicLearning, title: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
           </div>
@@ -1608,7 +1584,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 rows={3}
                 value={dynamicLearning.desc1 || ''}
                 onChange={(e) => setDynamicLearning({ ...dynamicLearning, desc1: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
             <div>
@@ -1617,13 +1593,13 @@ const ManageMbaPage = ({ isBba = false }) => {
                 rows={3}
                 value={dynamicLearning.desc2 || ''}
                 onChange={(e) => setDynamicLearning({ ...dynamicLearning, desc2: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
           </div>
 
           <div className="pt-4 border-t border-gray-100 space-y-4">
-            <h3 className="text-sm font-bold text-gray-700">Right Collage Images (2 images)</h3>
+            <h3 className="text-sm font-bold text-[#566A7F]">Right Collage Images (2 images)</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[0, 1].map((i) => (
                 <div key={i} className="p-4 rounded-xl bg-gray-50 border border-gray-200 space-y-3">
@@ -1631,23 +1607,16 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <LogoUploader deferredMode={true}
                     uploadEndpoint="/upload/mba"
                     currentLogoUrl={(dynamicLearning.images || [])[i] || ''}
-                    defaultImage={i === 0 ? '/assets/Images/mba/dynamic_49.png' : '/assets/Images/mba/dynamic_60.png'}
                     onUploadSuccess={(url) => updateDynamicImage(i, url)}
                   />
-                  <input
-                    type="text"
-                    value={(dynamicLearning.images || [])[i] || ''}
-                    onChange={(e) => updateDynamicImage(i, e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs"
-                    placeholder="Image URL"
-                  />
+                  
                 </div>
               ))}
             </div>
           </div>
 
           <div className="space-y-4 pt-4 border-t border-gray-100">
-            <h3 className="text-sm font-bold text-gray-700">Bottom Feature Cards Grid</h3>
+            <h3 className="text-sm font-bold text-[#566A7F]">Bottom Feature Cards Grid</h3>
             {(dynamicLearning.features || []).map((feat, idx) => (
               <div
                 key={idx}
@@ -1676,7 +1645,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                       type="text"
                       value={feat.title || ''}
                       onChange={(e) => updateDynamicFeature(idx, 'title', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold text-gray-900"
+                      className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
                   </div>
                   <div>
@@ -1684,7 +1653,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                     <select
                       value={feat.icon || 'Award'}
                       onChange={(e) => updateDynamicFeature(idx, 'icon', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium bg-white"
+                      className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     >
                       <option value="Users">Users</option>
                       <option value="Award">Award</option>
@@ -1704,7 +1673,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                       type="text"
                       value={feat.desc || ''}
                       onChange={(e) => updateDynamicFeature(idx, 'desc', e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm"
+                      className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
                   </div>
                 </div>
@@ -1718,7 +1687,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       {activeTab === 'momentsGallery' && (
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
           <div className="flex items-center justify-between border-b pb-4">
-            <h2 className="text-lg font-bold text-[#111836]">Moments Gallery Settings</h2>
+            <h2 className="text-lg font-bold text-primary">Moments Gallery Settings</h2>
             <button
               type="button"
               onClick={addGalleryItem}
@@ -1735,7 +1704,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={momentsGallery.badgeText || ''}
                 onChange={(e) => setMomentsGallery({ ...momentsGallery, badgeText: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
             <div>
@@ -1744,34 +1713,28 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={momentsGallery.title || ''}
                 onChange={(e) => setMomentsGallery({ ...momentsGallery, title: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
           </div>
 
           <div className="pt-4 border-t border-gray-100">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Section Background Image (Optional)</label>
+            <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-2">Section Background Image (Optional)</label>
             <div className="space-y-3 max-w-md">
               <LogoUploader deferredMode={true}
                 uploadEndpoint="/upload/mba"
                 currentLogoUrl={momentsGallery.bgImage || ''}
+                defaultImage="/assets/Images/mba/gallery_bg.png"
                 onUploadSuccess={(url) => setMomentsGallery({ ...momentsGallery, bgImage: url })}
               />
               <div>
-                <CharCountLabel label="Or paste background image URL directly:" value={momentsGallery.bgImage || ''} max={200} />
-                <input maxLength={200} 
-                  type="text"
-                  value={momentsGallery.bgImage || ''}
-                  onChange={(e) => setMomentsGallery({ ...momentsGallery, bgImage: e.target.value })}
-                  placeholder="https://... or /assets/Images/..."
-                  className="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs font-medium"
-                />
+                
               </div>
             </div>
           </div>
 
           <div className="space-y-6 pt-4 border-t border-gray-100">
-            <h3 className="text-sm font-bold text-gray-700">Gallery Items Grid</h3>
+            <h3 className="text-sm font-bold text-[#566A7F]">Gallery Items Grid</h3>
             {(momentsGallery.items || []).map((item, idx) => (
               <div 
                 key={idx} 
@@ -1839,7 +1802,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                     </div>
                   )}
                   <div>
-                    <h4 className="font-bold text-gray-900">{item.title || 'Untitled Photo'}</h4>
+                    <h4 className="text-sm font-bold text-gray-800">{item.title || 'Untitled Photo'}</h4>
                     <p className="text-sm text-gray-500">{item.subtitle}</p>
                     <div className="text-[10px] font-mono bg-white px-2 py-1 rounded border border-gray-200 inline-block mt-2 text-gray-400">
                       Layout: {item.span?.includes('col-span-4') ? 'Small Card' : item.span?.includes('col-span-6') ? 'Wide Card' : 'Full Width'}
@@ -1856,7 +1819,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       {activeTab === 'academicCalendarBanner' && (
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
           <div className="border-b pb-4">
-            <h2 className="text-lg font-bold text-[#111836]">Academic Calendar Banner Settings</h2>
+            <h2 className="text-lg font-bold text-primary">Academic Calendar Banner Settings</h2>
             <p className="text-xs text-gray-500 mt-1">Configure texts, buttons, and illustration for the Academic Calendar section.</p>
           </div>
 
@@ -1867,7 +1830,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={academicCalendarBanner.badgeText || ''}
                 onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, badgeText: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
             <div>
@@ -1876,7 +1839,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={academicCalendarBanner.title || ''}
                 onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, title: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
           </div>
@@ -1887,7 +1850,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               rows={3}
               value={academicCalendarBanner.description || ''}
               onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, description: e.target.value })}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm"
+              className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
 
@@ -1898,7 +1861,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={academicCalendarBanner.viewBtnText || ''}
                 onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, viewBtnText: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
             <div>
@@ -1908,7 +1871,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 value={academicCalendarBanner.viewBtnUrl || ''}
                 onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, viewBtnUrl: e.target.value })}
                 placeholder="/assets/Images/image 64.png or https://..."
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
           </div>
@@ -1920,7 +1883,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 type="text"
                 value={academicCalendarBanner.downloadBtnText || ''}
                 onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, downloadBtnText: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
             <div>
@@ -1930,13 +1893,13 @@ const ManageMbaPage = ({ isBba = false }) => {
                 value={academicCalendarBanner.downloadBtnUrl || ''}
                 onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, downloadBtnUrl: e.target.value })}
                 placeholder="/assets/Images/image 64.png or https://..."
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
           </div>
 
           <div className="pt-4 border-t border-gray-100">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Right Side Illustration Image</label>
+            <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-2">Right Side Illustration Image</label>
             <div className="space-y-3 max-w-md">
               <LogoUploader deferredMode={true}
                 uploadEndpoint="/upload/mba"
@@ -1945,14 +1908,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 onUploadSuccess={(url) => setAcademicCalendarBanner({ ...academicCalendarBanner, image: url })}
               />
               <div>
-                <CharCountLabel label="Or paste image URL directly:" value={academicCalendarBanner.image || ''} max={200} />
-                <input maxLength={200} 
-                  type="text"
-                  value={academicCalendarBanner.image || ''}
-                  onChange={(e) => setAcademicCalendarBanner({ ...academicCalendarBanner, image: e.target.value })}
-                  placeholder="/assets/Images/image 64.png or https://..."
-                  className="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs font-medium"
-                />
+                
               </div>
             </div>
           </div>
@@ -1960,7 +1916,7 @@ const ManageMbaPage = ({ isBba = false }) => {
           <div className="pt-6 border-t border-gray-100 space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-base font-bold text-[#111836] flex items-center gap-2">
+                <h3 className="text-base font-bold text-primary flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-primary" /> Interactive Schedule & Key Milestones
                 </h3>
                 <p className="text-xs text-gray-500 mt-0.5">Manage timeline events displayed when visitors click "View Calendar" on the program page.</p>
@@ -2069,7 +2025,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                       <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">{ev.semester || 'Trimester 1'}</span>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 bg-gray-200 px-2 py-0.5 rounded">{ev.category || 'Event'}</span>
                     </div>
-                    <h4 className="font-bold text-gray-900 text-sm">{ev.title || 'Untitled Event'}</h4>
+                    <h4 className="text-sm font-bold text-gray-800">{ev.title || 'Untitled Event'}</h4>
                     <p className="text-xs font-semibold text-gray-500 flex items-center gap-1"><Calendar className="w-3 h-3" /> {ev.date || 'No date set'}</p>
                     <p className="text-xs text-gray-600 mt-2">{ev.description || 'No description provided.'}</p>
                   </div>
@@ -2090,7 +2046,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       {activeTab === 'eligibility' && (
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
           <div className="flex items-center justify-between border-b pb-4">
-            <h2 className="text-lg font-bold text-[#111836]">Admission Steps & Eligibility Cards</h2>
+            <h2 className="text-lg font-bold text-primary">Admission Steps & Eligibility Cards</h2>
             <button
               type="button"
               onClick={addEligibilityStep}
@@ -2142,7 +2098,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 <div className="flex gap-4 pr-20">
                   <div className="text-3xl font-black text-gray-200">{item.step || '00'}</div>
                   <div className="space-y-1">
-                    <h4 className="font-bold text-gray-900">{item.title || 'Untitled Step'}</h4>
+                    <h4 className="text-sm font-bold text-gray-800">{item.title || 'Untitled Step'}</h4>
                     <p className="text-sm text-gray-600 line-clamp-2">{item.description || 'No description provided.'}</p>
                     
                     {item.bullets && item.bullets.length > 0 && (
@@ -2167,7 +2123,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       {activeTab === 'topRecruiters' && (
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
           <div className="border-b pb-4">
-            <h2 className="text-lg font-bold text-[#111836]">Top Recruiters & Corporate Partners</h2>
+            <h2 className="text-lg font-bold text-primary">Top Recruiters & Corporate Partners</h2>
             <p className="text-xs text-gray-500 mt-1">Manage corporate logos, placement categories, CTC highlights, and partner links displayed at the bottom of the {shortTitle} Program Page.</p>
           </div>
           <div className="pt-2">
@@ -2190,72 +2146,52 @@ const ManageMbaPage = ({ isBba = false }) => {
 
       {/* Live Preview Modal */}
       {isPreviewModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex flex-col justify-between p-4 sm:p-6 animate-fadeIn">
-          {/* Top Bar Controls */}
-          <div className="flex items-center justify-between bg-white px-6 py-4 rounded-t-2xl shadow-lg border-b border-gray-100 shrink-0">
+        <div className="fixed inset-0 z-[100] flex flex-col bg-gray-900/80 backdrop-blur-sm">
+          <div className="flex justify-between items-center bg-white px-4 py-3 border-b border-gray-200">
             <div className="flex items-center gap-3">
-              <span className="font-bold text-gray-900 text-base">{pageName} Live Preview</span>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold">Real-time</span>
+              <Eye className="w-5 h-5 text-gray-500" />
+              <span className="font-semibold text-gray-800">Live Preview</span>
             </div>
-
-            {/* Viewport switcher */}
-            <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-xl">
+            
+            <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-md">
               <button
                 onClick={() => setPreviewDevice('desktop')}
-                className={`p-2 rounded-lg transition-all ${previewDevice === 'desktop' ? 'bg-white text-primary shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
+                className={`p-1.5 rounded-sm transition-colors ${previewDevice === 'desktop' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Desktop View"
               >
                 <Monitor className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setPreviewDevice('tablet')}
-                className={`p-2 rounded-lg transition-all ${previewDevice === 'tablet' ? 'bg-white text-primary shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
+                className={`p-1.5 rounded-sm transition-colors ${previewDevice === 'tablet' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Tablet View"
               >
                 <Tablet className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setPreviewDevice('mobile')}
-                className={`p-2 rounded-lg transition-all ${previewDevice === 'mobile' ? 'bg-white text-primary shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
+                className={`p-1.5 rounded-sm transition-colors ${previewDevice === 'mobile' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Mobile View"
               >
                 <Smartphone className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="flex items-center gap-3">
-              <a
-                href={liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-blue-600 font-semibold hover:underline px-3 py-1.5 rounded-lg bg-blue-50"
-              >
-                Open in New Tab ↗
-              </a>
-              <button
-                onClick={() => setIsPreviewModalOpen(false)}
-                className="p-2 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+            <button
+              onClick={() => setIsPreviewModalOpen(false)}
+              className="p-2 text-gray-500 hover:text-red-500 bg-gray-100 hover:bg-red-50 rounded-md transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
-          {/* Iframe Viewport */}
-          <div className="flex-1 bg-gray-900 flex items-center justify-center p-4 overflow-hidden">
-            <div
-              className={`bg-white shadow-2xl transition-all duration-300 overflow-hidden ${previewDevice === 'desktop'
-                ? 'w-full h-full rounded-none'
-                : previewDevice === 'tablet'
-                  ? 'w-[768px] h-[90%] rounded-3xl border-[12px] border-gray-800'
-                  : 'w-[375px] h-[90%] rounded-[3rem] border-[14px] border-gray-800 shadow-2xl'
-                }`}
-            >
+          <div className="flex-1 overflow-auto bg-gray-100 flex items-center justify-center p-4 sm:p-8">
+            <div className={`bg-white shadow-2xl transition-all duration-300 h-[85vh] ${previewDevice === 'desktop' ? 'w-[100%] max-w-[1920px]' : previewDevice === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
               <iframe
                 ref={iframeRef}
                 src={liveUrl}
-                title="Live Program Page Preview"
-                className="w-full h-full border-none"
+                className="w-full h-full border-0"
+                title="Live Preview"
                 onLoad={() => {
                   if (iframeRef.current) {
                     iframeRef.current.contentWindow.postMessage({ type: 'LIVE_PREVIEW_UPDATE', data: currentDraftData }, '*');
