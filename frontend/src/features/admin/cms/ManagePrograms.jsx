@@ -100,7 +100,7 @@ const ManagePrograms = () => {
             subheading, heading, description, programs: finalPrograms,
             showSubheading, showHeading, showDescription, showPrograms
           });
-          
+
           await executeDeletions();
           setPrograms(finalPrograms);
           Toast.fire({ icon: 'success', title: 'Programs section saved successfully!' });
@@ -204,7 +204,7 @@ const ManagePrograms = () => {
 
         let newPrograms = [...programs];
         newPrograms.splice(index, 1);
-        
+
         const defaultPrograms = [
           {
             id: 'mba',
@@ -285,13 +285,13 @@ const ManagePrograms = () => {
       handleDragEnd();
       return;
     }
-    
+
     const newPrograms = [...programs];
     const draggedProgram = newPrograms[draggedIndex];
-    
+
     newPrograms.splice(draggedIndex, 1);
     newPrograms.splice(index, 0, draggedProgram);
-    
+
     setPrograms(newPrograms);
     handleDragEnd();
   };
@@ -367,7 +367,7 @@ const ManagePrograms = () => {
         <div className="fixed inset-0 z-[110] flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
             <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-              <h2 className="text-xl font-bold text-[#566A7F]">
+              <h2 className="text-xl font-bold text-gray-900">
                 {editingProgramIndex === -1 ? 'Add New Program' : 'Edit Program'}
               </h2>
               <button
@@ -377,7 +377,7 @@ const ManagePrograms = () => {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             <div className="p-6 overflow-y-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="col-span-1 md:col-span-2">
@@ -385,46 +385,46 @@ const ManagePrograms = () => {
                   <input
                     type="text"
                     value={currentProgram.title}
-                    onChange={(e) => setCurrentProgram({...currentProgram, title: e.target.value})}
+                    onChange={(e) => setCurrentProgram({ ...currentProgram, title: e.target.value })}
                     placeholder="e.g. MBA"
                     maxLength={50}
-                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                   <div className="text-right text-xs text-gray-400 mt-1">
                     {currentProgram.title.length} / 50
                   </div>
                 </div>
-                
+
                 <div className="col-span-1 md:col-span-2">
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Subtitle / Description</label>
                   <textarea
                     value={currentProgram.subtitle}
-                    onChange={(e) => setCurrentProgram({...currentProgram, subtitle: e.target.value})}
+                    onChange={(e) => setCurrentProgram({ ...currentProgram, subtitle: e.target.value })}
                     rows="3"
                     placeholder="e.g. Master of Business Administration..."
                     maxLength={200}
-                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                   <div className="text-right text-xs text-gray-400 mt-1">
                     {currentProgram.subtitle?.length || 0} / 200
                   </div>
                 </div>
-                
+
                 <div className="col-span-1 md:col-span-2">
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Tag (Vertical Text)</label>
                   <input
                     type="text"
                     value={currentProgram.tag}
-                    onChange={(e) => setCurrentProgram({...currentProgram, tag: e.target.value})}
+                    onChange={(e) => setCurrentProgram({ ...currentProgram, tag: e.target.value })}
                     placeholder="e.g. GRADUATE"
                     maxLength={15}
-                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                   <div className="text-right text-xs text-gray-400 mt-1">
                     {currentProgram.tag?.length || 0} / 15
                   </div>
                 </div>
-                
+
                 <div className="col-span-1 md:col-span-2">
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Program Image</label>
                   <div className="bg-gray-50 p-4 rounded-lg border border-[#D9DEE3]">
@@ -435,7 +435,7 @@ const ManagePrograms = () => {
                           if (currentProgram.image) {
                             markForDeletion(currentProgram.image);
                           }
-                          setCurrentProgram({...currentProgram, image: url, imageFile: file});
+                          setCurrentProgram({ ...currentProgram, image: url, imageFile: file });
                         }
                       }}
                       deferredMode={true}
@@ -445,7 +445,7 @@ const ManagePrograms = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
               <button
                 onClick={closeProgramModal}
@@ -469,7 +469,7 @@ const ManagePrograms = () => {
 
         {/* Header Text Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-[#1e2869] mb-4">Header Content</h3>
+          <h3 className="text-lg font-bold text-primary mb-4 border-b pb-2">Header Content</h3>
           <div className="grid grid-cols-1 gap-6">
             <div>
               <div className="flex justify-between items-center mb-1.5">
@@ -485,7 +485,7 @@ const ManagePrograms = () => {
                 onChange={(e) => setSubheading(e.target.value)}
                 placeholder="e.g. Our Courses"
                 maxLength={60}
-                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
               <div className="text-right text-xs text-gray-400 mt-1">
                 {subheading.length} / 60
@@ -505,7 +505,7 @@ const ManagePrograms = () => {
                 onChange={(e) => setHeading(e.target.value)}
                 placeholder="e.g. Academic Programs"
                 maxLength={60}
-                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
               <div className="text-right text-xs text-gray-400 mt-1">
                 {heading.length} / 60
@@ -525,7 +525,7 @@ const ManagePrograms = () => {
                 rows="3"
                 placeholder="Description text..."
                 maxLength={300}
-                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
               <div className="text-right text-xs text-gray-400 mt-1">
                 {description.length} / 300
@@ -538,7 +538,7 @@ const ManagePrograms = () => {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-4">
-              <h3 className="text-lg font-bold text-[#1e2869]">Programs</h3>
+              <h3 className="text-lg font-bold text-primary border-b pb-2">Programs</h3>
               <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
                 <input type="checkbox" checked={showPrograms} onChange={(e) => setShowPrograms(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
                 <span className="text-sm font-semibold text-gray-500">Show Programs</span>
@@ -582,12 +582,12 @@ const ManagePrograms = () => {
                     <GripVertical className="w-4 h-4 text-gray-600" />
                   </div>
                 </div>
-                
+
                 {/* Program Content */}
                 <div className="p-4 flex-1 flex flex-col">
-                  <h4 className="font-bold text-[#566A7F] text-lg mb-1">{program.title || '(Untitled Program)'}</h4>
+                  <h4 className="text-sm font-bold text-gray-800 mb-1">{program.title || '(Untitled Program)'}</h4>
                   <p className="text-sm text-gray-500 line-clamp-2 flex-1">{program.subtitle}</p>
-                  
+
                   {/* Actions */}
                   <div className="flex justify-end gap-2 mt-4 pt-3 border-t border-gray-100">
                     <button

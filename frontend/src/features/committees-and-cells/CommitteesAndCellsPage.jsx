@@ -32,6 +32,16 @@ const CommitteesAndCellsPage = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const handleMessage = (event) => {
+      if (event.data?.type === 'LIVE_PREVIEW_UPDATE' && event.data.data) {
+        setData(prev => ({ ...prev, ...event.data.data }));
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
   const filteredData = (data?.committees || []).filter(item =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.coordinator.toLowerCase().includes(searchTerm.toLowerCase())
@@ -52,11 +62,15 @@ const CommitteesAndCellsPage = () => {
         <section className="relative w-full min-h-[70vh] sm:min-h-[78vh] md:min-h-[82vh] lg:min-h-[86vh] flex items-end bg-[#1B2155] overflow-hidden pt-28 sm:pt-32 pb-24 sm:pb-32 lg:pb-36">
           {/* Background Image & Deep Navy Overlay */}
           <div className="absolute inset-0 z-0">
-            <img
-              src={data.heroBgImage}
-              alt="Committees Backdrop"
-              className="w-full h-full object-cover opacity-35 object-center scale-105 transform duration-1000"
-            />
+            {data.heroBgImage ? (
+              <img
+                src={data.heroBgImage}
+                alt="Committees Backdrop"
+                className="w-full h-full object-cover opacity-35 object-center scale-105 transform duration-1000"
+              />
+            ) : (
+              <div className="w-full h-full bg-[#1B2155]"></div>
+            )}
             <div className="absolute inset-0 bg-primary/50"></div>
             <div className="absolute inset-0 bg-primary/40"></div>
           </div>
@@ -105,10 +119,10 @@ const CommitteesAndCellsPage = () => {
                 <p className="text-gray-500 text-xs md:text-sm mt-0.5">{item.designation}</p>
               </div>
               {item.pdfLink && (
-                <a 
-                  href={item.pdfLink} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href={item.pdfLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="shrink-0 flex items-center justify-center gap-2 px-5 py-2.5 border border-gray-200 rounded-lg text-gray-500 text-sm font-semibold hover:border-[#3b4c8a] hover:text-[#3b4c8a] hover:bg-blue-50/30 transition-colors w-full md:w-auto"
                 >
                   <Info className="w-4 h-4" />
