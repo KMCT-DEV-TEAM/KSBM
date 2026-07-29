@@ -12,6 +12,17 @@ import ManagementDeskHero from '../../../features/about/components/management-de
 import ManagementDeskIntro from '../../../features/about/components/management-desk/ManagementDeskIntro';
 import ManagementDeskMembers from '../../../features/about/components/management-desk/ManagementDeskMembers';
 
+import ProgramHero from '../../../features/programs/components/ProgramHero';
+import ProgramOverview from '../../../features/programs/components/ProgramOverview';
+import LearningDimensionsGrid from '../../../features/programs/components/LearningDimensionsGrid';
+import WhyChoosePills from '../../../features/programs/components/WhyChoosePills';
+import SummerInternshipBanner from '../../../features/programs/components/SummerInternshipBanner';
+import DynamicLearningSection from '../../../features/programs/components/DynamicLearningSection';
+import MomentsGallery from '../../../features/programs/components/MomentsGallery';
+import AcademicCalendarBanner from '../../../features/programs/components/AcademicCalendarBanner';
+import AdmissionEligibility from '../../../features/programs/components/AdmissionEligibility';
+import TopRecruitersGrid from '../../../features/programs/components/TopRecruitersGrid';
+
 const ManagementDesk = ({ previewData }) => (
   <>
     {previewData.showHero && (!previewData.previewType || previewData.previewType === 'hero') && <ManagementDeskHero data={previewData} />}
@@ -29,7 +40,17 @@ const componentsMap = {
   AboutCtaSection,
   AdvisoryBoard,
   GoverningBody,
-  ManagementDesk
+  ManagementDesk,
+  ProgramHero,
+  ProgramOverview,
+  LearningDimensionsGrid,
+  WhyChoosePills,
+  SummerInternshipBanner,
+  DynamicLearningSection,
+  MomentsGallery,
+  AcademicCalendarBanner,
+  AdmissionEligibility,
+  TopRecruitersGrid
 };
 
 export default function CMSPreviewPage() {
@@ -69,7 +90,13 @@ export default function CMSPreviewPage() {
 
   return (
     <div className="w-full min-h-screen bg-[#FCFCFD] overflow-x-hidden">
-      <Component previewData={previewState.data} />
+      <Component 
+        previewData={previewState.data}
+        data={previewState.data}
+        program={previewState.data}
+        dimensions={previewState.data?.dimensions || []}
+        eligibility={previewState.data?.eligibility || []}
+      />
     </div>
   );
 }

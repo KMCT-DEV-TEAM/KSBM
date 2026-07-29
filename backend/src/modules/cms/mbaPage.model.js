@@ -249,7 +249,7 @@ const mbaPageSchema = new mongoose.Schema(
       events: { type: [mongoose.Schema.Types.Mixed], default: [] }
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 mbaPageSchema.statics.getSettings = async function () {

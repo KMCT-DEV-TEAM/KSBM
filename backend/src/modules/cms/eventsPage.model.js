@@ -109,7 +109,7 @@ const eventsPageSchema = new mongoose.Schema(
       }
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 eventsPageSchema.statics.getSettings = async function () {

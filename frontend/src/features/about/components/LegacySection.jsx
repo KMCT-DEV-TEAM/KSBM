@@ -8,6 +8,8 @@ const LegacySection = ({ previewData }) => {
     subheading: 'OUR IDENTITY',
     heading: 'A Legacy of Strategic Excellence.',
     description: `Founded with a vision to revolutionize business leadership in the region, KSBM has consistently pushed the boundaries of traditional management education. We are not merely an institution; it is a transformative space where students are not just participants in commerce, but leaders of it.\n\nOur curriculum is meticulously crafted to reflect the complexities of the global economy, emphasizing critical thinking, strategic foresight, and an entrepreneurial mindset. We empower our students to see beyond immediate numbers and shape the architects of commerce.`
+  ,
+    showSection: true
   });
 
   useEffect(() => {
@@ -27,6 +29,8 @@ const LegacySection = ({ previewData }) => {
     };
     fetchData();
   }, [previewData]);
+
+  if (legacyData.showSection === false) return null;
 
   return (
     <section className="py-20 bg-transparent">

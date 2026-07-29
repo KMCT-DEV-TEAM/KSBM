@@ -27,10 +27,12 @@ const ProudAchievers = ({ data }) => {
         className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
       >
 
-        <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }} className="flex items-center gap-4 mb-12">
-          <h2 className="text-2xl md:text-3xl font-semibold text-white">{data.title}</h2>
-          <div className="flex-1 h-px bg-white/20"></div>
-        </motion.div>
+        {data?.showHeading !== false && (
+          <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }} className="flex items-center gap-4 mb-12">
+            <h2 className="text-2xl md:text-3xl font-semibold text-white">{data.title}</h2>
+            <div className="flex-1 h-px bg-white/20"></div>
+          </motion.div>
+        )}
 
         {/* Infinite Scroll Container */}
         <motion.div

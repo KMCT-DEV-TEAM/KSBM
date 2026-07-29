@@ -9,16 +9,18 @@ const PlacementActivities = ({ data }) => {
     <section className="py-16 md:py-24 bg-white relative">
       <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.8 }}
-          transition={{ duration: 0.6 }}
-          className="flex items-center gap-4 mb-12"
-        >
-          <h2 className="text-2xl md:text-3xl font-semibold text-primary">{data.title}</h2>
-          <div className="flex-1 h-px bg-gray-200"></div>
-        </motion.div>
+        {data?.showHeading !== false && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.8 }}
+            transition={{ duration: 0.6 }}
+            className="flex items-center gap-4 mb-12"
+          >
+            <h2 className="text-2xl md:text-3xl font-semibold text-primary">{data.title}</h2>
+            <div className="flex-1 h-px bg-gray-200"></div>
+          </motion.div>
+        )}
 
         {/* Infinite Scroll Container */}
         <motion.div

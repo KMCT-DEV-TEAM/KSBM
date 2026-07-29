@@ -22,17 +22,23 @@ const FacultyIntro = ({ data }) => {
           transition={{ duration: 0.7 }}
           className="max-w-5xl"
         >
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3 block">
-            {data?.introSubheading || "FACULTY MEMBERS"}
-          </span>
+          {data?.showIntroSubheading !== false && (
+            <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3 block">
+              {data?.introSubheading || "FACULTY MEMBERS"}
+            </span>
+          )}
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#1e2869] mb-6 tracking-tight">
-            {data?.introHeading || "Learn from the Best"}
-          </h2>
+          {data?.showIntroHeading !== false && (
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#1e2869] mb-6 tracking-tight">
+              {data?.introHeading || "Learn from the Best"}
+            </h2>
+          )}
 
-          <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
-            {data?.introText || "At KSBM, our faculty members are the cornerstone of academic excellence. With a blend of strong academic credentials, industry expertise, and a passion for teaching, they create a dynamic learning environment that encourages critical thinking, innovation, and leadership. Beyond the classroom, our faculty mentor, inspire, and guide students through every stage of their academic journey, equipping them with the knowledge, confidence, and practical skills needed to succeed in an ever-evolving global business landscape."}
-          </p>
+          {data?.showIntroText !== false && (
+            <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
+              {data?.introText || "At KSBM, our faculty members are the cornerstone of academic excellence. With a blend of strong academic credentials, industry expertise, and a passion for teaching, they create a dynamic learning environment that encourages critical thinking, innovation, and leadership. Beyond the classroom, our faculty mentor, inspire, and guide students through every stage of their academic journey, equipping them with the knowledge, confidence, and practical skills needed to succeed in an ever-evolving global business landscape."}
+            </p>
+          )}
         </motion.div>
       </div>
     </section>

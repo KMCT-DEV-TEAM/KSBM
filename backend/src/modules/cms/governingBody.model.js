@@ -37,7 +37,7 @@ const governingBodySchema = new mongoose.Schema(
       ]
     },
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 governingBodySchema.statics.getSettings = async function () {

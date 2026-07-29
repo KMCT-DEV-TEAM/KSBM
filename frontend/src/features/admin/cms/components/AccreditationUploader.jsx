@@ -259,8 +259,8 @@ const AccreditationUploader = ({ images, setImages, onUploadStateChange, deferre
                 <div className="aspect-[4/3] w-full bg-white relative p-4 flex items-center justify-center">
                   <img src={img.url} alt={`Slide ${index + 1}`} className="max-w-full max-h-full object-contain mix-blend-multiply" />
                   
-                  {/* Overlay on hover */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                  {/* Overlay for drag handle */}
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center pointer-events-none">
                     <GripVertical className="w-8 h-8 text-white" />
                   </div>
 

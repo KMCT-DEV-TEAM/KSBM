@@ -172,23 +172,25 @@ const AlumniGallery = ({ data }) => {
 
       <div className="relative z-10 w-full">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-10 sm:mb-14 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto"
-        >
-          <div className="flex items-center justify-between w-full gap-4 sm:gap-6 mb-3">
-            <div className="flex-1 h-[1px] bg-primary/30"></div>
-            <span className="text-xs font-semibold tracking-[0.25em] text-primary uppercase shrink-0">
-              GALLERY
-            </span>
-            <div className="flex-1 h-[1px] bg-primary/30"></div>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#2b2b68] tracking-tight">
-            {data?.heading || 'Captured in Events'}
-          </h2>
-        </motion.div>
+        {data?.showHeading !== false && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10 sm:mb-14 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto"
+          >
+            <div className="flex items-center justify-between w-full gap-4 sm:gap-6 mb-3">
+              <div className="flex-1 h-[1px] bg-primary/30"></div>
+              <span className="text-xs font-semibold tracking-[0.25em] text-primary uppercase shrink-0">
+                GALLERY
+              </span>
+              <div className="flex-1 h-[1px] bg-primary/30"></div>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#2b2b68] tracking-tight">
+              {data?.heading || 'Captured in Events'}
+            </h2>
+          </motion.div>
+        )}
 
         {/* Gallery Collage with Scroll */}
         <div 

@@ -20,32 +20,38 @@ const PlacementOverview = ({ data }) => {
             className="lg:col-span-6 relative pb-16 pt-8 sm:pb-20 sm:pt-12 px-2 sm:px-6"
           >
             {/* Bottom/Left Main Image */}
-            <div className="relative z-10 w-[85%] sm:w-[80%] h-[280px] sm:h-[350px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-gray-100">
-              <img
-                src={resolveImage(data.collageImage1)}
-                alt="Collage Image 1"
-                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-              />
-            </div>
+            {data?.showCollageImage1 !== false && (
+              <div className="relative z-10 w-[85%] sm:w-[80%] h-[280px] sm:h-[350px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-gray-100">
+                <img
+                  src={resolveImage(data.collageImage1)}
+                  alt="Collage Image 1"
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+              </div>
+            )}
 
             {/* Top/Right Overlapping Image */}
-            <div className="absolute top-0 right-0 z-20 w-[60%] sm:w-[55%] h-[200px] sm:h-[240px] rounded-3xl overflow-hidden shadow-xl border-4 sm:border-[6px] border-white bg-gray-100">
-              <img
-                src={resolveImage(data.collageImage2)}
-                alt="Collage Image 2"
-                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-              />
-            </div>
+            {data?.showCollageImage2 !== false && (
+              <div className="absolute top-0 right-0 z-20 w-[60%] sm:w-[55%] h-[200px] sm:h-[240px] rounded-3xl overflow-hidden shadow-xl border-4 sm:border-[6px] border-white bg-gray-100">
+                <img
+                  src={resolveImage(data.collageImage2)}
+                  alt="Collage Image 2"
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+              </div>
+            )}
 
             {/* Bottom Floating Banner Box */}
-            <div className="absolute bottom-8 sm:bottom-15 right-2 sm:right-6 z-30 w-[70%] sm:w-[60%] max-w-[340px] bg-primary text-white p-3 sm:p-3.5 rounded-xl shadow-2xl border border-white/15 flex items-center gap-2.5 sm:gap-3">
-              <div className="p-2 sm:p-2.5 bg-white/10 rounded-lg shrink-0">
-                <Briefcase className="w-4 h-4 text-white" />
+            {data?.showFloatingQuote !== false && (
+              <div className="absolute bottom-8 sm:bottom-15 right-2 sm:right-6 z-30 w-[70%] sm:w-[60%] max-w-[340px] bg-primary text-white p-3 sm:p-3.5 rounded-xl shadow-2xl border border-white/15 flex items-center gap-2.5 sm:gap-3">
+                <div className="p-2 sm:p-2.5 bg-white/10 rounded-lg shrink-0">
+                  <Briefcase className="w-4 h-4 text-white" />
+                </div>
+                <p className="text-[11px] sm:text-xs font-semibold leading-tight text-white">
+                  {data.floatingQuote}
+                </p>
               </div>
-              <p className="text-[11px] sm:text-xs font-semibold leading-tight text-white">
-                {data.floatingQuote}
-              </p>
-            </div>
+            )}
           </motion.div>
 
           {/* Right Side - Content */}
@@ -57,54 +63,68 @@ const PlacementOverview = ({ data }) => {
             className="lg:col-span-6 space-y-6"
           >
             <div>
-              <div className="flex items-center gap-3">
-                <span className="text-xs font-semibold tracking-[0.25em] text-text-secondary uppercase">
-                  {data.deskBadge}
-                </span>
-                <div className="h-px bg-primary/30 w-12" />
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2 tracking-tight">
-                {data.title}
-              </h2>
+              {data?.showDeskBadge !== false && (
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-semibold tracking-[0.25em] text-text-secondary uppercase">
+                    {data.deskBadge}
+                  </span>
+                  <div className="h-px bg-primary/30 w-12" />
+                </div>
+              )}
+              {data?.showTitle !== false && (
+                <h2 className="text-3xl md:text-4xl font-bold text-primary mt-2 tracking-tight">
+                  {data.title}
+                </h2>
+              )}
             </div>
 
             <div className="space-y-4">
-              <p className="text-base text-gray-600 leading-relaxed font-medium">
-                {data.description1}
-              </p>
-              <p className="text-base text-gray-600 leading-relaxed">
-                {data.description2}
-              </p>
+              {data?.showDescription1 !== false && (
+                <p className="text-base text-gray-600 leading-relaxed font-medium">
+                  {data.description1}
+                </p>
+              )}
+              {data?.showDescription2 !== false && (
+                <p className="text-base text-gray-600 leading-relaxed">
+                  {data.description2}
+                </p>
+              )}
             </div>
 
             {/* 3 Logos - without border & little size */}
-            <div className="pt-2 pb-1 flex items-center gap-6 sm:gap-8 flex-wrap">
-              {(data.overviewLogos && data.overviewLogos.length > 0
-                ? data.overviewLogos
-                : [
-                  '/assets/Images/icar_logo.jpg',
-                  '/assets/Images/vit_logo.jpg',
-                  '/assets/Images/rcc_logo.jpg'
-                ]
-              ).map((logo, idx) => (
-                <img
-                  key={idx}
-                  src={resolveImage(logo)}
-                  alt={`Partner Logo ${idx + 1}`}
-                  className="h-10 sm:h-12 w-auto object-contain border-0 shadow-none transition-transform duration-300 hover:scale-105"
-                />
-              ))}
-            </div>
+            {data?.showLogos !== false && (
+              <div className="pt-2 pb-1 flex items-center gap-6 sm:gap-8 flex-wrap">
+                {(data.overviewLogos && data.overviewLogos.length > 0
+                  ? data.overviewLogos
+                  : [
+                    '/assets/Images/icar_logo.jpg',
+                    '/assets/Images/vit_logo.jpg',
+                    '/assets/Images/rcc_logo.jpg'
+                  ]
+                ).map((logo, idx) => (
+                  <img
+                    key={idx}
+                    src={resolveImage(logo)}
+                    alt={`Partner Logo ${idx + 1}`}
+                    className="h-10 sm:h-12 w-auto object-contain border-0 shadow-none transition-transform duration-300 hover:scale-105"
+                  />
+                ))}
+              </div>
+            )}
 
             <div className="pt-2 flex items-center gap-8 sm:gap-12">
-              <div>
-                <p className="text-3xl font-semibold text-primary mb-1">{data.stat1Value}</p>
-                <p className="text-sm text-text-secondary font-medium">{data.stat1Label}</p>
-              </div>
-              <div>
-                <p className="text-3xl font-semibold text-primary mb-1">{data.stat2Value}</p>
-                <p className="text-sm text-text-secondary font-medium">{data.stat2Label}</p>
-              </div>
+              {data?.showStat1 !== false && (
+                <div>
+                  <p className="text-3xl font-semibold text-primary mb-1">{data.stat1Value}</p>
+                  <p className="text-sm text-text-secondary font-medium">{data.stat1Label}</p>
+                </div>
+              )}
+              {data?.showStat2 !== false && (
+                <div>
+                  <p className="text-3xl font-semibold text-primary mb-1">{data.stat2Value}</p>
+                  <p className="text-sm text-text-secondary font-medium">{data.stat2Label}</p>
+                </div>
+              )}
             </div>
           </motion.div>
         </div>

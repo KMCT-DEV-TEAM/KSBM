@@ -25,7 +25,7 @@ const grievancePageSchema = new mongoose.Schema({
       ] 
     }
   }
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
 const GrievancePage = mongoose.model('GrievancePage', grievancePageSchema);
 export default GrievancePage;

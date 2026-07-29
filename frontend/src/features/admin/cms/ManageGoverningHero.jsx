@@ -165,17 +165,18 @@ const ManageGoverningHero = () => {
             <h3 className="text-lg font-bold text-[#1e2869] border-b pb-2">Hero Section</h3>
             
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Hero Heading</label>
-                <span className="text-xs text-gray-400">{heroHeading.length}/50</span>
-              </div>
-              <input type="text" maxLength={50} value={heroHeading} onChange={(e) => setHeroHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+              <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Hero Heading</label>
+                
+</div>
+<input type="text" maxLength={50} value={heroHeading} onChange={(e) => setHeroHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+<div className="text-right text-xs text-gray-400 mt-1">{heroHeading.length}/50 characters</div>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Hero Subtext</label>
-                <span className="text-xs text-gray-400">{heroSubtext.length}/200</span>
+              <div className="flex items-center gap-3 mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Hero Subtext</label>
+                
               </div>
               <textarea maxLength={200} value={heroSubtext} onChange={(e) => setHeroSubtext(e.target.value)} rows={4} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
             </div>
@@ -202,16 +203,18 @@ const ManageGoverningHero = () => {
               <div className="flex justify-between items-center mb-1.5">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Content Subheading</label>
                 <span className="text-xs text-gray-400">{contentSubheading.length}/50</span>
-              </div>
-              <input type="text" maxLength={50} value={contentSubheading} onChange={(e) => setContentSubheading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+</div>
+<input type="text" maxLength={50} value={contentSubheading} onChange={(e) => setContentSubheading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+<div className="text-right text-xs text-gray-400 mt-1">{heroSubtext.length}/200 characters</div>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Content Heading</label>
-                <span className="text-xs text-gray-400">{contentHeading.length}/100</span>
-              </div>
-              <input type="text" maxLength={100} value={contentHeading} onChange={(e) => setContentHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+              <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Content Heading</label>
+                
+</div>
+<input type="text" maxLength={100} value={contentHeading} onChange={(e) => setContentHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+<div className="text-right text-xs text-gray-400 mt-1">{contentHeading.length}/100 characters</div>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">

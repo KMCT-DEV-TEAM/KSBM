@@ -6,11 +6,13 @@ const AlumniHero = ({ data }) => {
   return (
     <section className="relative h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32">
       {/* Background Image */}
-      <img
-        src={data?.backgroundImage || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop"}
-        alt="KSBM Alumni Network"
-        className="absolute inset-0 w-full h-full object-cover object-top"
-      />
+      {data?.showBackgroundImage !== false && (
+        <img
+          src={data?.backgroundImage || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop"}
+          alt="KSBM Alumni Network"
+          className="absolute inset-0 w-full h-full object-cover object-top"
+        />
+      )}
 
       {/* Dark Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-[#0b1238]/60 to-black/30" />
@@ -23,12 +25,16 @@ const AlumniHero = ({ data }) => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-4xl"
         >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
-            {data?.title || 'Alumni'}
-          </h1>
-          <p className="text-xs sm:text-sm md:text-base text-gray-200 font-medium leading-relaxed max-w-3xl">
-            {data?.subtitle || 'Our alumni stand at the forefront of global business, driving innovation through principled leadership and strategic excellence across industries worldwide.'}
-          </p>
+          {data?.showTitle !== false && (
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+              {data?.title || 'Alumni'}
+            </h1>
+          )}
+          {data?.showSubtitle !== false && (
+            <p className="text-xs sm:text-sm md:text-base text-gray-200 font-medium leading-relaxed max-w-3xl">
+              {data?.subtitle || 'Our alumni stand at the forefront of global business, driving innovation through principled leadership and strategic excellence across industries worldwide.'}
+            </p>
+          )}
         </motion.div>
       </div>
     </section>

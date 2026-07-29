@@ -41,7 +41,7 @@ const faqSchema = new mongoose.Schema(
       }
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 faqSchema.statics.getSettings = async function () {

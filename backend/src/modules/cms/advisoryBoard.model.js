@@ -37,7 +37,7 @@ const advisoryBoardSchema = new mongoose.Schema(
       ]
     },
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 advisoryBoardSchema.statics.getSettings = async function () {

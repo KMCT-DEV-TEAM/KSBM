@@ -201,7 +201,7 @@ const Hero = ({ previewData }) => {
               hidden: { opacity: 0, y: 30 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
             }}
-            className="max-w-2xl text-xs md:text-sm mt-6 text-gray-200 leading-relaxed font-medium"
+            className="w-[75%] md:w-full max-w-2xl text-xs md:text-sm mt-6 text-gray-200 leading-relaxed font-medium"
           >
             {settings?.description?.text || "Unlock your potential with India's leading B-School, where traditional academic rigor meets modern industry innovation. Join a network of global visionaries."}
           </motion.p>

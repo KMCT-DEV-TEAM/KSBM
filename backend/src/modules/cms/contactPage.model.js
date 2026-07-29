@@ -24,7 +24,7 @@ const contactPageSchema = new mongoose.Schema(
       bottomBadgeDesk: { type: String, default: 'KSBM Desk' }
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 contactPageSchema.statics.getSettings = async function () {

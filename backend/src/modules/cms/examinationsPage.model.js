@@ -92,7 +92,7 @@ const examinationsPageSchema = new mongoose.Schema(
       ]
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 examinationsPageSchema.statics.getSettings = async function () {

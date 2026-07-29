@@ -79,23 +79,29 @@ const MemberCard = ({ member, index }) => {
         />
 
         {/* Member Image - Breaking out of the top */}
-        <div className="absolute bottom-6 -left-10 right-0 flex justify-center z-10 pointer-events-none">
-          <img
-            src={member.image || member.img}
-            alt={member.name}
-            className="w-[150%] h-auto object-contain object-bottom drop-shadow-md"
-          />
-        </div>
+        {member.showImage !== false && (
+          <div className="absolute bottom-6 -left-10 right-0 flex justify-center z-10 pointer-events-none">
+            <img
+              src={member.image || member.img}
+              alt={member.name}
+              className="w-[150%] h-auto object-contain object-bottom drop-shadow-md"
+            />
+          </div>
+        )}
       </div>
 
       {/* Name and Title Bar */}
       <div className="w-[92%] bg-[#3b4179] rounded-[16px] py-4 px-2 text-center z-20 -mt-14 shadow-lg shadow-black/20">
-        <h4 className="text-white font-bold text-sm md:text-[16px]">
-          {member.name}
-        </h4>
-        <p className="text-[#a6adcf] text-[10px] font-bold tracking-widest uppercase mt-1.5 flex items-center justify-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#a6adcf]"></span> {member.title}
-        </p>
+        {member.showName !== false && (
+          <h4 className="text-white font-bold text-sm md:text-[16px]">
+            {member.name}
+          </h4>
+        )}
+        {member.showTitle !== false && (
+          <p className="text-[#a6adcf] text-[10px] font-bold tracking-widest uppercase mt-1.5 flex items-center justify-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#a6adcf]"></span> {member.title}
+          </p>
+        )}
       </div>
     </motion.div>
   );

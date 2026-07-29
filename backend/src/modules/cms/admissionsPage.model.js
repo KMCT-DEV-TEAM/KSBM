@@ -217,7 +217,7 @@ const admissionsPageSchema = new mongoose.Schema(
       ]
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 admissionsPageSchema.statics.getSettings = async function () {

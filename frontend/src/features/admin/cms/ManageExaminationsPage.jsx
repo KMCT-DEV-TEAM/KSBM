@@ -440,35 +440,37 @@ const ManageExaminationsPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Badge Text</label>
-                      <span className="text-xs text-gray-400">{data.heroBadgeText?.length || 0}/50</span>
-                    </div>
-                    <input
+                    <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Badge Text</label>
+                      
+</div>
+<input
                       type="text"
                       value={data.heroBadgeText || ''}
                       maxLength={50}
                       onChange={(e) => updateSection('heroBadgeText', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+<div className="text-right text-xs text-gray-400 mt-1">{data.heroBadgeText?.length || 0}/50 characters</div>
                   </div>
                   <div>
-                    <div className="flex justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading Title</label>
-                      <span className="text-xs text-gray-400">{data.heroTitle?.length || 0}/100</span>
-                    </div>
-                    <input
+                    <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading Title</label>
+                      
+</div>
+<input
                       type="text"
                       value={data.heroTitle || ''}
                       maxLength={100}
                       onChange={(e) => updateSection('heroTitle', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+<div className="text-right text-xs text-gray-400 mt-1">{data.heroTitle?.length || 0}/100 characters</div>
                   </div>
                   <div>
-                    <div className="flex justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Hero Subtitle</label>
-                      <span className="text-xs text-gray-400">{data.heroSubtitle?.length || 0}/300</span>
+                    <div className="flex items-center gap-3 mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Hero Subtitle</label>
+                      
                     </div>
                     <textarea
                       rows="4"
@@ -504,19 +506,20 @@ const ManageExaminationsPage = () => {
                     <div className="flex justify-between mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Title</label>
                       <span className="text-xs text-gray-400">{data.overviewTitle?.length || 0}/100</span>
-                    </div>
-                    <input
+</div>
+<input
                       type="text"
                       value={data.overviewTitle || ''}
                       maxLength={100}
                       onChange={(e) => updateSection('overviewTitle', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+<div className="text-right text-xs text-gray-400 mt-1">{data.heroSubtitle?.length || 0}/300 characters</div>
                   </div>
                   <div>
-                    <div className="flex justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Paragraph 1 Text</label>
-                      <span className="text-xs text-gray-400">{data.overviewText1?.length || 0}/600</span>
+                    <div className="flex items-center gap-3 mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Paragraph 1 Text</label>
+                      
                     </div>
                     <textarea
                       rows="4"
@@ -565,19 +568,20 @@ const ManageExaminationsPage = () => {
                     <div className="flex justify-between mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Banner Title</label>
                       <span className="text-xs text-gray-400">{data.calendarTitle?.length || 0}/100</span>
-                    </div>
-                    <input
+</div>
+<input
                       type="text"
                       value={data.calendarTitle || ''}
                       maxLength={100}
                       onChange={(e) => updateSection('calendarTitle', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+<div className="text-right text-xs text-gray-400 mt-1">{data.overviewText1?.length || 0}/600 characters</div>
                   </div>
                   <div>
-                    <div className="flex justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Banner Description</label>
-                      <span className="text-xs text-gray-400">{data.calendarText?.length || 0}/300</span>
+                    <div className="flex items-center gap-3 mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Banner Description</label>
+                      
                     </div>
                     <textarea
                       rows="4"
@@ -592,27 +596,29 @@ const ManageExaminationsPage = () => {
                       <div className="flex justify-between mb-1.5">
                         <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">View Button Label</label>
                         <span className="text-xs text-gray-400">{data.calendarViewBtnText?.length || 0}/50</span>
-                      </div>
-                      <input
+</div>
+<input
                         type="text"
                         value={data.calendarViewBtnText || ''}
                         maxLength={50}
                         onChange={(e) => updateSection('calendarViewBtnText', e.target.value)}
                         className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       />
+<div className="text-right text-xs text-gray-400 mt-1">{data.calendarText?.length || 0}/300 characters</div>
                     </div>
                     <div>
-                      <div className="flex justify-between mb-1.5">
-                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Download Button Label</label>
-                        <span className="text-xs text-gray-400">{data.calendarDownloadBtnText?.length || 0}/50</span>
-                      </div>
-                      <input
+                      <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Download Button Label</label>
+                        
+</div>
+<input
                         type="text"
                         value={data.calendarDownloadBtnText || ''}
                         maxLength={50}
                         onChange={(e) => updateSection('calendarDownloadBtnText', e.target.value)}
                         className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       />
+<div className="text-right text-xs text-gray-400 mt-1">{data.calendarDownloadBtnText?.length || 0}/50 characters</div>
                     </div>
                   </div>
                   <div>

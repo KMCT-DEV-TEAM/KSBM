@@ -104,13 +104,15 @@ const ManagementDeskMembers = ({ data }) => {
                 transition={{ duration: 0.7 }}
                 className="w-full lg:w-5/12 flex flex-col items-center relative"
               >
-                <div className="relative w-full max-w-[315px] aspect-[4/5] flex justify-center items-end bg-gradient-to-b from-gray-50/80 to-primary/5 rounded-3xl overflow-hidden shadow-sm">
-                  <img
-                    src={member.image || 'https://via.placeholder.com/400x500'}
-                    alt={member.name}
-                    className="w-full h-full object-cover object-top"
-                  />
-                </div>
+                {member.showImage !== false && (
+                  <div className="relative w-full max-w-[315px] aspect-[4/5] flex justify-center items-end bg-gradient-to-b from-gray-50/80 to-primary/5 rounded-3xl overflow-hidden shadow-sm">
+                    <img
+                      src={member.image || 'https://via.placeholder.com/400x500'}
+                      alt={member.name}
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                )}
 
                 {/* Floating Name & Role Badge */}
                 <div className="bg-white rounded-2xl shadow-xl p-3 pr-6 flex items-center gap-3.5 -mt-8 relative z-20 max-w-[320px] w-full mx-auto">
@@ -120,8 +122,8 @@ const ManagementDeskMembers = ({ data }) => {
                     className="w-11 h-11 rounded-full object-cover shrink-0"
                   />
                   <div className="flex flex-col overflow-hidden">
-                    <h4 className="font-semibold text-gray-900 text-sm truncate">{member.name}</h4>
-                    <span className="text-[11px] text-gray-500 font-semibold tracking-wide truncate">{member.badgeRole || member.role}</span>
+                    {member.showName !== false && <h4 className="font-semibold text-gray-900 text-sm truncate">{member.name}</h4>}
+                    {member.showBadgeRole !== false && <span className="text-[11px] text-gray-500 font-semibold tracking-wide truncate">{member.badgeRole || member.role}</span>}
                   </div>
                 </div>
               </motion.div>
@@ -152,19 +154,23 @@ const ManagementDeskMembers = ({ data }) => {
               </div>
 
               {/* Title */}
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#2b2b68] mb-4 relative z-10 tracking-tight">
-                {member.title || 'Leadership Vision'}
-              </h3>
+              {member.showTitle !== false && (
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#2b2b68] mb-4 relative z-10 tracking-tight">
+                  {member.title || 'Leadership Vision'}
+                </h3>
+              )}
 
               {/* Description Paragraphs */}
-              <div className="space-y-4 text-gray-600 text-xs sm:text-sm leading-relaxed relative z-10 font-normal">
-                {(Array.isArray(member.description) && member.description.length > 0
-                  ? member.description
-                  : [typeof member.description === 'string' ? member.description : '']
-                ).map((para, pIdx) => (
-                  <p key={pIdx}>{para}</p>
-                ))}
-              </div>
+              {member.showDescription !== false && (
+                <div className="space-y-4 text-gray-600 text-xs sm:text-sm leading-relaxed relative z-10 font-normal">
+                  {(Array.isArray(member.description) && member.description.length > 0
+                    ? member.description
+                    : [typeof member.description === 'string' ? member.description : '']
+                  ).map((para, pIdx) => (
+                    <p key={pIdx}>{para}</p>
+                  ))}
+                </div>
+              )}
             </motion.div>
           </div>
         );

@@ -8,7 +8,7 @@ const aboutCtaSchema = new mongoose.Schema(
     buttonLink: { type: String, default: '/apply' },
     backgroundColor: { type: String, default: '#2A3256' },
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 aboutCtaSchema.statics.getSettings = async function () {

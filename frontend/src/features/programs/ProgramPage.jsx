@@ -355,16 +355,16 @@ const ProgramPage = ({ programType = 'mba' }) => {
 
   return (
     <div className="min-h-screen bg-[#fafafa]">
-      {(!activePreviewTab || activePreviewTab === 'hero') && <ProgramHero program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'overview') && <ProgramOverview program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'dimensions') && <LearningDimensionsGrid dimensions={config.dimensions} />}
-      {(!activePreviewTab || activePreviewTab === 'whyChoose') && <WhyChoosePills program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'internship') && <SummerInternshipBanner program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'dynamicLearning') && <DynamicLearningSection program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'momentsGallery') && <MomentsGallery program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'academicCalendarBanner') && <AcademicCalendarBanner program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'eligibility') && <AdmissionEligibility eligibility={config.eligibility} />}
-      {(!activePreviewTab || activePreviewTab === 'topRecruiters') && <TopRecruitersGrid />}
+      {(!activePreviewTab || activePreviewTab === 'hero') && config?.showSections?.hero !== false && <ProgramHero program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'overview') && config?.showSections?.overview !== false && <ProgramOverview program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'dimensions') && config?.showSections?.dimensions !== false && <LearningDimensionsGrid dimensions={config.dimensions} />}
+      {(!activePreviewTab || activePreviewTab === 'whyChoose') && config?.showSections?.whyChoose !== false && <WhyChoosePills program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'internship') && config?.showSections?.internships !== false && <SummerInternshipBanner program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'dynamicLearning') && config?.showSections?.dynamic !== false && <DynamicLearningSection program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'momentsGallery') && config?.showSections?.gallery !== false && <MomentsGallery program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'academicCalendarBanner') && config?.showSections?.calendar !== false && <AcademicCalendarBanner program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'eligibility') && config?.showSections?.eligibility !== false && <AdmissionEligibility eligibility={config.eligibility} />}
+      {(!activePreviewTab || activePreviewTab === 'topRecruiters') && config?.showSections?.recruiters !== false && <TopRecruitersGrid />}
     </div>
   );
 };

@@ -39,11 +39,11 @@ const ExaminationsLanding = ({ previewData }) => {
     <div className="min-h-screen bg-white flex flex-col justify-between">
       <div>
         <main>
-          {(!data?.activeTab || data.activeTab === 'hero') && <ExaminationsHero data={data} />}
-          {(!data?.activeTab || data.activeTab === 'overview') && <ExaminationsOverview data={data} />}
-          {(!data?.activeTab || data.activeTab === 'calendar') && <ExamCalendarBanner data={data} />}
-          {(!data?.activeTab || data.activeTab === 'notifications') && <ExamNotifications data={data} />}
-          {(!data?.activeTab || data.activeTab === 'results') && <ExamResultsTable data={data} />}
+          {(!data?.activeTab || data.activeTab === 'hero') && data?.showHeroSection !== false && <ExaminationsHero data={data} />}
+          {(!data?.activeTab || data.activeTab === 'overview') && data?.showOverviewSection !== false && <ExaminationsOverview data={data} />}
+          {(!data?.activeTab || data.activeTab === 'calendar') && data?.showCalendarSection !== false && <ExamCalendarBanner data={data} />}
+          {(!data?.activeTab || data.activeTab === 'notifications') && data?.showNotificationsSection !== false && <ExamNotifications data={data} />}
+          {(!data?.activeTab || data.activeTab === 'results') && data?.showResultsSection !== false && <ExamResultsTable data={data} />}
         </main>
       </div>
     </div>

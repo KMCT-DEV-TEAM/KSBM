@@ -8,6 +8,8 @@ const AboutHero = ({ previewData }) => {
     title: 'Advancing Business Integrity and Innovation.',
     subtitle: 'KMCT School of Business (KSBM) ignites a passion for intellectual discovery and lifelong learning. Empowering each individual to achieve their fullest potential.',
     backgroundImage: '/assets/Images/aboutus/about-hero-bg.jpg'
+  ,
+    showSection: true
   });
 
   useEffect(() => {
@@ -16,6 +18,8 @@ const AboutHero = ({ previewData }) => {
         title: previewData.title || heroData.title,
         subtitle: previewData.subtitle || heroData.subtitle,
         backgroundImage: previewData.backgroundImage || heroData.backgroundImage
+      ,
+        showSection: previewData.showSection ?? true
       });
       return;
     }
@@ -27,6 +31,8 @@ const AboutHero = ({ previewData }) => {
             title: data.title || heroData.title,
             subtitle: data.subtitle || heroData.subtitle,
             backgroundImage: data.backgroundImage || heroData.backgroundImage
+          ,
+            showSection: data.showSection ?? true
           });
         }
       } catch (error) {
@@ -35,6 +41,8 @@ const AboutHero = ({ previewData }) => {
     };
     fetchHeroData();
   }, [previewData]);
+
+  if (heroData.showSection === false) return null;
 
   return (
     <section className="relative w-full min-h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32">

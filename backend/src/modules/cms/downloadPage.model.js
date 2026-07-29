@@ -32,7 +32,7 @@ const downloadPageSchema = new mongoose.Schema({
     }
   },
   documents: [documentSchema]
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
 const DownloadPage = mongoose.model('DownloadPage', downloadPageSchema);
 

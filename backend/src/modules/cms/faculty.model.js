@@ -56,7 +56,7 @@ const facultySchema = new mongoose.Schema(
       ]
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 facultySchema.statics.getSettings = async function () {

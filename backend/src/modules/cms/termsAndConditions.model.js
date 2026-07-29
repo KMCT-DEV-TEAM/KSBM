@@ -53,7 +53,7 @@ const termsAndConditionsSchema = new mongoose.Schema(
       closingParagraph2: { type: String, default: 'If you have any questions or concerns regarding our terms of service, please contact our administrative desk or reach out via our general inquiry channels.' }
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 termsAndConditionsSchema.statics.getSettings = async function () {

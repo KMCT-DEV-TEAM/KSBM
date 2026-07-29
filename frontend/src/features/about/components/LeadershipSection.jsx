@@ -4,7 +4,9 @@ import { motion } from 'framer-motion';
 import api from '../../../api/axios';
 
 const LeadershipSection = ({ previewData }) => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({,
+    showSection: true
+  });
 
   useEffect(() => {
     if (previewData) {
@@ -54,6 +56,8 @@ const LeadershipSection = ({ previewData }) => {
     }
   ];
 
+  if (data.showSection === false) return null;
+
   return (
     <section className="pb-24 w-full bg-transparent overflow-hidden">
       <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
@@ -61,8 +65,10 @@ const LeadershipSection = ({ previewData }) => {
           const isEven = idx % 2 === 0;
           const isFirstLeader = idx === 0;
 
-          return (
-            <div
+          if (data.showSection === false) return null;
+
+  return (
+    <div
               key={leader.id || idx}
               className={`flex items-center gap-12 lg:gap-24 rounded-3xl ${
                 isFirstLeader

@@ -502,11 +502,11 @@ const ManageAlumni = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading Title</label>
-                      <span className="text-xs text-gray-400">{data.hero?.title?.length || 0}/50</span>
-                    </div>
-                    <input
+                    <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading Title</label>
+                      
+</div>
+<input
                       type="text"
                       value={data.hero?.title || ''}
                       maxLength={50}
@@ -514,11 +514,12 @@ const ManageAlumni = () => {
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       placeholder="e.g. Alumni"
                     />
+<div className="text-right text-xs text-gray-400 mt-1">{data.hero?.title?.length || 0}/50 characters</div>
                   </div>
                   <div>
-                    <div className="flex justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Hero Subtitle</label>
-                      <span className="text-xs text-gray-400">{data.hero?.subtitle?.length || 0}/300</span>
+                    <div className="flex items-center gap-3 mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Hero Subtitle</label>
+                      
                     </div>
                     <textarea
                       rows="4"
@@ -555,35 +556,37 @@ const ManageAlumni = () => {
                     <div className="flex justify-between mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Small Subtitle</label>
                       <span className="text-xs text-gray-400">{data.legacy?.subtitle?.length || 0}/50</span>
-                    </div>
-                    <input
+</div>
+<input
                       type="text"
                       value={data.legacy?.subtitle || ''}
                       maxLength={50}
                       onChange={(e) => updateSection('legacy', 'subtitle', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+<div className="text-right text-xs text-gray-400 mt-1">{data.hero?.subtitle?.length || 0}/300 characters</div>
                   </div>
                   <div>
-                    <div className="flex justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Main Heading</label>
-                      <span className="text-xs text-gray-400">{data.legacy?.title?.length || 0}/100</span>
-                    </div>
-                    <input
+                    <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Main Heading</label>
+                      
+</div>
+<input
                       type="text"
                       value={data.legacy?.title || ''}
                       maxLength={100}
                       onChange={(e) => updateSection('legacy', 'title', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+<div className="text-right text-xs text-gray-400 mt-1">{data.legacy?.title?.length || 0}/100 characters</div>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <div className="flex justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Paragraph 1</label>
-                      <span className="text-xs text-gray-400">{data.legacy?.description1?.length || 0}/600</span>
+                    <div className="flex items-center gap-3 mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Paragraph 1</label>
+                      
                     </div>
                     <textarea
                       rows="4"
@@ -638,14 +641,15 @@ const ManageAlumni = () => {
                     <div className="flex justify-between mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Floating Quote</label>
                       <span className="text-xs text-gray-400">{data.legacy?.floatingQuote?.length || 0}/150</span>
-                    </div>
-                    <input
+</div>
+<input
                       type="text"
                       value={data.legacy?.floatingQuote || ''}
                       maxLength={150}
                       onChange={(e) => updateSection('legacy', 'floatingQuote', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+<div className="text-right text-xs text-gray-400 mt-1">{data.legacy?.description1?.length || 0}/600 characters</div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Stat 1 (Value & Label)</label>
@@ -709,17 +713,18 @@ const ManageAlumni = () => {
                 </button>
               </div>
               <div className="mb-6">
-                <div className="flex justify-between mb-1.5">
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
-                  <span className="text-xs text-gray-400">{data.events?.heading?.length || 0}/50</span>
-                </div>
-                <input
+                <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
+                  
+</div>
+<input
                   type="text"
                   value={data.events?.heading || ''}
                   maxLength={50}
                   onChange={(e) => updateSection('events', 'heading', e.target.value)}
                   className="max-w-md w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
+<div className="text-right text-xs text-gray-400 mt-1">{data.events?.heading?.length || 0}/50 characters</div>
               </div>
 
               <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
@@ -762,30 +767,32 @@ const ManageAlumni = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div>
-                  <div className="flex justify-between mb-1.5">
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Subtitle</label>
-                    <span className="text-xs text-gray-400">{data.notableAlumni?.subtitle?.length || 0}/50</span>
-                  </div>
-                  <input
+                  <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Subtitle</label>
+                    
+</div>
+<input
                     type="text"
                     value={data.notableAlumni?.subtitle || ''}
                     maxLength={50}
                     onChange={(e) => updateSection('notableAlumni', 'subtitle', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
+<div className="text-right text-xs text-gray-400 mt-1">{data.notableAlumni?.subtitle?.length || 0}/50 characters</div>
                 </div>
                 <div>
-                  <div className="flex justify-between mb-1.5">
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
-                    <span className="text-xs text-gray-400">{data.notableAlumni?.heading?.length || 0}/50</span>
-                  </div>
-                  <input
+                  <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
+                    
+</div>
+<input
                     type="text"
                     value={data.notableAlumni?.heading || ''}
                     maxLength={50}
                     onChange={(e) => updateSection('notableAlumni', 'heading', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
+<div className="text-right text-xs text-gray-400 mt-1">{data.notableAlumni?.heading?.length || 0}/50 characters</div>
                 </div>
               </div>
 
@@ -828,17 +835,18 @@ const ManageAlumni = () => {
                 </button>
               </div>
               <div className="mb-6">
-                <div className="flex justify-between mb-1.5">
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
-                  <span className="text-xs text-gray-400">{data.gallery?.heading?.length || 0}/50</span>
-                </div>
-                <input
+                <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
+                  
+</div>
+<input
                   type="text"
                   value={data.gallery?.heading || ''}
                   maxLength={50}
                   onChange={(e) => updateSection('gallery', 'heading', e.target.value)}
                   className="max-w-md w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
+<div className="text-right text-xs text-gray-400 mt-1">{data.gallery?.heading?.length || 0}/50 characters</div>
               </div>
 
               <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
@@ -871,51 +879,54 @@ const ManageAlumni = () => {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <div className="flex justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">CTA Heading</label>
-                      <span className="text-xs text-gray-400">{data.cta?.title?.length || 0}/100</span>
-                    </div>
-                    <input
+                    <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">CTA Heading</label>
+                      
+</div>
+<input
                       type="text"
                       value={data.cta?.title || ''}
                       maxLength={100}
                       onChange={(e) => updateSection('cta', 'title', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+<div className="text-right text-xs text-gray-400 mt-1">{data.cta?.title?.length || 0}/100 characters</div>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <div className="flex justify-between mb-1.5">
-                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Button Text</label>
-                        <span className="text-xs text-gray-400">{data.cta?.buttonText?.length || 0}/30</span>
-                      </div>
-                      <input
+                      <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Button Text</label>
+                        
+</div>
+<input
                         type="text"
                         value={data.cta?.buttonText || ''}
                         maxLength={30}
                         onChange={(e) => updateSection('cta', 'buttonText', e.target.value)}
                         className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       />
+<div className="text-right text-xs text-gray-400 mt-1">{data.cta?.buttonText?.length || 0}/30 characters</div>
                     </div>
                     <div>
-                      <div className="flex justify-between mb-1.5">
-                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Button Link</label>
-                        <span className="text-xs text-gray-400">{data.cta?.buttonLink?.length || 0}/100</span>
-                      </div>
-                      <input
+                      <div className="mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Button Link</label>
+                        
+</div>
+<input
                         type="text"
                         value={data.cta?.buttonLink || ''}
                         maxLength={100}
                         onChange={(e) => updateSection('cta', 'buttonLink', e.target.value)}
                         className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       />
+<div className="text-right text-xs text-gray-400 mt-1">{data.cta?.buttonLink?.length || 0}/100 characters</div>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <div className="flex justify-between mb-1.5">
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">CTA Subtitle Description</label>
-                    <span className="text-xs text-gray-400">{data.cta?.subtitle?.length || 0}/300</span>
+                  <div className="flex items-center gap-3 mb-1.5">
+<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">CTA Subtitle Description</label>
+                    
                   </div>
                   <textarea
                     rows="3"
@@ -968,8 +979,8 @@ const ManageAlumni = () => {
                         <div className="flex justify-between mb-1.5">
                           <label className="block text-sm font-semibold text-gray-700">Event Title</label>
                           <span className="text-xs text-gray-400">{currentItem?.title?.length || 0}/100</span>
-                        </div>
-                        <input
+</div>
+<input
                           type="text"
                           value={currentItem.title || ''}
                           maxLength={100}
@@ -977,13 +988,14 @@ const ManageAlumni = () => {
                           className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                           placeholder="e.g. Global Reunion 2024"
                         />
+<div className="text-right text-xs text-gray-400 mt-1">{data.cta?.subtitle?.length || 0}/300 characters</div>
                       </div>
                       <div>
-                        <div className="flex justify-between mb-1.5">
-                          <label className="block text-sm font-semibold text-gray-700">Date/Tag</label>
-                          <span className="text-xs text-gray-400">{currentItem?.date?.length || 0}/50</span>
-                        </div>
-                        <input
+                        <div className="mb-1.5">
+<label className="block text-sm font-semibold text-gray-700">Date/Tag</label>
+                          
+</div>
+<input
                           type="text"
                           value={currentItem.date || ''}
                           maxLength={50}
@@ -991,11 +1003,12 @@ const ManageAlumni = () => {
                           className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                           placeholder="e.g. October 2024"
                         />
+<div className="text-right text-xs text-gray-400 mt-1">{currentItem?.date?.length || 0}/50 characters</div>
                       </div>
                       <div>
-                        <div className="flex justify-between mb-1.5">
-                          <label className="block text-sm font-semibold text-gray-700">Description</label>
-                          <span className="text-xs text-gray-400">{currentItem?.description?.length || 0}/200</span>
+                        <div className="flex items-center gap-3 mb-1.5">
+<label className="block text-sm font-semibold text-gray-700">Description</label>
+                          
                         </div>
                         <textarea
                           rows="3"
@@ -1015,8 +1028,8 @@ const ManageAlumni = () => {
                         <div className="flex justify-between mb-1.5">
                           <label className="block text-sm font-semibold text-gray-700">Full Name</label>
                           <span className="text-xs text-gray-400">{currentItem?.name?.length || 0}/100</span>
-                        </div>
-                        <input
+</div>
+<input
                           type="text"
                           value={currentItem.name || ''}
                           maxLength={100}
@@ -1024,13 +1037,14 @@ const ManageAlumni = () => {
                           className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                           placeholder="e.g. Dr. Arvind Nair"
                         />
+<div className="text-right text-xs text-gray-400 mt-1">{currentItem?.description?.length || 0}/200 characters</div>
                       </div>
                       <div>
-                        <div className="flex justify-between mb-1.5">
-                          <label className="block text-sm font-semibold text-gray-700">Role / Batch</label>
-                          <span className="text-xs text-gray-400">{currentItem?.role?.length || 0}/100</span>
-                        </div>
-                        <input
+                        <div className="mb-1.5">
+<label className="block text-sm font-semibold text-gray-700">Role / Batch</label>
+                          
+</div>
+<input
                           type="text"
                           value={currentItem.role || ''}
                           maxLength={100}
@@ -1038,6 +1052,7 @@ const ManageAlumni = () => {
                           className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                           placeholder="e.g. CEO, Global Corporate"
                         />
+<div className="text-right text-xs text-gray-400 mt-1">{currentItem?.role?.length || 0}/100 characters</div>
                       </div>
                     </>
                   )}
@@ -1045,11 +1060,11 @@ const ManageAlumni = () => {
                   {modalType === 'gallery' && (
                     <>
                       <div>
-                        <div className="flex justify-between mb-1.5">
-                          <label className="block text-sm font-semibold text-gray-700">Photo Title</label>
-                          <span className="text-xs text-gray-400">{currentItem?.title?.length || 0}/100</span>
-                        </div>
-                        <input
+                        <div className="mb-1.5">
+<label className="block text-sm font-semibold text-gray-700">Photo Title</label>
+                          
+</div>
+<input
                           type="text"
                           value={currentItem.title || ''}
                           maxLength={100}
@@ -1057,6 +1072,7 @@ const ManageAlumni = () => {
                           className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                           placeholder="e.g. Graduation Ceremony"
                         />
+<div className="text-right text-xs text-gray-400 mt-1">{currentItem?.title?.length || 0}/100 characters</div>
                       </div>
                     </>
                   )}

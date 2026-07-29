@@ -18,6 +18,7 @@ const Toast = Swal.mixin({
 
 const ManageAboutUsStats = () => {
   const [stats, setStats] = useState([]);
+  const [showSection, setShowSection] = useState(true);
   
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);

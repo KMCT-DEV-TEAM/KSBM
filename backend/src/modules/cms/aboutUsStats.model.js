@@ -17,7 +17,7 @@ const aboutUsStatsSchema = new mongoose.Schema(
       ]
     },
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 aboutUsStatsSchema.statics.getSettings = async function () {

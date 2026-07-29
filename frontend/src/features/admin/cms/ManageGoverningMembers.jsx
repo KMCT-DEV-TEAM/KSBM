@@ -199,18 +199,20 @@ const ManageGoverningMembers = () => {
                 </button>
                 <div className="space-y-4 pr-10">
                   <div>
-                    <div className="flex justify-between items-center mb-1.5">
-                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Name</label>
-                      <span className="text-xs text-gray-400">{member.name.length}/50</span>
-                    </div>
-                    <input type="text" maxLength={50} value={member.name} onChange={(e) => updateMember(index, 'name', e.target.value)} className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+                    <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Name</label>
+                      
+</div>
+<input type="text" maxLength={50} value={member.name} onChange={(e) => updateMember(index, 'name', e.target.value)} className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+<div className="text-right text-xs text-gray-400 mt-1">{member.name.length}/50 characters</div>
                   </div>
                   <div>
-                    <div className="flex justify-between items-center mb-1.5">
-                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Title</label>
-                      <span className="text-xs text-gray-400">{member.title.length}/50</span>
-                    </div>
-                    <input type="text" maxLength={50} value={member.title} onChange={(e) => updateMember(index, 'title', e.target.value)} className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+                    <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Title</label>
+                      
+</div>
+<input type="text" maxLength={50} value={member.title} onChange={(e) => updateMember(index, 'title', e.target.value)} className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+<div className="text-right text-xs text-gray-400 mt-1">{member.title.length}/50 characters</div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Member Image</label>
@@ -245,11 +247,11 @@ const ManageGoverningMembers = () => {
             
             <div className="p-6 space-y-5 overflow-y-auto custom-scrollbar flex-1">
               <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Name</label>
-                  <span className="text-xs text-gray-400">{newMember.name.length}/50</span>
-                </div>
-                <input 
+                <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Name</label>
+                  
+</div>
+<input 
                   type="text" 
                   maxLength={50}
                   value={newMember.name} 
@@ -257,13 +259,14 @@ const ManageGoverningMembers = () => {
                   className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" 
                   placeholder="e.g. Dr. John Doe" 
                 />
+<div className="text-right text-xs text-gray-400 mt-1">{newMember.name.length}/50 characters</div>
               </div>
               <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Title</label>
-                  <span className="text-xs text-gray-400">{newMember.title.length}/50</span>
-                </div>
-                <input 
+                <div className="mb-1.5">
+<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Title</label>
+                  
+</div>
+<input 
                   type="text" 
                   maxLength={50}
                   value={newMember.title} 
@@ -271,6 +274,7 @@ const ManageGoverningMembers = () => {
                   className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" 
                   placeholder="e.g. CHAIRMAN" 
                 />
+<div className="text-right text-xs text-gray-400 mt-1">{newMember.title.length}/50 characters</div>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Member Image</label>
