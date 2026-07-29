@@ -8,8 +8,12 @@ import Loader from '../components/Loader';
 
 const MainLayout = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isIframe, setIsIframe] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsIframe(window.self !== window.top);
+    }
     const handleLoading = (e) => {
       setIsLoading(e.detail);
     };
@@ -29,17 +33,17 @@ const MainLayout = ({ children }) => {
       )}
       
       {/* Global Header */}
-      <Header />
+      {!isIframe && <Header />}
       <main className="flex-grow">
         {children}
       </main>
 
       {/* Global Footer */}
-      <Footer />
+      {!isIframe && <Footer />}
       
       {/* Global Floating Buttons */}
-      <VirtualTourButton />
-      <SideContact />
+      {!isIframe && <VirtualTourButton />}
+      {!isIframe && <SideContact />}
     </div>
   );
 };

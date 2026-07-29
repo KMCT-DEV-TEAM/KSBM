@@ -13,7 +13,7 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
   const handleSuccess = useCallback(async (url, file = null) => {
     if (!deferredMode) {
       // If we are clearing the image, delete the old image from server if it wasn't a default or blob
-      if (url === '' && displayUrl && !displayUrl.startsWith('blob:') && displayUrl !== defaultImage) {
+      if (url === '' && displayUrl && !displayUrl.startsWith('blob:') && (!defaultImage || !displayUrl.includes(defaultImage))) {
         try {
           await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
         } catch (error) {
@@ -44,7 +44,7 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
     formData.append('image', file);
 
     try {
-      if (displayUrl && !displayUrl.startsWith('blob:') && displayUrl !== defaultImage) {
+      if (displayUrl && !displayUrl.startsWith('blob:') && (!defaultImage || !displayUrl.includes(defaultImage))) {
         try {
           await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
         } catch (error) {
@@ -144,15 +144,15 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
                   className="max-w-full max-h-full object-contain" 
                 />
                 <div className="absolute -top-2 -left-2 bg-black/60 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
-                  {displayUrl === defaultImage ? "Default" : "Current"}
+                  {(defaultImage && displayUrl.includes(defaultImage)) ? "Default" : "Current"}
                 </div>
               </div>
               <div>
                 <p className="text-sm font-semibold text-gray-700">{label || "Current Image"}</p>
-                <p className="text-xs text-gray-500">{displayUrl === defaultImage ? "Using default image setup" : "Active custom image"}</p>
+                <p className="text-xs text-gray-500">{(defaultImage && displayUrl.includes(defaultImage)) ? "Using default image setup" : "Active custom image"}</p>
               </div>
             </div>
-            {(!disableDelete && displayUrl !== defaultImage) && (
+            {(!disableDelete && (!defaultImage || !displayUrl.includes(defaultImage))) && (
               <button 
                 onClick={async (e) => {
                   e.preventDefault();
@@ -163,7 +163,7 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
                     variant: 'danger',
                     action: async () => {
                       if (!deferredMode) {
-                        if (displayUrl && !displayUrl.includes('placeholder') && !displayUrl.startsWith('blob:') && displayUrl !== defaultImage) {
+                        if (displayUrl && !displayUrl.includes('placeholder') && !displayUrl.startsWith('blob:') && (!defaultImage || !displayUrl.includes(defaultImage))) {
                           try {
                             await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
                           } catch (deleteErr) {

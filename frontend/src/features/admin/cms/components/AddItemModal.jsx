@@ -76,14 +76,13 @@ const AddItemModal = ({ isOpen, onClose, title, fields, onSave, initialData }) =
 
               {field.type === 'image' && (
                 <LogoUploader
-                  currentImage={formData[field.name]}
-                  onChange={(url, file) => {
-                    handleChange(field.name, url);
-                  }}
-                  deferredMode={true}
-                  uploadEndpoint="/upload/mba"
-                  disableDelete={!formData[field.name]}
-                />
+                    currentImage={formData[field.name]}
+                    defaultImage={initialData ? initialData[field.name] : ''}
+                    onChange={(url, file) => {
+                      handleChange(field.name, url);
+                    }}
+                    deferredMode={true}
+                  />
               )}
 
               {field.type === 'select' && (
