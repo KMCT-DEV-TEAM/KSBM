@@ -28,7 +28,7 @@ const AdmissionHero = ({ data }) => {
           alt="KSBM Campus & Admissions"
           className="w-full h-full object-cover"
           onError={(e) => {
-            e.currentTarget.src = '/assets/Images/image 67.png';
+            e.currentTarget.src = '/assets/Images/admissions/image 73.png';
           }}
         />
         <div className="absolute inset-0 bg-black/75 " />

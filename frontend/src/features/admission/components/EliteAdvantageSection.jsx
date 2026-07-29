@@ -50,7 +50,7 @@ const EliteAdvantageSection = ({ data }) => {
                 alt="Corporate Leadership Handshake at KSBM"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 onError={(e) => {
-                  e.currentTarget.src = '/assets/Images/image 2.png';
+                  e.currentTarget.src = '/assets/Images/admissions/image 2.png';
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent" />

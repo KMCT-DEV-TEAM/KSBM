@@ -11,7 +11,7 @@ const AdmissionCtaSection = ({ data }) => {
   const applyBtnUrl = data?.ctaApplyBtnUrl || '/#contact';
   const enquiryBtnText = data?.ctaEnquiryBtnText || 'Enquiry Now';
   const enquiryBtnUrl = data?.ctaEnquiryBtnUrl || '/#contact';
-  const image = data?.ctaImage || '/assets/Images/image 78.png';
+  const image = data?.ctaImage || '/assets/Images/admissions/image 78.png';
 
   return (
     <section className="bg-white relative">
@@ -62,7 +62,7 @@ const AdmissionCtaSection = ({ data }) => {
                 alt="KSBM Admissions & Leadership"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 onError={(e) => {
-                  e.currentTarget.src = '/assets/Images/image 78.png';
+                  e.currentTarget.src = '/assets/Images/admissions/image 78.png';
                 }}
               />
             </div>

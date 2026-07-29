@@ -30,33 +30,20 @@ const ManageAdmissionsPage = () => {
   const [heroBrochureBtnText, setHeroBrochureBtnText] = useState('Download Brochure');
   const [heroBrochureBtnUrl, setHeroBrochureBtnUrl] = useState('#');
   const [heroBgImage, setHeroBgImage] = useState('/assets/Images/image 73.png');
-  const [heroStats, setHeroStats] = useState([
-    { value: '98%', label: 'Placement Rate' },
-    { value: '500+', label: 'Recruiting Partners' },
-    { value: '15:1', label: 'Student-Faculty Ratio' }
-  ]);
+
 
   // 2. Elite Advantage Section
   const [eliteHeading, setEliteHeading] = useState('The KSBM Elite Advantage');
-  const [eliteSubtitle, setEliteSubtitle] = useState('Why Choose Our Program');
   const [eliteDesc, setEliteDesc] = useState('Supported by experienced faculty and corporate mentors, we focus on analytical depth, strategic vision, and holistic individual development, preparing students to excel in top multinational corporations and dynamic entrepreneurial ventures across India and globally.');
   const [eliteImage, setEliteImage] = useState('/assets/Images/image 2.png');
-  const [eliteAdvantages, setEliteAdvantages] = useState([
-    { icon: 'TrendingUp', title: 'Career Transformation', desc: 'Personalized career guidance and leadership development designed to elevate graduates into high-impact management roles.' },
-    { icon: 'Globe2', title: 'Global Curriculum', desc: 'Modern case-study approach integrated with real-world industry simulations, guest lectures, and corporate mentorship.' },
-    { icon: 'ShieldCheck', title: 'Academic Excellence', desc: 'Rigorous academic standards taught by renowned faculty members with extensive doctoral and corporate consulting backgrounds.' },
-    { icon: 'Users', title: 'Vibrant Network', desc: 'Access to a distinguished alumni network and active executive connections spanning leading multinational corporations worldwide.' }
-  ]);
 
   // 3. Journey Section
   const [journeyHeading, setJourneyHeading] = useState('Your Journey to KSBM');
   const [journeySubtitle, setJourneySubtitle] = useState('Application Process');
   const [journeySteps, setJourneySteps] = useState([
-    { step: '01', title: 'Online Application', duration: 'Approx. 20 Mins', desc: 'Complete the comprehensive online application form via our portal and upload academic transcripts, graduation certificates, and entrance exam scorecards.', icon: 'ClipboardList' },
-    { step: '02', title: 'Document & Score Verification', duration: '3 - 5 Business Days', desc: 'Our admissions committee rigorously reviews your academic credentials, entrance test scores (KMAT/CMAT/CAT/MAT), and eligibility compliance.', icon: 'CheckCircle2' },
-    { step: '03', title: 'Personal Interview & Assessment', duration: 'Scheduled Panel Assessment', desc: 'Shortlisted candidates participate in an interactive personal evaluation with faculty experts to evaluate communication, analytical clarity, and managerial aptitude.', icon: 'Users' },
-    { step: '04', title: 'Offer of Admission', duration: 'Within 7 Business Days', desc: 'Successful applicants receive an official provisional admission offer letter detailing scholarship eligibility, fee structure, and enrollment deadlines.', icon: 'Award' },
-    { step: '05', title: 'Enrollment & Onboarding', duration: 'Before Semester Commencement', desc: 'Confirm your seat by completing fee formalities, submitting original verification documents, and attending orientation.', icon: 'CheckCircle2' }
+    { step: '01', title: 'Entrance Score', desc: 'CAT / MAT / CMAT / KMAT / ATMA eligibility', icon: 'FileCheck' },
+    { step: '02', title: 'Group Discussion', desc: 'Demonstrate leadership and communication skills in interactive sessions', icon: 'Users' },
+    { step: '03', title: 'Personal Interview', desc: 'One-on-one interview assessing passion, aptitude, and career alignment.', icon: 'UserCheck' }
   ]);
 
   // 4. Eligibility Standards Section
@@ -128,13 +115,10 @@ const ManageAdmissionsPage = () => {
       if (data.heroBrochureBtnText !== undefined) setHeroBrochureBtnText(data.heroBrochureBtnText);
       if (data.heroBrochureBtnUrl !== undefined) setHeroBrochureBtnUrl(data.heroBrochureBtnUrl);
       if (data.heroBgImage !== undefined) setHeroBgImage(data.heroBgImage);
-      if (data.heroStats && Array.isArray(data.heroStats)) setHeroStats(data.heroStats);
 
       if (data.eliteHeading !== undefined) setEliteHeading(data.eliteHeading);
-      if (data.eliteSubtitle !== undefined) setEliteSubtitle(data.eliteSubtitle);
       if (data.eliteDesc !== undefined) setEliteDesc(data.eliteDesc);
       if (data.eliteImage !== undefined) setEliteImage(data.eliteImage);
-      if (data.eliteAdvantages && Array.isArray(data.eliteAdvantages)) setEliteAdvantages(data.eliteAdvantages);
 
       if (data.journeyHeading !== undefined) setJourneyHeading(data.journeyHeading);
       if (data.journeySubtitle !== undefined) setJourneySubtitle(data.journeySubtitle);
@@ -174,8 +158,8 @@ const ManageAdmissionsPage = () => {
         setIsSaving(true);
         try {
           const payload = {
-            heroBadgeText, heroTitle, heroSubtitle, heroApplyBtnText, heroApplyBtnUrl, heroBrochureBtnText, heroBrochureBtnUrl, heroBgImage, heroStats,
-            eliteHeading, eliteSubtitle, eliteDesc, eliteImage, eliteAdvantages,
+            heroBadgeText, heroTitle, heroSubtitle, heroApplyBtnText, heroApplyBtnUrl, heroBrochureBtnText, heroBrochureBtnUrl, heroBgImage,
+            eliteHeading, eliteDesc, eliteImage,
             journeyHeading, journeySubtitle, journeySteps,
             eligibilityHeading, eligibilitySubtitle, feeStructure, mba, bba,
             ctaHeading, ctaDesc, ctaApplyBtnText, ctaApplyBtnUrl, ctaEnquiryBtnText, ctaEnquiryBtnUrl, ctaImage,
@@ -193,23 +177,7 @@ const ManageAdmissionsPage = () => {
     });
   };
 
-  // CRUD helpers for Hero Stats
-  const updateHeroStat = (index, field, value) => {
-    const updated = [...heroStats];
-    updated[index][field] = value;
-    setHeroStats(updated);
-  };
-  const addHeroStat = () => setHeroStats([...heroStats, { value: '100%', label: 'New Metric' }]);
-  const deleteHeroStat = (index) => setHeroStats(heroStats.filter((_, idx) => idx !== index));
 
-  // CRUD helpers for Elite Advantages
-  const updateAdvantage = (index, field, value) => {
-    const updated = [...eliteAdvantages];
-    updated[index][field] = value;
-    setEliteAdvantages(updated);
-  };
-  const addAdvantage = () => setEliteAdvantages([...eliteAdvantages, { icon: 'Award', title: 'New Advantage Title', desc: 'Description of advantage point.' }]);
-  const deleteAdvantage = (index) => setEliteAdvantages(eliteAdvantages.filter((_, idx) => idx !== index));
 
   // CRUD helpers for Journey Steps
   const updateJourneyStep = (index, field, value) => {
@@ -217,7 +185,7 @@ const ManageAdmissionsPage = () => {
     updated[index][field] = value;
     setJourneySteps(updated);
   };
-  const addJourneyStep = () => setJourneySteps([...journeySteps, { step: String(journeySteps.length + 1).padStart(2, '0'), title: 'New Step Title', duration: 'Duration info', desc: 'Detailed description of this application phase.', icon: 'CheckCircle2' }]);
+  const addJourneyStep = () => setJourneySteps([...journeySteps, { step: String(journeySteps.length + 1).padStart(2, '0'), title: 'New Step Title', desc: 'Detailed description of this application phase.', icon: 'CheckCircle2' }]);
   const deleteJourneyStep = (index) => setJourneySteps(journeySteps.filter((_, idx) => idx !== index));
   const moveJourneyStep = (index, direction) => {
     if (direction === 'up' && index === 0) return;
@@ -362,50 +330,7 @@ const ManageAdmissionsPage = () => {
               />
             </div>
 
-            <div className="pt-6 border-t space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold uppercase text-gray-700">Hero Stat Counters</h3>
-                <button
-                  type="button"
-                  onClick={addHeroStat}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-blue-900"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add Stat</span>
-                </button>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {heroStats.map((stat, idx) => (
-                  <div key={idx} className="p-4 rounded-xl border border-gray-100 bg-gray-50/50 space-y-3 relative">
-                    <button
-                      type="button"
-                      onClick={() => deleteHeroStat(idx)}
-                      className="absolute top-3 right-3 text-red-500 hover:text-red-700"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                    <div>
-                      <label className="block text-[11px] font-bold text-gray-500 mb-1">Value (e.g. 98%)</label>
-                      <input
-                        type="text"
-                        value={stat.value}
-                        onChange={(e) => updateHeroStat(idx, 'value', e.target.value)}
-                        className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[11px] font-bold text-gray-500 mb-1">Label</label>
-                      <input
-                        type="text"
-                        value={stat.label}
-                        onChange={(e) => updateHeroStat(idx, 'label', e.target.value)}
-                        className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium"
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+
           </div>
 </SectionForm>
 
@@ -418,15 +343,6 @@ const ManageAdmissionsPage = () => {
                   type="text"
                   value={eliteHeading}
                   onChange={(e) => setEliteHeading(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Section Subtitle</label>
-                <input
-                  type="text"
-                  value={eliteSubtitle}
-                  onChange={(e) => setEliteSubtitle(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-semibold"
                 />
               </div>
@@ -450,50 +366,6 @@ const ManageAdmissionsPage = () => {
               />
             </div>
 
-            <div className="pt-6 border-t space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold uppercase text-gray-700">Advantage Highlight Cards</h3>
-                <button
-                  type="button"
-                  onClick={addAdvantage}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-blue-900"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add Advantage Card</span>
-                </button>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {eliteAdvantages.map((adv, idx) => (
-                  <div key={idx} className="p-4 rounded-xl border border-gray-100 bg-gray-50/50 space-y-3 relative">
-                    <button
-                      type="button"
-                      onClick={() => deleteAdvantage(idx)}
-                      className="absolute top-3 right-3 text-red-500 hover:text-red-700"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                    <div>
-                      <label className="block text-[11px] font-bold text-gray-500 mb-1">Title</label>
-                      <input
-                        type="text"
-                        value={adv.title}
-                        onChange={(e) => updateAdvantage(idx, 'title', e.target.value)}
-                        className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[11px] font-bold text-gray-500 mb-1">Description</label>
-                      <textarea
-                        rows={2}
-                        value={adv.desc}
-                        onChange={(e) => updateAdvantage(idx, 'desc', e.target.value)}
-                        className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium"
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
 </SectionForm>
 
@@ -565,7 +437,7 @@ const ManageAdmissionsPage = () => {
                           className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-bold"
                         />
                       </div>
-                      <div className="md:col-span-3">
+                      <div className="md:col-span-4">
                         <label className="block text-[11px] font-bold text-gray-500 mb-1">Title</label>
                         <input
                           type="text"
@@ -574,16 +446,7 @@ const ManageAdmissionsPage = () => {
                           className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-bold"
                         />
                       </div>
-                      <div className="md:col-span-3">
-                        <label className="block text-[11px] font-bold text-gray-500 mb-1">Duration Tag</label>
-                        <input
-                          type="text"
-                          value={step.duration}
-                          onChange={(e) => updateJourneyStep(idx, 'duration', e.target.value)}
-                          className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium"
-                        />
-                      </div>
-                      <div className="md:col-span-4">
+                      <div className="md:col-span-6">
                         <label className="block text-[11px] font-bold text-gray-500 mb-1">Description</label>
                         <textarea
                           rows={2}
