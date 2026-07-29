@@ -8,10 +8,15 @@ import NotableAlumni from './components/NotableAlumni';
 import AlumniGallery from './components/AlumniGallery';
 import AlumniCTA from './components/AlumniCTA';
 
-const Alumni = () => {
-  const [data, setData] = useState(null);
+const Alumni = ({ previewData }) => {
+  const [data, setData] = useState(previewData || null);
 
   useEffect(() => {
+    if (previewData) {
+      setData(previewData);
+      return;
+    }
+
     const fetchAlumniData = async () => {
       try {
         const { data: res } = await api.get('/cms/alumni-page');
@@ -23,16 +28,19 @@ const Alumni = () => {
       }
     };
     fetchAlumniData();
-  }, []);
+  }, [previewData]);
+
+  const isPreview = !!previewData;
+  const activeTab = previewData?.activeTab;
 
   return (
     <div className="bg-[#fcfcfd] min-h-screen flex flex-col pb-6 sm:pb-8">
-      <AlumniHero data={data?.hero} />
-      <LegacySection data={data?.legacy} />
-      <AlumniEvents data={data?.events} />
-      <NotableAlumni data={data?.notableAlumni} />
-      <AlumniGallery data={data?.gallery} />
-      <AlumniCTA data={data?.cta} />
+      {(!isPreview || activeTab === 'hero') && <div id="alumni-hero"><AlumniHero data={data?.hero} previewDevice={previewData?.previewDevice} /></div>}
+      {(!isPreview || activeTab === 'legacy') && <div id="alumni-legacy"><LegacySection data={data?.legacy} previewDevice={previewData?.previewDevice} /></div>}
+      {(!isPreview || activeTab === 'events') && <div id="alumni-events"><AlumniEvents data={data?.events} previewDevice={previewData?.previewDevice} /></div>}
+      {(!isPreview || activeTab === 'notable') && <div id="alumni-notable"><NotableAlumni data={data?.notableAlumni} previewDevice={previewData?.previewDevice} /></div>}
+      {(!isPreview || activeTab === 'gallery') && <div id="alumni-gallery"><AlumniGallery data={data?.gallery} previewDevice={previewData?.previewDevice} /></div>}
+      {(!isPreview || activeTab === 'cta') && <div id="alumni-cta"><AlumniCTA data={data?.cta} previewDevice={previewData?.previewDevice} /></div>}
     </div>
   );
 };

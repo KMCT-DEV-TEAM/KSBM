@@ -1,4 +1,5 @@
 import React from 'react';
+import { resolveImage } from '../../../utils/resolveImage';
 import { CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 

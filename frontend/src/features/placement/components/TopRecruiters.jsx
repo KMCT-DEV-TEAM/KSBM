@@ -1,4 +1,5 @@
 import React from 'react';
+import { resolveImage } from '../../../utils/resolveImage';
 import { motion } from 'framer-motion';
 
 const defaultRecruiters = [
@@ -46,7 +47,7 @@ const TopRecruiters = ({ data }) => {
           >
             {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
               <div key={`l1-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
-                <img src={recruiter.logo} alt={recruiter.name} className="w-full h-auto object-contain" />
+                <img src={resolveImage(recruiter.logo)} alt={recruiter.name} className="w-full h-auto object-contain" />
               </div>
             ))}
           </motion.div>
@@ -59,7 +60,7 @@ const TopRecruiters = ({ data }) => {
           >
             {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
               <div key={`l2-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
-                <img src={recruiter.logo} alt={recruiter.name} className="w-full h-auto object-contain" />
+                <img src={resolveImage(recruiter.logo)} alt={recruiter.name} className="w-full h-auto object-contain" />
               </div>
             ))}
           </motion.div>
@@ -72,7 +73,7 @@ const TopRecruiters = ({ data }) => {
           >
             {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
               <div key={`l3-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
-                <img src={recruiter.logo} alt={recruiter.name} className="w-full h-auto object-contain" />
+                <img src={resolveImage(recruiter.logo)} alt={recruiter.name} className="w-full h-auto object-contain" />
               </div>
             ))}
           </motion.div>

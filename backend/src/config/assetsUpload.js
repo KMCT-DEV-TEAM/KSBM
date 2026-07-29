@@ -40,6 +40,15 @@ if (!fs.existsSync(facultyAssetsDir)) {
   fs.mkdirSync(facultyAssetsDir, { recursive: true });
 }
 
+const alumniAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/alumni');
+if (!fs.existsSync(alumniAssetsDir)) {
+  fs.mkdirSync(alumniAssetsDir, { recursive: true });
+}
+
+const placementsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/placements');
+if (!fs.existsSync(placementsAssetsDir)) {
+  fs.mkdirSync(placementsAssetsDir, { recursive: true });
+  }
 const committeesAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/committees');
 if (!fs.existsSync(committeesAssetsDir)) {
   fs.mkdirSync(committeesAssetsDir, { recursive: true });
@@ -60,6 +69,10 @@ const storage = multer.diskStorage({
       targetDir = mbaAssetsDir;
     } else if (req.originalUrl.includes('/upload/faculty')) {
       targetDir = facultyAssetsDir;
+    } else if (req.originalUrl.includes('/upload/alumni')) {
+      targetDir = alumniAssetsDir;
+    } else if (req.originalUrl.includes('/upload/placements')) {
+      targetDir = placementsAssetsDir;
     } else if (req.originalUrl.includes('/upload/committees')) {
       targetDir = committeesAssetsDir;
     }

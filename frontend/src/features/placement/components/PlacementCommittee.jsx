@@ -1,4 +1,5 @@
 import React from 'react';
+import { resolveImage } from '../../../utils/resolveImage';
 import { motion } from 'framer-motion';
 
 const PlacementCommittee = ({ data }) => {

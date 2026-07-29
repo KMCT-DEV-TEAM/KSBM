@@ -1,4 +1,5 @@
 import React from 'react';
+import { resolveImage } from '../../../utils/resolveImage';
 import { motion } from 'framer-motion';
 
 const PlacementActivities = ({ data }) => {
@@ -44,7 +45,7 @@ const PlacementActivities = ({ data }) => {
               >
                 <div className="aspect-video overflow-hidden">
                   <img
-                    src={activity.image}
+                    src={resolveImage(activity.image)}
                     alt={activity.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
