@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import api from '../../../api/axios';
 
 const LeadershipSection = ({ previewData }) => {
-  const [data, setData] = useState({,
+  const [data, setData] = useState({
     showSection: true
   });
 
