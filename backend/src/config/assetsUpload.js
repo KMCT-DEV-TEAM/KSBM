@@ -40,6 +40,11 @@ if (!fs.existsSync(facultyAssetsDir)) {
   fs.mkdirSync(facultyAssetsDir, { recursive: true });
 }
 
+const alumniAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/alumni');
+if (!fs.existsSync(alumniAssetsDir)) {
+  fs.mkdirSync(alumniAssetsDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     let targetDir = assetsDir;
@@ -55,6 +60,8 @@ const storage = multer.diskStorage({
       targetDir = mbaAssetsDir;
     } else if (req.originalUrl.includes('/upload/faculty')) {
       targetDir = facultyAssetsDir;
+    } else if (req.originalUrl.includes('/upload/alumni')) {
+      targetDir = alumniAssetsDir;
     }
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir, { recursive: true });
