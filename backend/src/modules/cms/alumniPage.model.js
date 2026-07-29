@@ -145,7 +145,7 @@ const alumniPageSchema = new mongoose.Schema(
       buttonLink: { type: String, default: '#register' }
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 alumniPageSchema.statics.getSettings = async function () {

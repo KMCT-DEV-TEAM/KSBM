@@ -29,7 +29,7 @@ const galleryPageSchema = new mongoose.Schema(
       }
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 galleryPageSchema.statics.getSettings = async function () {

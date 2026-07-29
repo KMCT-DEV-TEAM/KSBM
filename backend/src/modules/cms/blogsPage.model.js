@@ -116,7 +116,7 @@ const blogsPageSchema = new mongoose.Schema({
     backgroundImage: { type: String, default: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1600&auto=format&fit=crop' }
   },
   blogs: { type: [blogSchema], default: defaultBlogs }
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
 blogsPageSchema.statics.getSettings = async function() {
   let settings = await this.findOne();

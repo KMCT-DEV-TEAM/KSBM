@@ -66,9 +66,7 @@ const Sidebar = () => {
       title: 'Facilities',
       icon: <Building2 className="w-5 h-5" />,
       links: [
-        { name: 'Hero Section', path: '/admin/cms/facilities/hero' },
-        { name: 'Institutional Resources', path: '/admin/cms/facilities/institutional-resources' },
-        { name: 'Clubs', path: '/admin/cms/facilities/clubs' },
+        { name: 'Manage Facilities Page', path: '/admin/cms/facilities' },
       ]
     },
     {

@@ -1625,7 +1625,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                     onDragOver={handleDynamicDragOver}
                     onDrop={(e) => handleDynamicDrop(e, idx)}
                     onDragEnd={handleDynamicDragEnd}
-                    className={`p-5 pl-12 rounded-2xl bg-gray-50/80 border ${draggedDynamicIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative space-y-4 shadow-sm transition-all duration-200`}
+                    className={`p-5 pl-16 rounded-2xl bg-gray-50/80 border ${draggedDynamicIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative space-y-4 shadow-sm transition-all duration-200`}
                   >
                     <div className="absolute left-4 top-1/2 -translate-y-1/2 cursor-grab text-gray-400 hover:text-primary active:cursor-grabbing" title="Drag to reorder">
                       <GripVertical className="w-5 h-5" />

@@ -152,7 +152,7 @@ const placementPageSchema = new mongoose.Schema(
       }
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 placementPageSchema.statics.getSettings = async function () {

@@ -24,16 +24,28 @@ const defaultLeaders = [
     heading: 'Leadership Vision',
     name: 'Dr. Navas K M',
     title: 'MANAGING TRUSTEE - KMCT',
-    description: `"The evolution of business continually shapes the experiences that define tomorrow's management culture. When understanding path in leadership starts to merge, a true perspective of real theoretical knowledge – they reveal the defining nature of KSBM."\n\nWe believe that robust leaders are forged by instilling a commitment to personal excellence and inspiring organizational cultures. Our primary mandate is to groom talent that is ethically grounded, and as KSBM, this is our overarching commitment to shaping a transformative future.\n\nAs KSBM accelerates towards already accelerating milestones, it is crucial to recognize that true leadership transcends beyond mere numbers; it is about human connections and impact, a mandate that echoes through our legacy. We are proud of what KSBM is accomplishing and its role in creating a future built on ethical, responsible, and visionary leadership."`,
-    image: '/assets/Images/Group 164.png'
+    showTitle: true,
+    description: `"The evolution of business continually shapes the experiences that define tomorrow's management culture. When understanding path in leadership starts to merge, a true perspective of real theoretical knowledge ?" they reveal the defining nature of KSBM."\n\nWe believe that robust leaders are forged by instilling a commitment to personal excellence and inspiring organizational cultures. Our primary mandate is to groom talent that is ethically grounded, and as KSBM, this is our overarching commitment to shaping a transformative future.\n\nAs KSBM accelerates towards already accelerating milestones, it is crucial to recognize that true leadership transcends beyond mere numbers; it is about human connections and impact, a mandate that echoes through our legacy. We are proud of what KSBM is accomplishing and its role in creating a future built on ethical, responsible, and visionary leadership."`,
+    showDescription: true,
+    image: '/assets/Images/Group 164.png',
+    showImage: true,
+    showSubheading: true,
+    showHeading: true,
+    showName: true,
   },
   {
     id: '2',
     subheading: 'MEET OUR LEADER',
+    showSubheading: true,
     name: 'Dr. James Starlin',
+    showName: true,
     title: 'PRINCIPAL',
+    showTitle: true,
     description: `"The world of business demands a new caliber of professionals, one that navigates complexities with a balanced mindset and strong ethical compass. It is through comprehensive education and strategic insight that these future leaders are shaped, making KSBM a catalyst in creating capable minds."\n\nWe continually strive to cultivate an environment where rigorous academics meet real-world strategy, ensuring our graduates are not just business operators, but management leaders. Our curriculum reflects KSBM's dedication to robust, responsible, and forward-looking education.\n\nKSBM focuses on instilling a culture of continuous learning and critical thinking. By nurturing entrepreneurship and values-driven leadership, we ensure that every individual leaving our doors is equipped not just to succeed, but to make a lasting impact. We empower our students to shape successful careers and turn ambitious goals into reality."`,
-    image: 'https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&q=80'
+    showDescription: true,
+    image: 'https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&q=80',
+    showImage: true,
+    showHeading: true
   }
 ];
 
@@ -106,7 +118,13 @@ const ManageLeadership = () => {
             name: data.name || 'Dr. Navas K M',
             title: data.title || 'MANAGING TRUSTEE - KMCT',
             description: data.description && data.description.length > 0 ? (Array.isArray(data.description) ? data.description.join('\n\n') : data.description) : defaultLeaders[0].description,
-            image: data.image || '/assets/Images/Group 164.png'
+            image: data.image || '/assets/Images/Group 164.png',
+            showSubheading: true,
+            showHeading: true,
+            showName: true,
+            showTitle: true,
+            showDescription: true,
+            showImage: true
           },
           {
             id: '2',
@@ -114,7 +132,13 @@ const ManageLeadership = () => {
             name: data.leader2Name || 'Dr. James Starlin',
             title: data.leader2Title || 'PRINCIPAL',
             description: data.leader2Description && data.leader2Description.length > 0 ? (Array.isArray(data.leader2Description) ? data.leader2Description.join('\n\n') : data.leader2Description) : defaultLeaders[1].description,
-            image: data.leader2Image || 'https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&q=80'
+            image: data.leader2Image || 'https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&q=80',
+            showSubheading: true,
+            showHeading: true,
+            showName: true,
+            showTitle: true,
+            showDescription: true,
+            showImage: true
           }
         ]);
       } else {
@@ -380,9 +404,15 @@ const ManageLeadership = () => {
                       Images
                     </h4>
                     <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                      <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">
-                        Person Image / Photo
-                      </label>
+                      <div className="flex items-center gap-4 mb-3">
+                        <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">
+                          Person Image / Photo
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input type="checkbox" checked={leader.showImage ?? true} onChange={(e) => updateLeaderField(index, 'showImage', e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
+                          <span className="text-xs font-semibold text-gray-500">Show</span>
+                        </label>
+                      </div>
                       <SingleImageUploader
                         imageUrl={leader.image}
                         onUploadComplete={(url) => updateLeaderField(index, 'image', url)}
@@ -401,9 +431,15 @@ const ManageLeadership = () => {
                     </h4>
                     <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
                       <div className="flex justify-between items-center mb-1.5">
-                        <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">
-                          Name
-                        </label>
+                        <div className="flex items-center gap-4">
+                          <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">
+                            Name
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked={leader.showName ?? true} onChange={(e) => updateLeaderField(index, 'showName', e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
+                            <span className="text-xs font-semibold text-gray-500">Show</span>
+                          </label>
+                        </div>
                         <span className="text-xs text-gray-500">{leader.name?.length || 0}/50</span>
                       </div>
                       <input
@@ -418,9 +454,15 @@ const ManageLeadership = () => {
 
                     <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
                       <div className="flex justify-between items-center mb-1.5">
-                        <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">
-                          Title / Designation
-                        </label>
+                        <div className="flex items-center gap-4">
+                          <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">
+                            Title / Designation
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked={leader.showTitle ?? true} onChange={(e) => updateLeaderField(index, 'showTitle', e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
+                            <span className="text-xs font-semibold text-gray-500">Show</span>
+                          </label>
+                        </div>
                         <span className="text-xs text-gray-500">{leader.title?.length || 0}/50</span>
                       </div>
                       <input
@@ -435,9 +477,15 @@ const ManageLeadership = () => {
 
                     <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
                       <div className="flex justify-between items-center mb-1.5">
-                        <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">
-                          Subheading Tag (Small Top Text)
-                        </label>
+                        <div className="flex items-center gap-4">
+                          <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">
+                            Subheading Tag (Small Top Text)
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked={leader.showSubheading ?? true} onChange={(e) => updateLeaderField(index, 'showSubheading', e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
+                            <span className="text-xs font-semibold text-gray-500">Show</span>
+                          </label>
+                        </div>
                         <span className="text-xs text-gray-500">{leader.subheading?.length || 0}/50</span>
                       </div>
                       <input
@@ -453,9 +501,15 @@ const ManageLeadership = () => {
                     {index === 0 && (
                       <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
                         <div className="flex justify-between items-center mb-1.5">
-                          <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">
-                            Main Heading (Optional)
-                          </label>
+                          <div className="flex items-center gap-4">
+                            <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">
+                              Main Heading (Optional)
+                            </label>
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input type="checkbox" checked={leader.showHeading ?? true} onChange={(e) => updateLeaderField(index, 'showHeading', e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
+                              <span className="text-xs font-semibold text-gray-500">Show</span>
+                            </label>
+                          </div>
                           <span className="text-xs text-gray-500">{leader.heading?.length || 0}/50</span>
                         </div>
                         <input
@@ -471,9 +525,15 @@ const ManageLeadership = () => {
 
                     <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
                       <div className="flex justify-between items-center mb-2">
-                        <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">
-                          Message / Paragraphs
-                        </label>
+                        <div className="flex items-center gap-4">
+                          <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">
+                            Message / Paragraphs
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked={leader.showDescription ?? true} onChange={(e) => updateLeaderField(index, 'showDescription', e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
+                            <span className="text-xs font-semibold text-gray-500">Show</span>
+                          </label>
+                        </div>
                         <span className="text-xs text-gray-500">{leader.description?.length || 0}/900</span>
                       </div>
                       <textarea

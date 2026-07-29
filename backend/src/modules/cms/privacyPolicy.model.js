@@ -30,7 +30,7 @@ const privacyPolicySchema = new mongoose.Schema(
       closingBoldText2: { type: String, default: 'Unauthorized use, reproduction, or distribution of any content is strictly prohibited.' }
     }
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 privacyPolicySchema.statics.getSettings = async function () {
