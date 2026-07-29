@@ -48,9 +48,9 @@ const Sidebar = () => {
       icon: <BookOpen className="w-5 h-5" />,
       links: [
         { name: 'Faculty Members', path: '/admin/cms/faculty' },
-        { name: 'Alumni Page Management', path: '/admin/cms/alumni' },
-        { name: 'Manage Placement Page', path: '/admin/cms/placement-page' },
-        { name: 'Manage Examinations Page', path: '/admin/cms/examinations' },
+        { name: 'Alumni Page', path: '/admin/cms/alumni' },
+        { name: 'Placement Page', path: '/admin/cms/placement-page' },
+        { name: 'Examination Page', path: '/admin/cms/examinations' },
         { name: 'Committees & Cells', path: '/admin/cms/committees-and-cells' },
       ]
     },

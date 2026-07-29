@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { resolveImage } from '../../../utils/resolveImage';
 
 const ProudAchievers = ({ data }) => {
   if (!data || !data.items || data.items.length === 0) return null;
@@ -55,7 +56,7 @@ const ProudAchievers = ({ data }) => {
                 <div className="relative rounded-2xl overflow-hidden shadow-xl transition-all duration-300 group-hover:-translate-y-2">
                   <div className="aspect-[3/4] relative">
                     <img
-                      src={achiever.image}
+                      src={resolveImage(achiever.image)}
                       alt={achiever.name}
                       className="w-full h-full object-cover object-top"
                     />
@@ -64,7 +65,7 @@ const ProudAchievers = ({ data }) => {
                     <div className="absolute bottom-6 left-0 bg-white/70 backdrop-blur-md py-3 px-5 pr-12 rounded-r-[18px] shadow-lg border border-white/50 border-l-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h4 className="text-gray-900 font-semibold text-[14px] leading-tight">Placed at</h4>
-                        <img src={achiever.companyLogo} alt={achiever.company} className="h-4 max-w-[80px] object-contain" />
+                        <img src={resolveImage(achiever.companyLogo)} alt={achiever.company} className="h-4 max-w-[80px] object-contain" />
                       </div>
                       <p className="text-gray-500 text-[12px] font-medium leading-tight">{achiever.role}</p>
                     </div>
@@ -95,7 +96,7 @@ const ProudAchievers = ({ data }) => {
                 <div className="relative rounded-2xl overflow-hidden shadow-xl transition-all duration-300 group-hover:-translate-y-2">
                   <div className="aspect-[3/4] relative">
                     <img
-                      src={achiever.image}
+                      src={resolveImage(achiever.image)}
                       alt={achiever.name}
                       className="w-full h-full object-cover object-top"
                     />
@@ -104,7 +105,7 @@ const ProudAchievers = ({ data }) => {
                     <div className="absolute bottom-6 left-0 bg-white/70 backdrop-blur-md py-3 px-5 pr-12 rounded-r-[18px] shadow-lg border border-white/50 border-l-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h4 className="text-gray-900 font-semibold text-[14px] leading-tight">Placed at</h4>
-                        <img src={achiever.companyLogo} alt={achiever.company} className="h-4 max-w-[80px] object-contain" />
+                        <img src={resolveImage(achiever.companyLogo)} alt={achiever.company} className="h-4 max-w-[80px] object-contain" />
                       </div>
                       <p className="text-gray-500 text-[12px] font-medium leading-tight">{achiever.role}</p>
                     </div>

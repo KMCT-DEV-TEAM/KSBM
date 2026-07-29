@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
+import { resolveImage } from '../../../utils/resolveImage';
 
 const PlacementHero = ({ data }) => {
   if (!data) return null;
@@ -10,7 +11,7 @@ const PlacementHero = ({ data }) => {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img
-          src={data.backgroundImage || "https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=2787&auto=format&fit=crop"}
+          src={resolveImage(data.backgroundImage, "https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=2787&auto=format&fit=crop")}
           alt={data.title}
           className="w-full h-full object-cover"
         />

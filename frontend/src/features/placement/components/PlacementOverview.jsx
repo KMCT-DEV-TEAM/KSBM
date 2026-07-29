@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase } from 'lucide-react';
+import { resolveImage } from '../../../utils/resolveImage';
 
 const PlacementOverview = ({ data }) => {
   if (!data) return null;
@@ -21,7 +22,7 @@ const PlacementOverview = ({ data }) => {
             {/* Bottom/Left Main Image */}
             <div className="relative z-10 w-[85%] sm:w-[80%] h-[280px] sm:h-[350px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-gray-100">
               <img
-                src={data.collageImage1}
+                src={resolveImage(data.collageImage1)}
                 alt="Collage Image 1"
                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
               />
@@ -30,7 +31,7 @@ const PlacementOverview = ({ data }) => {
             {/* Top/Right Overlapping Image */}
             <div className="absolute top-0 right-0 z-20 w-[60%] sm:w-[55%] h-[200px] sm:h-[240px] rounded-3xl overflow-hidden shadow-xl border-4 sm:border-[6px] border-white bg-gray-100">
               <img
-                src={data.collageImage2}
+                src={resolveImage(data.collageImage2)}
                 alt="Collage Image 2"
                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
               />
@@ -88,7 +89,7 @@ const PlacementOverview = ({ data }) => {
               ).map((logo, idx) => (
                 <img
                   key={idx}
-                  src={logo}
+                  src={resolveImage(logo)}
                   alt={`Partner Logo ${idx + 1}`}
                   className="h-10 sm:h-12 w-auto object-contain border-0 shadow-none transition-transform duration-300 hover:scale-105"
                 />

@@ -12,11 +12,17 @@ import FacultyInCharge from './components/FacultyInCharge';
 import PlacementCommittee from './components/PlacementCommittee';
 import PlacementActivities from './components/PlacementActivities';
 
-const PlacementLanding = () => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+const PlacementLanding = ({ previewData }) => {
+  const [data, setData] = useState(previewData || null);
+  const [loading, setLoading] = useState(!previewData);
 
   useEffect(() => {
+    if (previewData) {
+      setData(previewData);
+      setLoading(false);
+      return;
+    }
+
     window.scrollTo(0, 0);
     const fetchData = async () => {
       try {
@@ -34,17 +40,23 @@ const PlacementLanding = () => {
   if (loading) return <Loader />;
   if (!data) return null;
 
+  const activeTab = data?.activeTab;
+
+  const shouldRender = (tabName) => {
+    return !activeTab || activeTab === tabName;
+  };
+
   return (
     <div className="min-h-screen bg-white flex flex-col justify-between">
       <main>
-        <PlacementHero data={data.hero} />
-        <PlacementOverview data={data.overview} />
-        <ProudAchievers data={data.proudAchievers} />
-        <TopRecruiters data={data.topRecruiters} />
-        <ExcellenceSupport data={data.excellenceSupport} />
-        <FacultyInCharge data={data.facultyInCharge} />
-        <PlacementCommittee data={data.placementCommittee} />
-        <PlacementActivities data={data.activities} />
+        {shouldRender('hero') && <PlacementHero data={data.hero} />}
+        {shouldRender('overview') && <PlacementOverview data={data.overview} />}
+        {shouldRender('proudAchievers') && <ProudAchievers data={data.proudAchievers} />}
+        {shouldRender('topRecruiters') && <TopRecruiters data={data.topRecruiters} />}
+        {shouldRender('excellenceSupport') && <ExcellenceSupport data={data.excellenceSupport} />}
+        {shouldRender('facultyInCharge') && <FacultyInCharge data={data.facultyInCharge} />}
+        {shouldRender('placementCommittee') && <PlacementCommittee data={data.placementCommittee} />}
+        {shouldRender('activities') && <PlacementActivities data={data.activities} />}
       </main>
     </div>
   );

@@ -103,6 +103,19 @@ router.post('/alumni', protect, uploadAssets.single('image'), async (req, res) =
   });
 });
 
+router.post('/placements', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/placements/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/placements',
+    url: fileUrl,
+  });
+});
+
 router.post('/', protect, upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No image provided' });
@@ -165,7 +178,10 @@ router.delete('/', protect, async (req, res) => {
     'gallery_71.png', 'gallery_72.png', 'gallery_73.png', 'gallery_74.png',
     'gallery_75.png', 'gallery_76.png', 'gallery_77.png', 'gallery_78.png',
     'default-faculty-hero.jpg', 'default-faculty-leader.jpg',
-    'image 2.png', 'image 31.png'
+    'image 2.png', 'image 31.png',
+    'default-hero-bg.jpg', 'default-collage-1.jpg', 'default-collage-2.jpg', 
+    'default-excellence-bg.png', 'default-committee-vector.png', 'default-avatar.png',
+    'default-partner-1.jpg', 'default-partner-2.jpg', 'default-partner-3.jpg'
   ];
 
   const filename = fileUrl.split('/').pop();
@@ -187,6 +203,8 @@ router.delete('/', protect, async (req, res) => {
      filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/faculty', filename);
   } else if (fileUrl.includes('/assets/Images/alumni/')) {
      filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/alumni', filename);
+  } else if (fileUrl.includes('/assets/Images/placements/')) {
+     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/placements', filename);
   } else if (fileUrl.includes('/assets/home/')) {
      filePath = path.join(__dirname, '../../../assets/home', filename);
   } else if (fileUrl.includes('/uploads/')) {
