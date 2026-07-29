@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Reorder, useDragControls } from 'framer-motion';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
@@ -9,7 +9,7 @@ import SectionForm from './components/SectionForm';
 import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import AddItemModal from './components/AddItemModal';
-import { FileText, Eye, Monitor, Tablet, Smartphone, X, Plus, Trash2, GripVertical, ShieldCheck, Link2, Edit2 } from 'lucide-react';
+import { FileText, Eye, Monitor, Tablet, Smartphone, X, Plus, Trash2, GripVertical, ShieldCheck, Link2, Edit2, Pencil } from 'lucide-react';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -18,6 +18,51 @@ const Toast = Swal.mixin({
   timer: 3000,
   timerProgressBar: true,
 });
+
+const DraggableCommitteeCard = ({ item, index, onEdit, onDelete }) => {
+  const controls = useDragControls();
+  
+  return (
+    <Reorder.Item 
+      value={item}
+      dragListener={false}
+      dragControls={controls}
+      className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex items-center gap-4 relative group hover:border-primary/30 transition-colors select-none"
+    >
+      <div 
+        className="cursor-grab active:cursor-grabbing p-2 text-gray-400 hover:text-primary transition-colors touch-none"
+        onPointerDown={(e) => {
+          e.preventDefault();
+          controls.start(e);
+        }}
+      >
+        <GripVertical className="w-5 h-5" />
+      </div>
+      
+      <div className="flex-1 min-w-0">
+        <h4 className="font-bold text-gray-900 truncate">{item.title || 'Untitled'}</h4>
+        <p className="text-sm text-gray-500 truncate">{item.coordinator} {item.designation ? `| ${item.designation}` : ''}</p>
+      </div>
+      
+      <div className="flex items-center gap-2 pr-2">
+        <button 
+          onClick={() => onEdit(index)}
+          className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
+          title="Edit"
+        >
+          <Pencil className="w-4 h-4" />
+        </button>
+        <button 
+          onClick={() => onDelete(index)}
+          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+          title="Delete"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
+    </Reorder.Item>
+  );
+};
 
 const ManageCommitteesAndCellsPage = () => {
   const [loading, setLoading] = useState(true);
@@ -150,45 +195,6 @@ const ManageCommitteesAndCellsPage = () => {
     });
   };
 
-  const handleCommitteeChange = (index, field, value) => {
-    const updated = [...formData.committees];
-    updated[index][field] = value;
-    setFormData(prev => ({ ...prev, committees: updated }));
-  };
-
-  const moveCommittee = (index, direction) => {
-    const updated = [...formData.committees];
-    const target = index + direction;
-    if (target < 0 || target >= updated.length) return;
-    [updated[index], updated[target]] = [updated[target], updated[index]];
-    setFormData(prev => ({ ...prev, committees: updated }));
-  };
-
-  // Drag-and-drop handlers for committees
-  const handleCommitteeDragStart = (e, index) => {
-    setDraggedCommitteeIndex(index);
-    e.dataTransfer.effectAllowed = 'move';
-    setTimeout(() => { if (e.target) e.target.style.opacity = '0.5'; }, 0);
-  };
-  const handleCommitteeDragOver = (e) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-  };
-  const handleCommitteeDrop = (e, targetIndex) => {
-    e.preventDefault();
-    if (e.target) e.target.style.opacity = '1';
-    if (draggedCommitteeIndex === null || draggedCommitteeIndex === targetIndex) return;
-    const updated = [...formData.committees];
-    const draggedItem = updated[draggedCommitteeIndex];
-    updated.splice(draggedCommitteeIndex, 1);
-    updated.splice(targetIndex, 0, draggedItem);
-    setFormData(prev => ({ ...prev, committees: updated }));
-    setDraggedCommitteeIndex(null);
-  };
-  const handleCommitteeDragEnd = (e) => {
-    if (e.target) e.target.style.opacity = '1';
-    setDraggedCommitteeIndex(null);
-  };
 
   const openAddModal = () => {
     setModalConfig({
@@ -198,7 +204,7 @@ const ManageCommitteesAndCellsPage = () => {
         { name: 'title', label: 'Committee Title', type: 'text', maxLength: 100, required: true },
         { name: 'coordinator', label: 'Coordinator Name', type: 'text', maxLength: 50, required: true },
         { name: 'designation', label: 'Designation', type: 'text', maxLength: 100, required: false },
-        { name: 'pdfLink', label: 'PDF Link', type: 'text', maxLength: 300, required: false }
+        { name: 'pdfLink', label: 'PDF Document', type: 'document', required: false }
       ],
       initialData: null,
       onSave: (data) => {
@@ -216,7 +222,7 @@ const ManageCommitteesAndCellsPage = () => {
         { name: 'title', label: 'Committee Title', type: 'text', maxLength: 100, required: true },
         { name: 'coordinator', label: 'Coordinator Name', type: 'text', maxLength: 50, required: true },
         { name: 'designation', label: 'Designation', type: 'text', maxLength: 100, required: false },
-        { name: 'pdfLink', label: 'PDF Link', type: 'text', maxLength: 300, required: false }
+        { name: 'pdfLink', label: 'PDF Document', type: 'document', required: false }
       ],
       initialData: committee,
       onSave: (data) => {
@@ -404,77 +410,29 @@ const ManageCommitteesAndCellsPage = () => {
                   </button>
                 }
               >
-                <div className="space-y-4">
-                  {formData.committees.map((committee, idx) => (
-                    <div
-                      key={idx}
-                      draggable
-                      onDragStart={(e) => handleCommitteeDragStart(e, idx)}
-                      onDragOver={handleCommitteeDragOver}
-                      onDrop={(e) => handleCommitteeDrop(e, idx)}
-                      onDragEnd={handleCommitteeDragEnd}
-                      className={`bg-white border rounded-xl p-4 flex gap-4 items-start shadow-sm hover:shadow-md transition-all duration-200 group ${draggedCommitteeIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-100'}`}
+                <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
+                  {!(formData.committees || []).length ? (
+                    <div className="h-full flex flex-col items-center justify-center text-gray-400">
+                      <ShieldCheck className="w-12 h-12 mb-3 opacity-20" />
+                      <p>No committees added yet. Click 'Add Committee' to start building the list.</p>
+                    </div>
+                  ) : (
+                    <Reorder.Group 
+                      axis="y" 
+                      values={formData.committees} 
+                      onReorder={(items) => setFormData(prev => ({ ...prev, committees: items }))} 
+                      className="space-y-3"
                     >
-                      <div className="flex items-center mt-3 text-gray-400 hover:text-gray-600 cursor-move" title="Drag to reorder">
-                        <GripVertical className="w-5 h-5" />
-                      </div>
-
-                      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                          <div className="flex justify-between items-center">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Committee Title</label>
-                          </div>
-                          <h4 className="text-sm font-bold text-gray-800">{committee.title || 'Untitled'}</h4>
-                        </div>
-
-                        <div className="space-y-1">
-                          <div className="flex justify-between items-center">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Coordinator Name</label>
-                          </div>
-                          <p className="text-sm text-gray-700">{committee.coordinator || 'None'}</p>
-                        </div>
-
-                        <div className="space-y-1">
-                          <div className="flex justify-between items-center">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Designation</label>
-                          </div>
-                          <p className="text-sm text-gray-600">{committee.designation || 'None'}</p>
-                        </div>
-
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">PDF Document URL</label>
-                          <div className="flex items-center gap-2 mt-1">
-                            <Link2 className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-blue-500 truncate max-w-[200px]">{committee.pdfLink || 'No PDF Link'}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-1 ml-4">
-                        <button
-                          onClick={() => openEditModal(idx, committee)}
-                          className="p-2 text-blue-400 hover:bg-blue-500/10 hover:scale-90 hover:opacity-80 rounded-lg transition-all duration-200"
-                          title="Edit Committee"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-
-                        <button
-                          onClick={() => removeCommittee(idx)}
-                          className="p-2 text-red-400 hover:bg-red-500/10 hover:scale-90 hover:opacity-80 rounded-lg transition-all duration-200"
-                          title="Remove Committee"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-
-                  {formData.committees.length === 0 && (
-                    <div className="text-center py-10 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
-                      <ShieldCheck className="w-10 h-10 text-gray-300 mx-auto mb-2" />
-                      <p className="text-gray-500 text-sm">No committees added yet. Click 'Add Committee' to start building the list.</p>
-                    </div>
+                      {formData.committees.map((committee, idx) => (
+                        <DraggableCommitteeCard 
+                          key={committee._id || committee.uuid || idx} 
+                          item={committee} 
+                          index={idx} 
+                          onEdit={(i) => openEditModal(i, committee)} 
+                          onDelete={() => removeCommittee(idx)} 
+                        />
+                      ))}
+                    </Reorder.Group>
                   )}
                 </div>
               </SectionForm>

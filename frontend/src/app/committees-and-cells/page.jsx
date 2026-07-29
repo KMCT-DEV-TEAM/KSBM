@@ -1,5 +1,6 @@
 import React from 'react';
 import CommitteesAndCellsPage from '../../features/committees-and-cells/CommitteesAndCellsPage';
+import MainLayout from '../../layouts/MainLayout';
 
 export const metadata = {
   title: 'Committees & Cells | KSBM',
@@ -7,5 +8,9 @@ export const metadata = {
 };
 
 export default function CommitteesAndCellsRoute() {
-  return <CommitteesAndCellsPage />;
+  return (
+    <MainLayout>
+      <CommitteesAndCellsPage />
+    </MainLayout>
+  );
 }

@@ -8,15 +8,21 @@ import ExamNotifications from './components/ExamNotifications';
 import ExamResultsTable from './components/ExamResultsTable';
 import api from '../../api/axios';
 
-const ExaminationsLanding = () => {
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+const ExaminationsLanding = ({ previewData }) => {
+  const [data, setData] = useState(previewData || null);
+  const [isLoading, setIsLoading] = useState(!previewData);
 
   useEffect(() => {
+    if (previewData) {
+      setData(previewData);
+      setIsLoading(false);
+      return;
+    }
+    
     window.scrollTo(0, 0);
     const fetchExaminationsData = async () => {
       try {
-        const res = await api.get('/cms/examinations-page', { hideLoader: true });
+        const res = await api.get('/cms/examinations-page');
         if (res && res.data) {
           setData(res.data);
         }
@@ -33,11 +39,11 @@ const ExaminationsLanding = () => {
     <div className="min-h-screen bg-white flex flex-col justify-between">
       <div>
         <main>
-          <ExaminationsHero data={data} />
-          <ExaminationsOverview data={data} />
-          <ExamCalendarBanner data={data} />
-          <ExamNotifications data={data} />
-          <ExamResultsTable data={data} />
+          {(!data?.activeTab || data.activeTab === 'hero') && <ExaminationsHero data={data} />}
+          {(!data?.activeTab || data.activeTab === 'overview') && <ExaminationsOverview data={data} />}
+          {(!data?.activeTab || data.activeTab === 'calendar') && <ExamCalendarBanner data={data} />}
+          {(!data?.activeTab || data.activeTab === 'notifications') && <ExamNotifications data={data} />}
+          {(!data?.activeTab || data.activeTab === 'results') && <ExamResultsTable data={data} />}
         </main>
       </div>
     </div>

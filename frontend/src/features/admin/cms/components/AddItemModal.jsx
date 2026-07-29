@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LogoUploader from './LogoUploader';
+import SingleDocumentUploader from './SingleDocumentUploader';
 
 const AddItemModal = ({ isOpen, onClose, title, fields, onSave, initialData }) => {
   const [formData, setFormData] = useState({});
@@ -83,6 +84,19 @@ const AddItemModal = ({ isOpen, onClose, title, fields, onSave, initialData }) =
                   deferredMode={true}
                   uploadEndpoint="/upload/mba"
                   disableDelete={!formData[field.name]}
+                />
+              )}
+
+              {field.type === 'document' && (
+                <SingleDocumentUploader
+                  fileUrl={formData[field.name] || ''}
+                  uploadEndpoint="/upload/committees"
+                  defaultFile="#"
+                  onUploadComplete={(urlObj) => handleChange(field.name, urlObj)}
+                  onUploadStateChange={(isUploading) => {}}
+                  label={`Upload ${field.label}`}
+                  deferredUpload={false}
+                  recommendedSize="PDF up to 10MB"
                 />
               )}
 
