@@ -45,7 +45,8 @@ const aboutSchema = new mongoose.Schema(
     showHeading: { type: Boolean, default: true },
     showParagraphs: { type: Boolean, default: true },
     showImage: { type: Boolean, default: true },
-    showStats: { type: Boolean, default: true }
+    showStats: { type: Boolean, default: true },
+    showSection: { type: Boolean, default: true }
   },
   {
     timestamps: true,

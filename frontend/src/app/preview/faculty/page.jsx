@@ -40,6 +40,8 @@ export default function FacultyPreviewPage() {
     introText: previewData.introText,
     ksbmFaculty: previewData.ksbmFaculty,
     adjunctFaculty: previewData.adjunctFaculty,
+    ksbmFacultyHeading: previewData.ksbmFacultyHeading,
+    adjunctFacultyHeading: previewData.adjunctFacultyHeading,
   };
 
   const activeTab = previewData.activeTab || 'hero';
@@ -48,8 +50,8 @@ export default function FacultyPreviewPage() {
     <div className="w-full min-h-screen bg-[#fcfcfd]">
       {activeTab === 'hero' && <FacultyHero data={data} />}
       {activeTab === 'intro' && <FacultyIntro data={data} />}
-      {activeTab === 'ksbm' && <FacultyGridSection id="ksbm-faculty" title="KSBM Faculty" members={data.ksbmFaculty} />}
-      {activeTab === 'adjunct' && <FacultyGridSection id="adjunct-faculty" title="Adjunct Faculty" members={data.adjunctFaculty} />}
+      {activeTab === 'ksbm' && <FacultyGridSection id="ksbm-faculty" title={data.ksbmFacultyHeading || "KSBM Faculty"} members={data.ksbmFaculty} />}
+      {activeTab === 'adjunct' && <FacultyGridSection id="adjunct-faculty" title={data.adjunctFacultyHeading || "Adjunct Faculty"} members={data.adjunctFaculty} />}
     </div>
   );
 }

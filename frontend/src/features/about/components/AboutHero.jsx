@@ -42,7 +42,7 @@ const AboutHero = ({ previewData }) => {
     fetchHeroData();
   }, [previewData]);
 
-  if (heroData.showSection === false) return null;
+  if (heroData?.showSection === false) return null;
 
   return (
     <section className="relative w-full min-h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32">

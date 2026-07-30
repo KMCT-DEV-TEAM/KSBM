@@ -73,9 +73,11 @@ const ManageCommitteesAndCellsPage = () => {
   const [previewMode, setPreviewMode] = useState('desktop');
   const [modalConfig, setModalConfig] = useState({ isOpen: false, title: '', fields: [], onSave: () => { }, initialData: null });
   const [formData, setFormData] = useState({
+    showHeroSection: true,
     heroHeading: '',
     heroSubtext: '',
     heroBgImage: '',
+    showCommitteesSection: true,
     committees: []
   });
   const [heroBgFile, setHeroBgFile] = useState(null);
@@ -114,9 +116,11 @@ const ManageCommitteesAndCellsPage = () => {
       const { data } = await api.get('/cms/committees-and-cells');
       if (data) {
         setFormData({
+          showHeroSection: data.showHeroSection !== false,
           heroHeading: data.heroHeading || 'Committees & Cells',
           heroSubtext: data.heroSubtext || '',
           heroBgImage: data.heroBgImage || '',
+          showCommitteesSection: data.showCommitteesSection !== false,
           committees: data.committees || []
         });
         setOriginalHeroBgImage(data.heroBgImage || '');
@@ -185,9 +189,11 @@ const ManageCommitteesAndCellsPage = () => {
       confirmButtonText: 'Yes, reset it!',
       action: async () => {
         setFormData({
+          showHeroSection: true,
           heroHeading: 'Committees & Cells',
           heroSubtext: 'Explore the various statutory committees and institutional cells established to ensure transparency, student welfare, academic excellence, and regulatory compliance.',
           heroBgImage: '/assets/Images/image 53.png',
+          showCommitteesSection: true,
           committees: []
         });
         Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
@@ -353,7 +359,19 @@ const ManageCommitteesAndCellsPage = () => {
           >
             {/* Hero Section */}
             {activeTab === 'hero' && (
-              <SectionForm title="Hero Banner">
+              <SectionForm title={
+                <div className="flex items-center justify-between w-full">
+                  <span>Hero Banner</span>
+                  <label className="flex items-center cursor-pointer">
+                    <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase tracking-wider">Show Section</span>
+                    <div className="relative">
+                      <input type="checkbox" className="sr-only" checked={formData.showHeroSection !== false} onChange={(e) => handleChange('showHeroSection', e.target.checked)} />
+                      <div className={`block w-10 h-6 rounded-full transition-colors ${formData.showHeroSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${formData.showHeroSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                    </div>
+                  </label>
+                </div>
+              }>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div className="space-y-2">
@@ -403,7 +421,19 @@ const ManageCommitteesAndCellsPage = () => {
             {/* Committees Section */}
             {activeTab === 'committees' && (
               <SectionForm
-                title="Committees Manager"
+                title={
+                  <div className="flex items-center justify-between w-full">
+                    <span>Committees Manager</span>
+                    <label className="flex items-center cursor-pointer">
+                      <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase tracking-wider">Show Section</span>
+                      <div className="relative">
+                        <input type="checkbox" className="sr-only" checked={formData.showCommitteesSection !== false} onChange={(e) => handleChange('showCommitteesSection', e.target.checked)} />
+                        <div className={`block w-10 h-6 rounded-full transition-colors ${formData.showCommitteesSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                        <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${formData.showCommitteesSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                      </div>
+                    </label>
+                  </div>
+                }
                 actionButton={
                   <button onClick={openAddModal} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all disabled:opacity-50">
                     <Plus className="w-4 h-4" /> Add Committee

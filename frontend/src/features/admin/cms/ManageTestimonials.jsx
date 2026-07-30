@@ -27,6 +27,7 @@ const ManageTestimonials = () => {
   const [subheading, setSubheading] = useState('');
   const [heading, setHeading] = useState('');
   const [testimonials, setTestimonials] = useState([]);
+  const [showSection, setShowSection] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -52,6 +53,7 @@ const ManageTestimonials = () => {
       setSubheading(data.subheading || '');
       setHeading(data.heading || '');
       setTestimonials(data.testimonials || []);
+      setShowSection(data.showSection ?? true);
     } catch (error) {
       console.error('Error fetching testimonials settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to load testimonials settings.' });
@@ -85,7 +87,7 @@ const ManageTestimonials = () => {
           }));
 
           await api.put('/cms/testimonials', {
-            subheading, heading, testimonials: finalTestimonials
+            subheading, heading, testimonials: finalTestimonials, showSection
           });
 
           await executeDeletions();
@@ -139,6 +141,7 @@ const ManageTestimonials = () => {
           avatar: '/assets/Images/Home/testimonial_3.jpg'
         }
       ]);
+      setShowSection(true);
       Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
     }
     });
@@ -279,7 +282,8 @@ const ManageTestimonials = () => {
     if (isPreviewModalOpen) {
       const pData = {
         subheading, heading, testimonials,
-        previewDevice: previewMode
+        previewDevice: previewMode,
+        showSection
       };
       const handleIframeReady = (e) => {
         if (e.data?.type === 'iframe-ready' && e.data?.source === 'testimonials' && iframeRef.current?.contentWindow) {
@@ -294,7 +298,7 @@ const ManageTestimonials = () => {
       }, 500);
       return () => window.removeEventListener('message', handleIframeReady);
     }
-  }, [isPreviewModalOpen, previewMode, subheading, heading, testimonials]);
+  }, [isPreviewModalOpen, previewMode, subheading, heading, testimonials, showSection]);
 
   if (isLoading) {
     return <AdminSkeleton />;
@@ -495,6 +499,21 @@ const ManageTestimonials = () => {
           </div>
         </div>
       )}
+
+      {/* Global Visibility Settings */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-lg font-bold text-[#1e2869]">Section Visibility</h3>
+            <p className="text-sm text-gray-500 mt-1">Show or hide this entire section on the landing page</p>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" className="sr-only peer" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            <span className="ms-3 text-sm font-semibold text-gray-600 uppercase tracking-wider">{showSection ? 'Visible' : 'Hidden'}</span>
+          </label>
+        </div>
+      </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
         <div className="mb-8 pb-8 border-b border-gray-100">

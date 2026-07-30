@@ -560,7 +560,17 @@ const ManageAlumni = () => {
 
           {activeTab === 'legacy' && (
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
-              <h2 className="text-lg font-bold text-[#1e2869] mb-4 border-b pb-3">Legacy of Excellence</h2>
+              <div className="flex items-center justify-between mb-4 border-b pb-3">
+                <h2 className="text-lg font-bold text-[#1e2869]">Legacy of Excellence</h2>
+                <label className="flex items-center cursor-pointer">
+                  <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                  <div className="relative">
+                    <input type="checkbox" className="sr-only" checked={data.legacy?.showSection !== false} onChange={(e) => updateSection('legacy', 'showSection', e.target.checked)} />
+                    <div className={`block w-10 h-6 rounded-full transition-colors ${data.legacy?.showSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                    <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${data.legacy?.showSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                  </div>
+                </label>
+              </div>
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -712,9 +722,19 @@ const ManageAlumni = () => {
           {activeTab === 'events' && (
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
               <div className="flex items-center justify-between mb-6 border-b pb-4">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-primary" />
-                  <h2 className="text-lg font-bold text-[#1e2869]">Alumni Events ({(data.events?.items || []).length})</h2>
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-5 h-5 text-primary" />
+                    <h2 className="text-lg font-bold text-[#1e2869]">Alumni Events ({(data.events?.items || []).length})</h2>
+                  </div>
+                  <label className="flex items-center cursor-pointer">
+                    <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                    <div className="relative">
+                      <input type="checkbox" className="sr-only" checked={data.events?.showSection !== false} onChange={(e) => updateSection('events', 'showSection', e.target.checked)} />
+                      <div className={`block w-10 h-6 rounded-full transition-colors ${data.events?.showSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${data.events?.showSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                    </div>
+                  </label>
                 </div>
                 <button
                   onClick={() => openModal('add', 'events')}
@@ -765,9 +785,19 @@ const ManageAlumni = () => {
           {activeTab === 'notable' && (
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
               <div className="flex items-center justify-between mb-6 border-b pb-4">
-                <div className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-primary" />
-                  <h2 className="text-lg font-bold text-[#1e2869]">Notable Alumni ({(data.notableAlumni?.items || []).length})</h2>
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <Award className="w-5 h-5 text-primary" />
+                    <h2 className="text-lg font-bold text-[#1e2869]">Notable Alumni ({(data.notableAlumni?.items || []).length})</h2>
+                  </div>
+                  <label className="flex items-center cursor-pointer">
+                    <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                    <div className="relative">
+                      <input type="checkbox" className="sr-only" checked={data.notableAlumni?.showSection !== false} onChange={(e) => updateSection('notableAlumni', 'showSection', e.target.checked)} />
+                      <div className={`block w-10 h-6 rounded-full transition-colors ${data.notableAlumni?.showSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${data.notableAlumni?.showSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                    </div>
+                  </label>
                 </div>
                 <button
                   onClick={() => openModal('add', 'notableAlumni')}
@@ -834,9 +864,19 @@ const ManageAlumni = () => {
           {activeTab === 'gallery' && (
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
               <div className="flex items-center justify-between mb-6 border-b pb-4">
-                <div className="flex items-center gap-2">
-                  <ImageIcon className="w-5 h-5 text-primary" />
-                  <h2 className="text-lg font-bold text-[#1e2869]">Gallery ({(data.gallery?.items || []).length})</h2>
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <ImageIcon className="w-5 h-5 text-primary" />
+                    <h2 className="text-lg font-bold text-[#1e2869]">Gallery ({(data.gallery?.items || []).length})</h2>
+                  </div>
+                  <label className="flex items-center cursor-pointer">
+                    <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                    <div className="relative">
+                      <input type="checkbox" className="sr-only" checked={data.gallery?.showSection !== false} onChange={(e) => updateSection('gallery', 'showSection', e.target.checked)} />
+                      <div className={`block w-10 h-6 rounded-full transition-colors ${data.gallery?.showSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${data.gallery?.showSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                    </div>
+                  </label>
                 </div>
                 <button
                   onClick={() => openModal('add', 'gallery')}
@@ -886,7 +926,17 @@ const ManageAlumni = () => {
 
           {activeTab === 'cta' && (
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
-              <h2 className="text-lg font-bold text-[#1e2869] mb-4 border-b pb-3">Join the KMCT Alumni Network (CTA)</h2>
+              <div className="flex items-center justify-between mb-4 border-b pb-3">
+                <h2 className="text-lg font-bold text-[#1e2869]">Join the KMCT Alumni Network (CTA)</h2>
+                <label className="flex items-center cursor-pointer">
+                  <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                  <div className="relative">
+                    <input type="checkbox" className="sr-only" checked={data.cta?.showSection !== false} onChange={(e) => updateSection('cta', 'showSection', e.target.checked)} />
+                    <div className={`block w-10 h-6 rounded-full transition-colors ${data.cta?.showSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                    <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${data.cta?.showSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                  </div>
+                </label>
+              </div>
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>

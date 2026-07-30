@@ -46,6 +46,8 @@ const ManageHero = () => {
     linkUrl: '#'
   });
 
+  const [showSection, setShowSection] = useState(true);
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -70,6 +72,7 @@ const ManageHero = () => {
         if (data.secondaryButton) setSecondaryButton(data.secondaryButton);
         if (data.bannerImages) setBannerImages(data.bannerImages);
         if (data.statsCard) setStatsCard(data.statsCard);
+        if (data.showSection !== undefined) setShowSection(data.showSection);
       }
     } catch (error) {
       console.error('Error fetching hero settings:', error);
@@ -104,7 +107,8 @@ const ManageHero = () => {
             primaryButton, 
             secondaryButton,
             bannerImages: finalBannerImages,
-            statsCard
+            statsCard,
+            showSection
           }, { hideLoader: true });
           
           await executeDeletions();
@@ -148,6 +152,7 @@ const ManageHero = () => {
           linkText: 'Read Admission Guidelines',
           linkUrl: '#'
         });
+        setShowSection(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -161,7 +166,8 @@ const ManageHero = () => {
     primaryButton,
     secondaryButton,
     bannerImages,
-    statsCard
+    statsCard,
+    showSection
   };
 
   useEffect(() => {
@@ -254,6 +260,23 @@ const ManageHero = () => {
       {/* Main Form Card */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
         
+        {/* Section Visibility Toggle */}
+        <div className="mb-8 pb-8 border-b border-gray-100 flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-bold text-[#1e2869] mb-1">Section Visibility</h3>
+            <p className="text-sm text-gray-500">Show or hide the entire Hero Section on the live website.</p>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input 
+              type="checkbox" 
+              className="sr-only peer"
+              checked={showSection}
+              onChange={(e) => setShowSection(e.target.checked)}
+            />
+            <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+          </label>
+        </div>
+
         {/* Banner Images Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
           <h3 className="text-lg font-bold text-[#1e2869] mb-4">Banner Background Images</h3>

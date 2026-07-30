@@ -60,10 +60,10 @@ const Faculty = () => {
         <FacultyIntro data={data} />
       )}
       {data?.showKsbmFaculty !== false && (
-        <FacultyGridSection id="ksbm-faculty" title="KSBM Faculty" members={data?.ksbmFaculty} />
+        <FacultyGridSection id="ksbm-faculty" title={data?.ksbmFacultyHeading || "KSBM Faculty"} members={data?.ksbmFaculty} />
       )}
       {data?.showAdjunctFaculty !== false && (
-        <FacultyGridSection id="adjunct-faculty" title="Adjunct Faculty" members={data?.adjunctFaculty} />
+        <FacultyGridSection id="adjunct-faculty" title={data?.adjunctFacultyHeading || "Adjunct Faculty"} members={data?.adjunctFaculty} />
       )}
       </div>
     </>

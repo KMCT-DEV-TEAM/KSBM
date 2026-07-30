@@ -8,10 +8,8 @@ const AdmissionHero = ({ data }) => {
   const badgeText = data?.heroBadgeText || 'ADMISSION OPEN FOR 2025-26';
   const title = data?.heroTitle || 'Your Path to Corporate Leadership Starts Here';
   const subtitle = data?.heroSubtitle || 'Join a diverse cohort of MBA & BBA candidates at the forefront of business mastery. Transparent, merit-based, and designed to unlock your full leadership potential.';
-  const applyBtnText = data?.heroApplyBtnText || 'Apply Online';
-  const applyBtnUrl = data?.heroApplyBtnUrl || '/#contact';
-  const brochureBtnText = data?.heroBrochureBtnText || 'View Program Details';
-  const brochureBtnUrl = data?.heroBrochureBtnUrl || '/programs';
+  const brochureBtnText = data?.heroBrochureBtnText || 'Download Brochure';
+  const brochureFile = data?.heroBrochureFile || '#';
   const bgImage = data?.heroBgImage || 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop';
 
   return (
@@ -96,19 +94,17 @@ const AdmissionHero = ({ data }) => {
           }}
           className="flex flex-col lg:flex-row items-start lg:items-center gap-4 mt-10"
         >
-          <Link
-            href={applyBtnUrl}
-            className="px-8 py-4 rounded-[18px] bg-white text-[#111638] font-semibold text-sm sm:text-base transition-all duration-300 hover:bg-blue-50 hover:scale-[1.03] shadow-[0_10px_25px_rgba(255,255,255,0.2)] flex items-center justify-center lg:justify-start gap-2.5 group w-full md:w-auto"
-          >
-            <span>{applyBtnText}</span>
-          </Link>
-
-          <Link
-            href={brochureBtnUrl}
-            className="px-8 py-4 rounded-[18px] bg-white/10 hover:bg-white/20 text-white font-semibold text-sm sm:text-base border border-white/25 backdrop-blur-md transition-all duration-300 flex items-center justify-center lg:justify-start gap-2 w-full md:w-auto"
-          >
-            <span>{brochureBtnText}</span>
-          </Link>
+          {brochureFile && brochureFile !== '#' && (
+            <a
+              href={brochureFile}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-4 rounded-[18px] bg-white text-[#111638] font-semibold text-sm sm:text-base transition-all duration-300 hover:bg-blue-50 hover:scale-[1.03] shadow-[0_10px_25px_rgba(255,255,255,0.2)] flex items-center justify-center lg:justify-start gap-2.5 group w-full md:w-auto"
+            >
+              <FileText className="w-5 h-5 text-blue-600 group-hover:scale-110 transition-transform" />
+              <span>{brochureBtnText}</span>
+            </a>
+          )}
         </motion.div>
       </motion.div>
     </section>

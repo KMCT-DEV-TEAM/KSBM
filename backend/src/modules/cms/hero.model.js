@@ -81,6 +81,10 @@ const heroSchema = new mongoose.Schema(
         linkText: 'Read Admission Guidelines',
         linkUrl: '#'
       })
+    },
+    showSection: {
+      type: Boolean,
+      default: true
     }
   },
   {

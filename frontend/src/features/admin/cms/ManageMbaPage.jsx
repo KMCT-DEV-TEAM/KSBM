@@ -454,7 +454,8 @@ const ManageMbaPage = ({ isBba = false }) => {
             whyChoosePills,
             dynamicLearning,
             momentsGallery,
-            academicCalendarBanner
+            academicCalendarBanner,
+            showSections
           };
 
           const processedPayload = await processDeferredUploads(rawPayload, api);
@@ -1793,7 +1794,14 @@ const ManageMbaPage = ({ isBba = false }) => {
           {activeTab === 'momentsGallery' && (
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
               <div className="flex items-center justify-between border-b pb-4">
-                <h2 className="text-lg font-bold text-primary">Moments Gallery Settings</h2>
+                <div className="flex items-center gap-6">
+                  <h2 className="text-lg font-bold text-primary">Moments Gallery Settings</h2>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" className="sr-only peer" checked={showSections.gallery ?? true} onChange={(e) => setShowSections({...showSections, gallery: e.target.checked})} />
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                    <span className="ml-3 text-xs font-semibold text-gray-500 uppercase">Show Section</span>
+                  </label>
+                </div>
                 <button
                   type="button"
                   onClick={addGalleryItem}

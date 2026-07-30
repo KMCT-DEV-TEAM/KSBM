@@ -152,7 +152,7 @@ const AlumniGallery = ({ data }) => {
   );
 
   return (
-    <section className="py-14 md:py-20 relative overflow-hidden" style={{ backgroundColor: '#f5f0eb' }}>
+    <section className="py-14 md:py-20 relative overflow-hidden bg-white">
 
       {/* Decorative Dotted Grid Patterns */}
       <div className="absolute top-16 left-2 sm:left-6 opacity-30 pointer-events-none hidden sm:block z-0">
@@ -229,10 +229,10 @@ const AlumniGallery = ({ data }) => {
             {columns.map((col, colIdx) => {
               if (col.type === 'tall') {
                 return (
-                  <div key={colIdx} className="shrink-0 w-[220px] sm:w-[260px] lg:w-[300px]">
+                  <div key={colIdx} className="shrink-0 w-[160px] sm:w-[260px] lg:w-[300px]">
                     <GalleryImage 
                       item={col.items[0]} 
-                      className="h-[400px] sm:h-[460px] lg:h-[520px]"
+                      className="h-[280px] sm:h-[460px] lg:h-[520px]"
                     />
                   </div>
                 );
@@ -240,14 +240,14 @@ const AlumniGallery = ({ data }) => {
 
               if (col.type === 'split-top-small') {
                 return (
-                  <div key={colIdx} className="shrink-0 w-[220px] sm:w-[260px] lg:w-[300px] flex flex-col gap-3 sm:gap-4">
+                  <div key={colIdx} className="shrink-0 w-[160px] sm:w-[260px] lg:w-[300px] flex flex-col gap-3 sm:gap-4">
                     <GalleryImage 
                       item={col.items[0]} 
-                      className="h-[160px] sm:h-[185px] lg:h-[210px]"
+                      className="h-[110px] sm:h-[185px] lg:h-[210px]"
                     />
                     <GalleryImage 
                       item={col.items[1]} 
-                      className="h-[224px] sm:h-[259px] lg:h-[294px]"
+                      className="h-[158px] sm:h-[259px] lg:h-[294px]"
                     />
                   </div>
                 );
@@ -255,14 +255,14 @@ const AlumniGallery = ({ data }) => {
 
               if (col.type === 'split-top-large') {
                 return (
-                  <div key={colIdx} className="shrink-0 w-[220px] sm:w-[260px] lg:w-[300px] flex flex-col gap-3 sm:gap-4">
+                  <div key={colIdx} className="shrink-0 w-[160px] sm:w-[260px] lg:w-[300px] flex flex-col gap-3 sm:gap-4">
                     <GalleryImage 
                       item={col.items[0]} 
-                      className="h-[240px] sm:h-[275px] lg:h-[310px]"
+                      className="h-[168px] sm:h-[275px] lg:h-[310px]"
                     />
                     <GalleryImage 
                       item={col.items[1]} 
-                      className="h-[144px] sm:h-[169px] lg:h-[194px]"
+                      className="h-[100px] sm:h-[169px] lg:h-[194px]"
                     />
                   </div>
                 );

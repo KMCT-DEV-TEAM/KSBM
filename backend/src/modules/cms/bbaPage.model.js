@@ -247,6 +247,18 @@ const bbaPageSchema = new mongoose.Schema(
       downloadBtnUrl: { type: String, default: '/assets/Images/bba/bba_schedule.png' },
       image: { type: String, default: '/assets/Images/bba/bba_schedule.png' },
       events: { type: [mongoose.Schema.Types.Mixed], default: [] }
+    },
+    showSections: {
+      hero: { type: Boolean, default: true },
+      overview: { type: Boolean, default: true },
+      dimensions: { type: Boolean, default: true },
+      whyChoose: { type: Boolean, default: true },
+      internships: { type: Boolean, default: true },
+      dynamic: { type: Boolean, default: true },
+      gallery: { type: Boolean, default: true },
+      calendar: { type: Boolean, default: true },
+      eligibility: { type: Boolean, default: true },
+      recruiters: { type: Boolean, default: true }
     }
   },
   { timestamps: true, strict: false }

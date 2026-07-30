@@ -39,6 +39,7 @@ const recruitersSchema = new mongoose.Schema(
       ]
     },
     showRecruiters: { type: Boolean, default: true },
+    showSection: { type: Boolean, default: true }
   },
   {
     timestamps: true,

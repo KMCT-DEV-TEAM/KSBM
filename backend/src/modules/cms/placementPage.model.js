@@ -39,12 +39,14 @@ const featureSchema = new mongoose.Schema({
 const placementPageSchema = new mongoose.Schema(
   {
     hero: {
+      showSection: { type: Boolean, default: true },
       title: { type: String, default: 'Stay Informed. Stay Prepared. \nExcel in Every Examination.' },
       subtitle: { type: String, default: 'Equip yourself with the tools, knowledge, and confidence to ace every examination. Prepare smartly and secure your future with structured learning.' },
       badge: { type: String, default: 'Placement 2026' },
       backgroundImage: { type: String, default: '/assets/Images/placements/placement_hero_bg.png' }
     },
     overview: {
+      showSection: { type: Boolean, default: true },
       title: { type: String, default: 'Placement Excellence' },
       deskBadge: { type: String, default: 'Management Desk' },
       description1: { type: String, default: 'At KSBM, placement is not just an event, it is a process which starts from the first semester. We understand that every student has a unique set of skills and career aspirations. Our aim is to connect the right talent with the right opportunity.' },
@@ -66,6 +68,7 @@ const placementPageSchema = new mongoose.Schema(
       }
     },
     proudAchievers: {
+      showSection: { type: Boolean, default: true },
       title: { type: String, default: 'Proud Achievers' },
       items: {
         type: [achieverSchema],
@@ -78,6 +81,7 @@ const placementPageSchema = new mongoose.Schema(
       }
     },
     topRecruiters: {
+      showSection: { type: Boolean, default: true },
       title: { type: String, default: 'Top Recruiters' },
       description: { type: String, default: 'Our strong industry connections ensure that our students get the best career opportunities. We have a consistent track record of high-quality placements across diverse sectors.' },
       items: {
@@ -92,6 +96,7 @@ const placementPageSchema = new mongoose.Schema(
       }
     },
     excellenceSupport: {
+      showSection: { type: Boolean, default: true },
       title: { type: String, default: 'Excellence in Placement Support' },
       description: { type: String, default: 'Comprehensive training and guidance to ensure you step into the corporate world with confidence and the right skill set.' },
       listOne: {
@@ -115,6 +120,7 @@ const placementPageSchema = new mongoose.Schema(
       backgroundImage: { type: String, default: '/assets/Images/placements/placement_main.png' }
     },
     facultyInCharge: {
+      showSection: { type: Boolean, default: true },
       badge: { type: String, default: 'Faculty In-Charge' },
       title: { type: String, default: 'Empowering Careers. Inspiring Success.' },
       description: { type: String, default: 'Our experienced faculty members work tirelessly to bridge the gap between academia and industry, ensuring every student has access to the best career opportunities through dedicated mentorship and corporate engagement.' },
@@ -127,6 +133,7 @@ const placementPageSchema = new mongoose.Schema(
       }
     },
     placementCommittee: {
+      showSection: { type: Boolean, default: true },
       title: { type: String, default: 'Placement Committee' },
       description: { type: String, default: 'The Placement Committee consists of student representatives who actively coordinate with recruiters, schedule interviews, and ensure a smooth placement process.' },
       buttonText: { type: String, default: 'Connect with Committee' },
@@ -141,6 +148,7 @@ const placementPageSchema = new mongoose.Schema(
       }
     },
     activities: {
+      showSection: { type: Boolean, default: true },
       title: { type: String, default: 'Placement Activities & Events' },
       items: {
         type: [activitySchema],

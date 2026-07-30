@@ -17,6 +17,7 @@ const resultItemSchema = new mongoose.Schema({
 
 const examinationsPageSchema = new mongoose.Schema(
   {
+    showHeroSection: { type: Boolean, default: true },
     heroBadgeText: { type: String, default: 'Examinations 2026' },
     heroTitle: { type: String, default: 'Stay Informed. Stay Prepared. Excel in Every Examination.' },
     heroSubtitle: {
@@ -25,6 +26,7 @@ const examinationsPageSchema = new mongoose.Schema(
     },
     heroImage: { type: String, default: '/assets/Images/examinations/exam_hero_bg.png' },
 
+    showOverviewSection: { type: Boolean, default: true },
     overviewTitle: { type: String, default: 'Examination Overview' },
     overviewText1: {
       type: String,
@@ -36,6 +38,7 @@ const examinationsPageSchema = new mongoose.Schema(
     },
     overviewImage: { type: String, default: '/assets/Images/examinations/exam_main.png' },
 
+    showCalendarSection: { type: Boolean, default: true },
     calendarTitle: { type: String, default: 'Download the Official Exam Calendar' },
     calendarText: {
       type: String,
@@ -47,6 +50,7 @@ const examinationsPageSchema = new mongoose.Schema(
     calendarDownloadBtnUrl: { type: String, default: '/assets/Images/examinations/exam_schedule.png' },
     calendarImage: { type: String, default: '/assets/Images/examinations/exam_schedule.png' },
 
+    showNotificationsSection: { type: Boolean, default: true },
     notifications: {
       type: [notificationItemSchema],
       default: [
@@ -65,6 +69,7 @@ const examinationsPageSchema = new mongoose.Schema(
       ]
     },
 
+    showResultsSection: { type: Boolean, default: true },
     results: {
       type: [resultItemSchema],
       default: [

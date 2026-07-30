@@ -83,8 +83,10 @@ const ManageFaculty = () => {
   const [introText, setIntroText] = useState('');
   
   const [showKsbmFaculty, setShowKsbmFaculty] = useState(true);
+  const [ksbmFacultyHeading, setKsbmFacultyHeading] = useState('');
   const [ksbmFaculty, setKsbmFaculty] = useState([]);
   const [showAdjunctFaculty, setShowAdjunctFaculty] = useState(true);
+  const [adjunctFacultyHeading, setAdjunctFacultyHeading] = useState('');
   const [adjunctFaculty, setAdjunctFaculty] = useState([]);
   
   const [isLoading, setIsLoading] = useState(true);
@@ -130,7 +132,9 @@ const ManageFaculty = () => {
         if (data.introText) setIntroText(data.introText);
         
         if (data.showKsbmFaculty !== undefined) setShowKsbmFaculty(data.showKsbmFaculty);
+        if (data.ksbmFacultyHeading) setKsbmFacultyHeading(data.ksbmFacultyHeading);
         if (data.showAdjunctFaculty !== undefined) setShowAdjunctFaculty(data.showAdjunctFaculty);
+        if (data.adjunctFacultyHeading) setAdjunctFacultyHeading(data.adjunctFacultyHeading);
         
         if (data.ksbmFaculty && data.ksbmFaculty.length > 0) setKsbmFaculty(data.ksbmFaculty);
         if (data.adjunctFaculty && data.adjunctFaculty.length > 0) setAdjunctFaculty(data.adjunctFaculty);
@@ -168,6 +172,7 @@ const ManageFaculty = () => {
             showHeroTextContent, heroHeading, heroSubtext, heroBgImage: newHeroBgImage,
             showIntro, introSubheading, introHeading, introText,
             showKsbmFaculty, showAdjunctFaculty,
+            ksbmFacultyHeading, adjunctFacultyHeading,
             ksbmFaculty: newKsbmFaculty, adjunctFaculty: newAdjunctFaculty 
           }, { hideLoader: true });
           
@@ -312,6 +317,7 @@ const ManageFaculty = () => {
         showHeroTextContent, heroHeading, heroSubtext, heroBgImage,
         showIntro, introSubheading, introHeading, introText,
         showKsbmFaculty, showAdjunctFaculty,
+        ksbmFacultyHeading, adjunctFacultyHeading,
         ksbmFaculty: ksbmFaculty.map(m => ({
           ...m,
           image: typeof m.image === 'string' ? m.image : m.image?.previewUrl || '/assets/Images/image 31.png'
@@ -580,6 +586,14 @@ const ManageFaculty = () => {
             </button>
           </div>
 
+          <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 mb-6">
+            <div className="flex justify-between items-center mb-1.5">
+              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Section Heading</label>
+              <span className="text-xs text-gray-400">{(ksbmFacultyHeading || '').length}/60</span>
+            </div>
+            <input type="text" maxLength={60} value={ksbmFacultyHeading} onChange={(e) => setKsbmFacultyHeading(e.target.value)} placeholder="e.g. KSBM Faculty" className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+          </div>
+
           <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
             {ksbmFaculty.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-gray-400">
@@ -626,6 +640,14 @@ const ManageFaculty = () => {
             >
               <Plus className="w-4 h-4" /> Add Adjunct
             </button>
+          </div>
+
+          <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 mb-6">
+            <div className="flex justify-between items-center mb-1.5">
+              <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Section Heading</label>
+              <span className="text-xs text-gray-400">{(adjunctFacultyHeading || '').length}/60</span>
+            </div>
+            <input type="text" maxLength={60} value={adjunctFacultyHeading} onChange={(e) => setAdjunctFacultyHeading(e.target.value)} placeholder="e.g. Adjunct Faculty" className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
           </div>
 
           <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">

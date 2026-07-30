@@ -27,10 +27,7 @@ const ManageAchievements = () => {
   const [subheading, setSubheading] = useState('');
   const [heading, setHeading] = useState('');
   const [achievements, setAchievements] = useState([]);
-  
-  const [showSubheading, setShowSubheading] = useState(true);
-  const [showHeading, setShowHeading] = useState(true);
-  const [showAchievements, setShowAchievements] = useState(true);
+  const [showSection, setShowSection] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -55,9 +52,7 @@ const ManageAchievements = () => {
       setSubheading(data.subheading || '');
       setHeading(data.heading || '');
       setAchievements(data.achievements || []);
-      setShowSubheading(data.showSubheading ?? true);
-      setShowHeading(data.showHeading ?? true);
-      setShowAchievements(data.showAchievements ?? true);
+      setShowSection(data.showSection ?? true);
     } catch (error) {
       console.error('Error fetching achievements settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to load achievements settings.' });
@@ -86,7 +81,7 @@ const ManageAchievements = () => {
           }));
 
           await api.put('/cms/achievements', {
-            subheading, heading, achievements: finalAchievements, showSubheading, showHeading, showAchievements
+            subheading, heading, achievements: finalAchievements, showSection
           });
           
           await executeDeletions();
@@ -111,9 +106,7 @@ const ManageAchievements = () => {
       action: async () => {
       setSubheading('College Achievements');
       setHeading('Awards and Achievements');
-      setShowSubheading(true);
-      setShowHeading(true);
-      setShowAchievements(true);
+      setShowSection(true);
       setAchievements([
         {
           id: Date.now().toString() + '1',
@@ -297,7 +290,7 @@ const ManageAchievements = () => {
           <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
             <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
               <AchievementsPreview previewData={{
-                subheading, heading, achievements, showSubheading, showHeading, showAchievements, previewDevice: previewMode
+                subheading, heading, achievements, showSection, previewDevice: previewMode
               }} />
             </div>
           </div>
@@ -423,6 +416,21 @@ const ManageAchievements = () => {
         </div>
       )}
 
+      {/* Global Visibility Settings */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-lg font-bold text-[#1e2869]">Section Visibility</h3>
+            <p className="text-sm text-gray-500 mt-1">Show or hide this entire section on the landing page</p>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" className="sr-only peer" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            <span className="ms-3 text-sm font-semibold text-gray-600 uppercase tracking-wider">{showSection ? 'Visible' : 'Hidden'}</span>
+          </label>
+        </div>
+      </div>
+
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
         
         {/* Header Text Settings */}
@@ -432,10 +440,6 @@ const ManageAchievements = () => {
             <div>
               <div className="flex items-center gap-3 mb-1.5">
 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showSubheading} onChange={(e) => setShowSubheading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
-                  <span className="text-xs font-semibold text-gray-500">Show</span>
-                </label>
 </div>
 <input
                 type="text"
@@ -452,10 +456,6 @@ const ManageAchievements = () => {
             <div>
               <div className="flex items-center gap-3 mb-1.5">
 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showHeading} onChange={(e) => setShowHeading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
-                  <span className="text-xs font-semibold text-gray-500">Show</span>
-                </label>
 </div>
 <input
                 type="text"
@@ -477,10 +477,6 @@ const ManageAchievements = () => {
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-bold text-[#1e2869]">Achievements Items</h3>
-              <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
-                <input type="checkbox" checked={showAchievements} onChange={(e) => setShowAchievements(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
-                <span className="text-sm font-semibold text-gray-500">Show Achievements Section</span>
-              </label>
             </div>
             <button
               onClick={openAddAchievementModal}

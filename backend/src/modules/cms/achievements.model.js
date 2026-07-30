@@ -62,6 +62,7 @@ const achievementsSchema = new mongoose.Schema(
     showSubheading: { type: Boolean, default: true },
     showHeading: { type: Boolean, default: true },
     showAchievements: { type: Boolean, default: true },
+    showSection: { type: Boolean, default: true }
   },
   {
     timestamps: true,

@@ -27,14 +27,11 @@ const Toast = Swal.mixin({
 const ManageAccreditation = () => {
   const [subheading, setSubheading] = useState('');
   const [showSection, setShowSection] = useState(true);
-  const [showSubheading, setShowSubheading] = useState(true);
 
   const [heading, setHeading] = useState('');
-  const [showHeading, setShowHeading] = useState(true);
 
   const [imageUrl, setImageUrl] = useState('');
   const [images, setImages] = useState([]);
-  const [showImage, setShowImage] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -48,7 +45,7 @@ const ManageAccreditation = () => {
 
   const previewData = {
     subheading, heading, imageUrl, images,
-    showSubheading, showHeading, showImage, showSection
+    showSection
   };
 
   useEffect(() => {
@@ -81,19 +78,12 @@ const ManageAccreditation = () => {
       const { data } = await api.get('/cms/accreditation');
       setShowSection(data.showSection ?? true);
       setSubheading(data.subheading || '');
-      setShowSubheading(data.showSubheading ?? true);
-      setHeading(data.heading || '');
-      setShowHeading(data.showHeading ?? true);
-      setImageUrl(data.imageUrl || '');
-      
       const defaultBanners = [
         { url: '/assets/Images/Home/Component 86.png' },
         { url: '/assets/Images/Home/Component 87.png' },
         { url: '/assets/Images/Home/Component 88.png' }
       ];
       setImages(data.images && data.images.length > 0 ? data.images : defaultBanners);
-      
-      setShowImage(data.showImage ?? true);
     } catch (error) {
       console.error('Error fetching accreditation settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to load accreditation settings.' });
@@ -121,7 +111,7 @@ const ManageAccreditation = () => {
 
           await api.put('/cms/accreditation', {
             subheading, heading, imageUrl, images: finalImages,
-            showSubheading, showHeading, showImage, showSection
+            showSection
           });
           
           await executeDeletions();
@@ -145,16 +135,13 @@ const ManageAccreditation = () => {
       variant: 'primary',
       action: async () => {
       setSubheading('Institutional Credentials');
-      setShowSubheading(true);
       setHeading('Accreditation & Affiliations');
-      setShowHeading(true);
       setImageUrl('');
       setImages([
         { url: '/assets/Images/Home/Component 86.png' },
         { url: '/assets/Images/Home/Component 87.png' },
         { url: '/assets/Images/Home/Component 88.png' }
       ]);
-      setShowImage(true);
       setShowSection(true);
       Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
     }
@@ -232,26 +219,22 @@ const ManageAccreditation = () => {
         </div>
       )}
 
+      {/* Global Visibility Settings */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
-
-        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
-          <label className="flex items-center cursor-pointer">
-            <div className="relative">
-              <input
-                type="checkbox"
-                className="sr-only"
-                checked={showSection}
-                onChange={(e) => setShowSection(e.target.checked)}
-              />
-              <div className={`block w-10 h-6 rounded-full transition-colors ${showSection ? 'bg-primary' : 'bg-gray-300'}`}></div>
-              <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showSection ? 'transform translate-x-4' : ''}`}></div>
-            </div>
-            <span className="ml-3 text-sm font-medium text-gray-700">
-              {showSection ? 'Visible' : 'Hidden'}
-            </span>
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-lg font-bold text-[#1e2869]">Section Visibility</h3>
+            <p className="text-sm text-gray-500 mt-1">Show or hide this entire section on the landing page</p>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" className="sr-only peer" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            <span className="ms-3 text-sm font-semibold text-gray-600 uppercase tracking-wider">{showSection ? 'Visible' : 'Hidden'}</span>
           </label>
         </div>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
 
         {/* Text Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
@@ -260,10 +243,6 @@ const ManageAccreditation = () => {
             <div>
               <div className="flex items-center gap-3 mb-1.5">
 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showSubheading} onChange={(e) => setShowSubheading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
-                  <span className="text-xs font-semibold text-gray-500">Show</span>
-                </label>
 </div>
 <input
                 type="text"
@@ -278,10 +257,6 @@ const ManageAccreditation = () => {
             <div>
               <div className="flex items-center gap-3 mb-1.5">
 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showHeading} onChange={(e) => setShowHeading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
-                  <span className="text-xs font-semibold text-gray-500">Show</span>
-                </label>
 </div>
 <input
                 type="text"
@@ -300,10 +275,6 @@ const ManageAccreditation = () => {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-bold text-[#1e2869]">Accreditation Logos Image</h3>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={showImage} onChange={(e) => setShowImage(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
-              <span className="text-sm font-semibold text-gray-500">Show Image</span>
-            </label>
           </div>
           <p className="text-sm text-gray-500 mb-4">Upload multiple images for accreditation and affiliation logos. These will be shown on the website.</p>
           <AccreditationUploader

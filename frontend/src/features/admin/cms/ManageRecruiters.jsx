@@ -40,7 +40,7 @@ const defaultLogoMap = {
 
 const ManageRecruiters = () => {
   const [recruiters, setRecruiters] = useState([]);
-  const [showRecruiters, setShowRecruiters] = useState(true);
+  const [showSection, setShowSection] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -57,7 +57,7 @@ const ManageRecruiters = () => {
 
   useEffect(() => {
     if (isPreviewModalOpen) {
-      const pData = { recruiters, showRecruiters };
+      const pData = { recruiters, showSection };
       const handleIframeReady = (e) => {
         if (e.data?.type === 'iframe-ready' && e.data?.source === 'recruiters' && iframeRef.current?.contentWindow) {
           iframeRef.current.contentWindow.postMessage({ type: 'preview-recruiters-data', payload: pData }, '*');
@@ -71,7 +71,7 @@ const ManageRecruiters = () => {
       }, 500);
       return () => window.removeEventListener('message', handleIframeReady);
     }
-  }, [isPreviewModalOpen, recruiters, showRecruiters]);
+  }, [isPreviewModalOpen, recruiters, showSection]);
 
   useEffect(() => {
     fetchSettings();
@@ -81,7 +81,7 @@ const ManageRecruiters = () => {
     try {
       const { data } = await api.get('/cms/recruiters');
       setRecruiters(data.recruiters || []);
-      setShowRecruiters(data.showRecruiters ?? true);
+      setShowSection(data.showSection ?? true);
     } catch (error) {
       console.error('Error fetching recruiters settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to load recruiters settings.' });
@@ -110,7 +110,7 @@ const ManageRecruiters = () => {
           }));
 
           await api.put('/cms/recruiters', {
-            recruiters: finalRecruiters, showRecruiters
+            recruiters: finalRecruiters, showSection
           });
 
           await executeDeletions();
@@ -135,12 +135,12 @@ const ManageRecruiters = () => {
       action: async () => {
         const newDefaults = defaultRecruiterSettings.map(item => ({ ...item, id: Date.now().toString() + Math.random().toString().slice(2, 6) }));
         setRecruiters(newDefaults);
-        setShowRecruiters(true);
+        setShowSection(true);
 
         setIsSaving(true);
         try {
           await api.put('/cms/recruiters', {
-            recruiters: newDefaults, showRecruiters: true
+            recruiters: newDefaults, showSection: true
           });
           Toast.fire({ icon: 'success', title: 'Settings reset to default and saved.' });
         } catch (error) {
@@ -328,17 +328,28 @@ const ManageRecruiters = () => {
         </div>
       )}
 
+      {/* Global Visibility Settings */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-lg font-bold text-[#1e2869]">Section Visibility</h3>
+            <p className="text-sm text-gray-500 mt-1">Show or hide this entire section on the landing page</p>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" className="sr-only peer" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            <span className="ms-3 text-sm font-semibold text-gray-600 uppercase tracking-wider">{showSection ? 'Visible' : 'Hidden'}</span>
+          </label>
+        </div>
+      </div>
+
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
 
         {/* Recruiters Builder */}
         <div>
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-4">
-              <h3 className="text-lg font-bold text-[#1e2869]">Recruiter Cards & Placement Highlights</h3>
-              <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
-                <input type="checkbox" checked={showRecruiters} onChange={(e) => setShowRecruiters(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
-                <span className="text-sm font-semibold text-gray-500">Show Recruiters Section</span>
-              </label>
+              <h3 className="text-lg font-bold text-[#1e2869]">Recruiter Cards</h3>
             </div>
             <button
               onClick={handleAddRecruiter}

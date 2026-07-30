@@ -111,7 +111,9 @@ const TestimonialsSection = ({ previewData }) => {
         >
           {displayTestimonials.map((testimonial, index) => {
             const isActive = activeIndex === index;
-            return (
+            if (settings?.showSection === false) return null;
+
+  return (
               <div
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}

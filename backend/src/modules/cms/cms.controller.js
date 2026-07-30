@@ -88,7 +88,7 @@ export const getAboutSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateAboutSettings = async (req, res) => {
   try {
-    const { subheading, heading, paragraphs, imageUrl, stats, showSubheading, showHeading, showParagraphs, showImage, showStats } = req.body;
+    const { subheading, heading, paragraphs, imageUrl, stats, showSection } = req.body;
 
     const settings = await About.getSettings();
 
@@ -98,11 +98,7 @@ export const updateAboutSettings = async (req, res) => {
     if (imageUrl !== undefined) settings.imageUrl = imageUrl;
     if (stats !== undefined) settings.stats = stats;
     
-    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
-    if (showHeading !== undefined) settings.showHeading = showHeading;
-    if (showParagraphs !== undefined) settings.showParagraphs = showParagraphs;
-    if (showImage !== undefined) settings.showImage = showImage;
-    if (showStats !== undefined) settings.showStats = showStats;
+    if (showSection !== undefined) settings.showSection = showSection;
      const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
@@ -165,7 +161,7 @@ export const getProgramsSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateProgramsSettings = async (req, res) => {
   try {
-    const { subheading, heading, description, programs, showSubheading, showHeading, showDescription, showPrograms } = req.body;
+    const { subheading, heading, description, programs, showSection } = req.body;
 
     const settings = await Programs.getSettings();
 
@@ -174,10 +170,7 @@ export const updateProgramsSettings = async (req, res) => {
     if (description !== undefined) settings.description = description;
     if (programs !== undefined) settings.programs = programs;
     
-    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
-    if (showHeading !== undefined) settings.showHeading = showHeading;
-    if (showDescription !== undefined) settings.showDescription = showDescription;
-    if (showPrograms !== undefined) settings.showPrograms = showPrograms;
+    if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -203,7 +196,7 @@ export const getAccreditationSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateAccreditationSettings = async (req, res) => {
   try {
-    const { subheading, heading, imageUrl, images, showSubheading, showHeading, showImage, showSection } = req.body;
+    const { subheading, heading, imageUrl, images, showSection } = req.body;
 
     const settings = await Accreditation.getSettings();
 
@@ -212,9 +205,6 @@ export const updateAccreditationSettings = async (req, res) => {
     if (imageUrl !== undefined) settings.imageUrl = imageUrl;
     if (images !== undefined) settings.images = images;
     
-    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
-    if (showHeading !== undefined) settings.showHeading = showHeading;
-    if (showImage !== undefined) settings.showImage = showImage;
     if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();
@@ -241,7 +231,7 @@ export const getFacilitiesSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateFacilitiesSettings = async (req, res) => {
   try {
-    const { subheading, heading, description, facilitiesList, showSubheading, showHeading, showDescription, showFacilities } = req.body;
+    const { subheading, heading, description, facilitiesList, showSection } = req.body;
 
     const settings = await Facilities.getSettings();
 
@@ -250,10 +240,7 @@ export const updateFacilitiesSettings = async (req, res) => {
     if (description !== undefined) settings.description = description;
     if (facilitiesList !== undefined) settings.facilitiesList = facilitiesList;
     
-    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
-    if (showHeading !== undefined) settings.showHeading = showHeading;
-    if (showDescription !== undefined) settings.showDescription = showDescription;
-    if (showFacilities !== undefined) settings.showFacilities = showFacilities;
+    if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -279,7 +266,7 @@ export const getManagementSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateManagementSettings = async (req, res) => {
   try {
-    const { subheading, heading, description, members } = req.body;
+    const { subheading, heading, description, members, showSection } = req.body;
 
     const settings = await Management.getSettings();
 
@@ -287,6 +274,7 @@ export const updateManagementSettings = async (req, res) => {
     if (heading !== undefined) settings.heading = heading;
     if (description !== undefined) settings.description = description;
     if (members !== undefined) settings.members = members;
+    if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -327,10 +315,7 @@ export const updatePlacementSettings = async (req, res) => {
       stat2Value,
       stat2Label,
       statistics,
-      showSubheading,
-      showHeading,
-      showDescription,
-      showStats,
+      showSection,
     } = req.body;
 
     const settings = await Placement.getSettings();
@@ -344,14 +329,7 @@ export const updatePlacementSettings = async (req, res) => {
     if (stat2Label !== undefined) settings.stat2Label = stat2Label;
     if (statistics !== undefined) settings.statistics = statistics;
 
-    if (showSubheading !== undefined)
-      settings.showSubheading = showSubheading;
-    if (showHeading !== undefined)
-      settings.showHeading = showHeading;
-    if (showDescription !== undefined)
-      settings.showDescription = showDescription;
-    if (showStats !== undefined)
-      settings.showStats = showStats;
+    if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -383,13 +361,14 @@ export const getTestimonialsSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateTestimonialsSettings = async (req, res) => {
   try {
-    const { subheading, heading, testimonials } = req.body;
+    const { subheading, heading, testimonials, showSection } = req.body;
 
     const settings = await Testimonials.getSettings();
 
     if (subheading !== undefined) settings.subheading = subheading;
     if (heading !== undefined) settings.heading = heading;
     if (testimonials !== undefined) settings.testimonials = testimonials;
+    if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -418,16 +397,14 @@ export const getAchievementsSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateAchievementsSettings = async (req, res) => {
   try {
-    const { subheading, heading, achievements, showSubheading, showHeading, showAchievements } = req.body;
+    const { subheading, heading, achievements, showSection } = req.body;
 
     const settings = await Achievements.getSettings();
 
     if (subheading !== undefined) settings.subheading = subheading;
     if (heading !== undefined) settings.heading = heading;
     if (achievements !== undefined) settings.achievements = achievements;
-    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
-    if (showHeading !== undefined) settings.showHeading = showHeading;
-    if (showAchievements !== undefined) settings.showAchievements = showAchievements;
+    if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -453,12 +430,12 @@ export const getRecruitersSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateRecruitersSettings = async (req, res) => {
   try {
-    const { recruiters, showRecruiters } = req.body;
+    const { recruiters, showSection } = req.body;
 
     const settings = await Recruiters.getSettings();
 
     if (recruiters !== undefined) settings.recruiters = recruiters;
-    if (showRecruiters !== undefined) settings.showRecruiters = showRecruiters;
+    if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -484,17 +461,13 @@ export const getLifeAtKsbmSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateLifeAtKsbmSettings = async (req, res) => {
   try {
-    const { subheading, heading, description, images, showSubheading, showHeading, showDescription, showImages, showSection } = req.body;
+    const { subheading, heading, description, images, showSection } = req.body;
     const settings = await LifeAtKsbm.getSettings();
 
     if (subheading !== undefined) settings.subheading = subheading;
     if (heading !== undefined) settings.heading = heading;
     if (description !== undefined) settings.description = description;
     if (images !== undefined) settings.images = images;
-    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
-    if (showHeading !== undefined) settings.showHeading = showHeading;
-    if (showDescription !== undefined) settings.showDescription = showDescription;
-    if (showImages !== undefined) settings.showImages = showImages;
     if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();
@@ -521,15 +494,13 @@ export const getNewsSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateNewsSettings = async (req, res) => {
   try {
-    const { subheading, heading, featuredArticle, sideArticles, showSubheading, showHeading, showSection } = req.body;
+    const { subheading, heading, featuredArticle, sideArticles, showSection } = req.body;
     const settings = await News.getSettings();
 
     if (subheading !== undefined) settings.subheading = subheading;
     if (heading !== undefined) settings.heading = heading;
     if (featuredArticle !== undefined) settings.featuredArticle = featuredArticle;
     if (sideArticles !== undefined) settings.sideArticles = sideArticles;
-    if (showSubheading !== undefined) settings.showSubheading = showSubheading;
-    if (showHeading !== undefined) settings.showHeading = showHeading;
     if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();
@@ -892,7 +863,9 @@ export const updateFacultySettings = async (req, res) => {
     const { 
       heroHeading, heroSubtext, heroBgImage, 
       introSubheading, introHeading, introText, 
-      ksbmFaculty, adjunctFaculty 
+      ksbmFaculty, adjunctFaculty,
+      showHeroTextContent, showIntro, showKsbmFaculty, showAdjunctFaculty,
+      ksbmFacultyHeading, adjunctFacultyHeading
     } = req.body;
     const settings = await Faculty.getSettings();
     
@@ -904,6 +877,12 @@ export const updateFacultySettings = async (req, res) => {
     if (introText !== undefined) settings.introText = introText;
     if (ksbmFaculty !== undefined) settings.ksbmFaculty = ksbmFaculty;
     if (adjunctFaculty !== undefined) settings.adjunctFaculty = adjunctFaculty;
+    if (showHeroTextContent !== undefined) settings.showHeroTextContent = showHeroTextContent;
+    if (showIntro !== undefined) settings.showIntro = showIntro;
+    if (showKsbmFaculty !== undefined) settings.showKsbmFaculty = showKsbmFaculty;
+    if (showAdjunctFaculty !== undefined) settings.showAdjunctFaculty = showAdjunctFaculty;
+    if (ksbmFacultyHeading !== undefined) settings.ksbmFacultyHeading = ksbmFacultyHeading;
+    if (adjunctFacultyHeading !== undefined) settings.adjunctFacultyHeading = adjunctFacultyHeading;
     
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -955,10 +934,11 @@ export const getManagementDeskSettings = async (req, res) => {
 // @desc    Update Management Desk settings
 export const updateManagementDeskSettings = async (req, res) => {
   try {
-    const { showHero, heroHeading, heroSubtext, heroBgImage, showIntro, introSubheading, introHeading, introDescription, showMembers, members } = req.body;
+    const { showHero, showHeroTextContent, heroHeading, heroSubtext, heroBgImage, showIntro, introSubheading, introHeading, introDescription, showMembers, members } = req.body;
     const settings = await ManagementDesk.getSettings();
 
     if (showHero !== undefined) settings.showHero = showHero;
+    if (showHeroTextContent !== undefined) settings.showHeroTextContent = showHeroTextContent;
     if (heroHeading !== undefined) settings.heroHeading = heroHeading;
     if (heroSubtext !== undefined) settings.heroSubtext = heroSubtext;
     if (heroBgImage !== undefined) settings.heroBgImage = heroBgImage;
@@ -996,7 +976,7 @@ export const updateMbaPageSettings = async (req, res) => {
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
       'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
-      'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner'
+      'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
     ];
     const settings = await MbaPageSetting.getSettings();
     fields.forEach((field) => {
@@ -1006,6 +986,9 @@ export const updateMbaPageSettings = async (req, res) => {
     });
     if (req.body.academicCalendarBanner !== undefined) {
       settings.markModified('academicCalendarBanner');
+    }
+    if (req.body.showSections !== undefined) {
+      settings.markModified('showSections');
     }
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -1090,7 +1073,7 @@ export const updateBbaPageSettings = async (req, res) => {
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
       'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
-      'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner'
+      'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
     ];
     const settings = await BbaPageSetting.getSettings();
     fields.forEach((field) => {
@@ -1100,6 +1083,9 @@ export const updateBbaPageSettings = async (req, res) => {
     });
     if (req.body.academicCalendarBanner !== undefined) {
       settings.markModified('academicCalendarBanner');
+    }
+    if (req.body.showSections !== undefined) {
+      settings.markModified('showSections');
     }
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -1126,6 +1112,7 @@ export const getExaminationsPageSettings = async (req, res) => {
 export const updateExaminationsPageSettings = async (req, res) => {
   try {
     const fields = [
+      'showHeroSection', 'showOverviewSection', 'showCalendarSection', 'showNotificationsSection', 'showResultsSection',
       'heroBadgeText', 'heroTitle', 'heroSubtitle', 'heroImage',
       'overviewTitle', 'overviewText1', 'overviewText2', 'overviewImage',
       'calendarTitle', 'calendarText', 'calendarViewBtnText', 'calendarViewBtnUrl', 'calendarDownloadBtnText', 'calendarDownloadBtnUrl', 'calendarImage',
@@ -1167,7 +1154,7 @@ export const updateAdmissionsPageSettings = async (req, res) => {
       'journeyHeading', 'journeySubtitle', 'journeySteps',
       'eligibilityHeading', 'eligibilitySubtitle', 'feeStructure', 'mba', 'bba',
       'ctaHeading', 'ctaDesc', 'ctaApplyBtnText', 'ctaApplyBtnUrl', 'ctaEnquiryBtnText', 'ctaEnquiryBtnUrl', 'ctaImage',
-      'faqHeading', 'faqs'
+      'faqHeading', 'faqs', 'showSections'
     ];
     const settings = await AdmissionsPage.getSettings();
     fields.forEach((field) => {
@@ -1178,6 +1165,10 @@ export const updateAdmissionsPageSettings = async (req, res) => {
     settings.markModified('feeStructure');
     settings.markModified('mba');
     settings.markModified('bba');
+    if (req.body.showSections !== undefined) {
+      settings.showSections = { ...(settings.showSections?.toObject?.() || settings.showSections || {}), ...req.body.showSections };
+      settings.markModified('showSections');
+    }
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {

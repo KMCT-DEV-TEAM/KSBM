@@ -45,6 +45,7 @@ const facilitiesSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    showSection: { type: Boolean, default: true }
   },
   {
     timestamps: true,

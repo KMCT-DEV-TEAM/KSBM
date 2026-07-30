@@ -68,6 +68,8 @@ const FacilitiesSection = ({ previewData }) => {
   const marqueeList = [...repeatedList, ...repeatedList];
 
 
+  if (settings?.showSection === false) return null;
+
   return (
     <section className="w-full bg-background py-14 lg:py-20">
       <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">

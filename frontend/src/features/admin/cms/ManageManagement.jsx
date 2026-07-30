@@ -28,6 +28,7 @@ const ManageManagement = () => {
   const [heading, setHeading] = useState('');
   const [description, setDescription] = useState('');
   const [members, setMembers] = useState([]);
+  const [showSection, setShowSection] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -49,6 +50,7 @@ const ManageManagement = () => {
       setHeading(data.heading || '');
       setDescription(data.description || '');
       setMembers(data.members || []);
+      setShowSection(data.showSection ?? true);
     } catch (error) {
       console.error('Error fetching management settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to load management settings.' });
@@ -77,7 +79,8 @@ const ManageManagement = () => {
           }));
 
           await api.put('/cms/management', {
-            subheading, heading, description, members: finalMembers
+            subheading, heading, description, members: finalMembers,
+            showSection
           });
           
           await executeDeletions();
@@ -126,6 +129,7 @@ const ManageManagement = () => {
           image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
         }
       ]);
+      setShowSection(true);
       Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
     }
     });
@@ -184,7 +188,8 @@ const ManageManagement = () => {
     if (isPreviewModalOpen) {
       const pData = {
         subheading, heading, description, members,
-        previewDevice: previewMode
+        previewDevice: previewMode,
+        showSection
       };
       const handleIframeReady = (e) => {
         if (e.data?.type === 'iframe-ready' && e.data?.source === 'management' && iframeRef.current?.contentWindow) {
@@ -199,7 +204,7 @@ const ManageManagement = () => {
       }, 500);
       return () => window.removeEventListener('message', handleIframeReady);
     }
-  }, [isPreviewModalOpen, previewMode, subheading, heading, description, members]);
+  }, [isPreviewModalOpen, previewMode, subheading, heading, description, members, showSection]);
 
   if (isLoading) {
     return <AdminSkeleton />;
@@ -266,6 +271,21 @@ const ManageManagement = () => {
           </div>
         </div>
       )}
+
+      {/* Global Visibility Settings */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-lg font-bold text-[#1e2869]">Section Visibility</h3>
+            <p className="text-sm text-gray-500 mt-1">Show or hide this entire section on the landing page</p>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" className="sr-only peer" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            <span className="ms-3 text-sm font-semibold text-gray-600 uppercase tracking-wider">{showSection ? 'Visible' : 'Hidden'}</span>
+          </label>
+        </div>
+      </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
         <div className="mb-8 pb-8 border-b border-gray-100">

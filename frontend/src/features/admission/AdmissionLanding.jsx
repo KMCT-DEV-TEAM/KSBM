@@ -27,19 +27,45 @@ const AdmissionLanding = () => {
         setDataLoaded(true);
       }
     };
-    fetchAdmissionData();
+
+    const handleMessage = (event) => {
+      if (event.data?.type === 'preview-admissions-data') {
+        setData(event.data.payload);
+        setDataLoaded(true);
+      }
+    };
+    
+    window.addEventListener('message', handleMessage);
+    
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'iframe-ready', source: 'admissions' }, '*');
+    } else {
+      fetchAdmissionData();
+    }
+
+    return () => window.removeEventListener('message', handleMessage);
   }, []);
+
+  const activeTab = data?.activeTab;
+  const isPreview = Boolean(activeTab);
+
+  const showHero = !isPreview || activeTab === 'hero';
+  const showElite = (!isPreview || activeTab === 'elite') && data?.showSections?.elite !== false;
+  const showJourney = (!isPreview || activeTab === 'journey') && data?.showSections?.journey !== false;
+  const showEligibility = (!isPreview || activeTab === 'eligibility') && data?.showSections?.eligibility !== false;
+  const showCta = (!isPreview || activeTab === 'cta') && data?.showSections?.cta !== false;
+  const showFaq = (!isPreview || activeTab === 'faq') && data?.showSections?.faq !== false;
 
   return (
     <>
       <PageTransition dataLoaded={dataLoaded} />
       <div className="bg-white flex flex-col justify-between overflow-x-hidden">
-        <AdmissionHero data={data} />
-      <EliteAdvantageSection data={data} />
-      <AdmissionJourneySection data={data} />
-      <EligibilityStandardsSection data={data} />
-      <AdmissionCtaSection data={data} />
-        <AdmissionFaqSection data={data} />
+        {showHero && <AdmissionHero data={data} showText={data?.showSections?.heroText !== false} />}
+        {dataLoaded && showElite && <EliteAdvantageSection data={data} />}
+        {dataLoaded && showJourney && <AdmissionJourneySection data={data} />}
+        {dataLoaded && showEligibility && <EligibilityStandardsSection data={data} />}
+        {dataLoaded && showCta && <AdmissionCtaSection data={data} />}
+        {dataLoaded && showFaq && <AdmissionFaqSection data={data} />}
       </div>
     </>
   );

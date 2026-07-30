@@ -56,7 +56,7 @@ const LeadershipSection = ({ previewData }) => {
     }
   ];
 
-  if (data.showSection === false) return null;
+  if (data?.showSection === false) return null;
 
   return (
     <section className="pb-24 w-full bg-transparent overflow-hidden">
@@ -65,7 +65,7 @@ const LeadershipSection = ({ previewData }) => {
           const isEven = idx % 2 === 0;
           const isFirstLeader = idx === 0;
 
-          if (data.showSection === false) return null;
+          if (data?.showSection === false) return null;
 
   return (
     <div
