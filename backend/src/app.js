@@ -6,6 +6,7 @@ import userRoutes from './modules/users/user.routes.js';
 import cmsRoutes from './modules/cms/cms.routes.js';
 import uploadRoutes from './modules/upload/upload.routes.js';
 import grievanceRoutes from './modules/grievances/grievance.routes.js';
+import contactRoutes from './modules/contact/contact.routes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from "dotenv";
@@ -36,6 +37,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/cms', cmsRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/grievances', grievanceRoutes);
+app.use('/api/contact', contactRoutes);
 app.get('/', (req, res) => {
   res.send('API is running...');
 });

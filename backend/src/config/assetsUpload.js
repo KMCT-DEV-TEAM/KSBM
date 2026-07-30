@@ -69,6 +69,41 @@ if (!fs.existsSync(admissionsAssetsDir)) {
   fs.mkdirSync(admissionsAssetsDir, { recursive: true });
 }
 
+const blogsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/blogs');
+if (!fs.existsSync(blogsAssetsDir)) {
+  fs.mkdirSync(blogsAssetsDir, { recursive: true });
+}
+
+const grievanceAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/grievance');
+if (!fs.existsSync(grievanceAssetsDir)) {
+  fs.mkdirSync(grievanceAssetsDir, { recursive: true });
+}
+
+const contactAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/contact');
+if (!fs.existsSync(contactAssetsDir)) {
+  fs.mkdirSync(contactAssetsDir, { recursive: true });
+}
+
+const faqAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/faq');
+if (!fs.existsSync(faqAssetsDir)) {
+  fs.mkdirSync(faqAssetsDir, { recursive: true });
+}
+
+const downloadsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/downloads');
+if (!fs.existsSync(downloadsAssetsDir)) {
+  fs.mkdirSync(downloadsAssetsDir, { recursive: true });
+}
+
+const termsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/terms');
+if (!fs.existsSync(termsAssetsDir)) {
+  fs.mkdirSync(termsAssetsDir, { recursive: true });
+}
+
+const privacyAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/privacy');
+if (!fs.existsSync(privacyAssetsDir)) {
+  fs.mkdirSync(privacyAssetsDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     console.log('UPLOAD URL:', req.originalUrl);
@@ -97,6 +132,20 @@ const storage = multer.diskStorage({
       targetDir = facilitiesAssetsDir;
     } else if (req.originalUrl.includes('/upload/admissions')) {
       targetDir = admissionsAssetsDir;
+    } else if (req.originalUrl.includes('/upload/blogs')) {
+      targetDir = blogsAssetsDir;
+    } else if (req.originalUrl.includes('/upload/grievance')) {
+      targetDir = grievanceAssetsDir;
+    } else if (req.originalUrl.includes('/upload/contact')) {
+      targetDir = contactAssetsDir;
+    } else if (req.originalUrl.includes('/upload/faq')) {
+      targetDir = faqAssetsDir;
+    } else if (req.originalUrl.includes('/upload/downloads')) {
+      targetDir = downloadsAssetsDir;
+    } else if (req.originalUrl.includes('/upload/terms')) {
+      targetDir = termsAssetsDir;
+    } else if (req.originalUrl.includes('/upload/privacy')) {
+      targetDir = privacyAssetsDir;
     }
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir, { recursive: true });

@@ -30,7 +30,11 @@ const HeroImageUploader = ({
     
     if (deferredUpload) {
       const previewUrl = URL.createObjectURL(file);
-      onUploadComplete({ file, previewUrl });
+      onUploadComplete({ 
+        file, 
+        previewUrl,
+        oldUrl: (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultImage) ? currentDisplayUrl : null 
+      });
       return;
     }
 

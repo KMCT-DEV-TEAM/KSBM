@@ -105,14 +105,22 @@ const SingleDocumentUploader = ({
       confirmText: 'Yes, revert',
       variant: 'danger',
       action: async () => {
-        if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultFile) {
-          try {
-            await api.delete('/upload', { data: { fileUrl: currentDisplayUrl }, hideLoader: true });
-          } catch (err) {
-            console.warn('Skipped deleting physical file:', err);
+        if (deferredUpload) {
+          onUploadComplete({ 
+            isDeleted: true, 
+            oldUrl: (typeof currentDisplayUrl === 'string' && currentDisplayUrl !== defaultFile && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http')) ? currentDisplayUrl : null,
+            previewUrl: defaultFile 
+          });
+        } else {
+          if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultFile) {
+            try {
+              await api.delete('/upload', { data: { fileUrl: currentDisplayUrl }, hideLoader: true });
+            } catch (err) {
+              console.warn('Skipped deleting physical file:', err);
+            }
           }
+          onUploadComplete(defaultFile);
         }
-        onUploadComplete(defaultFile);
       }
     });
   };

@@ -7,15 +7,70 @@ import BlogHero from './components/BlogHero';
 import Link from 'next/link';
 import api from '../../api/axios';
 import { Loader2 } from 'lucide-react';
+import Loader from '../../components/Loader';
 
 const BlogDetailPage = ({ id }) => {
   const [activeSection, setActiveSection] = useState('introduction');
   const [article, setArticle] = useState(null);
   const [pageHero, setPageHero] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isPreview, setIsPreview] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    if (!loading) {
+      if (isPreview) {
+        setIsLoaded(true);
+        return;
+      }
+      const handleLoad = () => {
+        setTimeout(() => setIsLoaded(true), 400);
+      };
+      if (document.readyState === 'complete') {
+        handleLoad();
+      } else {
+        window.addEventListener('load', handleLoad);
+        const fallback = setTimeout(handleLoad, 3000);
+        return () => {
+          window.removeEventListener('load', handleLoad);
+          clearTimeout(fallback);
+        };
+      }
+    }
+  }, [loading, isPreview]);
+
+  useEffect(() => {
+    const handleMessage = (event) => {
+      if (event.data?.type === 'preview-blogs-data') {
+        setIsPreview(true);
+        setPageHero(event.data.payload?.hero || null);
+        
+        const allBlogs = event.data.payload?.blogs || [];
+        // Attempt to find the specific blog by id, else fallback to the first blog available
+        const foundArticle = allBlogs.find(b => b.id === id || b.uuid === id || b._id === id) || allBlogs[0];
+        
+        if (foundArticle) {
+          const related = allBlogs.filter(b => b.id !== foundArticle.id && b.uuid !== foundArticle.uuid).slice(0, 3);
+          const currentIndex = allBlogs.findIndex(b => b === foundArticle);
+          const prevArticle = currentIndex > 0 ? allBlogs[currentIndex - 1] : null;
+          const nextArticle = currentIndex < allBlogs.length - 1 && currentIndex !== -1 ? allBlogs[currentIndex + 1] : null;
+
+          setArticle({ ...foundArticle, relatedArticles: related, prevArticle, nextArticle });
+          if (foundArticle.sections?.length > 0) {
+            setActiveSection(foundArticle.sections[0].id);
+          }
+        }
+        setLoading(false);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: 'iframe-ready', source: 'blogs' }, '*');
+    }
+
     const fetchArticle = async () => {
+      if (isPreview) return;
       try {
         const { data } = await api.get('/cms/blogs-page');
         setPageHero(data?.hero || null);
@@ -40,8 +95,16 @@ const BlogDetailPage = ({ id }) => {
         setLoading(false);
       }
     };
-    fetchArticle();
-  }, [id]);
+
+    const timer = setTimeout(() => {
+      if (!isPreview) fetchArticle();
+    }, 100);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      clearTimeout(timer);
+    };
+  }, [id, isPreview]);
 
   // Sticky scroll spy logic for Table of Contents
   useEffect(() => {
@@ -60,34 +123,30 @@ const BlogDetailPage = ({ id }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [article]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col bg-white">
-        <Header />
-        <div className="flex-1 flex justify-center items-center">
-          <Loader2 className="w-10 h-10 animate-spin text-primary" />
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  if (!article) {
-    return (
-      <div className="min-h-screen flex flex-col bg-white">
-        <Header />
-        <div className="flex-1 flex justify-center items-center flex-col gap-4">
-          <h2 className="text-2xl font-bold text-gray-800">Article Not Found</h2>
-          <Link href="/blogs" className="text-primary hover:underline">Return to Blogs</Link>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen flex flex-col bg-white font-sans selection:bg-pink-500 selection:text-white">
-      <Header />
+    <>
+      {!isPreview && (
+        <div 
+          className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        >
+          <Loader fullScreen={false} />
+        </div>
+      )}
+
+      {loading || !article ? (
+        <div className="min-h-screen flex flex-col bg-white">
+          {!isPreview && <Header />}
+          {!loading && !article && (
+            <div className="flex-1 flex justify-center items-center flex-col gap-4">
+              <h2 className="text-2xl font-bold text-gray-800">Article Not Found</h2>
+              <Link href="/blogs" className="text-primary hover:underline">Return to Blogs</Link>
+            </div>
+          )}
+          {!isPreview && <Footer />}
+        </div>
+      ) : (
+        <div className="min-h-screen flex flex-col bg-white font-sans selection:bg-pink-500 selection:text-white">
+          {!isPreview && <Header />}
 
       {/* Reusing existing Hero layout with dynamic title and full screen size */}
       <BlogHero
@@ -246,33 +305,33 @@ const BlogDetailPage = ({ id }) => {
         </div>
       </main>
 
-      {/* Bottom CTA Banner (Begin Your Leadership Journey) */}
-      <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 mb-24">
-        <div className="bg-[#2B3175] rounded-[24px] sm:rounded-[32px] p-8 sm:p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_20px_40px_rgba(43,49,117,0.2)] border border-white/10 relative overflow-hidden">
-          {/* Decorative Glow inside CTA */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-pink-500/20 blur-[100px] rounded-full pointer-events-none"></div>
+          <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+            <div className="bg-[#2B3175] rounded-[24px] sm:rounded-[32px] p-8 sm:p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_20px_40px_rgba(43,49,117,0.2)] border border-white/10 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-pink-500/20 blur-[100px] rounded-full pointer-events-none"></div>
 
-          <div className="flex-1 z-10 text-center md:text-left">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight tracking-tight">
-              Begin Your Leadership Journey at KSBM
-            </h2>
-            <p className="text-white/80 text-sm sm:text-base font-medium max-w-xl mx-auto md:mx-0">
-              Applications for the academic year 2025-26 are now open. Secure your seat in the college of institution.
-            </p>
+              <div className="flex-1 z-10 text-center md:text-left">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight tracking-tight">
+                  Begin Your Leadership Journey at KSBM
+                </h2>
+                <p className="text-white/80 text-sm sm:text-base font-medium max-w-xl mx-auto md:mx-0">
+                  Applications for the academic year 2025-26 are now open. Secure your seat in the college of institution.
+                </p>
+              </div>
+              <div className="shrink-0 z-10">
+                <Link
+                  href="/admission"
+                  className="inline-block bg-white text-primary font-bold text-sm sm:text-base px-8 sm:px-12 py-4 rounded-xl shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:bg-gray-50 hover:-translate-y-1 transition-all duration-300"
+                >
+                  Apply Now Online
+                </Link>
+              </div>
+            </div>
           </div>
-          <div className="shrink-0 z-10">
-            <Link
-              href="/admission"
-              className="inline-block bg-white text-primary font-bold text-sm sm:text-base px-8 sm:px-12 py-4 rounded-xl shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:bg-gray-50 hover:-translate-y-1 transition-all duration-300"
-            >
-              Apply Now Online
-            </Link>
-          </div>
+
+          {!isPreview && <Footer />}
         </div>
-      </div>
-
-      <Footer />
-    </div>
+      )}
+    </>
   );
 };
 

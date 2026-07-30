@@ -7,37 +7,79 @@ import Loader from '../../components/Loader';
 import DownloadHero from './components/DownloadHero';
 import DownloadContent from './components/DownloadContent';
 
-const DownloadPage = () => {
+const DownloadPage = ({ previewData }) => {
   const [pageData, setPageData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (previewData) {
+      setPageData(previewData);
+      setLoading(false);
+      return;
+    }
+
     const fetchPageData = async () => {
       try {
         const { data } = await api.get('/cms/download-page');
         setPageData(data);
       } catch (error) {
         console.error('Error fetching Download Page data:', error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchPageData();
-  }, []);
+  }, [previewData]);
 
-  if (loading) {
-    return <Loader fullScreen />;
-  }
+  // Handle transition loader
+  const [isLoaded, setIsLoaded] = useState(false);
+  useEffect(() => {
+    let windowLoaded = document.readyState === 'complete';
+    let dataLoaded = !!pageData;
+
+    const checkReady = () => {
+      if (windowLoaded && dataLoaded) {
+        setTimeout(() => setIsLoaded(true), 400);
+      }
+    };
+
+    const handleWindowLoad = () => {
+      windowLoaded = true;
+      checkReady();
+    };
+
+    if (windowLoaded) {
+      checkReady();
+    } else {
+      window.addEventListener('load', handleWindowLoad);
+    }
+
+    if (pageData) {
+      dataLoaded = true;
+      checkReady();
+    }
+
+    const fallback = setTimeout(() => setIsLoaded(true), 5000);
+    return () => {
+      window.removeEventListener('load', handleWindowLoad);
+      clearTimeout(fallback);
+    };
+  }, [pageData]);
 
   return (
-    <div className="font-sans selection:bg-primary/30 selection:text-primary min-h-screen flex flex-col">
-      <Header />
+    <>
+      <div 
+        className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+      >
+        <Loader fullScreen={false} />
+      </div>
+    <div className="font-sans selection:bg-primary/30 selection:text-primary min-h-screen flex flex-col bg-white">
+      {!previewData && <Header />}
       <div className="flex-grow">
         <DownloadHero heroData={pageData?.hero} />
         <DownloadContent documents={pageData?.documents || []} />
       </div>
-      <Footer />
+      {!previewData && <Footer />}
     </div>
+    </>
   );
 };
 

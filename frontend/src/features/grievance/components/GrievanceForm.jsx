@@ -9,8 +9,15 @@ const Toast = Swal.mixin({
   toast: true,
   position: 'top-end',
   showConfirmButton: false,
-  timer: 4000,
-  timerProgressBar: true,
+  timer: 3000,
+  width: 'auto',
+  padding: '0.5em',
+  timerProgressBar: false,
+  customClass: {
+    title: 'text-sm font-medium m-0',
+    popup: 'rounded-lg shadow-sm',
+    icon: 'scale-50 my-auto'
+  }
 });
 const GrievanceForm = ({ formData: cmsData }) => {
   const [loading, setLoading] = useState(false);
@@ -72,8 +79,7 @@ const GrievanceForm = ({ formData: cmsData }) => {
 
       Toast.fire({
         icon: 'success',
-        title: 'Grievance Submitted Successfully',
-        text: 'Your concern has been forwarded to the respective committee.'
+        title: 'Grievance Submitted Successfully'
       });
 
       // Clear the form
@@ -91,8 +97,7 @@ const GrievanceForm = ({ formData: cmsData }) => {
       console.error('Submission error:', error);
       Toast.fire({
         icon: 'error',
-        title: 'Submission Failed',
-        text: 'There was a problem submitting your grievance. Please try again later.'
+        title: 'Submission Failed'
       });
     } finally {
       setLoading(false);

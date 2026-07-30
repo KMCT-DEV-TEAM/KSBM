@@ -142,6 +142,45 @@ router.post('/examinations', protect, uploadAssets.single('image'), async (req, 
   });
 });
 
+router.post('/blogs', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/blogs/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/blogs',
+    url: fileUrl,
+  });
+});
+
+router.post('/grievance', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/grievance/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/grievance',
+    url: fileUrl,
+  });
+});
+
+router.post('/contact', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/contact/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/contact',
+    url: fileUrl,
+  });
+});
+
 router.post('/facilities', protect, uploadAssets.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No image provided' });
@@ -182,6 +221,58 @@ router.post('/', protect, upload.single('image'), async (req, res) => {
   });
 });
 
+router.post('/faq', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/faq/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/faq',
+    url: fileUrl,
+  });
+});
+
+router.post('/downloads', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/downloads/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/downloads',
+    url: fileUrl,
+  });
+});
+
+router.post('/terms', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/terms/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/terms',
+    url: fileUrl,
+  });
+});
+
+router.post('/privacy', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/privacy/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/privacy',
+    url: fileUrl,
+  });
+});
+
 router.delete('/', protect, async (req, res) => {
   const { fileUrl } = req.body;
   if (!fileUrl) return res.status(400).json({ message: 'No fileUrl provided' });
@@ -215,7 +306,10 @@ router.delete('/', protect, async (req, res) => {
     'default-faculty-hero.jpg', 'default-faculty-leader.jpg', 'default-committees-hero.png',
     'image 2.png', 'image 31.png',
     'exam_hero_bg.png', 'exam_main.png', 'exam_schedule.png', 'image 64.png',
-    'admissions-hero-bg.png', 'admissions-elite.png', 'admissions-cta.png'
+    'admissions-hero-bg.png', 'admissions-elite.png', 'admissions-cta.png',
+    'hero-bg.jpg', 'default-card.jpg',
+    'grievance_hero.jpg', 'grievance_info.jpg', 'grievance_form.jpg',
+    'contact_hero.png'
   ];
 
   const filename = fileUrl.split('/').pop();
@@ -245,10 +339,22 @@ router.delete('/', protect, async (req, res) => {
      filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/admissions', filename);
   } else if (fileUrl.includes('/assets/Images/examinations/')) {
     filePath = path.join(__dirname, '../../../../frontend/public', fileUrl);
-  } else if (fileUrl.includes('/assets/Images/examinations/')) {
-    filePath = path.join(__dirname, '../../../../frontend/public', fileUrl);
+  } else if (fileUrl.includes('/assets/Images/blogs/')) {
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/blogs', filename);
+  } else if (fileUrl.includes('/assets/Images/grievance/')) {
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/grievance', filename);
+  } else if (fileUrl.includes('/assets/Images/contact/')) {
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/contact', filename);
   } else if (fileUrl.includes('/assets/Images/fecilities/')) {
     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/fecilities', filename);
+  } else if (fileUrl.includes('/assets/Images/faq/')) {
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/faq', filename);
+  } else if (fileUrl.includes('/assets/Images/downloads/')) {
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/downloads', filename);
+  } else if (fileUrl.includes('/assets/Images/terms/')) {
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/terms', filename);
+  } else if (fileUrl.includes('/assets/Images/privacy/')) {
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/privacy', filename);
   } else if (fileUrl.includes('/assets/home/')) {
      filePath = path.join(__dirname, '../../../../assets/home', filename);
   } else if (fileUrl.includes('/uploads/')) {
