@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
 import FacilitiesHero from '../../facilities/components/FacilitiesHero';
 import confirmAction from '../../../utils/confirmAction';
+import { uploadDeferredImage } from './utils/uploadHelper';
 import HeroImageUploader from './components/HeroImageUploader';
 import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
@@ -52,7 +53,11 @@ const ManageFacilitiesHero = () => {
       action: async () => {
         setIsSaving(true);
         try {
-          await api.put('/cms/facilities-page', { hero });
+          const finalImageUrl = await uploadDeferredImage(hero.backgroundImage, '/upload/facilities');
+          const payload = { ...hero, backgroundImage: finalImageUrl };
+
+          await api.put('/cms/facilities-page', { hero: payload });
+          setHero(payload);
           Toast.fire({ icon: 'success', title: 'Hero settings saved successfully!' });
         } catch (error) {
           console.error('Error saving settings:', error);
@@ -159,7 +164,9 @@ const ManageFacilitiesHero = () => {
               label="Drag & drop hero background image, or click to select"
               uploadEndpoint="/upload/facilities"
               recommendedSize="1920 × 1080 px (16:9 aspect ratio)"
-              defaultImage="/assets/Images/fecilities/facilities_hero.png"
+              defaultImage="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop"
+              deferredUpload={true}
+              allowDelete={true}
             />
           </div>
         </div>

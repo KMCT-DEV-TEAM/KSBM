@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../api/axios';
 import PageTransition from '../../components/PageTransition';
+import FacilitiesSkeleton from './components/FacilitiesSkeleton';
 import FacilitiesHero from './components/FacilitiesHero';
 import InstitutionalResourcesSection from './components/InstitutionalResourcesSection';
 import ClubsSection from './components/ClubsSection';
@@ -27,6 +28,15 @@ const Facilities = () => {
     fetchFacilitiesData();
   }, []);
 
+
+  if (!dataLoaded) {
+    return (
+      <>
+        <PageTransition dataLoaded={dataLoaded} />
+        <FacilitiesSkeleton />
+      </>
+    );
+  }
 
   return (
     <>

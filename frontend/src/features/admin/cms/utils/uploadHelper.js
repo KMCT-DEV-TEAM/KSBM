@@ -28,6 +28,15 @@ export const uploadDeferredImage = async (imageObj, uploadEndpoint) => {
     });
     
     return res.data.url;
+  } else if (imageObj && typeof imageObj === 'object' && imageObj.isDeleted) {
+    if (imageObj.oldUrl && !imageObj.oldUrl.startsWith('blob:') && !imageObj.oldUrl.startsWith('http')) {
+      try {
+        await api.delete('/upload', { data: { fileUrl: imageObj.oldUrl }, hideLoader: true });
+      } catch (err) {
+        console.warn('Failed to delete old image:', err);
+      }
+    }
+    return imageObj.previewUrl || '';
   }
   
   // If no change was made, return the existing URL (or empty string)

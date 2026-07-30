@@ -96,14 +96,22 @@ const HeroImageUploader = ({
       confirmText: 'Yes, revert to default',
       variant: 'danger',
       action: async () => {
-        if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultImage) {
-          try {
-            await api.delete('/upload', { data: { fileUrl: currentDisplayUrl }, hideLoader: true });
-          } catch (err) {
-            console.warn('Skipped deleting physical image:', err);
+        if (deferredUpload) {
+          onUploadComplete({ 
+            isDeleted: true, 
+            oldUrl: (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultImage) ? currentDisplayUrl : null,
+            previewUrl: defaultImage 
+          });
+        } else {
+          if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultImage) {
+            try {
+              await api.delete('/upload', { data: { fileUrl: currentDisplayUrl }, hideLoader: true });
+            } catch (err) {
+              console.warn('Skipped deleting physical image:', err);
+            }
           }
+          onUploadComplete(defaultImage);
         }
-        onUploadComplete(defaultImage);
       }
     });
   };
@@ -166,9 +174,14 @@ const HeroImageUploader = ({
                 {allowDelete && (
                   <button 
                     onClick={removeImage}
+                    disabled={currentDisplayUrl === defaultImage}
                     type="button"
-                    className="absolute top-2 right-2 p-1.5 bg-white text-red-500 hover:bg-red-500 hover:text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all shadow-sm z-10"
-                    title="Revert to Default Hero"
+                    className={`absolute top-2 right-2 p-1.5 rounded-lg transition-all shadow-md z-10 
+                      ${currentDisplayUrl === defaultImage 
+                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50' 
+                        : 'bg-white text-red-500 hover:bg-red-500 hover:text-white'
+                      }`}
+                    title={currentDisplayUrl === defaultImage ? "Default image cannot be deleted" : "Revert to Default Hero"}
                   >
                     <X className="w-4 h-4" />
                   </button>

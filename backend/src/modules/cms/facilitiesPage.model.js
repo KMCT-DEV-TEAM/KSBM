@@ -106,7 +106,7 @@ const facilitiesPageSchema = new mongoose.Schema(
         type: [clubItemSchema],
         default: [
           { title: 'Cultural Club', image: '/assets/Images/clubs/club_cultural.png' },
-          { title: 'Sports Club', image: '/assets/Images/clubs/club_sports.png' },
+          { title: 'Sports Club', image: '/assets/Images/fecilities/sports.jpg' },
           { title: 'Health Club', image: '/assets/Images/clubs/club_health.png' }
         ]
       }
