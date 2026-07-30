@@ -56,7 +56,9 @@ const Faculty = () => {
       <PageTransition dataLoaded={dataLoaded} />
       <div className="bg-[#fcfcfd] min-h-screen">
         <FacultyHero data={data} />
-      <FacultyIntro data={data} />
+      {data?.showIntro !== false && (
+        <FacultyIntro data={data} />
+      )}
       {data?.showKsbmFaculty !== false && (
         <FacultyGridSection id="ksbm-faculty" title="KSBM Faculty" members={data?.ksbmFaculty} />
       )}

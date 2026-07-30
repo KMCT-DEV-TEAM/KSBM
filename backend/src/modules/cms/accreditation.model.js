@@ -30,6 +30,7 @@ const accreditationSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    showSection: { type: Boolean, default: true },
   },
   {
     timestamps: true,

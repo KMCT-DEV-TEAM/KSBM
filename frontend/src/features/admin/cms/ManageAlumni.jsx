@@ -20,6 +20,7 @@ const Toast = Swal.mixin({
 
 const defaultAlumniData = {
   hero: {
+    showTextContent: true,
     title: 'Alumni',
     subtitle: 'Our alumni stand at the forefront of global business, driving innovation through principled leadership and strategic excellence across industries worldwide.',
     backgroundImage: '/assets/Images/alumni/hero-bg.png'
@@ -498,7 +499,17 @@ const ManageAlumni = () => {
         >
           {activeTab === 'hero' && (
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
-              <h2 className="text-lg font-bold text-[#1e2869] mb-4 border-b pb-3">Hero Section</h2>
+              <div className="flex justify-between items-center mb-4 border-b pb-3">
+                <h2 className="text-lg font-bold text-[#1e2869]">Hero Section</h2>
+                <label className="flex items-center cursor-pointer">
+                  <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Text</span>
+                  <div className="relative">
+                    <input type="checkbox" className="sr-only" checked={data.hero?.showTextContent !== false} onChange={(e) => updateSection('hero', 'showTextContent', e.target.checked)} />
+                    <div className={`block w-10 h-6 rounded-full transition-colors ${data.hero?.showTextContent !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                    <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${data.hero?.showTextContent !== false ? 'transform translate-x-4' : ''}`}></div>
+                  </div>
+                </label>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>

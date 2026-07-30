@@ -40,7 +40,8 @@ const ManageVisionMission = () => {
     visionImage: visionImage.file ? URL.createObjectURL(visionImage.file) : visionImage,
     missionTitle,
     missionContent: [missionContent],
-    missionImage: missionImage.file ? URL.createObjectURL(missionImage.file) : missionImage
+    missionImage: missionImage.file ? URL.createObjectURL(missionImage.file) : missionImage,
+    showSection
   };
 
   useEffect(() => {
@@ -119,7 +120,8 @@ const ManageVisionMission = () => {
             visionImage: finalVisionImage, 
             missionTitle, 
             missionContent: [missionContent], 
-            missionImage: finalMissionImage 
+            missionImage: finalMissionImage,
+            showSection 
           }, { hideLoader: true });
           Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
         } catch (error) {
@@ -145,6 +147,7 @@ const ManageVisionMission = () => {
         setMissionTitle('Our Mission');
         setMissionContent('To mould to competent healthcare professionals with leadership qualities through comprehensive nursing education, practice and research.\n\nTo provide high-quality healthcare education that integrates academic excellence with clinical practice.\n\nTo foster a culture of continuous learning, ethical practice, and compassionate patient care.\n\nTo contribute to the healthcare sector by producing highly skilled and dedicated nursing professionals.');
         setMissionImage('/assets/Images/image 28.png');
+        setShowSection(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -217,6 +220,26 @@ const ManageVisionMission = () => {
       )}
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+        
+        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+          <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="sr-only"
+                checked={showSection}
+                onChange={(e) => setShowSection(e.target.checked)}
+              />
+              <div className={`block w-10 h-6 rounded-full transition-colors ${showSection ? 'bg-primary' : 'bg-gray-300'}`}></div>
+              <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showSection ? 'transform translate-x-4' : ''}`}></div>
+            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700">
+              {showSection ? 'Visible' : 'Hidden'}
+            </span>
+          </label>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Vision Section */}
           <div className="space-y-6">

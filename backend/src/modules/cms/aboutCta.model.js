@@ -7,6 +7,7 @@ const aboutCtaSchema = new mongoose.Schema(
     buttonText: { type: String, default: 'Apply Now Online' },
     buttonLink: { type: String, default: '/apply' },
     backgroundColor: { type: String, default: '#2A3256' },
+    showSection: { type: Boolean, default: true },
   },
   { timestamps: true, strict: false }
 );

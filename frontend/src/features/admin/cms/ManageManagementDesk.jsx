@@ -20,6 +20,7 @@ const Toast = Swal.mixin({
 
 const ManageManagementDesk = () => {
   const [showHero, setShowHero] = useState(true);
+  const [showHeroTextContent, setShowHeroTextContent] = useState(true);
   const [heroHeading, setHeroHeading] = useState('');
   const [heroSubtext, setHeroSubtext] = useState('');
   const [heroBgImage, setHeroBgImage] = useState('');
@@ -47,7 +48,7 @@ const ManageManagementDesk = () => {
 
   const previewData = {
     previewType: activeTab,
-    showHero, heroHeading, heroSubtext, 
+    showHero, showHeroTextContent, heroHeading, heroSubtext, 
     heroBgImage: typeof heroBgImage === 'object' && heroBgImage?.previewUrl ? heroBgImage.previewUrl : heroBgImage,
     showIntro, introSubheading, introHeading, introDescription,
     showMembers,
@@ -94,6 +95,7 @@ const ManageManagementDesk = () => {
       const { data } = await api.get('/cms/management-desk');
       if (data) {
         if (data.showHero !== undefined) setShowHero(data.showHero);
+        if (data.showHeroTextContent !== undefined) setShowHeroTextContent(data.showHeroTextContent);
         if (data.heroHeading) setHeroHeading(data.heroHeading);
         if (data.heroSubtext) setHeroSubtext(data.heroSubtext);
         if (data.heroBgImage) setHeroBgImage(data.heroBgImage);
@@ -132,7 +134,7 @@ const ManageManagementDesk = () => {
           })));
 
           await api.put('/cms/management-desk', { 
-            showHero, heroHeading, heroSubtext, heroBgImage: newHeroBgImage,
+            showHero, showHeroTextContent, heroHeading, heroSubtext, heroBgImage: newHeroBgImage,
             showIntro, introSubheading, introHeading, introDescription,
             showMembers, members: newMembers 
           }, { hideLoader: true });
@@ -159,6 +161,7 @@ const ManageManagementDesk = () => {
       variant: 'primary',
       action: async () => {
         setShowHero(true);
+        setShowHeroTextContent(true);
         setHeroHeading('Management Desk');
         setHeroSubtext("Our leaders stand at the forefront of delivering dynamic management education through innovative teaching, practical learning and personalized mentorship to shape today's students into tomorrow's successful business leaders.");
         setHeroBgImage('/assets/Images/image 2.png');
@@ -349,7 +352,14 @@ const ManageManagementDesk = () => {
           <div className="space-y-6">
             <div className="flex justify-between items-center border-b pb-2">
               <h3 className="text-lg font-bold text-[#1e2869]">Hero Section</h3>
-
+              <label className="flex items-center cursor-pointer">
+                <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Text</span>
+                <div className="relative">
+                  <input type="checkbox" className="sr-only" checked={showHeroTextContent} onChange={(e) => setShowHeroTextContent(e.target.checked)} />
+                  <div className={`block w-10 h-6 rounded-full transition-colors ${showHeroTextContent ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                  <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showHeroTextContent ? 'transform translate-x-4' : ''}`}></div>
+                </div>
+              </label>
             </div>
             
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
@@ -390,14 +400,13 @@ const ManageManagementDesk = () => {
           <div className="space-y-6">
             <div className="flex justify-between items-center border-b pb-2">
               <h3 className="text-lg font-bold text-[#1e2869]">Intro Section</h3>
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#566A7F]">
-                <span>Show</span>
-                <input
-                  type="checkbox"
-                  checked={showIntro}
-                  onChange={(e) => setShowIntro(e.target.checked)}
-                  className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary"
-                />
+              <label className="flex items-center cursor-pointer">
+                <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show</span>
+                <div className="relative">
+                  <input type="checkbox" className="sr-only" checked={showIntro} onChange={(e) => setShowIntro(e.target.checked)} />
+                  <div className={`block w-10 h-6 rounded-full transition-colors ${showIntro ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                  <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showIntro ? 'transform translate-x-4' : ''}`}></div>
+                </div>
               </label>
             </div>
             
@@ -453,14 +462,13 @@ const ManageManagementDesk = () => {
             <div className="flex justify-between items-center mb-2 border-b pb-2">
               <div className="flex items-center gap-4">
                 <h3 className="text-lg font-bold text-[#1e2869]">Leadership Profiles (Alternating Zig-Zag)</h3>
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#566A7F]">
-                  <span>Show Profiles</span>
-                  <input
-                    type="checkbox"
-                    checked={showMembers}
-                    onChange={(e) => setShowMembers(e.target.checked)}
-                    className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary"
-                  />
+                <label className="flex items-center cursor-pointer">
+                  <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Profiles</span>
+                  <div className="relative">
+                    <input type="checkbox" className="sr-only" checked={showMembers} onChange={(e) => setShowMembers(e.target.checked)} />
+                    <div className={`block w-10 h-6 rounded-full transition-colors ${showMembers ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                    <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showMembers ? 'transform translate-x-4' : ''}`}></div>
+                  </div>
                 </label>
               </div>
               <button onClick={() => {

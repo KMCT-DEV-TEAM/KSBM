@@ -37,6 +37,9 @@ const GoverningBodyMembers = ({ data }) => {
       fetchData();
     }
   }, [data]);
+
+  if (data?.showMembers === false) return null;
+
   return (
     <section className="pb-20 w-[98%] max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-y-12 lg:gap-y-16">

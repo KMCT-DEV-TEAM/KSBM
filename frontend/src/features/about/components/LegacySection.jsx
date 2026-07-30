@@ -30,7 +30,7 @@ const LegacySection = ({ previewData }) => {
     fetchData();
   }, [previewData]);
 
-  if (legacyData.showSection === false) return null;
+  if (data.showSection === false) return null;
 
   return (
     <section className="py-20 bg-transparent">

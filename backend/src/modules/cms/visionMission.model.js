@@ -16,6 +16,7 @@ const visionMissionSchema = new mongoose.Schema(
       ]
     },
     missionImage: { type: String, default: '/assets/Images/aboutus/mission.png' },
+    showSection: { type: Boolean, default: true },
   },
   { timestamps: true }
 );

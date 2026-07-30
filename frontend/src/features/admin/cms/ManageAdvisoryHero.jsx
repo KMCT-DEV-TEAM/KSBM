@@ -21,9 +21,11 @@ const ManageAdvisoryHero = () => {
   const [heroHeading, setHeroHeading] = useState('');
   const [heroSubtext, setHeroSubtext] = useState('');
   const [heroBgImage, setHeroBgImage] = useState('');
+  const [showHeroTextContent, setShowHeroTextContent] = useState(true);
   const [contentSubheading, setContentSubheading] = useState('');
   const [contentHeading, setContentHeading] = useState('');
   const [contentDescription, setContentDescription] = useState([]);
+  const [showContentDetails, setShowContentDetails] = useState(true);
   
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -38,9 +40,11 @@ const ManageAdvisoryHero = () => {
     heroHeading,
     heroSubtext,
     heroBgImage: typeof heroBgImage === 'object' && heroBgImage?.previewUrl ? heroBgImage.previewUrl : heroBgImage,
+    showHeroTextContent,
     contentSubheading,
     contentHeading,
-    contentDescription
+    contentDescription,
+    showContentDetails
   };
 
   useEffect(() => {
@@ -78,6 +82,8 @@ const ManageAdvisoryHero = () => {
         if (data.contentSubheading) setContentSubheading(data.contentSubheading);
         if (data.contentHeading) setContentHeading(data.contentHeading);
         if (data.contentDescription) setContentDescription(data.contentDescription);
+        if (data.showHeroTextContent !== undefined) setShowHeroTextContent(data.showHeroTextContent);
+        if (data.showContentDetails !== undefined) setShowContentDetails(data.showContentDetails);
       }
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -99,8 +105,8 @@ const ManageAdvisoryHero = () => {
           const newHeroBgImage = await uploadDeferredImage(heroBgImage, '/upload/aboutus');
 
           await api.put('/cms/advisory-board', { 
-            heroHeading, heroSubtext, heroBgImage: newHeroBgImage,
-            contentSubheading, contentHeading, contentDescription
+            heroHeading, heroSubtext, heroBgImage: newHeroBgImage, showHeroTextContent,
+            contentSubheading, contentHeading, contentDescription, showContentDetails
           }, { hideLoader: true });
           
           setHeroBgImage(newHeroBgImage);
@@ -132,6 +138,8 @@ const ManageAdvisoryHero = () => {
           "The Advisory Board of KMCT School of Business Management is instrumental in shaping the institution's strategic direction and academic excellence.",
           "It is composed of distinguished leaders and experts from various industries who provide valuable insights and guidance. Their collective expertise ensures that our curriculum remains relevant, innovative, and aligned with industry standards, empowering our students to become the future leaders of the business world."
         ]);
+        setShowHeroTextContent(true);
+        setShowContentDetails(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -162,7 +170,17 @@ const ManageAdvisoryHero = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Hero Section */}
           <div className="space-y-6">
-            <h3 className="text-lg font-bold text-[#1e2869] border-b pb-2">Hero Section</h3>
+            <div className="flex justify-between items-center border-b pb-2">
+              <h3 className="text-lg font-bold text-[#1e2869]">Hero Section</h3>
+              <label className="flex items-center cursor-pointer">
+                <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Text</span>
+                <div className="relative">
+                  <input type="checkbox" className="sr-only" checked={showHeroTextContent} onChange={(e) => setShowHeroTextContent(e.target.checked)} />
+                  <div className={`block w-10 h-6 rounded-full transition-colors ${showHeroTextContent ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                  <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showHeroTextContent ? 'transform translate-x-4' : ''}`}></div>
+                </div>
+              </label>
+            </div>
             
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <div className="mb-1.5">
@@ -197,7 +215,17 @@ const ManageAdvisoryHero = () => {
 
           {/* Content Section */}
           <div className="space-y-6">
-            <h3 className="text-lg font-bold text-[#1e2869] border-b pb-2">Content Details</h3>
+            <div className="flex justify-between items-center border-b pb-2">
+              <h3 className="text-lg font-bold text-[#1e2869]">Content Details</h3>
+              <label className="flex items-center cursor-pointer">
+                <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                <div className="relative">
+                  <input type="checkbox" className="sr-only" checked={showContentDetails} onChange={(e) => setShowContentDetails(e.target.checked)} />
+                  <div className={`block w-10 h-6 rounded-full transition-colors ${showContentDetails ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                  <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showContentDetails ? 'transform translate-x-4' : ''}`}></div>
+                </div>
+              </label>
+            </div>
             
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <div className="flex justify-between items-center mb-1.5">

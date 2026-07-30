@@ -15,6 +15,7 @@ const ManagementDeskHero = ({ data }) => {
         </div>
       )}
 
+      {data?.showHeroTextContent !== false && (
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 w-full max-w-[1440px] mx-auto flex flex-col items-start text-left">
         {data?.showHeroHeading !== false && (
           <motion.h1
@@ -37,6 +38,7 @@ const ManagementDeskHero = ({ data }) => {
           </motion.p>
         )}
       </div>
+      )}
     </div>
   );
 };
