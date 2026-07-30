@@ -22,7 +22,7 @@ const FacilitiesSkeleton = () => {
         {/* Resources Skeleton */}
         <section className="py-24 bg-white relative">
           <div className="w-[90%] max-w-[1440px] mx-auto flex flex-col lg:flex-row items-center gap-16">
-            <div className="w-full lg:w-1/2 space-y-6">
+            <div className="w-full space-y-6">
               <div className="h-4 w-32 bg-gray-200 rounded"></div>
               <div className="h-12 w-3/4 bg-gray-200 rounded"></div>
               <div className="h-24 w-full bg-gray-200 rounded"></div>
@@ -45,7 +45,7 @@ const FacilitiesSkeleton = () => {
               <div className="h-10 w-64 bg-gray-200 rounded"></div>
               <div className="h-16 w-3/4 max-w-2xl bg-gray-200 rounded"></div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm h-[400px]">

@@ -71,6 +71,7 @@ if (!fs.existsSync(admissionsAssetsDir)) {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
+    console.log('UPLOAD URL:', req.originalUrl);
     let targetDir = assetsDir;
     if (req.originalUrl.includes('/upload/programs')) {
       targetDir = programsAssetsDir;
@@ -109,3 +110,4 @@ const storage = multer.diskStorage({
 });
 
 export const uploadAssets = multer({ storage: storage });
+

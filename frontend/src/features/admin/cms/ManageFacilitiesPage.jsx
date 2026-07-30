@@ -2,14 +2,31 @@
 import React, { useState } from 'react';
 import { FileText, Building2, Users } from 'lucide-react';
 import ManageFacilitiesHero from './ManageFacilitiesHero';
-import ManageFacilities from './ManageFacilities';
+import ManageInstitutionalResources from './ManageInstitutionalResources';
 import ManageClubs from './ManageClubs';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { Suspense, useEffect } from 'react';
 
-const ManageFacilitiesPage = () => {
-  const [activeTab, setActiveTab] = useState('hero');
+const ManageFacilitiesPageContent = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'hero');
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   const tabsContainerRef = React.useRef(null);
+
+  // Update URL when tab changes without causing a full reload
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    router.replace(`/admin/cms/facilities?tab=${tabId}`, { scroll: false });
+  };
 
   const tabs = [
     { id: 'hero', label: 'Hero Section', icon: <FileText className="w-4 h-4" /> },
@@ -32,7 +49,7 @@ const ManageFacilitiesPage = () => {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => handleTabChange(tab.id)}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${activeTab === tab.id
                 ? 'bg-primary text-white shadow-md'
                 : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
@@ -55,11 +72,19 @@ const ManageFacilitiesPage = () => {
           transition={{ duration: 0.2 }}
         >
           {activeTab === 'hero' && <ManageFacilitiesHero />}
-          {activeTab === 'resources' && <ManageFacilities />}
+          {activeTab === 'resources' && <ManageInstitutionalResources />}
           {activeTab === 'clubs' && <ManageClubs />}
         </motion.div>
       </AnimatePresence>
     </div>
+  );
+};
+
+const ManageFacilitiesPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ManageFacilitiesPageContent />
+    </Suspense>
   );
 };
 

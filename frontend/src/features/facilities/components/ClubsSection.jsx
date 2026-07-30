@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const watermarkImg = '/assets/Images/watermark_logo.png';
 
 const ClubsSection = ({ data }) => {
+  const sliderRef = useRef(null);
+
   if (!data || !data.items || data.items.length === 0) return null;
 
   const { heading, description, items } = data;
+
+  const scroll = (direction) => {
+    if (sliderRef.current) {
+      const scrollAmount = direction === 'left' ? -sliderRef.current.offsetWidth : sliderRef.current.offsetWidth;
+      sliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   return (
     <section className="relative w-full overflow-hidden py-16 sm:py-20">
@@ -32,24 +42,46 @@ const ClubsSection = ({ data }) => {
             </p>
           )}
 
-          <div className="flex items-center gap-4 w-full">
-            <h3 className="text-[24px] font-semibold text-[#2b2b68] tracking-tight shrink-0">
-              Clubs
-            </h3>
-            <div className="h-[1px] bg-primary/30 flex-1 mt-1"></div>
-          </div>
-        </motion.div>
+            <div className="flex items-center gap-4 w-full">
+              <h3 className="text-[24px] font-semibold text-[#2b2b68] tracking-tight shrink-0">
+                Clubs
+              </h3>
+              <div className="h-[1px] bg-primary/30 flex-1 mt-1"></div>
+              
+              {/* Navigation Arrows if > 3 items */}
+              {items.length > 3 && (
+                <div className="flex items-center gap-2 shrink-0">
+                  <button 
+                    onClick={() => scroll('left')}
+                    className="p-2 rounded-full border border-gray-200 text-gray-500 hover:text-primary hover:border-primary hover:bg-primary/5 transition-all"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button 
+                    onClick={() => scroll('right')}
+                    className="p-2 rounded-full border border-gray-200 text-gray-500 hover:text-primary hover:border-primary hover:bg-primary/5 transition-all"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+              )}
+            </div>
+          </motion.div>
 
-        {/* Clubs Grid */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-        >
-          {items.map((item, idx) => (
-            <Link href={`/facilities/club/${item._id}`} key={idx}>
+          {/* Clubs Slider */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
+            className="relative -mx-4 px-4 sm:mx-0 sm:px-0"
+          >
+            <div 
+              ref={sliderRef}
+              className="flex overflow-x-auto gap-6 lg:gap-8 snap-x snap-mandatory scroll-smooth pb-8 pt-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {items.map((item, idx) => (
+                <Link href={`/facilities/club/${item._id}`} key={idx} className="shrink-0 w-[85vw] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-22px)] snap-start">
               <motion.div
                 variants={{
                   hidden: { opacity: 0, scale: 0.95 },
@@ -86,6 +118,7 @@ const ClubsSection = ({ data }) => {
               </motion.div>
             </Link>
           ))}
+          </div>
         </motion.div>
       </div>
     </section>
