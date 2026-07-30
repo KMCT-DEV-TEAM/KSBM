@@ -21,6 +21,7 @@ const galleryItemSchema = new mongoose.Schema({
 const alumniPageSchema = new mongoose.Schema(
   {
     hero: {
+      showTextContent: { type: Boolean, default: true },
       title: { type: String, default: 'Alumni' },
       subtitle: {
         type: String,

@@ -29,7 +29,7 @@ const ManageAboutCta = () => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const iframeRef = useRef(null);
 
-  const previewData = { heading, subtext, buttonText, buttonLink };
+  const previewData = { heading, subtext, buttonText, buttonLink, showSection };
 
   useEffect(() => {
     let interval;
@@ -84,7 +84,7 @@ const ManageAboutCta = () => {
         setIsSaving(true);
         try {
           await api.put('/cms/about-us-cta', { 
-            heading, subtext, buttonText, buttonLink
+            heading, subtext, buttonText, buttonLink, showSection
           }, { hideLoader: true });
           Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
         } catch (error) {
@@ -108,6 +108,7 @@ const ManageAboutCta = () => {
         setSubtext('Applications for the academic year 2024-25 are now open. Secure your seat in the cohort of the future.');
         setButtonText('Apply Now Online');
         setButtonLink('/apply');
+        setShowSection(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -179,6 +180,25 @@ const ManageAboutCta = () => {
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full space-y-6">
         
+        <div className="flex justify-between items-center pb-4 border-b border-gray-100">
+          <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="sr-only"
+                checked={showSection}
+                onChange={(e) => setShowSection(e.target.checked)}
+              />
+              <div className={`block w-10 h-6 rounded-full transition-colors ${showSection ? 'bg-primary' : 'bg-gray-300'}`}></div>
+              <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showSection ? 'transform translate-x-4' : ''}`}></div>
+            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700">
+              {showSection ? 'Visible' : 'Hidden'}
+            </span>
+          </label>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
             <div className="mb-1.5">

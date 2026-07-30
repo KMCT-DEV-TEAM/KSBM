@@ -48,7 +48,7 @@ const ManageAccreditation = () => {
 
   const previewData = {
     subheading, heading, imageUrl, images,
-    showSubheading, showHeading, showImage
+    showSubheading, showHeading, showImage, showSection
   };
 
   useEffect(() => {
@@ -79,6 +79,7 @@ const ManageAccreditation = () => {
   const fetchSettings = async () => {
     try {
       const { data } = await api.get('/cms/accreditation');
+      setShowSection(data.showSection ?? true);
       setSubheading(data.subheading || '');
       setShowSubheading(data.showSubheading ?? true);
       setHeading(data.heading || '');
@@ -120,7 +121,7 @@ const ManageAccreditation = () => {
 
           await api.put('/cms/accreditation', {
             subheading, heading, imageUrl, images: finalImages,
-            showSubheading, showHeading, showImage
+            showSubheading, showHeading, showImage, showSection
           });
           
           await executeDeletions();
@@ -154,6 +155,7 @@ const ManageAccreditation = () => {
         { url: '/assets/Images/Home/Component 88.png' }
       ]);
       setShowImage(true);
+      setShowSection(true);
       Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
     }
     });
@@ -231,6 +233,25 @@ const ManageAccreditation = () => {
       )}
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+
+        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+          <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="sr-only"
+                checked={showSection}
+                onChange={(e) => setShowSection(e.target.checked)}
+              />
+              <div className={`block w-10 h-6 rounded-full transition-colors ${showSection ? 'bg-primary' : 'bg-gray-300'}`}></div>
+              <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showSection ? 'transform translate-x-4' : ''}`}></div>
+            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700">
+              {showSection ? 'Visible' : 'Hidden'}
+            </span>
+          </label>
+        </div>
 
         {/* Text Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">

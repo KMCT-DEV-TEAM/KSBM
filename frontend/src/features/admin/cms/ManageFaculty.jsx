@@ -72,15 +72,19 @@ const FacultyMemberCard = ({ member, index, onEdit, onDelete }) => {
 };
 
 const ManageFaculty = () => {
+  const [showHeroTextContent, setShowHeroTextContent] = useState(true);
   const [heroHeading, setHeroHeading] = useState('');
   const [heroSubtext, setHeroSubtext] = useState('');
   const [heroBgImage, setHeroBgImage] = useState('');
   
+  const [showIntro, setShowIntro] = useState(true);
   const [introSubheading, setIntroSubheading] = useState('');
   const [introHeading, setIntroHeading] = useState('');
   const [introText, setIntroText] = useState('');
   
+  const [showKsbmFaculty, setShowKsbmFaculty] = useState(true);
   const [ksbmFaculty, setKsbmFaculty] = useState([]);
+  const [showAdjunctFaculty, setShowAdjunctFaculty] = useState(true);
   const [adjunctFaculty, setAdjunctFaculty] = useState([]);
   
   const [isLoading, setIsLoading] = useState(true);
@@ -115,13 +119,18 @@ const ManageFaculty = () => {
     try {
       const { data } = await api.get('/cms/faculty');
       if (data) {
+        if (data.showHeroTextContent !== undefined) setShowHeroTextContent(data.showHeroTextContent);
         if (data.heroHeading) setHeroHeading(data.heroHeading);
         if (data.heroSubtext) setHeroSubtext(data.heroSubtext);
         if (data.heroBgImage) setHeroBgImage(data.heroBgImage);
         
+        if (data.showIntro !== undefined) setShowIntro(data.showIntro);
         if (data.introSubheading) setIntroSubheading(data.introSubheading);
         if (data.introHeading) setIntroHeading(data.introHeading);
         if (data.introText) setIntroText(data.introText);
+        
+        if (data.showKsbmFaculty !== undefined) setShowKsbmFaculty(data.showKsbmFaculty);
+        if (data.showAdjunctFaculty !== undefined) setShowAdjunctFaculty(data.showAdjunctFaculty);
         
         if (data.ksbmFaculty && data.ksbmFaculty.length > 0) setKsbmFaculty(data.ksbmFaculty);
         if (data.adjunctFaculty && data.adjunctFaculty.length > 0) setAdjunctFaculty(data.adjunctFaculty);
@@ -156,8 +165,9 @@ const ManageFaculty = () => {
           })));
 
           await api.put('/cms/faculty', { 
-            heroHeading, heroSubtext, heroBgImage: newHeroBgImage,
-            introSubheading, introHeading, introText,
+            showHeroTextContent, heroHeading, heroSubtext, heroBgImage: newHeroBgImage,
+            showIntro, introSubheading, introHeading, introText,
+            showKsbmFaculty, showAdjunctFaculty,
             ksbmFaculty: newKsbmFaculty, adjunctFaculty: newAdjunctFaculty 
           }, { hideLoader: true });
           
@@ -184,13 +194,17 @@ const ManageFaculty = () => {
       confirmText: 'Yes, reset!',
       variant: 'primary',
       action: async () => {
+        setShowHeroTextContent(true);
         setHeroHeading('Faculty Members');
         setHeroSubtext('Our distinguished faculty are committed to delivering quality education through innovative teaching, practical learning, and personalized mentorship, helping students build the skills and confidence needed for successful careers.');
         setHeroBgImage('/assets/Images/image 2.png');
         
+        setShowIntro(true);
         setIntroSubheading('FACULTY MEMBERS');
         setIntroHeading('Learn from the Best');
         setIntroText('At KSBM, our faculty members are the cornerstone of academic excellence. With a blend of strong academic credentials, industry expertise, and a passion for teaching, they create a dynamic learning environment that encourages critical thinking, innovation, and leadership. Beyond the classroom, our faculty mentor, inspire, and guide students through every stage of their academic journey, equipping them with the knowledge, confidence, and practical skills needed to succeed in an ever-evolving global business landscape.');
+        setShowKsbmFaculty(true);
+        setShowAdjunctFaculty(true);
         
         Toast.fire({ icon: 'info', title: 'Reset to defaults. Click Save Changes to apply.' });
       }
@@ -295,8 +309,9 @@ const ManageFaculty = () => {
     if (isPreviewModalOpen) {
       const pData = {
         activeTab,
-        heroHeading, heroSubtext, heroBgImage,
-        introSubheading, introHeading, introText,
+        showHeroTextContent, heroHeading, heroSubtext, heroBgImage,
+        showIntro, introSubheading, introHeading, introText,
+        showKsbmFaculty, showAdjunctFaculty,
         ksbmFaculty: ksbmFaculty.map(m => ({
           ...m,
           image: typeof m.image === 'string' ? m.image : m.image?.previewUrl || '/assets/Images/image 31.png'
@@ -422,7 +437,17 @@ const ManageFaculty = () => {
           >
             {activeTab === 'hero' && (
               <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
-          <h2 className="text-lg font-bold text-[#1e2869] mb-4 border-b pb-3">Hero Section</h2>
+          <div className="flex justify-between items-center mb-4 border-b pb-3">
+            <h2 className="text-lg font-bold text-[#1e2869]">Hero Section</h2>
+            <label className="flex items-center cursor-pointer">
+              <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Text</span>
+              <div className="relative">
+                <input type="checkbox" className="sr-only" checked={showHeroTextContent} onChange={(e) => setShowHeroTextContent(e.target.checked)} />
+                <div className={`block w-10 h-6 rounded-full transition-colors ${showHeroTextContent ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showHeroTextContent ? 'transform translate-x-4' : ''}`}></div>
+              </div>
+            </label>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
@@ -471,7 +496,17 @@ const ManageFaculty = () => {
 
         {activeTab === 'intro' && (
         <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
-          <h2 className="text-lg font-bold text-[#1e2869] mb-4 border-b pb-3">Learn from the Best (Intro Section)</h2>
+          <div className="flex justify-between items-center mb-4 border-b pb-3">
+            <h2 className="text-lg font-bold text-[#1e2869]">Learn from the Best (Intro Section)</h2>
+            <label className="flex items-center cursor-pointer">
+              <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+              <div className="relative">
+                <input type="checkbox" className="sr-only" checked={showIntro} onChange={(e) => setShowIntro(e.target.checked)} />
+                <div className={`block w-10 h-6 rounded-full transition-colors ${showIntro ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showIntro ? 'transform translate-x-4' : ''}`}></div>
+              </div>
+            </label>
+          </div>
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -523,9 +558,19 @@ const ManageFaculty = () => {
         {activeTab === 'ksbm' && (
         <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
           <div className="flex items-center justify-between mb-6 border-b pb-4">
-            <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-primary" />
-              <h2 className="text-lg font-bold text-[#1e2869]">KSBM Full-Time Faculty ({ksbmFaculty.length})</h2>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Users className="w-5 h-5 text-primary" />
+                <h2 className="text-lg font-bold text-[#1e2869]">KSBM Full-Time Faculty ({ksbmFaculty.length})</h2>
+              </div>
+              <label className="flex items-center cursor-pointer">
+                <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                <div className="relative">
+                  <input type="checkbox" className="sr-only" checked={showKsbmFaculty} onChange={(e) => setShowKsbmFaculty(e.target.checked)} />
+                  <div className={`block w-10 h-6 rounded-full transition-colors ${showKsbmFaculty ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                  <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showKsbmFaculty ? 'transform translate-x-4' : ''}`}></div>
+                </div>
+              </label>
             </div>
             <button
               onClick={() => openModal('add', 'ksbm')}
@@ -561,9 +606,19 @@ const ManageFaculty = () => {
         {activeTab === 'adjunct' && (
         <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 mt-8">
           <div className="flex items-center justify-between mb-6 border-b pb-4">
-            <div className="flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-primary" />
-              <h2 className="text-lg font-bold text-[#1e2869]">Adjunct Faculty ({adjunctFaculty.length})</h2>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Briefcase className="w-5 h-5 text-primary" />
+                <h2 className="text-lg font-bold text-[#1e2869]">Adjunct Faculty ({adjunctFaculty.length})</h2>
+              </div>
+              <label className="flex items-center cursor-pointer">
+                <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                <div className="relative">
+                  <input type="checkbox" className="sr-only" checked={showAdjunctFaculty} onChange={(e) => setShowAdjunctFaculty(e.target.checked)} />
+                  <div className={`block w-10 h-6 rounded-full transition-colors ${showAdjunctFaculty ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                  <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showAdjunctFaculty ? 'transform translate-x-4' : ''}`}></div>
+                </div>
+              </label>
             </div>
             <button
               onClick={() => openModal('add', 'adjunct')}

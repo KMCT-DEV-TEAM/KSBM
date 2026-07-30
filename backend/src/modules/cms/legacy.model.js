@@ -39,6 +39,7 @@ const legacySchema = new mongoose.Schema(
         }
       ]
     },
+    showSection: { type: Boolean, default: true },
   },
   { timestamps: true }
 );

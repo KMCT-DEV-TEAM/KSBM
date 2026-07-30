@@ -29,7 +29,7 @@ const ManageAboutUsStats = () => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const iframeRef = useRef(null);
 
-  const previewData = { stats };
+  const previewData = { stats, showSection };
 
   useEffect(() => {
     let interval;
@@ -59,8 +59,11 @@ const ManageAboutUsStats = () => {
   const fetchSettings = async () => {
     try {
       const { data } = await api.get('/cms/about-us-stats');
-      if (data && data.stats && data.stats.length > 0) {
-        setStats(data.stats);
+      if (data) {
+        setShowSection(data.showSection ?? true);
+        if (data.stats && data.stats.length > 0) {
+          setStats(data.stats);
+        }
       }
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -79,7 +82,7 @@ const ManageAboutUsStats = () => {
       action: async () => {
         setIsSaving(true);
         try {
-          await api.put('/cms/about-us-stats', { stats }, { hideLoader: true });
+          await api.put('/cms/about-us-stats', { stats, showSection }, { hideLoader: true });
           Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
         } catch (error) {
           console.error('Error saving settings:', error);
@@ -103,6 +106,7 @@ const ManageAboutUsStats = () => {
           { value: '500+', label: 'Expert Faculties' },
           { value: '25,000+', label: 'Alumni Network' }
         ]);
+        setShowSection(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -207,6 +211,25 @@ const ManageAboutUsStats = () => {
       )}
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+          <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="sr-only"
+                checked={showSection}
+                onChange={(e) => setShowSection(e.target.checked)}
+              />
+              <div className={`block w-10 h-6 rounded-full transition-colors ${showSection ? 'bg-primary' : 'bg-gray-300'}`}></div>
+              <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showSection ? 'transform translate-x-4' : ''}`}></div>
+            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700">
+              {showSection ? 'Visible' : 'Hidden'}
+            </span>
+          </label>
+        </div>
+
         <div>
           <div className="flex justify-between items-center mb-4 border-b pb-2">
             <h3 className="text-lg font-bold text-[#1e2869]">Stats List</h3>

@@ -19,6 +19,7 @@ const Toast = Swal.mixin({
 
 const ManageGoverningMembers = () => {
   const [members, setMembers] = useState([]);
+  const [showMembers, setShowMembers] = useState(true);
   
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -33,6 +34,7 @@ const ManageGoverningMembers = () => {
 
   const previewData = {
     previewType: 'members',
+    showMembers,
     members: members.map(m => ({
       ...m,
       image: typeof m.image === 'object' && m.image?.previewUrl ? m.image.previewUrl : m.image
@@ -67,8 +69,9 @@ const ManageGoverningMembers = () => {
   const fetchSettings = async () => {
     try {
       const { data } = await api.get('/cms/governing-body');
-      if (data && data.members) {
-        setMembers(data.members);
+      if (data) {
+        if (data.members && data.members.length > 0) setMembers(data.members);
+        if (data.showMembers !== undefined) setShowMembers(data.showMembers);
       }
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -93,7 +96,8 @@ const ManageGoverningMembers = () => {
           })));
 
           await api.put('/cms/governing-body', { 
-            members: newMembers 
+            members: newMembers,
+            showMembers
           }, { hideLoader: true });
           
           setMembers(newMembers);
@@ -119,6 +123,7 @@ const ManageGoverningMembers = () => {
         setMembers([
           { name: "Dr. Navas K M", title: "Managing Trustee", image: "/assets/Images/image 31.png" }
         ]);
+        setShowMembers(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -177,6 +182,25 @@ const ManageGoverningMembers = () => {
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
         {/* Members Section */}
+        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+          <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="sr-only"
+                checked={showMembers}
+                onChange={(e) => setShowMembers(e.target.checked)}
+              />
+              <div className={`block w-10 h-6 rounded-full transition-colors ${showMembers ? 'bg-primary' : 'bg-gray-300'}`}></div>
+              <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showMembers ? 'transform translate-x-4' : ''}`}></div>
+            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700">
+              {showMembers ? 'Visible' : 'Hidden'}
+            </span>
+          </label>
+        </div>
+
         <div>
           <div className="flex justify-between items-center mb-6 border-b pb-2">
             <h3 className="text-lg font-bold text-[#1e2869]">Governing Body Members</h3>

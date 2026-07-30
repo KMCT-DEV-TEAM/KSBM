@@ -203,7 +203,7 @@ export const getAccreditationSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateAccreditationSettings = async (req, res) => {
   try {
-    const { subheading, heading, imageUrl, images, showSubheading, showHeading, showImage } = req.body;
+    const { subheading, heading, imageUrl, images, showSubheading, showHeading, showImage, showSection } = req.body;
 
     const settings = await Accreditation.getSettings();
 
@@ -215,6 +215,7 @@ export const updateAccreditationSettings = async (req, res) => {
     if (showSubheading !== undefined) settings.showSubheading = showSubheading;
     if (showHeading !== undefined) settings.showHeading = showHeading;
     if (showImage !== undefined) settings.showImage = showImage;
+    if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -584,11 +585,13 @@ export const getAboutUsHeroSettings = async (req, res) => {
 
 export const updateAboutUsHeroSettings = async (req, res) => {
   try {
-    const { title, subtitle, backgroundImage } = req.body;
+    const { title, subtitle, backgroundImage, showTextContent, showSection } = req.body;
     const settings = await AboutUsHero.getSettings();
     if (title !== undefined) settings.title = title;
     if (subtitle !== undefined) settings.subtitle = subtitle;
     if (backgroundImage !== undefined) settings.backgroundImage = backgroundImage;
+    if (showTextContent !== undefined) settings.showTextContent = showTextContent;
+    if (showSection !== undefined) settings.showSection = showSection;
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
@@ -608,7 +611,7 @@ export const getVisionMissionSettings = async (req, res) => {
 
 export const updateVisionMissionSettings = async (req, res) => {
   try {
-    const { visionTitle, visionContent, visionImage, missionTitle, missionContent, missionImage } = req.body;
+    const { visionTitle, visionContent, visionImage, missionTitle, missionContent, missionImage, showSection } = req.body;
     const settings = await VisionMission.getSettings();
     if (visionTitle !== undefined) settings.visionTitle = visionTitle;
     if (visionContent !== undefined) settings.visionContent = visionContent;
@@ -616,6 +619,7 @@ export const updateVisionMissionSettings = async (req, res) => {
     if (missionTitle !== undefined) settings.missionTitle = missionTitle;
     if (missionContent !== undefined) settings.missionContent = missionContent;
     if (missionImage !== undefined) settings.missionImage = missionImage;
+    if (showSection !== undefined) settings.showSection = showSection;
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
@@ -635,8 +639,9 @@ export const getLeadershipSettings = async (req, res) => {
 
 export const updateLeadershipSettings = async (req, res) => {
   try {
-    const { leaders, subheading, heading, name, title, description, image, signatureImage, leader2Name, leader2Title, leader2Description, leader2Image } = req.body;
+    const { leaders, subheading, heading, name, title, description, image, signatureImage, leader2Name, leader2Title, leader2Description, leader2Image, showSection } = req.body;
     const settings = await Leadership.getSettings();
+    if (showSection !== undefined) settings.showSection = showSection;
     if (leaders !== undefined) {
       settings.leaders = leaders;
       settings.markModified('leaders');
@@ -692,13 +697,14 @@ export const getLegacySettings = async (req, res) => {
 
 export const updateLegacySettings = async (req, res) => {
   try {
-    const { subheading, heading, description, cards, image } = req.body;
+    const { subheading, heading, description, cards, image, showSection } = req.body;
     const settings = await Legacy.getSettings();
     if (subheading !== undefined) settings.subheading = subheading;
     if (heading !== undefined) settings.heading = heading;
     if (description !== undefined) settings.description = description;
     if (image !== undefined) settings.image = image;
     if (cards !== undefined) settings.cards = cards;
+    if (showSection !== undefined) settings.showSection = showSection;
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
@@ -718,9 +724,10 @@ export const getAboutUsStatsSettings = async (req, res) => {
 
 export const updateAboutUsStatsSettings = async (req, res) => {
   try {
-    const { stats } = req.body;
+    const { stats, showSection } = req.body;
     const settings = await AboutUsStats.getSettings();
     if (stats !== undefined) settings.stats = stats;
+    if (showSection !== undefined) settings.showSection = showSection;
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
@@ -743,7 +750,7 @@ export const updateAdvisoryBoardSettings = async (req, res) => {
     const { 
       heroHeading, heroSubtext, heroBgImage, 
       contentSubheading, contentHeading, contentDescription, 
-      members 
+      members, showHeroTextContent, showContentDetails, showMembers
     } = req.body;
     const settings = await AdvisoryBoard.getSettings();
     
@@ -754,6 +761,9 @@ export const updateAdvisoryBoardSettings = async (req, res) => {
     if (contentHeading !== undefined) settings.contentHeading = contentHeading;
     if (contentDescription !== undefined) settings.contentDescription = contentDescription;
     if (members !== undefined) settings.members = members;
+    if (showHeroTextContent !== undefined) settings.showHeroTextContent = showHeroTextContent;
+    if (showContentDetails !== undefined) settings.showContentDetails = showContentDetails;
+    if (showMembers !== undefined) settings.showMembers = showMembers;
     
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -777,7 +787,7 @@ export const updateGoverningBodySettings = async (req, res) => {
     const { 
       heroHeading, heroSubtext, heroBgImage, 
       contentSubheading, contentHeading, contentDescription, 
-      members 
+      members, showHeroTextContent, showContentDetails, showMembers
     } = req.body;
     const settings = await GoverningBody.getSettings();
     
@@ -788,6 +798,9 @@ export const updateGoverningBodySettings = async (req, res) => {
     if (contentHeading !== undefined) settings.contentHeading = contentHeading;
     if (contentDescription !== undefined) settings.contentDescription = contentDescription;
     if (members !== undefined) settings.members = members;
+    if (showHeroTextContent !== undefined) settings.showHeroTextContent = showHeroTextContent;
+    if (showContentDetails !== undefined) settings.showContentDetails = showContentDetails;
+    if (showMembers !== undefined) settings.showMembers = showMembers;
     
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
@@ -809,7 +822,7 @@ export const getAboutCtaSettings = async (req, res) => {
 // @desc    Update About Us CTA settings
 export const updateAboutCtaSettings = async (req, res) => {
   try {
-    const { heading, subtext, buttonText, buttonLink, backgroundColor } = req.body;
+    const { heading, subtext, buttonText, buttonLink, backgroundColor, showSection } = req.body;
     const settings = await AboutCta.getSettings();
     
     if (heading !== undefined) settings.heading = heading;
@@ -817,6 +830,7 @@ export const updateAboutCtaSettings = async (req, res) => {
     if (buttonText !== undefined) settings.buttonText = buttonText;
     if (buttonLink !== undefined) settings.buttonLink = buttonLink;
     if (backgroundColor !== undefined) settings.backgroundColor = backgroundColor;
+    if (showSection !== undefined) settings.showSection = showSection;
     
     const updatedSettings = await settings.save();
     res.json(updatedSettings);

@@ -39,6 +39,7 @@ const Counter = ({ value }) => {
 };
 
 const StatsSection = ({ previewData }) => {
+  const [statsData, setStatsData] = useState({});
   const [stats, setStats] = useState([
     { value: '16+', label: 'YEARS OF EXCELLENCE' },
     { value: '991+', label: 'ACTIVE STUDENTS' },
@@ -47,15 +48,19 @@ const StatsSection = ({ previewData }) => {
   ]);
 
   useEffect(() => {
-    if (previewData && previewData.stats) {
-      setStats(previewData.stats);
+    if (previewData) {
+      setStatsData(previewData);
+      if (previewData.stats) setStats(previewData.stats);
       return;
     }
     const fetchStats = async () => {
       try {
         const response = await api.get('/cms/about-us-stats', { hideLoader: true });
-        if (response.data && response.data.stats && response.data.stats.length > 0) {
-          setStats(response.data.stats);
+        if (response.data) {
+          setStatsData(response.data);
+          if (response.data.stats && response.data.stats.length > 0) {
+            setStats(response.data.stats);
+          }
         }
       } catch (error) {
         console.error('Error fetching Stats data:', error);

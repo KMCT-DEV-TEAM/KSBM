@@ -32,7 +32,8 @@ const ManageLegacy = () => {
   const iframeRef = useRef(null);
 
   const previewData = { 
-    subheading, heading, description, image: typeof image === 'object' && image.file ? URL.createObjectURL(image.file) : image
+    subheading, heading, description, image: typeof image === 'object' && image.file ? URL.createObjectURL(image.file) : image,
+    showSection
   };
 
   useEffect(() => {
@@ -96,7 +97,7 @@ const ManageLegacy = () => {
           }
 
           await api.put('/cms/legacy', { 
-            subheading, heading, description, image: finalImage
+            subheading, heading, description, image: finalImage, showSection
           }, { hideLoader: true });
           Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
         } catch (error) {
@@ -120,6 +121,7 @@ const ManageLegacy = () => {
         setHeading('A Journey of Educational Excellence');
         setDescription('Founded by the visionary leader...');
         setImage('/assets/Images/image 2.png');
+        setShowSection(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -190,6 +192,26 @@ const ManageLegacy = () => {
       )}
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+        
+        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+          <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="sr-only"
+                checked={showSection}
+                onChange={(e) => setShowSection(e.target.checked)}
+              />
+              <div className={`block w-10 h-6 rounded-full transition-colors ${showSection ? 'bg-primary' : 'bg-gray-300'}`}></div>
+              <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showSection ? 'transform translate-x-4' : ''}`}></div>
+            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700">
+              {showSection ? 'Visible' : 'Hidden'}
+            </span>
+          </label>
+        </div>
+
         <div className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">

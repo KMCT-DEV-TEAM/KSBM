@@ -61,6 +61,7 @@ const ManageLeadership = () => {
   const iframeRef = useRef(null);
 
   const previewData = {
+    showSection,
     leaders: leaders.map(leader => ({
       ...leader,
       description: Array.isArray(leader.description) ? leader.description : [leader.description],
@@ -179,6 +180,7 @@ const ManageLeadership = () => {
           }
 
           await api.put('/cms/leadership', {
+            showSection,
             leaders: finalLeaders,
             heading: finalLeaders[0]?.heading || 'Visionary Leadership for a Better Tomorrow',
             subheading: finalLeaders[0]?.subheading,
@@ -328,8 +330,18 @@ const ManageLeadership = () => {
         </div>
       )}
 
-      <div className="flex justify-between items-center w-full mt-4">
-        <h2 className="text-xl font-bold text-[#566A7F] font-heading">Leadership Profiles</h2>
+      <div className="flex justify-between items-center w-full mt-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+        <div className="flex items-center gap-6">
+          <h2 className="text-xl font-bold text-[#566A7F] font-heading">Leadership Profiles</h2>
+          <label className="flex items-center cursor-pointer">
+            <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+            <div className="relative">
+              <input type="checkbox" className="sr-only" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} />
+              <div className={`block w-10 h-6 rounded-full transition-colors ${showSection ? 'bg-primary' : 'bg-gray-300'}`}></div>
+              <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showSection ? 'transform translate-x-4' : ''}`}></div>
+            </div>
+          </label>
+        </div>
         <button
           onClick={() => setIsAddModalOpen(true)}
           className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"

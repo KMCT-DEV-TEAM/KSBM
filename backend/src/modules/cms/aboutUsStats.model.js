@@ -16,6 +16,7 @@ const aboutUsStatsSchema = new mongoose.Schema(
         { value: '5+', label: 'Campuses' }
       ]
     },
+    showSection: { type: Boolean, default: true },
   },
   { timestamps: true, strict: false }
 );

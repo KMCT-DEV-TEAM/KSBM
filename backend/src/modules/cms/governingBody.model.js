@@ -20,6 +20,9 @@ const governingBodySchema = new mongoose.Schema(
         "The Governing Body is committed to maintaining academic excellence, fostering research and innovation, and strengthening industry-academic collaborations. Through strategic decision-making and policy implementation, it ensures the holistic development of students and the institution, keeping pace with the evolving landscape of management education."
       ]
     },
+    showHeroTextContent: { type: Boolean, default: true },
+    showContentDetails: { type: Boolean, default: true },
+    showMembers: { type: Boolean, default: true },
     members: {
       type: [memberSchema],
       default: [

@@ -7,8 +7,8 @@ const AboutHero = ({ previewData }) => {
   const [heroData, setHeroData] = useState({
     title: 'Advancing Business Integrity and Innovation.',
     subtitle: 'KMCT School of Business (KSBM) ignites a passion for intellectual discovery and lifelong learning. Empowering each individual to achieve their fullest potential.',
-    backgroundImage: '/assets/Images/aboutus/about-hero-bg.jpg'
-  ,
+    backgroundImage: '/assets/Images/aboutus/about-hero-bg.jpg',
+    showTextContent: true,
     showSection: true
   });
 
@@ -17,8 +17,8 @@ const AboutHero = ({ previewData }) => {
       setHeroData({
         title: previewData.title || heroData.title,
         subtitle: previewData.subtitle || heroData.subtitle,
-        backgroundImage: previewData.backgroundImage || heroData.backgroundImage
-      ,
+        backgroundImage: previewData.backgroundImage || heroData.backgroundImage,
+        showTextContent: previewData.showTextContent ?? true,
         showSection: previewData.showSection ?? true
       });
       return;
@@ -30,8 +30,8 @@ const AboutHero = ({ previewData }) => {
           setHeroData({
             title: data.title || heroData.title,
             subtitle: data.subtitle || heroData.subtitle,
-            backgroundImage: data.backgroundImage || heroData.backgroundImage
-          ,
+            backgroundImage: data.backgroundImage || heroData.backgroundImage,
+            showTextContent: data.showTextContent ?? true,
             showSection: data.showSection ?? true
           });
         }
@@ -58,6 +58,7 @@ const AboutHero = ({ previewData }) => {
       </div>
       
       {/* Content */}
+      {heroData.showTextContent && (
       <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-white flex flex-col items-start text-left">
         <motion.div 
           initial="hidden"
@@ -86,6 +87,7 @@ const AboutHero = ({ previewData }) => {
           </motion.p>
         </motion.div>
       </div>
+      )}
     </section>
   );
 };

@@ -17,6 +17,10 @@ const managementDeskSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    showHeroTextContent: {
+      type: Boolean,
+      default: true,
+    },
     heroHeading: {
       type: String,
       default: 'Management Desk',

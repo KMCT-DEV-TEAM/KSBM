@@ -20,6 +20,9 @@ const advisoryBoardSchema = new mongoose.Schema(
         "It is composed of distinguished leaders and experts from various industries who provide valuable insights and guidance. Their collective expertise ensures that our curriculum remains relevant, innovative, and aligned with industry standards, empowering our students to become the future leaders of the business world."
       ]
     },
+    showHeroTextContent: { type: Boolean, default: true },
+    showContentDetails: { type: Boolean, default: true },
+    showMembers: { type: Boolean, default: true },
     members: {
       type: [memberSchema],
       default: [

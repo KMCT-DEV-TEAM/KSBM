@@ -20,6 +20,7 @@ const Toast = Swal.mixin({
 const ManageAboutUsHero = () => {
   const [title, setTitle] = useState('About KSBM');
   const [showSection, setShowSection] = useState(true);
+  const [showTextContent, setShowTextContent] = useState(true);
   const [subtitle, setSubtitle] = useState('Building Excellence Since 1995');
   const [backgroundImage, setBackgroundImage] = useState('/assets/Images/aboutus/about-hero-bg.jpg');
   
@@ -31,7 +32,7 @@ const ManageAboutUsHero = () => {
   const iframeRef = useRef(null);
 
   const previewData = {
-    title, subtitle, 
+    title, subtitle, showTextContent, showSection,
     backgroundImage: typeof backgroundImage === 'object' && backgroundImage.file ? URL.createObjectURL(backgroundImage.file) : backgroundImage
   };
 
@@ -65,6 +66,7 @@ const ManageAboutUsHero = () => {
       const { data } = await api.get('/cms/about-us-hero');
       if (data) {
         setShowSection(data.showSection ?? true);
+        setShowTextContent(data.showTextContent ?? true);
         setTitle(data.title || 'About KSBM');
         setSubtitle(data.subtitle || 'Building Excellence Since 1995');
         setBackgroundImage(data.backgroundImage || '/assets/Images/aboutus/about-hero-bg.jpg');
@@ -97,7 +99,7 @@ const ManageAboutUsHero = () => {
             finalImageUrl = response.data.url;
           }
 
-          await api.put('/cms/about-us-hero', { title, subtitle, backgroundImage: finalImageUrl }, { hideLoader: true });
+          await api.put('/cms/about-us-hero', { title, subtitle, showTextContent, showSection, backgroundImage: finalImageUrl }, { hideLoader: true });
           Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
         } catch (error) {
           console.error('Error saving settings:', error);
@@ -119,6 +121,8 @@ const ManageAboutUsHero = () => {
         setTitle('About KSBM');
         setSubtitle('Building Excellence Since 1995');
         setBackgroundImage('/assets/Images/aboutus/about-hero-bg.jpg');
+        setShowTextContent(true);
+        setShowSection(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -189,6 +193,25 @@ const ManageAboutUsHero = () => {
       )}
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+          <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="sr-only"
+                checked={showSection}
+                onChange={(e) => setShowSection(e.target.checked)}
+              />
+              <div className={`block w-10 h-6 rounded-full transition-colors ${showSection ? 'bg-primary' : 'bg-gray-300'}`}></div>
+              <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showSection ? 'transform translate-x-4' : ''}`}></div>
+            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700">
+              {showSection ? 'Visible' : 'Hidden'}
+            </span>
+          </label>
+        </div>
+
         <div className="space-y-8">
           
           <div className="pb-8 border-b border-gray-100">
@@ -212,7 +235,24 @@ const ManageAboutUsHero = () => {
           </div>
 
           <div className="pb-4">
-            <h3 className="text-lg font-bold text-[#1e2869] mb-4">Text Content</h3>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold text-[#1e2869]">Text Content</h3>
+              <label className="flex items-center cursor-pointer">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    className="sr-only"
+                    checked={showTextContent}
+                    onChange={(e) => setShowTextContent(e.target.checked)}
+                  />
+                  <div className={`block w-10 h-6 rounded-full transition-colors ${showTextContent ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                  <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showTextContent ? 'transform translate-x-4' : ''}`}></div>
+                </div>
+                <span className="ml-3 text-sm font-medium text-gray-700">
+                  {showTextContent ? 'Visible' : 'Hidden'}
+                </span>
+              </label>
+            </div>
             <div className="space-y-6">
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
                 <div className="mb-1.5">

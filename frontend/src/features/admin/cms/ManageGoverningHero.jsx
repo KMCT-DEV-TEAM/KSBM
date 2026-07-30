@@ -21,9 +21,11 @@ const ManageGoverningHero = () => {
   const [heroHeading, setHeroHeading] = useState('');
   const [heroSubtext, setHeroSubtext] = useState('');
   const [heroBgImage, setHeroBgImage] = useState('');
+  const [showHeroTextContent, setShowHeroTextContent] = useState(true);
   const [contentSubheading, setContentSubheading] = useState('');
   const [contentHeading, setContentHeading] = useState('');
   const [contentDescription, setContentDescription] = useState([]);
+  const [showContentDetails, setShowContentDetails] = useState(true);
   
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -38,9 +40,11 @@ const ManageGoverningHero = () => {
     heroHeading,
     heroSubtext,
     heroBgImage: typeof heroBgImage === 'object' && heroBgImage?.previewUrl ? heroBgImage.previewUrl : heroBgImage,
+    showHeroTextContent,
     contentSubheading,
     contentHeading,
-    contentDescription
+    contentDescription,
+    showContentDetails
   };
 
   useEffect(() => {
@@ -78,6 +82,8 @@ const ManageGoverningHero = () => {
         if (data.contentSubheading) setContentSubheading(data.contentSubheading);
         if (data.contentHeading) setContentHeading(data.contentHeading);
         if (data.contentDescription) setContentDescription(data.contentDescription);
+        if (data.showHeroTextContent !== undefined) setShowHeroTextContent(data.showHeroTextContent);
+        if (data.showContentDetails !== undefined) setShowContentDetails(data.showContentDetails);
       }
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -99,8 +105,8 @@ const ManageGoverningHero = () => {
           const newHeroBgImage = await uploadDeferredImage(heroBgImage, '/upload/aboutus');
 
           await api.put('/cms/governing-body', { 
-            heroHeading, heroSubtext, heroBgImage: newHeroBgImage,
-            contentSubheading, contentHeading, contentDescription
+            heroHeading, heroSubtext, heroBgImage: newHeroBgImage, showHeroTextContent,
+            contentSubheading, contentHeading, contentDescription, showContentDetails
           }, { hideLoader: true });
           
           setHeroBgImage(newHeroBgImage);
@@ -132,6 +138,8 @@ const ManageGoverningHero = () => {
           "The Governing Body of KMCT School of Business Management plays a pivotal role in shaping the institution's academic and administrative framework. The body is chaired by Dr. Navas KM, with Dr. Ayisha Nazreen serving as the Special Invitee, and Dr. Sujith Varma as the Member Secretary. It also includes selected faculty members who serve as academic nominees, industry representatives, and ex-officio members, ensuring a diverse and well-rounded leadership.",
           "The Governing Body is committed to maintaining academic excellence, fostering research and innovation, and strengthening industry-academic collaborations. Through strategic decision-making and policy implementation, it ensures the holistic development of students and the institution, keeping pace with the evolving landscape of management education."
         ]);
+        setShowHeroTextContent(true);
+        setShowContentDetails(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -162,7 +170,17 @@ const ManageGoverningHero = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Hero Section */}
           <div className="space-y-6">
-            <h3 className="text-lg font-bold text-[#1e2869] border-b pb-2">Hero Section</h3>
+            <div className="flex justify-between items-center border-b pb-2">
+              <h3 className="text-lg font-bold text-[#1e2869]">Hero Section</h3>
+              <label className="flex items-center cursor-pointer">
+                <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Text</span>
+                <div className="relative">
+                  <input type="checkbox" className="sr-only" checked={showHeroTextContent} onChange={(e) => setShowHeroTextContent(e.target.checked)} />
+                  <div className={`block w-10 h-6 rounded-full transition-colors ${showHeroTextContent ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                  <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showHeroTextContent ? 'transform translate-x-4' : ''}`}></div>
+                </div>
+              </label>
+            </div>
             
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <div className="mb-1.5">
@@ -197,7 +215,17 @@ const ManageGoverningHero = () => {
 
           {/* Content Section */}
           <div className="space-y-6">
-            <h3 className="text-lg font-bold text-[#1e2869] border-b pb-2">Content Details</h3>
+            <div className="flex justify-between items-center border-b pb-2">
+              <h3 className="text-lg font-bold text-[#1e2869]">Content Details</h3>
+              <label className="flex items-center cursor-pointer">
+                <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                <div className="relative">
+                  <input type="checkbox" className="sr-only" checked={showContentDetails} onChange={(e) => setShowContentDetails(e.target.checked)} />
+                  <div className={`block w-10 h-6 rounded-full transition-colors ${showContentDetails ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                  <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showContentDetails ? 'transform translate-x-4' : ''}`}></div>
+                </div>
+              </label>
+            </div>
             
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <div className="flex justify-between items-center mb-1.5">

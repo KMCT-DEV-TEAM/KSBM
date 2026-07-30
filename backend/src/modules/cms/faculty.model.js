@@ -9,6 +9,10 @@ const memberSchema = new mongoose.Schema({
 
 const facultySchema = new mongoose.Schema(
   {
+    showHeroTextContent: {
+      type: Boolean,
+      default: true,
+    },
     heroHeading: {
       type: String,
       default: "Faculty Members"
@@ -20,6 +24,10 @@ const facultySchema = new mongoose.Schema(
     heroBgImage: {
       type: String,
       default: "/assets/Images/faculty/faculty_default.png"
+    },
+    showIntro: {
+      type: Boolean,
+      default: true,
     },
     introSubheading: {
       type: String,
@@ -33,6 +41,7 @@ const facultySchema = new mongoose.Schema(
       type: String,
       default: "At KSBM, our faculty members are the cornerstone of academic excellence. With a blend of strong academic credentials, industry expertise, and a passion for teaching, they create a dynamic learning environment that encourages critical thinking, innovation, and leadership. Beyond the classroom, our faculty mentor, inspire, and guide students through every stage of their academic journey, equipping them with the knowledge, confidence, and practical skills needed to succeed in an ever-evolving global business landscape."
     },
+    showKsbmFaculty: { type: Boolean, default: true },
     ksbmFaculty: {
       type: [memberSchema],
       default: [
@@ -46,6 +55,7 @@ const facultySchema = new mongoose.Schema(
         { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/faculty/faculty_member_2.png", order: 8 }
       ]
     },
+    showAdjunctFaculty: { type: Boolean, default: true },
     adjunctFaculty: {
       type: [memberSchema],
       default: [

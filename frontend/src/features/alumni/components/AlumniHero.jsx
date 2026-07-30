@@ -18,6 +18,7 @@ const AlumniHero = ({ data }) => {
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-[#0b1238]/60 to-black/30" />
 
       {/* Content */}
+      {data?.showTextContent !== false && (
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 w-full max-w-[1440px] mx-auto text-white flex flex-col items-start text-left">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -37,6 +38,7 @@ const AlumniHero = ({ data }) => {
           )}
         </motion.div>
       </div>
+      )}
     </section>
   );
 };
