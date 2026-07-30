@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
 import ClubsSection from '../../facilities/components/ClubsSection';
 import confirmAction from '../../../utils/confirmAction';
+import { uploadDeferredImage } from './utils/uploadHelper';
 import SingleImageUploader from './components/SingleImageUploader';
 import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
@@ -20,8 +21,16 @@ const Toast = Swal.mixin({
   timerProgressBar: true
 });
 
+const getDefaultImage = (title) => {
+  if (title === 'Cultural Club') return 'https://images.unsplash.com/photo-1543807535-eceef0bc6599?q=80&w=2070&auto=format&fit=crop';
+  if (title === 'Sports Club') return '/assets/Images/fecilities/sports.jpg';
+  if (title === 'Health Club') return 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop';
+  return '';
+};
+
 const ManageClubs = () => {
   const [clubs, setClubs] = useState({ heading: '', description: '', items: [] });
+  const [deletedImages, setDeletedImages] = useState([]);
   
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -56,7 +65,33 @@ const ManageClubs = () => {
       action: async () => {
         setIsSaving(true);
         try {
-          await api.put('/cms/facilities-page', { clubs });
+          // Process fully deleted clubs
+          for (const url of deletedImages) {
+            try {
+              if (url && !url.startsWith('http')) {
+                await api.delete('/upload', { data: { fileUrl: url }, hideLoader: true });
+              }
+            } catch (err) { console.warn(err); }
+          }
+
+          // Process deferred uploads inside clubs.items
+          const processedItems = await Promise.all(clubs.items.map(async (item) => {
+            const finalImageUrl = await uploadDeferredImage(item.image, '/upload/facilities');
+            return {
+              ...item,
+              image: finalImageUrl
+            };
+          }));
+          
+          const payload = {
+            ...clubs,
+            items: processedItems
+          };
+
+          await api.put('/cms/facilities-page', { clubs: payload });
+          
+          setClubs(payload);
+          setDeletedImages([]);
           Toast.fire({ icon: 'success', title: 'Clubs settings saved successfully!' });
         } catch (error) {
           console.error('Error saving settings:', error);
@@ -80,7 +115,7 @@ const ManageClubs = () => {
           description: 'Extracurricular activities at KSBM encompass academic clubs, professional societies, and cultural organizations that play an instrumental role in shaping holistic development.',
           items: [
             { title: 'Cultural Club', image: 'https://images.unsplash.com/photo-1543807535-eceef0bc6599?q=80&w=2070&auto=format&fit=crop' },
-            { title: 'Sports Club', image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=2070&auto=format&fit=crop' },
+            { title: 'Sports Club', image: '/assets/Images/fecilities/sports.jpg' },
             { title: 'Health Club', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop' }
           ]
         });
@@ -100,6 +135,14 @@ const ManageClubs = () => {
   };
 
   const removeItem = (index) => {
+    const item = clubs.items[index];
+    const oldUrl = typeof item.image === 'object' ? item.image.oldUrl : item.image;
+    
+    // Add oldUrl to deletedImages if it's valid and not default
+    if (oldUrl && typeof oldUrl === 'string' && !oldUrl.startsWith('http') && oldUrl !== getDefaultImage(item.title)) {
+      setDeletedImages(prev => [...prev, oldUrl]);
+    }
+
     const newItems = [...clubs.items];
     newItems.splice(index, 1);
     setClubs({ ...clubs, items: newItems });
@@ -217,6 +260,9 @@ const ManageClubs = () => {
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Image</label>
                   <SingleImageUploader 
                     imageUrl={item.image} 
+                    defaultImage={getDefaultImage(item.title)}
+                    uploadEndpoint="/upload/facilities"
+                    deferredUpload={true}
                     onUploadComplete={(url) => handleItemChange(idx, 'image', url)}
                     onUploadStateChange={setIsUploading}
                     label="Upload Club Image"

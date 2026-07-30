@@ -142,6 +142,19 @@ router.post('/examinations', protect, uploadAssets.single('image'), async (req, 
   });
 });
 
+router.post('/facilities', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/fecilities/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/fecilities',
+    url: fileUrl,
+  });
+});
+
 router.post('/', protect, upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No image provided' });
@@ -149,7 +162,7 @@ router.post('/', protect, upload.single('image'), async (req, res) => {
   
   if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_CLOUD_NAME !== 'your_cloud_name') {
     try {
-      const result = await cloudinary.uploader.unsigned_upload(req.file.path, 'ksbmimage', {
+      const result = await cloudinary.uploader.upload(req.file.path, {
         folder: 'ksbm_assets'
       });
       
@@ -238,6 +251,8 @@ router.delete('/', protect, async (req, res) => {
     filePath = path.join(__dirname, '../../../../frontend/public', fileUrl);
   } else if (fileUrl.includes('/assets/Images/examinations/')) {
     filePath = path.join(__dirname, '../../../../frontend/public', fileUrl);
+  } else if (fileUrl.includes('/assets/Images/fecilities/')) {
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/fecilities', filename);
   } else if (fileUrl.includes('/assets/home/')) {
      filePath = path.join(__dirname, '../../../../assets/home', filename);
   } else if (fileUrl.includes('/uploads/')) {
