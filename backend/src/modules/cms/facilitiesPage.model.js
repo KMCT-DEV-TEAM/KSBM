@@ -110,6 +110,51 @@ const facilitiesPageSchema = new mongoose.Schema(
           { title: 'Health Club', image: '/assets/Images/clubs/club_health.png' }
         ]
       }
+    },
+    facilityDetails: {
+      title: { type: String, default: 'Facility Details' },
+      hero: {
+        title: { type: String, default: 'World Class Facilities' },
+        subtitle: { type: String, default: 'Experience learning with top-notch infrastructure designed for holistic development.' },
+        backgroundImage: { type: String, default: '/assets/Images/fecilities/facilities_hero.png' }
+      },
+      about: {
+        heading: { type: String, default: 'About This Facility' },
+        paragraphs: { type: [String], default: ['Our facilities are designed to provide the best environment for students.'] },
+        image: { type: String, default: '/assets/Images/fecilities/facility_1.jpg' }
+      },
+      activities: {
+        heading: { type: String, default: 'Key Features' },
+        items: {
+          type: [{ title: String, subtitle: String, image: String }],
+          default: [
+            { title: 'Feature 1', subtitle: 'State of the art', image: '/assets/Images/fecilities/facility_2.jpg' },
+            { title: 'Feature 2', subtitle: 'Modern equipment', image: '/assets/Images/fecilities/facility_3.jpg' }
+          ]
+        }
+      },
+      faculty: {
+        heading: { type: String, default: 'Facility Management' },
+        subheading: { type: String, default: 'Guided by Experts' },
+        description: { type: String, default: 'Our facilities are managed by experienced professionals dedicated to student success.' },
+        members: {
+          type: [{ name: String, role: String, image: String }],
+          default: [
+            { name: 'John Doe', role: 'Facility Manager', image: '/assets/Images/fecilities/life_1.jpg' }
+          ]
+        }
+      },
+      gallery: {
+        heading: { type: String, default: 'Facility Gallery' },
+        images: {
+          type: [{ title: String, image: String }],
+          default: [
+            { title: 'View 1', image: '/assets/Images/fecilities/facility_4.jpg' },
+            { title: 'View 2', image: '/assets/Images/fecilities/facility_5.jpg' },
+            { title: 'View 3', image: '/assets/Images/fecilities/facility_6.jpg' }
+          ]
+        }
+      }
     }
   },
   {

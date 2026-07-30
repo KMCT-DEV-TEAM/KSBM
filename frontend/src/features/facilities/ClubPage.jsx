@@ -8,6 +8,73 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Loader from '../../components/Loader';
 
+const buildGalleryColumns = (items) => {
+  const columns = [];
+  if (!items || !Array.isArray(items)) return columns;
+  let i = 0;
+  let colIndex = 0;
+
+  while (i < items.length) {
+    const pattern = colIndex % 5;
+
+    if (pattern === 0) {
+      columns.push({ type: 'tall', items: [items[i]] });
+      i += 1;
+    } else if (pattern === 1) {
+      const top = items[i];
+      const bottom = items[i + 1];
+      if (bottom) {
+        columns.push({ type: 'split-top-small', items: [top, bottom] });
+        i += 2;
+      } else {
+        columns.push({ type: 'tall', items: [top] });
+        i += 1;
+      }
+    } else if (pattern === 2) {
+      columns.push({ type: 'tall', items: [items[i]] });
+      i += 1;
+    } else if (pattern === 3) {
+      const top = items[i];
+      const bottom = items[i + 1];
+      if (bottom) {
+        columns.push({ type: 'split-top-large', items: [top, bottom] });
+        i += 2;
+      } else {
+        columns.push({ type: 'tall', items: [top] });
+        i += 1;
+      }
+    } else {
+      columns.push({ type: 'tall', items: [items[i]] });
+      i += 1;
+    }
+    colIndex++;
+  }
+  return columns;
+};
+
+const GalleryImage = ({ item, className = '' }) => {
+  if (!item) return null;
+  const imgSrc = typeof item === 'string' ? item : item?.image || item?.url || '';
+  const imgTitle = typeof item === 'object' && item !== null ? (item.title || '') : '';
+  if (!imgSrc) return null;
+
+  return (
+    <div className={`relative overflow-hidden rounded-2xl group ${className}`}>
+      <img
+        src={imgSrc}
+        alt={imgTitle || 'Gallery image'}
+        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        loading="lazy"
+      />
+      {imgTitle && (
+        <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <p className="text-white font-semibold text-sm tracking-wide line-clamp-1">{imgTitle}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const ClubPage = () => {
   const { clubId } = useParams();
   const [clubData, setClubData] = useState(null);
@@ -33,7 +100,7 @@ const ClubPage = () => {
     fetchClubData();
   }, [clubId]);
 
-  if (isLoading) return <Loader theme="light" text="Loading Club Details..." />;
+  if (isLoading) return <Loader fullScreen={true} />;
 
   if (!clubData) {
     return (
@@ -70,25 +137,27 @@ const ClubPage = () => {
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-[#0b1238]/60 mix-blend-multiply" />
-          <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-white flex flex-col items-start text-left">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="max-w-4xl"
-            >
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-white mb-4 leading-[1.1] tracking-tight">
-                {heroTitle}
-              </h1>
-              <p className="text-xs md:text-sm lg:text-base text-gray-200 font-medium leading-relaxed max-w-3xl">
-                {heroSubtitle}
-              </p>
-            </motion.div>
-          </div>
+          {hero?.showTextContent !== false && (
+            <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-white flex flex-col items-start text-left">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="max-w-4xl"
+              >
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-[1.1] tracking-tight">
+                  {heroTitle}
+                </h1>
+                <p className="text-xs md:text-sm lg:text-base text-gray-200 font-medium leading-relaxed max-w-3xl">
+                  {heroSubtitle}
+                </p>
+              </motion.div>
+            </div>
+          )}
         </section>
 
         {/* 2. About Section */}
-        {(about?.heading || about?.paragraphs?.length > 0 || about?.image) && (
+        {about?.showSection !== false && (about?.heading || about?.paragraphs?.length > 0 || about?.image) && (
           <section className="py-20 bg-white relative overflow-hidden">
             {/* Pattern Top Right */}
             <div className="absolute top-0 right-0 opacity-10 pointer-events-none">
@@ -141,7 +210,7 @@ const ClubPage = () => {
         )}
 
         {/* 3. Activities Section */}
-        {activities?.items?.length > 0 && (
+        {activities?.showSection !== false && activities?.items?.length > 0 && (
           <section className="py-20 bg-gray-50/80">
             <div className="w-[90%] max-w-[1440px] mx-auto text-center">
               <motion.h3
@@ -153,31 +222,51 @@ const ClubPage = () => {
                 {activities.heading || 'Our Activities'}
               </motion.h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {activities.items.map((item, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: idx * 0.1 }}
-                    className="relative rounded-2xl overflow-hidden aspect-[3/4] group shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer"
-                  >
-                    <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b1238]/90 via-[#1e2869]/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="absolute bottom-0 left-0 p-6 text-left transform group-hover:-translate-y-2 transition-transform duration-500">
-                      <h4 className="text-xl font-semibold text-white mb-1">{item.title}</h4>
-                      {item.subtitle && <p className="text-sm text-gray-300">{item.subtitle}</p>}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+              {activities.items.length >= 5 ? (
+                <div className="overflow-hidden relative w-full -mx-4 px-4 sm:mx-0 sm:px-0">
+                  <div className="animate-marquee gap-6 py-4">
+                    {[...activities.items, ...activities.items].map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="relative rounded-2xl overflow-hidden aspect-[3/4] group shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer shrink-0 w-[260px] sm:w-[300px]"
+                      >
+                        <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0b1238]/90 via-[#1e2869]/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="absolute bottom-0 left-0 p-6 text-left transform group-hover:-translate-y-2 transition-transform duration-500">
+                          <h4 className="text-xl font-semibold text-white mb-1">{item.title}</h4>
+                          {item.subtitle && <p className="text-sm text-gray-300">{item.subtitle}</p>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {activities.items.map((item, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.1 }}
+                      className="relative rounded-2xl overflow-hidden aspect-[3/4] group shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer"
+                    >
+                      <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0b1238]/90 via-[#1e2869]/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="absolute bottom-0 left-0 p-6 text-left transform group-hover:-translate-y-2 transition-transform duration-500">
+                        <h4 className="text-xl font-semibold text-white mb-1">{item.title}</h4>
+                        {item.subtitle && <p className="text-sm text-gray-300">{item.subtitle}</p>}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
             </div>
           </section>
         )}
 
         {/* 4. Faculty Section */}
-        {faculty?.members?.length > 0 && (
+        {faculty?.showSection !== false && faculty?.members?.length > 0 && (
           <section className="py-20 bg-white relative">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1440px] h-[1px] bg-gray-200/50 -z-10" />
 
@@ -213,11 +302,16 @@ const ClubPage = () => {
                     transition={{ delay: idx * 0.1 }}
                     className="relative rounded-2xl overflow-hidden w-64 aspect-[3/4] group shadow-lg"
                   >
-                    <img src={member.image} alt={member.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                    <div className="absolute bottom-0 left-0 p-5 text-white">
-                      <h4 className="font-semibold text-lg mb-0.5">{member.name}</h4>
-                      <p className="text-sm text-gray-300 font-light">{member.role}</p>
+                    {member.image ? (
+                      <img src={member.image} alt={member.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    ) : (
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+                        <span className="text-sm">No Image</span>
+                      </div>
+                    )}
+                    <div className="absolute bottom-6 left-0 bg-white py-2 pl-4 pr-5 rounded-r-xl max-w-[90%]">
+                      <h4 className="font-bold text-[#2b2b68] text-base mb-0.5 whitespace-nowrap">{member.name}</h4>
+                      <p className="text-xs text-gray-600 font-medium whitespace-nowrap">{member.role}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -227,7 +321,7 @@ const ClubPage = () => {
         )}
 
         {/* 5. Gallery Section */}
-        {gallery?.images?.length > 0 && (
+        {gallery?.showSection !== false && gallery?.images?.length > 0 && (
           <section
             className="py-24 bg-[#0b1238] relative text-white overflow-hidden"
             style={{
@@ -255,38 +349,52 @@ const ClubPage = () => {
                 </h2>
               </motion.div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 auto-rows-[200px] md:auto-rows-[240px] gap-4 md:gap-6 grid-flow-dense">
-                {gallery.images.map((img, idx) => {
-                  if (!img) return null;
-                  const imgSrc = typeof img === 'string' ? img : img?.image || img?.url || '';
-                  const imgTitle = typeof img === 'object' && img !== null ? (img.title || '') : '';
-                  if (!imgSrc) return null;
-
-                  const pattern = idx % 6;
-                  let spanClasses = 'sm:col-span-1 sm:row-span-1';
-                  if (pattern === 0 || pattern === 5) spanClasses = 'sm:col-span-2 sm:row-span-2';
-                  else if (pattern === 1) spanClasses = 'sm:col-span-1 sm:row-span-2';
-                  else if (pattern === 4) spanClasses = 'sm:col-span-2 sm:row-span-1';
-
-                  return (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: idx * 0.08 }}
-                      className={`group relative rounded-2xl overflow-hidden cursor-pointer shadow-xl border border-white/10 ${spanClasses}`}
-                    >
-                      <img src={imgSrc} alt={imgTitle || `Gallery ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      {imgTitle && (
-                        <div className="absolute bottom-0 inset-x-0 p-5 text-white transform translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                          <p className="font-semibold text-base md:text-lg drop-shadow-md line-clamp-1">{imgTitle}</p>
+              <div className="overflow-hidden relative w-full -mx-4 px-4 sm:mx-0 sm:px-0">
+                <div className="animate-marquee gap-3 sm:gap-4 pb-6 flex">
+                  {[...buildGalleryColumns(gallery.images), ...buildGalleryColumns(gallery.images)].map((col, colIdx) => {
+                    if (col.type === 'tall') {
+                      return (
+                        <div key={colIdx} className="shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] snap-center">
+                          <GalleryImage 
+                            item={col.items[0]} 
+                            className="h-[280px] sm:h-[340px] lg:h-[400px]"
+                          />
                         </div>
-                      )}
-                    </motion.div>
-                  );
-                })}
+                      );
+                    }
+
+                    if (col.type === 'split-top-small') {
+                      return (
+                        <div key={colIdx} className="shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] flex flex-col gap-3 sm:gap-4 snap-center">
+                          <GalleryImage 
+                            item={col.items[0]} 
+                            className="h-[120px] sm:h-[145px] lg:h-[170px]"
+                          />
+                          <GalleryImage 
+                            item={col.items[1]} 
+                            className="h-[148px] sm:h-[183px] lg:h-[218px]"
+                          />
+                        </div>
+                      );
+                    }
+
+                    if (col.type === 'split-top-large') {
+                      return (
+                        <div key={colIdx} className="shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] flex flex-col gap-3 sm:gap-4 snap-center">
+                          <GalleryImage 
+                            item={col.items[0]} 
+                            className="h-[148px] sm:h-[183px] lg:h-[218px]"
+                          />
+                          <GalleryImage 
+                            item={col.items[1]} 
+                            className="h-[120px] sm:h-[145px] lg:h-[170px]"
+                          />
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
               </div>
             </div>
           </section>

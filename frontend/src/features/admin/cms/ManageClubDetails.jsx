@@ -1,13 +1,33 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Save, Loader2, ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { Save, Loader2, ArrowLeft, Plus, Trash2, FileText, Info, Activity, Users, Image as ImageIcon, GripHorizontal } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
+import AdminModal from './components/AdminModal';
+import { Pencil } from 'lucide-react';
+
+const TabSkeleton = () => (
+  <div className="space-y-6 w-full animate-pulse">
+    <div className="h-6 bg-gray-200 rounded-md w-1/4 mb-6"></div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-4">
+        <div className="h-4 bg-gray-200 rounded-md w-1/3"></div>
+        <div className="h-10 bg-gray-200 rounded-md w-full"></div>
+        <div className="h-4 bg-gray-200 rounded-md w-1/3"></div>
+        <div className="h-10 bg-gray-200 rounded-md w-full"></div>
+      </div>
+      <div className="space-y-4">
+        <div className="h-32 bg-gray-200 rounded-md w-full"></div>
+      </div>
+    </div>
+  </div>
+);
 
 const Toast = Swal.mixin({
   toast: true,
@@ -20,16 +40,33 @@ const Toast = Swal.mixin({
 const ManageClubDetails = () => {
   const { clubId } = useParams();
   const router = useRouter();
-  
+
   const [facilitiesData, setFacilitiesData] = useState(null);
   const [clubIndex, setClubIndex] = useState(-1);
   const [club, setClub] = useState(null);
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  
+  const [draggedGalleryIdx, setDraggedGalleryIdx] = useState(null);
+  const [draggedActivityIdx, setDraggedActivityIdx] = useState(null);
+  const [draggedFacultyIdx, setDraggedFacultyIdx] = useState(null);
+  const [modalConfig, setModalConfig] = useState({ isOpen: false, type: null, index: -1, data: null });
+
   const [activeTab, setActiveTab] = useState('hero');
+  const [isTabLoading, setIsTabLoading] = useState(false);
+  const tabsContainerRef = useRef(null);
+
+  const handleTabChange = (tabId) => {
+    if (tabId === activeTab || isTabLoading) return;
+    setIsTabLoading(true);
+    setTimeout(() => {
+      setActiveTab(tabId);
+      setIsTabLoading(false);
+    }, 300);
+  };
+  
+  const { markForDeletion, uploadFile, executeDeletions, clearDeletions } = useDeferredUpload();
 
   useEffect(() => {
     fetchSettings();
@@ -43,7 +80,6 @@ const ManageClubDetails = () => {
         const index = data.clubs.items.findIndex(item => item._id === clubId);
         if (index !== -1) {
           setClubIndex(index);
-          // Initialize empty nested objects if they don't exist yet
           const foundClub = data.clubs.items[index];
           setClub({
             ...foundClub,
@@ -78,6 +114,41 @@ const ManageClubDetails = () => {
     }
   };
 
+  const openModal = (type, index = -1) => {
+    let initialData = {};
+    if (type === 'activity') {
+      initialData = index >= 0 ? { ...club.activities.items[index] } : { title: '', subtitle: '', image: '' };
+    } else if (type === 'faculty') {
+      initialData = index >= 0 ? { ...club.faculty.members[index] } : { name: '', role: '', image: '' };
+    } else if (type === 'gallery') {
+      initialData = index >= 0 ? { ...club.gallery.images[index] } : { image: '', title: '' };
+    }
+    setModalConfig({ isOpen: true, type, index, data: initialData });
+  };
+
+  const closeModal = () => {
+    setModalConfig({ isOpen: false, type: null, index: -1, data: null });
+  };
+
+  const saveModal = () => {
+    const { type, index, data } = modalConfig;
+    const newClub = { ...club };
+    
+    if (type === 'activity') {
+      if (index >= 0) newClub.activities.items[index] = data;
+      else newClub.activities.items.push(data);
+    } else if (type === 'faculty') {
+      if (index >= 0) newClub.faculty.members[index] = data;
+      else newClub.faculty.members.push(data);
+    } else if (type === 'gallery') {
+      if (index >= 0) newClub.gallery.images[index] = data;
+      else newClub.gallery.images.push(data);
+    }
+    
+    setClub(newClub);
+    closeModal();
+  };
+
   const handleSave = async () => {
     if (!facilitiesData || clubIndex === -1 || !club) return;
 
@@ -89,17 +160,42 @@ const ManageClubDetails = () => {
       action: async () => {
         setIsSaving(true);
         try {
-          // Update the specific club in the facilities data
-          const updatedClubsItems = [...facilitiesData.clubs.items];
-          updatedClubsItems[clubIndex] = club;
-          
-          const updatedClubsData = {
-            ...facilitiesData.clubs,
-            items: updatedClubsItems
+          const processImageUpload = async (imageObj) => {
+            if (typeof imageObj === 'object' && imageObj?.file) {
+              if (imageObj.oldUrl) markForDeletion(imageObj.oldUrl);
+              return await uploadFile(imageObj.file, '/upload/facilities');
+            }
+            return typeof imageObj === 'object' ? imageObj?.previewUrl || imageObj?.oldUrl || '' : imageObj;
           };
 
-          await api.put('/cms/facilities-page', { clubs: updatedClubsData });
-          Toast.fire({ icon: 'success', title: 'Club details saved successfully!' });
+          const clubToSave = JSON.parse(JSON.stringify(club));
+          clubToSave.hero.backgroundImage = await processImageUpload(club.hero.backgroundImage);
+          clubToSave.about.image = await processImageUpload(club.about.image);
+          
+          for (let i = 0; i < clubToSave.activities.items.length; i++) {
+             clubToSave.activities.items[i].image = await processImageUpload(club.activities.items[i].image);
+          }
+          for (let i = 0; i < clubToSave.faculty.members.length; i++) {
+             clubToSave.faculty.members[i].image = await processImageUpload(club.faculty.members[i].image);
+          }
+          for (let i = 0; i < clubToSave.gallery.images.length; i++) {
+             clubToSave.gallery.images[i].image = await processImageUpload(club.gallery.images[i].image);
+          }
+
+          if (clubIndex !== -1) {
+            const updatedClubsItems = [...facilitiesData.clubs.items];
+            updatedClubsItems[clubIndex] = clubToSave;
+
+            const updatedClubsData = {
+              ...facilitiesData.clubs,
+              items: updatedClubsItems
+            };
+
+            await api.put('/cms/facilities-page', { clubs: updatedClubsData });
+            await executeDeletions();
+            setClub(clubToSave);
+            Toast.fire({ icon: 'success', title: 'Club details saved successfully!' });
+          }
         } catch (error) {
           console.error('Error saving settings:', error);
           Toast.fire({ icon: 'error', title: 'Failed to save club details.' });
@@ -110,416 +206,725 @@ const ManageClubDetails = () => {
     });
   };
 
+  const handleReset = () => {
+    if (window.confirm('Are you sure you want to reset all changes? Any unsaved work will be lost.')) {
+      clearDeletions();
+      const foundClub = facilitiesData.clubs.items[clubIndex];
+      setClub({
+        ...foundClub,
+        hero: foundClub.hero || { title: '', subtitle: '', backgroundImage: '' },
+        about: {
+          heading: foundClub.about?.heading || '',
+          paragraphs: foundClub.about?.paragraphs || [],
+          image: foundClub.about?.image || ''
+        },
+        activities: {
+          heading: foundClub.activities?.heading || '',
+          items: foundClub.activities?.items || []
+        },
+        faculty: {
+          heading: foundClub.faculty?.heading || '',
+          subheading: foundClub.faculty?.subheading || '',
+          description: foundClub.faculty?.description || '',
+          members: foundClub.faculty?.members || []
+        },
+        gallery: {
+          heading: foundClub.gallery?.heading || '',
+          images: foundClub.gallery?.images || []
+        }
+      });
+      Toast.fire({ icon: 'success', title: 'Changes have been reset to last saved state' });
+    }
+  };
+
   if (isLoading) return <AdminSkeleton />;
   if (!club) return <div className="p-8 text-center text-gray-500">Club not found.</div>;
 
   const tabs = [
-    { id: 'hero', label: 'Hero Section' },
-    { id: 'about', label: 'About Content' },
-    { id: 'activities', label: 'Activities Grid' },
-    { id: 'faculty', label: 'Faculty' },
-    { id: 'gallery', label: 'Gallery' }
+    { id: 'hero', label: 'Hero Section', icon: <FileText className="w-4 h-4" /> },
+    { id: 'about', label: 'About Content', icon: <Info className="w-4 h-4" /> },
+    { id: 'activities', label: 'Activities Grid', icon: <Activity className="w-4 h-4" /> },
+    { id: 'faculty', label: 'Faculty', icon: <Users className="w-4 h-4" /> },
+    { id: 'gallery', label: 'Gallery', icon: <ImageIcon className="w-4 h-4" /> }
   ];
 
   return (
     <div className="space-y-6 w-full pb-20">
-      <div>
-        <button 
-          onClick={() => router.push('/admin/cms/facilities/clubs')}
-          className="flex items-center text-sm font-semibold text-primary hover:underline mb-3 cursor-pointer"
+      <div className="relative flex items-center gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
+        <div
+          ref={tabsContainerRef}
+          className="flex overflow-x-auto gap-2 scroll-smooth flex-1 py-1 px-1 custom-scrollbar"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          <ArrowLeft className="w-4 h-4 mr-1" /> Back to Clubs
-        </button>
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => handleTabChange(tab.id)}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${activeTab === tab.id
+                ? 'bg-primary text-white shadow-md'
+                : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
+                }`}
+            >
+              {tab.icon}
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div>
         <PageHeader
-          title={`Edit Club: ${club.title}`}
+          title={
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => router.push('/admin/cms/facilities?tab=clubs')}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center -ml-2"
+                title="Back to Clubs"
+              >
+                <ArrowLeft className="w-5 h-5 text-gray-600" />
+              </button>
+              <span>Edit Club: {club.title}</span>
+            </div>
+          }
           description="Manage the detailed page content for this club."
           onSave={handleSave}
+          onReset={handleReset}
+          previewUrl={`/facilities/club/${clubId}`}
           isSaving={isSaving || isUploading}
         />
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden w-full">
-        {/* Tabs Header */}
-        <div className="flex overflow-x-auto border-b border-gray-100 hide-scrollbar">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-4 text-sm font-semibold whitespace-nowrap transition-colors relative ${
-                activeTab === tab.id ? 'text-primary' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              {tab.label}
-              {activeTab === tab.id && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-t-full" />
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* Tab Content */}
         <div className="p-6 md:p-8">
-          
-          {/* HERO TAB */}
-          {activeTab === 'hero' && (
-            <div className="space-y-6 max-w-3xl">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Hero Title</label>
-                <input
-                  type="text"
-                  value={club.hero.title}
-                  onChange={(e) => setClub({ ...club, hero: { ...club.hero, title: e.target.value } })}
-                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
-                  placeholder="e.g. KSBM Sports Club: Where Leaders Compete"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Hero Subtitle</label>
-                <textarea
-                  rows="3"
-                  value={club.hero.subtitle}
-                  onChange={(e) => setClub({ ...club, hero: { ...club.hero, subtitle: e.target.value } })}
-                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm resize-none"
-                  placeholder="Brief introductory text..."
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Background Image</label>
-                <SingleImageUploader 
-                  imageUrl={club.hero.backgroundImage} 
-                  onUploadComplete={(url) => setClub({ ...club, hero: { ...club.hero, backgroundImage: url } })}
-                  onUploadStateChange={setIsUploading}
-                  label="Upload Hero Background"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* ABOUT TAB */}
-          {activeTab === 'about' && (
-            <div className="space-y-6 w-full">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Section Heading</label>
-                    <input
-                      type="text"
-                      value={club.about.heading}
-                      onChange={(e) => setClub({ ...club, about: { ...club.about, heading: e.target.value } })}
-                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 text-sm"
-                      placeholder="e.g. The Spirit of Competition"
-                    />
+          {isTabLoading ? <TabSkeleton /> : (
+            <>
+              {/* HERO TAB */}
+              {activeTab === 'hero' && (
+                <div className="space-y-6 max-w-3xl">
+                  <div className="mb-8 pb-4 border-b border-gray-100">
+                    <div className="flex justify-between items-center bg-gray-50 p-4 rounded-xl border border-gray-100">
+                      <h3 className="text-sm font-bold text-[#1e2869]">Text Content Visibility</h3>
+                      <label className="flex items-center cursor-pointer">
+                        <div className="relative">
+                          <input
+                            type="checkbox"
+                            className="sr-only"
+                            checked={club.hero.showTextContent !== false}
+                            onChange={(e) => setClub({ ...club, hero: { ...club.hero, showTextContent: e.target.checked } })}
+                          />
+                          <div className={`block w-10 h-6 rounded-full transition-colors ${club.hero.showTextContent !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                          <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${club.hero.showTextContent !== false ? 'transform translate-x-4' : ''}`}></div>
+                        </div>
+                        <span className="ml-3 text-sm font-medium text-gray-700">
+                          {club.hero.showTextContent !== false ? 'Visible' : 'Hidden'}
+                        </span>
+                      </label>
+                    </div>
                   </div>
                   <div>
-                    <div className="flex justify-between items-center mb-1.5">
-                      <label className="block text-sm font-semibold text-gray-700">Paragraphs</label>
-                      <button 
-                        onClick={() => setClub({ ...club, about: { ...club.about, paragraphs: [...club.about.paragraphs, ''] } })}
-                        className="text-xs font-semibold text-primary"
-                      >
-                        + Add Paragraph
-                      </button>
-                    </div>
-                    <div className="space-y-3">
-                      {club.about.paragraphs.map((p, idx) => (
-                        <div key={idx} className="flex gap-2">
-                          <textarea
-                            rows="3"
-                            value={p}
-                            onChange={(e) => {
-                              const newParas = [...club.about.paragraphs];
-                              newParas[idx] = e.target.value;
-                              setClub({ ...club, about: { ...club.about, paragraphs: newParas } });
-                            }}
-                            className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm resize-none"
-                          />
-                          <button onClick={() => {
-                              const newParas = [...club.about.paragraphs];
-                              newParas.splice(idx, 1);
-                              setClub({ ...club, about: { ...club.about, paragraphs: newParas } });
-                            }} className="text-red-400 hover:text-red-600 px-1">
-                            <Trash2 className="w-4 h-4" />
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Hero Title</label>
+                    <input
+                      type="text"
+                      value={club.hero.title}
+                      maxLength={50}
+                      onChange={(e) => setClub({ ...club, hero: { ...club.hero, title: e.target.value } })}
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
+                      placeholder="e.g. KSBM Sports Club: Where Leaders Compete"
+                    />
+                    <div className="text-xs text-right mt-1 text-gray-500">{(club.hero.title || '').length}/50</div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Hero Subtitle</label>
+                    <textarea
+                      rows="3"
+                      value={club.hero.subtitle}
+                      maxLength={150}
+                      onChange={(e) => setClub({ ...club, hero: { ...club.hero, subtitle: e.target.value } })}
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm resize-none"
+                      placeholder="Brief introductory text..."
+                    />
+                    <div className="text-xs text-right mt-1 text-gray-500">{(club.hero.subtitle || '').length}/150</div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Background Image</label>
+                    <SingleImageUploader
+                      imageUrl={club.hero.backgroundImage}
+                      onUploadComplete={(url) => setClub({ ...club, hero: { ...club.hero, backgroundImage: url } })}
+                      onUploadStateChange={setIsUploading}
+                      uploadEndpoint="/upload/facilities"
+                      label="Upload Hero Background"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'about' && (
+                <div className="space-y-6 w-full">
+                  <div className="flex justify-between items-center pb-4 border-b border-gray-100">
+                    <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+                    <label className="flex items-center cursor-pointer">
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          className="sr-only"
+                          checked={club.about.showSection !== false}
+                          onChange={(e) => setClub({ ...club, about: { ...club.about, showSection: e.target.checked } })}
+                        />
+                        <div className={`block w-10 h-6 rounded-full transition-colors ${club.about.showSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                        <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${club.about.showSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                      </div>
+                      <span className="ml-3 text-sm font-medium text-gray-700">
+                        {club.about.showSection !== false ? 'Visible' : 'Hidden'}
+                      </span>
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Section Heading</label>
+                        <input
+                          type="text"
+                          value={club.about.heading}
+                          maxLength={60}
+                          onChange={(e) => setClub({ ...club, about: { ...club.about, heading: e.target.value } })}
+                          className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 text-sm"
+                          placeholder="e.g. The Spirit of Competition"
+                        />
+                        <div className="text-xs text-right mt-1 text-gray-500">{(club.about.heading || '').length}/60</div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between items-center mb-1.5">
+                          <label className="block text-sm font-semibold text-gray-700">Paragraphs</label>
+                          <button 
+                            onClick={() => setClub({ ...club, about: { ...club.about, paragraphs: [...club.about.paragraphs, ''] } })}
+                            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
+                          >
+                            <Plus className="w-4 h-4" /> Add Paragraph
                           </button>
                         </div>
+                        <div className="space-y-3">
+                          {club.about.paragraphs.map((p, idx) => (
+                            <div key={idx} className="flex gap-2">
+                              <textarea
+                                rows="3"
+                                value={p}
+                                onChange={(e) => {
+                                  const newParas = [...club.about.paragraphs];
+                                  newParas[idx] = e.target.value;
+                                  setClub({ ...club, about: { ...club.about, paragraphs: newParas } });
+                                }}
+                                className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm resize-none"
+                              />
+                              <button onClick={() => {
+                                confirmAction({
+                                  title: 'Delete Paragraph?',
+                                  message: 'Are you sure you want to remove this paragraph?',
+                                  action: () => {
+                                    const newParas = [...club.about.paragraphs];
+                                    newParas.splice(idx, 1);
+                                    setClub({ ...club, about: { ...club.about, paragraphs: newParas } });
+                                  }
+                                });
+                              }} className="text-red-400 hover:text-red-600 px-1">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ))}
+                          {club.about.paragraphs.length === 0 && (
+                            <p className="text-sm text-gray-400 italic">No paragraphs added.</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Side Image</label>
+                      <SingleImageUploader
+                        imageUrl={club.about.image}
+                        onUploadComplete={(url) => setClub({ ...club, about: { ...club.about, image: url } })}
+                        onUploadStateChange={setIsUploading}
+                        uploadEndpoint="/upload/facilities"
+                        label="Upload About Image"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'activities' && (
+                <div className="space-y-6">
+                  <div className="flex justify-between items-center pb-4 border-b border-gray-100">
+                    <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+                    <label className="flex items-center cursor-pointer">
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          className="sr-only"
+                          checked={club.activities.showSection !== false}
+                          onChange={(e) => setClub({ ...club, activities: { ...club.activities, showSection: e.target.checked } })}
+                        />
+                        <div className={`block w-10 h-6 rounded-full transition-colors ${club.activities.showSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                        <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${club.activities.showSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                      </div>
+                      <span className="ml-3 text-sm font-medium text-gray-700">
+                        {club.activities.showSection !== false ? 'Visible' : 'Hidden'}
+                      </span>
+                    </label>
+                  </div>
+                  <div className="max-w-2xl">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Activities Section Heading</label>
+                    <input
+                      type="text"
+                      value={club.activities.heading}
+                      maxLength={60}
+                      onChange={(e) => setClub({ ...club, activities: { ...club.activities, heading: e.target.value } })}
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm"
+                      placeholder="e.g. THE ART OF EXPRESSION"
+                    />
+                    <div className="text-xs text-right mt-1 text-gray-500">{(club.activities.heading || '').length}/60</div>
+                  </div>
+
+                  <div className="pt-4 border-t border-gray-100">
+                    <div className="flex justify-between items-center mb-4">
+                      <label className="block text-sm font-semibold text-gray-700">Activity Cards</label>
+                      <button 
+                        onClick={() => openModal('activity')} 
+                        className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
+                      >
+                        <Plus className="w-4 h-4" /> Add Activity
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {club.activities.items.map((item, idx) => (
+                        <div 
+                          key={idx} 
+                          draggable
+                          onDragStart={(e) => {
+                            setDraggedActivityIdx(idx);
+                            e.dataTransfer.effectAllowed = 'move';
+                          }}
+                          onDragOver={(e) => {
+                            e.preventDefault();
+                            e.dataTransfer.dropEffect = 'move';
+                          }}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            if (draggedActivityIdx === null || draggedActivityIdx === idx) return;
+                            const newItems = [...club.activities.items];
+                            const draggedItem = newItems[draggedActivityIdx];
+                            newItems.splice(draggedActivityIdx, 1);
+                            newItems.splice(idx, 0, draggedItem);
+                            setClub({ ...club, activities: { ...club.activities, items: newItems } });
+                            setDraggedActivityIdx(null);
+                          }}
+                          className={`p-4 border rounded-xl relative group transition-all cursor-move flex items-center gap-4 ${draggedActivityIdx === idx ? 'opacity-50 bg-gray-100 border-dashed border-gray-300' : 'bg-gray-50 border-gray-200 hover:shadow-sm'}`}
+                        >
+                          <GripHorizontal className="w-5 h-5 text-gray-400 shrink-0" />
+                          {item.image ? (
+                            <img src={item.image} alt={item.title} className="w-12 h-12 rounded object-cover" />
+                          ) : (
+                            <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
+                              <ImageIcon className="w-5 h-5 text-gray-400" />
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-sm font-bold text-gray-900 truncate">{item.title || 'Untitled Activity'}</h4>
+                            <p className="text-xs text-gray-500 truncate">{item.subtitle}</p>
+                          </div>
+                          <div className="flex shrink-0">
+                            <button onClick={() => openModal('activity', idx)} className="p-1.5 text-blue-500 hover:bg-blue-50 rounded transition-colors">
+                              <Pencil className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => {
+                              confirmAction({
+                                title: 'Delete Activity?',
+                                message: 'Are you sure you want to remove this activity card?',
+                                action: () => {
+                                  const newItems = [...club.activities.items];
+                                  newItems.splice(idx, 1);
+                                  setClub({ ...club, activities: { ...club.activities, items: newItems } });
+                                }
+                              });
+                            }} className="p-1.5 text-red-400 hover:bg-red-50 rounded transition-colors">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
                       ))}
-                      {club.about.paragraphs.length === 0 && (
-                        <p className="text-sm text-gray-400 italic">No paragraphs added.</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'faculty' && (
+                <div className="space-y-6">
+                  <div className="flex justify-between items-center pb-4 border-b border-gray-100">
+                    <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+                    <label className="flex items-center cursor-pointer">
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          className="sr-only"
+                          checked={club.faculty.showSection !== false}
+                          onChange={(e) => setClub({ ...club, faculty: { ...club.faculty, showSection: e.target.checked } })}
+                        />
+                        <div className={`block w-10 h-6 rounded-full transition-colors ${club.faculty.showSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                        <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${club.faculty.showSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                      </div>
+                      <span className="ml-3 text-sm font-medium text-gray-700">
+                        {club.faculty.showSection !== false ? 'Visible' : 'Hidden'}
+                      </span>
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Subheading (Top)</label>
+                      <input
+                        type="text"
+                        value={club.faculty.subheading}
+                        maxLength={60}
+                        onChange={(e) => setClub({ ...club, faculty: { ...club.faculty, subheading: e.target.value } })}
+                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm"
+                        placeholder="e.g. Faculty In Charge"
+                      />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(club.faculty.subheading || '').length}/60</div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Main Heading</label>
+                      <input
+                        type="text"
+                        value={club.faculty.heading}
+                        maxLength={100}
+                        onChange={(e) => setClub({ ...club, faculty: { ...club.faculty, heading: e.target.value } })}
+                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold"
+                        placeholder="e.g. Guide, Mentor, Inspire."
+                      />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(club.faculty.heading || '').length}/100</div>
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Description text</label>
+                      <textarea
+                        rows="2"
+                        value={club.faculty.description}
+                        maxLength={300}
+                        onChange={(e) => setClub({ ...club, faculty: { ...club.faculty, description: e.target.value } })}
+                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm resize-none"
+                      />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(club.faculty.description || '').length}/300</div>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-gray-100">
+                    <div className="flex justify-between items-center mb-4">
+                      <label className="block text-sm font-semibold text-gray-700">Faculty Members (Max 2)</label>
+                      {club.faculty.members.length < 2 && (
+                        <button 
+                          onClick={() => openModal('faculty')} 
+                          className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
+                        >
+                          <Plus className="w-4 h-4" /> Add Member
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {club.faculty.members.map((member, idx) => (
+                        <div 
+                          key={idx} 
+                          draggable
+                          onDragStart={(e) => {
+                            setDraggedFacultyIdx(idx);
+                            e.dataTransfer.effectAllowed = 'move';
+                          }}
+                          onDragOver={(e) => {
+                            e.preventDefault();
+                            e.dataTransfer.dropEffect = 'move';
+                          }}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            if (draggedFacultyIdx === null || draggedFacultyIdx === idx) return;
+                            const newMembers = [...club.faculty.members];
+                            const draggedItem = newMembers[draggedFacultyIdx];
+                            newMembers.splice(draggedFacultyIdx, 1);
+                            newMembers.splice(idx, 0, draggedItem);
+                            setClub({ ...club, faculty: { ...club.faculty, members: newMembers } });
+                            setDraggedFacultyIdx(null);
+                          }}
+                          className={`p-4 border rounded-xl relative group transition-all cursor-move flex items-center gap-4 ${draggedFacultyIdx === idx ? 'opacity-50 bg-gray-100 border-dashed border-gray-300' : 'bg-gray-50 border-gray-200 hover:shadow-sm'}`}
+                        >
+                          <GripHorizontal className="w-5 h-5 text-gray-400 shrink-0" />
+                          {member.image ? (
+                            <img src={member.image} alt={member.name} className="w-12 h-12 rounded-full object-cover" />
+                          ) : (
+                            <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                              <ImageIcon className="w-5 h-5 text-gray-400" />
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-sm font-bold text-gray-900 truncate">{member.name || 'Unnamed Faculty'}</h4>
+                            <p className="text-xs text-gray-500 truncate">{member.role}</p>
+                          </div>
+                          <div className="flex shrink-0">
+                            <button onClick={() => openModal('faculty', idx)} className="p-1.5 text-blue-500 hover:bg-blue-50 rounded transition-colors">
+                              <Pencil className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => {
+                              confirmAction({
+                                title: 'Delete Faculty Member?',
+                                message: 'Are you sure you want to remove this faculty member?',
+                                action: () => {
+                                  const newMembers = [...club.faculty.members];
+                                  newMembers.splice(idx, 1);
+                                  setClub({ ...club, faculty: { ...club.faculty, members: newMembers } });
+                                }
+                              });
+                            }} className="p-1.5 text-red-400 hover:bg-red-50 rounded transition-colors">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      {club.faculty.members.length === 0 && (
+                        <div className="col-span-full py-8 text-center text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                          No faculty added.
+                        </div>
                       )}
                     </div>
                   </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Side Image</label>
-                  <SingleImageUploader 
-                    imageUrl={club.about.image} 
-                    onUploadComplete={(url) => setClub({ ...club, about: { ...club.about, image: url } })}
-                    onUploadStateChange={setIsUploading}
-                    label="Upload About Image"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
+              )}
 
-          {/* ACTIVITIES TAB */}
-          {activeTab === 'activities' && (
-            <div className="space-y-6">
-              <div className="max-w-2xl">
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Activities Section Heading</label>
-                <input
-                  type="text"
-                  value={club.activities.heading}
-                  onChange={(e) => setClub({ ...club, activities: { ...club.activities, heading: e.target.value } })}
-                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm"
-                  placeholder="e.g. THE ART OF EXPRESSION"
-                />
-              </div>
-              
-              <div className="pt-4 border-t border-gray-100">
-                <div className="flex justify-between items-center mb-4">
-                  <label className="block text-sm font-semibold text-gray-700">Activity Cards</label>
-                  <button onClick={() => setClub({ ...club, activities: { ...club.activities, items: [...club.activities.items, { title: '', subtitle: '', image: '' }] } })} className="text-sm font-semibold text-primary flex items-center bg-primary/10 px-3 py-1.5 rounded-lg">
-                    <Plus className="w-4 h-4 mr-1" /> Add Activity
-                  </button>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {club.activities.items.map((item, idx) => (
-                    <div key={idx} className="p-4 border border-gray-200 rounded-xl bg-gray-50 relative group">
-                      <button onClick={() => {
-                          const newItems = [...club.activities.items];
-                          newItems.splice(idx, 1);
-                          setClub({ ...club, activities: { ...club.activities, items: newItems } });
-                        }} className="absolute top-3 right-3 text-red-400 hover:text-red-600 bg-white rounded p-1 shadow-sm opacity-0 group-hover:opacity-100">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                      <div className="space-y-3">
-                        <SingleImageUploader 
-                          imageUrl={item.image} 
-                          onUploadComplete={(url) => {
-                            const newItems = [...club.activities.items];
-                            newItems[idx].image = url;
-                            setClub({ ...club, activities: { ...club.activities, items: newItems } });
-                          }}
-                          onUploadStateChange={setIsUploading}
-                          label="Activity Image"
-                        />
+              {/* GALLERY TAB */}
+              {activeTab === 'gallery' && (
+                <div className="space-y-6">
+                  <div className="flex justify-between items-center pb-4 border-b border-gray-100">
+                    <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+                    <label className="flex items-center cursor-pointer">
+                      <div className="relative">
                         <input
-                          type="text"
-                          value={item.title}
-                          onChange={(e) => {
-                            const newItems = [...club.activities.items];
-                            newItems[idx].title = e.target.value;
-                            setClub({ ...club, activities: { ...club.activities, items: newItems } });
-                          }}
-                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm font-semibold"
-                          placeholder="Title (e.g. Mohiniyattam)"
+                          type="checkbox"
+                          className="sr-only"
+                          checked={club.gallery.showSection !== false}
+                          onChange={(e) => setClub({ ...club, gallery: { ...club.gallery, showSection: e.target.checked } })}
                         />
-                        <input
-                          type="text"
-                          value={item.subtitle}
-                          onChange={(e) => {
-                            const newItems = [...club.activities.items];
-                            newItems[idx].subtitle = e.target.value;
-                            setClub({ ...club, activities: { ...club.activities, items: newItems } });
-                          }}
-                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm"
-                          placeholder="Subtitle (optional)"
-                        />
+                        <div className={`block w-10 h-6 rounded-full transition-colors ${club.gallery.showSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                        <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${club.gallery.showSection !== false ? 'transform translate-x-4' : ''}`}></div>
                       </div>
-                    </div>
-                  ))}
-                  {club.activities.items.length === 0 && (
-                    <div className="col-span-full py-8 text-center text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                      No activities added.
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
+                      <span className="ml-3 text-sm font-medium text-gray-700">
+                        {club.gallery.showSection !== false ? 'Visible' : 'Hidden'}
+                      </span>
+                    </label>
+                  </div>
+                  <div className="max-w-2xl">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Gallery Heading</label>
+                    <input
+                      type="text"
+                      value={club.gallery.heading}
+                      maxLength={60}
+                      onChange={(e) => setClub({ ...club, gallery: { ...club.gallery, heading: e.target.value } })}
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm"
+                      placeholder="e.g. Captured in Culture"
+                    />
+                    <div className="text-xs text-right mt-1 text-gray-500">{(club.gallery.heading || '').length}/60</div>
+                  </div>
 
-          {/* FACULTY TAB */}
-          {activeTab === 'faculty' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Subheading (Top)</label>
-                  <input
-                    type="text"
-                    value={club.faculty.subheading}
-                    onChange={(e) => setClub({ ...club, faculty: { ...club.faculty, subheading: e.target.value } })}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm"
-                    placeholder="e.g. Faculty In Charge"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Main Heading</label>
-                  <input
-                    type="text"
-                    value={club.faculty.heading}
-                    onChange={(e) => setClub({ ...club, faculty: { ...club.faculty, heading: e.target.value } })}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold"
-                    placeholder="e.g. Guide, Mentor, Inspire."
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Description text</label>
-                  <textarea
-                    rows="2"
-                    value={club.faculty.description}
-                    onChange={(e) => setClub({ ...club, faculty: { ...club.faculty, description: e.target.value } })}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm resize-none"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-gray-100">
-                <div className="flex justify-between items-center mb-4">
-                  <label className="block text-sm font-semibold text-gray-700">Faculty Members</label>
-                  <button onClick={() => setClub({ ...club, faculty: { ...club.faculty, members: [...club.faculty.members, { name: '', role: '', image: '' }] } })} className="text-sm font-semibold text-primary flex items-center bg-primary/10 px-3 py-1.5 rounded-lg">
-                    <Plus className="w-4 h-4 mr-1" /> Add Member
-                  </button>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {club.faculty.members.map((member, idx) => (
-                    <div key={idx} className="p-4 border border-gray-200 rounded-xl bg-gray-50 relative group">
-                      <button onClick={() => {
-                          const newMembers = [...club.faculty.members];
-                          newMembers.splice(idx, 1);
-                          setClub({ ...club, faculty: { ...club.faculty, members: newMembers } });
-                        }} className="absolute top-3 right-3 text-red-400 hover:text-red-600 bg-white rounded p-1 shadow-sm opacity-0 group-hover:opacity-100 z-10">
-                        <Trash2 className="w-4 h-4" />
+                  <div className="pt-4 border-t border-gray-100">
+                    <div className="flex justify-between items-center mb-4">
+                      <label className="block text-sm font-semibold text-gray-700">Gallery Images</label>
+                      <button 
+                        onClick={() => openModal('gallery')} 
+                        className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
+                      >
+                        <Plus className="w-4 h-4" /> Add Image
                       </button>
-                      <div className="space-y-3">
-                        <SingleImageUploader 
-                          imageUrl={member.image} 
-                          onUploadComplete={(url) => {
-                            const newMembers = [...club.faculty.members];
-                            newMembers[idx].image = url;
-                            setClub({ ...club, faculty: { ...club.faculty, members: newMembers } });
-                          }}
-                          onUploadStateChange={setIsUploading}
-                          label="Profile Image"
-                        />
-                        <input
-                          type="text"
-                          value={member.name}
-                          onChange={(e) => {
-                            const newMembers = [...club.faculty.members];
-                            newMembers[idx].name = e.target.value;
-                            setClub({ ...club, faculty: { ...club.faculty, members: newMembers } });
-                          }}
-                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm font-semibold"
-                          placeholder="Name"
-                        />
-                        <input
-                          type="text"
-                          value={member.role}
-                          onChange={(e) => {
-                            const newMembers = [...club.faculty.members];
-                            newMembers[idx].role = e.target.value;
-                            setClub({ ...club, faculty: { ...club.faculty, members: newMembers } });
-                          }}
-                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm"
-                          placeholder="Role (e.g. Director)"
-                        />
-                      </div>
                     </div>
-                  ))}
-                  {club.faculty.members.length === 0 && (
-                    <div className="col-span-full py-8 text-center text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                      No faculty added.
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
 
-          {/* GALLERY TAB */}
-          {activeTab === 'gallery' && (
-            <div className="space-y-6">
-              <div className="max-w-2xl">
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Gallery Heading</label>
-                <input
-                  type="text"
-                  value={club.gallery.heading}
-                  onChange={(e) => setClub({ ...club, gallery: { ...club.gallery, heading: e.target.value } })}
-                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm"
-                  placeholder="e.g. Captured in Culture"
-                />
-              </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {club.gallery.images.map((img, idx) => {
+                        const imgSrc = typeof img === 'string' ? img : img?.image || '';
+                        const imgTitle = typeof img === 'object' && img !== null ? (img?.title || '') : '';
 
-              <div className="pt-4 border-t border-gray-100">
-                <div className="flex justify-between items-center mb-4">
-                  <label className="block text-sm font-semibold text-gray-700">Gallery Images</label>
-                  <button onClick={() => setClub({ ...club, gallery: { ...club.gallery, images: [...club.gallery.images, { title: '', image: '' }] } })} className="text-sm font-semibold text-primary flex items-center bg-primary/10 px-3 py-1.5 rounded-lg">
-                    <Plus className="w-4 h-4 mr-1" /> Add Image
-                  </button>
-                </div>
-                
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {club.gallery.images.map((img, idx) => {
-                    const imgSrc = typeof img === 'string' ? img : img?.image || '';
-                    const imgTitle = typeof img === 'object' && img !== null ? (img?.title || '') : '';
-
-                    return (
-                      <div key={idx} className="p-3 border border-gray-200 rounded-xl bg-gray-50 relative group">
-                        <button onClick={() => {
-                            const newImgs = [...club.gallery.images];
-                            newImgs.splice(idx, 1);
-                            setClub({ ...club, gallery: { ...club.gallery, images: newImgs } });
-                          }} className="absolute top-2 right-2 text-red-400 hover:text-red-600 bg-white rounded p-1 shadow-sm opacity-0 group-hover:opacity-100 z-10">
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                        <div className="space-y-2">
-                          <SingleImageUploader 
-                            imageUrl={imgSrc} 
-                            onUploadComplete={(url) => {
-                              const newImgs = [...club.gallery.images];
-                              if (typeof newImgs[idx] === 'string' || !newImgs[idx]) {
-                                newImgs[idx] = { title: '', image: url };
-                              } else {
-                                newImgs[idx].image = url;
-                              }
-                              setClub({ ...club, gallery: { ...club.gallery, images: newImgs } });
+                        return (
+                          <div 
+                            key={idx} 
+                            draggable
+                            onDragStart={(e) => {
+                              setDraggedGalleryIdx(idx);
+                              e.dataTransfer.effectAllowed = 'move';
                             }}
-                            onUploadStateChange={setIsUploading}
-                            label="Upload Image"
-                          />
-                          <input
-                            type="text"
-                            value={imgTitle}
-                            onChange={(e) => {
-                              const newImgs = [...club.gallery.images];
-                              if (typeof newImgs[idx] === 'string' || !newImgs[idx]) {
-                                newImgs[idx] = { title: e.target.value, image: typeof img === 'string' ? img : '' };
-                              } else {
-                                newImgs[idx].title = e.target.value;
-                              }
-                              setClub({ ...club, gallery: { ...club.gallery, images: newImgs } });
+                            onDragOver={(e) => {
+                              e.preventDefault();
+                              e.dataTransfer.dropEffect = 'move';
                             }}
-                            className="w-full px-2 py-1.5 bg-white border border-gray-200 rounded-md text-xs"
-                            placeholder="Caption (Optional)"
-                          />
+                            onDrop={(e) => {
+                              e.preventDefault();
+                              if (draggedGalleryIdx === null || draggedGalleryIdx === idx) return;
+                              
+                              const newImgs = [...club.gallery.images];
+                              const draggedItem = newImgs[draggedGalleryIdx];
+                              newImgs.splice(draggedGalleryIdx, 1);
+                              newImgs.splice(idx, 0, draggedItem);
+                              
+                              setClub({ ...club, gallery: { ...club.gallery, images: newImgs } });
+                              setDraggedGalleryIdx(null);
+                            }}
+                            className={`border rounded-xl relative group transition-all cursor-move overflow-hidden bg-gray-50 aspect-square flex flex-col ${draggedGalleryIdx === idx ? 'opacity-50 border-dashed border-gray-300' : 'border-gray-200 hover:shadow-sm'}`}
+                          >
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center gap-2">
+                              <button onClick={() => openModal('gallery', idx)} className="p-2 text-white bg-blue-500/80 hover:bg-blue-500 rounded-full transition-colors backdrop-blur-sm">
+                                <Pencil className="w-4 h-4" />
+                              </button>
+                              <button onClick={() => {
+                                confirmAction({
+                                  title: 'Delete Image?',
+                                  message: 'Are you sure you want to remove this image from the gallery?',
+                                  action: () => {
+                                    const newImgs = [...club.gallery.images];
+                                    newImgs.splice(idx, 1);
+                                    setClub({ ...club, gallery: { ...club.gallery, images: newImgs } });
+                                  }
+                                });
+                              }} className="p-2 text-white bg-red-500/80 hover:bg-red-500 rounded-full transition-colors backdrop-blur-sm">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                            
+                            <div className="absolute top-2 left-2 z-10 p-1 bg-white/80 rounded shadow-sm opacity-0 group-hover:opacity-100 backdrop-blur-sm">
+                              <GripHorizontal className="w-4 h-4 text-gray-700" />
+                            </div>
+
+                            {imgSrc ? (
+                              <img src={imgSrc} alt={imgTitle || 'Gallery image'} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 gap-2">
+                                <ImageIcon className="w-8 h-8" />
+                                <span className="text-xs font-medium">No Image</span>
+                              </div>
+                            )}
+                            
+                            {imgTitle && (
+                              <div className="absolute bottom-0 inset-x-0 bg-black/60 text-white text-[10px] sm:text-xs p-1.5 truncate text-center z-10">
+                                {imgTitle}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                      {club.gallery.images.length === 0 && (
+                        <div className="col-span-full py-8 text-center text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                          No gallery images added.
                         </div>
-                      </div>
-                    );
-                  })}
-                  {club.gallery.images.length === 0 && (
-                    <div className="col-span-full py-8 text-center text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                      No gallery images added.
+                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
-            </div>
+              )}
+            </>
           )}
-
         </div>
       </div>
+
+      <AdminModal
+        isOpen={modalConfig.isOpen}
+        onClose={closeModal}
+        title={
+          modalConfig.type === 'activity' ? (modalConfig.index >= 0 ? 'Edit Activity' : 'Add Activity') :
+          modalConfig.type === 'faculty' ? (modalConfig.index >= 0 ? 'Edit Faculty Member' : 'Add Faculty Member') :
+          modalConfig.type === 'gallery' ? (modalConfig.index >= 0 ? 'Edit Gallery Image' : 'Add Gallery Image') : 'Item Details'
+        }
+        onSave={saveModal}
+      >
+        {modalConfig.type === 'activity' && (
+          <div className="space-y-4">
+            <SingleImageUploader 
+              imageUrl={modalConfig.data?.image} 
+              onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
+              onUploadStateChange={setIsUploading}
+              uploadEndpoint="/upload/facilities"
+              label="Activity Image"
+            />
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Activity Title</label>
+              <input
+                type="text"
+                value={modalConfig.data?.title || ''}
+                maxLength={50}
+                onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, title: e.target.value } })}
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
+                placeholder="Title (e.g. Mohiniyattam)"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Activity Subtitle</label>
+              <input
+                type="text"
+                value={modalConfig.data?.subtitle || ''}
+                maxLength={100}
+                onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, subtitle: e.target.value } })}
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
+                placeholder="Subtitle (optional)"
+              />
+            </div>
+          </div>
+        )}
+
+        {modalConfig.type === 'faculty' && (
+          <div className="space-y-4">
+            <SingleImageUploader 
+              imageUrl={modalConfig.data?.image} 
+              onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
+              onUploadStateChange={setIsUploading}
+              uploadEndpoint="/upload/facilities"
+              label="Profile Image"
+            />
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Name</label>
+              <input
+                type="text"
+                value={modalConfig.data?.name || ''}
+                maxLength={50}
+                onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, name: e.target.value } })}
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
+                placeholder="Name"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Role</label>
+              <input
+                type="text"
+                value={modalConfig.data?.role || ''}
+                maxLength={50}
+                onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, role: e.target.value } })}
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
+                placeholder="Role (e.g. Mentor)"
+              />
+            </div>
+          </div>
+        )}
+
+        {modalConfig.type === 'gallery' && (
+          <div className="space-y-4">
+            <SingleImageUploader 
+              imageUrl={modalConfig.data?.image} 
+              onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
+              onUploadStateChange={setIsUploading}
+              uploadEndpoint="/upload/facilities"
+              label="Upload Image"
+            />
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Image Caption (Optional)</label>
+              <input
+                type="text"
+                value={modalConfig.data?.title || ''}
+                maxLength={50}
+                onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, title: e.target.value } })}
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
+                placeholder="Caption (Optional)"
+              />
+            </div>
+          </div>
+        )}
+      </AdminModal>
     </div>
   );
 };

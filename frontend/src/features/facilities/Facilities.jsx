@@ -47,22 +47,28 @@ const Facilities = () => {
 
           {/* Pattern Separator */}
 
-          <InstitutionalResourcesSection
-            headerData={data?.institutionalResources}
-            libraryData={data?.library}
-            otherResourcesData={data?.otherResources}
-          />
+          {data?.institutionalResources?.showSection !== false && (
+            <InstitutionalResourcesSection
+              headerData={data?.institutionalResources}
+              libraryData={data?.library}
+              otherResourcesData={data?.otherResources}
+            />
+          )}
 
         {/* Pattern Separator */}
-        <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-10">
-          <div className="flex items-center justify-center gap-4 w-full">
-            <div className="h-[1.5px] bg-[#CCE2F2]/30 flex-1"></div>
-            <img src={watermarkImg} alt="Divider Logo" className="w-10 h-10 sm:w-12 sm:h-12 object-contain opacity-200" />
-            <div className="h-[1.5px] bg-[#CCE2F2]/30 flex-1"></div>
-          </div>
-        </div>
+        {data?.clubs?.showSection !== false && (
+          <>
+            <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+              <div className="flex items-center justify-center gap-4 w-full">
+                <div className="h-[1.5px] bg-[#CCE2F2]/30 flex-1"></div>
+                <img src={watermarkImg} alt="Divider Logo" className="w-10 h-10 sm:w-12 sm:h-12 object-contain opacity-200" />
+                <div className="h-[1.5px] bg-[#CCE2F2]/30 flex-1"></div>
+              </div>
+            </div>
 
-        <ClubsSection data={data?.clubs} />
+            <ClubsSection data={data?.clubs} />
+          </>
+        )}
       </main>
     </div>
     </>

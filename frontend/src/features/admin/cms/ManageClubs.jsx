@@ -12,6 +12,8 @@ import SingleImageUploader from './components/SingleImageUploader';
 import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
 import AdminItemCard from './components/AdminItemCard';
+import AdminModal from './components/AdminModal';
+import { Pencil } from 'lucide-react';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -29,7 +31,7 @@ const getDefaultImage = (title) => {
 };
 
 const ManageClubs = () => {
-  const [clubs, setClubs] = useState({ heading: '', description: '', items: [] });
+  const [clubs, setClubs] = useState({ heading: '', description: '', items: [], showSection: true });
   const [deletedImages, setDeletedImages] = useState([]);
   
   const [isLoading, setIsLoading] = useState(true);
@@ -37,6 +39,9 @@ const ManageClubs = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [draggedItemIndex, setDraggedItemIndex] = useState(null);
+  
+  const [modalConfig, setModalConfig] = useState({ isOpen: false, index: -1, data: null });
 
   useEffect(() => {
     fetchSettings();
@@ -130,22 +135,73 @@ const ManageClubs = () => {
     setClubs({ ...clubs, items: newItems });
   };
 
-  const addItem = () => {
-    setClubs({ ...clubs, items: [...clubs.items, { title: '', description: '', image: '' }] });
+  const handleDragStart = (e, index) => {
+    setDraggedItemIndex(index);
+    setTimeout(() => {
+      e.target.style.opacity = '0.5';
+    }, 0);
   };
 
-  const removeItem = (index) => {
-    const item = clubs.items[index];
-    const oldUrl = typeof item.image === 'object' ? item.image.oldUrl : item.image;
-    
-    // Add oldUrl to deletedImages if it's valid and not default
-    if (oldUrl && typeof oldUrl === 'string' && !oldUrl.startsWith('http') && oldUrl !== getDefaultImage(item.title)) {
-      setDeletedImages(prev => [...prev, oldUrl]);
-    }
+  const handleDragEnd = (e) => {
+    e.target.style.opacity = '1';
+    setDraggedItemIndex(null);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e, targetIndex) => {
+    e.preventDefault();
+    if (draggedItemIndex === null || draggedItemIndex === targetIndex) return;
 
     const newItems = [...clubs.items];
-    newItems.splice(index, 1);
+    const draggedItem = newItems[draggedItemIndex];
+    newItems.splice(draggedItemIndex, 1);
+    newItems.splice(targetIndex, 0, draggedItem);
     setClubs({ ...clubs, items: newItems });
+  };
+
+  const openModal = (index = -1) => {
+    const initialData = index >= 0 ? { ...clubs.items[index] } : { title: '', description: '', image: '' };
+    setModalConfig({ isOpen: true, index, data: initialData });
+  };
+
+  const closeModal = () => {
+    setModalConfig({ isOpen: false, index: -1, data: null });
+  };
+
+  const saveModal = () => {
+    const { index, data } = modalConfig;
+    const newItems = [...clubs.items];
+    
+    if (index >= 0) newItems[index] = data;
+    else newItems.push(data);
+    
+    setClubs({ ...clubs, items: newItems });
+    closeModal();
+  };
+
+  const removeItem = async (index) => {
+    await confirmAction({
+      title: 'Remove Club?',
+      message: 'Are you sure you want to remove this club?',
+      confirmText: 'Yes, remove it',
+      variant: 'danger',
+      action: async () => {
+        const item = clubs.items[index];
+        const oldUrl = typeof item.image === 'object' ? item.image.oldUrl : item.image;
+        
+        // Add oldUrl to deletedImages if it's valid and not default
+        if (oldUrl && typeof oldUrl === 'string' && !oldUrl.startsWith('http') && oldUrl !== getDefaultImage(item.title)) {
+          setDeletedImages(prev => [...prev, oldUrl]);
+        }
+
+        const newItems = [...clubs.items];
+        newItems.splice(index, 1);
+        setClubs({ ...clubs, items: newItems });
+      }
+    });
   };
 
   if (isLoading) return <AdminSkeleton />;
@@ -197,24 +253,46 @@ const ManageClubs = () => {
         title="Text Content"
         description="Main heading and description for the clubs section"
       >
+        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+          <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="sr-only"
+                checked={clubs.showSection !== false}
+                onChange={(e) => setClubs({ ...clubs, showSection: e.target.checked })}
+              />
+              <div className={`block w-10 h-6 rounded-full transition-colors ${clubs.showSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+              <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${clubs.showSection !== false ? 'transform translate-x-4' : ''}`}></div>
+            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700">
+              {clubs.showSection !== false ? 'Visible' : 'Hidden'}
+            </span>
+          </label>
+        </div>
         <div className="space-y-6">
           <div className="max-w-xl">
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Section Heading</label>
             <input
               type="text"
+              maxLength={50}
               value={clubs.heading}
               onChange={(e) => setClubs({ ...clubs, heading: e.target.value })}
               className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
             />
+            <div className="text-right text-xs text-gray-400 mt-1">{(clubs.heading || '').length}/50 characters</div>
           </div>
           <div className="max-w-3xl">
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Section Description</label>
             <textarea
               rows="3"
+              maxLength={300}
               value={clubs.description}
               onChange={(e) => setClubs({ ...clubs, description: e.target.value })}
               className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm resize-none"
             />
+            <div className="text-right text-xs text-gray-400 mt-1">{(clubs.description || '').length}/300 characters</div>
           </div>
         </div>
       </SectionForm>
@@ -223,7 +301,7 @@ const ManageClubs = () => {
         title="Clubs List"
         description="Add and manage the clubs featured in this section"
         actionButton={
-          <button onClick={addItem} className="text-sm font-semibold text-primary flex items-center bg-primary/10 px-3.5 py-2 rounded-lg hover:bg-primary/20 transition-colors">
+          <button onClick={() => openModal()} className="text-sm font-semibold text-primary flex items-center bg-primary/10 px-3.5 py-2 rounded-lg hover:bg-primary/20 transition-colors">
             <Plus className="w-4 h-4 mr-1.5" /> Add Club
           </button>
         }
@@ -234,55 +312,43 @@ const ManageClubs = () => {
               key={idx}
               title={item.title || `Club #${idx + 1}`}
               onDelete={() => removeItem(idx)}
+              draggable
+              onDragStart={(e) => handleDragStart(e, idx)}
+              onDragEnd={handleDragEnd}
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, idx)}
+              className="cursor-move"
             >
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Club Name</label>
-                  <input
-                    type="text"
-                    value={item.title}
-                    onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-primary/20"
-                    placeholder="e.g. Sports Club"
-                  />
+              <div className="flex gap-4 items-center">
+                {item.image ? (
+                  <img src={item.image} alt={item.title} className="w-16 h-16 rounded object-cover border border-gray-200" />
+                ) : (
+                  <div className="w-16 h-16 rounded bg-gray-100 flex items-center justify-center text-[10px] text-gray-400 font-medium">No Image</div>
+                )}
+                <div className="flex-1 min-w-0 space-y-1">
+                  <p className="text-xs text-gray-500 line-clamp-2">{item.description || 'No description provided.'}</p>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Short Description</label>
-                  <textarea
-                    rows="2"
-                    value={item.description || ''}
-                    onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-primary/20 resize-none"
-                    placeholder="Club overview displayed on card hover..."
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Image</label>
-                  <SingleImageUploader 
-                    imageUrl={item.image} 
-                    defaultImage={getDefaultImage(item.title)}
-                    uploadEndpoint="/upload/facilities"
-                    deferredUpload={true}
-                    onUploadComplete={(url) => handleItemChange(idx, 'image', url)}
-                    onUploadStateChange={setIsUploading}
-                    label="Upload Club Image"
-                  />
-                </div>
+              </div>
 
-                <div className="pt-3 border-t border-gray-200/60">
-                  {item._id ? (
-                    <Link 
-                      href={`/admin/cms/facilities/clubs/${item._id}`}
-                      className="inline-flex items-center justify-center w-full bg-[#f8f9fa] border border-[#d9dee3] text-[#697a8d] hover:bg-primary/10 hover:text-primary hover:border-primary/20 px-4 py-2 rounded-md font-semibold text-sm transition-colors"
-                    >
-                      Manage Page Details
-                    </Link>
-                  ) : (
-                    <div className="text-center text-xs font-semibold text-amber-600 bg-amber-50 py-2 rounded-md border border-amber-100">
-                      Save changes to manage details
-                    </div>
-                  )}
-                </div>
+              <div className="pt-3 border-t border-gray-200/60 flex gap-2">
+                <button 
+                  onClick={() => openModal(idx)}
+                  className="flex-1 inline-flex items-center justify-center text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors border border-blue-200"
+                >
+                  <Pencil className="w-3.5 h-3.5 mr-1" /> Edit Details
+                </button>
+                {item._id ? (
+                  <Link 
+                    href={`/admin/cms/facilities/clubs/${item._id}`}
+                    className="flex-1 inline-flex items-center justify-center bg-[#f8f9fa] border border-[#d9dee3] text-[#697a8d] hover:bg-primary/10 hover:text-primary hover:border-primary/20 px-3 py-1.5 rounded-md font-semibold text-xs transition-colors"
+                  >
+                    Manage Page
+                  </Link>
+                ) : (
+                  <div className="flex-1 text-center text-[10px] font-semibold text-amber-600 bg-amber-50 py-1.5 rounded-md border border-amber-100 flex items-center justify-center">
+                    Save to manage page
+                  </div>
+                )}
               </div>
             </AdminItemCard>
           ))}
@@ -293,6 +359,47 @@ const ManageClubs = () => {
           )}
         </div>
       </SectionForm>
+
+      <AdminModal
+        isOpen={modalConfig.isOpen}
+        onClose={closeModal}
+        title={modalConfig.index >= 0 ? 'Edit Club' : 'Add Club'}
+        onSave={saveModal}
+      >
+        <div className="space-y-4">
+          <SingleImageUploader 
+            imageUrl={modalConfig.data?.image} 
+            defaultImage={getDefaultImage(modalConfig.data?.title)}
+            uploadEndpoint="/upload/facilities"
+            deferredUpload={true}
+            onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
+            onUploadStateChange={setIsUploading}
+            label="Upload Club Image"
+          />
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Club Name</label>
+            <input
+              type="text"
+              maxLength={50}
+              value={modalConfig.data?.title || ''}
+              onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, title: e.target.value } })}
+              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
+              placeholder="e.g. Sports Club"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Short Description</label>
+            <textarea
+              rows="3"
+              maxLength={150}
+              value={modalConfig.data?.description || ''}
+              onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, description: e.target.value } })}
+              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 resize-none"
+              placeholder="Club overview displayed on card hover..."
+            />
+          </div>
+        </div>
+      </AdminModal>
     </div>
   );
 };
