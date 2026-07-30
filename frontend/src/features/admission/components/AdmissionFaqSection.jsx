@@ -24,12 +24,12 @@ const faqs = [
 
 const AdmissionFaqSection = ({ data }) => {
   const [openIndex, setOpenIndex] = useState(0);
+  const faqHeading = data?.faqHeading || 'FAQ';
+  const faqItems = (data?.faqs && data.faqs.length > 0) ? data.faqs : faqs;
 
   const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? -1 : index);
   };
-
-  const faqItems = (data?.faqs && data.faqs.length > 0) ? data.faqs : faqs;
 
   return (
     <section className="py-15 sm:py-20 relative overflow-hidden">
@@ -46,7 +46,7 @@ const AdmissionFaqSection = ({ data }) => {
             className="lg:col-span-4 flex flex-col items-center"
           >
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tighter text-primary font-heading leading-none mb-4 sm:mb-6">
-              FAQ
+              {faqHeading}
             </h2>
           </motion.div>
 

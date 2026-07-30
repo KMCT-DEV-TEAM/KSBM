@@ -26,16 +26,10 @@ const Toast = Swal.mixin({
 
 const ManageFacilities = () => {
   const [subheading, setSubheading] = useState('');
-  const [showSubheading, setShowSubheading] = useState(true);
-
   const [heading, setHeading] = useState('');
-  const [showHeading, setShowHeading] = useState(true);
-
   const [description, setDescription] = useState('');
-  const [showDescription, setShowDescription] = useState(true);
-
   const [facilitiesList, setFacilitiesList] = useState([]);
-  const [showFacilities, setShowFacilities] = useState(true);
+  const [showSection, setShowSection] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -50,7 +44,7 @@ const ManageFacilities = () => {
     if (isPreviewModalOpen && iframeRef.current) {
       const payload = {
         subheading, heading, description, facilitiesList,
-        showSubheading, showHeading, showDescription, showFacilities
+        showSection
       };
       
       const sendUpdate = () => {
@@ -72,7 +66,7 @@ const ManageFacilities = () => {
       window.addEventListener('message', handleMessage);
       return () => window.removeEventListener('message', handleMessage);
     }
-  }, [isPreviewModalOpen, subheading, heading, description, facilitiesList, showSubheading, showHeading, showDescription, showFacilities]);
+  }, [isPreviewModalOpen, subheading, heading, description, facilitiesList, showSection]);
   const [editingFacilityIndex, setEditingFacilityIndex] = useState(-1);
   const [currentFacility, setCurrentFacility] = useState(null);
   const [draggedFacilityIndex, setDraggedFacilityIndex] = useState(null);
@@ -89,13 +83,8 @@ const ManageFacilities = () => {
     try {
       const { data } = await api.get('/cms/facilities');
       setSubheading(data.subheading || '');
-      setShowSubheading(data.showSubheading ?? true);
-
       setHeading(data.heading || '');
-      setShowHeading(data.showHeading ?? true);
-
       setDescription(data.description || '');
-      setShowDescription(data.showDescription ?? true);
 
       let fetchedList = data.facilitiesList || [];
       if (fetchedList.length < 6) {
@@ -115,7 +104,7 @@ const ManageFacilities = () => {
         }
       }
       setFacilitiesList(fetchedList);
-      setShowFacilities(data.showFacilities ?? true);
+      setShowSection(data.showSection ?? true);
     } catch (error) {
       console.error('Error fetching facilities settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to load facilities settings.' });
@@ -145,7 +134,7 @@ const ManageFacilities = () => {
 
           await api.put('/cms/facilities', {
             subheading, heading, description, facilitiesList: finalFacilitiesList,
-            showSubheading, showHeading, showDescription, showFacilities
+            showSection
           });
           
           await executeDeletions();
@@ -232,11 +221,8 @@ const ManageFacilities = () => {
       variant: 'primary',
       action: async () => {
         setSubheading('College Facilities');
-        setShowSubheading(true);
         setHeading('Institutional Resources');
-        setShowHeading(true);
         setDescription('Our state-of-the-art campus offers modern classrooms, advanced learning resources, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.');
-        setShowDescription(true);
         setFacilitiesList([
           { title: 'Smart Classrooms', image: '/assets/Images/Home/facility_1.jpg' },
           { title: 'Digital Library', image: '/assets/Images/Home/facility_2.jpg' },
@@ -245,7 +231,7 @@ const ManageFacilities = () => {
           { title: 'Auditorium', image: '/assets/Images/Home/facility_5.jpg' },
           { title: 'Sports & Fitness', image: '/assets/Images/Home/facility_6.jpg' }
         ]);
-        setShowFacilities(true);
+        setShowSection(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -380,6 +366,21 @@ const ManageFacilities = () => {
         </div>
       )}
 
+      {/* Global Visibility Settings */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-lg font-bold text-[#1e2869]">Section Visibility</h3>
+            <p className="text-sm text-gray-500 mt-1">Show or hide this entire section on the landing page</p>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" className="sr-only peer" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            <span className="ms-3 text-sm font-semibold text-gray-600 uppercase tracking-wider">{showSection ? 'Visible' : 'Hidden'}</span>
+          </label>
+        </div>
+      </div>
+
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
 
         {/* Text Settings */}
@@ -389,10 +390,6 @@ const ManageFacilities = () => {
             <div>
               <div className="flex items-center gap-3 mb-1.5">
 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showSubheading} onChange={(e) => setShowSubheading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
-                  <span className="text-xs font-semibold text-gray-500">Show</span>
-                </label>
 </div>
 <input
                 type="text"
@@ -407,10 +404,6 @@ const ManageFacilities = () => {
             <div>
               <div className="flex items-center gap-3 mb-1.5">
 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showHeading} onChange={(e) => setShowHeading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
-                  <span className="text-xs font-semibold text-gray-500">Show</span>
-                </label>
 </div>
 <input
                 type="text"
@@ -425,10 +418,6 @@ const ManageFacilities = () => {
             <div>
               <div className="flex justify-between items-center mb-1.5">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Description</label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showDescription} onChange={(e) => setShowDescription(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
-                  <span className="text-xs font-semibold text-gray-500">Show</span>
-                </label>
               </div>
               <textarea
                 value={description}
@@ -448,10 +437,6 @@ const ManageFacilities = () => {
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-bold text-[#1e2869]">Facilities List</h3>
-              <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
-                <input type="checkbox" checked={showFacilities} onChange={(e) => setShowFacilities(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
-                <span className="text-sm font-semibold text-gray-500">Show Facilities Grid</span>
-              </label>
             </div>
             <button
               onClick={openAddFacilityModal}

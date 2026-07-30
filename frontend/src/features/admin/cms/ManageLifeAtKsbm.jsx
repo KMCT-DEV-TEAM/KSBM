@@ -21,11 +21,6 @@ const ManageLifeAtKsbm = () => {
   const [heading, setHeading] = useState('');
   const [description, setDescription] = useState('');
   const [images, setImages] = useState([]);
-  
-  const [showSubheading, setShowSubheading] = useState(true);
-  const [showHeading, setShowHeading] = useState(true);
-  const [showDescription, setShowDescription] = useState(true);
-  const [showImages, setShowImages] = useState(true);
   const [showSection, setShowSection] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -44,11 +39,6 @@ const ManageLifeAtKsbm = () => {
       setHeading(data.heading || '');
       setDescription(data.description || '');
       setImages(data.images || []);
-      
-      setShowSubheading(data.showSubheading ?? true);
-      setShowHeading(data.showHeading ?? true);
-      setShowDescription(data.showDescription ?? true);
-      setShowImages(data.showImages ?? true);
       setShowSection(data.showSection ?? true);
     } catch (error) {
       console.error('Error fetching Life at KSBM settings:', error);
@@ -68,8 +58,7 @@ const ManageLifeAtKsbm = () => {
     setIsSaving(true);
     try {
       await api.put('/cms/life-at-ksbm', {
-        subheading, heading, description, images,
-        showSubheading, showHeading, showDescription, showImages, showSection
+        subheading, heading, description, images, showSection
       }, { hideLoader: true });
       Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
     } catch (error) {
@@ -98,20 +87,12 @@ const ManageLifeAtKsbm = () => {
         { src: '/assets/Images/Home/life_at_ksbm_7.jpg', alt: 'Outdoor gathering' },
         { src: '/assets/Images/Home/life_at_ksbm_8.jpg', alt: 'Campus gate' }
       ],
-      showSubheading: true,
-      showHeading: true,
-      showDescription: true,
-      showImages: true,
       showSection: true,
     };
     setSubheading(defaults.subheading);
     setHeading(defaults.heading);
     setDescription(defaults.description);
     setImages(defaults.images);
-    setShowSubheading(defaults.showSubheading);
-    setShowHeading(defaults.showHeading);
-    setShowDescription(defaults.showDescription);
-    setShowImages(defaults.showImages);
     setShowSection(defaults.showSection);
     Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
   };
@@ -183,26 +164,33 @@ const ManageLifeAtKsbm = () => {
           </div>
           <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
             <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <LifeAtKSBMSectionPreview previewData={{ subheading, heading, description, images, showSubheading, showHeading, showDescription, showImages, showSection, previewDevice: previewMode }} />
+              <LifeAtKSBMSectionPreview previewData={{ subheading, heading, description, images, showSection, previewDevice: previewMode }} />
             </div>
           </div>
         </div>
       )}
 
+      {/* Global Visibility Settings */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-lg font-bold text-[#1e2869]">Section Visibility</h3>
+            <p className="text-sm text-gray-500 mt-1">Show or hide this entire section on the landing page</p>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" className="sr-only peer" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            <span className="ms-3 text-sm font-semibold text-gray-600 uppercase tracking-wider">{showSection ? 'Visible' : 'Hidden'}</span>
+          </label>
+        </div>
+      </div>
+
       <SectionForm title="Header Content">
         <div className="space-y-4">
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
-            <span className="text-sm font-medium text-gray-700">Show Section Entirely</span>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-            </label>
-          </div>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-gray-700">Subheading</label>
-                <input type="checkbox" checked={showSubheading} onChange={e => setShowSubheading(e.target.checked)} className="rounded text-primary focus:ring-primary" title="Show/Hide" />
               </div>
               <input type="text" value={subheading} onChange={e => setSubheading(e.target.value)} maxLength={30} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
               <div className="text-right text-xs text-gray-400 mt-1">
@@ -212,7 +200,6 @@ const ManageLifeAtKsbm = () => {
             <div className="flex-1 space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-gray-700">Heading</label>
-                <input type="checkbox" checked={showHeading} onChange={e => setShowHeading(e.target.checked)} className="rounded text-primary focus:ring-primary" title="Show/Hide" />
               </div>
               <input type="text" value={heading} onChange={e => setHeading(e.target.value)} maxLength={50} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
               <div className="text-right text-xs text-gray-400 mt-1">
@@ -223,7 +210,6 @@ const ManageLifeAtKsbm = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-gray-700">Description</label>
-              <input type="checkbox" checked={showDescription} onChange={e => setShowDescription(e.target.checked)} className="rounded text-primary focus:ring-primary" title="Show/Hide" />
             </div>
             <textarea rows={3} value={description} onChange={e => setDescription(e.target.value)} maxLength={250} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" />
             <div className="text-right text-xs text-gray-400 mt-1">
@@ -236,8 +222,6 @@ const ManageLifeAtKsbm = () => {
       <SectionForm title="Gallery Images">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-gray-700">Show Images Grid</span>
-            <input type="checkbox" checked={showImages} onChange={e => setShowImages(e.target.checked)} className="rounded text-primary focus:ring-primary" />
           </div>
           <label className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer">
             <Plus className="w-4 h-4" /> Add Image

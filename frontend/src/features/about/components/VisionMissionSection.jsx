@@ -75,7 +75,7 @@ const VisionMissionSection = ({ previewData }) => {
     return () => cancelAnimationFrame(animationId);
   }, [isHovered]);
 
-  if (data.showSection === false) return null;
+  if (data?.showSection === false) return null;
 
   return (
     <section className="py-20 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">

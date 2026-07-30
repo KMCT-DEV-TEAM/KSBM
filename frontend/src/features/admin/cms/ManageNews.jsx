@@ -27,9 +27,6 @@ const ManageNews = () => {
   const [subheading, setSubheading] = useState('');
   const [heading, setHeading] = useState('');
   const [articles, setArticles] = useState([]);
-  
-  const [showSubheading, setShowSubheading] = useState(true);
-  const [showHeading, setShowHeading] = useState(true);
   const [showSection, setShowSection] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -67,8 +64,6 @@ const ManageNews = () => {
       }));
       setArticles(combinedWithIds);
 
-      setShowSubheading(data.showSubheading ?? true);
-      setShowHeading(data.showHeading ?? true);
       setShowSection(data.showSection ?? true);
     } catch (error) {
       console.error('Error fetching News settings:', error);
@@ -102,7 +97,7 @@ const ManageNews = () => {
 
           await api.put('/cms/news', {
             subheading, heading, featuredArticle, sideArticles,
-            showSubheading, showHeading, showSection
+            showSection
           }, { hideLoader: true });
           
           await executeDeletions();
@@ -141,8 +136,6 @@ const ManageNews = () => {
             { date: 'SEPTEMBER 28, 2024', title: 'New Global Faculty Partnership with Zurich School of Finance', image: '/assets/Images/Home/news_side_3.jpg' },
             { date: 'AUGUST 12, 2024', title: 'Annual Alumni Meet 2024: Bridging Generations', image: '/assets/Images/Home/news_side_4.jpg' }
           ],
-          showSubheading: true,
-          showHeading: true,
           showSection: true,
         };
 
@@ -162,8 +155,6 @@ const ManageNews = () => {
         setSubheading(defaults.subheading);
         setHeading(defaults.heading);
         setArticles(combinedWithIds);
-        setShowSubheading(defaults.showSubheading);
-        setShowHeading(defaults.showHeading);
         setShowSection(defaults.showSection);
         
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
@@ -319,8 +310,6 @@ const ManageNews = () => {
                 heading, 
                 featuredArticle: articles.length > 0 ? articles[0] : null, 
                 sideArticles: articles.length > 1 ? articles.slice(1) : [], 
-                showSubheading, 
-                showHeading, 
                 showSection, 
                 previewDevice: previewMode
               }} />
@@ -448,6 +437,21 @@ const ManageNews = () => {
         </div>
       )}
 
+      {/* Global Visibility Settings */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-lg font-bold text-[#1e2869]">Section Visibility</h3>
+            <p className="text-sm text-gray-500 mt-1">Show or hide this entire section on the landing page</p>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" className="sr-only peer" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            <span className="ms-3 text-sm font-semibold text-gray-600 uppercase tracking-wider">{showSection ? 'Visible' : 'Hidden'}</span>
+          </label>
+        </div>
+      </div>
+
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
         
         {/* Header Text Settings */}
@@ -457,10 +461,6 @@ const ManageNews = () => {
             <div>
               <div className="flex items-center gap-3 mb-1.5">
 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showSubheading} onChange={(e) => setShowSubheading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
-                  <span className="text-xs font-semibold text-gray-500">Show</span>
-                </label>
 </div>
 <input
                 type="text"
@@ -477,10 +477,6 @@ const ManageNews = () => {
             <div>
               <div className="flex items-center gap-3 mb-1.5">
 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showHeading} onChange={(e) => setShowHeading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
-                  <span className="text-xs font-semibold text-gray-500">Show</span>
-                </label>
 </div>
 <input
                 type="text"
@@ -502,10 +498,6 @@ const ManageNews = () => {
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-bold text-[#1e2869]">News Articles</h3>
-              <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
-                <input type="checkbox" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
-                <span className="text-sm font-semibold text-gray-500">Show Section Entirely</span>
-              </label>
             </div>
             <button
               onClick={openAddArticleModal}

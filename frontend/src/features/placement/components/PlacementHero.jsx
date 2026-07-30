@@ -22,7 +22,8 @@ const PlacementHero = ({ data }) => {
       )}
 
       {/* Content */}
-      <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-white flex flex-col items-start text-left">
+      {data?.showSection !== false && (
+        <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-white flex flex-col items-start text-left">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -67,6 +68,7 @@ const PlacementHero = ({ data }) => {
           )}
         </motion.div>
       </div>
+      )}
     </section>
   );
 };

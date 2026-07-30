@@ -20,6 +20,10 @@ const committeeSchema = new mongoose.Schema({
 });
 
 const committeesAndCellsSchema = new mongoose.Schema({
+  showHeroSection: {
+    type: Boolean,
+    default: true,
+  },
   heroHeading: {
     type: String,
     default: 'Committees & Cells',
@@ -31,6 +35,10 @@ const committeesAndCellsSchema = new mongoose.Schema({
   heroBgImage: {
     type: String,
     default: '/assets/Images/committees/default-committees-hero.png',
+  },
+  showCommitteesSection: {
+    type: Boolean,
+    default: true,
   },
   committees: [committeeSchema],
 }, {

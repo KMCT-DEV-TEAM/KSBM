@@ -62,7 +62,8 @@ const managementSchema = new mongoose.Schema(
           image: '/assets/Images/Home/management_3.jpg'
         }
       ]
-    }
+    },
+    showSection: { type: Boolean, default: true }
   },
   {
     timestamps: true,

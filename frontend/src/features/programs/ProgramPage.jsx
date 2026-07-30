@@ -352,6 +352,13 @@ const ProgramPage = ({ programType = 'mba' }) => {
           setActivePreviewTab(event.data.activeTab);
         }
       }
+      if (event.data?.type === 'preview-cms-data' && event.data.payload) {
+        setConfig(prev => ({ ...prev, ...event.data.payload }));
+        if (event.data.componentName) {
+          // You could optionally set activePreviewTab based on componentName mapping if needed,
+          // but just updating config is enough for the toggle to reflect.
+        }
+      }
     };
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
@@ -361,7 +368,7 @@ const ProgramPage = ({ programType = 'mba' }) => {
     <>
       <PageTransition dataLoaded={dataLoaded} />
       <div className="min-h-screen bg-[#fafafa]">
-      {(!activePreviewTab || activePreviewTab === 'hero') && config?.showSections?.hero !== false && <ProgramHero program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'hero') && <ProgramHero program={config} />}
       {(!activePreviewTab || activePreviewTab === 'overview') && config?.showSections?.overview !== false && <ProgramOverview program={config} />}
       {(!activePreviewTab || activePreviewTab === 'dimensions') && config?.showSections?.dimensions !== false && <LearningDimensionsGrid dimensions={config.dimensions} />}
       {(!activePreviewTab || activePreviewTab === 'whyChoose') && config?.showSections?.whyChoose !== false && <WhyChoosePills program={config} />}

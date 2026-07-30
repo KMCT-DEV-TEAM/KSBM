@@ -26,20 +26,12 @@ const Toast = Swal.mixin({
 
 const ManageAbout = () => {
   const [subheading, setSubheading] = useState('');
-  const [showSubheading, setShowSubheading] = useState(true);
-
   const [heading, setHeading] = useState('');
-  const [showHeading, setShowHeading] = useState(true);
-
   const [paragraphs, setParagraphs] = useState(['', '']);
-  const [showParagraphs, setShowParagraphs] = useState(true);
-
   const [imageUrl, setImageUrl] = useState('');
   const [imageFile, setImageFile] = useState(null);
-  const [showImage, setShowImage] = useState(true);
-
   const [stats, setStats] = useState([]);
-  const [showStats, setShowStats] = useState(true);
+  const [showSection, setShowSection] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -82,19 +74,11 @@ const ManageAbout = () => {
     try {
       const { data } = await api.get('/cms/about');
       setSubheading(data.subheading || '');
-      setShowSubheading(data.showSubheading ?? true);
-
       setHeading(data.heading || '');
-      setShowHeading(data.showHeading ?? true);
-
       setParagraphs(data.paragraphs || ['', '']);
-      setShowParagraphs(data.showParagraphs ?? true);
-
       setImageUrl(data.imageUrl || '');
-      setShowImage(data.showImage ?? true);
-
       setStats(data.stats || []);
-      setShowStats(data.showStats ?? true);
+      setShowSection(data.showSection ?? true);
     } catch (error) {
       console.error('Error fetching about settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to load about settings.' });
@@ -119,7 +103,7 @@ const ManageAbout = () => {
 
           await api.put('/cms/about', {
             subheading, heading, paragraphs, imageUrl: finalImageUrl, stats,
-            showSubheading, showHeading, showParagraphs, showImage, showStats
+            showSection
           });
 
           await executeDeletions();
@@ -144,23 +128,19 @@ const ManageAbout = () => {
       variant: 'primary',
       action: async () => {
       setSubheading('BUILDING EXCELLENCE SINCE 1995');
-      setShowSubheading(true);
       setHeading("Shaping Tomorrow's Business Leaders");
-      setShowHeading(true);
       setParagraphs([
         "At KMCT School of Business Management (KSBM), we believe management education goes beyond academic excellence—it is about developing ethical leaders, innovative thinkers, and future-ready professionals. For over two decades, KSBM has been committed to delivering quality education through its MBA and BBA programs, combining academic rigor with practical learning, industry exposure, internships, and experiential training to prepare students for today's evolving business landscape.",
         "Our MBA program equips students with advanced managerial knowledge, strategic thinking, and leadership skills for successful corporate careers, while the BBA program builds a strong foundation in business, communication, and management for higher studies and professional growth. Supported by experienced faculty, modern infrastructure, and strong industry collaborations, KSBM provides an inspiring environment that nurtures critical thinking, entrepreneurship, innovation, and lifelong learning."
       ]);
-      setShowParagraphs(true);
       setImageUrl('');
-      setShowImage(true);
       setStats([
         { value: '16+', label: 'YEARS OF EXCELLENCE' },
         { value: '991+', label: 'ACTIVE STUDENTS' },
         { value: '196+', label: 'GLOBAL RECRUITERS' },
         { value: '196+', label: 'GLOBAL RECRUITERS' }
       ]);
-      setShowStats(true);
+      setShowSection(true);
       Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
     }
     });
@@ -232,7 +212,7 @@ const ManageAbout = () => {
       try {
         await api.put('/cms/about', {
           subheading, heading, paragraphs, imageUrl, stats: newStats,
-          showSubheading, showHeading, showParagraphs, showImage, showStats
+          showSection
         });
         Toast.fire({ icon: 'success', title: 'Stat deleted successfully!' });
       } catch (error) {
@@ -251,7 +231,7 @@ const ManageAbout = () => {
       try {
         await api.put('/cms/about', {
           subheading, heading, paragraphs: newParagraphs, imageUrl, stats,
-          showSubheading, showHeading, showParagraphs, showImage, showStats
+          showSection
         });
         Toast.fire({ icon: 'success', title: 'Paragraph deleted successfully!' });
       } catch (error) {
@@ -269,8 +249,8 @@ const ManageAbout = () => {
     if (isPreviewModalOpen) {
       const pData = {
         subheading, heading, paragraphs, imageUrl, stats,
-        showSubheading, showHeading, showParagraphs, showImage, showStats,
-        previewDevice: previewMode
+        previewDevice: previewMode,
+        showSection
       };
       const handleIframeReady = (e) => {
         if (e.data?.type === 'iframe-ready' && e.data?.source === 'about' && iframeRef.current?.contentWindow) {
@@ -285,7 +265,7 @@ const ManageAbout = () => {
       }, 500);
       return () => window.removeEventListener('message', handleIframeReady);
     }
-  }, [isPreviewModalOpen, previewMode, subheading, heading, paragraphs, imageUrl, stats, showSubheading, showHeading, showParagraphs, showImage, showStats]);
+  }, [isPreviewModalOpen, previewMode, subheading, heading, paragraphs, imageUrl, stats, showSection]);
 
   if (isLoading) {
     return <AdminSkeleton />;
@@ -353,6 +333,21 @@ const ManageAbout = () => {
         </div>
       )}
 
+      {/* Global Visibility Settings */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-lg font-bold text-[#1e2869]">Section Visibility</h3>
+            <p className="text-sm text-gray-500 mt-1">Show or hide this entire section on the landing page</p>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" className="sr-only peer" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            <span className="ms-3 text-sm font-semibold text-gray-600 uppercase tracking-wider">{showSection ? 'Visible' : 'Hidden'}</span>
+          </label>
+        </div>
+      </div>
+
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
 
         {/* Header Text Settings */}
@@ -362,10 +357,6 @@ const ManageAbout = () => {
             <div>
               <div className="flex items-center gap-3 mb-1.5">
 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showSubheading} onChange={(e) => setShowSubheading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
-                  <span className="text-xs font-semibold text-gray-500">Show</span>
-                </label>
 </div>
 <input
                 type="text"
@@ -382,10 +373,6 @@ const ManageAbout = () => {
             <div>
               <div className="flex items-center gap-3 mb-1.5">
 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={showHeading} onChange={(e) => setShowHeading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
-                  <span className="text-xs font-semibold text-gray-500">Show</span>
-                </label>
 </div>
 <input
                 type="text"
@@ -406,10 +393,6 @@ const ManageAbout = () => {
         <div className="mb-8 pb-8 border-b border-gray-100">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-bold text-[#1e2869]">Section Image</h3>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={showImage} onChange={(e) => setShowImage(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
-              <span className="text-sm font-semibold text-gray-500">Show Image</span>
-            </label>
           </div>
           <LogoUploader
             currentLogoUrl={imageUrl || graduateImg}
@@ -433,10 +416,6 @@ const ManageAbout = () => {
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-bold text-[#1e2869]">Paragraphs</h3>
-              <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
-                <input type="checkbox" checked={showParagraphs} onChange={(e) => setShowParagraphs(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
-                <span className="text-sm font-semibold text-gray-500">Show Paragraphs</span>
-              </label>
             </div>
             <button
               onClick={addParagraph}
@@ -477,10 +456,6 @@ const ManageAbout = () => {
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-bold text-[#1e2869]">Statistics</h3>
-              <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
-                <input type="checkbox" checked={showStats} onChange={(e) => setShowStats(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
-                <span className="text-sm font-semibold text-gray-500">Show Stats Section</span>
-              </label>
             </div>
             <button
               onClick={addStat}

@@ -61,6 +61,7 @@ const programsSchema = new mongoose.Schema(
     showHeading: { type: Boolean, default: true },
     showDescription: { type: Boolean, default: true },
     showPrograms: { type: Boolean, default: true },
+    showSection: { type: Boolean, default: true }
   },
   {
     timestamps: true,

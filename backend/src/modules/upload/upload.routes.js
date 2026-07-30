@@ -155,34 +155,24 @@ router.post('/facilities', protect, uploadAssets.single('image'), async (req, re
   });
 });
 
+router.post('/admissions', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/admissions/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/admissions',
+    url: fileUrl,
+  });
+});
+
 router.post('/', protect, upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No image provided' });
   }
   
-  if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_CLOUD_NAME !== 'your_cloud_name') {
-    try {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: 'ksbm_assets'
-      });
-      
-      // Optionally remove the file from local storage after successful upload
-      import('fs').then(fs => {
-        fs.unlink(req.file.path, (err) => {
-          if (err) console.error("Failed to delete local file:", err);
-        });
-      });
-
-      return res.status(200).json({
-        message: 'Image uploaded successfully to Cloudinary',
-        url: result.secure_url,
-      });
-    } catch (error) {
-      console.error('Cloudinary upload error:', error);
-      return res.status(500).json({ message: 'Failed to upload to Cloudinary', error: error.message || error });
-    }
-  }
-
   // Local URL fallback
   const fileUrl = `/uploads/${req.file.filename}`;
   
@@ -223,7 +213,8 @@ router.delete('/', protect, async (req, res) => {
     'default-partner-1.jpg', 'default-partner-2.jpg', 'default-partner-3.jpg',
     'default-faculty-hero.jpg', 'default-faculty-leader.jpg', 'default-committees-hero.png',
     'image 2.png', 'image 31.png',
-    'exam_hero_bg.png', 'exam_main.png', 'exam_schedule.png', 'image 64.png'
+    'exam_hero_bg.png', 'exam_main.png', 'exam_schedule.png', 'image 64.png',
+    'admissions-hero-bg.png', 'admissions-elite.png', 'admissions-cta.png'
   ];
 
   const filename = fileUrl.split('/').pop();
@@ -248,6 +239,10 @@ router.delete('/', protect, async (req, res) => {
   } else if (fileUrl.includes('/assets/Images/placements/')) {
      filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/placements', filename);
   } else if (fileUrl.includes('/assets/Images/committees/')) {
+     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/committees', filename);
+  } else if (fileUrl.includes('/assets/Images/admissions/')) {
+     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/admissions', filename);
+  } else if (fileUrl.includes('/assets/Images/examinations/')) {
     filePath = path.join(__dirname, '../../../../frontend/public', fileUrl);
   } else if (fileUrl.includes('/assets/Images/examinations/')) {
     filePath = path.join(__dirname, '../../../../frontend/public', fileUrl);

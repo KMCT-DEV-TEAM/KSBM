@@ -47,6 +47,7 @@ const EligibilityStandardsSection = ({ data }) => {
   
   const heading = data?.eligibilityHeading || 'Eligibility & Standards';
   const subtitle = data?.eligibilitySubtitle || 'Academic standards and requirements for admission into our premier programs.';
+  const scholarshipNote = data?.scholarshipNote || 'Scholarships available for merit and economically disadvantaged students.';
   
   const mergedData = {
     MBA: {
@@ -208,7 +209,7 @@ const EligibilityStandardsSection = ({ data }) => {
               <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-3 rounded-[18px] border border-white/15 max-w-md w-full md:w-auto">
                 <AwardIcon className="w-6 h-6 text-white shrink-0" />
                 <p className="text-xs text-gray-200 font-medium leading-normal">
-                  Scholarships available for merit and economically disadvantaged students.
+                  {scholarshipNote}
                 </p>
               </div>
             </div>

@@ -49,7 +49,7 @@ const PlacementLanding = ({ previewData }) => {
       <div className="min-h-screen bg-white flex flex-col justify-between">
         <main>
         {shouldRender('hero') && <PlacementHero data={data?.hero} />}
-        {shouldRender('overview') && <PlacementOverview data={data?.overview} />}
+        {shouldRender('overview') && data?.overview?.showSection !== false && <PlacementOverview data={data?.overview} />}
         {shouldRender('proudAchievers') && data?.proudAchievers?.showSection !== false && <ProudAchievers data={data?.proudAchievers} />}
         {shouldRender('topRecruiters') && data?.topRecruiters?.showSection !== false && <TopRecruiters data={data?.topRecruiters} />}
         {shouldRender('excellenceSupport') && data?.excellenceSupport?.showSection !== false && <ExcellenceSupport data={data?.excellenceSupport} />}

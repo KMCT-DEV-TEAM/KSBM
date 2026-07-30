@@ -123,6 +123,8 @@ const AboutSection = ({ previewData }) => {
 
   const showTopSection = cmsData.showImage || cmsData.showHeading || cmsData.showSubheading || cmsData.showParagraphs;
 
+  if (cmsData?.showSection === false) return null;
+
   return (
     <section className={`relative w-full bg-background ${ptClass} pb-10 overflow-hidden`}>
       {/* Background Logo Watermark */}

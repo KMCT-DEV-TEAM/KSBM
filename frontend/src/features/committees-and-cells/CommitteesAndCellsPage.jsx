@@ -73,6 +73,7 @@ const CommitteesAndCellsPage = () => {
           <div className="absolute right-0 bottom-0 w-[500px] h-[500px] bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
           {/* Full Size Content Container matching Footer width */}
+          {data?.showHeroSection !== false && (
           <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mt-auto">
             <div className="max-w-3xl">
               {data?.showHeroHeading !== false && (
@@ -87,6 +88,7 @@ const CommitteesAndCellsPage = () => {
               )}
             </div>
           </div>
+          )}
         </section>
 
         {/* Floating Search Bar */}

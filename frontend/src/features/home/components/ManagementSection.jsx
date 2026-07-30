@@ -76,7 +76,9 @@ const ManagementSection = ({ previewData }) => {
             // Check if it's the center card (assuming exactly 3 members)
             const isCenter = index === 1;
             
-            return (
+            if (settings?.showSection === false) return null;
+
+  return (
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}

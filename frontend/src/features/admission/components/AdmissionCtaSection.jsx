@@ -7,10 +7,6 @@ import { ArrowRight } from 'lucide-react';
 const AdmissionCtaSection = ({ data }) => {
   const heading = data?.ctaHeading || 'Begin Your Leadership Journey at KSBM';
   const desc = data?.ctaDesc || 'Applications for the upcoming academic year are now open. Take the first step towards a transformative management education under a community of vibrant peers, experienced faculty, and industry leaders.';
-  const applyBtnText = data?.ctaApplyBtnText || 'Apply Now';
-  const applyBtnUrl = data?.ctaApplyBtnUrl || '/#contact';
-  const enquiryBtnText = data?.ctaEnquiryBtnText || 'Enquiry Now';
-  const enquiryBtnUrl = data?.ctaEnquiryBtnUrl || '/#contact';
   const image = data?.ctaImage || '/assets/Images/admissions/image 78.png';
 
   return (
@@ -38,20 +34,7 @@ const AdmissionCtaSection = ({ data }) => {
               {desc}
             </p>
 
-            <div className="flex flex-wrap items-center gap-3.5 w-full sm:w-auto">
-              <Link
-                href={applyBtnUrl}
-                className="px-10 py-3 rounded-[18px] bg-primary text-white font-semibold text-sm transition-all duration-300 hover:bg-[#1e2358] hover:scale-[1.03] shadow-[0_8px_20px_rgba(43,47,102,0.25)] flex items-center justify-center gap-2 group"
-              >
-                <span>{applyBtnText}</span>
-              </Link>
-              <Link
-                href={enquiryBtnUrl}
-                className="px-10 py-3 rounded-[18px] bg-white text-primary hover:bg-blue-50/80 font-semibold text-sm border border-primary transition-all duration-300 shadow-sm flex items-center justify-center gap-2 group"
-              >
-                <span>{enquiryBtnText}</span>
-              </Link>
-            </div>
+
           </div>
 
           {/* Right Image Container */}

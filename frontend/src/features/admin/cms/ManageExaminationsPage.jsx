@@ -436,7 +436,17 @@ const ManageExaminationsPage = () => {
         >
           {activeTab === 'hero' && (
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
-              <h2 className="text-lg font-bold text-[#1e2869] mb-4 border-b pb-3">Hero Section</h2>
+              <div className="flex items-center justify-between mb-4 border-b pb-3">
+                <h2 className="text-lg font-bold text-[#1e2869]">Hero Section</h2>
+                <label className="flex items-center cursor-pointer">
+                  <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                  <div className="relative">
+                    <input type="checkbox" className="sr-only" checked={data.showHeroSection !== false} onChange={(e) => updateSection('showHeroSection', e.target.checked)} />
+                    <div className={`block w-10 h-6 rounded-full transition-colors ${data.showHeroSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                    <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${data.showHeroSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                  </div>
+                </label>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
@@ -499,7 +509,17 @@ const ManageExaminationsPage = () => {
 
           {activeTab === 'overview' && (
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
-              <h2 className="text-lg font-bold text-[#1e2869] mb-4 border-b pb-3">Examination Overview Section</h2>
+              <div className="flex items-center justify-between mb-4 border-b pb-3">
+                <h2 className="text-lg font-bold text-[#1e2869]">Examination Overview Section</h2>
+                <label className="flex items-center cursor-pointer">
+                  <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                  <div className="relative">
+                    <input type="checkbox" className="sr-only" checked={data.showOverviewSection !== false} onChange={(e) => updateSection('showOverviewSection', e.target.checked)} />
+                    <div className={`block w-10 h-6 rounded-full transition-colors ${data.showOverviewSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                    <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${data.showOverviewSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                  </div>
+                </label>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
@@ -561,7 +581,17 @@ const ManageExaminationsPage = () => {
 
           {activeTab === 'calendar' && (
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
-              <h2 className="text-lg font-bold text-[#1e2869] mb-4 border-b pb-3">Official Exam Calendar Banner Settings</h2>
+              <div className="flex items-center justify-between mb-4 border-b pb-3">
+                <h2 className="text-lg font-bold text-[#1e2869]">Official Exam Calendar Banner Settings</h2>
+                <label className="flex items-center cursor-pointer">
+                  <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                  <div className="relative">
+                    <input type="checkbox" className="sr-only" checked={data.showCalendarSection !== false} onChange={(e) => updateSection('showCalendarSection', e.target.checked)} />
+                    <div className={`block w-10 h-6 rounded-full transition-colors ${data.showCalendarSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                    <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${data.showCalendarSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                  </div>
+                </label>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
@@ -657,9 +687,19 @@ const ManageExaminationsPage = () => {
           {activeTab === 'notifications' && (
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
               <div className="flex items-center justify-between mb-6 border-b pb-4">
-                <div className="flex items-center gap-2">
-                  <Bell className="w-5 h-5 text-primary" />
-                  <h2 className="text-lg font-bold text-[#1e2869]">Notifications & Announcements ({(data.notifications || []).length})</h2>
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <Bell className="w-5 h-5 text-primary" />
+                    <h2 className="text-lg font-bold text-[#1e2869]">Notifications & Announcements ({(data.notifications || []).length})</h2>
+                  </div>
+                  <label className="flex items-center cursor-pointer">
+                    <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                    <div className="relative">
+                      <input type="checkbox" className="sr-only" checked={data.showNotificationsSection !== false} onChange={(e) => updateSection('showNotificationsSection', e.target.checked)} />
+                      <div className={`block w-10 h-6 rounded-full transition-colors ${data.showNotificationsSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${data.showNotificationsSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                    </div>
+                  </label>
                 </div>
                 <button
                   onClick={() => openModal('add', 'notifications')}
@@ -696,9 +736,19 @@ const ManageExaminationsPage = () => {
           {activeTab === 'results' && (
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
               <div className="flex items-center justify-between mb-6 border-b pb-4">
-                <div className="flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-primary" />
-                  <h2 className="text-lg font-bold text-[#1e2869]">Semester Results List ({(data.results || []).length})</h2>
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-primary" />
+                    <h2 className="text-lg font-bold text-[#1e2869]">Semester Results List ({(data.results || []).length})</h2>
+                  </div>
+                  <label className="flex items-center cursor-pointer">
+                    <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                    <div className="relative">
+                      <input type="checkbox" className="sr-only" checked={data.showResultsSection !== false} onChange={(e) => updateSection('showResultsSection', e.target.checked)} />
+                      <div className={`block w-10 h-6 rounded-full transition-colors ${data.showResultsSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${data.showResultsSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                    </div>
+                  </label>
                 </div>
                 <button
                   onClick={() => openModal('add', 'results')}

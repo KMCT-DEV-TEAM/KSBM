@@ -33,11 +33,9 @@ const admissionsPageSchema = new mongoose.Schema(
       type: String,
       default: 'Join a world-class institution dedicated to excellence in management education. Shape your future with industry-relevant curriculum and global perspectives.'
     },
-    heroApplyBtnText: { type: String, default: 'Apply Now' },
-    heroApplyBtnUrl: { type: String, default: '/#contact' },
     heroBrochureBtnText: { type: String, default: 'Download Brochure' },
-    heroBrochureBtnUrl: { type: String, default: '#' },
-    heroBgImage: { type: String, default: '/assets/Images/image 73.png' },
+    heroBrochureFile: { type: String, default: '' },
+    heroBgImage: { type: String, default: '/assets/Images/admissions/admissions-hero-bg.png' },
     heroStats: {
       type: [statItemSchema],
       default: [
@@ -52,9 +50,9 @@ const admissionsPageSchema = new mongoose.Schema(
     eliteSubtitle: { type: String, default: 'Why Choose Our Program' },
     eliteDesc: {
       type: String,
-      default: 'Supported by experienced faculty and corporate mentors, we focus on analytical depth, strategic vision, and holistic individual development, preparing students to excel in top multinational corporations and dynamic entrepreneurial ventures across India and globally.'
+      default: "The MBA program at KSBM is uniquely crafted for young professionals and recent graduates aiming for high-impact leadership careers. Through our case-study pedagogy, industry immersions, and rigorous academic standards, students gain practical business intelligence and decision-making capabilities that stand out in today's corporate landscape.\n\nSupported by experienced faculty and corporate mentors, we focus on analytical depth, strategic vision, and holistic individual development, preparing students to excel in top multinational corporations and dynamic entrepreneurial ventures across India and globally."
     },
-    eliteImage: { type: String, default: '/assets/Images/image 2.png' },
+    eliteImage: { type: String, default: '/assets/Images/admissions/admissions-elite.png' },
     eliteAdvantages: {
       type: [advantageItemSchema],
       default: [
@@ -183,11 +181,7 @@ const admissionsPageSchema = new mongoose.Schema(
       type: String,
       default: 'Applications for the upcoming academic year are now open. Take the first step towards a transformative management education under a community of vibrant peers, experienced faculty, and industry leaders.'
     },
-    ctaApplyBtnText: { type: String, default: 'Apply Now' },
-    ctaApplyBtnUrl: { type: String, default: '/#contact' },
-    ctaEnquiryBtnText: { type: String, default: 'Enquiry Now' },
-    ctaEnquiryBtnUrl: { type: String, default: '/#contact' },
-    ctaImage: { type: String, default: '/assets/Images/image 78.png' },
+    ctaImage: { type: String, default: '/assets/Images/admissions/admissions-cta.png' },
 
     // 6. FAQ Section
     faqHeading: { type: String, default: 'FAQ' },
@@ -215,6 +209,14 @@ const admissionsPageSchema = new mongoose.Schema(
           answer: 'Yes, merit-based scholarships and fee concessions are offered to outstanding students with high entrance exam percentiles or exceptional academic records. We also assist students with documentation for education loans from major nationalized and private banks.'
         }
       ]
+    },
+    showSections: {
+      heroText: { type: Boolean, default: true },
+      elite: { type: Boolean, default: true },
+      journey: { type: Boolean, default: true },
+      eligibility: { type: Boolean, default: true },
+      cta: { type: Boolean, default: true },
+      faq: { type: Boolean, default: true }
     }
   },
   { timestamps: true, strict: false }

@@ -66,6 +66,7 @@ const ProgramHero = ({ program }) => {
       </motion.div>
 
       {/* Main Content exact match with Home Hero container */}
+      {program?.showSections?.hero !== false && (
       <motion.div
         initial="hidden"
         animate="visible"
@@ -147,6 +148,7 @@ const ProgramHero = ({ program }) => {
           </button>
         </motion.div>
       </motion.div>
+      )}
 
       {/* Interactive Brochure Request Modal */}
       <AnimatePresence>

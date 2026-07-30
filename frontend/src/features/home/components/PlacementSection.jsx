@@ -91,6 +91,8 @@ const PlacementSection = ({ previewData }) => {
     },
   };
 
+  if (displayData?.showSection === false) return null;
+
   return (
     <section className={`w-full bg-[#f4f7f9] py-16 lg:py-20 ${isMobilePreview ? 'max-w-[375px] mx-auto' : isTabletPreview ? 'max-w-[768px] mx-auto' : ''}`}>
       <motion.div 

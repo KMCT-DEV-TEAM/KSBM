@@ -33,6 +33,7 @@ const alumniPageSchema = new mongoose.Schema(
       }
     },
     legacy: {
+      showSection: { type: Boolean, default: true },
       subtitle: { type: String, default: 'KSBM ALUMNI NETWORK / OUR LEGACY' },
       title: { type: String, default: 'Legacy of Excellence' },
       description1: {
@@ -58,6 +59,7 @@ const alumniPageSchema = new mongoose.Schema(
       stat2Label: { type: String, default: 'Industry Leaders' }
     },
     events: {
+      showSection: { type: Boolean, default: true },
       heading: { type: String, default: 'ALUMNI EVENTS' },
       items: {
         type: [eventItemSchema],
@@ -90,6 +92,7 @@ const alumniPageSchema = new mongoose.Schema(
       }
     },
     notableAlumni: {
+      showSection: { type: Boolean, default: true },
       subtitle: { type: String, default: 'OUR PRIDE' },
       heading: { type: String, default: 'Notable Alumni' },
       items: {
@@ -124,6 +127,7 @@ const alumniPageSchema = new mongoose.Schema(
       }
     },
     gallery: {
+      showSection: { type: Boolean, default: true },
       heading: { type: String, default: 'Captured in Events' },
       items: {
         type: [galleryItemSchema],
@@ -137,6 +141,7 @@ const alumniPageSchema = new mongoose.Schema(
       }
     },
     cta: {
+      showSection: { type: Boolean, default: true },
       title: { type: String, default: 'Join the KMCT Alumni Network' },
       subtitle: {
         type: String,
