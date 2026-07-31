@@ -844,6 +844,7 @@ export const updateFacilitiesPageSettings = async (req, res) => {
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
+    import('fs').then(fs => fs.writeFileSync('error.log', error.stack || error.message));
     res.status(500).json({ message: 'Server error updating Facilities Page settings', error: error.message });
   }
 };

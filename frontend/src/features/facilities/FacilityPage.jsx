@@ -77,8 +77,38 @@ const GalleryImage = ({ item, className = '' }) => {
 const FacilityPage = () => {
   const [facilityData, setFacilityData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [previewSection, setPreviewSection] = useState(null);
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [isIframe, setIsIframe] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsIframe(window.self !== window.top);
+    }
+    const handleMessage = (event) => {
+      if (event.data?.type === 'LIVE_PREVIEW_UPDATE' && event.data.data) {
+        setFacilityData(event.data.data);
+        setIsPreviewMode(true);
+        if (event.data.activeTab) {
+          setPreviewSection(event.data.activeTab);
+        }
+      }
+    };
+    
+    window.addEventListener('message', handleMessage);
+    
+    if (window.parent) {
+      window.parent.postMessage({ type: 'iframe-ready' }, '*');
+    }
+    
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  useEffect(() => {
+    if (isIframe) {
+      setIsLoading(false);
+      return;
+    }
     const fetchFacilityData = async () => {
       try {
         const response = await api.get('/cms/facilities-page', { hideLoader: true });
@@ -93,11 +123,27 @@ const FacilityPage = () => {
       }
     };
     fetchFacilityData();
-  }, []);
+  }, [isIframe]);
 
-  if (isLoading) return <Loader fullScreen={true} />;
+  if (isLoading) {
+    if (isIframe) {
+      return (
+        <div className="flex items-center justify-center min-h-screen bg-[#FCFCFD] text-gray-500">
+          Loading preview data...
+        </div>
+      );
+    }
+    return <Loader fullScreen={true} />;
+  }
 
   if (!facilityData) {
+    if (isIframe) {
+      return (
+        <div className="flex items-center justify-center min-h-screen bg-[#FCFCFD] text-gray-500">
+          Loading preview data...
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
@@ -121,10 +167,11 @@ const FacilityPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50/50">
-      <Header />
+      {!isPreviewMode && <Header />}
 
       <main className="flex-1">
         {/* 1. Hero Section */}
+        {(!previewSection || previewSection === 'hero') && (
         <section className="relative h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32 bg-[#0b1238]">
           <img
             src={heroBg}
@@ -150,9 +197,10 @@ const FacilityPage = () => {
             </div>
           )}
         </section>
+        )}
 
         {/* 2. About Section */}
-        {about?.showSection !== false && (about?.heading || about?.paragraphs?.length > 0 || about?.image) && (
+        {(!previewSection || previewSection === 'about') && about?.showSection !== false && (about?.heading || about?.paragraphs?.length > 0 || about?.image) && (
           <section className="py-20 bg-white relative overflow-hidden">
             {/* Pattern Top Right */}
             <div className="absolute top-0 right-0 opacity-10 pointer-events-none">
@@ -205,7 +253,7 @@ const FacilityPage = () => {
         )}
 
         {/* 3. Activities Section */}
-        {activities?.showSection !== false && activities?.items?.length > 0 && (
+        {(!previewSection || previewSection === 'activities') && activities?.showSection !== false && activities?.items?.length > 0 && (
           <section className="py-20 bg-gray-50/80">
             <div className="w-[90%] max-w-[1440px] mx-auto text-center">
               <motion.h3
@@ -261,7 +309,7 @@ const FacilityPage = () => {
         )}
 
         {/* 4. Faculty Section */}
-        {faculty?.showSection !== false && faculty?.members?.length > 0 && (
+        {(!previewSection || previewSection === 'faculty') && faculty?.showSection !== false && faculty?.members?.length > 0 && (
           <section className="py-20 bg-white relative">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1440px] h-[1px] bg-gray-200/50 -z-10" />
 
@@ -316,7 +364,7 @@ const FacilityPage = () => {
         )}
 
         {/* 5. Gallery Section */}
-        {gallery?.showSection !== false && gallery?.images?.length > 0 && (
+        {(!previewSection || previewSection === 'gallery') && gallery?.showSection !== false && gallery?.images?.length > 0 && (
           <section
             className="py-24 bg-[#0b1238] relative text-white overflow-hidden"
             style={{
@@ -396,6 +444,7 @@ const FacilityPage = () => {
         )}
 
         {/* Bottom CTA */}
+        {!isPreviewMode && (
         <section className="py-20 bg-gray-50 flex items-center justify-center">
           <div className="text-center max-w-2xl px-4">
             <h2 className="text-2xl md:text-3xl font-bold text-[#2b2b68] mb-4">
@@ -409,10 +458,11 @@ const FacilityPage = () => {
             </Link>
           </div>
         </section>
+        )}
 
       </main>
 
-      <Footer />
+      {!isPreviewMode && <Footer />}
     </div>
   );
 };

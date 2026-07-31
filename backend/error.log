@@ -1,0 +1,11 @@
+ValidationError: FacilitiesPage validation failed: otherResources.items.1.title: Path `title` is required.
+    at Document.invalidate (D:\KMCT\KSBM\backend\node_modules\mongoose\lib\document.js:3455:32)
+    at Subdocument.invalidate (D:\KMCT\KSBM\backend\node_modules\mongoose\lib\types\subdocument.js:231:12)
+    at EmbeddedDocument.validate (D:\KMCT\KSBM\backend\node_modules\mongoose\lib\document.js:2866:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Promise.all (index 1)
+    at async SchemaDocumentArray.doValidate (D:\KMCT\KSBM\backend\node_modules\mongoose\lib\schema\documentArray.js:268:3)
+    at async Promise.all (index 0)
+    at async model.validate (D:\KMCT\KSBM\backend\node_modules\mongoose\lib\document.js:2857:30)
+    at async model.$__save (D:\KMCT\KSBM\backend\node_modules\mongoose\lib\model.js:399:7)
+    at async maybeTracedSave (D:\KMCT\KSBM\backend\node_modules\mongoose\lib\model.js:675:7)
