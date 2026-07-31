@@ -37,12 +37,8 @@ const Toast = Swal.mixin({
   timerProgressBar: true
 });
 
-const ManageClubDetails = () => {
-  const { clubId } = useParams();
-  const router = useRouter();
-  
-  const [facilitiesData, setFacilitiesData] = useState(null);
-  const [club, setClub] = useState(null);
+const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
+  const [club, setClub] = useState(initialData || null);
   
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -108,38 +104,63 @@ const ManageClubDetails = () => {
 
   const { markForDeletion, uploadFile, executeDeletions, clearDeletions } = useDeferredUpload();
 
+  // Initialize on mount or when initialData changes
   useEffect(() => {
-    fetchSettings();
-  }, [clubId]);
-
-  const fetchSettings = async () => {
-    try {
-      const { data } = await api.get('/cms/facilities-page');
-      if (data) {
-        setFacilitiesData(data);
-        
-        // Use the newly added facilityDetails field
-        if (data.facilityDetails) {
-          setClub(data.facilityDetails);
-        } else {
-          // Default fallback
-          setClub({
-            title: 'Facility Details',
-            hero: { title: '', subtitle: '', backgroundImage: '/assets/Images/fecilities/facilities_hero.png' },
-            about: { heading: '', paragraphs: [], image: '/assets/Images/fecilities/facility_1.jpg' },
-            activities: { heading: '', items: [] },
-            faculty: { heading: '', subheading: '', description: '', members: [] },
-            gallery: { heading: '', images: [] }
-          });
-        }
+    if (initialData) {
+      // Ensure we have defaults if some nested fields are missing
+      const dataToSet = { ...initialData };
+      if (!dataToSet.hero || (!dataToSet.hero.title && !dataToSet.hero.backgroundImage)) {
+        dataToSet.hero = { 
+          title: 'World Class Facilities', 
+          subtitle: 'Experience learning with top-notch infrastructure designed for holistic development.', 
+          backgroundImage: '/assets/Images/fecilities/facilities_hero.png', 
+          showTextContent: true 
+        };
       }
-    } catch (error) {
-      console.error('Error fetching settings:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to load club details.' });
-    } finally {
+      if (!dataToSet.about || (!dataToSet.about.heading && !dataToSet.about.image)) {
+        dataToSet.about = { 
+          heading: 'About This Facility', 
+          paragraphs: ['Our facilities are designed to provide the best environment for students.'], 
+          image: '/assets/Images/fecilities/facility_1.jpg', 
+          showSection: true 
+        };
+      }
+      if (!dataToSet.activities || (!dataToSet.activities.heading && (!dataToSet.activities.items || dataToSet.activities.items.length === 0))) {
+        dataToSet.activities = { 
+          heading: 'Key Features', 
+          items: [
+            { title: 'Feature 1', subtitle: 'State of the art', image: '/assets/Images/fecilities/facility_2.jpg' },
+            { title: 'Feature 2', subtitle: 'Modern equipment', image: '/assets/Images/fecilities/facility_3.jpg' }
+          ], 
+          showSection: true 
+        };
+      }
+      if (!dataToSet.faculty || (!dataToSet.faculty.heading && (!dataToSet.faculty.members || dataToSet.faculty.members.length === 0))) {
+        dataToSet.faculty = { 
+          heading: 'Facility Management', 
+          subheading: 'Guided by Experts', 
+          description: 'Our facilities are managed by experienced professionals dedicated to student success.', 
+          members: [
+            { name: 'John Doe', role: 'Facility Manager', image: '/assets/Images/fecilities/life_1.jpg' }
+          ], 
+          showSection: true 
+        };
+      }
+      if (!dataToSet.gallery || (!dataToSet.gallery.heading && (!dataToSet.gallery.images || dataToSet.gallery.images.length === 0))) {
+        dataToSet.gallery = { 
+          heading: 'Facility Gallery', 
+          images: [
+            { title: 'View 1', image: '/assets/Images/fecilities/facility_4.jpg' },
+            { title: 'View 2', image: '/assets/Images/fecilities/facility_5.jpg' },
+            { title: 'View 3', image: '/assets/Images/fecilities/facility_6.jpg' }
+          ], 
+          showSection: true 
+        };
+      }
+      setClub(dataToSet);
       setIsLoading(false);
     }
-  };
+  }, [initialData]);
 
   const openModal = (type, index = -1) => {
     let initialData = {};
@@ -176,70 +197,63 @@ const ManageClubDetails = () => {
     closeModal();
   };
 
-  const handleSave = async () => {
-    if (!facilitiesData || !club) return;
-
-    await confirmAction({
-      title: 'Save Changes?',
-      message: 'Are you sure you want to save the club page details?',
-      confirmText: 'Yes, save it!',
-      variant: 'primary',
-      action: async () => {
-        setIsSaving(true);
-        try {
-          const processImageUpload = async (imageObj) => {
-            if (typeof imageObj === 'object' && imageObj?.file) {
-              if (imageObj.oldUrl) markForDeletion(imageObj.oldUrl);
-              return await uploadFile(imageObj.file, '/upload/facilities');
-            }
-            return typeof imageObj === 'object' ? imageObj?.previewUrl || imageObj?.oldUrl || '' : imageObj;
-          };
-
-          const clubToSave = JSON.parse(JSON.stringify(club));
-          clubToSave.hero.backgroundImage = await processImageUpload(club.hero.backgroundImage);
-          clubToSave.about.image = await processImageUpload(club.about.image);
-          
-          for (let i = 0; i < clubToSave.activities.items.length; i++) {
-             clubToSave.activities.items[i].image = await processImageUpload(club.activities.items[i].image);
-          }
-          for (let i = 0; i < clubToSave.faculty.members.length; i++) {
-             clubToSave.faculty.members[i].image = await processImageUpload(club.faculty.members[i].image);
-          }
-          for (let i = 0; i < clubToSave.gallery.images.length; i++) {
-             clubToSave.gallery.images[i].image = await processImageUpload(club.gallery.images[i].image);
-          }
-
-          await api.put('/cms/facilities-page', { facilityDetails: clubToSave });
-          await executeDeletions();
-          setClub(clubToSave);
-          Toast.fire({ icon: 'success', title: 'Facility details saved successfully!' });
-        } catch (error) {
-          console.error('Error saving settings:', error);
-          Toast.fire({ icon: 'error', title: 'Failed to save facility details.' });
-        } finally {
-          setIsSaving(false);
-        }
-      }
-    });
+  const handleSave = () => {
+    if (!club) return;
+    onSave(club);
   };
 
-  const handleReset = () => {
-    if (window.confirm('Are you sure you want to reset all changes? Any unsaved work will be lost.')) {
-      clearDeletions();
-      if (facilitiesData?.facilityDetails) {
-        setClub(facilitiesData.facilityDetails);
-      } else {
-        setClub({
-          title: 'Facility Details',
-          hero: { title: '', subtitle: '', backgroundImage: '/assets/Images/fecilities/facilities_hero.png' },
-          about: { heading: '', paragraphs: [], image: '/assets/Images/fecilities/facility_1.jpg' },
-          activities: { heading: '', items: [] },
-          faculty: { heading: '', subheading: '', description: '', members: [] },
-          gallery: { heading: '', images: [] }
-        });
+  const handleReset = async () => {
+    await confirmAction({
+      title: 'Reset to Defaults?',
+      message: 'This will reset all your settings to their original template state. You still need to click "Save Details" to apply them.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary',
+      action: async () => {
+        const defaultData = {
+          ...club,
+          hero: {
+            title: 'Welcome to the Club',
+            subtitle: 'Join us to explore and grow.',
+            backgroundImage: '/assets/Images/fecilities/facilities_hero.png',
+            showTextContent: true
+          },
+          about: {
+            heading: 'About This Facility',
+            paragraphs: ['Our facilities are designed to provide the best environment for students.'],
+            image: '/assets/Images/fecilities/facility_1.jpg',
+            showSection: true
+          },
+          activities: {
+            heading: 'Key Features',
+            items: [
+              { title: 'Feature 1', subtitle: 'State of the art', image: '/assets/Images/fecilities/facility_2.jpg' },
+              { title: 'Feature 2', subtitle: 'Modern equipment', image: '/assets/Images/fecilities/facility_3.jpg' }
+            ],
+            showSection: true
+          },
+          faculty: {
+            heading: 'Facility Management',
+            subheading: 'Guided by Experts',
+            description: 'Our facilities are managed by experienced professionals dedicated to student success.',
+            members: [
+              { name: 'John Doe', role: 'Facility Manager', image: '/assets/Images/fecilities/life_1.jpg' }
+            ],
+            showSection: true
+          },
+          gallery: {
+            heading: 'Facility Gallery',
+            images: [
+              { title: 'View 1', image: '/assets/Images/fecilities/facility_4.jpg' },
+              { title: 'View 2', image: '/assets/Images/fecilities/facility_5.jpg' },
+              { title: 'View 3', image: '/assets/Images/fecilities/facility_6.jpg' }
+            ],
+            showSection: true
+          }
+        };
+        setClub(defaultData);
+        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Details to apply.' });
       }
-      Toast.fire({ icon: 'success', title: 'Changes have been reset to last saved state' });
-    }
+    });
   };
 
   if (isLoading) return <AdminSkeleton />;
@@ -283,20 +297,20 @@ const ManageClubDetails = () => {
           title={
             <div className="flex items-center gap-2">
               <button 
-                onClick={() => router.push('/admin/cms/facilities')}
+                onClick={onCancel}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center -ml-2"
-                title="Back to Facilities"
+                title="Back to Clubs"
               >
                 <ArrowLeft className="w-5 h-5 text-gray-600" />
               </button>
-              <span>Edit Facility Details</span>
+              <span>Edit {club.title || 'Club'} Details</span>
             </div>
           }
-          description="Manage the detailed page content for this facility."
+          description="Manage the detailed page content for this specific club/facility."
           onSave={handleSave}
           onReset={handleReset}
           onPreview={() => setIsPreviewModalOpen(true)}
-          isSaving={isSaving || isUploading}
+          saveText="Save Details"
         />
       </div>
 
@@ -361,6 +375,7 @@ const ManageClubDetails = () => {
                       uploadEndpoint="/upload/facilities"
                       defaultImage="/assets/Images/fecilities/facilities_hero.png"
                       label="Upload Hero Background"
+                      deferredUpload={true}
                     />
                   </div>
                 </div>
@@ -454,6 +469,7 @@ const ManageClubDetails = () => {
                         uploadEndpoint="/upload/facilities"
                         defaultImage="/assets/Images/fecilities/facility_1.jpg"
                         label="Upload About Image"
+                        deferredUpload={true}
                       />
                     </div>
                   </div>
@@ -860,6 +876,7 @@ const ManageClubDetails = () => {
               uploadEndpoint="/upload/facilities"
               defaultImage="/assets/Images/fecilities/facility_2.jpg"
               label="Activity Image"
+              deferredUpload={true}
             />
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Activity Title</label>
@@ -895,6 +912,7 @@ const ManageClubDetails = () => {
               uploadEndpoint="/upload/facilities"
               defaultImage="/assets/Images/fecilities/life_1.jpg"
               label="Profile Image"
+              deferredUpload={true}
             />
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Name</label>
@@ -930,6 +948,7 @@ const ManageClubDetails = () => {
               uploadEndpoint="/upload/facilities"
               defaultImage="/assets/Images/fecilities/facility_4.jpg"
               label="Upload Image"
+              deferredUpload={true}
             />
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Image Caption (Optional)</label>
@@ -996,7 +1015,7 @@ const ManageClubDetails = () => {
             >
               <iframe
                 ref={iframeRef}
-                src={`/facilities-details?clubId=${clubId}`}
+                src={`/facilities-details?clubId=${club?._id || ''}`}
                 className="w-full h-full border-0"
                 title="Live Preview"
               />
@@ -1009,4 +1028,4 @@ const ManageClubDetails = () => {
   );
 };
 
-export default ManageClubDetails;
+export default ClubDetailsEditor;

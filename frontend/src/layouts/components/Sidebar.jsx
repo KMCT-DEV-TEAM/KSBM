@@ -68,7 +68,6 @@ const Sidebar = () => {
       icon: <Building2 className="w-5 h-5" />,
       links: [
         { name: 'Manage Facilities Page', path: '/admin/cms/facilities' },
-        { name: 'Manage Facility Details', path: '/admin/cms/facilities-details' },
       ]
     },
     {

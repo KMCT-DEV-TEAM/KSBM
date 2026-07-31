@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import api from '../../api/axios';
@@ -75,6 +76,9 @@ const GalleryImage = ({ item, className = '' }) => {
 };
 
 const FacilityPage = () => {
+  const searchParams = useSearchParams();
+  const clubId = searchParams?.get('clubId');
+
   const [facilityData, setFacilityData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [previewSection, setPreviewSection] = useState(null);
@@ -113,6 +117,16 @@ const FacilityPage = () => {
       try {
         const response = await api.get('/cms/facilities-page', { hideLoader: true });
         const data = response.data;
+        
+        if (clubId && data?.clubs?.items) {
+          const club = data.clubs.items.find(c => c._id === clubId);
+          if (club) {
+            setFacilityData(club);
+            return;
+          }
+        }
+        
+        // Fallback to template if no clubId found
         if (data && data.facilityDetails) {
           setFacilityData(data.facilityDetails);
         }
@@ -123,7 +137,7 @@ const FacilityPage = () => {
       }
     };
     fetchFacilityData();
-  }, [isIframe]);
+  }, [isIframe, clubId]);
 
   if (isLoading) {
     if (isIframe) {
