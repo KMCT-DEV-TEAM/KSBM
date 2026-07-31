@@ -286,6 +286,19 @@ router.post('/privacy', protect, uploadAssets.single('image'), async (req, res) 
   });
 });
 
+router.post('/events', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/events/${req.file.filename}`;
+  
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/events',
+    url: fileUrl,
+  });
+});
+
 router.delete('/', protect, async (req, res) => {
   const { fileUrl } = req.body;
   if (!fileUrl) return res.status(400).json({ message: 'No fileUrl provided' });
@@ -368,6 +381,8 @@ router.delete('/', protect, async (req, res) => {
     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/terms', filename);
   } else if (fileUrl.includes('/assets/Images/privacy/')) {
     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/privacy', filename);
+  } else if (fileUrl.includes('/assets/Images/events/')) {
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/events', filename);
   } else if (fileUrl.includes('/assets/Images/gallery/')) {
     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/gallery', filename);
   } else if (fileUrl.includes('/assets/home/')) {

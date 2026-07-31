@@ -45,7 +45,9 @@ const SingleImageUploader = ({
       'gallery_67.png', 'gallery_58.png', 'gallery_69.png', 'gallery_70.png',
       'gallery_71.png', 'gallery_72.png', 'gallery_73.png', 'gallery_74.png',
       'gallery_75.png', 'gallery_76.png', 'gallery_77.png', 'gallery_78.png',
-      'default-faculty-hero.jpg', 'default-faculty-leader.jpg'
+      'default-faculty-hero.jpg', 'default-faculty-leader.jpg',
+      'library_main.jpg', 'classrooms_main.jpg', 'cafeteria_main.jpg',
+      'hostel_main.jpg', 'computer_lab_main.jpg'
     ];
     return protectedImages.some(img => url.endsWith(img));
   };

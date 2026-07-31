@@ -5,7 +5,6 @@ import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Tr
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
-import ClubsSection from '../../facilities/components/ClubsSection';
 import confirmAction from '../../../utils/confirmAction';
 import { uploadDeferredImage } from './utils/uploadHelper';
 import SingleImageUploader from './components/SingleImageUploader';
@@ -33,15 +32,43 @@ const getDefaultImage = (title) => {
 const ManageClubs = () => {
   const [clubs, setClubs] = useState({ heading: '', description: '', items: [], showSection: true });
   const [deletedImages, setDeletedImages] = useState([]);
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [draggedItemIndex, setDraggedItemIndex] = useState(null);
-  
+
   const [modalConfig, setModalConfig] = useState({ isOpen: false, index: -1, data: null });
+
+  const iframeRef = React.useRef(null);
+
+  useEffect(() => {
+    if (isPreviewModalOpen && iframeRef.current) {
+      const payload = {
+        type: 'LIVE_PREVIEW_UPDATE',
+        data: { clubs },
+        activeTab: 'clubs'
+      };
+
+      const sendUpdate = () => {
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage(payload, '*');
+        }
+      };
+
+      sendUpdate();
+
+      const handleMessage = (e) => {
+        if (e.data?.type === 'iframe-ready') {
+          sendUpdate();
+        }
+      };
+      window.addEventListener('message', handleMessage);
+      return () => window.removeEventListener('message', handleMessage);
+    }
+  }, [isPreviewModalOpen, clubs]);
 
   useEffect(() => {
     fetchSettings();
@@ -87,14 +114,14 @@ const ManageClubs = () => {
               image: finalImageUrl
             };
           }));
-          
+
           const payload = {
             ...clubs,
             items: processedItems
           };
 
           await api.put('/cms/facilities-page', { clubs: payload });
-          
+
           setClubs(payload);
           setDeletedImages([]);
           Toast.fire({ icon: 'success', title: 'Clubs settings saved successfully!' });
@@ -174,10 +201,10 @@ const ManageClubs = () => {
   const saveModal = () => {
     const { index, data } = modalConfig;
     const newItems = [...clubs.items];
-    
+
     if (index >= 0) newItems[index] = data;
     else newItems.push(data);
-    
+
     setClubs({ ...clubs, items: newItems });
     closeModal();
   };
@@ -191,7 +218,7 @@ const ManageClubs = () => {
       action: async () => {
         const item = clubs.items[index];
         const oldUrl = typeof item.image === 'object' ? item.image.oldUrl : item.image;
-        
+
         // Add oldUrl to deletedImages if it's valid and not default
         if (oldUrl && typeof oldUrl === 'string' && !oldUrl.startsWith('http') && oldUrl !== getDefaultImage(item.title)) {
           setDeletedImages(prev => [...prev, oldUrl]);
@@ -224,7 +251,7 @@ const ManageClubs = () => {
             <div className="flex items-center gap-2 text-sm font-bold text-[#697A8D] uppercase tracking-wider">
               <Eye className="w-5 h-5" /> Live Preview
             </div>
-            
+
             <div className="flex items-center bg-white rounded-md border border-gray-200 p-0.5">
               <button onClick={() => setPreviewMode('desktop')} className={`p-1.5 rounded-sm transition-colors ${previewMode === 'desktop' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}>
                 <Monitor className="w-4 h-4" />
@@ -241,9 +268,19 @@ const ManageClubs = () => {
               <X className="w-5 h-5" />
             </button>
           </div>
-          <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
-            <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <ClubsSection data={clubs} />
+          <div className="flex-1 w-full bg-gray-100 flex items-center justify-center p-4 overflow-hidden">
+            <div
+              className={`bg-white rounded-lg shadow-2xl overflow-hidden transition-all duration-300 ease-in-out ${previewMode === 'mobile' ? 'w-[375px] h-[812px]' :
+                  previewMode === 'tablet' ? 'w-[768px] h-[1024px]' :
+                    'w-full h-full'
+                }`}
+            >
+              <iframe
+                ref={iframeRef}
+                src="/facilities"
+                className="w-full h-full border-0"
+                title="Live Preview"
+              />
             </div>
           </div>
         </div>
@@ -301,7 +338,7 @@ const ManageClubs = () => {
         title="Clubs List"
         description="Add and manage the clubs featured in this section"
         actionButton={
-          <button onClick={() => openModal()} className="text-sm font-semibold text-primary flex items-center bg-primary/10 px-3.5 py-2 rounded-lg hover:bg-primary/20 transition-colors">
+          <button onClick={() => openModal()} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">
             <Plus className="w-4 h-4 mr-1.5" /> Add Club
           </button>
         }
@@ -331,16 +368,16 @@ const ManageClubs = () => {
               </div>
 
               <div className="pt-3 border-t border-gray-200/60 flex gap-2">
-                <button 
+                <button
                   onClick={() => openModal(idx)}
-                  className="flex-1 inline-flex items-center justify-center text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors border border-blue-200"
+                  className="flex-1 inline-flex items-center justify-center text-primary hover:bg-primary/10 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors border border-primary/20"
                 >
                   <Pencil className="w-3.5 h-3.5 mr-1" /> Edit Details
                 </button>
                 {item._id ? (
-                  <Link 
+                  <Link
                     href={`/admin/cms/facilities/clubs/${item._id}`}
-                    className="flex-1 inline-flex items-center justify-center bg-[#f8f9fa] border border-[#d9dee3] text-[#697a8d] hover:bg-primary/10 hover:text-primary hover:border-primary/20 px-3 py-1.5 rounded-md font-semibold text-xs transition-colors"
+                    className="flex-1 inline-flex items-center justify-center text-white bg-primary hover:bg-[#151c48] shadow-sm px-3 py-1.5 rounded-md font-semibold text-xs transition-all"
                   >
                     Manage Page
                   </Link>
@@ -365,19 +402,24 @@ const ManageClubs = () => {
         onClose={closeModal}
         title={modalConfig.index >= 0 ? 'Edit Club' : 'Add Club'}
         onSave={saveModal}
+        isSaveDisabled={
+          !modalConfig.data?.title?.trim() ||
+          !modalConfig.data?.description?.trim() ||
+          !modalConfig.data?.image
+        }
       >
         <div className="space-y-4">
-          <SingleImageUploader 
-            imageUrl={modalConfig.data?.image} 
+          <SingleImageUploader
+            imageUrl={modalConfig.data?.image}
             defaultImage={getDefaultImage(modalConfig.data?.title)}
             uploadEndpoint="/upload/facilities"
             deferredUpload={true}
             onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
             onUploadStateChange={setIsUploading}
-            label="Upload Club Image"
+            label="Upload Club Image *"
           />
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Club Name</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Club Name <span className="text-red-500">*</span></label>
             <input
               type="text"
               maxLength={50}
@@ -388,7 +430,7 @@ const ManageClubs = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Short Description</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Short Description <span className="text-red-500">*</span></label>
             <textarea
               rows="3"
               maxLength={150}

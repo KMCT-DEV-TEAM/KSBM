@@ -57,6 +57,26 @@ const EventsHero = ({ hero }) => {
         </div>
       </div>
 
+      {/* Content Overlay (Title and Subtitle) */}
+      {hero?.showTextContent !== false && (
+        <div className="absolute inset-0 z-20 flex flex-col justify-start items-start text-left px-6 md:px-16 lg:px-32 xl:px-48 pt-28 md:pt-36 lg:pt-40 w-full pointer-events-none">
+          <h1 
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-wider mb-4 drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] leading-[1.2] md:w-[60%]"
+            style={{
+              background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            {hero?.title || 'THE SPIRIT OF CULTURE'}
+          </h1>
+          <p className="text-gray-300 text-xs sm:text-sm md:text-base max-w-lg lg:max-w-xl leading-relaxed drop-shadow-[0_2px_5px_rgba(0,0,0,0.8)]">
+            {hero?.subtitle || 'Experience the vibrancy and dynamic energy of our college campus. From cultural extravaganzas to technical symposiums, our events are the heartbeat of student life.'}
+          </p>
+        </div>
+      )}
+
     </section>
   );
 };

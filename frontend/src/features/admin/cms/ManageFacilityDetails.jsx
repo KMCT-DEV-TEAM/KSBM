@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Save, Loader2, ArrowLeft, Plus, Trash2, FileText, Info, Activity, Users, Image as ImageIcon, GripHorizontal } from 'lucide-react';
+import { Save, Loader2, ArrowLeft, Plus, Trash2, FileText, Info, Activity, Users, Image as ImageIcon, GripHorizontal, Eye, Monitor, Tablet, Smartphone, X } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
@@ -56,6 +56,47 @@ const ManageClubDetails = () => {
   const [isTabLoading, setIsTabLoading] = useState(false);
   const tabsContainerRef = useRef(null);
 
+  // Preview Modal States
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [previewMode, setPreviewMode] = useState('desktop');
+  const iframeRef = useRef(null);
+
+  useEffect(() => {
+    if (isPreviewModalOpen && iframeRef.current) {
+      const payload = {
+        type: 'LIVE_PREVIEW_UPDATE',
+        data: club,
+        activeTab: activeTab
+      };
+      
+      const sendUpdate = () => {
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage(payload, '*');
+        }
+      };
+
+      let interval;
+      let count = 0;
+      interval = setInterval(() => {
+        sendUpdate();
+        count++;
+        if (count > 10) clearInterval(interval);
+      }, 500);
+
+      const handleMessage = (e) => {
+        if (e.data?.type === 'iframe-ready') {
+          sendUpdate();
+        }
+      };
+      window.addEventListener('message', handleMessage);
+      
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('message', handleMessage);
+      };
+    }
+  }, [isPreviewModalOpen, club, activeTab]);
+
   const handleTabChange = (tabId) => {
     if (tabId === activeTab || isTabLoading) return;
     setIsTabLoading(true);
@@ -84,8 +125,8 @@ const ManageClubDetails = () => {
           // Default fallback
           setClub({
             title: 'Facility Details',
-            hero: { title: '', subtitle: '', backgroundImage: '' },
-            about: { heading: '', paragraphs: [], image: '' },
+            hero: { title: '', subtitle: '', backgroundImage: '/assets/Images/fecilities/facilities_hero.png' },
+            about: { heading: '', paragraphs: [], image: '/assets/Images/fecilities/facility_1.jpg' },
             activities: { heading: '', items: [] },
             faculty: { heading: '', subheading: '', description: '', members: [] },
             gallery: { heading: '', images: [] }
@@ -190,8 +231,8 @@ const ManageClubDetails = () => {
       } else {
         setClub({
           title: 'Facility Details',
-          hero: { title: '', subtitle: '', backgroundImage: '' },
-          about: { heading: '', paragraphs: [], image: '' },
+          hero: { title: '', subtitle: '', backgroundImage: '/assets/Images/fecilities/facilities_hero.png' },
+          about: { heading: '', paragraphs: [], image: '/assets/Images/fecilities/facility_1.jpg' },
           activities: { heading: '', items: [] },
           faculty: { heading: '', subheading: '', description: '', members: [] },
           gallery: { heading: '', images: [] }
@@ -254,7 +295,7 @@ const ManageClubDetails = () => {
           description="Manage the detailed page content for this facility."
           onSave={handleSave}
           onReset={handleReset}
-          previewUrl={`/facilities-details`}
+          onPreview={() => setIsPreviewModalOpen(true)}
           isSaving={isSaving || isUploading}
         />
       </div>
@@ -804,6 +845,11 @@ const ManageClubDetails = () => {
           modalConfig.type === 'gallery' ? (modalConfig.index >= 0 ? 'Edit Gallery Image' : 'Add Gallery Image') : 'Item Details'
         }
         onSave={saveModal}
+        isSaveDisabled={
+          modalConfig.type === 'activity' ? (!modalConfig.data?.title?.trim() || !modalConfig.data?.image) :
+          modalConfig.type === 'faculty' ? (!modalConfig.data?.name?.trim() || !modalConfig.data?.image) :
+          modalConfig.type === 'gallery' ? (!modalConfig.data?.image) : false
+        }
       >
         {modalConfig.type === 'activity' && (
           <div className="space-y-4">
@@ -812,6 +858,7 @@ const ManageClubDetails = () => {
               onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
               onUploadStateChange={setIsUploading}
               uploadEndpoint="/upload/facilities"
+              defaultImage="/assets/Images/fecilities/facility_2.jpg"
               label="Activity Image"
             />
             <div>
@@ -846,6 +893,7 @@ const ManageClubDetails = () => {
               onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
               onUploadStateChange={setIsUploading}
               uploadEndpoint="/upload/facilities"
+              defaultImage="/assets/Images/fecilities/life_1.jpg"
               label="Profile Image"
             />
             <div>
@@ -880,6 +928,7 @@ const ManageClubDetails = () => {
               onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
               onUploadStateChange={setIsUploading}
               uploadEndpoint="/upload/facilities"
+              defaultImage="/assets/Images/fecilities/facility_4.jpg"
               label="Upload Image"
             />
             <div>
@@ -896,6 +945,66 @@ const ManageClubDetails = () => {
           </div>
         )}
       </AdminModal>
+
+      {/* Preview Modal */}
+      {isPreviewModalOpen && (
+        <div className="fixed inset-0 z-[100] flex flex-col bg-gray-900/80 backdrop-blur-sm">
+          <div className="flex justify-between items-center bg-white px-4 py-3 border-b border-gray-200">
+            <div className="flex items-center gap-2 text-sm font-bold text-[#697A8D] uppercase tracking-wider">
+              <Eye className="w-5 h-5" /> Live Preview - {tabs.find(t => t.id === activeTab)?.label}
+            </div>
+
+            <div className="flex items-center bg-white rounded-md border border-gray-200 p-0.5">
+              <button
+                onClick={() => setPreviewMode('desktop')}
+                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'desktop' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
+                title="Desktop View"
+              >
+                <Monitor className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setPreviewMode('tablet')}
+                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'tablet' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
+                title="Tablet View"
+              >
+                <Tablet className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setPreviewMode('mobile')}
+                className={`p-1.5 rounded-sm transition-colors ${previewMode === 'mobile' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
+                title="Mobile View"
+              >
+                <Smartphone className="w-4 h-4" />
+              </button>
+            </div>
+
+            <button
+              onClick={() => setIsPreviewModalOpen(false)}
+              className="p-2 text-gray-500 hover:text-red-500 bg-gray-100 hover:bg-red-50 rounded-md transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="flex-1 w-full bg-gray-100 flex items-center justify-center p-4 overflow-hidden">
+            <div 
+              className={`bg-white rounded-lg shadow-2xl overflow-hidden transition-all duration-300 ease-in-out ${
+                previewMode === 'mobile' ? 'w-[375px] h-[812px]' :
+                previewMode === 'tablet' ? 'w-[768px] h-[1024px]' :
+                'w-full h-full'
+              }`}
+            >
+              <iframe
+                ref={iframeRef}
+                src={`/facilities-details?clubId=${clubId}`}
+                className="w-full h-full border-0"
+                title="Live Preview"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

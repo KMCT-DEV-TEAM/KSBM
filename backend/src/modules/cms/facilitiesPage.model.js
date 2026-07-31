@@ -30,19 +30,22 @@ const clubItemSchema = new mongoose.Schema({
   hero: {
     title: { type: String, default: '' },
     subtitle: { type: String, default: '' },
-    backgroundImage: { type: String, default: '' }
+    backgroundImage: { type: String, default: '' },
+    showTextContent: { type: Boolean, default: true }
   },
   about: {
     heading: { type: String, default: '' },
     paragraphs: { type: [String], default: [] },
-    image: { type: String, default: '' }
+    image: { type: String, default: '' },
+    showSection: { type: Boolean, default: true }
   },
   activities: {
     heading: { type: String, default: '' },
     items: {
       type: [{ title: String, subtitle: String, image: String }],
       default: []
-    }
+    },
+    showSection: { type: Boolean, default: true }
   },
   faculty: {
     heading: { type: String, default: '' },
@@ -51,14 +54,16 @@ const clubItemSchema = new mongoose.Schema({
     members: {
       type: [{ name: String, role: String, image: String }],
       default: []
-    }
+    },
+    showSection: { type: Boolean, default: true }
   },
   gallery: {
     heading: { type: String, default: '' },
     images: {
       type: [{ title: String, image: String }],
       default: []
-    }
+    },
+    showSection: { type: Boolean, default: true }
   }
 });
 
@@ -72,6 +77,7 @@ const facilitiesPageSchema = new mongoose.Schema(
     institutionalResources: {
       heading: { type: String, default: 'Institutional Resources' },
       description: { type: String, default: 'At KSBM, we believe that a great learning experience begins with an inspiring environment. Our modern campus is thoughtfully designed to support academic excellence, innovation, and holistic student development. From technology-enabled classrooms to dedicated learning spaces, every facility empowers students to learn, collaborate, and grow with confidence.' },
+      showSection: { type: Boolean, default: true }
     },
     library: {
       heading: { type: String, default: 'Library' },
@@ -102,6 +108,7 @@ const facilitiesPageSchema = new mongoose.Schema(
     clubs: {
       heading: { type: String, default: 'Clubs And Association' },
       description: { type: String, default: 'Extracurricular activities at KSBM encompass academic clubs, professional societies, and cultural organizations that play an instrumental role in shaping holistic development. Through active participation in events, students forge long-lasting networks and acquire critical skills that transcend the classroom boundaries.' },
+      showSection: { type: Boolean, default: true },
       items: {
         type: [clubItemSchema],
         default: [
@@ -116,12 +123,14 @@ const facilitiesPageSchema = new mongoose.Schema(
       hero: {
         title: { type: String, default: 'World Class Facilities' },
         subtitle: { type: String, default: 'Experience learning with top-notch infrastructure designed for holistic development.' },
-        backgroundImage: { type: String, default: '/assets/Images/fecilities/facilities_hero.png' }
+        backgroundImage: { type: String, default: '/assets/Images/fecilities/facilities_hero.png' },
+        showTextContent: { type: Boolean, default: true }
       },
       about: {
         heading: { type: String, default: 'About This Facility' },
         paragraphs: { type: [String], default: ['Our facilities are designed to provide the best environment for students.'] },
-        image: { type: String, default: '/assets/Images/fecilities/facility_1.jpg' }
+        image: { type: String, default: '/assets/Images/fecilities/facility_1.jpg' },
+        showSection: { type: Boolean, default: true }
       },
       activities: {
         heading: { type: String, default: 'Key Features' },
@@ -131,7 +140,8 @@ const facilitiesPageSchema = new mongoose.Schema(
             { title: 'Feature 1', subtitle: 'State of the art', image: '/assets/Images/fecilities/facility_2.jpg' },
             { title: 'Feature 2', subtitle: 'Modern equipment', image: '/assets/Images/fecilities/facility_3.jpg' }
           ]
-        }
+        },
+        showSection: { type: Boolean, default: true }
       },
       faculty: {
         heading: { type: String, default: 'Facility Management' },
@@ -142,7 +152,8 @@ const facilitiesPageSchema = new mongoose.Schema(
           default: [
             { name: 'John Doe', role: 'Facility Manager', image: '/assets/Images/fecilities/life_1.jpg' }
           ]
-        }
+        },
+        showSection: { type: Boolean, default: true }
       },
       gallery: {
         heading: { type: String, default: 'Facility Gallery' },
@@ -153,7 +164,8 @@ const facilitiesPageSchema = new mongoose.Schema(
             { title: 'View 2', image: '/assets/Images/fecilities/facility_5.jpg' },
             { title: 'View 3', image: '/assets/Images/fecilities/facility_6.jpg' }
           ]
-        }
+        },
+        showSection: { type: Boolean, default: true }
       }
     }
   },

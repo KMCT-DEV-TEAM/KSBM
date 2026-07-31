@@ -4,10 +4,11 @@ import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2, Plus, Tr
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
-import InstitutionalResourcesSection from '../../facilities/components/InstitutionalResourcesSection';
 import confirmAction from '../../../utils/confirmAction';
 import SingleImageUploader from './components/SingleImageUploader';
 import PageHeader from './components/PageHeader';
+import AdminItemCard from './components/AdminItemCard';
+import AdminModal from './components/AdminModal';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -27,9 +28,42 @@ const ManageInstitutionalResources = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState({ isOpen: false, index: -1, data: null });
   
   // To switch between Main Resource and Other Resources forms
   const [activeTab, setActiveTab] = useState('heading');
+  
+  const iframeRef = React.useRef(null);
+
+  useEffect(() => {
+    if (isPreviewModalOpen && iframeRef.current) {
+      const payload = {
+        type: 'LIVE_PREVIEW_UPDATE',
+        data: {
+          institutionalResources,
+          library,
+          otherResources
+        },
+        activeTab: 'resources'
+      };
+      
+      const sendUpdate = () => {
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage(payload, '*');
+        }
+      };
+
+      sendUpdate();
+
+      const handleMessage = (e) => {
+        if (e.data?.type === 'iframe-ready') {
+          sendUpdate();
+        }
+      };
+      window.addEventListener('message', handleMessage);
+      return () => window.removeEventListener('message', handleMessage);
+    }
+  }, [isPreviewModalOpen, institutionalResources, library, otherResources]);
 
   useEffect(() => {
     fetchSettings();
@@ -70,6 +104,13 @@ const ManageInstitutionalResources = () => {
   };
 
   const handleSave = async () => {
+    // Validate that all items have required fields
+    const invalidItems = otherResources.items.filter(item => !item.title || item.title.trim() === '');
+    if (invalidItems.length > 0) {
+      Toast.fire({ icon: 'error', title: 'Validation Error', text: 'All resource items must have a title.' });
+      return;
+    }
+
     await confirmAction({
       title: 'Save Changes?',
       message: 'Are you sure you want to save these changes?',
@@ -78,11 +119,58 @@ const ManageInstitutionalResources = () => {
       action: async () => {
         setIsSaving(true);
         try {
-          await api.put('/cms/facilities-page', { institutionalResources, library, otherResources });
+          const processImage = async (imgObj) => {
+            if (!imgObj) return '';
+            if (typeof imgObj === 'string') return imgObj;
+            if (imgObj.file) {
+              const formData = new FormData();
+              formData.append('image', imgObj.file);
+              const res = await api.post('/upload/facilities', formData, { 
+                headers: { 'Content-Type': 'multipart/form-data' }, 
+                hideLoader: true 
+              });
+              return res.data.url;
+            }
+            if (imgObj.isDeleted) {
+              if (imgObj.oldUrl && typeof imgObj.oldUrl === 'string' && imgObj.oldUrl !== imgObj.previewUrl && !imgObj.oldUrl.startsWith('blob:') && !imgObj.oldUrl.startsWith('http')) {
+                try {
+                  await api.delete('/upload', { data: { fileUrl: imgObj.oldUrl }, hideLoader: true });
+                } catch(err) {
+                  console.warn('Failed to delete physical image', err);
+                }
+              }
+              return imgObj.previewUrl || '';
+            }
+            return '';
+          };
+
+          const finalLibrary = {
+            ...library,
+            mainImage: await processImage(library.mainImage),
+            thumbnails: await Promise.all((library.thumbnails || []).map(processImage))
+          };
+
+          const finalOtherResources = {
+            ...otherResources,
+            items: await Promise.all(otherResources.items.map(async (item) => {
+              return {
+                ...item,
+                image: await processImage(item.image),
+                thumbnails: await Promise.all((item.thumbnails || []).map(processImage))
+              };
+            }))
+          };
+
+          await api.put('/cms/facilities-page', { institutionalResources, library: finalLibrary, otherResources: finalOtherResources });
+          
+          setLibrary(finalLibrary);
+          setOtherResources(finalOtherResources);
+          
           Toast.fire({ icon: 'success', title: 'Institutional Resources saved successfully!' });
         } catch (error) {
-          console.error('Error saving settings:', error);
-          Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
+          const errMsg = error.response?.data?.error || error.response?.data?.message || error.message;
+          console.warn('Error saving settings: ' + errMsg);
+          Toast.fire({ icon: 'error', title: 'Failed to save settings: ' + errMsg });
         } finally {
           setIsSaving(false);
         }
@@ -105,16 +193,36 @@ const ManageInstitutionalResources = () => {
           heading: 'Library',
           description: 'The KSBM Library serves as a dynamic hub, supporting students, faculty, and researchers with a rich collection of academic resources.',
           description2: 'With an extensive collection of books, journals, and digital resources, the library provides a conducive environment.',
-          mainImage: 'https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=2030&auto=format&fit=crop',
-          thumbnails: ['', '', '']
+          mainImage: '/assets/Images/fecilities/library_main.jpg',
+          thumbnails: [
+            '/assets/Images/fecilities/facility_1.jpg',
+            '/assets/Images/fecilities/facility_2.jpg',
+            '/assets/Images/fecilities/facility_3.jpg'
+          ]
         });
         setOtherResources({
           heading: 'Other Resources',
           items: [
-            { title: 'Classrooms', image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop' },
-            { title: 'Cafeteria', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop' },
-            { title: 'Hostel', image: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?q=80&w=2069&auto=format&fit=crop' },
-            { title: 'Computer Lab', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop' }
+            { 
+              title: 'Classrooms', 
+              image: '/assets/Images/fecilities/classrooms_main.jpg',
+              thumbnails: ['/assets/Images/fecilities/facility_4.jpg', '/assets/Images/fecilities/facility_5.jpg', '/assets/Images/fecilities/facility_6.jpg']
+            },
+            { 
+              title: 'Cafeteria', 
+              image: '/assets/Images/fecilities/cafeteria_main.jpg',
+              thumbnails: ['/assets/Images/fecilities/life_1.jpg', '/assets/Images/fecilities/life_2.jpg', '/assets/Images/fecilities/life_3.jpg']
+            },
+            { 
+              title: 'Hostel', 
+              image: '/assets/Images/fecilities/hostel_main.jpg',
+              thumbnails: ['/assets/Images/fecilities/life_4.jpg', '/assets/Images/fecilities/life_5.jpg', '/assets/Images/fecilities/life_6.jpg']
+            },
+            { 
+              title: 'Computer Lab', 
+              image: '/assets/Images/fecilities/computer_lab_main.jpg',
+              thumbnails: ['/assets/Images/fecilities/life_7.jpg', '/assets/Images/fecilities/life_8.jpg', '/assets/Images/fecilities/facility_1.jpg']
+            }
           ]
         });
         Toast.fire({ icon: 'info', title: 'Settings reset to default.' });
@@ -123,14 +231,27 @@ const ManageInstitutionalResources = () => {
   };
 
   // Other Resources Handlers
-  const handleItemChange = (index, field, value) => {
-    const newItems = [...otherResources.items];
-    newItems[index][field] = value;
-    setOtherResources({ ...otherResources, items: newItems });
+  const openModal = (index = -1) => {
+    if (index >= 0) {
+      setModalConfig({ isOpen: true, index, data: { ...otherResources.items[index] } });
+    } else {
+      setModalConfig({ isOpen: true, index: -1, data: { title: '', image: '', description: '', description2: '', thumbnails: ['', '', ''] } });
+    }
   };
 
-  const addItem = () => {
-    setOtherResources({ ...otherResources, items: [...otherResources.items, { title: '', image: '', description: '', description2: '', thumbnails: ['', '', ''] }] });
+  const closeModal = () => {
+    setModalConfig({ isOpen: false, index: -1, data: null });
+  };
+
+  const saveModal = () => {
+    const { index, data } = modalConfig;
+    const newItems = [...otherResources.items];
+    
+    if (index >= 0) newItems[index] = data;
+    else newItems.push(data);
+    
+    setOtherResources({ ...otherResources, items: newItems });
+    closeModal();
   };
 
   const removeItem = async (index) => {
@@ -183,9 +304,20 @@ const ManageInstitutionalResources = () => {
               <X className="w-5 h-5" />
             </button>
           </div>
-          <div className="flex-1 bg-white overflow-x-auto relative p-4 flex justify-center py-12">
-            <div className={`transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <InstitutionalResourcesSection headerData={institutionalResources} libraryData={library} otherResourcesData={otherResources} />
+          <div className="flex-1 w-full bg-gray-100 flex items-center justify-center p-4 overflow-hidden">
+            <div 
+              className={`bg-white rounded-lg shadow-2xl overflow-hidden transition-all duration-300 ease-in-out ${
+                previewMode === 'mobile' ? 'w-[375px] h-[812px]' :
+                previewMode === 'tablet' ? 'w-[768px] h-[1024px]' :
+                'w-full h-full'
+              }`}
+            >
+              <iframe
+                ref={iframeRef}
+                src="/facilities"
+                className="w-full h-full border-0"
+                title="Live Preview"
+              />
             </div>
           </div>
         </div>
@@ -316,6 +448,9 @@ const ManageInstitutionalResources = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Main Image</label>
                 <SingleImageUploader 
                   imageUrl={library.mainImage} 
+                  defaultImage="/assets/Images/fecilities/library_main.jpg"
+                  deferredUpload={true}
+                  uploadEndpoint="/upload/facilities"
                   onUploadComplete={(url) => setLibrary({ ...library, mainImage: url })}
                   onUploadStateChange={setIsUploading}
                   label="Upload Main Image"
@@ -329,6 +464,9 @@ const ManageInstitutionalResources = () => {
                     <div key={idx} className="space-y-2">
                       <SingleImageUploader 
                         imageUrl={library.thumbnails[idx]} 
+                        defaultImage={`/assets/Images/fecilities/facility_${idx + 1}.jpg`}
+                        deferredUpload={true}
+                        uploadEndpoint="/upload/facilities"
                         onUploadComplete={(url) => {
                           const newThumbs = [...library.thumbnails];
                           newThumbs[idx] = url;
@@ -363,90 +501,40 @@ const ManageInstitutionalResources = () => {
               <div className="pt-4 border-t border-gray-100">
                 <div className="flex justify-between items-center mb-4">
                   <label className="block text-sm font-semibold text-gray-700">Resource Items</label>
-                  <button onClick={addItem} className="text-sm font-semibold text-primary flex items-center bg-primary/10 px-3 py-1.5 rounded-lg hover:bg-primary/20 transition-colors">
+                  <button onClick={() => openModal()} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">
                     <Plus className="w-4 h-4 mr-1" /> Add Resource
                   </button>
                 </div>
                 
                 <div className="space-y-6">
-                  {otherResources.items.map((item, idx) => (
-                    <div key={idx} className="p-6 border border-gray-200 rounded-xl bg-gray-50 relative group transition-colors hover:border-gray-300">
-                      <button onClick={() => removeItem(idx)} className="absolute top-4 right-4 text-red-400 hover:text-red-600 transition-colors bg-white rounded p-1 shadow-sm">
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pr-8">
-                        <div className="space-y-4">
-                          <div>
-                            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Title / Heading</label>
-                            <input
-                              type="text"
-                              maxLength={50}
-                              value={item.title || ''}
-                              onChange={(e) => handleItemChange(idx, 'title', e.target.value)}
-                              className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-primary/20"
-                              placeholder="e.g. Classrooms"
-                            />
-                            <div className="text-right text-xs text-gray-400 mt-1">{(item.title || '').length}/50 characters</div>
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Description Paragraph 1</label>
-                            <textarea
-                              rows="3"
-                              maxLength={400}
-                              value={item.description || ''}
-                              onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
-                              className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-primary/20 resize-none"
-                            />
-                            <div className="text-right text-xs text-gray-400 mt-1">{(item.description || '').length}/400 characters</div>
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Description Paragraph 2</label>
-                            <textarea
-                              rows="3"
-                              maxLength={400}
-                              value={item.description2 || ''}
-                              onChange={(e) => handleItemChange(idx, 'description2', e.target.value)}
-                              className="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-primary/20 resize-none"
-                            />
-                            <div className="text-right text-xs text-gray-400 mt-1">{(item.description2 || '').length}/400 characters</div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {otherResources.items.map((item, idx) => (
+                      <AdminItemCard
+                        key={idx}
+                        title={item.title || `Resource #${idx + 1}`}
+                        onDelete={() => removeItem(idx)}
+                      >
+                        <div className="flex gap-4 p-4 items-start">
+                          {item.image ? (
+                            <img src={typeof item.image === 'object' ? item.image.previewUrl : item.image} alt={item.title} className="w-16 h-16 rounded object-cover border border-gray-200" />
+                          ) : (
+                            <div className="w-16 h-16 rounded bg-gray-100 flex items-center justify-center text-[10px] text-gray-400 font-medium">No Image</div>
+                          )}
+                          <div className="flex-1 min-w-0 space-y-1">
+                            <p className="text-xs text-gray-500 line-clamp-2">{item.description || 'No description provided.'}</p>
                           </div>
                         </div>
-
-                        <div className="space-y-4">
-                          <div>
-                            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Main Image</label>
-                            <SingleImageUploader 
-                              imageUrl={item.image || ''} 
-                              onUploadComplete={(url) => handleItemChange(idx, 'image', url)}
-                              onUploadStateChange={setIsUploading}
-                              label="Upload Main Image"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Thumbnails</label>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                              {[0, 1, 2].map(thumbIdx => (
-                                <SingleImageUploader 
-                                  key={thumbIdx}
-                                  imageUrl={(item.thumbnails || ['', '', ''])[thumbIdx]} 
-                                  onUploadComplete={(url) => {
-                                    const newItems = [...otherResources.items];
-                                    const newThumbs = [...(newItems[idx].thumbnails || ['', '', ''])];
-                                    newThumbs[thumbIdx] = url;
-                                    newItems[idx].thumbnails = newThumbs;
-                                    setOtherResources({ ...otherResources, items: newItems });
-                                  }}
-                                  onUploadStateChange={setIsUploading}
-                                  label={`Thumb ${thumbIdx + 1}`}
-                                />
-                              ))}
-                            </div>
-                          </div>
+                        <div className="pt-3 border-t border-gray-200/60 flex gap-2">
+                          <button
+                            onClick={() => openModal(idx)}
+                            className="flex-1 inline-flex items-center justify-center text-primary hover:bg-primary/10 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors border border-primary/20"
+                          >
+                            Edit Details
+                          </button>
                         </div>
-                      </div>
-                    </div>
-                  ))}
+                      </AdminItemCard>
+                    ))}
+                  </div>
                   {otherResources.items.length === 0 && (
                     <div className="py-8 text-center text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
                       No resources added yet.
@@ -458,6 +546,103 @@ const ManageInstitutionalResources = () => {
           </div>
         )}
       </div>
+
+      <AdminModal
+        isOpen={modalConfig.isOpen}
+        onClose={closeModal}
+        title={modalConfig.index >= 0 ? 'Edit Resource' : 'Add Resource'}
+        onSave={saveModal}
+        isSaveDisabled={
+          !modalConfig.data?.title?.trim() ||
+          !modalConfig.data?.description?.trim() ||
+          !modalConfig.data?.image
+        }
+      >
+        <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Title / Heading <span className="text-red-500">*</span></label>
+              <input
+                type="text"
+                maxLength={50}
+                value={modalConfig.data?.title || ''}
+                onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, title: e.target.value } })}
+                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-primary/20"
+                placeholder="e.g. Classrooms"
+              />
+              <div className="text-right text-xs text-gray-400 mt-1">{(modalConfig.data?.title || '').length}/50 characters</div>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Description Paragraph 1 <span className="text-red-500">*</span></label>
+              <textarea
+                rows="3"
+                maxLength={400}
+                value={modalConfig.data?.description || ''}
+                onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, description: e.target.value } })}
+                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-primary/20 resize-none"
+              />
+              <div className="text-right text-xs text-gray-400 mt-1">{(modalConfig.data?.description || '').length}/400 characters</div>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Description Paragraph 2 (Optional)</label>
+              <textarea
+                rows="3"
+                maxLength={400}
+                value={modalConfig.data?.description2 || ''}
+                onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, description2: e.target.value } })}
+                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-primary/20 resize-none"
+              />
+              <div className="text-right text-xs text-gray-400 mt-1">{(modalConfig.data?.description2 || '').length}/400 characters</div>
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-gray-100 space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Main Image <span className="text-red-500">*</span></label>
+              <SingleImageUploader 
+                imageUrl={modalConfig.data?.image || ''} 
+                defaultImage={modalConfig.data?.title === 'Classrooms' ? '/assets/Images/fecilities/classrooms_main.jpg' : 
+                              modalConfig.data?.title === 'Cafeteria' ? '/assets/Images/fecilities/cafeteria_main.jpg' : 
+                              modalConfig.data?.title === 'Hostel' ? '/assets/Images/fecilities/hostel_main.jpg' : 
+                              modalConfig.data?.title === 'Computer Lab' ? '/assets/Images/fecilities/computer_lab_main.jpg' : '/assets/Images/fecilities/facility_1.jpg'}
+                deferredUpload={true}
+                uploadEndpoint="/upload/facilities"
+                onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
+                onUploadStateChange={setIsUploading}
+                label="Upload Main Image"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Thumbnails</label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {[0, 1, 2].map(thumbIdx => {
+                  const defaultThumbs = modalConfig.data?.title === 'Classrooms' ? ['/assets/Images/fecilities/facility_4.jpg', '/assets/Images/fecilities/facility_5.jpg', '/assets/Images/fecilities/facility_6.jpg'] :
+                                        modalConfig.data?.title === 'Cafeteria' ? ['/assets/Images/fecilities/life_1.jpg', '/assets/Images/fecilities/life_2.jpg', '/assets/Images/fecilities/life_3.jpg'] :
+                                        modalConfig.data?.title === 'Hostel' ? ['/assets/Images/fecilities/life_4.jpg', '/assets/Images/fecilities/life_5.jpg', '/assets/Images/fecilities/life_6.jpg'] :
+                                        modalConfig.data?.title === 'Computer Lab' ? ['/assets/Images/fecilities/life_7.jpg', '/assets/Images/fecilities/life_8.jpg', '/assets/Images/fecilities/facility_1.jpg'] :
+                                        ['/assets/Images/fecilities/facility_1.jpg', '/assets/Images/fecilities/facility_2.jpg', '/assets/Images/fecilities/facility_3.jpg'];
+                  return (
+                    <SingleImageUploader 
+                      key={thumbIdx}
+                      imageUrl={(modalConfig.data?.thumbnails || ['', '', ''])[thumbIdx]} 
+                      defaultImage={defaultThumbs[thumbIdx]}
+                      deferredUpload={true}
+                      uploadEndpoint="/upload/facilities"
+                      onUploadComplete={(url) => {
+                        const newThumbs = [...(modalConfig.data?.thumbnails || ['', '', ''])];
+                        newThumbs[thumbIdx] = url;
+                        setModalConfig({ ...modalConfig, data: { ...modalConfig.data, thumbnails: newThumbs } });
+                      }}
+                      onUploadStateChange={setIsUploading}
+                      label={`Thumb ${thumbIdx + 1}`}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </AdminModal>
     </div>
   );
 };

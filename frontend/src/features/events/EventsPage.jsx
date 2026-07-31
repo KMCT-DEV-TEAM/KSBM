@@ -13,9 +13,21 @@ import EventsEssence from './components/EventsEssence';
 import EventsStayConnected from './components/EventsStayConnected';
 import EventsMoments from './components/EventsMoments';
 
+// Skeleton Components
+import {
+  HeroSkeleton,
+  AboutSkeleton,
+  UpcomingSkeleton,
+  CarouselSkeleton,
+  EssenceSkeleton,
+  StayConnectedSkeleton,
+  MomentsSkeleton,
+} from './components/EventsPageSkeleton';
+
 const EventsPage = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [pageData, setPageData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [carouselIndex, setCarouselIndex] = useState(0);
 
   useEffect(() => {
@@ -25,6 +37,8 @@ const EventsPage = () => {
         setPageData(response.data);
       } catch (error) {
         console.error('Error fetching events page data:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchData();
@@ -57,21 +71,54 @@ const EventsPage = () => {
     <div className="min-h-screen flex flex-col bg-[#050505] text-white overflow-x-hidden font-sans">
       <Header />
 
-      <EventsHero hero={hero} />
-      <EventsAbout about={about} />
-      <EventsUpcoming upcomingEvents={upcomingEvents} />
-      <EventsCarousel
-        highlightedPrograms={highlightedPrograms}
-        carouselIndex={carouselIndex}
-        setCarouselIndex={setCarouselIndex}
-      />
-      <EventsEssence
-        essenceOfCulture={essenceOfCulture}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
-      <EventsStayConnected stayConnected={stayConnected} />
-      <EventsMoments momentsCaptured={momentsCaptured} />
+      {/* ── Hero Banner ── */}
+      {isLoading ? <HeroSkeleton /> : <EventsHero hero={hero} />}
+
+      {/* ── About Section ── */}
+      {about?.showSection !== false && (
+        isLoading ? <AboutSkeleton /> : <EventsAbout about={about} />
+      )}
+
+      {/* ── Upcoming Events ── */}
+      {upcomingEvents?.showSection !== false && (
+        isLoading ? <UpcomingSkeleton /> : <EventsUpcoming upcomingEvents={upcomingEvents} />
+      )}
+
+      {/* ── Highlighted Programs (Carousel) ── */}
+      {highlightedPrograms?.showSection !== false && (
+        isLoading ? (
+          <CarouselSkeleton />
+        ) : (
+          <EventsCarousel
+            highlightedPrograms={highlightedPrograms}
+            carouselIndex={carouselIndex}
+            setCarouselIndex={setCarouselIndex}
+          />
+        )
+      )}
+
+      {/* ── Essence of Culture ── */}
+      {essenceOfCulture?.showSection !== false && (
+        isLoading ? (
+          <EssenceSkeleton />
+        ) : (
+          <EventsEssence
+            essenceOfCulture={essenceOfCulture}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+        )
+      )}
+
+      {/* ── Stay Connected ── */}
+      {stayConnected?.showSection !== false && (
+        isLoading ? <StayConnectedSkeleton /> : <EventsStayConnected stayConnected={stayConnected} />
+      )}
+
+      {/* ── Moments Captured ── */}
+      {momentsCaptured?.showSection !== false && (
+        isLoading ? <MomentsSkeleton /> : <EventsMoments momentsCaptured={momentsCaptured} />
+      )}
 
       {/* Custom Events Footer */}
       <EventsFooter footerGraphic={footerGraphic} />

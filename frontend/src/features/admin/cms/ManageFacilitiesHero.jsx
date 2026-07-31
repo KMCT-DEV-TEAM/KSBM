@@ -1,10 +1,9 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Save, RefreshCw, Eye, Monitor, Smartphone, Tablet, X, Loader2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
-import FacilitiesHero from '../../facilities/components/FacilitiesHero';
 import confirmAction from '../../../utils/confirmAction';
 import { uploadDeferredImage } from './utils/uploadHelper';
 import HeroImageUploader from './components/HeroImageUploader';
@@ -27,6 +26,33 @@ const ManageFacilitiesHero = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const iframeRef = useRef(null);
+
+  useEffect(() => {
+    if (isPreviewModalOpen && iframeRef.current) {
+      const payload = {
+        type: 'LIVE_PREVIEW_UPDATE',
+        data: { hero },
+        activeTab: 'hero'
+      };
+      
+      const sendUpdate = () => {
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage(payload, '*');
+        }
+      };
+
+      sendUpdate();
+
+      const handleMessage = (e) => {
+        if (e.data?.type === 'iframe-ready') {
+          sendUpdate();
+        }
+      };
+      window.addEventListener('message', handleMessage);
+      return () => window.removeEventListener('message', handleMessage);
+    }
+  }, [isPreviewModalOpen, hero]);
 
   useEffect(() => {
     fetchSettings();
@@ -122,9 +148,20 @@ const ManageFacilitiesHero = () => {
               <X className="w-5 h-5" />
             </button>
           </div>
-          <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
-            <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <FacilitiesHero data={hero} />
+          <div className="flex-1 w-full bg-gray-100 flex items-center justify-center p-4 overflow-hidden">
+            <div 
+              className={`bg-white rounded-lg shadow-2xl overflow-hidden transition-all duration-300 ease-in-out ${
+                previewMode === 'mobile' ? 'w-[375px] h-[812px]' :
+                previewMode === 'tablet' ? 'w-[768px] h-[1024px]' :
+                'w-full h-full'
+              }`}
+            >
+              <iframe
+                ref={iframeRef}
+                src="/facilities"
+                className="w-full h-full border-0"
+                title="Live Preview"
+              />
             </div>
           </div>
         </div>

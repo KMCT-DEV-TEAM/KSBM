@@ -109,6 +109,11 @@ if (!fs.existsSync(privacyAssetsDir)) {
   fs.mkdirSync(privacyAssetsDir, { recursive: true });
 }
 
+const eventsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/events');
+if (!fs.existsSync(eventsAssetsDir)) {
+  fs.mkdirSync(eventsAssetsDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     console.log('UPLOAD URL:', req.originalUrl);
@@ -151,6 +156,8 @@ const storage = multer.diskStorage({
       targetDir = termsAssetsDir;
     } else if (req.originalUrl.includes('/upload/privacy')) {
       targetDir = privacyAssetsDir;
+    } else if (req.originalUrl.includes('/upload/events')) {
+      targetDir = eventsAssetsDir;
     } else if (req.originalUrl.includes('/upload/gallery')) {
       targetDir = galleryAssetsDir;
     }
