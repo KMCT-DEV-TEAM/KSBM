@@ -9,6 +9,7 @@ import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
 import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
+import { uploadDeferredImage } from './utils/uploadHelper';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -25,6 +26,7 @@ const ManageEventsPage = () => {
   const [previewMode, setPreviewMode] = useState('desktop');
   const [activeTab, setActiveTab] = useState('hero');
   const tabsContainerRef = useRef(null);
+  const iframeRef = useRef(null);
 
   const tabs = [
     { id: 'hero', label: 'Hero Banner', icon: <FileText className="w-4 h-4" /> },
@@ -34,7 +36,6 @@ const ManageEventsPage = () => {
     { id: 'essence', label: 'Essence of Culture', icon: <Music className="w-4 h-4" /> },
     { id: 'stayConnected', label: 'Stay Connected', icon: <Share2 className="w-4 h-4" /> },
     { id: 'moments', label: 'Moments Captured', icon: <Camera className="w-4 h-4" /> },
-    { id: 'footer', label: 'Footer Graphic', icon: <Layout className="w-4 h-4" /> }
   ];
 
   const defaults = {
@@ -87,11 +88,141 @@ const ManageEventsPage = () => {
       images: [
         { img: 'https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop' }
       ]
-    },
-    footerGraphic: '/assets/Images/Group 339.png'
+    }
   };
 
   const [formData, setFormData] = useState(defaults);
+  const [dragInfo, setDragInfo] = useState(null);
+  const [pendingUploads, setPendingUploads] = useState([]);
+  const [imagesToDelete, setImagesToDelete] = useState([]);
+
+  // Modal State
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [addModalType, setAddModalType] = useState(null);
+  const [modalData, setModalData] = useState({});
+  const [modalFile, setModalFile] = useState(null);
+  const [modalImageUrl, setModalImageUrl] = useState('');
+
+  useEffect(() => {
+    if (isPreviewModalOpen && iframeRef.current) {
+      let componentName = '';
+      let payload = null;
+      
+      switch (activeTab) {
+        case 'hero': componentName = 'EventsHero'; payload = { hero: formData.hero }; break;
+        case 'about': componentName = 'EventsAbout'; payload = { about: formData.about }; break;
+        case 'upcoming': componentName = 'EventsUpcoming'; payload = { upcomingEvents: formData.upcomingEvents }; break;
+        case 'highlighted': componentName = 'EventsCarousel'; payload = { highlightedPrograms: formData.highlightedPrograms }; break;
+        case 'essence': componentName = 'EventsEssence'; payload = { essenceOfCulture: formData.essenceOfCulture }; break;
+        case 'stayConnected': componentName = 'EventsStayConnected'; payload = { stayConnected: formData.stayConnected }; break;
+        case 'moments': componentName = 'EventsMoments'; payload = { momentsCaptured: formData.momentsCaptured }; break;
+      }
+      
+      const sendData = () => {
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage({ type: 'preview-cms-data', componentName, payload }, '*');
+        }
+      };
+      
+      sendData();
+      
+      let count = 0;
+      const interval = setInterval(() => {
+        sendData();
+        count++;
+        if (count > 10) clearInterval(interval);
+      }, 500);
+      
+      return () => clearInterval(interval);
+    }
+  }, [formData, activeTab, isPreviewModalOpen]);
+
+  const openAddModal = (section, key, defaultTemplate) => {
+    setAddModalType({ section, key });
+    setModalData(defaultTemplate);
+    setModalFile(null);
+    setModalImageUrl('');
+    setIsAddModalOpen(true);
+  };
+
+  const handleModalSave = () => {
+    if (!addModalType) return;
+    const { section, key } = addModalType;
+    setFormData(prev => {
+      const arr = [...(prev[section][key] || [])];
+      const newIndex = arr.length;
+      
+      if (modalFile) {
+        setPendingUploads(p => {
+          const filtered = p.filter(x => x.path !== `${section}.${key}.${newIndex}.img`);
+          return [...filtered, { path: `${section}.${key}.${newIndex}.img`, file: modalFile }];
+        });
+      }
+      
+      arr.push({ ...modalData, img: modalImageUrl || modalData.img });
+      
+      return {
+        ...prev,
+        [section]: {
+          ...prev[section],
+          [key]: arr
+        }
+      };
+    });
+    setIsAddModalOpen(false);
+  };
+
+  const handleDragStart = (e, section, key, index) => {
+    setDragInfo({ section, key, index });
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(() => { if (e.target) e.target.style.opacity = '0.5'; }, 0);
+  };
+
+  const handleDragEnd = (e) => {
+    if (e.target) e.target.style.opacity = '1';
+    setDragInfo(null);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e, targetSection, targetKey, targetIndex) => {
+    e.preventDefault();
+    if (!dragInfo || dragInfo.section !== targetSection || dragInfo.key !== targetKey || dragInfo.index === targetIndex) return;
+    setFormData(prev => {
+      const arr = [...(prev[targetSection][targetKey] || [])];
+      const draggedItem = arr[dragInfo.index];
+      arr.splice(dragInfo.index, 1);
+      arr.splice(targetIndex, 0, draggedItem);
+      return { ...prev, [targetSection]: { ...prev[targetSection], [targetKey]: arr } };
+    });
+    setDragInfo(null);
+  };
+
+  const handleImageUploadChange = (path, url, file, currentUrl, defaultUrl) => {
+    if (url !== currentUrl && currentUrl && !currentUrl.startsWith('blob:') && currentUrl !== defaultUrl) {
+      setImagesToDelete(prev => [...prev, currentUrl]);
+    }
+    if (file) {
+      setPendingUploads(prev => {
+        const filtered = prev.filter(p => p.path !== path);
+        return [...filtered, { path, file }];
+      });
+    }
+    const keys = path.split('.');
+    setFormData(prev => {
+      const newData = JSON.parse(JSON.stringify(prev));
+      let current = newData;
+      for (let i = 0; i < keys.length - 1; i++) {
+        current = current[keys[i]];
+      }
+      current[keys[keys.length - 1]] = url;
+      return newData;
+    });
+  };
+
 
   useEffect(() => {
     fetchSettings();
@@ -151,7 +282,27 @@ const ManageEventsPage = () => {
       action: async () => {
         setSaving(true);
         try {
-          await api.put('/cms/events-page', formData, { hideLoader: true });
+          let updatedData = JSON.parse(JSON.stringify(formData));
+          for (const upload of pendingUploads) {
+            const uploadedUrl = await uploadDeferredImage({ file: upload.file }, '/upload/events');
+            if (uploadedUrl) {
+              const keys = upload.path.split('.');
+              let current = updatedData;
+              for (let i = 0; i < keys.length - 1; i++) {
+                current = current[keys[i]];
+              }
+              current[keys[keys.length - 1]] = uploadedUrl;
+            }
+          }
+          for (const url of imagesToDelete) {
+            if (!url.startsWith('blob:') && url.includes('/assets/Images/events/')) {
+              await api.delete('/upload', { data: { fileUrl: url }, hideLoader: true }).catch(() => {});
+            }
+          }
+          setPendingUploads([]);
+          setImagesToDelete([]);
+          await api.put('/cms/events-page', updatedData, { hideLoader: true });
+          setFormData(updatedData);
           Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
         } catch (error) {
           console.error('Error saving settings:', error);
@@ -188,13 +339,27 @@ const ManageEventsPage = () => {
   };
 
   const handleRemoveArrayItem = (section, key, index) => {
-    setFormData(prev => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [key]: prev[section][key].filter((_, i) => i !== index)
+    confirmAction({
+      title: 'Remove Item',
+      message: 'Are you sure you want to remove this item? This action cannot be undone after saving.',
+      confirmText: 'Yes, remove',
+      variant: 'danger',
+      action: () => {
+        setFormData(prev => {
+          const itemToRemove = prev[section][key][index];
+          if (itemToRemove && itemToRemove.img && !itemToRemove.img.startsWith('blob:') && !itemToRemove.img.startsWith('http')) {
+            setImagesToDelete(old => [...old, itemToRemove.img]);
+          }
+          return {
+            ...prev,
+            [section]: {
+              ...prev[section],
+              [key]: prev[section][key].filter((_, i) => i !== index)
+            }
+          };
+        });
       }
-    }));
+    });
   };
 
   const handleMoveArrayItem = (section, key, index, direction) => {
@@ -210,6 +375,24 @@ const ManageEventsPage = () => {
   };
 
   if (loading) return <AdminSkeleton />;
+
+  const VisibilityToggle = ({ section }) => (
+    <label className="flex items-center cursor-pointer">
+      <div className="relative">
+        <input
+          type="checkbox"
+          className="sr-only"
+          checked={formData[section]?.showSection !== false}
+          onChange={(e) => setFormData({ ...formData, [section]: { ...formData[section], showSection: e.target.checked } })}
+        />
+        <div className={`block w-10 h-6 rounded-full transition-colors ${formData[section]?.showSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+        <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${formData[section]?.showSection !== false ? 'transform translate-x-4' : ''}`}></div>
+      </div>
+      <span className="ml-3 text-sm font-medium text-gray-700">
+        {formData[section]?.showSection !== false ? 'Visible' : 'Hidden'}
+      </span>
+    </label>
+  );
 
   return (
     <div className="space-y-6 w-full">
@@ -235,9 +418,9 @@ const ManageEventsPage = () => {
             </div>
             <button onClick={() => setIsPreviewModalOpen(false)} className="p-2 text-gray-500 hover:text-red-500 bg-gray-100 hover:bg-red-50 rounded-md transition-colors"><X className="w-5 h-5" /></button>
           </div>
-          <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center items-end">
-            <div className={`bg-white shadow-xl w-full h-full mt-auto transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <iframe src="/events" className="w-full h-full border-0" title="Events Preview" />
+          <div className="flex-1 bg-gray-100 overflow-hidden relative flex justify-center items-center">
+            <div className={`bg-white shadow-2xl transition-all duration-300 h-[85vh] ${previewMode === 'desktop' ? 'w-[100%] max-w-[1920px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
+              <iframe ref={iframeRef} src="/preview/cms" className="w-full h-full border-0" title="Events Preview" />
             </div>
           </div>
         </div>
@@ -279,51 +462,70 @@ const ManageEventsPage = () => {
           {/* Hero Section */}
           {activeTab === 'hero' && (
             <SectionForm title="Hero Banner">
+              <div className="mb-8 pb-4 border-b border-gray-100">
+                <div className="flex justify-between items-center bg-gray-50 p-4 rounded-xl border border-gray-100">
+                  <h3 className="text-sm font-bold text-[#1e2869]">Text Content Visibility</h3>
+                  <label className="flex items-center cursor-pointer">
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        className="sr-only"
+                        checked={formData.hero?.showTextContent !== false}
+                        onChange={(e) => setFormData({ ...formData, hero: { ...formData.hero, showTextContent: e.target.checked } })}
+                      />
+                      <div className={`block w-10 h-6 rounded-full transition-colors ${formData.hero?.showTextContent !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${formData.hero?.showTextContent !== false ? 'transform translate-x-4' : ''}`}></div>
+                    </div>
+                    <span className="ml-3 text-sm font-medium text-gray-700">
+                      {formData.hero?.showTextContent !== false ? 'Visible' : 'Hidden'}
+                    </span>
+                  </label>
+                </div>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-gray-500">Page Title</label>
-                    <input type="text" value={formData.hero.title} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, title: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                    <label className="text-xs font-semibold text-gray-500">Page Title <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
+                    <input type="text" maxLength={50} value={formData.hero.title} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, title: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.hero.title || '')).length}/50 characters</div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-gray-500">Subtitle</label>
-                    <textarea rows={4} value={formData.hero.subtitle} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, subtitle: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
+                    <label className="text-xs font-semibold text-gray-500">Subtitle <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 200 chars)</span></label>
+                    <textarea rows={4} maxLength={200} value={formData.hero.subtitle} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, subtitle: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.hero.subtitle || '')).length}/200 characters</div>
                   </div>
                 </div>
-                <div>
-                  <label className="text-xs font-semibold text-gray-500 mb-2 block">Hero Background Image</label>
-                  <LogoUploader
-                    label="Banner Background"
-                    currentImage={formData.hero.backgroundImage}
-                    onImageSelected={(url) => setFormData({ ...formData, hero: { ...formData.hero, backgroundImage: url } })}
-                  />
-                </div>
+                
               </div>
             </SectionForm>
           )}
 
           {/* About Section */}
           {activeTab === 'about' && (
-            <SectionForm title="About Section">
+            <SectionForm title="About Section" actionButton={<VisibilityToggle section="about" />}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-gray-500">Subheading (Ribbon)</label>
-                      <input type="text" value={formData.about?.subheading || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, subheading: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <label className="text-xs font-semibold text-gray-500">Subheading (Ribbon) <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 30 chars)</span></label>
+                      <input type="text" maxLength={30} value={formData.about?.subheading || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, subheading: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.about?.subheading || '')).length}/30 characters</div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-gray-500">Main Heading</label>
-                      <input type="text" value={formData.about?.heading || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, heading: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <label className="text-xs font-semibold text-gray-500">Main Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
+                      <input type="text" maxLength={50} value={formData.about?.heading || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, heading: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.about?.heading || '')).length}/50 characters</div>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-gray-500">Paragraph 1</label>
-                    <textarea rows={3} value={formData.about?.paragraph1 || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, paragraph1: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
+                    <label className="text-xs font-semibold text-gray-500">Paragraph 1 <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 1000 chars)</span></label>
+                    <textarea rows={3} maxLength={1000} value={formData.about?.paragraph1 || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, paragraph1: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.about?.paragraph1 || '')).length}/1000 characters</div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-gray-500">Paragraph 2</label>
-                    <textarea rows={3} value={formData.about?.paragraph2 || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, paragraph2: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
+                    <label className="text-xs font-semibold text-gray-500">Paragraph 2 <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 1000 chars)</span></label>
+                    <textarea rows={3} maxLength={1000} value={formData.about?.paragraph2 || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, paragraph2: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.about?.paragraph2 || '')).length}/1000 characters</div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -338,10 +540,10 @@ const ManageEventsPage = () => {
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-500 mb-2 block">About Featured Image</label>
-                  <LogoUploader
+                  <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
                     label="About Section Image"
                     currentImage={formData.about?.image}
-                    onImageSelected={(url) => setFormData({ ...formData, about: { ...formData.about, image: url } })}
+                    defaultImage={defaults.about.image} onChange={(url, file) => handleImageUploadChange('about.image', url, file, formData.about?.image, defaults.about.image)}
                   />
                 </div>
               </div>
@@ -350,22 +552,23 @@ const ManageEventsPage = () => {
 
           {/* Upcoming Events */}
           {activeTab === 'upcoming' && (
-            <SectionForm title="Upcoming Events">
+            <SectionForm title="Upcoming Events" actionButton={<VisibilityToggle section="upcomingEvents" />}>
               <div className="space-y-4">
                 <div className="space-y-2 mb-6">
-                  <label className="text-xs font-semibold text-gray-500">Section Heading</label>
-                  <input type="text" value={formData.upcomingEvents.heading} onChange={e => setFormData({ ...formData, upcomingEvents: { ...formData.upcomingEvents, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                  <label className="text-xs font-semibold text-gray-500">Section Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
+                  <input type="text" maxLength={50} value={formData.upcomingEvents.heading} onChange={e => setFormData({ ...formData, upcomingEvents: { ...formData.upcomingEvents, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.upcomingEvents.heading || '')).length}/50 characters</div>
                 </div>
 
                 <div className="flex justify-end mb-4">
-                  <button onClick={() => handleAddArrayItem('upcomingEvents', 'events', { title: '', description: '', date: '', month: '', img: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
+                  <button onClick={() => openAddModal('upcomingEvents', 'events', { title: '', description: '', date: '', month: '', img: '' })} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">
                     <Plus className="w-4 h-4" /> Add Event
                   </button>
                 </div>
 
                 <div className="space-y-4">
                   {formData.upcomingEvents.events?.map((item, idx) => (
-                    <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50/50 relative group hover:border-primary/30 transition-all">
+                    <div key={idx} draggable onDragStart={(e) => handleDragStart(e, 'upcomingEvents', 'events', idx)} onDragEnd={handleDragEnd} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'upcomingEvents', 'events', idx)} className="p-4 rounded-md border border-gray-200 bg-gray-50/50 relative group hover:border-primary/30 transition-all cursor-move">
                       <div className="flex items-center justify-between mb-3">
                         <span className="text-xs font-bold text-gray-500 uppercase">Event #{idx + 1}</span>
                         <div className="flex items-center gap-1">
@@ -378,29 +581,33 @@ const ManageEventsPage = () => {
                       <div className="flex flex-col md:flex-row gap-5">
                         <div className="w-full md:w-1/3 shrink-0">
                           <label className="text-xs font-semibold text-gray-500 mb-2 block">Event Poster/Image</label>
-                          <LogoUploader
+                          <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
                             label="Upload Poster"
                             currentImage={item.img}
-                            onImageSelected={(url) => handleUpdateArray('upcomingEvents', 'events', idx, 'img', url)}
+                            defaultImage={defaults.upcomingEvents.events[0]?.img} onChange={(url, file) => handleImageUploadChange(`upcomingEvents.events.${idx}.img`, url, file, item.img, defaults.upcomingEvents.events[0]?.img)}
                           />
                         </div>
                         <div className="flex-1 space-y-4">
                           <div className="space-y-1">
-                            <label className="text-xs font-semibold text-gray-500">Event Title</label>
-                            <input type="text" value={item.title} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'title', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. CELEBRITY VISIT" />
+                            <label className="text-xs font-semibold text-gray-500">Event Title <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
+                            <input type="text" maxLength={50} value={item.title} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'title', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. CELEBRITY VISIT" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.title || '')).length}/50 characters</div>
                           </div>
                           <div className="space-y-1">
-                            <label className="text-xs font-semibold text-gray-500">Event Description</label>
-                            <textarea rows={3} value={item.description} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'description', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                            <label className="text-xs font-semibold text-gray-500">Event Description <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 150 chars)</span></label>
+                            <textarea rows={3} maxLength={150} value={item.description} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'description', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.description || '')).length}/150 characters</div>
                           </div>
                           <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1">
-                              <label className="text-xs font-semibold text-gray-500">Date</label>
-                              <input type="text" value={item.date} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'date', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. 12" />
+                              <label className="text-xs font-semibold text-gray-500">Date <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 2 chars)</span></label>
+                              <input type="text" maxLength={2} value={item.date} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'date', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. 12" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.date || '')).length}/2 characters</div>
                             </div>
                             <div className="space-y-1">
-                              <label className="text-xs font-semibold text-gray-500">Month</label>
-                              <input type="text" value={item.month} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'month', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. OCT" />
+                              <label className="text-xs font-semibold text-gray-500">Month <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 3 chars)</span></label>
+                              <input type="text" maxLength={3} value={item.month} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'month', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. OCT" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.month || '')).length}/3 characters</div>
                             </div>
                           </div>
                         </div>
@@ -414,29 +621,25 @@ const ManageEventsPage = () => {
 
           {/* Highlighted Programs Carousel */}
           {activeTab === 'highlighted' && (
-            <SectionForm title="Highlighted Programs (3D Carousel)">
+            <SectionForm title="Highlighted Programs (3D Carousel)" actionButton={<VisibilityToggle section="highlightedPrograms" />}>
               <div className="space-y-4">
                 <div className="space-y-2 mb-6">
-                  <label className="text-xs font-semibold text-gray-500">Section Heading</label>
-                  <input type="text" value={formData.highlightedPrograms.heading} onChange={e => setFormData({ ...formData, highlightedPrograms: { ...formData.highlightedPrograms, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                  <label className="text-xs font-semibold text-gray-500">Section Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
+                  <input type="text" maxLength={50} value={formData.highlightedPrograms.heading} onChange={e => setFormData({ ...formData, highlightedPrograms: { ...formData.highlightedPrograms, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.highlightedPrograms.heading || '')).length}/50 characters</div>
                 </div>
 
-                <div className="flex justify-end mb-4">
-                  <button onClick={() => handleAddArrayItem('highlightedPrograms', 'images', { img: '', alt: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
-                    <Plus className="w-4 h-4" /> Add Image
-                  </button>
-                </div>
+
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {formData.highlightedPrograms.images?.map((item, idx) => (
-                    <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group">
+                    <div key={idx} draggable onDragStart={(e) => handleDragStart(e, 'highlightedPrograms', 'images', idx)} onDragEnd={handleDragEnd} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'highlightedPrograms', 'images', idx)} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group cursor-move">
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-xs font-bold text-gray-500 uppercase">Image #{idx + 1}</span>
-                        <button onClick={() => handleRemoveArrayItem('highlightedPrograms', 'images', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
                       </div>
-                      <LogoUploader
+                      <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
                         currentImage={item.img}
-                        onImageSelected={(url) => handleUpdateArray('highlightedPrograms', 'images', idx, 'img', url)}
+                        defaultImage={defaults.highlightedPrograms.images[0]?.img} onChange={(url, file) => handleImageUploadChange(`highlightedPrograms.images.${idx}.img`, url, file, item.img, defaults.highlightedPrograms.images[0]?.img)}
                       />
                     </div>
                   ))}
@@ -447,41 +650,45 @@ const ManageEventsPage = () => {
           
           {/* Essence of Culture */}
           {activeTab === 'essence' && (
-            <SectionForm title="Essence of Culture (Photo Collage)">
+            <SectionForm title="Essence of Culture (Photo Collage)" actionButton={<VisibilityToggle section="essenceOfCulture" />}>
               <div className="space-y-4">
                 <div className="space-y-2 mb-6">
-                  <label className="text-xs font-semibold text-gray-500">Section Heading</label>
-                  <input type="text" value={formData.essenceOfCulture.heading} onChange={e => setFormData({ ...formData, essenceOfCulture: { ...formData.essenceOfCulture, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                  <label className="text-xs font-semibold text-gray-500">Section Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
+                  <input type="text" maxLength={50} value={formData.essenceOfCulture.heading} onChange={e => setFormData({ ...formData, essenceOfCulture: { ...formData.essenceOfCulture, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.essenceOfCulture.heading || '')).length}/50 characters</div>
                 </div>
 
                 <div className="flex justify-end mb-4">
-                  <button onClick={() => handleAddArrayItem('essenceOfCulture', 'items', { img: '', category: '', description: '', programs: [] })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
+                  <button onClick={() => openAddModal('essenceOfCulture', 'items', { img: '', category: '', description: '', programs: [] })} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">
                     <Plus className="w-4 h-4" /> Add Item
                   </button>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {formData.essenceOfCulture.items?.map((item, idx) => (
-                    <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group flex flex-col space-y-3">
+                    <div key={idx} draggable onDragStart={(e) => handleDragStart(e, 'essenceOfCulture', 'items', idx)} onDragEnd={handleDragEnd} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'essenceOfCulture', 'items', idx)} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group flex flex-col space-y-3 cursor-move">
                       <div className="flex justify-between items-center">
                         <span className="text-xs font-bold text-gray-500 uppercase">Item #{idx + 1}</span>
                         <button onClick={() => handleRemoveArrayItem('essenceOfCulture', 'items', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-gray-500">Category Name</label>
-                        <input type="text" value={item.category} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'category', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="Category (e.g. Dance)" />
+                        <label className="text-xs font-semibold text-gray-500">Category Name <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 30 chars)</span></label>
+                        <input type="text" maxLength={30} value={item.category} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'category', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="Category (e.g. Dance)" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.category || '')).length}/30 characters</div>
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-gray-500">Category Description</label>
-                        <textarea rows={2} value={item.description || ''} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'description', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="Short description of this cultural category..." />
+                        <label className="text-xs font-semibold text-gray-500">Category Description <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 100 chars)</span></label>
+                        <textarea rows={2} maxLength={100} value={item.description || ''} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'description', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="Short description of this cultural category..." />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.description || '')).length}/100 characters</div>
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-gray-500">Programs List (Comma-separated)</label>
-                        <input type="text" value={Array.isArray(item.programs) ? item.programs.join(', ') : (item.programs || '')} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'programs', e.target.value.split(',').map(s => s.trim()))} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="e.g. Solo Dance, Folk Dance, Group Classical" />
+                        <label className="text-xs font-semibold text-gray-500">Programs List (Comma-separated) <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 200 chars)</span></label>
+                        <input type="text" maxLength={200} value={Array.isArray(item.programs) ? item.programs.join(', ') : (item.programs || '')} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'programs', e.target.value.split(',').map(s => s.trim()))} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="e.g. Solo Dance, Folk Dance, Group Classical" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.programs || '')).length}/200 characters</div>
                       </div>
-                      <LogoUploader
+                      <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
                         currentImage={item.img}
-                        onImageSelected={(url) => handleUpdateArray('essenceOfCulture', 'items', idx, 'img', url)}
+                        defaultImage={defaults.essenceOfCulture.items[0]?.img} onChange={(url, file) => handleImageUploadChange(`essenceOfCulture.items.${idx}.img`, url, file, item.img, defaults.essenceOfCulture.items[0]?.img)}
                       />
                     </div>
                   ))}
@@ -492,27 +699,28 @@ const ManageEventsPage = () => {
           
           {/* Stay Connected */}
           {activeTab === 'stayConnected' && (
-            <SectionForm title="Stay Connected (Posters)">
+            <SectionForm title="Stay Connected (Posters)" actionButton={<VisibilityToggle section="stayConnected" />}>
               <div className="space-y-4">
                 <div className="space-y-2 mb-6">
-                  <label className="text-xs font-semibold text-gray-500">Section Heading</label>
-                  <input type="text" value={formData.stayConnected.heading} onChange={e => setFormData({ ...formData, stayConnected: { ...formData.stayConnected, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                  <label className="text-xs font-semibold text-gray-500">Section Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
+                  <input type="text" maxLength={50} value={formData.stayConnected.heading} onChange={e => setFormData({ ...formData, stayConnected: { ...formData.stayConnected, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.stayConnected.heading || '')).length}/50 characters</div>
                 </div>
                 <div className="flex justify-end mb-4">
-                  <button onClick={() => handleAddArrayItem('stayConnected', 'posters', { img: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
+                  <button onClick={() => openAddModal('stayConnected', 'posters', { img: '' })} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">
                     <Plus className="w-4 h-4" /> Add Poster
                   </button>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {formData.stayConnected.posters?.map((item, idx) => (
-                    <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group">
+                    <div key={idx} draggable onDragStart={(e) => handleDragStart(e, 'stayConnected', 'posters', idx)} onDragEnd={handleDragEnd} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'stayConnected', 'posters', idx)} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group cursor-move">
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-xs font-bold text-gray-500 uppercase">Poster #{idx + 1}</span>
                         <button onClick={() => handleRemoveArrayItem('stayConnected', 'posters', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
                       </div>
-                      <LogoUploader
+                      <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
                         currentImage={item.img}
-                        onImageSelected={(url) => handleUpdateArray('stayConnected', 'posters', idx, 'img', url)}
+                        defaultImage={defaults.stayConnected.posters[0]?.img} onChange={(url, file) => handleImageUploadChange(`stayConnected.posters.${idx}.img`, url, file, item.img, defaults.stayConnected.posters[0]?.img)}
                       />
                     </div>
                   ))}
@@ -523,27 +731,28 @@ const ManageEventsPage = () => {
           
           {/* Moments Captured */}
           {activeTab === 'moments' && (
-            <SectionForm title="Moments Captured (Masonry Grid)">
+            <SectionForm title="Moments Captured (Masonry Grid)" actionButton={<VisibilityToggle section="momentsCaptured" />}>
               <div className="space-y-4">
                 <div className="space-y-2 mb-6">
-                  <label className="text-xs font-semibold text-gray-500">Section Heading</label>
-                  <input type="text" value={formData.momentsCaptured.heading} onChange={e => setFormData({ ...formData, momentsCaptured: { ...formData.momentsCaptured, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                  <label className="text-xs font-semibold text-gray-500">Section Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
+                  <input type="text" maxLength={50} value={formData.momentsCaptured.heading} onChange={e => setFormData({ ...formData, momentsCaptured: { ...formData.momentsCaptured, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.momentsCaptured.heading || '')).length}/50 characters</div>
                 </div>
                 <div className="flex justify-end mb-4">
-                  <button onClick={() => handleAddArrayItem('momentsCaptured', 'images', { img: '' })} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium">
+                  <button onClick={() => openAddModal('momentsCaptured', 'images', { img: '' })} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">
                     <Plus className="w-4 h-4" /> Add Moment
                   </button>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {formData.momentsCaptured.images?.map((item, idx) => (
-                    <div key={idx} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group">
+                    <div key={idx} draggable onDragStart={(e) => handleDragStart(e, 'momentsCaptured', 'images', idx)} onDragEnd={handleDragEnd} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'momentsCaptured', 'images', idx)} className="p-4 rounded-md border border-gray-200 bg-gray-50 relative group cursor-move">
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-xs font-bold text-gray-500 uppercase">Moment #{idx + 1}</span>
                         <button onClick={() => handleRemoveArrayItem('momentsCaptured', 'images', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
                       </div>
-                      <LogoUploader
+                      <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
                         currentImage={item.img}
-                        onImageSelected={(url) => handleUpdateArray('momentsCaptured', 'images', idx, 'img', url)}
+                        defaultImage={defaults.momentsCaptured.images[0]?.img} onChange={(url, file) => handleImageUploadChange(`momentsCaptured.images.${idx}.img`, url, file, item.img, defaults.momentsCaptured.images[0]?.img)}
                       />
                     </div>
                   ))}
@@ -552,21 +761,87 @@ const ManageEventsPage = () => {
             </SectionForm>
           )}
 
-          {/* Custom Footer Graphic */}
-          {activeTab === 'footer' && (
-            <SectionForm title="Custom Footer Graphic">
-              <div className="space-y-4">
-                <label className="text-xs font-semibold text-gray-500">Footer Banner Image</label>
-                <div className="p-4 rounded-md border border-gray-200 bg-gray-50 max-w-sm">
-                  <LogoUploader
-                    currentImage={formData.footerGraphic}
-                    onImageSelected={(url) => setFormData({ ...formData, footerGraphic: url })}
+          
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Add Modal */}
+      <AnimatePresence>
+        {isAddModalOpen && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+              
+              <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white shrink-0">
+                <h3 className="text-lg font-bold text-gray-800 tracking-wide uppercase">Add New Item</h3>
+                <button onClick={() => setIsAddModalOpen(false)} className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-6 overflow-y-auto space-y-6 bg-gray-50/50 flex-1">
+                {addModalType?.section === 'upcomingEvents' && (
+                  <div className="space-y-4">
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-gray-500">Event Title <span className="text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
+                      <input type="text" maxLength={50} value={modalData.title} onChange={e => setModalData({...modalData, title: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50" placeholder="e.g. CELEBRITY VISIT" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-gray-500">Event Description <span className="text-gray-400 font-normal ml-2">(Max 150 chars)</span></label>
+                      <textarea rows={3} maxLength={150} value={modalData.description} onChange={e => setModalData({...modalData, description: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-gray-500">Date <span className="text-gray-400 font-normal ml-2">(Max 2 chars)</span></label>
+                        <input type="text" maxLength={2} value={modalData.date} onChange={e => setModalData({...modalData, date: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50" placeholder="e.g. 12" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-gray-500">Month <span className="text-gray-400 font-normal ml-2">(Max 3 chars)</span></label>
+                        <input type="text" maxLength={3} value={modalData.month} onChange={e => setModalData({...modalData, month: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50" placeholder="e.g. OCT" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {addModalType?.section === 'essenceOfCulture' && (
+                  <div className="space-y-4">
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-gray-500">Category Name <span className="text-gray-400 font-normal ml-2">(Max 30 chars)</span></label>
+                      <input type="text" maxLength={30} value={modalData.category} onChange={e => setModalData({...modalData, category: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50" placeholder="Category (e.g. Dance)" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-gray-500">Category Description <span className="text-gray-400 font-normal ml-2">(Max 100 chars)</span></label>
+                      <textarea rows={2} maxLength={100} value={modalData.description} onChange={e => setModalData({...modalData, description: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50" placeholder="Short description of this cultural category..." />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-gray-500">Programs List (Comma-separated) <span className="text-gray-400 font-normal ml-2">(Max 200 chars)</span></label>
+                      <input type="text" maxLength={200} value={Array.isArray(modalData.programs) ? modalData.programs.join(', ') : (modalData.programs || '')} onChange={e => setModalData({...modalData, programs: e.target.value.split(',').map(s => s.trim())})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50" placeholder="e.g. Solo Dance, Folk Dance, Group Classical" />
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-2 pt-2">
+                  <label className="text-xs font-semibold text-gray-500">Image</label>
+                  <LogoUploader 
+                    uploadEndpoint="/upload/events" 
+                    deferredMode={true}
+                    currentImage={modalImageUrl}
+                    defaultImage={''}
+                    onChange={(url, file) => {
+                      setModalImageUrl(url);
+                      if (file) setModalFile(file);
+                    }}
                   />
                 </div>
               </div>
-            </SectionForm>
-          )}
-        </motion.div>
+
+              <div className="px-6 py-4 border-t border-gray-100 flex justify-end gap-3 bg-white shrink-0">
+                <button onClick={() => setIsAddModalOpen(false)} className="px-6 py-2.5 rounded-lg text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors">Cancel</button>
+                <button onClick={handleModalSave} className="px-6 py-2.5 bg-primary hover:bg-[#151c48] text-white rounded-lg text-sm font-semibold transition-colors shadow-md">Add Item</button>
+              </div>
+
+            </motion.div>
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );

@@ -23,6 +23,14 @@ import AcademicCalendarBanner from '../../../features/programs/components/Academ
 import AdmissionEligibility from '../../../features/programs/components/AdmissionEligibility';
 import TopRecruitersGrid from '../../../features/programs/components/TopRecruitersGrid';
 
+import EventsHero from '../../../features/events/components/EventsHero';
+import EventsAbout from '../../../features/events/components/EventsAbout';
+import EventsUpcoming from '../../../features/events/components/EventsUpcoming';
+import EventsCarousel from '../../../features/events/components/EventsCarousel';
+import EventsEssence from '../../../features/events/components/EventsEssence';
+import EventsStayConnected from '../../../features/events/components/EventsStayConnected';
+import EventsMoments from '../../../features/events/components/EventsMoments';
+
 const ManagementDesk = ({ previewData }) => (
   <>
     {previewData.showHero && (!previewData.previewType || previewData.previewType === 'hero') && <ManagementDeskHero data={previewData} />}
@@ -50,11 +58,20 @@ const componentsMap = {
   MomentsGallery,
   AcademicCalendarBanner,
   AdmissionEligibility,
-  TopRecruitersGrid
+  TopRecruitersGrid,
+  EventsHero,
+  EventsAbout,
+  EventsUpcoming,
+  EventsCarousel,
+  EventsEssence,
+  EventsStayConnected,
+  EventsMoments
 };
 
 export default function CMSPreviewPage() {
   const [previewState, setPreviewState] = useState({ componentName: null, data: null });
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState('All');
 
   useEffect(() => {
     const handleMessage = (event) => {
@@ -88,14 +105,22 @@ export default function CMSPreviewPage() {
     return <div className="p-4 text-red-500">Component {previewState.componentName} not found</div>;
   }
 
+  const isEvents = previewState.componentName?.startsWith('Events');
+  const bgClass = isEvents ? 'bg-[#050505] text-white' : 'bg-[#FCFCFD]';
+
   return (
-    <div className="w-full min-h-screen bg-[#FCFCFD] overflow-x-hidden">
+    <div className={`w-full min-h-screen ${bgClass} overflow-x-hidden`}>
       <Component 
         previewData={previewState.data}
         data={previewState.data}
         program={previewState.data}
         dimensions={previewState.data?.dimensions || []}
         eligibility={previewState.data?.eligibility || []}
+        carouselIndex={carouselIndex}
+        setCarouselIndex={setCarouselIndex}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        {...previewState.data}
       />
     </div>
   );
