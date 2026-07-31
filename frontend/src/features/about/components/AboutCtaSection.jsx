@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import api from '../../../api/axios';
+import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
 const watermarkImg = '/assets/Images/watermark_logo.png';
 
 const AboutCtaSection = ({ previewData }) => {
@@ -29,7 +30,8 @@ const AboutCtaSection = ({ previewData }) => {
   const heading = data?.heading || 'Begin Your Leadership Journey at KSBM';
   const subtext = data?.subtext || 'Applications for the academic year 2024-25 are now open. Secure your seat in the cohort of the future.';
   const buttonText = data?.buttonText || 'Apply Now Online';
-  const buttonLink = data?.buttonLink || '/apply';
+  const globalLinks = useGlobalLinks();
+  const buttonLink = globalLinks['about_cta']?.link || data?.buttonLink || '/apply';
   const bgColor = data?.backgroundColor || '#2B2F66';
 
   if (data?.showSection === false) return null;
@@ -58,14 +60,14 @@ const AboutCtaSection = ({ previewData }) => {
             {subtext}
           </p>
         </div>
-        <div className="relative z-10 flex-shrink-0 lg:mr-12 xl:mr-20">
-          <Link
-            href={buttonLink}
-            className="inline-flex items-center justify-center px-6 py-3 bg-white text-sm font-semibold rounded-xl hover:bg-gray-50 transition-colors duration-200 shadow-sm"
-            style={{ color: bgColor }}
+        <div className="relative z-10 w-full lg:w-auto mt-4 lg:mt-0 flex justify-center lg:justify-end">
+          <a href={buttonLink}
+             target={buttonLink.startsWith('http') ? '_blank' : undefined}
+             rel={buttonLink.startsWith('http') ? 'noopener noreferrer' : undefined}
+             className="inline-flex h-[42px] items-center justify-center rounded bg-[#c5e1ff] px-6 text-sm md:text-base font-semibold text-[#1a235c] transition-all hover:bg-white hover:text-primary hover:shadow-[0_4px_12px_rgba(255,255,255,0.2)] focus:outline-none focus:ring-2 focus:ring-[#c5e1ff] focus:ring-offset-2 w-full sm:w-auto hover:-translate-y-0.5"
           >
             {buttonText}
-          </Link>
+          </a>
         </div>
       </div>
     </section>

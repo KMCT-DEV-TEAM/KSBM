@@ -50,6 +50,7 @@ const AdminNavbar = () => {
     { name: 'Contact Form Submissions', path: '/admin/contact-submissions' },
     { name: 'Header & Navbar', path: '/admin/cms/header' },
     { name: 'Footer', path: '/admin/cms/footer' },
+    { name: 'SEO Settings', path: '/admin/cms/seo' },
   ];
 
   const filteredPages = searchablePages.filter(page =>
