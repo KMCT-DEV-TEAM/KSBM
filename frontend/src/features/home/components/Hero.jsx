@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Loader from '../../../components/Loader';
 import api from '../../../api/axios';
+import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
 import {
   ArrowUpRight,
   Download,
@@ -18,6 +19,9 @@ const Hero = ({ previewData }) => {
   const [dataLoaded, setDataLoaded] = useState(!!previewData);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  
+  const globalLinks = useGlobalLinks();
+  const heroApplyLink = globalLinks['hero_apply']?.link || settings?.primaryButton?.link || '#';
 
   useEffect(() => {
     if (previewData) {
@@ -216,7 +220,12 @@ const Hero = ({ previewData }) => {
           className="flex flex-col lg:flex-row items-start lg:items-center gap-4 mt-10"
         >
           {settings?.primaryButton?.isVisible !== false && (
-            <a href={settings?.primaryButton?.link || '#'} className="bg-secondary text-primary text-sm md:text-base font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start">
+            <a 
+              href={heroApplyLink} 
+              target={heroApplyLink.startsWith('http') ? '_blank' : undefined}
+              rel={heroApplyLink.startsWith('http') ? 'noopener noreferrer' : undefined}
+              className="bg-secondary text-primary text-sm md:text-base font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start"
+            >
               {settings?.primaryButton?.text || 'Apply Now'} <ArrowUpRight className="w-5 h-5" />
             </a>
           )}

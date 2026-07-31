@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useGlobalLinks } from '../hooks/useGlobalLinks';
 
 const VirtualTourButton = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -27,11 +28,16 @@ const VirtualTourButton = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const globalLinks = useGlobalLinks();
+  const tourLink = globalLinks['virtual_tour_360']?.link || '#';
+
   const useSolidTheme = isScrolled && !isOverFooter;
 
   return (
     <a
-      href="#"
+      href={tourLink}
+      target={tourLink.startsWith('http') ? '_blank' : undefined}
+      rel={tourLink.startsWith('http') ? 'noopener noreferrer' : undefined}
       className={`fixed bottom-6 right-2 md:right-2 z-[99] flex flex-col items-center justify-center w-12 h-12 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.15)] hover:-translate-y-1 transition-all duration-300 cursor-pointer ${useSolidTheme
         ? 'bg-primary border border-primary text-white hover:opacity-90'
         : 'bg-background/20 backdrop-blur-md border border-white/30 text-white hover:bg-background/30'

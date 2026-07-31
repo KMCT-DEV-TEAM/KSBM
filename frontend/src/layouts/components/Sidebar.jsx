@@ -113,6 +113,8 @@ const Sidebar = () => {
       links: [
         { name: 'Header & Navbar', path: '/admin/cms/header' },
         { name: 'Footer', path: '/admin/cms/footer' },
+        { name: 'SEO Settings', path: '/admin/cms/seo' },
+        { name: 'Action Buttons', path: '/admin/cms/global-buttons' },
       ]
     }
   ];

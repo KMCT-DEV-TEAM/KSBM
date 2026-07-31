@@ -87,8 +87,16 @@ import {
   setDefaultMandatoryDisclosure,
   deleteMandatoryDisclosure,
   getDefaultMandatoryDisclosure,
+  getSeoSettings,
+  updateSeoSettings,
+  getGlobalButtons,
+  createGlobalButton,
+  updateGlobalButton,
+  deleteGlobalButton,
+  reorderGlobalButtons
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
+import { upload } from '../../config/cloudinary.js';
 
 const router = express.Router();
 
@@ -276,5 +284,26 @@ router.route('/mandatory-disclosure/:id/default')
 
 router.route('/mandatory-disclosure/:id')
   .delete(protect, deleteMandatoryDisclosure);
+
+// ==========================================
+// SEO Management Routes
+// ==========================================
+router.route('/seo/:pageIdentifier')
+  .get(getSeoSettings)
+  .put(protect, upload.fields([{ name: 'ogImage', maxCount: 1 }, { name: 'favicon', maxCount: 1 }]), updateSeoSettings);
+
+// ==========================================
+// Global Action Buttons Routes
+// ==========================================
+router.route('/global-buttons')
+  .get(getGlobalButtons)
+  .post(protect, createGlobalButton);
+
+router.route('/global-buttons/reorder')
+  .put(protect, reorderGlobalButtons);
+
+router.route('/global-buttons/:id')
+  .put(protect, updateGlobalButton)
+  .delete(protect, deleteGlobalButton);
 
 export default router;

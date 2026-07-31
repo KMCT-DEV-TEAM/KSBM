@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation';
 import AboutMegaMenu from './AboutMegaMenu';
 import PeopleMegaMenu from './PeopleMegaMenu';
 import ProgramsMegaMenu from './ProgramsMegaMenu';
+import { useGlobalLinks } from '../hooks/useGlobalLinks';
 
 const getSubLinks = (label) => {
   if (!label) return null;
@@ -102,6 +103,9 @@ const Header = ({ previewData }) => {
   const [logoUrl, setLogoUrl] = useState('');
   const [alignment, setAlignment] = useState('center');
   const [mandatoryDisclosureUrl, setMandatoryDisclosureUrl] = useState(null);
+  
+  const globalLinks = useGlobalLinks();
+  const headerApplyLink = globalLinks['header_apply']?.link || '/admissions';
 
   useEffect(() => {
     const fetchMandatoryDisclosure = async () => {
@@ -343,11 +347,16 @@ const Header = ({ previewData }) => {
           </nav>
 
           {/* Action Button */}
-          {actionButton.isVisible && (
+          {actionButton?.isVisible !== false && (
             <div className={`${desktopClass} items-center`}>
-              <button className="bg-primary text-white hover:bg-[#1e2869] border-none rounded-full py-2 px-5 text-[13.5px] font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_6px_14px_rgba(0,0,0,0.15)] shadow-[0_4px_10px_rgba(0,0,0,0.1)] active:translate-y-[1px] active:shadow-[0_2px_6px_rgba(0,0,0,0.1)]">
-                {actionButton.text}
-              </button>
+              <a 
+                href={headerApplyLink}
+                target={headerApplyLink.startsWith('http') ? '_blank' : undefined}
+                rel={headerApplyLink.startsWith('http') ? 'noopener noreferrer' : undefined}
+                className="bg-primary text-white hover:bg-[#1e2869] border-none rounded-full py-2 px-5 text-[13.5px] font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_6px_14px_rgba(0,0,0,0.15)] shadow-[0_4px_10px_rgba(0,0,0,0.1)] active:translate-y-[1px] active:shadow-[0_2px_6px_rgba(0,0,0,0.1)] inline-block text-center"
+              >
+                {actionButton?.text || 'Apply Now'}
+              </a>
             </div>
           )}
 

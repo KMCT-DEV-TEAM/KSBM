@@ -5,6 +5,7 @@ import EventsPageModel from './eventsPage.model.js';
 import BlogsPageModel from './blogsPage.model.js';
 import Hero from './hero.model.js';
 import Programs from './programs.model.js';
+import Seo from './seo.model.js';
 import Accreditation from './accreditation.model.js';
 import Facilities from './facilities.model.js';
 import Management from './management.model.js';
@@ -1599,5 +1600,119 @@ export const getDefaultMandatoryDisclosure = async (req, res) => {
     res.json(disclosure);
   } catch (error) {
     res.status(500).json({ message: 'Server error fetching default disclosure', error: error.message });
+  }
+};
+// ==========================================
+// SEO Management Handlers
+// ==========================================
+
+export const getSeoSettings = async (req, res) => {
+  try {
+    const { pageIdentifier } = req.params;
+    let seo = await Seo.findOne({ pageIdentifier });
+    if (!seo) {
+      seo = new Seo({ pageIdentifier });
+      await seo.save();
+    }
+    res.json(seo);
+  } catch (error) {
+    console.error('Error fetching SEO settings:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+export const updateSeoSettings = async (req, res) => {
+  try {
+    const { pageIdentifier } = req.params;
+    let seo = await Seo.findOne({ pageIdentifier });
+    if (!seo) {
+      seo = new Seo({ pageIdentifier });
+    }
+    
+    // Process image uploads if exist
+    if (req.files) {
+      if (req.files.ogImage && req.files.ogImage.length > 0) {
+        const filePath = '/uploads/' + req.files.ogImage[0].filename;
+        req.body.ogImage = filePath;
+      }
+      if (req.files.favicon && req.files.favicon.length > 0) {
+        const filePath = '/uploads/' + req.files.favicon[0].filename;
+        req.body.favicon = filePath;
+      }
+    }
+
+    Object.assign(seo, req.body);
+    await seo.save();
+    res.json(seo);
+  } catch (error) {
+    console.error('Error updating SEO settings:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+import GlobalButton from './globalButton.model.js';
+
+// ==========================================
+// Global Action Buttons
+// ==========================================
+
+export const getGlobalButtons = async (req, res) => {
+  try {
+    const buttons = await GlobalButton.find().sort({ order: 1 });
+    res.json(buttons);
+  } catch (error) {
+    console.error('Error fetching global buttons:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+export const createGlobalButton = async (req, res) => {
+  try {
+    const button = new GlobalButton(req.body);
+    await button.save();
+    res.status(201).json(button);
+  } catch (error) {
+    console.error('Error creating global button:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+export const updateGlobalButton = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const button = await GlobalButton.findByIdAndUpdate(id, req.body, { new: true });
+    if (!button) {
+      return res.status(404).json({ message: 'Button not found' });
+    }
+    res.json(button);
+  } catch (error) {
+    console.error('Error updating global button:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+export const deleteGlobalButton = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const button = await GlobalButton.findByIdAndDelete(id);
+    if (!button) {
+      return res.status(404).json({ message: 'Button not found' });
+    }
+    res.json({ message: 'Button deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting global button:', error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+export const reorderGlobalButtons = async (req, res) => {
+  try {
+    const { buttons } = req.body;
+    for (const item of buttons) {
+      await GlobalButton.findByIdAndUpdate(item.id, { order: item.order });
+    }
+    res.json({ message: 'Buttons reordered successfully' });
+  } catch (error) {
+    console.error('Error reordering global buttons:', error);
+    res.status(500).json({ message: 'Server Error' });
   }
 };
