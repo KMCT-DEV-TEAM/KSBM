@@ -824,7 +824,7 @@ export const getFacilitiesPageSettings = async (req, res) => {
 // @desc    Update Facilities Page settings
 export const updateFacilitiesPageSettings = async (req, res) => {
   try {
-    const { hero, institutionalResources, library, otherResources, clubs } = req.body;
+    const { hero, institutionalResources, library, otherResources, clubs, facilityDetails } = req.body;
     const settings = await FacilitiesPage.getSettings();
     
     if (hero !== undefined) settings.hero = hero;
@@ -840,6 +840,10 @@ export const updateFacilitiesPageSettings = async (req, res) => {
     if (clubs !== undefined) {
       settings.clubs = clubs;
       settings.markModified('clubs');
+    }
+    if (facilityDetails !== undefined) {
+      settings.facilityDetails = facilityDetails;
+      settings.markModified('facilityDetails');
     }
     
     const updatedSettings = await settings.save();

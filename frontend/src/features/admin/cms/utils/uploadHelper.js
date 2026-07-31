@@ -23,7 +23,6 @@ export const uploadDeferredImage = async (imageObj, uploadEndpoint) => {
     const formData = new FormData();
     formData.append('image', imageObj.file);
     const res = await api.post(uploadEndpoint, formData, {
-      
       hideLoader: true
     });
     

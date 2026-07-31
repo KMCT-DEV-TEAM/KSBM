@@ -12,7 +12,8 @@ import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
 import AdminItemCard from './components/AdminItemCard';
 import AdminModal from './components/AdminModal';
-import { Pencil } from 'lucide-react';
+import { Pencil, FileText } from 'lucide-react';
+import ClubDetailsEditor from './ClubDetailsEditor';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -38,9 +39,12 @@ const ManageClubs = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  const [draggedItemIndex, setDraggedItemIndex] = useState(null);
-
   const [modalConfig, setModalConfig] = useState({ isOpen: false, index: -1, data: null });
+  
+  // Details View State
+  const [editingDetailsIndex, setEditingDetailsIndex] = useState(null);
+  const [editingDetailsData, setEditingDetailsData] = useState(null);
+  const [globalDetailsTemplate, setGlobalDetailsTemplate] = useState(null);
 
   const iframeRef = React.useRef(null);
 
@@ -80,11 +84,76 @@ const ManageClubs = () => {
       if (data && data.clubs) {
         setClubs(data.clubs);
       }
+      if (data && data.facilityDetails) {
+        setGlobalDetailsTemplate(data.facilityDetails);
+      }
     } catch (error) {
       console.error('Error fetching settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to load settings.' });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const saveClubsDataToBackend = async (clubsData) => {
+    setIsSaving(true);
+    try {
+      // Process fully deleted clubs
+      for (const url of deletedImages) {
+        try {
+          if (url && !url.startsWith('http')) {
+            await api.delete('/upload', { data: { fileUrl: url }, hideLoader: true });
+          }
+        } catch (err) { console.warn(err); }
+      }
+
+      // Process deferred uploads inside clubs.items including all nested details
+      const processedItems = await Promise.all(clubsData.items.map(async (item) => {
+        const finalImageUrl = await uploadDeferredImage(item.image, '/upload/facilities');
+        
+        const newHeroBg = await uploadDeferredImage(item.hero?.backgroundImage, '/upload/facilities');
+        const newAboutImg = await uploadDeferredImage(item.about?.image, '/upload/facilities');
+        
+        const newActivities = await Promise.all((item.activities?.items || []).map(async (act) => ({
+          ...act, image: await uploadDeferredImage(act.image, '/upload/facilities')
+        })));
+        
+        const newFaculty = await Promise.all((item.faculty?.members || []).map(async (fac) => ({
+          ...fac, image: await uploadDeferredImage(fac.image, '/upload/facilities')
+        })));
+        
+        const newGallery = await Promise.all((item.gallery?.images || []).map(async (gal) => ({
+          ...gal, image: await uploadDeferredImage(gal.image, '/upload/facilities')
+        })));
+        
+        return {
+          ...item,
+          image: finalImageUrl,
+          hero: { ...item.hero, backgroundImage: newHeroBg },
+          about: { ...item.about, image: newAboutImg },
+          activities: { ...item.activities, items: newActivities },
+          faculty: { ...item.faculty, members: newFaculty },
+          gallery: { ...item.gallery, images: newGallery }
+        };
+      }));
+
+      const payload = {
+        ...clubsData,
+        items: processedItems
+      };
+
+      await api.put('/cms/facilities-page', { clubs: payload });
+
+      setClubs(payload);
+      setDeletedImages([]);
+      Toast.fire({ icon: 'success', title: 'Clubs settings saved successfully!' });
+      return payload;
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
+      throw error;
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -95,42 +164,7 @@ const ManageClubs = () => {
       confirmText: 'Yes, save it!',
       variant: 'primary',
       action: async () => {
-        setIsSaving(true);
-        try {
-          // Process fully deleted clubs
-          for (const url of deletedImages) {
-            try {
-              if (url && !url.startsWith('http')) {
-                await api.delete('/upload', { data: { fileUrl: url }, hideLoader: true });
-              }
-            } catch (err) { console.warn(err); }
-          }
-
-          // Process deferred uploads inside clubs.items
-          const processedItems = await Promise.all(clubs.items.map(async (item) => {
-            const finalImageUrl = await uploadDeferredImage(item.image, '/upload/facilities');
-            return {
-              ...item,
-              image: finalImageUrl
-            };
-          }));
-
-          const payload = {
-            ...clubs,
-            items: processedItems
-          };
-
-          await api.put('/cms/facilities-page', { clubs: payload });
-
-          setClubs(payload);
-          setDeletedImages([]);
-          Toast.fire({ icon: 'success', title: 'Clubs settings saved successfully!' });
-        } catch (error) {
-          console.error('Error saving settings:', error);
-          Toast.fire({ icon: 'error', title: 'Failed to save settings.' });
-        } finally {
-          setIsSaving(false);
-        }
+        await saveClubsDataToBackend(clubs);
       }
     });
   };
@@ -189,6 +223,52 @@ const ManageClubs = () => {
     setClubs({ ...clubs, items: newItems });
   };
 
+  const openDetails = (index) => {
+    setEditingDetailsIndex(index);
+    let itemData = JSON.parse(JSON.stringify(clubs.items[index]));
+
+    // If the club lacks a customized hero title, assume it hasn't been configured yet.
+    // Inject the previously saved global facilityDetails data as a template.
+    if (globalDetailsTemplate && (!itemData.hero || !itemData.hero.title)) {
+      itemData = {
+        ...itemData,
+        hero: globalDetailsTemplate.hero || itemData.hero,
+        about: globalDetailsTemplate.about || itemData.about,
+        activities: globalDetailsTemplate.activities || itemData.activities,
+        faculty: globalDetailsTemplate.faculty || itemData.faculty,
+        gallery: globalDetailsTemplate.gallery || itemData.gallery
+      };
+    }
+
+    setEditingDetailsData(itemData);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const saveDetails = async (updatedData) => {
+    const newItems = [...clubs.items];
+    newItems[editingDetailsIndex] = updatedData;
+    const newClubs = { ...clubs, items: newItems };
+    
+    // Update local state first
+    setClubs(newClubs);
+    setEditingDetailsData(updatedData);
+    
+    // Save directly to backend so changes reflect immediately on public landing page
+    try {
+      const savedPayload = await saveClubsDataToBackend(newClubs);
+      if (savedPayload && savedPayload.items[editingDetailsIndex]) {
+        setEditingDetailsData(savedPayload.items[editingDetailsIndex]);
+      }
+    } catch (error) {
+      console.error('Error saving details:', error);
+    }
+  };
+
+  const cancelDetails = () => {
+    setEditingDetailsIndex(null);
+    setEditingDetailsData(null);
+  };
+
   const openModal = (index = -1) => {
     const initialData = index >= 0 ? { ...clubs.items[index] } : { title: '', description: '', image: '' };
     setModalConfig({ isOpen: true, index, data: initialData });
@@ -233,8 +313,20 @@ const ManageClubs = () => {
 
   if (isLoading) return <AdminSkeleton />;
 
+  if (editingDetailsIndex !== null && editingDetailsData) {
+    return (
+      <div className="w-full">
+        <ClubDetailsEditor 
+          initialData={editingDetailsData} 
+          onSave={saveDetails} 
+          onCancel={cancelDetails} 
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6 w-full">
+    <div className="space-y-6 w-full pb-20">
       <PageHeader
         title="Clubs & Association Settings"
         description="Manage the clubs grid section."
@@ -372,20 +464,21 @@ const ManageClubs = () => {
                   onClick={() => openModal(idx)}
                   className="flex-1 inline-flex items-center justify-center text-primary hover:bg-primary/10 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors border border-primary/20"
                 >
-                  <Pencil className="w-3.5 h-3.5 mr-1" /> Edit Details
+                  <Pencil className="w-3.5 h-3.5 mr-1" /> Edit Core
                 </button>
-                {item._id ? (
-                  <Link
-                    href={`/admin/cms/facilities/clubs/${item._id}`}
-                    className="flex-1 inline-flex items-center justify-center text-white bg-primary hover:bg-[#151c48] shadow-sm px-3 py-1.5 rounded-md font-semibold text-xs transition-all"
-                  >
-                    Manage Page
-                  </Link>
-                ) : (
-                  <div className="flex-1 text-center text-[10px] font-semibold text-amber-600 bg-amber-50 py-1.5 rounded-md border border-amber-100 flex items-center justify-center">
-                    Save to manage page
-                  </div>
-                )}
+                <button
+                  onClick={() => openDetails(idx)}
+                  className="flex-1 inline-flex items-center justify-center text-white bg-primary hover:bg-[#151c48] shadow-sm px-3 py-1.5 rounded-md font-semibold text-xs transition-all"
+                >
+                  <FileText className="w-3.5 h-3.5 mr-1" /> Manage Page
+                </button>
+                <button
+                  onClick={() => removeItem(idx)}
+                  className="flex-none inline-flex items-center justify-center text-red-500 hover:bg-red-50 px-2 py-1.5 rounded-md text-xs font-semibold transition-colors border border-red-200/50"
+                  title="Delete Club"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
               </div>
             </AdminItemCard>
           ))}

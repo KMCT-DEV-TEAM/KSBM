@@ -47,24 +47,6 @@ const ClubsSection = ({ data }) => {
                 Clubs
               </h3>
               <div className="h-[1px] bg-primary/30 flex-1 mt-1"></div>
-              
-              {/* Navigation Arrows if > 3 items */}
-              {items.length > 3 && (
-                <div className="flex items-center gap-2 shrink-0">
-                  <button 
-                    onClick={() => scroll('left')}
-                    className="p-2 rounded-full border border-gray-200 text-gray-500 hover:text-primary hover:border-primary hover:bg-primary/5 transition-all"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button 
-                    onClick={() => scroll('right')}
-                    className="p-2 rounded-full border border-gray-200 text-gray-500 hover:text-primary hover:border-primary hover:bg-primary/5 transition-all"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </div>
-              )}
             </div>
           </motion.div>
 
@@ -76,49 +58,91 @@ const ClubsSection = ({ data }) => {
             variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
             className="relative -mx-4 px-4 sm:mx-0 sm:px-0"
           >
-            <div 
-              ref={sliderRef}
-              className="flex overflow-x-auto gap-6 lg:gap-8 snap-x snap-mandatory scroll-smooth pb-8 pt-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-            >
-              {items.map((item, idx) => (
-                <Link href={`/facilities/club/${item._id}`} key={idx} className="shrink-0 w-[85vw] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-22px)] snap-start">
-              <motion.div
-                variants={{
-                  hidden: { opacity: 0, scale: 0.95 },
-                  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } }
-                }}
-                className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-[350px] sm:h-[400px]"
-              >
-                {/* Image */}
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
+            {items.length > 3 ? (
+              <div className="overflow-hidden relative w-full pt-4 pb-8">
+                <div className="animate-marquee gap-6 lg:gap-8 flex">
+                  {[...items, ...items].map((item, idx) => (
+                    <Link href={`/facilities/club/${item._id}`} key={idx} className="shrink-0 w-[280px] sm:w-[350px] lg:w-[400px]">
+                      <motion.div
+                        variants={{
+                          hidden: { opacity: 0, scale: 0.95 },
+                          visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } }
+                        }}
+                        className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-[350px] sm:h-[400px] w-full"
+                      >
+                        {/* Image */}
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
 
-                {/* Primary Half Color Gradient Overlay */}
-                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary via-primary/85 to-transparent opacity-85 group-hover:h-full group-hover:from-primary/95 group-hover:via-primary/90 group-hover:to-primary/75 transition-all duration-500" />
+                        {/* Primary Half Color Gradient Overlay */}
+                        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary via-primary/85 to-transparent opacity-85 group-hover:h-full group-hover:from-primary/95 group-hover:via-primary/90 group-hover:to-primary/75 transition-all duration-500" />
 
-                {/* Content Overlay */}
-                <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end transform transition-all duration-500 z-10">
-                  <div className="transform transition-transform duration-500 group-hover:-translate-y-2">
-                    <h3 className="text-white font-bold text-xl sm:text-2xl tracking-wide">
-                      {item.title}
-                    </h3>
+                        {/* Content Overlay */}
+                        <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end transform transition-all duration-500 z-10">
+                          <div className="transform transition-transform duration-500 group-hover:-translate-y-2">
+                            <h3 className="text-white font-bold text-xl sm:text-2xl tracking-wide">
+                              {item.title}
+                            </h3>
 
-                    {/* Description revealed on hover */}
-                    <p className="text-white/90 text-xs sm:text-sm mt-3 leading-relaxed opacity-0 max-h-0 overflow-hidden group-hover:opacity-100 group-hover:max-h-48 transition-all duration-500 line-clamp-4">
-                      {item.description || "Engage in dynamic activities, leadership workshops, and collaborative events designed to build practical business acumen and lifelong peer networks."}
-                    </p>
+                            {/* Description revealed on hover */}
+                            <p className="text-white/90 text-xs sm:text-sm mt-3 leading-relaxed opacity-0 max-h-0 overflow-hidden group-hover:opacity-100 group-hover:max-h-48 transition-all duration-500 line-clamp-4">
+                              {item.description || "Engage in dynamic activities, leadership workshops, and collaborative events designed to build practical business acumen and lifelong peer networks."}
+                            </p>
 
-                    {/* Animated line on hover */}
-                    <div className="w-0 h-[2px] bg-white mt-4 group-hover:w-16 transition-all duration-500 ease-out" />
-                  </div>
+                            {/* Animated line on hover */}
+                            <div className="w-0 h-[2px] bg-white mt-4 group-hover:w-16 transition-all duration-500 ease-out" />
+                          </div>
+                        </div>
+                      </motion.div>
+                    </Link>
+                  ))}
                 </div>
-              </motion.div>
-            </Link>
-          ))}
-          </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 pt-4 pb-8">
+                {items.map((item, idx) => (
+                  <Link href={`/facilities/club/${item._id}`} key={idx} className="w-full">
+                    <motion.div
+                      variants={{
+                        hidden: { opacity: 0, scale: 0.95 },
+                        visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } }
+                      }}
+                      className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 h-[350px] sm:h-[400px] w-full"
+                    >
+                      {/* Image */}
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+
+                      {/* Primary Half Color Gradient Overlay */}
+                      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary via-primary/85 to-transparent opacity-85 group-hover:h-full group-hover:from-primary/95 group-hover:via-primary/90 group-hover:to-primary/75 transition-all duration-500" />
+
+                      {/* Content Overlay */}
+                      <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end transform transition-all duration-500 z-10">
+                        <div className="transform transition-transform duration-500 group-hover:-translate-y-2">
+                          <h3 className="text-white font-bold text-xl sm:text-2xl tracking-wide">
+                            {item.title}
+                          </h3>
+
+                          {/* Description revealed on hover */}
+                          <p className="text-white/90 text-xs sm:text-sm mt-3 leading-relaxed opacity-0 max-h-0 overflow-hidden group-hover:opacity-100 group-hover:max-h-48 transition-all duration-500 line-clamp-4">
+                            {item.description || "Engage in dynamic activities, leadership workshops, and collaborative events designed to build practical business acumen and lifelong peer networks."}
+                          </p>
+
+                          {/* Animated line on hover */}
+                          <div className="w-0 h-[2px] bg-white mt-4 group-hover:w-16 transition-all duration-500 ease-out" />
+                        </div>
+                      </div>
+                    </motion.div>
+                  </Link>
+                ))}
+              </div>
+            )}
         </motion.div>
       </div>
     </section>

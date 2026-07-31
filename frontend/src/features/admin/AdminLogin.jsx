@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Lock, Mail, AlertCircle } from 'lucide-react';
 import api from '../../api/axios';
-const logo = '/assets/Images/LOGO__KMCT School of Business Management (1).png';
+const logo = '/assets/Images/Header/LOGO__KMCT School of Business Management (1).png';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -16,7 +16,7 @@ const AdminLogin = () => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const response = await api.post('/users/login', { email, password });
       localStorage.setItem('accessToken', response.data.accessToken);
@@ -30,91 +30,120 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F5F5F9] p-4 font-sans">
-      <div className="w-full max-w-[400px] bg-white rounded-[0.5rem] shadow-[0_2px_6px_0_rgba(67,89,113,0.12)] p-8 sm:p-10 border border-gray-100">
-        
-        {/* KSBM Logo */}
-        <div className="flex justify-center mb-8">
-          <img src={logo} alt="KSBM Logo" className="h-12 object-contain" />
+    <div className="min-h-screen flex font-sans bg-white">
+
+      {/* Left Side - Branding Image (Hidden on Mobile) */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-primary overflow-hidden">
+        <img
+          src="/assets/Images/aboutus/about-hero-bg.jpg"
+          alt="KSBM Campus"
+          className="absolute inset-0 w-full h-full object-cover opacity-50 mix-blend-overlay"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b1238] via-[#1e2869]/60 to-transparent"></div>
+
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+          <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-64 h-64 bg-primary-light/20 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold text-[#566A7F] mb-1">Welcome to KSBM! 👋</h3>
-          <p className="text-[#697A8D] text-sm">Please sign in to your account and start the adventure</p>
+        <div className="relative z-10 flex flex-col justify-end p-16 h-full">
+          <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl border border-white/20">
+            <h1 className="text-4xl font-bold text-white mb-4 leading-tight">KSBM Admin Portal</h1>
+            <p className="text-gray-200 text-base leading-relaxed max-w-md">
+              Manage your institution's digital presence, academic programs, facilities, and student activities from one centralized dashboard.
+            </p>
+          </div>
         </div>
+      </div>
 
-        {error && (
-          <div className="mb-6 p-3 bg-[#FF3E1D]/10 border border-[#FF3E1D]/20 rounded-md flex items-start gap-2">
-            <AlertCircle className="w-5 h-5 text-[#FF3E1D] shrink-0" />
-            <p className="text-sm text-[#FF3E1D] font-medium">{error}</p>
+      {/* Right Side - Login Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-16 bg-gray-50/50">
+        <div className="w-full max-w-[420px] bg-white p-8 sm:p-10 rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 relative overflow-hidden">
+
+          {/* Top border accent */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+
+          {/* KSBM Logo */}
+          <div className="flex justify-center mb-10">
+            <img src={logo} alt="KSBM Logo" className="h-16 sm:h-24 object-contain" />
           </div>
-        )}
 
-        <form onSubmit={handleLogin} className="space-y-5">
-          
-          {/* Email Field */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Email</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="h-4 w-4 text-[#697A8D]" />
+          <div className="mb-8 text-center">
+            <h3 className="text-2xl font-semibold text-primary mb-2">Welcome Back! 👋</h3>
+            <p className="text-gray-500 text-sm">Please sign in to access your dashboard</p>
+          </div>
+
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+              <p className="text-sm text-red-600 font-medium">{error}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} className="space-y-6">
+
+            {/* Email Field */}
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-gray-700 uppercase tracking-wider">Email Address</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <Mail className="h-4 w-4 text-gray-400" />
+                </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-11 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all placeholder-gray-400"
+                  placeholder="admin@ksbm.ac.in"
+                  required
+                />
               </div>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                placeholder="admin@ksbm.ac.in"
-                required
-              />
             </div>
-          </div>
 
-          {/* Password Field */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Password</label>
-              <a href="#" className="text-xs font-semibold text-primary hover:text-primary/90">Forgot Password?</a>
-            </div>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-4 w-4 text-[#697A8D]" />
+            {/* Password Field */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-gray-700 uppercase tracking-wider">Password</label>
               </div>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                placeholder="••••••••"
-                required
-              />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <Lock className="h-4 w-4 text-gray-400" />
+                </div>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-11 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all placeholder-gray-400"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Remember Me Toggle Mock */}
-          <div className="flex items-center mt-2">
-            <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
-            <span className="ml-2 text-sm text-[#697A8D]">Remember me</span>
-          </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-primary text-white py-2.5 rounded-md font-semibold text-sm hover:bg-primary/90 transition-colors shadow-[0_2px_4px_0_var(--color-primary)] disabled:opacity-70 mt-4 flex justify-center items-center"
-          >
-            {isLoading ? (
-              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-            ) : (
-              'Sign in'
-            )}
-          </button>
-          
-        </form>
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-primary text-white py-3.5 rounded-xl font-bold text-sm hover:bg-[#0b1238] transition-all shadow-[0_4px_14px_0_rgba(30,40,105,0.39)] hover:shadow-[0_6px_20px_rgba(30,40,105,0.23)] hover:-translate-y-0.5 disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:shadow-none mt-2 flex justify-center items-center"
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <svg className="animate-spin h-5 w-5 text-white/80" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <span>Signing in...</span>
+                </div>
+              ) : (
+                'Sign In to Dashboard'
+              )}
+            </button>
 
+          </form>
+
+        </div>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import FacilityPage from "../../features/facilities/FacilityPage";
 
 export const metadata = {
@@ -6,5 +7,9 @@ export const metadata = {
 };
 
 export default function FacilityDetailsPage() {
-  return <FacilityPage />;
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <FacilityPage />
+    </Suspense>
+  );
 }
