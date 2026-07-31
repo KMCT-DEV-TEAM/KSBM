@@ -83,7 +83,6 @@ const Sidebar = () => {
       links: [
         { name: 'Manage Events Page', path: '/admin/cms/events' },
         { name: 'Manage Blogs Page', path: '/admin/cms/blogs' },
-        { name: 'Manage Blog Details Page', path: '/admin/cms/blog-details' },
         { name: 'Manage Gallery Page', path: '/admin/cms/gallery' },
       ]
     },
@@ -91,12 +90,12 @@ const Sidebar = () => {
       title: 'Contact & Policies',
       icon: <ShieldCheck className="w-5 h-5" />,
       links: [
-        { name: 'Manage Contact Page', path: '/admin/cms/contact-page' },
-        { name: 'Manage FAQ Page', path: '/admin/cms/faq' },
-        { name: 'Manage Privacy Policy', path: '/admin/cms/privacy-policy' },
-        { name: 'Manage Terms & Conditions', path: '/admin/cms/terms-and-conditions' },
-        { name: 'Manage Grievance Page', path: '/admin/cms/grievance' },
-        { name: 'Manage Download Page', path: '/admin/cms/download' },
+        { name: 'Contact Page', path: '/admin/cms/contact-page' },
+        { name: 'FAQ Page', path: '/admin/cms/faq' },
+        { name: 'Privacy Policy', path: '/admin/cms/privacy-policy' },
+        { name: 'Terms & Conditions', path: '/admin/cms/terms-and-conditions' },
+        { name: 'Grievance Page', path: '/admin/cms/grievance' },
+        { name: 'Download Page', path: '/admin/cms/download' },
       ]
     },
     {
@@ -104,6 +103,7 @@ const Sidebar = () => {
       icon: <ShieldCheck className="w-5 h-5" />, 
       links: [
         { name: 'View Grievance Tickets', path: '/admin/grievances' },
+        { name: 'Contact Form Submissions', path: '/admin/contact-submissions' },
       ]
     },
     {

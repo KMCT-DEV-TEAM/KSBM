@@ -5,14 +5,29 @@ import { Phone, Mail, MapPin, Send, CheckCircle2 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import api from '../../../api/axios';
 
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  width: 'auto',
+  padding: '0.5em',
+  timerProgressBar: false,
+  customClass: {
+    title: 'text-sm font-medium m-0',
+    popup: 'rounded-lg shadow-sm',
+    icon: 'scale-50 my-auto'
+  }
+});
+
 const watermarkLogo = '/assets/Images/watermark_logo.png';
 
-const ContactHero = () => {
+const ContactHero = ({ previewData, onDataLoaded }) => {
   const [heroData, setHeroData] = useState({
     title: 'Stay Connected. \nStart Your Journey With KSBM.',
     subtitle: 'Reach out to our admissions office, placement cell, or general inquiry desk. We are here to answer your questions and guide you toward a transformative management education experience.',
     badge: 'CONTACT INFORMATION',
-    backgroundImage: '/assets/Images/image 73.png'
+    backgroundImage: '/assets/Images/contact/contact_hero.png'
   });
 
   const [contactBoxData, setContactBoxData] = useState({
@@ -32,6 +47,12 @@ const ContactHero = () => {
   });
 
   useEffect(() => {
+    if (previewData) {
+      if (previewData.hero) setHeroData(prev => ({ ...prev, ...previewData.hero }));
+      if (previewData.contactBox) setContactBoxData(prev => ({ ...prev, ...previewData.contactBox }));
+      return;
+    }
+
     const fetchSettings = async () => {
       try {
         const response = await api.get('/cms/contact-page');
@@ -39,10 +60,12 @@ const ContactHero = () => {
         if (response.data?.contactBox) setContactBoxData(prev => ({ ...prev, ...response.data.contactBox }));
       } catch (error) {
         console.error('Failed to fetch contact page settings:', error);
+      } finally {
+        if (onDataLoaded) onDataLoaded();
       }
     };
     fetchSettings();
-  }, []);
+  }, [previewData, onDataLoaded]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -61,24 +84,20 @@ const ContactHero = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
-      Swal.fire({
+      Toast.fire({
         icon: 'warning',
-        title: 'Missing Fields',
-        text: 'Please fill in your Name, Email, and Message before submitting.',
-        confirmButtonColor: '#111836'
+        title: 'Please fill all required fields.'
       });
       return;
     }
 
     setIsSubmitting(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await api.post('/contact/submit', formData);
 
-      Swal.fire({
+      Toast.fire({
         icon: 'success',
-        title: 'Message Sent Successfully!',
-        text: 'Thank you for reaching out. Our team will get back to you within 24 hours.',
-        confirmButtonColor: '#111836'
+        title: 'Message Sent Successfully!'
       });
 
       setFormData({
@@ -89,11 +108,9 @@ const ContactHero = () => {
         message: ''
       });
     } catch (error) {
-      Swal.fire({
+      Toast.fire({
         icon: 'error',
-        title: 'Submission Failed',
-        text: 'Could not send your message right now. Please try again later.',
-        confirmButtonColor: '#111836'
+        title: 'Submission Failed'
       });
     } finally {
       setIsSubmitting(false);

@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Lock, Eye, CheckCircle2 } from 'lucide-react';
 import api from '../../api/axios';
+import Loader from '../../components/Loader';
 
-const PrivacyPolicy = () => {
+const PrivacyPolicy = ({ previewData }) => {
   const [data, setData] = useState({
     hero: {
       title: 'Privacy Policy',
@@ -33,6 +34,11 @@ const PrivacyPolicy = () => {
   });
 
   useEffect(() => {
+    if (previewData) {
+      setData(previewData);
+      return;
+    }
+
     window.scrollTo(0, 0);
     const fetchSettings = async () => {
       try {
@@ -48,7 +54,40 @@ const PrivacyPolicy = () => {
       }
     };
     fetchSettings();
-  }, []);
+  }, [previewData]);
+
+  const [isLoaded, setIsLoaded] = useState(false);
+  useEffect(() => {
+    let windowLoaded = document.readyState === 'complete';
+    let dataLoaded = data && Object.keys(data).length > 0;
+
+    const checkReady = () => {
+      if (windowLoaded && dataLoaded) {
+        setTimeout(() => setIsLoaded(true), 400);
+      }
+    };
+
+    const handleWindowLoad = () => {
+      windowLoaded = true;
+      checkReady();
+    };
+
+    if (windowLoaded) {
+      checkReady();
+    } else {
+      window.addEventListener('load', handleWindowLoad);
+    }
+
+    if (dataLoaded) {
+      checkReady();
+    }
+
+    const fallback = setTimeout(() => setIsLoaded(true), 5000);
+    return () => {
+      window.removeEventListener('load', handleWindowLoad);
+      clearTimeout(fallback);
+    };
+  }, [data]);
 
   const hero = data.hero || {};
   const mainContent = data.mainContent || {};
@@ -62,8 +101,14 @@ const PrivacyPolicy = () => {
     ];
 
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-between">
-      <main>
+    <>
+      <div 
+        className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+      >
+        <Loader fullScreen={false} />
+      </div>
+      <div className="min-h-screen bg-white flex flex-col justify-between">
+        <main>
         {/* Top Hero Section */}
         <section className="relative min-h-[400px] sm:min-h-[480px] md:min-h-[540px] flex items-center justify-center overflow-hidden bg-[#111836] py-16 sm:py-20 px-4">
           {/* Background Image & Overlay */}
@@ -141,8 +186,9 @@ const PrivacyPolicy = () => {
             </motion.div>
           </div>
         </section>
-      </main>
-    </div>
+        </main>
+      </div>
+    </>
   );
 };
 

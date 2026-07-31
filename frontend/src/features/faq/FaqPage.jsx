@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus, HelpCircle, MessageSquare } from 'lucide-react';
 import api from '../../api/axios';
+import Loader from '../../components/Loader';
 import AdmissionCtaSection from '../admission/components/AdmissionCtaSection';
 
-const FaqPage = () => {
+const FaqPage = ({ previewData }) => {
   const [openIndex, setOpenIndex] = useState(0);
   const [data, setData] = useState({
     hero: {
@@ -41,6 +42,11 @@ const FaqPage = () => {
   });
 
   useEffect(() => {
+    if (previewData) {
+      setData(previewData);
+      return;
+    }
+
     window.scrollTo(0, 0);
     const fetchSettings = async () => {
       try {
@@ -56,7 +62,40 @@ const FaqPage = () => {
       }
     };
     fetchSettings();
-  }, []);
+  }, [previewData]);
+
+  const [isLoaded, setIsLoaded] = useState(false);
+  useEffect(() => {
+    let windowLoaded = document.readyState === 'complete';
+    let dataLoaded = data && Object.keys(data).length > 0;
+
+    const checkReady = () => {
+      if (windowLoaded && dataLoaded) {
+        setTimeout(() => setIsLoaded(true), 400);
+      }
+    };
+
+    const handleWindowLoad = () => {
+      windowLoaded = true;
+      checkReady();
+    };
+
+    if (windowLoaded) {
+      checkReady();
+    } else {
+      window.addEventListener('load', handleWindowLoad);
+    }
+
+    if (dataLoaded) {
+      checkReady();
+    }
+
+    const fallback = setTimeout(() => setIsLoaded(true), 5000);
+    return () => {
+      window.removeEventListener('load', handleWindowLoad);
+      clearTimeout(fallback);
+    };
+  }, [data]);
 
   const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? -1 : index);
@@ -82,8 +121,14 @@ const FaqPage = () => {
     ];
 
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-between">
-      <main>
+    <>
+      <div 
+        className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+      >
+        <Loader fullScreen={false} />
+      </div>
+      <div className="min-h-screen bg-white flex flex-col justify-between">
+        <main>
         {/* Top Hero Section */}
         <section className="relative min-h-[400px] sm:min-h-[480px] md:min-h-[540px] flex items-center justify-center overflow-hidden bg-[#111836] py-16 sm:py-20 px-4">
           {/* Background Image & Overlay */}
@@ -200,8 +245,10 @@ const FaqPage = () => {
 
           </div>
         </section>
-      </main>
-    </div>
+        </main>
+        <AdmissionCtaSection />
+      </div>
+    </>
   );
 };
 

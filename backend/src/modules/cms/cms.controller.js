@@ -1428,14 +1428,15 @@ export const getBlogsPageSettings = async (req, res) => {
 // @access  Private/Admin
 export const updateBlogsPageSettings = async (req, res) => {
   try {
-    const { hero, ctaSection } = req.body;
+    const { hero, ctaSection, blogs } = req.body;
     let settings = await BlogsPageModel.findOne();
 
     if (!settings) {
-      settings = new BlogsPageModel({ hero, ctaSection });
+      settings = new BlogsPageModel({ hero, ctaSection, blogs });
     } else {
       if (hero) settings.hero = hero;
       if (ctaSection) settings.ctaSection = ctaSection;
+      if (blogs) settings.blogs = blogs;
     }
 
     const updatedSettings = await settings.save();
