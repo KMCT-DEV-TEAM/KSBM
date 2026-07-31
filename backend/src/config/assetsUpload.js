@@ -99,6 +99,11 @@ if (!fs.existsSync(termsAssetsDir)) {
   fs.mkdirSync(termsAssetsDir, { recursive: true });
 }
 
+const galleryAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/gallery');
+if (!fs.existsSync(galleryAssetsDir)) {
+  fs.mkdirSync(galleryAssetsDir, { recursive: true });
+}
+
 const privacyAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/privacy');
 if (!fs.existsSync(privacyAssetsDir)) {
   fs.mkdirSync(privacyAssetsDir, { recursive: true });
@@ -146,6 +151,8 @@ const storage = multer.diskStorage({
       targetDir = termsAssetsDir;
     } else if (req.originalUrl.includes('/upload/privacy')) {
       targetDir = privacyAssetsDir;
+    } else if (req.originalUrl.includes('/upload/gallery')) {
+      targetDir = galleryAssetsDir;
     }
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir, { recursive: true });

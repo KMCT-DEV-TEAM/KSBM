@@ -101,6 +101,21 @@ const Header = ({ previewData }) => {
   const [actionButton, setActionButton] = useState({ text: 'Apply Now', isVisible: true });
   const [logoUrl, setLogoUrl] = useState('');
   const [alignment, setAlignment] = useState('center');
+  const [mandatoryDisclosureUrl, setMandatoryDisclosureUrl] = useState(null);
+
+  useEffect(() => {
+    const fetchMandatoryDisclosure = async () => {
+      try {
+        const { data } = await api.get('/cms/mandatory-disclosure/default', { hideLoader: true });
+        if (data && data.pdfUrl) {
+          setMandatoryDisclosureUrl(data.pdfUrl);
+        }
+      } catch (error) {
+        // silently fail
+      }
+    };
+    fetchMandatoryDisclosure();
+  }, []);
 
   useEffect(() => {
     if (previewData) {
@@ -285,7 +300,14 @@ const Header = ({ previewData }) => {
                     <Link
                       href={item.link}
                       className={`no-underline text-[13.5px] py-2 transition-colors duration-300 inline-block ${getNavTextClass(activeNav === item.label)}`}
-                      onClick={() => setActiveNav(item.label)}
+                      onClick={(e) => {
+                        if (item.link === '/mandatory-disclosure') {
+                          e.preventDefault();
+                          if (mandatoryDisclosureUrl) window.open(mandatoryDisclosureUrl, '_blank');
+                        } else {
+                          setActiveNav(item.label);
+                        }
+                      }}
                     >
                       {item.label}
                     </Link>
@@ -392,10 +414,15 @@ const Header = ({ previewData }) => {
                           className={`block no-underline text-base font-medium py-1 flex-1 transition-colors ${
                             activeNav === item.label ? 'text-primary font-bold' : 'text-slate-600 hover:text-primary'
                           }`}
-                          onClick={() => {
-                            setActiveNav(item.label);
-                            setIsMobileMenuOpen(false);
-                            setExpandedMobileNav({});
+                          onClick={(e) => {
+                            if (item.link === '/mandatory-disclosure') {
+                              e.preventDefault();
+                              if (mandatoryDisclosureUrl) window.open(mandatoryDisclosureUrl, '_blank');
+                            } else {
+                              setActiveNav(item.label);
+                              setIsMobileMenuOpen(false);
+                              setExpandedMobileNav({});
+                            }
                           }}
                         >
                           {item.label}

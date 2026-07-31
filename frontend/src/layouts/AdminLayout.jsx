@@ -2,10 +2,12 @@
 import React from 'react';
 import Sidebar from './components/Sidebar';
 import AdminNavbar from './components/AdminNavbar';
+import { NotificationProvider } from '../context/NotificationContext';
 
 const AdminLayout = ({ children }) => {
   return (
-    <div className="fixed inset-0 flex w-full bg-[#F5F5F9] overflow-hidden font-sans">
+    <NotificationProvider>
+      <div className="fixed inset-0 flex w-full bg-[#F5F5F9] overflow-hidden font-sans">
       {/* Sidebar Component */}
       <Sidebar />
 
@@ -20,8 +22,9 @@ const AdminLayout = ({ children }) => {
           {children}
         </main>
         
+        </div>
       </div>
-    </div>
+    </NotificationProvider>
   );
 };
 

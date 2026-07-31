@@ -53,7 +53,9 @@ const ManageGrievancePage = () => {
         "Student Grievance Cell",
         "Student Grievance Cell",
         "Student Grievance Cell"
-      ]
+      ],
+      departments: ["Department 1", "Department 2"],
+      courses: ["Course 1", "Course 2", "Course 3"]
     }
   };
 
@@ -209,6 +211,23 @@ const ManageGrievancePage = () => {
     const newOptions = [...formData.formSection.cellOptions];
     newOptions.splice(idx, 1);
     handleChange('formSection', 'cellOptions', newOptions);
+  };
+
+  const handleListChange = (field, idx, value) => {
+    const newList = [...(formData.formSection[field] || [])];
+    newList[idx] = value;
+    handleChange('formSection', field, newList);
+  };
+
+  const handleAddListItem = (field, defaultValue) => {
+    const newList = [...(formData.formSection[field] || []), defaultValue];
+    handleChange('formSection', field, newList);
+  };
+
+  const handleDeleteListItem = (field, idx) => {
+    const newList = [...(formData.formSection[field] || [])];
+    newList.splice(idx, 1);
+    handleChange('formSection', field, newList);
   };
 
   if (loading) return <AdminSkeleton />;
@@ -419,6 +438,88 @@ const ManageGrievancePage = () => {
                             onClick={() => handleDeleteCellOption(idx)}
                             className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors opacity-0 group-hover:opacity-100"
                             title="Remove Option"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-3 pt-4 border-t border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Departments</label>
+                      <p className="text-xs text-gray-400 mb-2">Edit, add, or remove the exact labels that appear for the department dropdown on the form.</p>
+                    </div>
+                    <button 
+                      onClick={() => handleAddListItem('departments', 'New Department')}
+                      className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
+                    >
+                      <Plus className="w-4 h-4" /> Add Department
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {(formData.formSection.departments || []).map((opt, idx) => (
+                      <div key={idx} className="relative space-y-1 group">
+                        <div className="flex justify-between items-center ml-1">
+                          <label className="text-[10px] text-gray-400 font-medium uppercase">Department {idx + 1}</label>
+                          <span className="text-[10px] text-gray-400">{opt?.length || 0}/50</span>
+                        </div>
+                        <div className="relative">
+                          <input
+                            type="text"
+                            maxLength={50}
+                            value={opt}
+                            onChange={(e) => handleListChange('departments', idx, e.target.value)}
+                            className="w-full p-2.5 pr-10 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-primary/50"
+                          />
+                          <button
+                            onClick={() => handleDeleteListItem('departments', idx)}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors opacity-0 group-hover:opacity-100"
+                            title="Remove Department"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-3 pt-4 border-t border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Courses</label>
+                      <p className="text-xs text-gray-400 mb-2">Edit, add, or remove the exact labels that appear for the course dropdown on the form.</p>
+                    </div>
+                    <button 
+                      onClick={() => handleAddListItem('courses', 'New Course')}
+                      className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
+                    >
+                      <Plus className="w-4 h-4" /> Add Course
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {(formData.formSection.courses || []).map((opt, idx) => (
+                      <div key={idx} className="relative space-y-1 group">
+                        <div className="flex justify-between items-center ml-1">
+                          <label className="text-[10px] text-gray-400 font-medium uppercase">Course {idx + 1}</label>
+                          <span className="text-[10px] text-gray-400">{opt?.length || 0}/50</span>
+                        </div>
+                        <div className="relative">
+                          <input
+                            type="text"
+                            maxLength={50}
+                            value={opt}
+                            onChange={(e) => handleListChange('courses', idx, e.target.value)}
+                            className="w-full p-2.5 pr-10 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-primary/50"
+                          />
+                          <button
+                            onClick={() => handleDeleteListItem('courses', idx)}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors opacity-0 group-hover:opacity-100"
+                            title="Remove Course"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
