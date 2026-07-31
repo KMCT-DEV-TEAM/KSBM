@@ -7,13 +7,15 @@ import {
   MonitorPlay, Type, Image, BookOpen,
   Award, Building2, Briefcase, Handshake,
   MessageSquare, Star, Newspaper, Heart, PanelBottom,
-  ChevronDown, ChevronRight, Home, Info, Globe, GraduationCap, Phone, ShieldCheck
+  ChevronDown, ChevronRight, Home, Info, Globe, GraduationCap, Phone, ShieldCheck, Bell
 } from 'lucide-react';
+import { useNotifications } from '../../context/NotificationContext';
 const logo = '/assets/Images/Header/LOGO__KMCT School of Business Management (1).png';
 
 const Sidebar = () => {
   const pathname = usePathname();
   const [openSection, setOpenSection] = useState(null);
+  const { unreadCount } = useNotifications();
 
   const toggleSection = (section) => {
     setOpenSection(openSection === section ? null : section);
@@ -21,8 +23,7 @@ const Sidebar = () => {
 
   const mainLinks = [
     { name: 'Overview', path: '/admin/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-    { name: 'Users', path: '/admin/users', icon: <Users className="w-5 h-5" /> },
-    { name: 'Settings', path: '/admin/settings', icon: <Settings className="w-5 h-5" /> },
+    { name: 'Notifications', path: '/admin/notifications', icon: <Bell className="w-5 h-5" /> },
   ];
 
   const cmsSections = [
@@ -96,6 +97,7 @@ const Sidebar = () => {
         { name: 'Terms & Conditions', path: '/admin/cms/terms-and-conditions' },
         { name: 'Grievance Page', path: '/admin/cms/grievance' },
         { name: 'Download Page', path: '/admin/cms/download' },
+        { name: 'Mandatory Disclosure', path: '/admin/cms/mandatory-disclosure' },
       ]
     },
     {
@@ -133,13 +135,22 @@ const Sidebar = () => {
               <Link
                 key={link.path}
                 href={link.path}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 ${pathname === link.path
+                className={`flex items-center justify-between px-4 py-2.5 rounded-lg transition-all duration-200 ${pathname === link.path
                   ? 'bg-primary/10 text-primary font-semibold'
                   : 'text-[#697A8D] hover:bg-gray-50'
                   }`}
               >
-                {link.icon}
-                <span className="text-sm">{link.name}</span>
+                <div className="flex items-center gap-3">
+                    <span className={pathname === link.path ? 'text-primary' : 'text-gray-400'}>
+                        {link.icon}
+                    </span>
+                    <span className="text-sm">{link.name}</span>
+                </div>
+                {link.name === 'Notifications' && unreadCount > 0 && (
+                  <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    {unreadCount}
+                  </span>
+                )}
               </Link>
             ))}
           </div>

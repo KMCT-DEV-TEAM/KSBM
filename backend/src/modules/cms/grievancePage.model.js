@@ -23,6 +23,14 @@ const grievancePageSchema = new mongoose.Schema({
         "Student Grievance Cell",
         "Student Grievance Cell"
       ] 
+    },
+    departments: {
+      type: [String],
+      default: ["Department 1", "Department 2"]
+    },
+    courses: {
+      type: [String],
+      default: ["Course 1", "Course 2", "Course 3"]
     }
   }
 }, { timestamps: true, strict: false });

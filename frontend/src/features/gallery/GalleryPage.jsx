@@ -4,12 +4,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import api from '../../api/axios';
-const GalleryPage = () => {
+const GalleryPage = ({ previewData }) => {
   const [activeTab, setActiveTab] = useState('All');
-  const [galleryData, setGalleryData] = useState(null);
+  const [galleryData, setGalleryData] = useState(previewData || null);
   const [selectedMedia, setSelectedMedia] = useState(null);
 
   useEffect(() => {
+    if (previewData) {
+      setGalleryData(previewData);
+      return;
+    }
     const fetchGalleryData = async () => {
       try {
         const response = await api.get('/cms/gallery-page');
@@ -19,7 +23,7 @@ const GalleryPage = () => {
       }
     };
     fetchGalleryData();
-  }, []);
+  }, [previewData]);
 
   const items = galleryData?.gallery?.items || [];
   const hero = galleryData?.hero || {
@@ -30,27 +34,28 @@ const GalleryPage = () => {
   const gallery = galleryData?.gallery || { badge: 'Gallery', heading: 'Moments Captured in Campus' };
 
   const filteredItems = items.filter((item) => {
+    const itemCategory = item.category || (item.type === 'video' ? 'Sports' : 'Cultural');
     if (activeTab === 'All') return true;
-    if (activeTab === 'Sports') return item.type === 'video';
-    if (activeTab === 'Cultural') return item.type === 'image';
+    if (activeTab === 'Sports') return itemCategory === 'Sports';
+    if (activeTab === 'Cultural') return itemCategory === 'Cultural';
     return true;
   });
 
   const getCardDimensions = (item, idx, rowNum = 1) => {
     const shapeIndex = (idx + (rowNum === 2 ? 2 : rowNum === 3 ? 4 : 0)) % 5;
     const shapes = [
-      'w-[320px] sm:w-[390px] md:w-[440px] h-[220px] sm:h-[240px] shrink-0', // Wide rectangle
-      'w-[230px] sm:w-[260px] md:w-[280px] h-[250px] sm:h-[280px] shrink-0', // Tall portrait
-      'w-[250px] sm:w-[290px] md:w-[330px] h-[230px] sm:h-[250px] shrink-0', // Square-ish
-      'w-[350px] sm:w-[430px] md:w-[490px] h-[240px] sm:h-[270px] shrink-0', // Panoramic collage
-      'w-[220px] sm:w-[250px] md:w-[270px] h-[210px] sm:h-[230px] shrink-0'  // Compact bento
+      'w-[200px] sm:w-[390px] md:w-[440px] h-[140px] sm:h-[240px] shrink-0', // Wide rectangle
+      'w-[150px] sm:w-[260px] md:w-[280px] h-[170px] sm:h-[280px] shrink-0', // Tall portrait
+      'w-[170px] sm:w-[290px] md:w-[330px] h-[150px] sm:h-[250px] shrink-0', // Square-ish
+      'w-[220px] sm:w-[430px] md:w-[490px] h-[150px] sm:h-[270px] shrink-0', // Panoramic collage
+      'w-[140px] sm:w-[250px] md:w-[270px] h-[130px] sm:h-[230px] shrink-0'  // Compact bento
     ];
     return shapes[shapeIndex];
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#111836] overflow-x-hidden">
-      <Header />
+      {!previewData && <Header />}
 
       <main className="flex-1 relative">
         {/* Unified Background for entire page, matching Contact page model */}
@@ -153,7 +158,7 @@ const GalleryPage = () => {
               {filteredItems.length > 0 ? (
                 <>
                   {/* Line 1: Right to Left */}
-                  <div className="animate-marquee-row1 gap-5 sm:gap-6 px-4" style={{ animationDuration: `${Math.max(filteredItems.length * 6, 25)}s` }}>
+                  <div className="animate-marquee-row1 gap-5 sm:gap-6 px-4" style={{ animationDuration: `${Math.max(filteredItems.length * 12, 50)}s` }}>
                     {[...filteredItems, ...filteredItems, ...filteredItems, ...filteredItems, ...filteredItems, ...filteredItems].map((item, idx) => (
                       <div
                         key={`row1-${item.id}-${idx}`}
@@ -183,7 +188,7 @@ const GalleryPage = () => {
                   </div>
 
                   {/* Line 2: Left to Right */}
-                  <div className="animate-marquee-row2 gap-3 sm:gap-5 px-4" style={{ animationDuration: `${Math.max(filteredItems.length * 6.5, 28)}s` }}>
+                  <div className="animate-marquee-row2 gap-3 sm:gap-5 px-4" style={{ animationDuration: `${Math.max(filteredItems.length * 13, 56)}s` }}>
                     {[...filteredItems.slice().reverse(), ...filteredItems.slice().reverse(), ...filteredItems.slice().reverse(), ...filteredItems.slice().reverse(), ...filteredItems.slice().reverse(), ...filteredItems.slice().reverse()].map((item, idx) => (
                       <div
                         key={`row2-${item.id}-${idx}`}
@@ -213,7 +218,7 @@ const GalleryPage = () => {
                   </div>
 
                   {/* Line 3: Right to Left (Offset) */}
-                  <div className="animate-marquee-row3 gap-4 sm:gap-6 px-4" style={{ animationDuration: `${Math.max(filteredItems.length * 5.5, 26)}s` }}>
+                  <div className="animate-marquee-row3 gap-4 sm:gap-6 px-4" style={{ animationDuration: `${Math.max(filteredItems.length * 11, 52)}s` }}>
                     {[...filteredItems.slice(1), filteredItems[0], ...filteredItems.slice(1), filteredItems[0], ...filteredItems.slice(1), filteredItems[0], ...filteredItems.slice(1), filteredItems[0], ...filteredItems.slice(1), filteredItems[0], ...filteredItems.slice(1), filteredItems[0]].map((item, idx) => (
                       <div
                         key={`row3-${item?.id || idx}-${idx}`}
@@ -303,7 +308,7 @@ const GalleryPage = () => {
         )}
       </AnimatePresence>
 
-      <Footer />
+      {!previewData && <Footer />}
     </div>
   );
 };

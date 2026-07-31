@@ -14,17 +14,17 @@ const galleryPageSchema = new mongoose.Schema(
         type: [
           {
             title: { type: String },
-            type: { type: String, enum: ['image', 'video'], default: 'image' },
+            category: { type: String, enum: ['Cultural', 'Sports'], default: 'Cultural' },
             img: { type: String }
           }
         ],
         default: [
-          { title: 'Temple', type: 'image', img: 'https://images.unsplash.com/photo-1542840410-3092f99611a3?q=80&w=800&auto=format&fit=crop' },
-          { title: 'Camp Fire', type: 'image', img: 'https://images.unsplash.com/photo-1523580494112-071d1694d8d6?q=80&w=800&auto=format&fit=crop' },
-          { title: 'Mountain', type: 'video', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop' },
-          { title: 'The Night Beauty', type: 'image', img: 'https://images.unsplash.com/photo-1493225457124-a1a2a5f0393b?q=80&w=800&auto=format&fit=crop' },
-          { title: 'Graduation', type: 'image', img: 'https://images.unsplash.com/photo-1523580494112-071d1694d8d6?q=80&w=800&auto=format&fit=crop' },
-          { title: 'Study Boy', type: 'image', img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop' }
+          { title: 'Temple', category: 'Cultural', img: 'https://images.unsplash.com/photo-1542840410-3092f99611a3?q=80&w=800&auto=format&fit=crop' },
+          { title: 'Camp Fire', category: 'Cultural', img: 'https://images.unsplash.com/photo-1523580494112-071d1694d8d6?q=80&w=800&auto=format&fit=crop' },
+          { title: 'Mountain', category: 'Cultural', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop' },
+          { title: 'The Night Beauty', category: 'Cultural', img: 'https://images.unsplash.com/photo-1493225457124-a1a2a5f0393b?q=80&w=800&auto=format&fit=crop' },
+          { title: 'Graduation', category: 'Cultural', img: 'https://images.unsplash.com/photo-1523580494112-071d1694d8d6?q=80&w=800&auto=format&fit=crop' },
+          { title: 'Study Boy', category: 'Cultural', img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop' }
         ]
       }
     }

@@ -1,4 +1,5 @@
 import Header from './header.model.js';
+import MandatoryDisclosure from './mandatoryDisclosure.model.js';
 import About from './about.model.js';
 import EventsPageModel from './eventsPage.model.js';
 import BlogsPageModel from './blogsPage.model.js';
@@ -1517,5 +1518,82 @@ export const updateCommitteesAndCellsSettings = async (req, res) => {
     res.status(200).json(settings);
   } catch (error) {
     res.status(500).json({ message: 'Error updating committees settings', error: error.message });
+  }
+};
+
+// @desc    Get all mandatory disclosures
+// @route   GET /api/cms/mandatory-disclosure
+// @access  Public
+export const getMandatoryDisclosures = async (req, res) => {
+  try {
+    const disclosures = await MandatoryDisclosure.find().sort({ createdAt: -1 });
+    res.json(disclosures);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching mandatory disclosures', error: error.message });
+  }
+};
+
+// @desc    Upload mandatory disclosure
+// @route   POST /api/cms/mandatory-disclosure
+// @access  Private (Admin)
+export const uploadMandatoryDisclosure = async (req, res) => {
+  try {
+    const { title, pdfUrl, isDefault } = req.body;
+    if (!title || !pdfUrl) {
+      return res.status(400).json({ message: 'Title and PDF URL are required' });
+    }
+    const disclosure = new MandatoryDisclosure({ title, pdfUrl, isDefault });
+    const savedDisclosure = await disclosure.save();
+    res.status(201).json(savedDisclosure);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error uploading mandatory disclosure', error: error.message });
+  }
+};
+
+// @desc    Set default mandatory disclosure
+// @route   PUT /api/cms/mandatory-disclosure/:id/default
+// @access  Private (Admin)
+export const setDefaultMandatoryDisclosure = async (req, res) => {
+  try {
+    const disclosure = await MandatoryDisclosure.findById(req.params.id);
+    if (!disclosure) {
+      return res.status(404).json({ message: 'Disclosure not found' });
+    }
+    disclosure.isDefault = true;
+    await disclosure.save();
+    res.json({ message: 'Default set successfully', disclosure });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error setting default disclosure', error: error.message });
+  }
+};
+
+// @desc    Delete mandatory disclosure
+// @route   DELETE /api/cms/mandatory-disclosure/:id
+// @access  Private (Admin)
+export const deleteMandatoryDisclosure = async (req, res) => {
+  try {
+    const disclosure = await MandatoryDisclosure.findById(req.params.id);
+    if (!disclosure) {
+      return res.status(404).json({ message: 'Disclosure not found' });
+    }
+    await disclosure.deleteOne();
+    res.json({ message: 'Disclosure removed' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error deleting disclosure', error: error.message });
+  }
+};
+
+// @desc    Get default mandatory disclosure
+// @route   GET /api/cms/mandatory-disclosure/default
+// @access  Public
+export const getDefaultMandatoryDisclosure = async (req, res) => {
+  try {
+    const disclosure = await MandatoryDisclosure.findOne({ isDefault: true });
+    if (!disclosure) {
+      return res.status(404).json({ message: 'No default disclosure set' });
+    }
+    res.json(disclosure);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching default disclosure', error: error.message });
   }
 };

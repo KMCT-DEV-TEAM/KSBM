@@ -18,7 +18,7 @@ router.post('/home', protect, uploadAssets.single('image'), async (req, res) => 
   }
 
   const fileUrl = `/assets/Images/Home/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/Home',
     url: fileUrl,
@@ -31,7 +31,7 @@ router.post('/programs', protect, uploadAssets.single('image'), async (req, res)
   }
 
   const fileUrl = `/assets/Images/Home/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/Home',
     url: fileUrl,
@@ -44,7 +44,7 @@ router.post('/aboutus', protect, uploadAssets.single('image'), async (req, res) 
   }
 
   const fileUrl = `/assets/Images/aboutus/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/aboutus',
     url: fileUrl,
@@ -57,7 +57,7 @@ router.post('/management', protect, uploadAssets.single('image'), async (req, re
   }
 
   const fileUrl = `/assets/Images/management/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/management',
     url: fileUrl,
@@ -70,7 +70,7 @@ router.post('/mba', protect, uploadAssets.single('image'), async (req, res) => {
   }
 
   const fileUrl = `/assets/Images/mba/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/mba',
     url: fileUrl,
@@ -83,7 +83,7 @@ router.post('/faculty', protect, uploadAssets.single('image'), async (req, res) 
   }
 
   const fileUrl = `/assets/Images/faculty/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/faculty',
     url: fileUrl,
@@ -96,7 +96,7 @@ router.post('/alumni', protect, uploadAssets.single('image'), async (req, res) =
   }
 
   const fileUrl = `/assets/Images/alumni/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/alumni',
     url: fileUrl,
@@ -109,7 +109,7 @@ router.post('/placements', protect, uploadAssets.single('image'), async (req, re
   }
 
   const fileUrl = `/assets/Images/placements/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/placements',
     url: fileUrl,
@@ -122,7 +122,7 @@ router.post('/committees', protect, uploadAssets.single('image'), async (req, re
   }
 
   const fileUrl = `/assets/Images/committees/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/committees',
     url: fileUrl,
@@ -135,7 +135,7 @@ router.post('/examinations', protect, uploadAssets.single('image'), async (req, 
   }
 
   const fileUrl = `/assets/Images/examinations/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/examinations',
     url: fileUrl,
@@ -148,7 +148,7 @@ router.post('/blogs', protect, uploadAssets.single('image'), async (req, res) =>
   }
 
   const fileUrl = `/assets/Images/blogs/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/blogs',
     url: fileUrl,
@@ -161,7 +161,7 @@ router.post('/grievance', protect, uploadAssets.single('image'), async (req, res
   }
 
   const fileUrl = `/assets/Images/grievance/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/grievance',
     url: fileUrl,
@@ -174,7 +174,7 @@ router.post('/contact', protect, uploadAssets.single('image'), async (req, res) 
   }
 
   const fileUrl = `/assets/Images/contact/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/contact',
     url: fileUrl,
@@ -187,7 +187,7 @@ router.post('/facilities', protect, uploadAssets.single('image'), async (req, re
   }
 
   const fileUrl = `/assets/Images/fecilities/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/fecilities',
     url: fileUrl,
@@ -200,7 +200,7 @@ router.post('/admissions', protect, uploadAssets.single('image'), async (req, re
   }
 
   const fileUrl = `/assets/Images/admissions/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/admissions',
     url: fileUrl,
@@ -211,10 +211,10 @@ router.post('/', protect, upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No image provided' });
   }
-  
+
   // Local URL fallback
   const fileUrl = `/uploads/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully locally',
     url: fileUrl,
@@ -227,9 +227,22 @@ router.post('/faq', protect, uploadAssets.single('image'), async (req, res) => {
   }
 
   const fileUrl = `/assets/Images/faq/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/faq',
+    url: fileUrl,
+  });
+});
+
+router.post('/gallery', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
+
+  const fileUrl = `/assets/Images/gallery/${req.file.filename}`;
+
+  res.status(200).json({
+    message: 'Image uploaded successfully to /assets/Images/gallery',
     url: fileUrl,
   });
 });
@@ -240,7 +253,7 @@ router.post('/downloads', protect, uploadAssets.single('image'), async (req, res
   }
 
   const fileUrl = `/assets/Images/downloads/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/downloads',
     url: fileUrl,
@@ -253,7 +266,7 @@ router.post('/terms', protect, uploadAssets.single('image'), async (req, res) =>
   }
 
   const fileUrl = `/assets/Images/terms/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/terms',
     url: fileUrl,
@@ -266,7 +279,7 @@ router.post('/privacy', protect, uploadAssets.single('image'), async (req, res) 
   }
 
   const fileUrl = `/assets/Images/privacy/${req.file.filename}`;
-  
+
   res.status(200).json({
     message: 'Image uploaded successfully to /assets/Images/privacy',
     url: fileUrl,
@@ -306,14 +319,14 @@ router.delete('/', protect, async (req, res) => {
     'about-hero-bg.jpg',
     'default-management-hero.jpg', 'default-management-leader.jpg', 'default-management-badge.png',
     'mba_hero_bg.png', 'mba_main.png', 'mba_feature_1.png', 'mba_feature_2.png',
-    'internship_2.png', 'internship_27.png', 'internship_28.png', 
+    'internship_2.png', 'internship_27.png', 'internship_28.png',
     'dynamic_49.png', 'dynamic_60.png', 'calendar_64.png',
     'gallery_67.png', 'gallery_58.png', 'gallery_69.png', 'gallery_70.png',
     'gallery_71.png', 'gallery_72.png', 'gallery_73.png', 'gallery_74.png',
     'gallery_75.png', 'gallery_76.png', 'gallery_77.png', 'gallery_78.png',
-    'default-faculty-hero.jpg', 'default-faculty-leader.jpg',
+    'image 53.png', 'image%2053.png', 'default-faculty-leader.jpg',
     'image 2.png', 'image 31.png',
-    'default-hero-bg.jpg', 'default-collage-1.jpg', 'default-collage-2.jpg', 
+    'default-hero-bg.jpg', 'default-collage-1.jpg', 'default-collage-2.jpg',
     'default-excellence-bg.png', 'default-committee-vector.png', 'default-avatar.png',
     'default-partner-1.jpg', 'default-partner-2.jpg', 'default-partner-3.jpg',
     'default-faculty-hero.jpg', 'default-faculty-leader.jpg', 'default-committees-hero.png',
@@ -341,15 +354,15 @@ router.delete('/', protect, async (req, res) => {
   } else if (fileUrl.includes('/assets/Images/mba/')) {
     filePath = path.join(__dirname, '../../../../frontend/public', fileUrl);
   } else if (fileUrl.includes('/assets/Images/faculty/')) {
-     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/faculty', filename);
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/faculty', filename);
   } else if (fileUrl.includes('/assets/Images/alumni/')) {
-     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/alumni', filename);
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/alumni', filename);
   } else if (fileUrl.includes('/assets/Images/placements/')) {
-     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/placements', filename);
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/placements', filename);
   } else if (fileUrl.includes('/assets/Images/committees/')) {
-     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/committees', filename);
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/committees', filename);
   } else if (fileUrl.includes('/assets/Images/admissions/')) {
-     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/admissions', filename);
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/admissions', filename);
   } else if (fileUrl.includes('/assets/Images/examinations/')) {
     filePath = path.join(__dirname, '../../../../frontend/public', fileUrl);
   } else if (fileUrl.includes('/assets/Images/blogs/')) {
@@ -370,10 +383,12 @@ router.delete('/', protect, async (req, res) => {
     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/privacy', filename);
   } else if (fileUrl.includes('/assets/Images/events/')) {
     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/events', filename);
+  } else if (fileUrl.includes('/assets/Images/gallery/')) {
+    filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/gallery', filename);
   } else if (fileUrl.includes('/assets/home/')) {
-     filePath = path.join(__dirname, '../../../../assets/home', filename);
+    filePath = path.join(__dirname, '../../../../assets/home', filename);
   } else if (fileUrl.includes('/uploads/')) {
-     filePath = path.join(__dirname, '../../../uploads', filename);
+    filePath = path.join(__dirname, '../../../uploads', filename);
   }
 
   console.log('DELETE request for:', fileUrl);

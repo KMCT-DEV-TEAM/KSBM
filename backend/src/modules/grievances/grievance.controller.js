@@ -1,4 +1,5 @@
 import Grievance from './grievance.model.js';
+import { createNotificationAndBroadcast } from '../notifications/notification.controller.js';
 
 // @desc    Submit a new grievance
 // @route   POST /api/grievances
@@ -18,6 +19,15 @@ export const submitGrievance = async (req, res) => {
     });
 
     const createdGrievance = await grievance.save();
+    
+    // Broadcast notification to all connected admins
+    await createNotificationAndBroadcast({
+      type: 'NEW_GRIEVANCE',
+      title: 'New Grievance Ticket',
+      message: `A new grievance ticket has been submitted for ${department}.`,
+      link: '/admin/grievances'
+    });
+
     res.status(201).json(createdGrievance);
   } catch (error) {
     console.error('Error submitting grievance:', error);

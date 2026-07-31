@@ -156,27 +156,20 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
               <button 
                 onClick={async (e) => {
                   e.preventDefault();
-                  await confirmAction({
-                    title: 'Revert to Default?',
-                    message: 'Are you sure you want to remove this image and revert to the default image setup?',
-                    confirmText: 'Yes, revert to default',
-                    variant: 'danger',
-                    action: async () => {
-                      if (!deferredMode) {
-                        if (displayUrl && !displayUrl.includes('placeholder') && !displayUrl.startsWith('blob:') && (!defaultImage || !displayUrl.includes(defaultImage))) {
-                          try {
-                            await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
-                          } catch (deleteErr) {
-                            console.error('Failed to delete physical file:', deleteErr);
-                          }
-                        }
+                  e.stopPropagation();
+                  if (!deferredMode) {
+                    if (displayUrl && !displayUrl.includes('placeholder') && !displayUrl.startsWith('blob:') && (!defaultImage || !displayUrl.includes(defaultImage))) {
+                      try {
+                        await api.delete('/upload', { data: { fileUrl: displayUrl }, hideLoader: true });
+                      } catch (deleteErr) {
+                        console.error('Failed to delete physical file:', deleteErr);
                       }
-                      handleSuccess('');
                     }
-                  });
+                  }
+                  handleSuccess('');
                 }}
                 className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
-                title="Revert to Default Image"
+                title="Remove Image"
               >
                 <X className="w-5 h-5" />
               </button>
