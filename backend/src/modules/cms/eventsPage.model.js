@@ -62,7 +62,10 @@ const eventsPageSchema = new mongoose.Schema(
           { img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=600&auto=format&fit=crop', alt: 'Program 2' },
           { img: 'https://images.unsplash.com/photo-1533174000273-7d5d1c2ec7ce?q=80&w=600&auto=format&fit=crop', alt: 'Program 3' },
           { img: 'https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop', alt: 'Program 4' },
-          { img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=600&auto=format&fit=crop', alt: 'Program 5' }
+          { img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=600&auto=format&fit=crop', alt: 'Program 5' },
+          { img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=600&auto=format&fit=crop', alt: 'Program 6' },
+          { img: 'https://images.unsplash.com/photo-1574169208507-84376144848b?q=80&w=600&auto=format&fit=crop', alt: 'Program 7' },
+          { img: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=600&auto=format&fit=crop', alt: 'Program 8' }
         ]
       }
     },

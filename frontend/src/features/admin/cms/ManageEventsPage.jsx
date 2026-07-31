@@ -68,7 +68,14 @@ const ManageEventsPage = () => {
     highlightedPrograms: {
       heading: 'THE HIGHLIGHTED PROGRAMS',
       images: [
-        { img: 'https://images.unsplash.com/photo-1547153760-18fc86324498?q=80&w=600&auto=format&fit=crop', alt: 'Program 1' }
+        { img: 'https://images.unsplash.com/photo-1547153760-18fc86324498?q=80&w=600&auto=format&fit=crop', alt: 'Program 1' },
+        { img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=600&auto=format&fit=crop', alt: 'Program 2' },
+        { img: 'https://images.unsplash.com/photo-1533174000273-7d5d1c2ec7ce?q=80&w=600&auto=format&fit=crop', alt: 'Program 3' },
+        { img: 'https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop', alt: 'Program 4' },
+        { img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=600&auto=format&fit=crop', alt: 'Program 5' },
+        { img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=600&auto=format&fit=crop', alt: 'Program 6' },
+        { img: 'https://images.unsplash.com/photo-1574169208507-84376144848b?q=80&w=600&auto=format&fit=crop', alt: 'Program 7' },
+        { img: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=600&auto=format&fit=crop', alt: 'Program 8' }
       ]
     },
     essenceOfCulture: {
@@ -245,7 +252,14 @@ const ManageEventsPage = () => {
             highlightedPrograms: { 
               ...prev.highlightedPrograms, 
               ...(d.highlightedPrograms || {}),
-              images: d.highlightedPrograms?.images?.length > 0 ? d.highlightedPrograms.images : prev.highlightedPrograms.images
+              images: (() => {
+                const fetchedImages = d.highlightedPrograms?.images?.length > 0 ? d.highlightedPrograms.images : prev.highlightedPrograms.images;
+                const paddedImages = [...fetchedImages];
+                while (paddedImages.length < 8) {
+                  paddedImages.push({ img: '', alt: `Program ${paddedImages.length + 1}` });
+                }
+                return paddedImages.slice(0, 8);
+              })()
             },
             essenceOfCulture: { 
               ...prev.essenceOfCulture, 
