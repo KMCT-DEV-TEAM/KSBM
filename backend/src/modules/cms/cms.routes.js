@@ -82,6 +82,11 @@ import {
   updateDownloadPage,
   getCommitteesAndCellsSettings,
   updateCommitteesAndCellsSettings,
+  getMandatoryDisclosures,
+  uploadMandatoryDisclosure,
+  setDefaultMandatoryDisclosure,
+  deleteMandatoryDisclosure,
+  getDefaultMandatoryDisclosure,
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -258,5 +263,18 @@ router.route('/download-page')
 router.route('/committees-and-cells')
   .get(getCommitteesAndCellsSettings)
   .put(protect, updateCommitteesAndCellsSettings);
+
+router.route('/mandatory-disclosure')
+  .get(getMandatoryDisclosures)
+  .post(protect, uploadMandatoryDisclosure);
+
+router.route('/mandatory-disclosure/default')
+  .get(getDefaultMandatoryDisclosure);
+
+router.route('/mandatory-disclosure/:id/default')
+  .put(protect, setDefaultMandatoryDisclosure);
+
+router.route('/mandatory-disclosure/:id')
+  .delete(protect, deleteMandatoryDisclosure);
 
 export default router;

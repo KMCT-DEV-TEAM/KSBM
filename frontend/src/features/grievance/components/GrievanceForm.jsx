@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import { Loader2 } from 'lucide-react';
@@ -19,6 +19,61 @@ const Toast = Swal.mixin({
     icon: 'scale-50 my-auto'
   }
 });
+
+const CustomSelect = ({ value, onChange, options, placeholder, inputClasses }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative w-full" ref={containerRef}>
+      <div
+        className={`${inputClasses} cursor-pointer flex justify-between items-center`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className={value ? 'text-white' : 'text-white/70'}>
+          {value || placeholder}
+        </span>
+        <svg className={`w-4 h-4 text-white/70 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+      </div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute z-[90] w-full mt-2 bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 py-2 top-full"
+          >
+            {options.map((opt, idx) => (
+              <div
+                key={idx}
+                className="px-5 py-3 hover:bg-gray-50 cursor-pointer text-gray-700 text-sm font-medium transition-colors"
+                onClick={() => {
+                  onChange(opt);
+                  setIsOpen(false);
+                }}
+              >
+                {opt}
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 const GrievanceForm = ({ formData: cmsData }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -39,6 +94,9 @@ const GrievanceForm = ({ formData: cmsData }) => {
     "Student Grievance Cell",
     "Student Grievance Cell"
   ];
+
+  const departments = cmsData?.departments || ["Department 1", "Department 2"];
+  const courses = cmsData?.courses || ["Course 1", "Course 2", "Course 3"];
 
   const bgImage = cmsData?.backgroundImage || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1600&auto=format&fit=crop';
 
@@ -175,35 +233,23 @@ const GrievanceForm = ({ formData: cmsData }) => {
               {/* Row 3 */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="relative">
-                  <select
-                    className={inputClasses}
+                  <CustomSelect
                     value={formData.department}
-                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                    required
-                  >
-                    <option value="" disabled className="text-gray-900">Department *</option>
-                    <option value="dept1" className="text-gray-900">Department 1</option>
-                    <option value="dept2" className="text-gray-900">Department 2</option>
-                  </select>
-                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-white/70">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                  </div>
+                    onChange={(val) => setFormData({ ...formData, department: val })}
+                    options={departments}
+                    placeholder="Department *"
+                    inputClasses={inputClasses}
+                  />
                 </div>
 
                 <div className="relative">
-                  <select
-                    className={inputClasses}
+                  <CustomSelect
                     value={formData.course}
-                    onChange={(e) => setFormData({ ...formData, course: e.target.value })}
-                    required
-                  >
-                    <option value="" disabled className="text-gray-900">Course *</option>
-                    <option value="course1" className="text-gray-900">Course 1</option>
-                    <option value="course2" className="text-gray-900">Course 2</option>
-                  </select>
-                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-white/70">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                  </div>
+                    onChange={(val) => setFormData({ ...formData, course: val })}
+                    options={courses}
+                    placeholder="Course *"
+                    inputClasses={inputClasses}
+                  />
                 </div>
               </div>
 

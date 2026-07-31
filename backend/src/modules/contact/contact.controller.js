@@ -1,4 +1,5 @@
 import Contact from './contact.model.js';
+import { createNotificationAndBroadcast } from '../notifications/notification.controller.js';
 
 // @desc    Submit a new contact form
 // @route   POST /api/contact/submit
@@ -17,6 +18,14 @@ export const submitContactForm = async (req, res) => {
       phone,
       service,
       message,
+    });
+
+    // Broadcast notification to all connected admins
+    await createNotificationAndBroadcast({
+      type: 'NEW_CONTACT',
+      title: 'New Contact Enquiry',
+      message: `${name} has submitted a new enquiry.`,
+      link: '/admin/contact-submissions'
     });
 
     res.status(201).json({ message: 'Contact form submitted successfully', contact: newContact });
