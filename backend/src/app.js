@@ -23,7 +23,7 @@ dotenv.config();
 
 // Middlewares   
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:3001", "https://ksbm-2.onrender.com", "https://ksbm-l2reat5g7-kmct2.vercel.app"],
+  origin: ["http://localhost:3000", "http://localhost:3001", "https://ksbm-2.onrender.com", "https://ksbm-rho.vercel.app"],
   credentials: true,
 }));
 app.use(express.json());
