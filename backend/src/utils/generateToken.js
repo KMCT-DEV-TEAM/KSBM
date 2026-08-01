@@ -14,8 +14,8 @@ const generateToken = (res, userId) => {
   // Set the refresh token as an HTTP-only cookie
   res.cookie('jwt_refresh', refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV !== 'development', // Use secure cookies in production
-    sameSite: 'strict', // Prevent CSRF attacks
+    secure: true, // Must be true for sameSite: 'none'
+    sameSite: 'none', // Allow cross-site cookies
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
   });
 
