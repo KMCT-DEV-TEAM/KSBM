@@ -21,7 +21,8 @@ const Hero = ({ previewData }) => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   
   const globalLinks = useGlobalLinks();
-  const heroApplyLink = globalLinks['hero_apply']?.link || settings?.primaryButton?.link || '#';
+  const heroApplyBtn = globalLinks['global_apply'];
+  const heroBrochureBtn = globalLinks['hero_brochure'];
 
   useEffect(() => {
     if (previewData) {
@@ -98,6 +99,10 @@ const Hero = ({ previewData }) => {
   }, [images.length, imagesLoaded]);
 
 
+
+  if (dataLoaded && settings?.showSection === false) {
+    return null;
+  }
 
   return (
     <>
@@ -219,19 +224,25 @@ const Hero = ({ previewData }) => {
           }}
           className="flex flex-col lg:flex-row items-start lg:items-center gap-4 mt-10"
         >
-          {settings?.primaryButton?.isVisible !== false && (
+          {(heroApplyBtn?.isActive !== false) && (
             <a 
-              href={heroApplyLink} 
-              target={heroApplyLink.startsWith('http') ? '_blank' : undefined}
-              rel={heroApplyLink.startsWith('http') ? 'noopener noreferrer' : undefined}
+              href={heroApplyBtn?.link || '#'} 
+              target={(heroApplyBtn?.link || '').startsWith('http') ? '_blank' : undefined}
+              rel={(heroApplyBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
               className="bg-secondary text-primary text-sm md:text-base font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start"
             >
-              {settings?.primaryButton?.text || 'Apply Now'} <ArrowUpRight className="w-5 h-5" />
+              {heroApplyBtn?.label || 'Apply Now'} <ArrowUpRight className="w-5 h-5" />
             </a>
           )}
-          {settings?.secondaryButton?.isVisible !== false && (
-            <a href={settings?.secondaryButton?.link || '#'} className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start">
-              <Download className="w-5 h-5" /> {settings?.secondaryButton?.text || 'Download Brochure'}
+          {(heroBrochureBtn?.isActive !== false) && (
+            <a 
+              href={heroBrochureBtn?.link || '#'} 
+              target={(heroBrochureBtn?.link || '').startsWith('http') ? '_blank' : undefined}
+              rel={(heroBrochureBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
+              className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start"
+              download
+            >
+              <Download className="w-5 h-5" /> {heroBrochureBtn?.label || 'Download Brochure'}
             </a>
           )}
         </motion.div>
@@ -275,7 +286,7 @@ const Hero = ({ previewData }) => {
             </div>
           </div>
 
-          <a href={settings?.statsCard?.linkUrl || '#'} className="inline-flex items-center gap-1.5 text-xs text-gray-300 hover:text-white mt-5 transition-colors group">
+          <a href={settings?.statsCard?.linkUrl && settings.statsCard.linkUrl !== '#' ? settings.statsCard.linkUrl : '/admissions'} className="inline-flex items-center gap-1.5 text-xs text-gray-300 hover:text-white mt-5 transition-colors group">
             {settings?.statsCard?.linkText || 'Read Admission Guidelines'}
             <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </a>
@@ -297,14 +308,14 @@ const Hero = ({ previewData }) => {
             <span className="font-bold text-secondary flex items-center gap-2"><BadgeCheck className="w-4 h-4"/> {settings?.statsCard?.batchText || 'Batch 2025–27'}</span>
             <span className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-300"/> {settings?.statsCard?.stat1Title || 'Limited Seats'}</span>
             <span className="flex items-center gap-2"><Award className="w-4 h-4 text-gray-300"/> {settings?.statsCard?.stat2Title || '100% Placement'}</span>
-            <a href={settings?.statsCard?.linkUrl || '#'} className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5"/></a>
+            <a href={settings?.statsCard?.linkUrl && settings.statsCard.linkUrl !== '#' ? settings.statsCard.linkUrl : '/admissions'} className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5"/></a>
           </div>
           {/* Second Set for seamless infinite scrolling */}
           <div className="flex items-center gap-10">
             <span className="font-bold text-secondary flex items-center gap-2"><BadgeCheck className="w-4 h-4"/> {settings?.statsCard?.batchText || 'Batch 2025–27'}</span>
             <span className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-300"/> {settings?.statsCard?.stat1Title || 'Limited Seats'}</span>
             <span className="flex items-center gap-2"><Award className="w-4 h-4 text-gray-300"/> {settings?.statsCard?.stat2Title || '100% Placement'}</span>
-            <a href={settings?.statsCard?.linkUrl || '#'} className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5"/></a>
+            <a href={settings?.statsCard?.linkUrl && settings.statsCard.linkUrl !== '#' ? settings.statsCard.linkUrl : '/admissions'} className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5"/></a>
           </div>
         </div>
       </motion.div>

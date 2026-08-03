@@ -105,7 +105,7 @@ const Header = ({ previewData }) => {
   const [mandatoryDisclosureUrl, setMandatoryDisclosureUrl] = useState(null);
   
   const globalLinks = useGlobalLinks();
-  const headerApplyLink = globalLinks['header_apply']?.link || '/admissions';
+  const headerApplyLink = globalLinks['global_apply']?.link || '/admissions';
 
   useEffect(() => {
     const fetchMandatoryDisclosure = async () => {

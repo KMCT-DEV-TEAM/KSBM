@@ -94,7 +94,9 @@ const AchievementsSection = ({ previewData }) => {
     }
   };
 
-  if (data?.showSection === false) return null;
+  if (data?.showSection === false) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-background py-12 lg:py-14 overflow-hidden">

@@ -1156,16 +1156,6 @@ const ManageMbaPage = ({ isBba = false }) => {
                     placeholder="EXPLORE PROGRAM"
                   />
                 </div>
-                <div>
-                  <CharCountLabel label="Secondary Action Button Text" value={heroSecondaryBtnText} max={30} />
-                  <input maxLength={30}
-                    type="text"
-                    value={heroSecondaryBtnText}
-                    onChange={(e) => setHeroSecondaryBtnText(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    placeholder="DOWNLOAD BROCHURE"
-                  />
-                </div>
               </div>
 
               <div className="pt-4 border-t border-gray-100">
@@ -1258,16 +1248,6 @@ const ManageMbaPage = ({ isBba = false }) => {
                     onChange={(e) => setOverviewPrimaryBtnText(e.target.value)}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     placeholder="Apply Now"
-                  />
-                </div>
-                <div>
-                  <CharCountLabel label="Secondary Action Button Text" value={overviewSecondaryBtnText} max={30} />
-                  <input maxLength={30}
-                    type="text"
-                    value={overviewSecondaryBtnText}
-                    onChange={(e) => setOverviewSecondaryBtnText(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    placeholder="Download Brochure"
                   />
                 </div>
               </div>

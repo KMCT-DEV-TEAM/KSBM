@@ -3,6 +3,11 @@ import axios from 'axios';
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:5000/api' : 'https://ksbm-bs43.onrender.com/api'),
   withCredentials: true, // Crucial for sending and receiving httpOnly cookies
+  headers: {
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  }
 });
 // const api = axios.create({
 //   baseURL: 'https://ksbm-bs43.onrender.com/api', // Adjust this in production

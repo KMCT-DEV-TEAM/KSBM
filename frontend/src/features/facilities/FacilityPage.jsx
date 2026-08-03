@@ -7,6 +7,7 @@ import api from '../../api/axios';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Loader from '../../components/Loader';
+import { useGlobalLinks } from '../../hooks/useGlobalLinks';
 
 const buildGalleryColumns = (items) => {
   const columns = [];
@@ -78,6 +79,8 @@ const GalleryImage = ({ item, className = '' }) => {
 const FacilityPage = () => {
   const searchParams = useSearchParams();
   const clubId = searchParams?.get('clubId');
+  const globalLinks = useGlobalLinks();
+  const applyLink = globalLinks['global_apply']?.link || '/contact';
 
   const [facilityData, setFacilityData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -467,7 +470,7 @@ const FacilityPage = () => {
             <p className="text-gray-600 mb-8">
               Explore opportunities to engage, learn, and grow. Join our vibrant community and become part of something greater.
             </p>
-            <Link href="/contact" className="inline-block bg-[#2b2b68] text-white px-8 py-3 rounded-md font-semibold hover:bg-primary/90 transition-colors">
+            <Link href={applyLink} className="inline-block bg-[#2b2b68] text-white px-8 py-3 rounded-md font-semibold hover:bg-primary/90 transition-colors">
               Apply Now
             </Link>
           </div>

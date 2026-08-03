@@ -105,10 +105,40 @@ const ManageCommitteesAndCellsPage = () => {
     fetchSettings();
   }, []);
 
+  // Listen for the iframe telling us it's ready to receive data
   useEffect(() => {
-    if (isPreviewModalOpen && iframeRef.current) {
-      iframeRef.current.contentWindow.postMessage({ type: 'LIVE_PREVIEW_UPDATE', data: formData }, '*');
-    }
+    const handleMessage = (event) => {
+      if (event.data?.type === 'PREVIEW_READY' && isPreviewModalOpen) {
+        if (iframeRef.current?.contentWindow) {
+          iframeRef.current.contentWindow.postMessage({ type: 'LIVE_PREVIEW_UPDATE', data: formData }, '*');
+        }
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [isPreviewModalOpen, formData]);
+
+  useEffect(() => {
+    if (!isPreviewModalOpen) return;
+
+    // Send data immediately and also poll for a bit to handle iframe load timing
+    const sendData = () => {
+      if (iframeRef.current?.contentWindow) {
+        iframeRef.current.contentWindow.postMessage({ type: 'LIVE_PREVIEW_UPDATE', data: formData }, '*');
+      }
+    };
+
+    // Try immediately
+    sendData();
+
+    // Retry for 3 seconds to handle iframe load delay
+    const interval = setInterval(sendData, 300);
+    const timeout = setTimeout(() => clearInterval(interval), 3000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
   }, [isPreviewModalOpen, formData]);
 
   const fetchSettings = async () => {
@@ -291,7 +321,7 @@ const ManageCommitteesAndCellsPage = () => {
 
       {isPreviewModalOpen && (
         <div className="fixed inset-0 z-[100] flex flex-col bg-gray-900/80 backdrop-blur-sm">
-          <div className="flex justify-between items-center bg-white px-4 py-3 border-b border-gray-200">
+          <div className="flex justify-between items-center bg-white px-4 py-3 border-b border-gray-200 shrink-0">
             <div className="flex items-center gap-2 text-sm font-bold text-[#697A8D] uppercase tracking-wider">
               <Eye className="w-5 h-5" /> Live Preview
             </div>
@@ -302,15 +332,18 @@ const ManageCommitteesAndCellsPage = () => {
             </div>
             <button onClick={() => setIsPreviewModalOpen(false)} className="p-2 text-gray-500 hover:text-red-500 bg-gray-100 hover:bg-red-50 rounded-md transition-colors"><X className="w-5 h-5" /></button>
           </div>
-          <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center items-end">
-            <div className={`bg-white shadow-xl w-full h-full mt-auto transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
+          <div className="flex-1 overflow-auto bg-gray-100 p-4 flex justify-center">
+            <div className={`bg-white shadow-xl transition-all duration-300 h-full ${
+              previewMode === 'desktop' ? 'w-full min-w-[1280px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'
+            }`}>
               <iframe
                 ref={iframeRef}
                 src="/committees-and-cells"
                 className="w-full h-full border-0"
                 title="Committees Preview"
                 onLoad={() => {
-                  if (iframeRef.current) {
+                  // After iframe loads, send data immediately
+                  if (iframeRef.current?.contentWindow) {
                     iframeRef.current.contentWindow.postMessage({ type: 'LIVE_PREVIEW_UPDATE', data: formData }, '*');
                   }
                 }}
@@ -359,19 +392,28 @@ const ManageCommitteesAndCellsPage = () => {
           >
             {/* Hero Section */}
             {activeTab === 'hero' && (
-              <SectionForm title={
-                <div className="flex items-center justify-between w-full">
-                  <span>Hero Banner</span>
+              <SectionForm title="Hero Banner">
+                {/* Visibility Settings */}
+                <div className="flex justify-between items-center pb-4 border-b border-gray-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+                    <p className="text-sm text-gray-500 mt-1">Show or hide the entire Hero Section on the live website.</p>
+                  </div>
                   <label className="flex items-center cursor-pointer">
-                    <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase tracking-wider">Show Section</span>
                     <div className="relative">
-                      <input type="checkbox" className="sr-only" checked={formData.showHeroSection !== false} onChange={(e) => handleChange('showHeroSection', e.target.checked)} />
-                      <div className={`block w-10 h-6 rounded-full transition-colors ${formData.showHeroSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
-                      <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${formData.showHeroSection !== false ? 'transform translate-x-4' : ''}`}></div>
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={formData.showHeroSection !== false}
+                        onChange={(e) => handleChange('showHeroSection', e.target.checked)}
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                     </div>
+                    <span className="ml-3 text-sm font-medium text-gray-700">
+                      {formData.showHeroSection !== false ? 'Visible' : 'Hidden'}
+                    </span>
                   </label>
                 </div>
-              }>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div className="space-y-2">
@@ -421,25 +463,34 @@ const ManageCommitteesAndCellsPage = () => {
             {/* Committees Section */}
             {activeTab === 'committees' && (
               <SectionForm
-                title={
-                  <div className="flex items-center justify-between w-full">
-                    <span>Committees Manager</span>
-                    <label className="flex items-center cursor-pointer">
-                      <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase tracking-wider">Show Section</span>
-                      <div className="relative">
-                        <input type="checkbox" className="sr-only" checked={formData.showCommitteesSection !== false} onChange={(e) => handleChange('showCommitteesSection', e.target.checked)} />
-                        <div className={`block w-10 h-6 rounded-full transition-colors ${formData.showCommitteesSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
-                        <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${formData.showCommitteesSection !== false ? 'transform translate-x-4' : ''}`}></div>
-                      </div>
-                    </label>
-                  </div>
-                }
+                title="Committees Manager"
                 actionButton={
                   <button onClick={openAddModal} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all disabled:opacity-50">
                     <Plus className="w-4 h-4" /> Add Committee
                   </button>
                 }
               >
+                {/* Visibility Settings */}
+                <div className="flex justify-between items-center pb-4 border-b border-gray-100">
+                  <div>
+                    <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+                    <p className="text-sm text-gray-500 mt-1">Show or hide the entire Committees Section on the live website.</p>
+                  </div>
+                  <label className="flex items-center cursor-pointer">
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={formData.showCommitteesSection !== false}
+                        onChange={(e) => handleChange('showCommitteesSection', e.target.checked)}
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    </div>
+                    <span className="ml-3 text-sm font-medium text-gray-700">
+                      {formData.showCommitteesSection !== false ? 'Visible' : 'Hidden'}
+                    </span>
+                  </label>
+                </div>
                 <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
                   {!(formData.committees || []).length ? (
                     <div className="h-full flex flex-col items-center justify-center text-gray-400">

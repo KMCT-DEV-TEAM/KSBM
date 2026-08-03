@@ -8,6 +8,7 @@ import Link from 'next/link';
 import api from '../../api/axios';
 import { Loader2 } from 'lucide-react';
 import Loader from '../../components/Loader';
+import { useGlobalLinks } from '../../hooks/useGlobalLinks';
 
 const BlogDetailPage = ({ id }) => {
   const [activeSection, setActiveSection] = useState('introduction');
@@ -16,6 +17,9 @@ const BlogDetailPage = ({ id }) => {
   const [loading, setLoading] = useState(true);
   const [isPreview, setIsPreview] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  
+  const globalLinks = useGlobalLinks();
+  const applyLink = globalLinks['global_apply']?.link || '/admission';
 
   useEffect(() => {
     if (!loading) {
@@ -319,7 +323,7 @@ const BlogDetailPage = ({ id }) => {
               </div>
               <div className="shrink-0 z-10">
                 <Link
-                  href="/admission"
+                  href={applyLink}
                   className="inline-block bg-white text-primary font-bold text-sm sm:text-base px-8 sm:px-12 py-4 rounded-xl shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:bg-gray-50 hover:-translate-y-1 transition-all duration-300"
                 >
                   Apply Now Online

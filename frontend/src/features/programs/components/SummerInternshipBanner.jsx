@@ -3,11 +3,13 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, Briefcase } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
 
 const SummerInternshipBanner = ({ program }) => {
   const badgeText = program?.internshipBadge || "EXPERIENTIAL LEARNING";
   const btnText = program?.internshipBtnText || "Apply Now";
-  const btnLink = program?.internshipBtnLink || "/#contact";
+  const globalLinks = useGlobalLinks();
+  const btnLink = globalLinks['global_apply']?.link || program?.internshipBtnLink || "/#contact";
   const floatingImages = program?.internshipImages && program.internshipImages.length > 0
     ? program.internshipImages
     : [

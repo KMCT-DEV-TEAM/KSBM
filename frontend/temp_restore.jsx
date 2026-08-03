@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/axios';
 import { motion } from 'framer-motion';
@@ -70,10 +70,10 @@ const AcademicPrograms = ({ previewData }) => {
     heading,
     description,
     programs,
-    showSubheading = true,
-    showHeading = true,
-    showDescription = true,
-    showPrograms = true,
+    showSubheading,
+    showHeading,
+    showDescription,
+    showPrograms,
     previewDevice
   } = displayData;
 

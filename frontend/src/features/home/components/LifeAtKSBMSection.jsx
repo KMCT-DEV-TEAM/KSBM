@@ -81,6 +81,10 @@ const LifeAtKSBMSection = ({ previewData }) => {
     return null;
   }
 
+  if (data?.showSection === false) {
+    return null;
+  }
+
   return (
     <section className={`relative w-full bg-[#f4f7f9] py-12 ${lg('lg:py-14')} overflow-hidden`}>
 
@@ -145,10 +149,7 @@ const LifeAtKSBMSection = ({ previewData }) => {
             {[...Array(2)].map((_, arrayIndex) => (
               <div key={arrayIndex} className={`flex gap-3 ${md('md:gap-4')} shrink-0`}>
                 {images.slice(Math.ceil(images.length / 2)).map((img, index) => {
-                  const isWide = index % 4 === 1 || index % 4 === 2;
-                  if (data?.showSection === false) return null;
-
-  return (
+                  const isWide = index % 4 === 1 || index % 4 === 2;  return (
                     <div
                       key={index}
                       className={`h-[160px] ${md('md:h-[240px]')} shrink-0 ${isWide ? `w-[280px] ${md('md:w-[500px]')}` : `w-[160px] ${md('md:w-[300px]')}`} rounded-[1rem] ${md('md:rounded-[1.5rem]')} overflow-hidden group cursor-pointer shadow-sm relative`}

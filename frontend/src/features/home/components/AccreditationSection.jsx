@@ -56,7 +56,9 @@ const AccreditationSection = ({ previewData }) => {
     return null;
   }
 
-  if (settings?.showSection === false) return null;
+  if (settings?.showSection === false) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-[#f4fafe] py-12 sm:py-16 lg:py-20 overflow-hidden">

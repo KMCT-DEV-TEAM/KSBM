@@ -77,7 +77,8 @@ const AboutSection = ({ previewData }) => {
         showParagraphs: previewData.showParagraphs ?? true,
         showImage: previewData.showImage ?? true,
         showStats: previewData.showStats ?? true
-      });
+      ,
+              showSection: data.showSection});
       return;
     }
 
@@ -96,7 +97,8 @@ const AboutSection = ({ previewData }) => {
             showParagraphs: data.showParagraphs ?? true,
             showImage: data.showImage ?? true,
             showStats: data.showStats ?? true
-          });
+          ,
+              showSection: data.showSection});
         }
       } catch (error) {
         console.error('Error fetching about CMS data:', error);
@@ -123,7 +125,9 @@ const AboutSection = ({ previewData }) => {
 
   const showTopSection = cmsData.showImage || cmsData.showHeading || cmsData.showSubheading || cmsData.showParagraphs;
 
-  if (cmsData?.showSection === false) return null;
+  if (cmsData?.showSection === false) {
+    return null;
+  }
 
   return (
     <section className={`relative w-full bg-background ${ptClass} pb-10 overflow-hidden`}>
