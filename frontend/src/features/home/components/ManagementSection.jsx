@@ -86,7 +86,7 @@ const ManagementSection = ({ previewData }) => {
                 viewport={{ once: false, margin: "-50px" }}
                 transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
                 key={member.id || member._id}
-                className={`relative aspect-[4/5] w-full max-w-[320px] ${isCenter ? 'lg:max-w-[380px] lg:scale-110 z-20' : 'lg:max-w-[320px] z-10'} rounded-[2rem] overflow-hidden group cursor-pointer shadow-xl hover:shadow-[0_25px_50px_rgba(27,37,89,0.4)] transition-all duration-500 hover:-translate-y-4`}
+                className={`relative aspect-[4/5] w-full max-w-[320px] lg:max-w-[320px] z-10 rounded-[2rem] overflow-hidden group cursor-pointer shadow-xl hover:shadow-[0_25px_50px_rgba(27,37,89,0.4)] transition-all duration-500 hover:-translate-y-4`}
               >
                 {/* Background Image */}
                 <img
@@ -114,7 +114,7 @@ const ManagementSection = ({ previewData }) => {
                 {/* Text Content */}
                 <div className={`absolute bottom-0 left-0 w-full z-20 p-5 lg:p-6`}>
                   {member.name && (
-                    <h3 className={`font-bold text-white mb-1 lg:mb-2 group-hover:text-white transition-colors duration-300 ${isCenter ? 'text-xl lg:text-2xl' : 'text-lg lg:text-xl'}`}>
+                    <h3 className={`font-bold text-white mb-1 lg:mb-2 group-hover:text-white transition-colors duration-300 text-lg lg:text-xl`}>
                       {member.name}
                     </h3>
                   )}
