@@ -35,7 +35,7 @@ const EventsAbout = ({ about }) => {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="relative flex justify-center md:justify-start"
+          className="relative flex justify-center md:justify-start order-2 md:order-1"
         >
           {/* Decorative Polygon */}
           <div className="absolute top-12 right-25 w-16 h-16 z-20 pointer-events-none drop-shadow-md opacity-80 animate-pulse">
@@ -55,7 +55,7 @@ const EventsAbout = ({ about }) => {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="flex flex-col gap-6 relative z-10"
+          className="flex flex-col gap-6 relative z-10 order-1 md:order-2"
         >
           {/* Background Radial Glow/Shade */}
           <div
@@ -83,7 +83,7 @@ const EventsAbout = ({ about }) => {
           </div>
 
           {/* Buttons */}
-          <div className="flex flex-wrap items-center gap-5 mt-6">
+          <div className="flex flex-wrap items-center gap-5 mt-6 relative z-10">
             {data.brochureUrl ? (
               <a href={data.brochureUrl} target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-md bg-gradient-to-r from-[#e74694] to-[#f57451] text-white font-semibold text-sm hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(231,70,148,0.4)]">
                 Event Brochure
@@ -105,7 +105,7 @@ const EventsAbout = ({ about }) => {
           </div>
 
           {/* Decorative Icon */}
-          <div className="absolute -bottom-8 -right-4 md:-right-8 opacity-60 animate-bounce" style={{ animationDuration: '3s' }}>
+          <div className="absolute -bottom-8 -right-4 md:-right-8 opacity-60 animate-bounce z-[-1]" style={{ animationDuration: '3s' }}>
             <img src="/assets/Images/image 117.png" alt="Decorative Icon" className="w-50 h-50 object-contain" />
           </div>
 

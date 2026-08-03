@@ -31,7 +31,7 @@ const EventsMoments = ({ momentsCaptured }) => {
         </div>
 
         {/* Scrolling Gallery Grid */}
-        <div className="w-[98%] max-w-[1440px] mx-auto h-[800px] overflow-hidden relative mt-16 flex items-center justify-center">
+        <div className="w-[98%] max-w-[1440px] mx-auto h-[500px] md:h-[800px] overflow-hidden relative mt-8 md:mt-16 flex items-center justify-center">
           {/* Ambient Gallery Middle Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-pink-500/10 blur-[150px] rounded-full pointer-events-none z-0"></div>
 
@@ -39,32 +39,40 @@ const EventsMoments = ({ momentsCaptured }) => {
           <div className="absolute top-0 left-0 w-full h-[100px] z-20 pointer-events-none"></div>
           <div className="absolute bottom-0 left-0 w-full h-[100px] z-20 pointer-events-none"></div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full w-full relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 h-full w-full relative z-10">
             {/* Column 1 (Scrolls Up) */}
             <div className="h-full overflow-hidden">
               <motion.div
-                className="flex flex-col gap-6"
+                className="flex flex-col"
                 animate={{ y: ["0%", "-50%"] }}
                 transition={{ ease: "linear", duration: 25, repeat: Infinity }}
               >
-                {[...momentsCaptured.images, ...momentsCaptured.images].map((item, idx) => (
-                  <div key={`col1-${idx}`} className="w-[90%] md:w-[85%] mx-auto rounded-xl overflow-hidden border border-white/5 transition-colors">
-                    <img src={item.img || "https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop"} alt="Moment" className="w-full h-[240px] lg:h-[320px] object-cover hover:scale-105 transition-transform duration-500" />
+                {[...Array(2)].map((_, groupIdx) => (
+                  <div key={groupIdx} className="flex flex-col gap-6 pb-6">
+                    {momentsCaptured.images.map((item, idx) => (
+                      <div key={`col1-${groupIdx}-${idx}`} className="w-[95%] md:w-[85%] mx-auto rounded-xl overflow-hidden border border-white/5 transition-colors">
+                        <img src={item.img || "https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop"} alt="Moment" className="w-full h-[180px] md:h-[240px] lg:h-[320px] object-cover hover:scale-105 transition-transform duration-500" />
+                      </div>
+                    ))}
                   </div>
                 ))}
               </motion.div>
             </div>
 
             {/* Column 2 (Scrolls Down) */}
-            <div className="h-full overflow-hidden hidden md:block">
+            <div className="h-full overflow-hidden block">
               <motion.div
-                className="flex flex-col gap-6"
+                className="flex flex-col"
                 animate={{ y: ["-50%", "0%"] }}
                 transition={{ ease: "linear", duration: 30, repeat: Infinity }}
               >
-                {[...momentsCaptured.images, ...momentsCaptured.images].reverse().map((item, idx) => (
-                  <div key={`col2-${idx}`} className="w-[90%] md:w-[85%] mx-auto rounded-xl overflow-hidden border border-white/5 transition-colors">
-                    <img src={item.img || "https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop"} alt="Moment" className="w-full h-[240px] lg:h-[320px] object-cover hover:scale-105 transition-transform duration-500" />
+                {[...Array(2)].map((_, groupIdx) => (
+                  <div key={groupIdx} className="flex flex-col gap-6 pb-6">
+                    {[...momentsCaptured.images].reverse().map((item, idx) => (
+                      <div key={`col2-${groupIdx}-${idx}`} className="w-[95%] md:w-[85%] mx-auto rounded-xl overflow-hidden border border-white/5 transition-colors">
+                        <img src={item.img || "https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop"} alt="Moment" className="w-full h-[180px] md:h-[240px] lg:h-[320px] object-cover hover:scale-105 transition-transform duration-500" />
+                      </div>
+                    ))}
                   </div>
                 ))}
               </motion.div>
@@ -73,13 +81,17 @@ const EventsMoments = ({ momentsCaptured }) => {
             {/* Column 3 (Scrolls Up) */}
             <div className="h-full overflow-hidden hidden md:block">
               <motion.div
-                className="flex flex-col gap-6"
+                className="flex flex-col"
                 animate={{ y: ["0%", "-50%"] }}
                 transition={{ ease: "linear", duration: 20, repeat: Infinity }}
               >
-                {[...momentsCaptured.images, ...momentsCaptured.images].map((item, idx) => (
-                  <div key={`col3-${idx}`} className="w-[90%] md:w-[85%] mx-auto rounded-xl overflow-hidden border border-white/5 hover:border-pink-500/40 transition-colors">
-                    <img src={item.img || "https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop"} alt="Moment" className="w-full h-[240px] lg:h-[320px] object-cover hover:scale-105 transition-transform duration-500" />
+                {[...Array(2)].map((_, groupIdx) => (
+                  <div key={groupIdx} className="flex flex-col gap-6 pb-6">
+                    {momentsCaptured.images.map((item, idx) => (
+                      <div key={`col3-${groupIdx}-${idx}`} className="w-[95%] md:w-[85%] mx-auto rounded-xl overflow-hidden border border-white/5 hover:border-pink-500/40 transition-colors">
+                        <img src={item.img || "https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop"} alt="Moment" className="w-full h-[180px] md:h-[240px] lg:h-[320px] object-cover hover:scale-105 transition-transform duration-500" />
+                      </div>
+                    ))}
                   </div>
                 ))}
               </motion.div>

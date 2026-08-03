@@ -1,5 +1,6 @@
 import Header from './header.model.js';
 import MandatoryDisclosure from './mandatoryDisclosure.model.js';
+import Organogram from './organogram.model.js';
 import About from './about.model.js';
 import EventsPageModel from './eventsPage.model.js';
 import BlogsPageModel from './blogsPage.model.js';
@@ -1600,6 +1601,87 @@ export const getDefaultMandatoryDisclosure = async (req, res) => {
     res.json(disclosure);
   } catch (error) {
     res.status(500).json({ message: 'Server error fetching default disclosure', error: error.message });
+  }
+};
+
+// ==========================================
+// Organogram Management Controllers
+// ==========================================
+
+// @desc    Get all organograms
+// @route   GET /api/cms/organogram
+// @access  Public
+export const getOrganograms = async (req, res) => {
+  try {
+    const organograms = await Organogram.find().sort({ createdAt: -1 });
+    res.json(organograms);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching organograms', error: error.message });
+  }
+};
+
+// @desc    Upload organogram
+// @route   POST /api/cms/organogram
+// @access  Private (Admin)
+export const uploadOrganogram = async (req, res) => {
+  try {
+    const { title, pdfUrl, isDefault } = req.body;
+    if (!title || !pdfUrl) {
+      return res.status(400).json({ message: 'Title and PDF URL are required' });
+    }
+    const organogram = new Organogram({ title, pdfUrl, isDefault });
+    const savedOrganogram = await organogram.save();
+    res.status(201).json(savedOrganogram);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error uploading organogram', error: error.message });
+  }
+};
+
+// @desc    Set default organogram
+// @route   PUT /api/cms/organogram/:id/default
+// @access  Private (Admin)
+export const setDefaultOrganogram = async (req, res) => {
+  try {
+    const organogram = await Organogram.findById(req.params.id);
+    if (!organogram) {
+      return res.status(404).json({ message: 'Organogram not found' });
+    }
+    organogram.isDefault = true;
+    await organogram.save();
+    res.json({ message: 'Default set successfully', organogram });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error setting default organogram', error: error.message });
+  }
+};
+
+// @desc    Delete organogram
+// @route   DELETE /api/cms/organogram/:id
+// @access  Private (Admin)
+export const deleteOrganogram = async (req, res) => {
+  try {
+    const organogram = await Organogram.findById(req.params.id);
+    if (!organogram) {
+      return res.status(404).json({ message: 'Organogram not found' });
+    }
+    await organogram.deleteOne();
+    res.json({ message: 'Organogram removed' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error deleting organogram', error: error.message });
+  }
+};
+
+// @desc    Get default organogram
+// @route   GET /api/cms/organogram/default
+// @access  Public
+export const getDefaultOrganogram = async (req, res) => {
+  try {
+    const organogram = await Organogram.findOne({ isDefault: true });
+    if (!organogram) {
+      return res.status(404).json({ message: 'No default organogram set' });
+    }
+    res.json(organogram);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching default organogram', error: error.message });
   }
 };
 // ==========================================

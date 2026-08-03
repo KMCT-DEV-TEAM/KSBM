@@ -64,6 +64,7 @@ import ManageGoverningBody from '../features/admin/cms/ManageGoverningBody';
 import ManageManagementDesk from '../features/admin/cms/ManageManagementDesk';
 import ManageAboutCta from '../features/admin/cms/ManageAboutCta';
 import ManageMandatoryDisclosure from '../features/admin/cms/ManageMandatoryDisclosure';
+import ManageOrganogram from '../features/admin/cms/ManageOrganogram';
 
 const AppRoutes = () => {
   return (
@@ -161,6 +162,7 @@ const AppRoutes = () => {
           <Route path="cms/faq" element={<ManageFaqPage />} />
           <Route path="cms/gallery" element={<ManageGalleryPage />} />
           <Route path="cms/mandatory-disclosure" element={<ManageMandatoryDisclosure />} />
+          <Route path="cms/organogram" element={<ManageOrganogram />} />
 
             {/* Add future admin routes here */}
           </Route>

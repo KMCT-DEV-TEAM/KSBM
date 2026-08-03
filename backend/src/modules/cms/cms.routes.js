@@ -87,6 +87,11 @@ import {
   setDefaultMandatoryDisclosure,
   deleteMandatoryDisclosure,
   getDefaultMandatoryDisclosure,
+  getOrganograms,
+  uploadOrganogram,
+  setDefaultOrganogram,
+  deleteOrganogram,
+  getDefaultOrganogram,
   getSeoSettings,
   updateSeoSettings,
   getGlobalButtons,
@@ -284,6 +289,22 @@ router.route('/mandatory-disclosure/:id/default')
 
 router.route('/mandatory-disclosure/:id')
   .delete(protect, deleteMandatoryDisclosure);
+
+// ==========================================
+// Organogram Routes
+// ==========================================
+router.route('/organogram')
+  .get(getOrganograms)
+  .post(protect, uploadOrganogram);
+
+router.route('/organogram/default')
+  .get(getDefaultOrganogram);
+
+router.route('/organogram/:id/default')
+  .put(protect, setDefaultOrganogram);
+
+router.route('/organogram/:id')
+  .delete(protect, deleteOrganogram);
 
 // ==========================================
 // SEO Management Routes

@@ -46,6 +46,7 @@ const AdminNavbar = () => {
     { name: 'Grievance Page', path: '/admin/cms/grievance' },
     { name: 'Download Page', path: '/admin/cms/download' },
     { name: 'Mandatory Disclosure', path: '/admin/cms/mandatory-disclosure' },
+    { name: 'Organogram', path: '/admin/cms/organogram' },
     { name: 'View Grievance Tickets', path: '/admin/grievances' },
     { name: 'Contact Form Submissions', path: '/admin/contact-submissions' },
     { name: 'Header & Navbar', path: '/admin/cms/header' },

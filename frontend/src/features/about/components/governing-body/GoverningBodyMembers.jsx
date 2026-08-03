@@ -42,22 +42,16 @@ const GoverningBodyMembers = ({ data }) => {
 
   return (
     <section className="pb-20 w-[98%] max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex flex-col gap-y-12 lg:gap-y-16">
-        {members.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-12">
-            {members.slice(0, 3).map((member, idx) => (
-              <MemberCard key={member._id || idx} member={member} index={idx} />
-            ))}
-          </div>
-        )}
-        
-        {members.length > 3 && (
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-12">
-            {members.slice(3).map((member, idx) => (
-              <MemberCard key={member._id || (idx + 3)} member={member} index={idx + 3} />
-            ))}
-          </div>
-        )}
+      <div className="flex flex-wrap justify-center gap-x-6 gap-y-12 lg:gap-y-16">
+        {members.length > 0 && members.map((member, idx) => (
+          <React.Fragment key={member._id || idx}>
+            <MemberCard member={member} index={idx} />
+            {/* Force a break after the 3rd element on desktop to keep the 3-item top row */}
+            {idx === 2 && members.length > 3 && (
+              <div className="hidden lg:block w-full h-0 m-0 p-0 -mt-16 pointer-events-none"></div>
+            )}
+          </React.Fragment>
+        ))}
       </div>
     </section>
   );
@@ -70,7 +64,7 @@ const MemberCard = ({ member, index }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.2 }}
       transition={{ duration: 0.6, delay: (index % 4) * 0.1, type: "spring", stiffness: 100 }}
-      className="w-full sm:w-[240px] md:w-[260px] flex flex-col items-center group cursor-pointer pt-12"
+      className="w-[calc(50%-12px)] sm:w-[240px] md:w-[260px] flex flex-col items-center group cursor-pointer pt-8 sm:pt-12"
     >
       {/* Image Container with Custom Shape Background */}
       <div className="relative w-full aspect-[4/5] z-0 transition-transform duration-300 group-hover:-translate-y-2">
@@ -83,26 +77,26 @@ const MemberCard = ({ member, index }) => {
 
         {/* Member Image - Breaking out of the top */}
         {member.showImage !== false && (
-          <div className="absolute bottom-6 -left-10 right-0 flex justify-center z-10 pointer-events-none">
+          <div className="absolute bottom-4 sm:bottom-6 -left-6 sm:-left-10 right-0 flex justify-center z-10 pointer-events-none">
             <img
               src={member.image || member.img}
               alt={member.name}
-              className="w-[150%] h-auto object-contain object-bottom drop-shadow-md"
+              className="w-[140%] sm:w-[150%] h-auto object-contain object-bottom drop-shadow-md"
             />
           </div>
         )}
       </div>
 
       {/* Name and Title Bar */}
-      <div className="w-[92%] bg-[#3b4179] rounded-[16px] py-4 px-2 text-center z-20 -mt-14 shadow-lg shadow-black/20">
+      <div className="w-[98%] sm:w-[92%] bg-[#3b4179] rounded-[12px] sm:rounded-[16px] py-3 sm:py-4 px-1 sm:px-2 text-center z-20 -mt-10 sm:-mt-14 shadow-lg shadow-black/20">
         {member.showName !== false && (
-          <h4 className="text-white font-bold text-sm md:text-[16px]">
+          <h4 className="text-white font-bold text-xs sm:text-sm md:text-[16px] leading-tight mb-1 sm:mb-0">
             {member.name}
           </h4>
         )}
         {member.showTitle !== false && (
-          <p className="text-[#a6adcf] text-[10px] font-bold tracking-widest uppercase mt-1.5 flex items-center justify-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#a6adcf]"></span> {member.title}
+          <p className="text-[#a6adcf] text-[8px] sm:text-[10px] font-bold tracking-widest uppercase sm:mt-1.5 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 leading-[1.1] sm:leading-normal">
+            <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#a6adcf] shrink-0"></span> {member.title}
           </p>
         )}
       </div>

@@ -65,20 +65,20 @@ const MomentsGallery = ({ program }) => {
     const shapeIndex = (idx + (rowNum === 2 ? 2 : 0)) % 5;
 
     if (spanStr.includes('col-span-12')) {
-      return 'w-[380px] sm:w-[480px] md:w-[540px] h-[250px] sm:h-[280px] shrink-0';
+      return 'w-[280px] sm:w-[480px] md:w-[540px] h-[180px] sm:h-[280px] shrink-0';
     }
     if (spanStr.includes('col-span-6')) {
       return shapeIndex % 2 === 0
-        ? 'w-[350px] sm:w-[430px] md:w-[480px] h-[220px] sm:h-[240px] shrink-0'
-        : 'w-[340px] sm:w-[420px] md:w-[460px] h-[250px] sm:h-[270px] shrink-0';
+        ? 'w-[260px] sm:w-[430px] md:w-[480px] h-[160px] sm:h-[240px] shrink-0'
+        : 'w-[250px] sm:w-[420px] md:w-[460px] h-[180px] sm:h-[270px] shrink-0';
     }
 
     const shapes = [
-      'w-[320px] sm:w-[390px] md:w-[440px] h-[220px] sm:h-[240px] shrink-0', // Wide rectangle
-      'w-[230px] sm:w-[260px] md:w-[280px] h-[250px] sm:h-[280px] shrink-0', // Tall portrait
-      'w-[250px] sm:w-[290px] md:w-[330px] h-[230px] sm:h-[250px] shrink-0', // Square-ish
-      'w-[350px] sm:w-[430px] md:w-[490px] h-[240px] sm:h-[270px] shrink-0', // Panoramic collage
-      'w-[220px] sm:w-[250px] md:w-[270px] h-[210px] sm:h-[230px] shrink-0'  // Compact bento
+      'w-[240px] sm:w-[390px] md:w-[440px] h-[160px] sm:h-[240px] shrink-0', // Wide rectangle
+      'w-[170px] sm:w-[260px] md:w-[280px] h-[190px] sm:h-[280px] shrink-0', // Tall portrait
+      'w-[190px] sm:w-[290px] md:w-[330px] h-[170px] sm:h-[250px] shrink-0', // Square-ish
+      'w-[260px] sm:w-[430px] md:w-[490px] h-[180px] sm:h-[270px] shrink-0', // Panoramic collage
+      'w-[160px] sm:w-[250px] md:w-[270px] h-[150px] sm:h-[230px] shrink-0'  // Compact bento
     ];
 
     return shapes[shapeIndex];
