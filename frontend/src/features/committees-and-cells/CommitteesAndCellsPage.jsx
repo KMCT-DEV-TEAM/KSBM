@@ -30,9 +30,16 @@ const CommitteesAndCellsPage = () => {
     const handleMessage = (event) => {
       if (event.data?.type === 'LIVE_PREVIEW_UPDATE' && event.data.data) {
         setData(prev => ({ ...prev, ...event.data.data }));
+        setDataLoaded(true); // Ensure page transition clears
       }
     };
     window.addEventListener('message', handleMessage);
+    
+    // Notify parent that we're ready to receive preview data
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'PREVIEW_READY' }, '*');
+    }
+    
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 

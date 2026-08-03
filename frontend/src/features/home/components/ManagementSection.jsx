@@ -24,7 +24,8 @@ const ManagementSection = ({ previewData }) => {
               heading: data.heading || 'The Architects Of Excellence',
               description: data.description || 'Our leadership board combines decades of top-tier industry experience with a profound commitment to academic innovation.',
               members: data.members || []
-            });
+            ,
+              showSection: data.showSection});
           }
         } catch (error) {
           console.error('Error fetching management settings:', error);
@@ -35,6 +36,10 @@ const ManagementSection = ({ previewData }) => {
   }, [previewData]);
 
   const { subheading, heading, description, members } = settings;
+
+  if (settings?.showSection === false) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-white py-20 lg:py-32 relative z-10">
@@ -74,11 +79,7 @@ const ManagementSection = ({ previewData }) => {
         <div className="flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-12 w-full max-w-6xl mx-auto">
           {members.map((member, index) => {
             // Check if it's the center card (assuming exactly 3 members)
-            const isCenter = index === 1;
-            
-            if (settings?.showSection === false) return null;
-
-  return (
+            const isCenter = index === 1;  return (
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}

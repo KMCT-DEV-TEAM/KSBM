@@ -31,7 +31,7 @@ const AboutCtaSection = ({ previewData }) => {
   const subtext = data?.subtext || 'Applications for the academic year 2024-25 are now open. Secure your seat in the cohort of the future.';
   const buttonText = data?.buttonText || 'Apply Now Online';
   const globalLinks = useGlobalLinks();
-  const buttonLink = globalLinks['about_cta']?.link || data?.buttonLink || '/apply';
+  const buttonLink = globalLinks['global_apply']?.link || data?.buttonLink || '/apply';
   const bgColor = data?.backgroundColor || '#2B2F66';
 
   if (data?.showSection === false) return null;

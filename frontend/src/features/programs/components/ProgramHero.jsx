@@ -2,14 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, ArrowRight, X, Send, User, Mail, Phone } from 'lucide-react';
-import Swal from 'sweetalert2';
+import { Download, ArrowRight } from 'lucide-react';
+import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
 
 const ProgramHero = ({ program }) => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [isBrochureModalOpen, setIsBrochureModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
   const isBba = program.id === 'bba';
+  const globalLinks = useGlobalLinks();
+  const brochureUrl = globalLinks['hero_brochure']?.link || null;
 
   useEffect(() => {
     const img = new Image();
@@ -17,30 +17,6 @@ const ProgramHero = ({ program }) => {
     img.onload = () => setImagesLoaded(true);
     img.onerror = () => setImagesLoaded(true);
   }, [program.heroImage]);
-
-  const handleBrochureSubmit = (e) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email || !formData.phone) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Missing Details',
-        text: 'Please fill out your Name, Email, and Phone Number to download the brochure.',
-        confirmButtonColor: '#1b2559'
-      });
-      return;
-    }
-
-    setIsBrochureModalOpen(false);
-    Swal.fire({
-      icon: 'success',
-      title: 'Brochure Sent Successfully!',
-      text: `The official ${program.shortTitle} Curriculum & Brochure PDF has been emailed to ${formData.email}.`,
-      confirmButtonColor: '#1b2559',
-      timer: 4000,
-      timerProgressBar: true
-    });
-    setFormData({ name: '', email: '', phone: '' });
-  };
 
   const line1 = program.heroTitleLine1 || (isBba ? "Bachelor of Business" : "Master of Business");
   const line2 = program.heroTitleLine2 || (isBba ? "Administration (BBA)" : "Administration (MBA)");
@@ -138,112 +114,21 @@ const ProgramHero = ({ program }) => {
             <span>{primaryBtnText}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
-          <button
-            type="button"
-            onClick={() => setIsBrochureModalOpen(true)}
-            className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-semibold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start cursor-pointer"
-          >
-            <Download className="w-4 h-4" />
-            <span>{secondaryBtnText}</span>
-          </button>
+          {brochureUrl ? (
+            <a
+              href={brochureUrl}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-semibold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start"
+            >
+              <Download className="w-4 h-4" />
+              <span>{secondaryBtnText}</span>
+            </a>
+          ) : null}
         </motion.div>
       </motion.div>
       )}
-
-      {/* Interactive Brochure Request Modal */}
-      <AnimatePresence>
-        {isBrochureModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsBrochureModalOpen(false)}
-              className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 z-10"
-            >
-              <div className="bg-primary px-6 py-6 text-white relative">
-                <button
-                  type="button"
-                  onClick={() => setIsBrochureModalOpen(false)}
-                  className="absolute top-5 right-5 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-                <span className="text-[10px] font-bold tracking-widest uppercase bg-white/15 px-2.5 py-1 rounded-full text-blue-100">
-                  OFFICIAL CURRICULUM
-                </span>
-                <h3 className="text-xl font-bold mt-3 leading-snug">
-                  Download {program.shortTitle} Brochure & Syllabus
-                </h3>
-                <p className="text-xs text-blue-200 mt-1">
-                  Enter your details to receive the comprehensive course guide instantly.
-                </p>
-              </div>
-
-              <form onSubmit={handleBrochureSubmit} className="p-6 space-y-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Full Name</label>
-                  <div className="relative">
-                    <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Enter your full name"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:outline-none text-slate-800"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Email Address</label>
-                  <div className="relative">
-                    <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="you@example.com"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:outline-none text-slate-800"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Phone / WhatsApp Number</label>
-                  <div className="relative">
-                    <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="tel"
-                      required
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      placeholder="+91 98765 43210"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-primary focus:outline-none text-slate-800"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full mt-2 py-3.5 bg-primary text-white font-semibold text-sm rounded-xl hover:bg-[#162050] transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>Get Instant PDF & Curriculum</span>
-                </button>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };

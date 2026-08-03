@@ -70,7 +70,9 @@ const RecruitersSection = ({ previewData }) => {
     displayList = [...displayList, ...defaultRecruiters.slice(0, missing)];
   }
 
-  if (data?.showSection === false) return null;
+  if (data?.showSection === false) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-background py-12 lg:py-16 border-t border-gray-100">

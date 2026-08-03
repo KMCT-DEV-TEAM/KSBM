@@ -18,11 +18,17 @@ export const streamNotifications = (req, res) => {
   // Send an initial connected message
   res.write(`data: ${JSON.stringify({ type: 'CONNECTED', message: 'SSE connection established' })}\n\n`);
 
+  // Keep-alive ping every 30 seconds to prevent proxy/browser timeout
+  const pingInterval = setInterval(() => {
+    res.write(`:\n\n`); // SSE comment acts as a ping
+  }, 30000);
+
   // Add the client to our list
   clients.push(res);
 
   // When the client closes the connection, remove them
   req.on('close', () => {
+    clearInterval(pingInterval);
     clients = clients.filter(client => client !== res);
   });
 };

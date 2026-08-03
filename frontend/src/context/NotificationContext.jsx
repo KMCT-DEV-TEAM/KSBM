@@ -85,7 +85,7 @@ export const NotificationProvider = ({ children }) => {
       };
 
       eventSource.onerror = (error) => {
-        console.error('SSE connection error. Reconnecting with fresh token in 5s...', error);
+        console.warn('SSE connection interrupted. Reconnecting with fresh token in 5s...');
         eventSource.close();
         reconnectTimeout = setTimeout(connectSSE, 5000);
       };

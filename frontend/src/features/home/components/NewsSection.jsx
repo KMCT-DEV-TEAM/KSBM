@@ -96,7 +96,9 @@ const NewsSection = ({ previewData }) => {
     return null;
   }
 
-  if (data?.showSection === false) return null;
+  if (data?.showSection === false) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-[#f4f7f9] py-12 lg:py-14">

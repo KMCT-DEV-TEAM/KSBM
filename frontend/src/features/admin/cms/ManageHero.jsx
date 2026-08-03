@@ -30,9 +30,6 @@ const ManageHero = () => {
   const [headingLine2, setHeadingLine2] = useState({ text: 'Business Leaders', isVisible: true });
   const [description, setDescription] = useState({ text: "Unlock your potential with India's leading B-School, where traditional academic rigor meets modern industry innovation. Join a network of global visionaries.", isVisible: true });
   
-  const [primaryButton, setPrimaryButton] = useState({ text: 'Apply Now', isVisible: true, link: '#' });
-  const [secondaryButton, setSecondaryButton] = useState({ text: 'Download Brochure', isVisible: true, link: '#' });
-
   const [bannerImages, setBannerImages] = useState([]);
   
   const [statsCard, setStatsCard] = useState({
@@ -43,7 +40,7 @@ const ManageHero = () => {
     stat2Title: '100% Placement',
     stat2Subtitle: 'Consistent record over years',
     linkText: 'Read Admission Guidelines',
-    linkUrl: '#'
+    linkUrl: '/admissions'
   });
 
   const [showSection, setShowSection] = useState(true);
@@ -68,8 +65,6 @@ const ManageHero = () => {
         if (data.headingLine1) setHeadingLine1(typeof data.headingLine1 === 'string' ? { text: data.headingLine1, isVisible: true } : data.headingLine1);
         if (data.headingLine2) setHeadingLine2(typeof data.headingLine2 === 'string' ? { text: data.headingLine2, isVisible: true } : data.headingLine2);
         if (data.description) setDescription(typeof data.description === 'string' ? { text: data.description, isVisible: true } : data.description);
-        if (data.primaryButton) setPrimaryButton(data.primaryButton);
-        if (data.secondaryButton) setSecondaryButton(data.secondaryButton);
         if (data.bannerImages) setBannerImages(data.bannerImages);
         if (data.statsCard) setStatsCard(data.statsCard);
         if (data.showSection !== undefined) setShowSection(data.showSection);
@@ -104,8 +99,6 @@ const ManageHero = () => {
             headingLine1, 
             headingLine2, 
             description, 
-            primaryButton, 
-            secondaryButton,
             bannerImages: finalBannerImages,
             statsCard,
             showSection
@@ -135,8 +128,6 @@ const ManageHero = () => {
         setHeadingLine1({ text: 'Empowering Future', isVisible: true });
         setHeadingLine2({ text: 'Business Leaders', isVisible: true });
         setDescription({ text: "Unlock your potential with India's leading B-School, where traditional academic rigor meets modern industry innovation. Join a network of global visionaries.", isVisible: true });
-        setPrimaryButton({ text: 'Apply Now', isVisible: true, link: '#' });
-        setSecondaryButton({ text: 'Download Brochure', isVisible: true, link: '#' });
         setBannerImages([
           { url: '/assets/Images/Home/hero_banner_1.png' },
           { url: '/assets/Images/Home/hero_banner_2.png' },
@@ -150,7 +141,7 @@ const ManageHero = () => {
           stat2Title: '100% Placement',
           stat2Subtitle: 'Consistent record over years',
           linkText: 'Read Admission Guidelines',
-          linkUrl: '#'
+          linkUrl: '/admissions'
         });
         setShowSection(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
@@ -163,8 +154,6 @@ const ManageHero = () => {
     headingLine1,
     headingLine2,
     description,
-    primaryButton,
-    secondaryButton,
     bannerImages,
     statsCard,
     showSection
@@ -199,7 +188,7 @@ const ManageHero = () => {
     <div className="space-y-6 w-full">
       <PageHeader
         title="Hero Section Settings"
-        description="Manage the main hero banner text and action buttons."
+        description="Manage the main hero banner text."
         onPreview={() => setIsPreviewModalOpen(true)}
         onReset={handleResetToDefault}
         onSave={handleSave}
@@ -261,19 +250,24 @@ const ManageHero = () => {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
         
         {/* Section Visibility Toggle */}
-        <div className="mb-8 pb-8 border-b border-gray-100 flex items-center justify-between">
+        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
           <div>
-            <h3 className="text-lg font-bold text-[#1e2869] mb-1">Section Visibility</h3>
-            <p className="text-sm text-gray-500">Show or hide the entire Hero Section on the live website.</p>
+            <h3 className="text-lg font-bold text-[#1e2869]">Visibility Settings</h3>
+            <p className="text-sm text-gray-500 mt-1">Show or hide the entire Hero Section on the live website.</p>
           </div>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input 
-              type="checkbox" 
-              className="sr-only peer"
-              checked={showSection}
-              onChange={(e) => setShowSection(e.target.checked)}
-            />
-            <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+          <label className="flex items-center cursor-pointer">
+            <div className="relative">
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                checked={showSection}
+                onChange={(e) => setShowSection(e.target.checked)}
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </div>
+            <span className="ml-3 text-sm font-medium text-gray-700">
+              {showSection ? 'Visible' : 'Hidden'}
+            </span>
           </label>
         </div>
 
@@ -367,88 +361,6 @@ const ManageHero = () => {
                 <span className="text-sm font-semibold text-[#566A7F]">Show Description</span>
               </label>
             </div>
-          </div>
-        </div>
-
-        {/* Buttons Settings */}
-        <div>
-          <h3 className="text-lg font-bold text-[#1e2869] mb-4">Action Buttons</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            {/* Primary Button */}
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <h4 className="font-semibold text-sm text-[#566A7F] mb-3 border-b pb-2">Primary Button (Apply Now)</h4>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Button Text</label>
-                  <input 
-                    type="text" 
-                    value={primaryButton.text}
-                    disabled
-                    onChange={(e) => setPrimaryButton({ ...primaryButton, text: e.target.value })}
-                    className="w-full px-3 py-2 bg-gray-100 border border-[#D9DEE3] rounded-md text-gray-400 text-sm cursor-not-allowed"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Link URL</label>
-                  <input 
-                    type="text" 
-                    value={primaryButton.link}
-                    onChange={(e) => setPrimaryButton({ ...primaryButton, link: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                  />
-                </div>
-                <div className="pt-2">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input 
-                      type="checkbox"
-                      checked={primaryButton.isVisible}
-                      onChange={(e) => setPrimaryButton({ ...primaryButton, isVisible: e.target.checked })}
-                      className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
-                    />
-                    <span className="text-sm font-semibold text-[#566A7F]">Show Primary Button</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            {/* Secondary Button */}
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-              <h4 className="font-semibold text-sm text-[#566A7F] mb-3 border-b pb-2">Secondary Button (Download Brochure)</h4>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Button Text</label>
-                  <input 
-                    type="text" 
-                    value={secondaryButton.text}
-                    disabled
-                    onChange={(e) => setSecondaryButton({ ...secondaryButton, text: e.target.value })}
-                    className="w-full px-3 py-2 bg-gray-100 border border-[#D9DEE3] rounded-md text-gray-400 text-sm cursor-not-allowed"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Link URL</label>
-                  <input 
-                    type="text" 
-                    value={secondaryButton.link}
-                    onChange={(e) => setSecondaryButton({ ...secondaryButton, link: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                  />
-                </div>
-                <div className="pt-2">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input 
-                      type="checkbox"
-                      checked={secondaryButton.isVisible}
-                      onChange={(e) => setSecondaryButton({ ...secondaryButton, isVisible: e.target.checked })}
-                      className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
-                    />
-                    <span className="text-sm font-semibold text-[#566A7F]">Show Secondary Button</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
 

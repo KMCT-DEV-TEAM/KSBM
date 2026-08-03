@@ -67,8 +67,9 @@ const FacilitiesSection = ({ previewData }) => {
   }
   const marqueeList = [...repeatedList, ...repeatedList];
 
-
-  if (settings?.showSection === false) return null;
+  if (settings?.showSection === false) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-background py-14 lg:py-20">

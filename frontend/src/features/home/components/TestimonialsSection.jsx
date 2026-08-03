@@ -52,7 +52,8 @@ const TestimonialsSection = ({ previewData }) => {
               subheading: data.subheading || 'Testimonials',
               heading: data.heading || 'Voices of Success',
               testimonials: data.testimonials && data.testimonials.length > 0 ? data.testimonials : settings.testimonials
-            });
+            ,
+              showSection: data.showSection});
           }
         } catch (error) {
           console.error('Error fetching testimonials settings:', error);
@@ -74,6 +75,10 @@ const TestimonialsSection = ({ previewData }) => {
   }, [displayTestimonials.length]);
 
   if (displayTestimonials.length === 0) return null;
+
+  if (settings?.showSection === false) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-background py-12 lg:py-16">
@@ -110,10 +115,7 @@ const TestimonialsSection = ({ previewData }) => {
           className="hidden lg:flex gap-6 h-[380px] w-full max-w-7xl mx-auto justify-center"
         >
           {displayTestimonials.map((testimonial, index) => {
-            const isActive = activeIndex === index;
-            if (settings?.showSection === false) return null;
-
-  return (
+            const isActive = activeIndex === index;  return (
               <div
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}

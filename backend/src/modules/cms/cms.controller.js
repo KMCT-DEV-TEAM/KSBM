@@ -125,7 +125,7 @@ export const getHeroSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateHeroSettings = async (req, res) => {
   try {
-    const { pillText, headingLine1, headingLine2, description, primaryButton, secondaryButton, bannerImages, statsCard } = req.body;
+    const { pillText, headingLine1, headingLine2, description, primaryButton, secondaryButton, bannerImages, statsCard, showSection } = req.body;
 
     const settings = await Hero.getSettings();
 
@@ -137,11 +137,11 @@ export const updateHeroSettings = async (req, res) => {
     if (secondaryButton !== undefined) settings.secondaryButton = secondaryButton;
     if (bannerImages !== undefined) settings.bannerImages = bannerImages;
     if (statsCard !== undefined) settings.statsCard = statsCard;
+    if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error updating about settings', error: error.message });
     res.status(500).json({ message: 'Server error updating hero settings', error: error.message });
   }
 };
