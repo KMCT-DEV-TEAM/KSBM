@@ -60,7 +60,7 @@ const EventsCarousel = ({ highlightedPrograms, carouselIndex, setCarouselIndex }
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
           }}>Showcase</h5>
-        <h2 className="text-center text-xl md:text-3xl font-bold uppercase tracking-widest text-[#ffccf0] drop-shadow-[0_0_15px_rgba(219,39,119,0.8)]">
+        <h2 className="text-center text-lg md:text-2xl font-bold uppercase tracking-widest text-[#ffccf0] drop-shadow-[0_0_15px_rgba(219,39,119,0.8)]">
           {highlightedPrograms.heading}
         </h2>
       </div>

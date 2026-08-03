@@ -10,7 +10,7 @@ const EventsHero = ({ hero }) => {
   ];
 
   return (
-    <section className="relative w-full h-[100vh] flex items-center justify-center overflow-hidden bg-[#050505]/10">
+    <section className="relative w-full h-[75vh] md:h-[100vh] flex items-center justify-center overflow-hidden bg-[#050505]/10">
 
       {/* Decorative Mandala (Bottom Left, perfectly split with next section) */}
       <div className="absolute left-[-10%] bottom-0 translate-y-[35%] w-64 sm:w-80 md:w-96 lg:w-[32rem] aspect-square z-20 pointer-events-none opacity-80 mix-blend-screen">
@@ -59,7 +59,7 @@ const EventsHero = ({ hero }) => {
 
       {/* Content Overlay (Title and Subtitle) */}
       {hero?.showTextContent !== false && (
-        <div className="absolute inset-0 z-20 flex flex-col justify-start items-start text-left px-6 md:px-16 lg:px-32 xl:px-48 pt-28 md:pt-36 lg:pt-40 w-full pointer-events-none">
+        <div className="absolute inset-0 z-20 flex flex-col justify-center md:justify-start items-start text-left px-6 md:px-16 lg:px-32 xl:px-48 pt-0 md:pt-36 lg:pt-40 w-full pointer-events-none">
           <h1 
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-wider mb-4 drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] leading-[1.2] md:w-[60%]"
             style={{

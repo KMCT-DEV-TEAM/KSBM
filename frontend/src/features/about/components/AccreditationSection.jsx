@@ -98,16 +98,31 @@ const AccreditationSection = ({ previewData }) => {
           >
             {settings?.images && settings.images.length > 4 ? (
               <div className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_64px,_black_calc(100%-64px),transparent_100%)]">
-                <div className="flex items-center animate-marquee gap-8 sm:gap-12 lg:gap-16 pr-8 lg:pr-16">
-                  {[...settings.images, ...settings.images].map((img, idx) => (
-                    <div key={idx} className="flex-shrink-0 flex items-center justify-center">
-                      <img
-                        src={img.url}
-                        alt={`Accreditation ${idx + 1}`}
-                        className="w-auto h-12 sm:h-16 md:h-20 lg:h-24 object-contain mix-blend-multiply select-none"
-                      />
-                    </div>
-                  ))}
+                <div className="flex items-center animate-marquee">
+                  {/* First Set */}
+                  <div className="flex items-center gap-8 sm:gap-12 lg:gap-16 pr-8 sm:pr-12 lg:pr-16 shrink-0">
+                    {settings.images.map((img, idx) => (
+                      <div key={`set1-${idx}`} className="flex-shrink-0 flex items-center justify-center">
+                        <img
+                          src={img.url}
+                          alt={`Accreditation ${idx + 1}`}
+                          className="w-auto h-12 sm:h-16 md:h-20 lg:h-24 object-contain mix-blend-multiply select-none"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  {/* Second Set (Duplicate for seamless loop) */}
+                  <div className="flex items-center gap-8 sm:gap-12 lg:gap-16 pr-8 sm:pr-12 lg:pr-16 shrink-0">
+                    {settings.images.map((img, idx) => (
+                      <div key={`set2-${idx}`} className="flex-shrink-0 flex items-center justify-center">
+                        <img
+                          src={img.url}
+                          alt={`Accreditation ${idx + 1}`}
+                          className="w-auto h-12 sm:h-16 md:h-20 lg:h-24 object-contain mix-blend-multiply select-none"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             ) : settings?.images && settings.images.length > 0 ? (

@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { Target, Users, GraduationCap, Building2, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const aboutLinks = [
+import api from '../api/axios';
+
+const initialAboutLinks = [
   {
     label: 'OVERVIEW',
     description: 'Overview of KMCT School of Business, our vision, mission, and legacy.',
@@ -36,6 +38,37 @@ const aboutLinks = [
 
 const AboutMegaMenu = ({ isOpen, onMouseEnter, onMouseLeave }) => {
   const [hoveredLink, setHoveredLink] = React.useState(null);
+  const [aboutLinks, setAboutLinks] = React.useState(initialAboutLinks);
+
+  React.useEffect(() => {
+    const fetchOrganogram = async () => {
+      try {
+        const { data } = await api.get('/cms/organogram/default', { hideLoader: true });
+        if (data && data.pdfUrl) {
+          setAboutLinks(prevLinks => {
+            const newLinks = [...prevLinks];
+            const govBodyIndex = newLinks.findIndex(link => link.label === 'GOVERNING BODY');
+            if (govBodyIndex !== -1) {
+              const newGovBodyLink = { ...newLinks[govBodyIndex] };
+              if (newGovBodyLink.subLinks) {
+                const newSubLinks = [...newGovBodyLink.subLinks];
+                const organogramIndex = newSubLinks.findIndex(sub => sub.label === 'Organogram');
+                if (organogramIndex !== -1) {
+                  newSubLinks[organogramIndex] = { ...newSubLinks[organogramIndex], href: data.pdfUrl };
+                }
+                newGovBodyLink.subLinks = newSubLinks;
+              }
+              newLinks[govBodyIndex] = newGovBodyLink;
+            }
+            return newLinks;
+          });
+        }
+      } catch (error) {
+        // silently fail and use default hardcoded URL
+      }
+    };
+    fetchOrganogram();
+  }, []);
 
   return (
     <AnimatePresence>

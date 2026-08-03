@@ -91,22 +91,22 @@ const DynamicLearningSection = ({ program }) => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="flex justify-center lg:justify-end w-full relative min-h-[350px]"
+            className="flex justify-center lg:justify-end w-full relative min-h-[300px] sm:min-h-[350px]"
           >
-            <div className="relative w-full max-w-[420px] h-[340px]">
+            <div className="relative w-full max-w-[340px] sm:max-w-[420px] h-[280px] sm:h-[340px]">
               <img
                 src={images[0] || '/assets/Images/mba/dynamic_49.png'}
                 alt="Industrial Visit 1"
-                className="absolute top-0 left-0 w-[240px] h-[280px] rounded-[10px] object-cover shadow-2xl z-10"
+                className="absolute top-0 left-0 w-[180px] h-[220px] sm:w-[240px] sm:h-[280px] rounded-[10px] object-cover shadow-2xl z-10"
               />
               <img
                 src={images[1] || images[0] || '/assets/Images/mba/dynamic_60.png'}
                 alt="Industrial Visit 2"
-                className="absolute bottom-0 right-0 w-[240px] h-[280px] rounded-[10px] object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-20"
+                className="absolute bottom-0 right-0 w-[180px] h-[220px] sm:w-[240px] sm:h-[280px] rounded-[10px] object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-20"
               />
 
               {/* Image 68 positioned in the empty space between images */}
-              <div className="absolute -bottom-16 left-1 lg:left-1 w-[180px] hidden sm:block opacity-100 z-[15] pointer-events-none">
+              <div className="absolute -bottom-10 sm:-bottom-16 left-1 lg:left-1 w-[120px] sm:w-[180px] hidden sm:block opacity-100 z-[15] pointer-events-none">
                 <img src="/assets/Images/image 68.png" alt="Decorative element" className="w-full h-auto object-contain" />
               </div>
             </div>

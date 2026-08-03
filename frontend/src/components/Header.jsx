@@ -103,6 +103,7 @@ const Header = ({ previewData }) => {
   const [logoUrl, setLogoUrl] = useState('');
   const [alignment, setAlignment] = useState('center');
   const [mandatoryDisclosureUrl, setMandatoryDisclosureUrl] = useState(null);
+  const [organogramUrl, setOrganogramUrl] = useState(null);
   
   const globalLinks = useGlobalLinks();
   const headerApplyLink = globalLinks['global_apply']?.link || '/admissions';
@@ -118,7 +119,18 @@ const Header = ({ previewData }) => {
         // silently fail
       }
     };
+    const fetchOrganogram = async () => {
+      try {
+        const { data } = await api.get('/cms/organogram/default', { hideLoader: true });
+        if (data && data.pdfUrl) {
+          setOrganogramUrl(data.pdfUrl);
+        }
+      } catch (error) {
+        // silently fail
+      }
+    };
     fetchMandatoryDisclosure();
+    fetchOrganogram();
   }, []);
 
   useEffect(() => {
@@ -308,6 +320,9 @@ const Header = ({ previewData }) => {
                         if (item.link === '/mandatory-disclosure') {
                           e.preventDefault();
                           if (mandatoryDisclosureUrl) window.open(mandatoryDisclosureUrl, '_blank');
+                        } else if (item.href === '/assets/Organogram.pdf') {
+                          e.preventDefault();
+                          if (organogramUrl) window.open(organogramUrl, '_blank');
                         } else {
                           setActiveNav(item.label);
                         }
@@ -427,6 +442,9 @@ const Header = ({ previewData }) => {
                             if (item.link === '/mandatory-disclosure') {
                               e.preventDefault();
                               if (mandatoryDisclosureUrl) window.open(mandatoryDisclosureUrl, '_blank');
+                            } else if (item.href === '/assets/Organogram.pdf') {
+                              e.preventDefault();
+                              if (organogramUrl) window.open(organogramUrl, '_blank');
                             } else {
                               setActiveNav(item.label);
                               setIsMobileMenuOpen(false);
@@ -482,10 +500,15 @@ const Header = ({ previewData }) => {
                                 <Link
                                   href={sub.href}
                                   className="text-sm text-slate-700 hover:text-primary font-medium py-1.5 flex items-center justify-between transition-colors block"
-                                  onClick={() => {
-                                    setActiveNav(item.label);
-                                    setIsMobileMenuOpen(false);
-                                    setExpandedMobileNav({});
+                                  onClick={(e) => {
+                                    if (sub.href === '/assets/Organogram.pdf') {
+                                      e.preventDefault();
+                                      if (organogramUrl) window.open(organogramUrl, '_blank');
+                                    } else {
+                                      setActiveNav(item.label);
+                                      setIsMobileMenuOpen(false);
+                                      setExpandedMobileNav({});
+                                    }
                                   }}
                                 >
                                   <span>{sub.label}</span>

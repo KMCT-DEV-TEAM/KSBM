@@ -97,6 +97,7 @@ const Sidebar = () => {
         { name: 'Grievance Page', path: '/admin/cms/grievance' },
         { name: 'Download Page', path: '/admin/cms/download' },
         { name: 'Mandatory Disclosure', path: '/admin/cms/mandatory-disclosure' },
+        { name: 'Organogram', path: '/admin/cms/organogram' },
       ]
     },
     {

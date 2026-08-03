@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const EventsEssence = ({ essenceOfCulture }) => {
   const displayItems = essenceOfCulture?.items?.length > 0 ? essenceOfCulture.items : [
@@ -111,8 +111,8 @@ const EventsEssence = ({ essenceOfCulture }) => {
           </div>
         )}
 
-        {/* Thumbnails Column - Shows Maximum 5 Images */}
-        <div className="flex flex-col gap-4 w-full md:w-[250px] lg:w-[350px] shrink-0 pl-6 z-10">
+        {/* Thumbnails Column - Desktop */}
+        <div className="hidden md:flex flex-col gap-4 w-full md:w-[250px] lg:w-[350px] shrink-0 pl-6 z-10">
           <div className="flex flex-col gap-4 w-full">
             <AnimatePresence mode="popLayout">
               {visibleItems.map((item, idx) => (
@@ -145,7 +145,56 @@ const EventsEssence = ({ essenceOfCulture }) => {
               ))}
             </AnimatePresence>
           </div>
+        </div>
 
+        {/* Thumbnails Slider - Mobile */}
+        <div className="md:hidden flex flex-col items-center justify-center w-full relative z-10 px-6">
+          <AnimatePresence mode="wait">
+            {displayItems.map((item, idx) => (
+              selectedDetail === item.category && (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="relative w-full h-[220px] rounded-[12px] overflow-hidden shadow-[0_0_25px_rgba(200,55,171,0.35)] border-2 border-pink-500/80 shrink-0"
+                >
+                  <img src={item.img || "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop"} alt={item.category || "Culture"} className="w-full h-full object-cover" />
+                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent pointer-events-none"></div>
+                  <div className="absolute bottom-3 left-4 pointer-events-none z-10">
+                    <h3 className="text-lg font-bold uppercase tracking-wider text-pink-400">{item.category}</h3>
+                  </div>
+                </motion.div>
+              )
+            ))}
+          </AnimatePresence>
+
+          {/* Mobile Controls */}
+          {displayItems.length > 1 && (
+            <div className="flex justify-center mt-6 gap-4 w-full">
+              <button 
+                onClick={() => {
+                  const currentIndex = displayItems.findIndex(i => i.category === selectedDetail);
+                  const prevIndex = currentIndex === 0 ? displayItems.length - 1 : currentIndex - 1;
+                  setSelectedDetail(displayItems[prevIndex].category);
+                }}
+                className="p-3 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors z-10"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button 
+                onClick={() => {
+                  const currentIndex = displayItems.findIndex(i => i.category === selectedDetail);
+                  const nextIndex = currentIndex === displayItems.length - 1 ? 0 : currentIndex + 1;
+                  setSelectedDetail(displayItems[nextIndex].category);
+                }}
+                className="p-3 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors z-10"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Details Column */}

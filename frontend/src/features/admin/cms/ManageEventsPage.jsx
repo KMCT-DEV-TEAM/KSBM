@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Trash2, ChevronUp, ChevronDown, Eye, Monitor, Tablet, Smartphone, X, FileText, Info, Calendar, Sparkles, Music, Share2, Camera, Layout } from 'lucide-react';
+import { Plus, Trash2, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, Monitor, Tablet, Smartphone, X, FileText, Info, Calendar, Sparkles, Music, Share2, Camera, Layout } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
@@ -410,6 +410,42 @@ const ManageEventsPage = () => {
 
   return (
     <div className="space-y-6 w-full">
+      {/* Tabs Navigation */}
+      <div className="relative flex items-center gap-1 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
+        <button 
+          onClick={() => { if(tabsContainerRef.current) tabsContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' }) }} 
+          className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors shrink-0"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <div
+          ref={tabsContainerRef}
+          className="flex overflow-x-auto gap-2 scroll-smooth flex-1 py-1 px-1 custom-scrollbar"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${
+                activeTab === tab.id
+                  ? 'bg-primary text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
+              }`}
+            >
+              {tab.icon}
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+        <button 
+          onClick={() => { if(tabsContainerRef.current) tabsContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' }) }} 
+          className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors shrink-0"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
+
       <PageHeader 
         title="Manage Events Page" 
         description="Customize the cinematic events landing page including the hero, upcoming events, and photo collages."
@@ -440,29 +476,6 @@ const ManageEventsPage = () => {
         </div>
       )}
 
-      {/* Tabs Navigation */}
-      <div className="relative flex items-center gap-2 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm">
-        <div
-          ref={tabsContainerRef}
-          className="flex overflow-x-auto gap-2 scroll-smooth flex-1 py-1 px-1 custom-scrollbar"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${
-                activeTab === tab.id
-                  ? 'bg-primary text-white shadow-md'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
-              }`}
-            >
-              {tab.icon}
-              <span>{tab.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
 
       <AnimatePresence mode="wait">
         <motion.div
