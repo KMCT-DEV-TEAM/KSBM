@@ -120,7 +120,7 @@ const FacilitiesSection = ({ previewData }) => {
         {/* Facilities Marquee */}
         {showFacilities && facilitiesList.length > 0 && (
           <div className="relative w-full overflow-hidden mt-8">
-            <div className="animate-marquee gap-4 sm:gap-6 lg:gap-8 flex">
+            <div className="animate-marquee gap-4 sm:gap-6 lg:gap-8 flex" style={{ animationDuration: '120s' }}>
               {marqueeList.map((facility, index) => (
                 <div
                   key={`${facility._id || index}-${index}`}

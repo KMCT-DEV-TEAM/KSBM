@@ -25,11 +25,11 @@ const FacultyGridSection = ({ title, members, id }) => {
           <h3 className="text-xl sm:text-2xl font-semibold text-[#1e2869] whitespace-nowrap tracking-tight">
             {title}
           </h3>
-          <div className={`flex-grow h-[1.5px] ${isKsbmFaculty ? 'bg-primary' : 'bg-gray-200/80'}`}></div>
+          <div className={`flex-grow h-[1px] ${isKsbmFaculty ? 'bg-primary' : 'bg-gray-200/80'}`}></div>
         </div>
 
         {/* Members Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           {members.map((member, idx) => (
             <FacultyCard key={member._id || idx} member={member} index={idx} />
           ))}
