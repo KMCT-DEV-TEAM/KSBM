@@ -1,5 +1,18 @@
 import React, { useState } from 'react';
 import { Eye, RefreshCw, Save, Loader2, Monitor, Tablet, Smartphone, X } from 'lucide-react';
+import Swal from 'sweetalert2';
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
 
 const PageHeader = ({ title, description, onPreview, previewUrl, onReset, onSave, isSaving, extraButtons, children }) => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
@@ -10,6 +23,34 @@ const PageHeader = ({ title, description, onPreview, previewUrl, onReset, onSave
       onPreview();
     } else if (previewUrl) {
       setIsPreviewModalOpen(true);
+    }
+  };
+
+  const handleSaveClick = (e) => {
+    e.preventDefault();
+    if (isSaving) return;
+
+    // Generic validation: Check all visible inputs and textareas (except checkboxes/radios/files)
+    const formElements = Array.from(document.querySelectorAll('input:not([type="checkbox"]):not([type="file"]):not([type="radio"]), textarea'));
+    
+    const emptyFields = formElements.filter(el => {
+      // Check if element is visible
+      const isVisible = !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+      if (!isVisible) return false;
+      
+      // If visible, check if empty
+      return !el.value.trim();
+    });
+
+    if (emptyFields.length > 0) {
+      // Focus the first empty field for user convenience
+      emptyFields[0].focus();
+      Toast.fire({ icon: 'warning', title: 'Please fill all the fields' });
+      return;
+    }
+
+    if (onSave) {
+      onSave(e);
     }
   };
 
@@ -44,7 +85,7 @@ const PageHeader = ({ title, description, onPreview, previewUrl, onReset, onSave
           )}
           {onSave && (
             <button
-              onClick={onSave}
+              onClick={handleSaveClick}
               disabled={isSaving}
               className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all disabled:opacity-50"
             >
