@@ -40,6 +40,11 @@ const ManageAbout = () => {
   const iframeRef = React.useRef(null);
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, action: null, index: null, title: '', message: '', confirmText: '', variant: 'danger' });
 
+  // Paragraph Modal State
+  const [isParagraphModalOpen, setIsParagraphModalOpen] = useState(false);
+  const [currentParagraph, setCurrentParagraph] = useState('');
+  const [editingParagraphIndex, setEditingParagraphIndex] = useState(null);
+
   const { markForDeletion, uploadFile, executeDeletions, clearDeletions } = useDeferredUpload();
 
   const dragItem = React.useRef();
@@ -179,14 +184,50 @@ const ManageAbout = () => {
     setStats(newStats);
   };
 
-  const updateParagraph = (index, value) => {
-    const newParagraphs = [...paragraphs];
-    newParagraphs[index] = value;
-    setParagraphs(newParagraphs);
+  const openAddParagraphModal = () => {
+    if (paragraphs.length >= 3) {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: 'You can only have up to 3 paragraphs.',
+        showConfirmButton: false,
+        timer: 3000
+      });
+      return;
+    }
+    setEditingParagraphIndex(null);
+    setCurrentParagraph('');
+    setIsParagraphModalOpen(true);
   };
 
-  const addParagraph = () => {
-    setParagraphs([...paragraphs, '']);
+  const openEditParagraphModal = (index) => {
+    setEditingParagraphIndex(index);
+    setCurrentParagraph(paragraphs[index]);
+    setIsParagraphModalOpen(true);
+  };
+
+  const closeParagraphModal = () => {
+    setIsParagraphModalOpen(false);
+    setCurrentParagraph('');
+    setEditingParagraphIndex(null);
+  };
+
+  const saveParagraphFromModal = () => {
+    if (!currentParagraph.trim()) {
+      Toast.fire({ icon: 'warning', title: 'Paragraph text is required.' });
+      return;
+    }
+    
+    const newParagraphs = [...paragraphs];
+    if (editingParagraphIndex !== null) {
+      newParagraphs[editingParagraphIndex] = currentParagraph;
+    } else {
+      newParagraphs.push(currentParagraph);
+    }
+    
+    setParagraphs(newParagraphs);
+    closeParagraphModal();
   };
 
   const removeParagraph = (index) => {
@@ -418,36 +459,40 @@ const ManageAbout = () => {
               <h3 className="text-lg font-bold text-[#1e2869]">Paragraphs</h3>
             </div>
             <button
-              onClick={addParagraph}
-              className="flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
+              onClick={openAddParagraphModal}
+              disabled={paragraphs.length >= 3}
+              className={`flex items-center gap-2 px-5 py-2 text-sm font-semibold rounded-xl shadow-md transition-all ${paragraphs.length >= 3 ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none' : 'text-white bg-primary hover:bg-[#151c48]'}`}
             >
               <Plus className="w-4 h-4" /> Add Paragraph
             </button>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {paragraphs.map((para, index) => (
-              <div key={index} className="flex gap-3">
+              <div key={index} className="flex items-start gap-3 bg-[#F5F5F9] p-4 rounded-lg border border-gray-200">
                 <div className="flex-1">
-                  <textarea
-                    value={para}
-                    onChange={(e) => updateParagraph(index, e.target.value)}
-                    rows="4"
-                    maxLength={600}
-                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                  />
-                  <div className="text-xs text-right mt-1 text-gray-500">
-                    {para.length}/600 characters
-                  </div>
+                  <p className="text-sm text-[#566A7F] line-clamp-3">{para}</p>
                 </div>
-                <button
-                  onClick={() => removeParagraph(index)}
-                  className="p-2 h-fit text-gray-400 hover:text-[#FF3E1D] hover:bg-[#FF3E1D]/10 rounded-md transition-colors"
-                  title="Remove Paragraph"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <div className="flex gap-2 shrink-0">
+                  <button
+                    onClick={() => openEditParagraphModal(index)}
+                    className="p-2 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-md transition-colors"
+                    title="Edit Paragraph"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                  </button>
+                  <button
+                    onClick={() => removeParagraph(index)}
+                    className="p-2 text-gray-400 hover:text-[#FF3E1D] hover:bg-[#FF3E1D]/10 rounded-md transition-colors"
+                    title="Remove Paragraph"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             ))}
+            {paragraphs.length === 0 && (
+              <p className="text-sm text-gray-500 text-center py-4">No paragraphs added yet.</p>
+            )}
           </div>
         </div>
 
@@ -536,6 +581,61 @@ const ManageAbout = () => {
         variant={confirmModal.variant}
         isSubmitting={isSaving}
       />
+
+      {/* Paragraph Add/Edit Modal */}
+      {isParagraphModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+              <h2 className="text-xl font-bold text-[#1e2869]">
+                {editingParagraphIndex !== null ? 'Edit Paragraph' : 'Add New Paragraph'}
+              </h2>
+              <button
+                onClick={closeParagraphModal}
+                className="p-2 text-gray-400 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto custom-scrollbar">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">
+                    Paragraph Content <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    value={currentParagraph}
+                    onChange={(e) => setCurrentParagraph(e.target.value)}
+                    rows="6"
+                    maxLength={600}
+                    placeholder="Enter paragraph text..."
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                  <div className="text-xs text-right mt-1 text-gray-500">
+                    {currentParagraph.length}/600 characters
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3 rounded-b-2xl">
+              <button
+                onClick={closeParagraphModal}
+                className="px-5 py-2.5 text-sm font-semibold text-gray-600 bg-white border border-gray-300 hover:bg-gray-50 rounded-xl transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={saveParagraphFromModal}
+                className="px-5 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl transition-colors"
+              >
+                {editingParagraphIndex !== null ? 'Save Changes' : 'Add Paragraph'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
