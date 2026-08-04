@@ -252,15 +252,15 @@ const Header = ({ previewData }) => {
     }
     // Real responsive behavior
     switch (alignment) {
-      case 'left': return 'flex-1 justify-end lg:justify-start lg:pl-8';
-      case 'center': return 'flex-1 justify-end lg:justify-center';
+      case 'left': return 'flex-1 justify-end min-[1400px]:justify-start min-[1400px]:pl-8';
+      case 'center': return 'flex-1 justify-end min-[1400px]:justify-center';
       case 'right': default: return 'flex-1 justify-end';
     }
   };
 
-  const desktopClass = isPreviewMobile ? 'hidden' : isPreviewDesktop ? 'flex' : 'hidden lg:flex';
-  const mobileToggleClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? 'flex' : 'flex lg:hidden';
-  const mobileDropdownClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? '' : 'lg:hidden';
+  const desktopClass = isPreviewMobile ? 'hidden' : isPreviewDesktop ? 'flex' : 'hidden min-[1400px]:flex';
+  const mobileToggleClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? 'flex' : 'flex min-[1400px]:hidden';
+  const mobileDropdownClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? '' : 'min-[1400px]:hidden';
 
   const isEventsPage = pathname === '/events';
 
