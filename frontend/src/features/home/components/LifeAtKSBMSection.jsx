@@ -67,7 +67,17 @@ const LifeAtKSBMSection = ({ previewData }) => {
     );
   }
 
-  const { subheading, heading, description, images, showSubheading, showHeading, showDescription, showImages, showSection } = data;
+  const { 
+    subheading, 
+    heading, 
+    description, 
+    images, 
+    showSubheading = true, 
+    showHeading = true, 
+    showDescription = true, 
+    showImages = true, 
+    showSection 
+  } = data;
 
   const isPreview = !!previewData;
   const forceMobile = isPreview && previewData.previewDevice === 'mobile';
