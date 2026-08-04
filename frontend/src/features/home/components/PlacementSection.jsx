@@ -57,10 +57,10 @@ const PlacementSection = ({ previewData }) => {
     stat2Value,
     stat2Label,
     statistics,
-    showSubheading,
-    showHeading,
-    showDescription,
-    showStats,
+    showSubheading = true,
+    showHeading = true,
+    showDescription = true,
+    showStats = true,
     previewDevice
   } = displayData;
 
