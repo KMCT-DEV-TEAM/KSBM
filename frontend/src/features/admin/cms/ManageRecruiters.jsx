@@ -275,6 +275,14 @@ const ManageRecruiters = () => {
 
   return (
     <div className="space-y-6 w-full">
+      <PageHeader
+        title="Recruiters Settings"
+        description="Manage the recruiters and partners displayed on the landing page."
+        onPreview={() => setIsPreviewModalOpen(true)}
+        onReset={handleResetToDefault}
+        onSave={handleSave}
+        isSaving={isSaving}
+      />
 
       {isPreviewModalOpen && (
         <div className="fixed inset-0 z-[100] flex flex-col bg-gray-900/80 backdrop-blur-sm">
