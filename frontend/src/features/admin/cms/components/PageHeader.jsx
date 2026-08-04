@@ -31,7 +31,9 @@ const PageHeader = ({ title, description, onPreview, previewUrl, onReset, onSave
     if (isSaving) return;
 
     // Generic validation: Check all visible inputs and textareas (except checkboxes/radios/files)
-    const formElements = Array.from(document.querySelectorAll('input:not([type="checkbox"]):not([type="file"]):not([type="radio"]), textarea'));
+    // Scope the validation to the current page container to avoid triggering on Navbar/Sidebar search inputs
+    const container = e.currentTarget.closest('.space-y-6') || e.currentTarget.closest('.p-6') || document;
+    const formElements = Array.from(container.querySelectorAll('input:not([type="checkbox"]):not([type="file"]):not([type="radio"]), textarea'));
     
     const emptyFields = formElements.filter(el => {
       // Check if element is visible
