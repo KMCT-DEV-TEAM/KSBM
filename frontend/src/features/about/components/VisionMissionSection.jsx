@@ -126,28 +126,30 @@ const VisionMissionSection = ({ previewData }) => {
 
           <div 
             className="flex-1 relative rounded-2xl shadow-lg p-10 lg:p-14 flex flex-col justify-center items-center min-h-[300px] overflow-hidden cursor-pointer group"
-            onClick={() => setActiveCard(activeCard === 'vision' ? null : 'vision')}
+            onClick={() => {
+              if (window.innerWidth < 768) setActiveCard(activeCard === 'vision' ? null : 'vision');
+            }}
           >
             {/* Background Image */}
             <img
               src={data.visionImage}
               alt="Vision Background"
-              className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 z-0 ${activeCard === 'vision' ? 'scale-105' : 'group-hover:scale-105'}`}
+              className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 z-0 ${activeCard === 'vision' ? 'scale-105' : 'md:group-hover:scale-105'}`}
             />
             
             {/* View Icon (Visible when not active) */}
-            <div className={`absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-500 ${activeCard === 'vision' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`md:hidden absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-500 ${activeCard === 'vision' ? 'opacity-0 pointer-events-none' : 'opacity-100 md:group-hover:opacity-0 md:group-hover:pointer-events-none'}`}>
               <div className="bg-white/30 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/40 transition-colors">
                 <Eye size={32} className="text-white" />
               </div>
             </div>
 
             {/* Purple Overlay */}
-            <div className={`absolute inset-0 bg-[#454e7d]/90 z-0 transition-opacity duration-500 ${activeCard === 'vision' ? 'opacity-100' : 'opacity-0'}`}></div>
+            <div className={`absolute inset-0 bg-[#454e7d]/90 z-0 transition-opacity duration-500 ${activeCard === 'vision' ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100'}`}></div>
 
-            <div className={`relative z-10 flex flex-col items-center text-center transition-all duration-500 ${activeCard === 'vision' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+            <div className={`relative z-10 flex flex-col items-center text-center transition-all duration-500 ${activeCard === 'vision' ? 'opacity-100' : 'opacity-0 pointer-events-none md:group-hover:opacity-100 md:group-hover:pointer-events-auto'}`}>
               {/* Eye Icon */}
-              <div className="mb-4 text-white/80">
+              <div className="mb-4 text-white/80 md:hidden">
                 <Eye size={36} strokeWidth={1} />
               </div>
 
@@ -180,26 +182,28 @@ const VisionMissionSection = ({ previewData }) => {
 
           <div 
             className="flex-1 relative rounded-2xl shadow-lg p-10 lg:p-14 flex flex-col min-h-[300px] overflow-hidden cursor-pointer group"
-            onClick={() => setActiveCard(activeCard === 'mission' ? null : 'mission')}
+            onClick={() => {
+              if (window.innerWidth < 768) setActiveCard(activeCard === 'mission' ? null : 'mission');
+            }}
           >
             {/* Background Image */}
             <img
               src={data.missionImage}
               alt="Mission Background"
-              className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 z-0 ${activeCard === 'mission' ? 'scale-105' : 'group-hover:scale-105'}`}
+              className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 z-0 ${activeCard === 'mission' ? 'scale-105' : 'md:group-hover:scale-105'}`}
             />
 
             {/* View Icon (Visible when not active) */}
-            <div className={`absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-500 ${activeCard === 'mission' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`md:hidden absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-500 ${activeCard === 'mission' ? 'opacity-0 pointer-events-none' : 'opacity-100 md:group-hover:opacity-0 md:group-hover:pointer-events-none'}`}>
               <div className="bg-white/30 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/40 transition-colors">
                 <Eye size={32} className="text-white" />
               </div>
             </div>
 
             {/* Purple Overlay */}
-            <div className={`absolute inset-0 bg-[#454e7d]/90 z-0 transition-opacity duration-500 ${activeCard === 'mission' ? 'opacity-100' : 'opacity-0'}`}></div>
+            <div className={`absolute inset-0 bg-[#454e7d]/90 z-0 transition-opacity duration-500 ${activeCard === 'mission' ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100'}`}></div>
 
-            <div className={`transition-all duration-500 w-full h-full flex flex-col relative z-10 ${activeCard === 'mission' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+            <div className={`transition-all duration-500 w-full h-full flex flex-col relative z-10 ${activeCard === 'mission' ? 'opacity-100' : 'opacity-0 pointer-events-none md:group-hover:opacity-100 md:group-hover:pointer-events-auto'}`}>
               {/* Top Center Title */}
               <h3 className="text-white text-2xl md:text-3xl font-serif font-bold text-center mb-16">
                 {data.missionTitle}
