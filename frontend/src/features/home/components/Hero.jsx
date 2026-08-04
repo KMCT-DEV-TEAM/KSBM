@@ -222,16 +222,16 @@ const Hero = ({ previewData }) => {
             hidden: { opacity: 0, y: 30 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
           }}
-          className="flex flex-col lg:flex-row items-start lg:items-center gap-4 mt-10"
+          className="flex flex-row flex-wrap items-center gap-4 mt-10"
         >
           {(heroApplyBtn?.isActive !== false) && (
             <a 
               href={heroApplyBtn?.link || '#'} 
               target={(heroApplyBtn?.link || '').startsWith('http') ? '_blank' : undefined}
               rel={(heroApplyBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
-              className="bg-secondary text-primary text-sm md:text-base font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start"
+              className="bg-secondary text-primary text-sm md:text-base font-bold px-6 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-auto justify-center"
             >
-              {heroApplyBtn?.label || 'Apply Now'} <ArrowUpRight className="w-5 h-5" />
+              {heroApplyBtn?.label || 'Apply Now'} <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
             </a>
           )}
           {(heroBrochureBtn?.isActive !== false) && (
@@ -239,10 +239,10 @@ const Hero = ({ previewData }) => {
               href={heroBrochureBtn?.link || '#'} 
               target={(heroBrochureBtn?.link || '').startsWith('http') ? '_blank' : undefined}
               rel={(heroBrochureBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
-              className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start"
+              className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-bold px-6 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-auto justify-center"
               download
             >
-              <Download className="w-5 h-5" /> {heroBrochureBtn?.label || 'Download Brochure'}
+              <Download className="w-4 h-4 md:w-5 md:h-5" /> {heroBrochureBtn?.label || 'Download Brochure'}
             </a>
           )}
         </motion.div>

@@ -348,13 +348,13 @@ const ManageHero = () => {
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Description</label>
               <textarea 
                 value={description.text}
-                maxLength={150}
+                maxLength={250}
                 onChange={(e) => setDescription({ ...description, text: e.target.value })}
                 rows={3}
                 className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               ></textarea>
               <div className="text-xs text-right mt-1 text-gray-500">
-                {description.text.length}/150 characters
+                {description.text.length}/250 characters
               </div>
               <label className="flex items-center gap-2 mt-2 cursor-pointer">
                 <input type="checkbox" checked={description.isVisible} onChange={(e) => setDescription({ ...description, isVisible: e.target.checked })} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
