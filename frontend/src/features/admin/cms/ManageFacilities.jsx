@@ -421,13 +421,13 @@ const ManageFacilities = () => {
               </div>
               <textarea
                 value={description}
-                maxLength={150}
+                maxLength={200}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
                 placeholder="e.g. Our state-of-the-art campus offers modern classrooms..."
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
-              <div className="text-xs text-right mt-1 text-gray-500">{description.length}/150</div>
+              <div className="text-xs text-right mt-1 text-gray-500">{description.length}/200</div>
             </div>
           </div>
         </div>
