@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const AdminModal = ({ isOpen, onClose, title, onSave, children }) => {
+const AdminModal = ({ isOpen, onClose, title, onSave, isSaveDisabled = false, children }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

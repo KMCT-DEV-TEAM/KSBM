@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, Sparkles, GraduationCap, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const AdmissionHero = ({ data }) => {
+const AdmissionHero = ({ data, showText = true }) => {
   const badgeText = data?.heroBadgeText || 'ADMISSION OPEN FOR 2025-26';
   const title = data?.heroTitle || 'Your Path to Corporate Leadership Starts Here';
   const subtitle = data?.heroSubtitle || 'Join a diverse cohort of MBA & BBA candidates at the forefront of business mastery. Transparent, merit-based, and designed to unlock your full leadership potential.';
@@ -38,6 +38,7 @@ const AdmissionHero = ({ data }) => {
       <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none z-0" />
 
       {/* Main Content exact match with MBA Hero container */}
+      {showText && (
       <motion.div
         initial="hidden"
         animate="visible"
@@ -107,6 +108,7 @@ const AdmissionHero = ({ data }) => {
           )}
         </motion.div>
       </motion.div>
+      )}
     </section>
   );
 };
