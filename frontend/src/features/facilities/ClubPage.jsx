@@ -185,12 +185,12 @@ const ClubPage = () => {
                 </h2>
                 {about.paragraphs?.length > 0 ? (
                   about.paragraphs.map((p, idx) => (
-                    <p key={idx} className="text-gray-600 leading-relaxed">
+                    <p key={idx} className="text-gray-600 leading-relaxed break-words">
                       {p}
                     </p>
                   ))
                 ) : (
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed break-words">
                     Join our vibrant community where students come together to share their passion and grow their skills.
                   </p>
                 )}
@@ -236,8 +236,8 @@ const ClubPage = () => {
                         <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0b1238]/90 via-[#1e2869]/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
                         <div className="absolute bottom-0 left-0 p-6 text-left transform group-hover:-translate-y-2 transition-transform duration-500">
-                          <h4 className="text-xl font-semibold text-white mb-1">{item.title}</h4>
-                          {item.subtitle && <p className="text-sm text-gray-300">{item.subtitle}</p>}
+                          <h4 className="text-xl font-semibold text-white mb-1 break-words">{item.title}</h4>
+                          {item.subtitle && <p className="text-sm text-gray-300 break-words">{item.subtitle}</p>}
                         </div>
                       </div>
                     ))}
@@ -257,8 +257,8 @@ const ClubPage = () => {
                       <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0b1238]/90 via-[#1e2869]/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
                       <div className="absolute bottom-0 left-0 p-6 text-left transform group-hover:-translate-y-2 transition-transform duration-500">
-                        <h4 className="text-xl font-semibold text-white mb-1">{item.title}</h4>
-                        {item.subtitle && <p className="text-sm text-gray-300">{item.subtitle}</p>}
+                        <h4 className="text-xl font-semibold text-white mb-1 break-words">{item.title}</h4>
+                        {item.subtitle && <p className="text-sm text-gray-300 break-words">{item.subtitle}</p>}
                       </div>
                     </motion.div>
                   ))}
@@ -289,7 +289,7 @@ const ClubPage = () => {
                   {faculty.heading || 'Faculty In Charge'}
                 </h2>
                 {faculty.description && (
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-gray-600 leading-relaxed break-words">
                     {faculty.description}
                   </p>
                 )}
