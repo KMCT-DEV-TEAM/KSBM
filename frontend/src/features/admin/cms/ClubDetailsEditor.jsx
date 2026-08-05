@@ -185,26 +185,73 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
     const newClub = { ...club };
     
     if (type === 'activity') {
+      if (!data?.image) {
+        Toast.fire({ icon: 'warning', title: 'Please upload an activity image.' });
+        return;
+      }
+      if (!data?.title?.trim()) {
+        Toast.fire({ icon: 'warning', title: 'Please enter an activity title.' });
+        return;
+      }
       if (index >= 0) newClub.activities.items[index] = data;
       else newClub.activities.items.push(data);
     } else if (type === 'faculty') {
+      if (!data?.image) {
+        Toast.fire({ icon: 'warning', title: 'Please upload a profile image.' });
+        return;
+      }
+      if (!data?.name?.trim()) {
+        Toast.fire({ icon: 'warning', title: 'Please enter faculty name.' });
+        return;
+      }
+      if (!data?.role?.trim()) {
+        Toast.fire({ icon: 'warning', title: 'Please enter faculty role.' });
+        return;
+      }
       if (index >= 0) newClub.faculty.members[index] = data;
       else newClub.faculty.members.push(data);
     } else if (type === 'gallery') {
+      if (!data?.image) {
+        Toast.fire({ icon: 'warning', title: 'Please upload a gallery image.' });
+        return;
+      }
       if (index >= 0) newClub.gallery.images[index] = data;
       else newClub.gallery.images.push(data);
     } else if (type === 'paragraph') {
-      if (index >= 0) newClub.about.paragraphs[index] = data.text;
-      else newClub.about.paragraphs.push(data.text);
+      if (!data?.text?.trim()) {
+        Toast.fire({ icon: 'warning', title: 'Please enter paragraph text.' });
+        return;
+      }
+      if (index >= 0) {
+        newClub.about.paragraphs[index] = data.text;
+      } else {
+        if (newClub.about.paragraphs.length === 0) {
+          newClub.about.paragraphs.push(data.text);
+        } else {
+          newClub.about.paragraphs[0] = data.text;
+        }
+      }
     }
     
     setClub(newClub);
     closeModal();
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!club) return;
-    onSave(club);
+    
+    const cleanedClub = { ...club };
+    if (cleanedClub.about && cleanedClub.about.paragraphs) {
+      cleanedClub.about.paragraphs = cleanedClub.about.paragraphs.filter(p => p && p.trim() !== '');
+    }
+    
+    setIsSaving(true);
+    try {
+      await onSave(cleanedClub);
+      setClub(cleanedClub);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleReset = async () => {
@@ -316,6 +363,8 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
           onReset={handleReset}
           onPreview={() => setIsPreviewModalOpen(true)}
           saveText="Save Details"
+          isSaving={isSaving}
+          isUploading={isUploading}
         />
       </div>
 
@@ -424,18 +473,20 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                       <div>
                         <div className="flex justify-between items-center mb-1.5">
                           <label className="block text-sm font-semibold text-gray-700">Paragraphs</label>
-                          <button 
-                            onClick={() => openModal('paragraph')}
-                            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
-                          >
-                            <Plus className="w-4 h-4" /> Add Paragraph
-                          </button>
+                          {club.about.paragraphs.length < 1 && (
+                            <button 
+                              onClick={() => openModal('paragraph')}
+                              className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
+                            >
+                              <Plus className="w-4 h-4" /> Add Paragraph
+                            </button>
+                          )}
                         </div>
                         <div className="space-y-3">
                           {club.about.paragraphs.map((p, idx) => (
                             <div key={idx} className="p-3 bg-gray-50 border border-gray-200 rounded-lg flex gap-3 items-start hover:shadow-sm transition-shadow group">
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm text-gray-600 line-clamp-3">{p || 'Empty paragraph'}</p>
+                                <p className="text-sm text-gray-600 line-clamp-3 whitespace-pre-line break-words">{p || 'Empty paragraph'}</p>
                               </div>
                               <div className="flex shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button onClick={() => openModal('paragraph', idx)} className="p-1.5 text-blue-500 hover:bg-blue-50 rounded transition-colors" title="Edit">
@@ -865,26 +916,22 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
           modalConfig.type === 'paragraph' ? (modalConfig.index >= 0 ? 'Edit Paragraph' : 'Add Paragraph') : 'Item Details'
         }
         onSave={saveModal}
-        isSaveDisabled={
-          modalConfig.type === 'activity' ? (!modalConfig.data?.title?.trim() || !modalConfig.data?.image) :
-          modalConfig.type === 'faculty' ? (!modalConfig.data?.name?.trim() || !modalConfig.data?.image) :
-          modalConfig.type === 'paragraph' ? (!modalConfig.data?.text?.trim()) :
-          modalConfig.type === 'gallery' ? (!modalConfig.data?.image) : false
-        }
       >
         {modalConfig.type === 'activity' && (
           <div className="space-y-4">
-            <SingleImageUploader 
-              imageUrl={modalConfig.data?.image} 
-              onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
-              onUploadStateChange={setIsUploading}
-              uploadEndpoint="/upload/facilities"
-              defaultImage="/assets/Images/fecilities/facility_2.jpg"
-              label="Activity Image"
-              deferredUpload={true}
-            />
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Activity Title</label>
+              <SingleImageUploader 
+                imageUrl={modalConfig.data?.image} 
+                onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
+                onUploadStateChange={setIsUploading}
+                uploadEndpoint="/upload/facilities"
+                defaultImage="/assets/Images/fecilities/facility_2.jpg"
+                label="Activity Image *"
+                deferredUpload={true}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Activity Title <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 value={modalConfig.data?.title || ''}
@@ -912,17 +959,19 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
 
         {modalConfig.type === 'faculty' && (
           <div className="space-y-4">
-            <SingleImageUploader 
-              imageUrl={modalConfig.data?.image} 
-              onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
-              onUploadStateChange={setIsUploading}
-              uploadEndpoint="/upload/facilities"
-              defaultImage="/assets/Images/fecilities/life_1.jpg"
-              label="Profile Image"
-              deferredUpload={true}
-            />
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Name</label>
+              <SingleImageUploader 
+                imageUrl={modalConfig.data?.image} 
+                onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
+                onUploadStateChange={setIsUploading}
+                uploadEndpoint="/upload/facilities"
+                defaultImage="/assets/Images/fecilities/life_1.jpg"
+                label="Profile Image *"
+                deferredUpload={true}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Name <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 value={modalConfig.data?.name || ''}
@@ -934,7 +983,7 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
               <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 15</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.name || '').length}/15</span></div>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Role</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Role <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 value={modalConfig.data?.role || ''}
@@ -950,15 +999,17 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
 
         {modalConfig.type === 'gallery' && (
           <div className="space-y-4">
-            <SingleImageUploader 
-              imageUrl={modalConfig.data?.image} 
-              onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
-              onUploadStateChange={setIsUploading}
-              uploadEndpoint="/upload/facilities"
-              defaultImage="/assets/Images/fecilities/facility_4.jpg"
-              label="Upload Image"
-              deferredUpload={true}
-            />
+            <div>
+              <SingleImageUploader 
+                imageUrl={modalConfig.data?.image} 
+                onUploadComplete={(url) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, image: url } })}
+                onUploadStateChange={setIsUploading}
+                uploadEndpoint="/upload/facilities"
+                defaultImage="/assets/Images/fecilities/facility_4.jpg"
+                label="Upload Image *"
+                deferredUpload={true}
+              />
+            </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Image Caption (Optional)</label>
               <input

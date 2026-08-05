@@ -242,12 +242,12 @@ const FacilityPage = () => {
                 </h2>
                 {about.paragraphs?.length > 0 ? (
                   about.paragraphs.map((p, idx) => (
-                    <p key={idx} className="text-gray-600 text-xs sm:text-base leading-relaxed">
+                    <p key={idx} className="text-gray-600 text-xs sm:text-base leading-relaxed whitespace-pre-line break-words">
                       {p}
                     </p>
                   ))
                 ) : (
-                  <p className="text-gray-600 text-xs sm:text-base leading-relaxed">
+                  <p className="text-gray-600 text-xs sm:text-base leading-relaxed whitespace-pre-line break-words">
                     This is where the club description goes. Add details about your club's mission and history in the CMS.
                   </p>
                 )}
