@@ -19,7 +19,7 @@ const FacilitiesHero = ({ data }) => {
       </div>
 
       {/* Content */}
-      {data.showTextContent !== false && (
+      {data.showTextContent !== false && data.showTextContent !== 'false' && (
         <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-white flex flex-col items-start text-left">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

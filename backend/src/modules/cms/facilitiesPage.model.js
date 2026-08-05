@@ -72,7 +72,8 @@ const facilitiesPageSchema = new mongoose.Schema(
     hero: {
       heading: { type: String, default: 'Institutional Resources' },
       subtext: { type: String, default: 'Our campus offers state-of-the-art facilities, modern classrooms, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.' },
-      backgroundImage: { type: String, default: '/assets/Images/facilities/facility_hero.png' }
+      backgroundImage: { type: String, default: '/assets/Images/facilities/facility_hero.png' },
+      showTextContent: { type: Boolean, default: true }
     },
     institutionalResources: {
       heading: { type: String, default: 'Institutional Resources' },
@@ -180,6 +181,19 @@ facilitiesPageSchema.statics.getSettings = async function () {
     settings = await this.create({});
   } else {
     let isModified = false;
+    if (!settings.hero) {
+      settings.hero = {
+        heading: 'Institutional Resources',
+        subtext: 'Our campus offers state-of-the-art facilities, modern classrooms, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.',
+        backgroundImage: '/assets/Images/facilities/facility_hero.png',
+        showTextContent: true
+      };
+      isModified = true;
+    } else if (settings.hero.showTextContent === undefined) {
+      settings.hero.showTextContent = true;
+      isModified = true;
+    }
+
     if (!settings.institutionalResources || !settings.institutionalResources.heading) {
       settings.institutionalResources = {
         heading: 'Institutional Resources',

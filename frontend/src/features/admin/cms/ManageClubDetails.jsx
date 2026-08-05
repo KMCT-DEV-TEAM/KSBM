@@ -83,7 +83,12 @@ const ManageClubDetails = () => {
           const foundClub = data.clubs.items[index];
           setClub({
             ...foundClub,
-            hero: foundClub.hero || { title: '', subtitle: '', backgroundImage: '' },
+            hero: {
+              title: foundClub.hero?.title || '',
+              subtitle: foundClub.hero?.subtitle || '',
+              backgroundImage: foundClub.hero?.backgroundImage || '',
+              showTextContent: foundClub.hero?.showTextContent !== false && foundClub.hero?.showTextContent !== 'false'
+            },
             about: {
               heading: foundClub.about?.heading || '',
               paragraphs: foundClub.about?.paragraphs || [],
@@ -309,14 +314,14 @@ const ManageClubDetails = () => {
                           <input
                             type="checkbox"
                             className="sr-only"
-                            checked={club.hero.showTextContent !== false}
+                            checked={club.hero.showTextContent !== false && club.hero.showTextContent !== 'false'}
                             onChange={(e) => setClub({ ...club, hero: { ...club.hero, showTextContent: e.target.checked } })}
                           />
-                          <div className={`block w-10 h-6 rounded-full transition-colors ${club.hero.showTextContent !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
-                          <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${club.hero.showTextContent !== false ? 'transform translate-x-4' : ''}`}></div>
+                          <div className={`block w-10 h-6 rounded-full transition-colors ${club.hero.showTextContent !== false && club.hero.showTextContent !== 'false' ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                          <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${club.hero.showTextContent !== false && club.hero.showTextContent !== 'false' ? 'transform translate-x-4' : ''}`}></div>
                         </div>
                         <span className="ml-3 text-sm font-medium text-gray-700">
-                          {club.hero.showTextContent !== false ? 'Visible' : 'Hidden'}
+                          {club.hero.showTextContent !== false && club.hero.showTextContent !== 'false' ? 'Visible' : 'Hidden'}
                         </span>
                       </label>
                     </div>
