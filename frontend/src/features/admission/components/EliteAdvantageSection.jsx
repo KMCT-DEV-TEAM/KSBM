@@ -22,14 +22,14 @@ const EliteAdvantageSection = ({ data }) => {
             className="lg:col-span-6 flex flex-col justify-center items-start text-left"
           >
             <div className="flex items-center gap-4 sm:gap-6 w-full mb-6">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-primary tracking-tight font-heading shrink-0">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-primary tracking-tight font-heading break-words break-all whitespace-pre-line max-w-full min-w-0">
                 {heading}
               </h2>
               <div className="h-[1px] bg-[#E3E3E3] flex-1 rounded-full" />
             </div>
 
             {desc.split('\n\n').map((para, i) => (
-              <p key={i} className="text-gray-600 text-[17px] leading-relaxed mb-6 font-normal">
+              <p key={i} className="text-gray-600 text-[17px] leading-relaxed mb-6 font-normal whitespace-pre-line break-words">
                 {para}
               </p>
             ))}

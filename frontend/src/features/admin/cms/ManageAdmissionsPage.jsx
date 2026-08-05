@@ -58,8 +58,6 @@ const ManageAdmissionsPage = () => {
   const [heroBadgeText, setHeroBadgeText] = useState('Admissions 2026');
   const [heroTitle, setHeroTitle] = useState('Empowering Future Leaders');
   const [heroSubtitle, setHeroSubtitle] = useState('Join a world-class institution dedicated to excellence in management education. Shape your future with industry-relevant curriculum and global perspectives.');
-  const [heroBrochureBtnText, setHeroBrochureBtnText] = useState('Download Brochure');
-  const [heroBrochureFile, setHeroBrochureFile] = useState('');
   const [heroBgImage, setHeroBgImage] = useState(DEFAULT_IMAGES.heroBgImage);
 
   // ── Elite ─────────────────────────────────────────────
@@ -134,7 +132,7 @@ const ManageAdmissionsPage = () => {
         activeTab,
         showSections,
         heroBadgeText, heroTitle, heroSubtitle,
-        heroBrochureBtnText, heroBrochureFile, heroBgImage,
+        heroBgImage,
         eliteHeading, eliteSubtitle, eliteDesc, eliteImage,
         journeyHeading, journeySubtitle, journeySteps,
         eligibilityHeading, eligibilitySubtitle, scholarshipNote, feeStructure, mba, bba,
@@ -157,7 +155,7 @@ const ManageAdmissionsPage = () => {
     }
   }, [
     isPreviewModalOpen, previewMode, activeTab,
-    showSections, heroBadgeText, heroTitle, heroSubtitle, heroBrochureBtnText, heroBrochureFile, heroBgImage,
+    showSections, heroBadgeText, heroTitle, heroSubtitle, heroBgImage,
     eliteHeading, eliteSubtitle, eliteDesc, eliteImage,
     journeyHeading, journeySubtitle, journeySteps,
     eligibilityHeading, eligibilitySubtitle, scholarshipNote, feeStructure, mba, bba,
@@ -185,8 +183,6 @@ const ManageAdmissionsPage = () => {
       if (d.heroBadgeText !== undefined) setHeroBadgeText(d.heroBadgeText);
       if (d.heroTitle !== undefined) setHeroTitle(d.heroTitle);
       if (d.heroSubtitle !== undefined) setHeroSubtitle(d.heroSubtitle);
-      if (d.heroBrochureBtnText !== undefined) setHeroBrochureBtnText(d.heroBrochureBtnText);
-      if (d.heroBrochureFile !== undefined) setHeroBrochureFile(d.heroBrochureFile);
       if (d.heroBgImage !== undefined) setHeroBgImage(d.heroBgImage);
 
       if (d.eliteHeading !== undefined) setEliteHeading(d.eliteHeading);
@@ -231,12 +227,10 @@ const ManageAdmissionsPage = () => {
           const finalHeroBgImage = await uploadDeferredImage(heroBgImage, '/upload/admissions');
           const finalEliteImage  = await uploadDeferredImage(eliteImage,  '/upload/admissions');
           const finalCtaImage    = await uploadDeferredImage(ctaImage,    '/upload/admissions');
-          const finalBrochureFile = await uploadDeferredImage(heroBrochureFile, '/upload/admissions');
 
           const payload = {
             showSections,
             heroBadgeText, heroTitle, heroSubtitle,
-            heroBrochureBtnText, heroBrochureFile: finalBrochureFile,
             heroBgImage: finalHeroBgImage,
             eliteHeading, eliteSubtitle, eliteDesc, eliteImage: finalEliteImage,
             journeyHeading, journeySubtitle, journeySteps,
@@ -252,7 +246,6 @@ const ManageAdmissionsPage = () => {
             catch (err) { console.warn('Skipped deleting image:', err); }
           }
           setImagesToDelete([]);
-          setHeroBrochureFile(finalBrochureFile);
           setHeroBgImage(finalHeroBgImage);
           setEliteImage(finalEliteImage);
           setCtaImage(finalCtaImage);
@@ -282,8 +275,6 @@ const ManageAdmissionsPage = () => {
         setHeroBadgeText('Admissions 2026');
         setHeroTitle('Empowering Future Leaders');
         setHeroSubtitle('Join a world-class institution dedicated to excellence in management education. Shape your future with industry-relevant curriculum and global perspectives.');
-        setHeroBrochureBtnText('Download Brochure');
-        setHeroBrochureFile('');
         setHeroBgImage(DEFAULT_IMAGES.heroBgImage);
         
         // Reset Elite
@@ -505,19 +496,6 @@ const ManageAdmissionsPage = () => {
                   <div><label className={fieldLabel}>Badge Text</label><input type="text" maxLength={50} value={heroBadgeText} onChange={e=>setHeroBadgeText(e.target.value)} className={inputCls} /><CharCounter text={heroBadgeText} limit={50} /></div>
                   <div><label className={fieldLabel}>Hero Title</label><input type="text" maxLength={80} value={heroTitle} onChange={e=>setHeroTitle(e.target.value)} className={inputCls} /><CharCounter text={heroTitle} limit={80} /></div>
                   <div><label className={fieldLabel}>Hero Subtitle</label><textarea rows={4} maxLength={300} value={heroSubtitle} onChange={e=>setHeroSubtitle(e.target.value)} className={inputCls} /><CharCounter text={heroSubtitle} limit={300} /></div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div><label className={fieldLabel}>Brochure Btn Text</label><input type="text" maxLength={30} value={heroBrochureBtnText} onChange={e=>setHeroBrochureBtnText(e.target.value)} className={inputCls} /><CharCounter text={heroBrochureBtnText} limit={30} /></div>
-                    <div>
-                      <label className={fieldLabel}>Brochure PDF</label>
-                      <SingleDocumentUploader
-                        fileUrl={heroBrochureFile}
-                        onUploadComplete={setHeroBrochureFile}
-                        onUploadStateChange={setIsUploading}
-                        deferredUpload={true}
-                        defaultFile=""
-                      />
-                    </div>
-                  </div>
                 </div>
                 <div>
                   <label className={fieldLabel}>Background Image</label>
