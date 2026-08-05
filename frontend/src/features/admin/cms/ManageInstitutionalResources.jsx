@@ -396,12 +396,12 @@ const ManageInstitutionalResources = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Description</label>
                 <textarea
                   rows="5"
-                  maxLength={300}
+                  maxLength={360}
                   value={institutionalResources.description || ''}
                   onChange={(e) => setInstitutionalResources({ ...institutionalResources, description: e.target.value })}
                   className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm resize-none"
                 />
-                <div className="text-right text-xs text-gray-400 mt-1">{(institutionalResources.description || '').length}/300 characters</div>
+                <div className="text-right text-xs text-gray-400 mt-1">{(institutionalResources.description || '').length}/360 characters</div>
               </div>
             </div>
           </div>

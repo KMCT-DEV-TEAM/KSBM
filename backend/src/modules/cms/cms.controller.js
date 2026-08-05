@@ -829,7 +829,10 @@ export const updateFacilitiesPageSettings = async (req, res) => {
     const { hero, institutionalResources, library, otherResources, clubs, facilityDetails } = req.body;
     const settings = await FacilitiesPage.getSettings();
     
-    if (hero !== undefined) settings.hero = hero;
+    if (hero !== undefined) {
+      settings.hero = hero;
+      settings.markModified('hero');
+    }
     if (institutionalResources !== undefined) settings.institutionalResources = institutionalResources;
     if (library !== undefined) {
       settings.library = library;

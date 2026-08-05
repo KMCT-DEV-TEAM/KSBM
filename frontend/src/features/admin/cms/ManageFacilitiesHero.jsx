@@ -61,7 +61,7 @@ const ManageFacilitiesHero = () => {
   const fetchSettings = async () => {
     try {
       const { data } = await api.get('/cms/facilities-page');
-      if (data && data.hero) setHero(data.hero);
+      if (data && data.hero) setHero({ showTextContent: true, ...data.hero, showTextContent: data.hero.showTextContent !== false && data.hero.showTextContent !== 'false' });
     } catch (error) {
       console.error('Error fetching settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to load settings.' });
@@ -105,7 +105,8 @@ const ManageFacilitiesHero = () => {
         setHero({
           heading: 'Institutional Resources',
           subtext: 'Our campus offers state-of-the-art facilities, modern classrooms, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.',
-          backgroundImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop'
+          backgroundImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop',
+          showTextContent: true
         });
         Toast.fire({ icon: 'info', title: 'Settings reset to default.' });
       }
@@ -176,14 +177,14 @@ const ManageFacilitiesHero = () => {
                 <input
                   type="checkbox"
                   className="sr-only"
-                  checked={hero.showTextContent !== false}
+                  checked={hero.showTextContent !== false && hero.showTextContent !== 'false'}
                   onChange={(e) => setHero({ ...hero, showTextContent: e.target.checked })}
                 />
-                <div className={`block w-10 h-6 rounded-full transition-colors ${hero.showTextContent !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
-                <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${hero.showTextContent !== false ? 'transform translate-x-4' : ''}`}></div>
+                <div className={`block w-10 h-6 rounded-full transition-colors ${hero.showTextContent !== false && hero.showTextContent !== 'false' ? 'bg-primary' : 'bg-gray-300'}`}></div>
+                <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${hero.showTextContent !== false && hero.showTextContent !== 'false' ? 'transform translate-x-4' : ''}`}></div>
               </div>
               <span className="ml-3 text-sm font-medium text-gray-700">
-                {hero.showTextContent !== false ? 'Visible' : 'Hidden'}
+                {hero.showTextContent !== false && hero.showTextContent !== 'false' ? 'Visible' : 'Hidden'}
               </span>
             </label>
           </div>

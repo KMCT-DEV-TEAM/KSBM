@@ -140,7 +140,7 @@ const ClubPage = () => {
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-[#0b1238]/60 mix-blend-multiply" />
-          {hero?.showTextContent !== false && (
+          {hero?.showTextContent !== false && hero?.showTextContent !== 'false' && (
             <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-white flex flex-col items-start text-left">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
