@@ -78,7 +78,7 @@ const ManageAdmissionsPage = () => {
   // ── Eligibility ───────────────────────────────────────
   const [eligibilityHeading, setEligibilityHeading] = useState('Program Requirements');
   const [eligibilitySubtitle, setEligibilitySubtitle] = useState('Eligibility Criteria');
-  const [feeStructure, setFeeStructure] = useState({ amount: '1,50,000', period: 'per semester' });
+
   const [mba, setMba] = useState({
     eligibilityText: "Any recognized Bachelor's degree with a valid CMAT/CAT/KMAT score.",
     approvedIntake: '60 Seats',
@@ -93,7 +93,8 @@ const ManageAdmissionsPage = () => {
       "Specializations : Finance, Marketing, HR, Systems, International Business",
       "Internship : 8-week compulsory corporate summer internship",
       "Affiliation : Calicut University & AICTE Approved"
-    ]
+    ],
+    feeStructure: { amount: '1,50,000', period: 'per semester' }
   });
   const [bba, setBba] = useState({
     eligibilityText: 'Pass in Plus Two (10+2) or equivalent examination from a recognized board.',
@@ -135,7 +136,7 @@ const ManageAdmissionsPage = () => {
         heroBgImage,
         eliteHeading, eliteSubtitle, eliteDesc, eliteImage,
         journeyHeading, journeySubtitle, journeySteps,
-        eligibilityHeading, eligibilitySubtitle, scholarshipNote, feeStructure, mba, bba,
+        eligibilityHeading, eligibilitySubtitle, scholarshipNote, mba, bba,
         ctaHeading, ctaDesc, ctaImage,
         faqHeading, faqs
       };
@@ -158,7 +159,7 @@ const ManageAdmissionsPage = () => {
     showSections, heroBadgeText, heroTitle, heroSubtitle, heroBgImage,
     eliteHeading, eliteSubtitle, eliteDesc, eliteImage,
     journeyHeading, journeySubtitle, journeySteps,
-    eligibilityHeading, eligibilitySubtitle, scholarshipNote, feeStructure, mba, bba,
+    eligibilityHeading, eligibilitySubtitle, scholarshipNote, mba, bba,
     ctaHeading, ctaDesc, ctaImage, faqHeading, faqs
   ]);
 
@@ -197,7 +198,7 @@ const ManageAdmissionsPage = () => {
       if (d.eligibilityHeading !== undefined) setEligibilityHeading(d.eligibilityHeading);
       if (d.eligibilitySubtitle !== undefined) setEligibilitySubtitle(d.eligibilitySubtitle);
       if (d.scholarshipNote !== undefined) setScholarshipNote(d.scholarshipNote);
-      if (d.feeStructure) setFeeStructure(prev => ({ ...prev, ...d.feeStructure }));
+
       if (d.mba) setMba(prev => ({ ...prev, ...d.mba }));
       if (d.bba) setBba(prev => ({ ...prev, ...d.bba }));
 
@@ -234,7 +235,7 @@ const ManageAdmissionsPage = () => {
             heroBgImage: finalHeroBgImage,
             eliteHeading, eliteSubtitle, eliteDesc, eliteImage: finalEliteImage,
             journeyHeading, journeySubtitle, journeySteps,
-            eligibilityHeading, eligibilitySubtitle, scholarshipNote, feeStructure, mba, bba,
+            eligibilityHeading, eligibilitySubtitle, scholarshipNote, mba, bba,
             ctaHeading, ctaDesc, ctaImage: finalCtaImage,
             faqHeading, faqs,
           };
@@ -295,7 +296,7 @@ const ManageAdmissionsPage = () => {
         // Reset Eligibility
         setEligibilityHeading('Program Requirements');
         setEligibilitySubtitle('Eligibility Criteria');
-        setFeeStructure({ amount: '1,50,000', period: 'per semester' });
+
         setScholarshipNote('Scholarships available for merit and economically disadvantaged students.');
         setMba({
           eligibilityText: "Any recognized Bachelor's degree with a valid CMAT/CAT/KMAT score.",
@@ -311,7 +312,8 @@ const ManageAdmissionsPage = () => {
             "Specializations : Finance, Marketing, HR, Systems, International Business",
             "Internship : 8-week compulsory corporate summer internship",
             "Affiliation : Calicut University & AICTE Approved"
-          ]
+          ],
+          feeStructure: { amount: '1,50,000', period: 'per semester' }
         });
         setBba({
           eligibilityText: 'Pass in Plus Two (10+2) or equivalent examination from a recognized board.',
@@ -593,10 +595,8 @@ const ManageAdmissionsPage = () => {
                   <div><label className={fieldLabel}>Section Heading</label><input type="text" maxLength={80} value={eligibilityHeading} onChange={e=>setEligibilityHeading(e.target.value)} className={inputCls} /><CharCounter text={eligibilityHeading} limit={80} /></div>
                   <div><label className={fieldLabel}>Section Subtitle</label><input type="text" maxLength={150} value={eligibilitySubtitle} onChange={e=>setEligibilitySubtitle(e.target.value)} className={inputCls} /><CharCounter text={eligibilitySubtitle} limit={150} /></div>
                 </div>
-                <div className="p-5 rounded-2xl bg-primary/5 border border-blue-100 grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div><label className={fieldLabel}>Fee Amount (e.g. 1,50,000)</label><input type="text" maxLength={20} value={feeStructure.amount} onChange={e=>setFeeStructure({...feeStructure,amount:e.target.value})} className="w-full px-4 py-2 rounded-xl border border-gray-200 text-sm font-bold bg-white" /><CharCounter text={feeStructure.amount} limit={20} /></div>
-                  <div><label className={fieldLabel}>Fee Period (e.g. per semester)</label><input type="text" maxLength={30} value={feeStructure.period} onChange={e=>setFeeStructure({...feeStructure,period:e.target.value})} className="w-full px-4 py-2 rounded-xl border border-gray-200 text-sm font-medium bg-white" /><CharCounter text={feeStructure.period} limit={30} /></div>
-                  <div className="md:col-span-2"><label className={fieldLabel}>Scholarship Note</label><input type="text" maxLength={150} value={scholarshipNote} onChange={e=>setScholarshipNote(e.target.value)} className="w-full px-4 py-2 rounded-xl border border-gray-200 text-sm font-medium bg-white" /><CharCounter text={scholarshipNote} limit={150} /></div>
+                <div className="p-5 rounded-2xl bg-primary/5 border border-blue-100">
+                  <div className="w-full"><label className={fieldLabel}>Scholarship Note</label><input type="text" maxLength={150} value={scholarshipNote} onChange={e=>setScholarshipNote(e.target.value)} className="w-full px-4 py-2 rounded-xl border border-gray-200 text-sm font-medium bg-white" /><CharCounter text={scholarshipNote} limit={150} /></div>
                 </div>
                 <div className="pt-4 border-t space-y-6">
                   <div className="flex gap-3">
@@ -613,6 +613,10 @@ const ManageAdmissionsPage = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div><label className={fieldLabel}>Eligibility Summary</label><textarea rows={2} maxLength={200} value={obj.eligibilityText} onChange={e=>setObj({...obj,eligibilityText:e.target.value})} className="w-full px-4 py-2 rounded-xl border border-gray-200 text-sm font-medium bg-white" /><CharCounter text={obj.eligibilityText} limit={200} /></div>
                           <div><label className={fieldLabel}>Approved Intake</label><input type="text" maxLength={30} value={obj.approvedIntake} onChange={e=>setObj({...obj,approvedIntake:e.target.value})} className="w-full px-4 py-2 rounded-xl border border-gray-200 text-sm font-bold bg-white" /><CharCounter text={obj.approvedIntake} limit={30} /></div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t">
+                          <div><label className={fieldLabel}>Fee Amount</label><input type="text" maxLength={20} value={obj.feeStructure?.amount || ''} onChange={e=>setObj({...obj, feeStructure: {...obj.feeStructure, amount: e.target.value}})} className="w-full px-4 py-2 rounded-xl border border-gray-200 text-sm font-bold bg-white" /><CharCounter text={obj.feeStructure?.amount || ''} limit={20} /></div>
+                          <div><label className={fieldLabel}>Fee Period</label><input type="text" maxLength={30} value={obj.feeStructure?.period || ''} onChange={e=>setObj({...obj, feeStructure: {...obj.feeStructure, period: e.target.value}})} className="w-full px-4 py-2 rounded-xl border border-gray-200 text-sm font-medium bg-white" /><CharCounter text={obj.feeStructure?.period || ''} limit={30} /></div>
                         </div>
                         {[['eligibilityCriteria','Eligibility Criteria'],['programHighlights','Program Highlights']].map(([key,lbl])=>(
                           <div key={key} className="space-y-3 pt-4 border-t">
