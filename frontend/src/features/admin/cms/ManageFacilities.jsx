@@ -399,7 +399,7 @@ const ManageFacilities = () => {
                 placeholder="e.g. College Facilities"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
-              <div className="text-xs text-right mt-1 text-gray-500">{subheading.length}/30</div>
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{subheading.length}/30</span></div>
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1.5">
@@ -413,7 +413,7 @@ const ManageFacilities = () => {
                 placeholder="e.g. Institutional Resources"
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
-              <div className="text-xs text-right mt-1 text-gray-500">{heading.length}/40</div>
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 40</span><span className="text-[10px] text-gray-400 font-medium">{heading.length}/40</span></div>
             </div>
             <div>
               <div className="flex justify-between items-center mb-1.5">
@@ -427,7 +427,7 @@ const ManageFacilities = () => {
                 placeholder="e.g. Our state-of-the-art campus offers modern classrooms..."
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
-              <div className="text-xs text-right mt-1 text-gray-500">{description.length}/200</div>
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 200</span><span className="text-[10px] text-gray-400 font-medium">{description.length}/200</span></div>
             </div>
           </div>
         </div>
@@ -540,7 +540,7 @@ const ManageFacilities = () => {
                     placeholder="e.g. Smart Classrooms"
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
-                  <div className="text-xs text-right mt-1 text-gray-500">{(currentFacility.title || '').length}/25</div>
+                  <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 25</span><span className="text-[10px] text-gray-400 font-medium">{(currentFacility.title || '').length}/25</span></div>
                 </div>
 
                 <div className="col-span-1 md:col-span-2">

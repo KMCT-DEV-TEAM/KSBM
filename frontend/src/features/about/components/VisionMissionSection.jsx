@@ -138,7 +138,7 @@ const VisionMissionSection = ({ previewData }) => {
             />
             
             {/* View Icon (Visible when not active) */}
-            <div className={`md:hidden absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-500 ${activeCard === 'vision' ? 'opacity-0 pointer-events-none' : 'opacity-100 md:group-hover:opacity-0 md:group-hover:pointer-events-none'}`}>
+            <div className={`absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-500 md:hidden ${activeCard === 'vision' ? 'opacity-0 pointer-events-none' : 'opacity-100 md:group-hover:opacity-0 md:group-hover:pointer-events-none'}`}>
               <div className="bg-white/30 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/40 transition-colors">
                 <Eye size={32} className="text-white" />
               </div>
@@ -194,7 +194,7 @@ const VisionMissionSection = ({ previewData }) => {
             />
 
             {/* View Icon (Visible when not active) */}
-            <div className={`md:hidden absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-500 ${activeCard === 'mission' ? 'opacity-0 pointer-events-none' : 'opacity-100 md:group-hover:opacity-0 md:group-hover:pointer-events-none'}`}>
+            <div className={`absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-500 md:hidden ${activeCard === 'mission' ? 'opacity-0 pointer-events-none' : 'opacity-100 md:group-hover:opacity-0 md:group-hover:pointer-events-none'}`}>
               <div className="bg-white/30 p-4 rounded-full backdrop-blur-sm group-hover:bg-white/40 transition-colors">
                 <Eye size={32} className="text-white" />
               </div>

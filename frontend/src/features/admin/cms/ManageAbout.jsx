@@ -538,7 +538,7 @@ const ManageAbout = () => {
                       placeholder="Value (e.g., 16+)"
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
-                    <div className="text-xs text-right mt-1 text-gray-500">{stat.value?.length || 0}/10</div>
+                    <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 10</span><span className="text-[10px] text-gray-400 font-medium">{stat.value?.length || 0}/10</span></div>
                   </div>
                   <div>
                     <input
@@ -549,7 +549,7 @@ const ManageAbout = () => {
                       placeholder="Label (e.g., YEARS OF EXCELLENCE)"
                       className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     />
-                    <div className="text-xs text-right mt-1 text-gray-500">{stat.label?.length || 0}/30</div>
+                    <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{stat.label?.length || 0}/30</span></div>
                   </div>
                 </div>
 

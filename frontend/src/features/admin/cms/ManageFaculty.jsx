@@ -468,7 +468,7 @@ const ManageFaculty = () => {
                   onChange={(e) => setHeroHeading(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
-<div className="text-right text-xs text-gray-400 mt-1">{heroHeading?.length || 0}/50 characters</div>
+<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{heroHeading?.length || 0}/50</span></div>
               </div>
               <div>
                 <div className="flex items-center gap-3 mb-1.5">
@@ -527,7 +527,7 @@ const ManageFaculty = () => {
                   onChange={(e) => setIntroSubheading(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
-<div className="text-right text-xs text-gray-400 mt-1">{heroSubtext?.length || 0}/300 characters</div>
+<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 300</span><span className="text-[10px] text-gray-400 font-medium">{heroSubtext?.length || 0}/300</span></div>
               </div>
               <div>
                 <div className="mb-1.5">
@@ -541,7 +541,7 @@ const ManageFaculty = () => {
                   onChange={(e) => setIntroHeading(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
-<div className="text-right text-xs text-gray-400 mt-1">{introHeading?.length || 0}/100 characters</div>
+<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 100</span><span className="text-[10px] text-gray-400 font-medium">{introHeading?.length || 0}/100</span></div>
               </div>
             </div>
             <div>
@@ -720,7 +720,7 @@ const ManageFaculty = () => {
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       placeholder="e.g. Dr. Navas K. M"
                     />
-<div className="text-right text-xs text-gray-400 mt-1">{introText?.length || 0}/600 characters</div>
+<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 600</span><span className="text-[10px] text-gray-400 font-medium">{introText?.length || 0}/600</span></div>
                   </div>
                   
                   <div>
@@ -736,7 +736,7 @@ const ManageFaculty = () => {
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       placeholder="e.g. Managing Trustee"
                     />
-<div className="text-right text-xs text-gray-400 mt-1">{currentMember?.title?.length || 0}/100 characters</div>
+<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 100</span><span className="text-[10px] text-gray-400 font-medium">{currentMember?.title?.length || 0}/100</span></div>
                   </div>
                   
                   <div>

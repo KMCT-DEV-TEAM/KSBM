@@ -410,7 +410,7 @@ const ManageClubs = () => {
               onChange={(e) => setClubs({ ...clubs, heading: e.target.value })}
               className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
             />
-            <div className="text-right text-xs text-gray-400 mt-1">{(clubs.heading || '').length}/30 characters</div>
+            <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(clubs.heading || '').length}/30</span></div>
           </div>
           <div className="max-w-3xl">
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Section Description</label>
@@ -421,7 +421,7 @@ const ManageClubs = () => {
               onChange={(e) => setClubs({ ...clubs, description: e.target.value })}
               className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm resize-none"
             />
-            <div className="text-right text-xs text-gray-400 mt-1">{(clubs.description || '').length}/300 characters</div>
+            <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 300</span><span className="text-[10px] text-gray-400 font-medium">{(clubs.description || '').length}/300</span></div>
           </div>
         </div>
       </SectionForm>
@@ -521,7 +521,7 @@ const ManageClubs = () => {
               className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
               placeholder="e.g. Sports Club"
             />
-            <div className="text-right text-xs text-gray-400 mt-1">{(modalConfig.data?.title || '').length}/30 characters</div>
+            <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.title || '').length}/30</span></div>
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Short Description <span className="text-red-500">*</span></label>
@@ -533,7 +533,7 @@ const ManageClubs = () => {
               className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 resize-none"
               placeholder="Club overview displayed on card hover..."
             />
-            <div className="text-right text-xs text-gray-400 mt-1">{(modalConfig.data?.description || '').length}/150 characters</div>
+            <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 150</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.description || '').length}/150</span></div>
           </div>
         </div>
       </AdminModal>
