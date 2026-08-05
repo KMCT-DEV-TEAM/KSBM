@@ -62,9 +62,9 @@ const AboutCtaSection = ({ previewData }) => {
         </div>
         <div className="relative z-10 w-full lg:w-auto mt-4 lg:mt-0 flex justify-center lg:justify-end">
           <a href={buttonLink}
-             target={buttonLink.startsWith('http') ? '_blank' : undefined}
-             rel={buttonLink.startsWith('http') ? 'noopener noreferrer' : undefined}
-             className="inline-flex h-[42px] items-center justify-center rounded bg-[#c5e1ff] px-6 text-sm md:text-base font-semibold text-[#1a235c] transition-all hover:bg-white hover:text-primary hover:shadow-[0_4px_12px_rgba(255,255,255,0.2)] focus:outline-none focus:ring-2 focus:ring-[#c5e1ff] focus:ring-offset-2 w-full sm:w-auto hover:-translate-y-0.5"
+            target={buttonLink.startsWith('http') ? '_blank' : undefined}
+            rel={buttonLink.startsWith('http') ? 'noopener noreferrer' : undefined}
+            className="inline-flex h-[42px] items-center justify-center rounded bg-white px-6 text-sm md:text-base font-semibold text-[#1a235c] transition-all hover:shadow-[0_4px_12px_rgba(255,255,255,0.2)] focus:outline-none focus:ring-2 focus:ring-[#c5e1ff] focus:ring-offset-2 w-full sm:w-auto hover:-translate-y-0.5"
           >
             {buttonText}
           </a>
