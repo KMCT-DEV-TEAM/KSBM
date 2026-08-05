@@ -220,7 +220,7 @@ const ManageLegacy = () => {
                 
 </div>
 <input type="text" maxLength={50} value={subheading} onChange={(e) => setSubheading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-<div className="text-right text-xs text-gray-400 mt-1">{subheading.length}/50 characters</div>
+<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{subheading.length}/50</span></div>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <div className="mb-1.5">
@@ -228,7 +228,7 @@ const ManageLegacy = () => {
                 
 </div>
 <input type="text" maxLength={50} value={heading} onChange={(e) => setHeading(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-<div className="text-right text-xs text-gray-400 mt-1">{heading.length}/50 characters</div>
+<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{heading.length}/50</span></div>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 md:col-span-2">
               <div className="flex justify-between items-center mb-1.5">

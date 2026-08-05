@@ -390,7 +390,7 @@ const ManageInstitutionalResources = () => {
                   onChange={(e) => setInstitutionalResources({ ...institutionalResources, heading: e.target.value })}
                   className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
                 />
-                <div className="text-right text-xs text-gray-400 mt-1">{(institutionalResources.heading || '').length}/30 characters</div>
+                <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(institutionalResources.heading || '').length}/30</span></div>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Description</label>
@@ -401,7 +401,7 @@ const ManageInstitutionalResources = () => {
                   onChange={(e) => setInstitutionalResources({ ...institutionalResources, description: e.target.value })}
                   className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm resize-none"
                 />
-                <div className="text-right text-xs text-gray-400 mt-1">{(institutionalResources.description || '').length}/360 characters</div>
+                <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 360</span><span className="text-[10px] text-gray-400 font-medium">{(institutionalResources.description || '').length}/360</span></div>
               </div>
             </div>
           </div>
@@ -418,7 +418,7 @@ const ManageInstitutionalResources = () => {
                   onChange={(e) => setLibrary({ ...library, heading: e.target.value })}
                   className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
                 />
-                <div className="text-right text-xs text-gray-400 mt-1">{(library.heading || '').length}/30 characters</div>
+                <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(library.heading || '').length}/30</span></div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -430,7 +430,7 @@ const ManageInstitutionalResources = () => {
                     onChange={(e) => setLibrary({ ...library, description: e.target.value })}
                     className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm resize-none"
                   />
-                  <div className="text-right text-xs text-gray-400 mt-1">{(library.description || '').length}/400 characters</div>
+                  <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 400</span><span className="text-[10px] text-gray-400 font-medium">{(library.description || '').length}/400</span></div>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Description Paragraph 2</label>
@@ -441,7 +441,7 @@ const ManageInstitutionalResources = () => {
                     onChange={(e) => setLibrary({ ...library, description2: e.target.value })}
                     className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm resize-none"
                   />
-                  <div className="text-right text-xs text-gray-400 mt-1">{(library.description2 || '').length}/400 characters</div>
+                  <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 400</span><span className="text-[10px] text-gray-400 font-medium">{(library.description2 || '').length}/400</span></div>
                 </div>
               </div>
               <div className="pt-4 border-t border-gray-100">
@@ -495,7 +495,7 @@ const ManageInstitutionalResources = () => {
                   className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
                   placeholder="e.g. Other Resources"
                 />
-                <div className="text-right text-xs text-gray-400 mt-1">{(otherResources.heading || '').length}/30 characters</div>
+                <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(otherResources.heading || '').length}/30</span></div>
               </div>
               
               <div className="pt-4 border-t border-gray-100">
@@ -570,7 +570,7 @@ const ManageInstitutionalResources = () => {
                 className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-primary/20"
                 placeholder="e.g. Classrooms"
               />
-              <div className="text-right text-xs text-gray-400 mt-1">{(modalConfig.data?.title || '').length}/30 characters</div>
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.title || '').length}/30</span></div>
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Description Paragraph 1 <span className="text-red-500">*</span></label>
@@ -581,7 +581,7 @@ const ManageInstitutionalResources = () => {
                 onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, description: e.target.value } })}
                 className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-primary/20 resize-none"
               />
-              <div className="text-right text-xs text-gray-400 mt-1">{(modalConfig.data?.description || '').length}/400 characters</div>
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 400</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.description || '').length}/400</span></div>
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Description Paragraph 2 (Optional)</label>
@@ -592,7 +592,7 @@ const ManageInstitutionalResources = () => {
                 onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, description2: e.target.value } })}
                 className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-primary/20 resize-none"
               />
-              <div className="text-right text-xs text-gray-400 mt-1">{(modalConfig.data?.description2 || '').length}/400 characters</div>
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 400</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.description2 || '').length}/400</span></div>
             </div>
           </div>
 

@@ -170,6 +170,8 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
       initialData = index >= 0 ? { ...club.faculty.members[index] } : { name: '', role: '', image: '' };
     } else if (type === 'gallery') {
       initialData = index >= 0 ? { ...club.gallery.images[index] } : { image: '', title: '' };
+    } else if (type === 'paragraph') {
+      initialData = index >= 0 ? { text: club.about.paragraphs[index] } : { text: '' };
     }
     setModalConfig({ isOpen: true, type, index, data: initialData });
   };
@@ -191,6 +193,9 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
     } else if (type === 'gallery') {
       if (index >= 0) newClub.gallery.images[index] = data;
       else newClub.gallery.images.push(data);
+    } else if (type === 'paragraph') {
+      if (index >= 0) newClub.about.paragraphs[index] = data.text;
+      else newClub.about.paragraphs.push(data.text);
     }
     
     setClub(newClub);
@@ -352,7 +357,7 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                       className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
                       placeholder="e.g. KSBM Sports Club: Where Leaders Compete"
                     />
-                    <div className="text-xs text-right mt-1 text-gray-500">{(club.hero.title || '').length}/30</div>
+                    <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(club.hero.title || '').length}/30</span></div>
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Hero Subtitle</label>
@@ -364,7 +369,7 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                       className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm resize-none"
                       placeholder="Brief introductory text..."
                     />
-                    <div className="text-xs text-right mt-1 text-gray-500">{(club.hero.subtitle || '').length}/150</div>
+                    <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 150</span><span className="text-[10px] text-gray-400 font-medium">{(club.hero.subtitle || '').length}/150</span></div>
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Background Image</label>
@@ -414,13 +419,13 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                           className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 text-sm"
                           placeholder="e.g. The Spirit of Competition"
                         />
-                        <div className="text-xs text-right mt-1 text-gray-500">{(club.about.heading || '').length}/30</div>
+                        <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(club.about.heading || '').length}/30</span></div>
                       </div>
                       <div>
                         <div className="flex justify-between items-center mb-1.5">
                           <label className="block text-sm font-semibold text-gray-700">Paragraphs</label>
                           <button 
-                            onClick={() => setClub({ ...club, about: { ...club.about, paragraphs: [...club.about.paragraphs, ''] } })}
+                            onClick={() => openModal('paragraph')}
                             className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
                           >
                             <Plus className="w-4 h-4" /> Add Paragraph
@@ -428,30 +433,28 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                         </div>
                         <div className="space-y-3">
                           {club.about.paragraphs.map((p, idx) => (
-                            <div key={idx} className="flex gap-2">
-                              <textarea
-                                rows="3"
-                                value={p}
-                                onChange={(e) => {
-                                  const newParas = [...club.about.paragraphs];
-                                  newParas[idx] = e.target.value;
-                                  setClub({ ...club, about: { ...club.about, paragraphs: newParas } });
-                                }}
-                                className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm resize-none"
-                              />
-                              <button onClick={() => {
-                                confirmAction({
-                                  title: 'Delete Paragraph?',
-                                  message: 'Are you sure you want to remove this paragraph?',
-                                  action: () => {
-                                    const newParas = [...club.about.paragraphs];
-                                    newParas.splice(idx, 1);
-                                    setClub({ ...club, about: { ...club.about, paragraphs: newParas } });
-                                  }
-                                });
-                              }} className="text-red-400 hover:text-red-600 px-1">
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                            <div key={idx} className="p-3 bg-gray-50 border border-gray-200 rounded-lg flex gap-3 items-start hover:shadow-sm transition-shadow group">
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm text-gray-600 line-clamp-3">{p || 'Empty paragraph'}</p>
+                              </div>
+                              <div className="flex shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onClick={() => openModal('paragraph', idx)} className="p-1.5 text-blue-500 hover:bg-blue-50 rounded transition-colors" title="Edit">
+                                  <Pencil className="w-4 h-4" />
+                                </button>
+                                <button onClick={() => {
+                                  confirmAction({
+                                    title: 'Delete Paragraph?',
+                                    message: 'Are you sure you want to remove this paragraph?',
+                                    action: () => {
+                                      const newParas = [...club.about.paragraphs];
+                                      newParas.splice(idx, 1);
+                                      setClub({ ...club, about: { ...club.about, paragraphs: newParas } });
+                                    }
+                                  });
+                                }} className="p-1.5 text-red-400 hover:bg-red-50 rounded transition-colors" title="Delete">
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
                             </div>
                           ))}
                           {club.about.paragraphs.length === 0 && (
@@ -507,7 +510,7 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                       className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm"
                       placeholder="e.g. THE ART OF EXPRESSION"
                     />
-                    <div className="text-xs text-right mt-1 text-gray-500">{(club.activities.heading || '').length}/30</div>
+                    <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(club.activities.heading || '').length}/30</span></div>
                   </div>
                   
                   <div className="pt-4 border-t border-gray-100">
@@ -620,7 +623,7 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                         className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm"
                         placeholder="e.g. Faculty In Charge"
                       />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(club.faculty.subheading || '').length}/30</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(club.faculty.subheading || '').length}/30</span></div>
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1.5">Main Heading</label>
@@ -632,7 +635,7 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                         className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold"
                         placeholder="e.g. Guide, Mentor, Inspire."
                       />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(club.faculty.heading || '').length}/30</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(club.faculty.heading || '').length}/30</span></div>
                     </div>
                     <div className="md:col-span-2">
                       <label className="block text-sm font-semibold text-gray-700 mb-1.5">Description text</label>
@@ -643,7 +646,7 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                         onChange={(e) => setClub({ ...club, faculty: { ...club.faculty, description: e.target.value } })}
                         className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm resize-none"
                       />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(club.faculty.description || '').length}/300</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 300</span><span className="text-[10px] text-gray-400 font-medium">{(club.faculty.description || '').length}/300</span></div>
                     </div>
                   </div>
 
@@ -758,7 +761,7 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                       className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm"
                       placeholder="e.g. Captured in Culture"
                     />
-                    <div className="text-xs text-right mt-1 text-gray-500">{(club.gallery.heading || '').length}/30</div>
+                    <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(club.gallery.heading || '').length}/30</span></div>
                   </div>
 
                   <div className="pt-4 border-t border-gray-100">
@@ -858,12 +861,14 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
         title={
           modalConfig.type === 'activity' ? (modalConfig.index >= 0 ? 'Edit Activity' : 'Add Activity') :
           modalConfig.type === 'faculty' ? (modalConfig.index >= 0 ? 'Edit Faculty Member' : 'Add Faculty Member') :
-          modalConfig.type === 'gallery' ? (modalConfig.index >= 0 ? 'Edit Gallery Image' : 'Add Gallery Image') : 'Item Details'
+          modalConfig.type === 'gallery' ? (modalConfig.index >= 0 ? 'Edit Gallery Image' : 'Add Gallery Image') :
+          modalConfig.type === 'paragraph' ? (modalConfig.index >= 0 ? 'Edit Paragraph' : 'Add Paragraph') : 'Item Details'
         }
         onSave={saveModal}
         isSaveDisabled={
           modalConfig.type === 'activity' ? (!modalConfig.data?.title?.trim() || !modalConfig.data?.image) :
           modalConfig.type === 'faculty' ? (!modalConfig.data?.name?.trim() || !modalConfig.data?.image) :
+          modalConfig.type === 'paragraph' ? (!modalConfig.data?.text?.trim()) :
           modalConfig.type === 'gallery' ? (!modalConfig.data?.image) : false
         }
       >
@@ -888,6 +893,7 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
                 placeholder="Title (e.g. Mohiniyattam)"
               />
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.title || '').length}/50</span></div>
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Activity Subtitle</label>
@@ -899,6 +905,7 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
                 placeholder="Subtitle (optional)"
               />
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 100</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.subtitle || '').length}/100</span></div>
             </div>
           </div>
         )}
@@ -919,22 +926,24 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
               <input
                 type="text"
                 value={modalConfig.data?.name || ''}
-                maxLength={50}
+                maxLength={15}
                 onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, name: e.target.value } })}
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
                 placeholder="Name"
               />
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 15</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.name || '').length}/15</span></div>
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Role</label>
               <input
                 type="text"
                 value={modalConfig.data?.role || ''}
-                maxLength={50}
+                maxLength={15}
                 onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, role: e.target.value } })}
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
                 placeholder="Role (e.g. Mentor)"
               />
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 15</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.role || '').length}/15</span></div>
             </div>
           </div>
         )}
@@ -955,11 +964,29 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
               <input
                 type="text"
                 value={modalConfig.data?.title || ''}
-                maxLength={50}
+                maxLength={15}
                 onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, title: e.target.value } })}
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
                 placeholder="Caption (Optional)"
               />
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 15</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.title || '').length}/15</span></div>
+            </div>
+          </div>
+        )}
+
+        {modalConfig.type === 'paragraph' && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Paragraph Text <span className="text-red-500">*</span></label>
+              <textarea
+                rows="4"
+                maxLength={400}
+                value={modalConfig.data?.text || ''}
+                onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, text: e.target.value } })}
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 resize-none"
+                placeholder="Enter paragraph text here..."
+              />
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 400</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.text || '').length}/400</span></div>
             </div>
           </div>
         )}

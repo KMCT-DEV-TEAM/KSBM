@@ -514,12 +514,12 @@ const ManageEventsPage = () => {
                   <div className="space-y-2">
                     <label className="text-xs font-semibold text-gray-500">Page Title <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
                     <input type="text" maxLength={50} value={formData.hero.title} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, title: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.hero.title || '')).length}/50 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.hero.title || '')).length}/50</span></div>
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-semibold text-gray-500">Subtitle <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 200 chars)</span></label>
                     <textarea rows={4} maxLength={200} value={formData.hero.subtitle} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, subtitle: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.hero.subtitle || '')).length}/200 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 200</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.hero.subtitle || '')).length}/200</span></div>
                   </div>
                 </div>
                 
@@ -536,23 +536,23 @@ const ManageEventsPage = () => {
                     <div className="space-y-2">
                       <label className="text-xs font-semibold text-gray-500">Subheading (Ribbon) <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 30 chars)</span></label>
                       <input type="text" maxLength={30} value={formData.about?.subheading || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, subheading: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.about?.subheading || '')).length}/30 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.about?.subheading || '')).length}/30</span></div>
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-semibold text-gray-500">Main Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
                       <input type="text" maxLength={50} value={formData.about?.heading || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, heading: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.about?.heading || '')).length}/50 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.about?.heading || '')).length}/50</span></div>
                     </div>
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-semibold text-gray-500">Paragraph 1 <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 1000 chars)</span></label>
                     <textarea rows={3} maxLength={1000} value={formData.about?.paragraph1 || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, paragraph1: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.about?.paragraph1 || '')).length}/1000 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 1000</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.about?.paragraph1 || '')).length}/1000</span></div>
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-semibold text-gray-500">Paragraph 2 <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 1000 chars)</span></label>
                     <textarea rows={3} maxLength={1000} value={formData.about?.paragraph2 || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, paragraph2: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.about?.paragraph2 || '')).length}/1000 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 1000</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.about?.paragraph2 || '')).length}/1000</span></div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -584,7 +584,7 @@ const ManageEventsPage = () => {
                 <div className="space-y-2 mb-6">
                   <label className="text-xs font-semibold text-gray-500">Section Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
                   <input type="text" maxLength={50} value={formData.upcomingEvents.heading} onChange={e => setFormData({ ...formData, upcomingEvents: { ...formData.upcomingEvents, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.upcomingEvents.heading || '')).length}/50 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.upcomingEvents.heading || '')).length}/50</span></div>
                 </div>
 
                 <div className="flex justify-end mb-4">
@@ -618,23 +618,23 @@ const ManageEventsPage = () => {
                           <div className="space-y-1">
                             <label className="text-xs font-semibold text-gray-500">Event Title <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
                             <input type="text" maxLength={50} value={item.title} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'title', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. CELEBRITY VISIT" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.title || '')).length}/50 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.title || '')).length}/50</span></div>
                           </div>
                           <div className="space-y-1">
                             <label className="text-xs font-semibold text-gray-500">Event Description <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 150 chars)</span></label>
                             <textarea rows={3} maxLength={150} value={item.description} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'description', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.description || '')).length}/150 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 150</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.description || '')).length}/150</span></div>
                           </div>
                           <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1">
                               <label className="text-xs font-semibold text-gray-500">Date <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 2 chars)</span></label>
                               <input type="text" maxLength={2} value={item.date} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'date', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. 12" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.date || '')).length}/2 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 2</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.date || '')).length}/2</span></div>
                             </div>
                             <div className="space-y-1">
                               <label className="text-xs font-semibold text-gray-500">Month <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 3 chars)</span></label>
                               <input type="text" maxLength={3} value={item.month} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'month', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. OCT" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.month || '')).length}/3 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 3</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.month || '')).length}/3</span></div>
                             </div>
                           </div>
                         </div>
@@ -653,7 +653,7 @@ const ManageEventsPage = () => {
                 <div className="space-y-2 mb-6">
                   <label className="text-xs font-semibold text-gray-500">Section Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
                   <input type="text" maxLength={50} value={formData.highlightedPrograms.heading} onChange={e => setFormData({ ...formData, highlightedPrograms: { ...formData.highlightedPrograms, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.highlightedPrograms.heading || '')).length}/50 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.highlightedPrograms.heading || '')).length}/50</span></div>
                 </div>
 
 
@@ -682,7 +682,7 @@ const ManageEventsPage = () => {
                 <div className="space-y-2 mb-6">
                   <label className="text-xs font-semibold text-gray-500">Section Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
                   <input type="text" maxLength={50} value={formData.essenceOfCulture.heading} onChange={e => setFormData({ ...formData, essenceOfCulture: { ...formData.essenceOfCulture, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.essenceOfCulture.heading || '')).length}/50 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.essenceOfCulture.heading || '')).length}/50</span></div>
                 </div>
 
                 <div className="flex justify-end mb-4">
@@ -701,17 +701,17 @@ const ManageEventsPage = () => {
                       <div>
                         <label className="text-xs font-semibold text-gray-500">Category Name <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 30 chars)</span></label>
                         <input type="text" maxLength={30} value={item.category} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'category', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="Category (e.g. Dance)" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.category || '')).length}/30 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.category || '')).length}/30</span></div>
                       </div>
                       <div>
                         <label className="text-xs font-semibold text-gray-500">Category Description <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 100 chars)</span></label>
                         <textarea rows={2} maxLength={100} value={item.description || ''} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'description', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="Short description of this cultural category..." />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.description || '')).length}/100 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 100</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.description || '')).length}/100</span></div>
                       </div>
                       <div>
                         <label className="text-xs font-semibold text-gray-500">Programs List (Comma-separated) <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 200 chars)</span></label>
                         <input type="text" maxLength={200} value={Array.isArray(item.programs) ? item.programs.join(', ') : (item.programs || '')} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'programs', e.target.value.split(',').map(s => s.trim()))} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="e.g. Solo Dance, Folk Dance, Group Classical" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(item.programs || '')).length}/200 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 200</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.programs || '')).length}/200</span></div>
                       </div>
                       <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
                         currentImage={item.img}
@@ -731,7 +731,7 @@ const ManageEventsPage = () => {
                 <div className="space-y-2 mb-6">
                   <label className="text-xs font-semibold text-gray-500">Section Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
                   <input type="text" maxLength={50} value={formData.stayConnected.heading} onChange={e => setFormData({ ...formData, stayConnected: { ...formData.stayConnected, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.stayConnected.heading || '')).length}/50 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.stayConnected.heading || '')).length}/50</span></div>
                 </div>
                 <div className="flex justify-end mb-4">
                   <button onClick={() => openAddModal('stayConnected', 'posters', { img: '' })} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">
@@ -763,7 +763,7 @@ const ManageEventsPage = () => {
                 <div className="space-y-2 mb-6">
                   <label className="text-xs font-semibold text-gray-500">Section Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
                   <input type="text" maxLength={50} value={formData.momentsCaptured.heading} onChange={e => setFormData({ ...formData, momentsCaptured: { ...formData.momentsCaptured, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(String(formData.momentsCaptured.heading || '')).length}/50 characters</div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.momentsCaptured.heading || '')).length}/50</span></div>
                 </div>
                 <div className="flex justify-end mb-4">
                   <button onClick={() => openAddModal('momentsCaptured', 'images', { img: '' })} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">

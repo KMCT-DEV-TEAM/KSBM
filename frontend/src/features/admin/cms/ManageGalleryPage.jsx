@@ -306,12 +306,12 @@ const ManageGalleryPage = () => {
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-gray-500">Page Title</label>
                 <textarea rows={2} maxLength={50} value={formData.hero.title} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, title: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. KSBM Sports Club" />
-                <div className="text-right text-xs text-gray-400">{formData.hero.title?.length || 0}/50 characters</div>
+                <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{formData.hero.title?.length || 0}/50</span></div>
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-gray-500">Subtitle / Introductory Text</label>
                 <textarea rows={4} maxLength={150} value={formData.hero.subtitle} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, subtitle: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" placeholder="Enter introductory descriptive text..." />
-                <div className="text-right text-xs text-gray-400">{formData.hero.subtitle?.length || 0}/150 characters</div>
+                <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 150</span><span className="text-[10px] text-gray-400 font-medium">{formData.hero.subtitle?.length || 0}/150</span></div>
               </div>
             </div>
             <div>
@@ -335,12 +335,12 @@ const ManageGalleryPage = () => {
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-gray-500">Gallery Badge</label>
                 <input type="text" maxLength={20} value={formData.gallery.badge} onChange={e => setFormData({ ...formData, gallery: { ...formData.gallery, badge: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. Gallery" />
-                <div className="text-right text-xs text-gray-400">{formData.gallery.badge?.length || 0}/20 characters</div>
+                <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 20</span><span className="text-[10px] text-gray-400 font-medium">{formData.gallery.badge?.length || 0}/20</span></div>
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-gray-500">Gallery Section Heading</label>
                 <input type="text" maxLength={50} value={formData.gallery.heading} onChange={e => setFormData({ ...formData, gallery: { ...formData.gallery, heading: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. Moments Captured in Campus" />
-                <div className="text-right text-xs text-gray-400">{formData.gallery.heading?.length || 0}/50 characters</div>
+                <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{formData.gallery.heading?.length || 0}/50</span></div>
               </div>
             </div>
 
