@@ -347,12 +347,12 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                     <input
                       type="text"
                       value={club.hero.title}
-                      maxLength={50}
+                      maxLength={30}
                       onChange={(e) => setClub({ ...club, hero: { ...club.hero, title: e.target.value } })}
                       className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
                       placeholder="e.g. KSBM Sports Club: Where Leaders Compete"
                     />
-                    <div className="text-xs text-right mt-1 text-gray-500">{(club.hero.title || '').length}/50</div>
+                    <div className="text-xs text-right mt-1 text-gray-500">{(club.hero.title || '').length}/30</div>
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Hero Subtitle</label>
@@ -409,12 +409,12 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                         <input
                           type="text"
                           value={club.about.heading}
-                          maxLength={60}
+                          maxLength={30}
                           onChange={(e) => setClub({ ...club, about: { ...club.about, heading: e.target.value } })}
                           className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 text-sm"
                           placeholder="e.g. The Spirit of Competition"
                         />
-                        <div className="text-xs text-right mt-1 text-gray-500">{(club.about.heading || '').length}/60</div>
+                        <div className="text-xs text-right mt-1 text-gray-500">{(club.about.heading || '').length}/30</div>
                       </div>
                       <div>
                         <div className="flex justify-between items-center mb-1.5">
@@ -502,12 +502,12 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                     <input
                       type="text"
                       value={club.activities.heading}
-                      maxLength={60}
+                      maxLength={30}
                       onChange={(e) => setClub({ ...club, activities: { ...club.activities, heading: e.target.value } })}
                       className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm"
                       placeholder="e.g. THE ART OF EXPRESSION"
                     />
-                    <div className="text-xs text-right mt-1 text-gray-500">{(club.activities.heading || '').length}/60</div>
+                    <div className="text-xs text-right mt-1 text-gray-500">{(club.activities.heading || '').length}/30</div>
                   </div>
                   
                   <div className="pt-4 border-t border-gray-100">
@@ -615,24 +615,24 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                       <input
                         type="text"
                         value={club.faculty.subheading}
-                        maxLength={60}
+                        maxLength={30}
                         onChange={(e) => setClub({ ...club, faculty: { ...club.faculty, subheading: e.target.value } })}
                         className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm"
                         placeholder="e.g. Faculty In Charge"
                       />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(club.faculty.subheading || '').length}/60</div>
+                      <div className="text-xs text-right mt-1 text-gray-500">{(club.faculty.subheading || '').length}/30</div>
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1.5">Main Heading</label>
                       <input
                         type="text"
                         value={club.faculty.heading}
-                        maxLength={100}
+                        maxLength={30}
                         onChange={(e) => setClub({ ...club, faculty: { ...club.faculty, heading: e.target.value } })}
                         className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold"
                         placeholder="e.g. Guide, Mentor, Inspire."
                       />
-                      <div className="text-xs text-right mt-1 text-gray-500">{(club.faculty.heading || '').length}/100</div>
+                      <div className="text-xs text-right mt-1 text-gray-500">{(club.faculty.heading || '').length}/30</div>
                     </div>
                     <div className="md:col-span-2">
                       <label className="block text-sm font-semibold text-gray-700 mb-1.5">Description text</label>
@@ -753,12 +753,12 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                     <input
                       type="text"
                       value={club.gallery.heading}
-                      maxLength={60}
+                      maxLength={30}
                       onChange={(e) => setClub({ ...club, gallery: { ...club.gallery, heading: e.target.value } })}
                       className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm"
                       placeholder="e.g. Captured in Culture"
                     />
-                    <div className="text-xs text-right mt-1 text-gray-500">{(club.gallery.heading || '').length}/60</div>
+                    <div className="text-xs text-right mt-1 text-gray-500">{(club.gallery.heading || '').length}/30</div>
                   </div>
 
                   <div className="pt-4 border-t border-gray-100">

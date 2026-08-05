@@ -151,44 +151,89 @@ const InstitutionalResourcesSection = ({ headerData, libraryData, otherResources
             <div className="h-[1px] bg-primary/30 flex-1 mt-1"></div>
           </div>
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {otherResourcesData.items.map((item, idx) => {
-              const isSwapped = activeIndex === idx;
-              const displayItem = isSwapped
-                ? { title: libraryData.heading, image: libraryData.mainImage }
-                : item;
+          {otherResourcesData.items.length >= 5 ? (
+            <div className="w-full overflow-hidden relative">
+              <motion.div
+                className="flex w-max"
+                animate={{ x: ["0%", "-50%"] }}
+                transition={{
+                  repeat: Infinity,
+                  ease: "linear",
+                  duration: otherResourcesData.items.length * 5,
+                }}
+              >
+                {[0, 1].map((setIndex) => (
+                  <div key={setIndex} className="flex gap-6 pr-6">
+                    {otherResourcesData.items.map((item, idx) => {
+                      const isSwapped = activeIndex === idx;
+                      const displayItem = isSwapped
+                        ? { title: libraryData.heading, image: libraryData.mainImage }
+                        : item;
 
-              return (
-                <motion.div
-                  variants={{
-                    hidden: { opacity: 0, y: 30 },
-                    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-                  }}
-                  key={idx}
-                  onClick={() => handleOtherResourceClick(item, idx)}
-                  className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 aspect-[4/3] cursor-pointer"
-                >
-                  <img
-                    src={displayItem.image}
-                    alt={displayItem.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2b2b68]/90 via-[#2b2b68]/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                    <h4 className="text-white font-semibold text-lg sm:text-xl tracking-wide">
-                      {displayItem.title}
-                    </h4>
+                      return (
+                        <div
+                          key={`${setIndex}-${idx}`}
+                          onClick={() => handleOtherResourceClick(item, idx)}
+                          className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 aspect-[4/3] cursor-pointer w-[280px] sm:w-[320px] flex-shrink-0"
+                        >
+                          <img
+                            src={displayItem.image}
+                            alt={displayItem.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#2b2b68]/90 via-[#2b2b68]/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
+                          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                            <h4 className="text-white font-semibold text-lg sm:text-xl tracking-wide">
+                              {displayItem.title}
+                            </h4>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          ) : (
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            >
+              {otherResourcesData.items.map((item, idx) => {
+                const isSwapped = activeIndex === idx;
+                const displayItem = isSwapped
+                  ? { title: libraryData.heading, image: libraryData.mainImage }
+                  : item;
+
+                return (
+                  <motion.div
+                    variants={{
+                      hidden: { opacity: 0, y: 30 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+                    }}
+                    key={idx}
+                    onClick={() => handleOtherResourceClick(item, idx)}
+                    className="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 aspect-[4/3] cursor-pointer"
+                  >
+                    <img
+                      src={displayItem.image}
+                      alt={displayItem.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#2b2b68]/90 via-[#2b2b68]/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                      <h4 className="text-white font-semibold text-lg sm:text-xl tracking-wide">
+                        {displayItem.title}
+                      </h4>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          )}
         </motion.div>
       )}
     </section>

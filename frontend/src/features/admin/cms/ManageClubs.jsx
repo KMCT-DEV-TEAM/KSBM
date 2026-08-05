@@ -405,12 +405,12 @@ const ManageClubs = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Section Heading</label>
             <input
               type="text"
-              maxLength={50}
+              maxLength={30}
               value={clubs.heading}
               onChange={(e) => setClubs({ ...clubs, heading: e.target.value })}
               className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
             />
-            <div className="text-right text-xs text-gray-400 mt-1">{(clubs.heading || '').length}/50 characters</div>
+            <div className="text-right text-xs text-gray-400 mt-1">{(clubs.heading || '').length}/30 characters</div>
           </div>
           <div className="max-w-3xl">
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Section Description</label>
