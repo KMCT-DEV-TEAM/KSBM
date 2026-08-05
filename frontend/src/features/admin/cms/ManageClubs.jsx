@@ -515,12 +515,13 @@ const ManageClubs = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Club Name <span className="text-red-500">*</span></label>
             <input
               type="text"
-              maxLength={50}
+              maxLength={30}
               value={modalConfig.data?.title || ''}
               onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, title: e.target.value } })}
               className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
               placeholder="e.g. Sports Club"
             />
+            <div className="text-right text-xs text-gray-400 mt-1">{(modalConfig.data?.title || '').length}/30 characters</div>
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Short Description <span className="text-red-500">*</span></label>
@@ -532,6 +533,7 @@ const ManageClubs = () => {
               className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 resize-none"
               placeholder="Club overview displayed on card hover..."
             />
+            <div className="text-right text-xs text-gray-400 mt-1">{(modalConfig.data?.description || '').length}/150 characters</div>
           </div>
         </div>
       </AdminModal>
