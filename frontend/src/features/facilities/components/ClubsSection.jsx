@@ -20,7 +20,7 @@ const ClubsSection = ({ data }) => {
   };
 
   return (
-    <section className="relative w-full overflow-hidden py-16 sm:py-20">
+    <section className="relative w-full overflow-hidden py-8 sm:py-20">
 
       <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Area */}
@@ -29,24 +29,24 @@ const ClubsSection = ({ data }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-12 lg:mb-16 w-full"
+          className="mb-8 lg:mb-16 w-full"
         >
           {heading && (
-            <h2 className="text-3xl font-semibold text-[#2b2b68] tracking-tight mb-6">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-[#2b2b68] tracking-tight mb-4 sm:mb-6">
               {heading}
             </h2>
           )}
           {description && (
-            <p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-4xl mb-10">
+            <p className="text-gray-600 text-xs sm:text-base leading-relaxed max-w-4xl mb-6 sm:mb-10">
               {description}
             </p>
           )}
 
-            <div className="flex items-center gap-4 w-full">
-              <h3 className="text-[24px] font-semibold text-[#2b2b68] tracking-tight shrink-0">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 w-full">
+              <h3 className="text-xl sm:text-[24px] font-semibold text-[#2b2b68] tracking-tight shrink-0">
                 Clubs
               </h3>
-              <div className="h-[1px] bg-primary/30 flex-1 mt-1"></div>
+              <div className="h-[1px] bg-primary/30 w-16 sm:w-auto sm:flex-1 mt-1"></div>
             </div>
           </motion.div>
 
@@ -83,12 +83,12 @@ const ClubsSection = ({ data }) => {
                         {/* Content Overlay */}
                         <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end transform transition-all duration-500 z-10">
                           <div className="transform transition-transform duration-500 group-hover:-translate-y-2">
-                            <h3 className="text-white font-bold text-xl sm:text-2xl tracking-wide">
+                            <h3 className="text-white font-bold text-base sm:text-2xl tracking-wide">
                               {item.title}
                             </h3>
 
                             {/* Description revealed on hover */}
-                            <p className="text-white/90 text-xs sm:text-sm mt-3 leading-relaxed opacity-0 max-h-0 overflow-hidden group-hover:opacity-100 group-hover:max-h-48 transition-all duration-500 line-clamp-4">
+                            <p className="text-white/90 text-[10px] sm:text-sm mt-3 leading-relaxed opacity-0 max-h-0 overflow-hidden group-hover:opacity-100 group-hover:max-h-48 transition-all duration-500 line-clamp-4">
                               {item.description || "Engage in dynamic activities, leadership workshops, and collaborative events designed to build practical business acumen and lifelong peer networks."}
                             </p>
 

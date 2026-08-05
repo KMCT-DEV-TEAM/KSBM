@@ -204,10 +204,10 @@ const FacilityPage = () => {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="max-w-4xl"
               >
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-[1.1] tracking-tight">
+                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-snug tracking-tight">
                   {heroTitle}
                 </h1>
-                <p className="text-xs md:text-sm lg:text-base text-gray-200 font-medium leading-relaxed max-w-3xl">
+                <p className="text-[11px] md:text-sm lg:text-base text-gray-200 font-medium leading-relaxed max-w-3xl">
                   {heroSubtitle}
                 </p>
               </motion.div>
@@ -218,7 +218,7 @@ const FacilityPage = () => {
 
         {/* 2. About Section */}
         {(!previewSection || previewSection === 'about') && about?.showSection !== false && (about?.heading || about?.paragraphs?.length > 0 || about?.image) && (
-          <section className="py-20 bg-white relative overflow-hidden">
+          <section className="py-10 sm:py-20 bg-white relative overflow-hidden">
             {/* Pattern Top Right */}
             <div className="absolute top-0 right-0 opacity-10 pointer-events-none">
               <svg width="200" height="200" viewBox="0 0 100 100" fill="currentColor" className="text-primary">
@@ -237,18 +237,18 @@ const FacilityPage = () => {
                 transition={{ duration: 0.8 }}
                 className="order-2 lg:order-1 space-y-6"
               >
-                <h2 className="text-3xl md:text-4xl font-semibold text-[#2b2b68] tracking-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-[#2b2b68] tracking-tight">
                   {about.heading || 'About the Club'}
                 </h2>
                 {about.paragraphs?.length > 0 ? (
                   about.paragraphs.map((p, idx) => (
-                    <p key={idx} className="text-gray-600 leading-relaxed">
+                    <p key={idx} className="text-gray-600 text-xs sm:text-base leading-relaxed">
                       {p}
                     </p>
                   ))
                 ) : (
-                  <p className="text-gray-600 leading-relaxed">
-                    Join our vibrant community where students come together to share their passion and grow their skills.
+                  <p className="text-gray-600 text-xs sm:text-base leading-relaxed">
+                    This is where the club description goes. Add details about your club's mission and history in the CMS.
                   </p>
                 )}
               </motion.div>
@@ -271,13 +271,13 @@ const FacilityPage = () => {
 
         {/* 3. Activities Section */}
         {(!previewSection || previewSection === 'activities') && activities?.showSection !== false && activities?.items?.length > 0 && (
-          <section className="py-20 bg-gray-50/80">
+          <section className="py-10 sm:py-20 bg-gray-50/80">
             <div className="w-[90%] max-w-[1440px] mx-auto text-center">
               <motion.h3
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-sm font-bold text-primary uppercase tracking-[0.2em] mb-12"
+                className="text-xs sm:text-sm font-bold text-primary uppercase tracking-[0.2em] mb-8 sm:mb-12"
               >
                 {activities.heading || 'Our Activities'}
               </motion.h3>
@@ -293,8 +293,8 @@ const FacilityPage = () => {
                         <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0b1238]/90 via-[#1e2869]/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
                         <div className="absolute bottom-0 left-0 p-6 text-left transform group-hover:-translate-y-2 transition-transform duration-500">
-                          <h4 className="text-xl font-bold text-white mb-1">{item.title}</h4>
-                          {item.subtitle && <p className="text-sm text-gray-300">{item.subtitle}</p>}
+                          <h4 className="text-base sm:text-xl font-bold text-white mb-1">{item.title}</h4>
+                          {item.subtitle && <p className="text-xs sm:text-sm text-gray-300">{item.subtitle}</p>}
                         </div>
                       </div>
                     ))}
@@ -327,7 +327,7 @@ const FacilityPage = () => {
 
         {/* 4. Faculty Section */}
         {(!previewSection || previewSection === 'faculty') && faculty?.showSection !== false && faculty?.members?.length > 0 && (
-          <section className="py-20 bg-white relative">
+          <section className="py-10 sm:py-20 bg-white relative">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1440px] h-[1px] bg-gray-200/50 -z-10" />
 
             <div className="w-[90%] max-w-[1200px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
@@ -338,15 +338,15 @@ const FacilityPage = () => {
                 className="lg:w-1/3"
               >
                 {faculty.subheading && (
-                  <p className="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
+                  <p className="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">
                     {faculty.subheading}
                   </p>
                 )}
-                <h2 className="text-3xl md:text-4xl font-bold text-[#2b2b68] tracking-tight mb-6 leading-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b2b68] tracking-tight mb-6 leading-tight">
                   {faculty.heading || 'Faculty In Charge'}
                 </h2>
                 {faculty.description && (
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-gray-600 text-xs sm:text-base leading-relaxed">
                     {faculty.description}
                   </p>
                 )}
@@ -383,7 +383,7 @@ const FacilityPage = () => {
         {/* 5. Gallery Section */}
         {(!previewSection || previewSection === 'gallery') && gallery?.showSection !== false && gallery?.images?.length > 0 && (
           <section
-            className="py-24 bg-[#0b1238] relative text-white overflow-hidden"
+            className="py-12 sm:py-24 bg-[#0b1238] relative text-white overflow-hidden"
             style={{
               backgroundImage: "url('/assets/Images/fecilities/image_55.png')",
               backgroundSize: '400px auto',
@@ -397,14 +397,14 @@ const FacilityPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-center mb-16"
+                className="text-center mb-10 sm:mb-16"
               >
                 <div className="flex items-center justify-center gap-4 mb-4">
                   <div className="h-[1px] w-12 bg-white/30" />
                   <p className="text-xs tracking-[0.3em] font-semibold text-white/70 uppercase">Gallery</p>
                   <div className="h-[1px] w-12 bg-white/30" />
                 </div>
-                <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight">
                   {gallery.heading || 'Captured in Culture'}
                 </h2>
               </motion.div>
@@ -462,12 +462,12 @@ const FacilityPage = () => {
 
         {/* Bottom CTA */}
         {!isPreviewMode && (
-        <section className="py-20 bg-gray-50 flex items-center justify-center">
+        <section className="py-10 sm:py-20 bg-gray-50 flex items-center justify-center">
           <div className="text-center max-w-2xl px-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-[#2b2b68] mb-4">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#2b2b68] mb-4">
               Ready to lead the future?
             </h2>
-            <p className="text-gray-600 mb-8">
+            <p className="text-gray-600 text-xs sm:text-base mb-8">
               Explore opportunities to engage, learn, and grow. Join our vibrant community and become part of something greater.
             </p>
             <Link href={applyLink} className="inline-block bg-[#2b2b68] text-white px-8 py-3 rounded-md font-semibold hover:bg-primary/90 transition-colors">

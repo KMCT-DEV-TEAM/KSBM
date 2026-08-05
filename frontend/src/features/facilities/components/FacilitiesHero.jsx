@@ -7,7 +7,7 @@ const FacilitiesHero = ({ data }) => {
   const { heading, subtext, backgroundImage } = data;
 
   return (
-    <section className="relative w-full h-[60vh] sm:h-[80vh] lg:h-screen min-h-[500px] flex items-end justify-center overflow-hidden mb-16 pb-24 md:pb-32 group">
+    <section className="relative w-full h-[60vh] sm:h-[80vh] lg:h-screen min-h-[500px] flex items-end justify-center overflow-hidden mb-8 sm:mb-16 pb-16 md:pb-32 group">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <div
@@ -27,10 +27,10 @@ const FacilitiesHero = ({ data }) => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="max-w-4xl"
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-[1.1] tracking-tight">
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-snug tracking-tight">
               {heading}
             </h1>
-            <p className="text-xs md:text-sm lg:text-base text-gray-200 font-medium leading-relaxed max-w-3xl">
+            <p className="text-[11px] md:text-sm lg:text-base text-gray-200 font-medium leading-relaxed max-w-3xl">
               {subtext}
             </p>
           </motion.div>
