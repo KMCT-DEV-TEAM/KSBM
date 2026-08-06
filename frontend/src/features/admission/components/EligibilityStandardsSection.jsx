@@ -56,8 +56,8 @@ const EligibilityStandardsSection = ({ data }) => {
       eligibilityCriteria: (data?.mba?.eligibilityCriteria && data.mba.eligibilityCriteria.length > 0) ? data.mba.eligibilityCriteria : programData.MBA.eligibilityCriteria,
       programHighlights: (data?.mba?.programHighlights && data.mba.programHighlights.length > 0) ? data.mba.programHighlights : programData.MBA.programHighlights,
       feeStructure: {
-        amount: data?.feeStructure?.amount || programData.MBA.feeStructure.amount,
-        period: data?.feeStructure?.period || programData.MBA.feeStructure.period
+        amount: data?.mba?.feeStructure?.amount || data?.feeStructure?.amount || programData.MBA.feeStructure.amount,
+        period: data?.mba?.feeStructure?.period || data?.feeStructure?.period || programData.MBA.feeStructure.period
       }
     },
     BBA: {
@@ -66,8 +66,8 @@ const EligibilityStandardsSection = ({ data }) => {
       eligibilityCriteria: (data?.bba?.eligibilityCriteria && data.bba.eligibilityCriteria.length > 0) ? data.bba.eligibilityCriteria : programData.BBA.eligibilityCriteria,
       programHighlights: (data?.bba?.programHighlights && data.bba.programHighlights.length > 0) ? data.bba.programHighlights : programData.BBA.programHighlights,
       feeStructure: {
-        amount: data?.feeStructure?.amount || programData.BBA.feeStructure.amount,
-        period: data?.feeStructure?.period || programData.BBA.feeStructure.period
+        amount: data?.bba?.feeStructure?.amount || data?.feeStructure?.amount || programData.BBA.feeStructure.amount,
+        period: data?.bba?.feeStructure?.period || data?.feeStructure?.period || programData.BBA.feeStructure.period
       }
     }
   };
