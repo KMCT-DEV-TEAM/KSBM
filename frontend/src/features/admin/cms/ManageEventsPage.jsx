@@ -156,8 +156,28 @@ const ManageEventsPage = () => {
 
   const handleModalSave = async () => {
     if (!addModalType || !isAddModalOpen || isModalSaving) return;
-    setIsModalSaving(true);
+    
     const { section, key } = addModalType;
+    
+    // Validation
+    if (section === 'upcomingEvents') {
+      if (!modalData.title?.trim() || !modalData.description?.trim() || !modalData.date?.trim() || !modalData.month?.trim()) {
+        Toast.fire({ icon: 'warning', title: 'Please fill all required text fields.' });
+        return;
+      }
+    } else if (section === 'essenceOfCulture') {
+      if (!modalData.category?.trim() || !modalData.description?.trim() || !modalData.programs || modalData.programs.length === 0 || modalData.programs[0] === '') {
+        Toast.fire({ icon: 'warning', title: 'Please fill all required text fields.' });
+        return;
+      }
+    } else if (section === 'momentsCaptured' || section === 'stayConnected' || section === 'highlightedPrograms') {
+       if (!modalImageUrl && !modalData.img) {
+         Toast.fire({ icon: 'warning', title: 'Please upload an image.' });
+         return;
+       }
+    }
+    
+    setIsModalSaving(true);
     
     // Brief delay to show loading state and prevent rapid multiple clicks
     await new Promise(resolve => setTimeout(resolve, 400));
