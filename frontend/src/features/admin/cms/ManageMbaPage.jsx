@@ -291,14 +291,40 @@ const ManageMbaPage = ({ isBba = false }) => {
 
   // Live Preview Data Poster
   useEffect(() => {
+    let interval;
     if (isPreviewModalOpen && iframeRef.current) {
-      iframeRef.current.contentWindow.postMessage({ 
-        type: 'preview-cms-data', 
-        componentName: componentMap[activeTab], 
-        payload: { ...currentDraftData, programType: isBbaMode ? 'bba' : 'mba' }
-      }, '*');
+      const sendData = () => {
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage({ 
+            type: 'preview-cms-data', 
+            componentName: componentMap[activeTab], 
+            payload: { ...currentDraftData, programType: isBbaMode ? 'bba' : 'mba' }
+          }, '*');
+        }
+      };
+
+      sendData();
+
+      let count = 0;
+      interval = setInterval(() => {
+        sendData();
+        count++;
+        if (count > 10) clearInterval(interval);
+      }, 500);
+
+      const handleMessage = (e) => {
+        if (e.data?.type === 'iframe-ready') {
+          sendData();
+        }
+      };
+      window.addEventListener('message', handleMessage);
+
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('message', handleMessage);
+      };
     }
-  }, [isPreviewModalOpen, currentDraftData, activeTab]);
+  }, [isPreviewModalOpen, currentDraftData, activeTab, isBbaMode]);
 
   const fetchSettings = async () => {
     setIsLoading(true);

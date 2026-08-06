@@ -36,17 +36,19 @@ const ExaminationsLanding = ({ previewData }) => {
     fetchExaminationsData();
   }, []);
 
+  const isPreview = Boolean(previewData || data?.activeTab);
+
   return (
     <>
       <PageTransition dataLoaded={dataLoaded} />
       <div className="min-h-screen bg-white flex flex-col justify-between">
         <div>
         <main>
-          {(!data?.activeTab || data.activeTab === 'hero') && <ExaminationsHero data={data} />}
-          {(!data?.activeTab || data.activeTab === 'overview') && data?.showOverviewSection !== false && <ExaminationsOverview data={data} />}
-          {(!data?.activeTab || data.activeTab === 'calendar') && data?.showCalendarSection !== false && <ExamCalendarBanner data={data} />}
-          {(!data?.activeTab || data.activeTab === 'notifications') && data?.showNotificationsSection !== false && <ExamNotifications data={data} />}
-          {(!data?.activeTab || data.activeTab === 'results') && data?.showResultsSection !== false && <ExamResultsTable data={data} />}
+          {(!data?.activeTab || data.activeTab === 'hero') && <ExaminationsHero data={{ ...data, isPreview }} />}
+          {(!data?.activeTab || data.activeTab === 'overview') && (isPreview || data?.showOverviewSection !== false) && <ExaminationsOverview data={{ ...data, isPreview }} />}
+          {(!data?.activeTab || data.activeTab === 'calendar') && (isPreview || data?.showCalendarSection !== false) && <ExamCalendarBanner data={{ ...data, isPreview }} />}
+          {(!data?.activeTab || data.activeTab === 'notifications') && (isPreview || data?.showNotificationsSection !== false) && <ExamNotifications data={{ ...data, isPreview }} />}
+          {(!data?.activeTab || data.activeTab === 'results') && (isPreview || data?.showResultsSection !== false) && <ExamResultsTable data={{ ...data, isPreview }} />}
         </main>
         </div>
       </div>

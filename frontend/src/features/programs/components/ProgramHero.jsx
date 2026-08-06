@@ -42,7 +42,7 @@ const ProgramHero = ({ program }) => {
       </motion.div>
 
       {/* Main Content exact match with Home Hero container */}
-      {program?.showSections?.hero !== false && (
+      {(program?.isPreview || program?.showSections?.hero !== false) && (
       <motion.div
         initial="hidden"
         animate="visible"

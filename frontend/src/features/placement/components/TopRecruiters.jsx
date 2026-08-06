@@ -11,9 +11,9 @@ const defaultRecruiters = [
 ];
 
 const TopRecruiters = ({ data }) => {
-  if (!data || !data.items || data.items.length === 0) return null;
+  if (data?.showSection === false && !data?.isPreview) return null;
   
-  let recruiters = data.items;
+  let recruiters = (data?.items && data.items.length > 0) ? data.items : defaultRecruiters;
   if (recruiters.length < 5) {
     const missing = 5 - recruiters.length;
     recruiters = [...recruiters, ...defaultRecruiters.slice(0, missing)];

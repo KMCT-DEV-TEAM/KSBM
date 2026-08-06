@@ -18,7 +18,7 @@ const defaultListTwo = [
 ];
 
 const ExcellenceSupport = ({ data }) => {
-  if (data?.showSection === false) return null;
+  if (data?.showSection === false && !data?.isPreview) return null;
 
   const listOne = (data?.listOne && data?.listOne.length > 0) ? data.listOne : defaultListOne;
   const listTwo = (data?.listTwo && data?.listTwo.length > 0) ? data.listTwo : defaultListTwo;

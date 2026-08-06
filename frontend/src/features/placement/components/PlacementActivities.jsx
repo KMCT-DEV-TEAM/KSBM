@@ -2,9 +2,13 @@ import React from 'react';
 import { resolveImage } from '../../../utils/resolveImage';
 import { motion } from 'framer-motion';
 
+const defaultActivities = [
+  { id: 'def1', title: 'Placement Activity Session', description: 'Comprehensive skill development program', image: '/assets/Images/placements/achiever_1.png' }
+];
+
 const PlacementActivities = ({ data }) => {
-  if (!data || !data.items || data.items.length === 0) return null;
-  const activities = data.items;
+  if (data?.showSection === false && !data?.isPreview) return null;
+  const activities = (data?.items && data.items.length > 0) ? data.items : defaultActivities;
   return (
     <section className="py-16 md:py-24 bg-white relative">
       <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
