@@ -45,7 +45,7 @@ const PlacementHero = ({ data }) => {
               {data.badge}
             </motion.span>
           )}
-          {data?.showTitle !== false && (
+          {data?.showTitle !== false && data?.title && (
             <motion.h1
               variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.2 } } }}
               className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-[1.1] tracking-tight"
