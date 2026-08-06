@@ -67,7 +67,7 @@ const FacilitiesSection = ({ previewData }) => {
   }
   const marqueeList = [...repeatedList, ...repeatedList];
 
-  if (settings?.showSection === false) {
+  if (settings?.showSection === false && !previewData) {
     return null;
   }
 

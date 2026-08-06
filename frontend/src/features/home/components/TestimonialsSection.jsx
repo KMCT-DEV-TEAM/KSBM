@@ -76,7 +76,7 @@ const TestimonialsSection = ({ previewData }) => {
 
   if (displayTestimonials.length === 0) return null;
 
-  if (settings?.showSection === false) {
+  if (settings?.showSection === false && !previewData) {
     return null;
   }
 

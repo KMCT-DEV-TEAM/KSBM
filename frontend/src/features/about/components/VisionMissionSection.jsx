@@ -89,7 +89,7 @@ const VisionMissionSection = ({ previewData }) => {
     };
   }, []);
 
-  if (data?.showSection === false) return null;
+  if (data?.showSection === false && !previewData) return null;
 
   return (
     <section ref={sectionRef} className="py-20 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">

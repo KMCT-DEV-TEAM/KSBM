@@ -50,11 +50,11 @@ const AdmissionLanding = () => {
   const isPreview = Boolean(activeTab);
 
   const showHero = !isPreview || activeTab === 'hero';
-  const showElite = (!isPreview || activeTab === 'elite') && data?.showSections?.elite !== false;
-  const showJourney = (!isPreview || activeTab === 'journey') && data?.showSections?.journey !== false;
-  const showEligibility = (!isPreview || activeTab === 'eligibility') && data?.showSections?.eligibility !== false;
-  const showCta = (!isPreview || activeTab === 'cta') && data?.showSections?.cta !== false;
-  const showFaq = (!isPreview || activeTab === 'faq') && data?.showSections?.faq !== false;
+  const showElite = (!isPreview || activeTab === 'elite') && (isPreview || data?.showSections?.elite !== false);
+  const showJourney = (!isPreview || activeTab === 'journey') && (isPreview || data?.showSections?.journey !== false);
+  const showEligibility = (!isPreview || activeTab === 'eligibility') && (isPreview || data?.showSections?.eligibility !== false);
+  const showCta = (!isPreview || activeTab === 'cta') && (isPreview || data?.showSections?.cta !== false);
+  const showFaq = (!isPreview || activeTab === 'faq') && (isPreview || data?.showSections?.faq !== false);
 
   return (
     <>

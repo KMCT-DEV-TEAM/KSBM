@@ -34,7 +34,7 @@ const AboutCtaSection = ({ previewData }) => {
   const buttonLink = globalLinks['global_apply']?.link || data?.buttonLink || '/apply';
   const bgColor = data?.backgroundColor || '#2B2F66';
 
-  if (data?.showSection === false) return null;
+  if (data?.showSection === false && !previewData) return null;
 
   return (
     <section className="relative overflow-hidden w-full pb-16 pt-6 bg-[#fcfcfd]">

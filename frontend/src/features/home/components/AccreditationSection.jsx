@@ -56,7 +56,7 @@ const AccreditationSection = ({ previewData }) => {
     return null;
   }
 
-  if (settings?.showSection === false) {
+  if (settings?.showSection === false && !previewData) {
     return null;
   }
 

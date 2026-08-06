@@ -43,11 +43,11 @@ const Alumni = ({ previewData }) => {
       <PageTransition dataLoaded={dataLoaded} />
       <div className="bg-[#fcfcfd] min-h-screen flex flex-col pb-6 sm:pb-8">
         {(!isPreview || activeTab === 'hero') && <div id="alumni-hero"><AlumniHero data={data?.hero} previewDevice={previewData?.previewDevice} /></div>}
-        {(!isPreview || activeTab === 'legacy') && data?.legacy?.showSection !== false && <div id="alumni-legacy"><LegacySection data={data?.legacy} previewDevice={previewData?.previewDevice} /></div>}
-        {(!isPreview || activeTab === 'events') && data?.events?.showSection !== false && <div id="alumni-events"><AlumniEvents data={data?.events} previewDevice={previewData?.previewDevice} /></div>}
-        {(!isPreview || activeTab === 'notable') && data?.notableAlumni?.showSection !== false && <div id="alumni-notable"><NotableAlumni data={data?.notableAlumni} previewDevice={previewData?.previewDevice} /></div>}
-        {(!isPreview || activeTab === 'gallery') && data?.gallery?.showSection !== false && <div id="alumni-gallery"><AlumniGallery data={data?.gallery} previewDevice={previewData?.previewDevice} /></div>}
-        {(!isPreview || activeTab === 'cta') && data?.cta?.showSection !== false && <div id="alumni-cta"><AlumniCTA data={data?.cta} previewDevice={previewData?.previewDevice} /></div>}
+        {(!isPreview || activeTab === 'legacy') && (isPreview || data?.legacy?.showSection !== false) && <div id="alumni-legacy"><LegacySection data={data?.legacy} previewDevice={previewData?.previewDevice} /></div>}
+        {(!isPreview || activeTab === 'events') && (isPreview || data?.events?.showSection !== false) && <div id="alumni-events"><AlumniEvents data={data?.events} previewDevice={previewData?.previewDevice} /></div>}
+        {(!isPreview || activeTab === 'notable') && (isPreview || data?.notableAlumni?.showSection !== false) && <div id="alumni-notable"><NotableAlumni data={data?.notableAlumni} previewDevice={previewData?.previewDevice} /></div>}
+        {(!isPreview || activeTab === 'gallery') && (isPreview || data?.gallery?.showSection !== false) && <div id="alumni-gallery"><AlumniGallery data={data?.gallery} previewDevice={previewData?.previewDevice} /></div>}
+        {(!isPreview || activeTab === 'cta') && (isPreview || data?.cta?.showSection !== false) && <div id="alumni-cta"><AlumniCTA data={data?.cta} previewDevice={previewData?.previewDevice} /></div>}
       </div>
     </>
   );

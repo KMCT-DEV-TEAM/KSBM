@@ -1406,7 +1406,7 @@ export const getEventsPageSettings = async (req, res) => {
 // @access  Private/Admin
 export const updateEventsPageSettings = async (req, res) => {
   try {
-    const fields = ['hero', 'upcomingEvents', 'highlightedPrograms', 'essenceOfCulture', 'stayConnected', 'momentsCaptured'];
+    const fields = ['hero', 'about', 'upcomingEvents', 'highlightedPrograms', 'essenceOfCulture', 'stayConnected', 'momentsCaptured'];
     const settings = await EventsPageModel.getSettings();
     
     fields.forEach((field) => {

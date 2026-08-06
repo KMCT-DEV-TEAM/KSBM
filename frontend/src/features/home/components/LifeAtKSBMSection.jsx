@@ -91,9 +91,6 @@ const LifeAtKSBMSection = ({ previewData }) => {
     return null;
   }
 
-  if (data?.showSection === false) {
-    return null;
-  }
 
   return (
     <section className={`relative w-full bg-[#f4f7f9] py-12 ${lg('lg:py-14')} overflow-hidden`}>

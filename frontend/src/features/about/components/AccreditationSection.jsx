@@ -35,7 +35,7 @@ const AccreditationSection = ({ previewData }) => {
   }, [previewData]);
 
   if (isLoading) {
-    if (previewData?.showSection === false) return null;
+    if (previewData?.showSection === false && !previewData) return null;
     return (
       <section className="py-20 w-full bg-[#f4fafe] flex justify-center items-center">
         <Loader theme="light" />
@@ -43,7 +43,7 @@ const AccreditationSection = ({ previewData }) => {
     );
   }
 
-  if (settings?.showSection === false) return null;
+  if (settings?.showSection === false && !previewData) return null;
 
   const {
     subheading = "Institutional Credentials",

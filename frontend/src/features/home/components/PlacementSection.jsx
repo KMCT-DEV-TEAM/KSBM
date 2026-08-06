@@ -91,7 +91,7 @@ const PlacementSection = ({ previewData }) => {
     },
   };
 
-  if (data?.showSection === false) {
+  if (data?.showSection === false && !previewData) {
     return null;
   }
 

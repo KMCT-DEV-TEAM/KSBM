@@ -76,9 +76,8 @@ const AboutSection = ({ previewData }) => {
         showHeading: previewData.showHeading ?? true,
         showParagraphs: previewData.showParagraphs ?? true,
         showImage: previewData.showImage ?? true,
-        showStats: previewData.showStats ?? true
-      ,
-              showSection: data.showSection});
+        showStats: previewData.showStats ?? true,
+        showSection: previewData.showSection ?? true});
       return;
     }
 
@@ -125,7 +124,7 @@ const AboutSection = ({ previewData }) => {
 
   const showTopSection = cmsData.showImage || cmsData.showHeading || cmsData.showSubheading || cmsData.showParagraphs;
 
-  if (cmsData?.showSection === false) {
+  if (cmsData?.showSection === false && !previewData) {
     return null;
   }
 

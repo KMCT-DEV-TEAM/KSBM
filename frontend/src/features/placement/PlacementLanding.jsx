@@ -38,6 +38,7 @@ const PlacementLanding = ({ previewData }) => {
   }, []);
 
   const activeTab = data?.activeTab;
+  const isPreview = !!activeTab;
 
   const shouldRender = (tabName) => {
     return !activeTab || activeTab === tabName;
@@ -49,13 +50,13 @@ const PlacementLanding = ({ previewData }) => {
       <div className="min-h-screen bg-white flex flex-col justify-between">
         <main>
         {shouldRender('hero') && <PlacementHero data={data?.hero} />}
-        {shouldRender('overview') && data?.overview?.showSection !== false && <PlacementOverview data={data?.overview} />}
-        {shouldRender('proudAchievers') && data?.proudAchievers?.showSection !== false && <ProudAchievers data={data?.proudAchievers} />}
-        {shouldRender('topRecruiters') && data?.topRecruiters?.showSection !== false && <TopRecruiters data={data?.topRecruiters} />}
-        {shouldRender('excellenceSupport') && data?.excellenceSupport?.showSection !== false && <ExcellenceSupport data={data?.excellenceSupport} />}
-        {shouldRender('facultyInCharge') && data?.facultyInCharge?.showSection !== false && <FacultyInCharge data={data?.facultyInCharge} />}
-        {shouldRender('placementCommittee') && data?.placementCommittee?.showSection !== false && <PlacementCommittee data={data?.placementCommittee} />}
-        {shouldRender('activities') && data?.activities?.showSection !== false && <PlacementActivities data={data?.activities} />}
+        {shouldRender('overview') && (isPreview || data?.overview?.showSection !== false) && <PlacementOverview data={data?.overview} />}
+        {shouldRender('proudAchievers') && (isPreview || data?.proudAchievers?.showSection !== false) && <ProudAchievers data={data?.proudAchievers} />}
+        {shouldRender('topRecruiters') && (isPreview || data?.topRecruiters?.showSection !== false) && <TopRecruiters data={data?.topRecruiters} />}
+        {shouldRender('excellenceSupport') && (isPreview || data?.excellenceSupport?.showSection !== false) && <ExcellenceSupport data={data?.excellenceSupport} />}
+        {shouldRender('facultyInCharge') && (isPreview || data?.facultyInCharge?.showSection !== false) && <FacultyInCharge data={data?.facultyInCharge} />}
+        {shouldRender('placementCommittee') && (isPreview || data?.placementCommittee?.showSection !== false) && <PlacementCommittee data={data?.placementCommittee} />}
+        {shouldRender('activities') && (isPreview || data?.activities?.showSection !== false) && <PlacementActivities data={data?.activities} />}
         </main>
       </div>
     </>

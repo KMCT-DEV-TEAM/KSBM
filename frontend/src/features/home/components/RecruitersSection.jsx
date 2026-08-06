@@ -70,7 +70,7 @@ const RecruitersSection = ({ previewData }) => {
     displayList = [...displayList, ...defaultRecruiters.slice(0, missing)];
   }
 
-  if (data?.showSection === false) {
+  if (data?.showSection === false && !previewData) {
     return null;
   }
 

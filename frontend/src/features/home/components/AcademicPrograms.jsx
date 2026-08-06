@@ -147,7 +147,7 @@ const AcademicPrograms = ({ previewData }) => {
     );
   };
 
-  if (displayData?.showSection === false) return null;
+  if (displayData?.showSection === false && !previewData) return null;
 
   return (
     <section className={`w-full bg-background py-12 lg:py-14`}>
