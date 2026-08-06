@@ -20,13 +20,13 @@ const defaultListTwo = [
 const ExcellenceSupport = ({ data }) => {
   if (data?.showSection === false) return null;
 
-  const listOne = (data?.listOne && data.listOne.length > 0) ? data.listOne : defaultListOne;
-  const listTwo = (data?.listTwo && data.listTwo.length > 0) ? data.listTwo : defaultListTwo;
+  const listOne = (data?.listOne && data?.listOne.length > 0) ? data.listOne : defaultListOne;
+  const listTwo = (data?.listTwo && data?.listTwo.length > 0) ? data.listTwo : defaultListTwo;
 
   return (
     <section
       className="py-16 md:py-24 relative overflow-hidden bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: data?.showBackgroundImage !== false ? `url('${data.backgroundImage || '/assets/Images/Rectangle 67.png'}')` : 'none', backgroundColor: data?.showBackgroundImage === false ? '#1b2559' : undefined }}
+      style={{ backgroundImage: data?.showBackgroundImage !== false ? `url('${data?.backgroundImage || '/assets/Images/Rectangle 67.png'}')` : 'none', backgroundColor: data?.showBackgroundImage === false ? '#1b2559' : undefined }}
     >
       {/* Dark blue overlay to ensure text is readable over the image */}
       {data?.showBackgroundImage !== false && <div className="absolute inset-0 bg-primary/90"></div>}
@@ -41,18 +41,18 @@ const ExcellenceSupport = ({ data }) => {
         }}
         className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center"
       >
-        {data?.showBadge !== false && data.badge && (
+        {data?.showBadge !== false && data?.badge && (
           <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="mb-4">
             <span className="inline-block px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold uppercase tracking-wider backdrop-blur-sm border border-white/30">
-              {data.badge}
+              {data?.badge}
             </span>
           </motion.div>
         )}
         {data?.showTitle !== false && (
-          <motion.h2 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="text-2xl md:text-3xl lg:text-4xl font-semibold text-white mb-4">{data.title}</motion.h2>
+          <motion.h2 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="text-2xl md:text-3xl lg:text-4xl font-semibold text-white mb-4">{data?.title}</motion.h2>
         )}
         <motion.p variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="text-gray-300 text-sm md:text-base max-w-2xl mx-auto mb-16 leading-relaxed">
-          {data.description}
+          {data?.description}
         </motion.p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-4xl mx-auto">
