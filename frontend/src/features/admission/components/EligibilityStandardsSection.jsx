@@ -47,7 +47,7 @@ const EligibilityStandardsSection = ({ data }) => {
   
   const heading = data?.eligibilityHeading || 'Eligibility & Standards';
   const subtitle = data?.eligibilitySubtitle || 'Academic standards and requirements for admission into our premier programs.';
-  const scholarshipNote = data?.scholarshipNote || 'Scholarships available for merit and economically disadvantaged students.';
+  const scholarshipNote = data?.scholarshipNote !== undefined ? data.scholarshipNote : 'Scholarships available for merit and economically disadvantaged students.';
   
   const mergedData = {
     MBA: {

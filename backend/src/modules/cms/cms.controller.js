@@ -1163,7 +1163,7 @@ export const updateAdmissionsPageSettings = async (req, res) => {
       'heroBadgeText', 'heroTitle', 'heroSubtitle', 'heroApplyBtnText', 'heroApplyBtnUrl', 'heroBrochureBtnText', 'heroBrochureBtnUrl', 'heroBgImage', 'heroStats',
       'eliteHeading', 'eliteSubtitle', 'eliteDesc', 'eliteImage', 'eliteAdvantages',
       'journeyHeading', 'journeySubtitle', 'journeySteps',
-      'eligibilityHeading', 'eligibilitySubtitle', 'feeStructure', 'mba', 'bba',
+      'eligibilityHeading', 'eligibilitySubtitle', 'scholarshipNote', 'feeStructure', 'mba', 'bba',
       'ctaHeading', 'ctaDesc', 'ctaApplyBtnText', 'ctaApplyBtnUrl', 'ctaEnquiryBtnText', 'ctaEnquiryBtnUrl', 'ctaImage',
       'faqHeading', 'faqs', 'showSections'
     ];
