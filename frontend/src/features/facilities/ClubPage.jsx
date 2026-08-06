@@ -312,7 +312,7 @@ const ClubPage = () => {
                         <span className="text-sm">No Image</span>
                       </div>
                     )}
-                    <div className="absolute bottom-6 left-0 bg-white py-2 pl-4 pr-5 rounded-r-xl max-w-[90%]">
+                    <div style={{ borderRadius: "0 12px 12px 0" }} className="absolute bottom-6 left-0 bg-white py-2 pl-4 pr-5 max-w-[90%]">
                       <h4 className="font-bold text-[#2b2b68] text-base mb-0.5 whitespace-nowrap">{member.name}</h4>
                       <p className="text-xs text-gray-600 font-medium whitespace-nowrap">{member.role}</p>
                     </div>
@@ -358,8 +358,8 @@ const ClubPage = () => {
                     if (col.type === 'tall') {
                       return (
                         <div key={colIdx} className="shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] snap-center">
-                          <GalleryImage 
-                            item={col.items[0]} 
+                          <GalleryImage
+                            item={col.items[0]}
                             className="h-[280px] sm:h-[340px] lg:h-[400px]"
                           />
                         </div>
@@ -369,12 +369,12 @@ const ClubPage = () => {
                     if (col.type === 'split-top-small') {
                       return (
                         <div key={colIdx} className="shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] flex flex-col gap-3 sm:gap-4 snap-center">
-                          <GalleryImage 
-                            item={col.items[0]} 
+                          <GalleryImage
+                            item={col.items[0]}
                             className="h-[120px] sm:h-[145px] lg:h-[170px]"
                           />
-                          <GalleryImage 
-                            item={col.items[1]} 
+                          <GalleryImage
+                            item={col.items[1]}
                             className="h-[148px] sm:h-[183px] lg:h-[218px]"
                           />
                         </div>
@@ -384,12 +384,12 @@ const ClubPage = () => {
                     if (col.type === 'split-top-large') {
                       return (
                         <div key={colIdx} className="shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] flex flex-col gap-3 sm:gap-4 snap-center">
-                          <GalleryImage 
-                            item={col.items[0]} 
+                          <GalleryImage
+                            item={col.items[0]}
                             className="h-[148px] sm:h-[183px] lg:h-[218px]"
                           />
-                          <GalleryImage 
-                            item={col.items[1]} 
+                          <GalleryImage
+                            item={col.items[1]}
                             className="h-[120px] sm:h-[145px] lg:h-[170px]"
                           />
                         </div>

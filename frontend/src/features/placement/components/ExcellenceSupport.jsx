@@ -3,8 +3,25 @@ import { resolveImage } from '../../../utils/resolveImage';
 import { CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+const defaultListOne = [
+  { title: 'Dedicated Placement Cell' },
+  { title: 'Industry Mentorship Programs' },
+  { title: 'Group Discussion Training' },
+  { title: 'Internship Assistance' },
+];
+
+const defaultListTwo = [
+  { title: 'Mock Interviews' },
+  { title: 'Aptitude Test Preparation' },
+  { title: 'Corporate Guest Lectures' },
+  { title: 'Personality Development' },
+];
+
 const ExcellenceSupport = ({ data }) => {
-  if (!data) return null;
+  if (data?.showSection === false) return null;
+
+  const listOne = (data?.listOne && data.listOne.length > 0) ? data.listOne : defaultListOne;
+  const listTwo = (data?.listTwo && data.listTwo.length > 0) ? data.listTwo : defaultListTwo;
 
   return (
     <section
@@ -42,7 +59,7 @@ const ExcellenceSupport = ({ data }) => {
           {/* Card 1 */}
           <motion.div variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }} className="bg-white/15 border border-white/30 backdrop-blur-sm rounded-[18px] p-8 md:p-12 text-left shadow-2xl transition-transform duration-300 hover:-translate-y-1">
             <ul className="space-y-6">
-              {data.listOne?.map((item, idx) => (
+              {listOne.map((item, idx) => (
                 <li key={idx} className="flex items-center gap-4 text-white">
                   <CheckCircle2 className="w-6 h-6 text-white flex-shrink-0" />
                   <span className="text-[15px] font-small">{item.title || item}</span>
@@ -54,7 +71,7 @@ const ExcellenceSupport = ({ data }) => {
           {/* Card 2 */}
           <motion.div variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2 } } }} className="bg-white/15  border border-white/30 backdrop-blur-sm rounded-[18px] p-8 md:p-12 text-left shadow-2xl transition-transform duration-300 hover:-translate-y-1">
             <ul className="space-y-6">
-              {data.listTwo?.map((item, idx) => (
+              {listTwo.map((item, idx) => (
                 <li key={idx} className="flex items-center gap-4 text-white">
                   <CheckCircle2 className="w-6 h-6 text-white flex-shrink-0" />
                   <span className="text-[15px] font-small">{item.title || item}</span>
