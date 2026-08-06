@@ -82,7 +82,7 @@ const LegacySection = ({ previewData }) => {
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
               className="text-gray-600 text-sm md:text-base leading-relaxed space-y-2"
             >
-              {data.description.split('\n').filter(p => p.trim()).map((para, idx) => (
+              {data.description?.split('\n').filter(p => p.trim()).map((para, idx) => (
                 <p key={idx}>{para}</p>
               ))}
             </motion.div>

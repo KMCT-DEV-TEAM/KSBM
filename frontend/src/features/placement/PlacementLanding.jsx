@@ -35,7 +35,7 @@ const PlacementLanding = ({ previewData }) => {
       }
     };
     fetchData();
-  }, []);
+  }, [previewData]);
 
   const activeTab = data?.activeTab;
   const isPreview = Boolean(previewData || activeTab);
