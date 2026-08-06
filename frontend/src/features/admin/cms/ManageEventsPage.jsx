@@ -10,6 +10,7 @@ import SectionForm from './components/SectionForm';
 import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import { uploadDeferredImage } from './utils/uploadHelper';
+import SingleDocumentUploader from './components/SingleDocumentUploader';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -517,9 +518,9 @@ const ManageEventsPage = () => {
                       <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.hero.title || '')).length}/50</span></div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-gray-500">Subtitle <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 200 chars)</span></label>
-                    <textarea rows={4} maxLength={200} value={formData.hero.subtitle} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, subtitle: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
-                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 200</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.hero.subtitle || '')).length}/200</span></div>
+                    <label className="text-xs font-semibold text-gray-500">Subtitle <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 250 chars)</span></label>
+                    <textarea rows={4} maxLength={250} value={formData.hero.subtitle} onChange={e => setFormData({ ...formData, hero: { ...formData.hero, subtitle: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 250</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.hero.subtitle || '')).length}/250</span></div>
                   </div>
                 </div>
                 
@@ -554,14 +555,40 @@ const ManageEventsPage = () => {
                     <textarea rows={3} maxLength={1000} value={formData.about?.paragraph2 || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, paragraph2: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none leading-relaxed" />
                       <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 1000</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.about?.paragraph2 || '')).length}/1000</span></div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-gray-500">Event Brochure URL (Optional)</label>
-                      <input type="text" placeholder="https://... or /assets/..." value={formData.about?.brochureUrl || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, brochureUrl: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <label className="text-xs font-semibold text-gray-500">Event Brochure PDF (Optional)</label>
+                      <SingleDocumentUploader
+                        id="events-brochure"
+                        fileUrl={formData.about?.brochureUrl}
+                        deferredUpload={true}
+                        onUploadComplete={(res) => {
+                          if (res.isDeleted) {
+                            handleImageUploadChange('about.brochureUrl', '', null, formData.about?.brochureUrl);
+                          } else {
+                            handleImageUploadChange('about.brochureUrl', res.previewUrl, res.file, formData.about?.brochureUrl);
+                          }
+                        }}
+                        label="Upload Brochure PDF"
+                        accept=".pdf"
+                      />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-gray-500">Download Calendar URL (Optional)</label>
-                      <input type="text" placeholder="https://... or /assets/..." value={formData.about?.calendarUrl || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, calendarUrl: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <label className="text-xs font-semibold text-gray-500">Download Calendar PDF (Optional)</label>
+                      <SingleDocumentUploader
+                        id="events-calendar"
+                        fileUrl={formData.about?.calendarUrl}
+                        deferredUpload={true}
+                        onUploadComplete={(res) => {
+                          if (res.isDeleted) {
+                            handleImageUploadChange('about.calendarUrl', '', null, formData.about?.calendarUrl);
+                          } else {
+                            handleImageUploadChange('about.calendarUrl', res.previewUrl, res.file, formData.about?.calendarUrl);
+                          }
+                        }}
+                        label="Upload Calendar PDF"
+                        accept=".pdf"
+                      />
                     </div>
                   </div>
                 </div>
@@ -621,9 +648,9 @@ const ManageEventsPage = () => {
                       <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.title || '')).length}/50</span></div>
                           </div>
                           <div className="space-y-1">
-                            <label className="text-xs font-semibold text-gray-500">Event Description <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 150 chars)</span></label>
-                            <textarea rows={3} maxLength={150} value={item.description} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'description', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 150</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.description || '')).length}/150</span></div>
+                            <label className="text-xs font-semibold text-gray-500">Event Description <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 200 chars)</span></label>
+                            <textarea rows={3} maxLength={200} value={item.description} onChange={e => handleUpdateArray('upcomingEvents', 'events', idx, 'description', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 200</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.description || '')).length}/200</span></div>
                           </div>
                           <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1">
@@ -813,8 +840,8 @@ const ManageEventsPage = () => {
                       <input type="text" maxLength={50} value={modalData.title} onChange={e => setModalData({...modalData, title: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50" placeholder="e.g. CELEBRITY VISIT" />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-gray-500">Event Description <span className="text-gray-400 font-normal ml-2">(Max 150 chars)</span></label>
-                      <textarea rows={3} maxLength={150} value={modalData.description} onChange={e => setModalData({...modalData, description: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50" />
+                      <label className="text-xs font-semibold text-gray-500">Event Description <span className="text-gray-400 font-normal ml-2">(Max 200 chars)</span></label>
+                      <textarea rows={3} maxLength={200} value={modalData.description} onChange={e => setModalData({...modalData, description: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50" />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1">

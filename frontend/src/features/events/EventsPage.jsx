@@ -18,6 +18,7 @@ import Loader from '../../components/Loader';
 const EventsPage = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [pageData, setPageData] = useState(null);
+  const [previewData, setPreviewData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [carouselIndex, setCarouselIndex] = useState(0);
 
@@ -35,13 +36,23 @@ const EventsPage = () => {
     fetchData();
   }, []);
 
-  const hero = pageData?.hero || {
+  useEffect(() => {
+    const handleMessage = (e) => {
+      if (e.data?.type === 'preview-cms-data') {
+        setPreviewData(prev => ({ ...prev, ...e.data.payload }));
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  const hero = previewData?.hero || pageData?.hero || {
     title: 'THE SPIRIT OF CULTURE',
     subtitle: 'Experience the vibrancy and dynamic energy of our college campus. From cultural extravaganzas to technical symposiums, our events are the heartbeat of student life.',
     backgroundImage: '/assets/Images/Group 250.png'
   };
 
-  const about = pageData?.about || {
+  const about = previewData?.about || pageData?.about || {
     subheading: 'About',
     heading: 'THE SPIRIT OF CULTURE',
     paragraph1: "Discover a celebration where creativity knows no limits and every performance tells a story worth remembering. Kaleido is more than a cultural festival—it's a vibrant platform where passion meets purpose, traditions blend with innovation, and talent shines without boundaries. Bringing together students, artists, performers, and creative minds from diverse backgrounds, the festival transforms the campus into a spectacular stage filled with energy, color, and inspiration.",
@@ -51,12 +62,12 @@ const EventsPage = () => {
     calendarUrl: ''
   };
 
-  const upcomingEvents = pageData?.upcomingEvents || { heading: 'THE UPCOMING EVENTS', events: [] };
-  const highlightedPrograms = pageData?.highlightedPrograms || { heading: 'THE HIGHLIGHTED PROGRAMS', images: [] };
-  const essenceOfCulture = pageData?.essenceOfCulture || { heading: 'THE ESSENCE OF CULTURE', items: [] };
-  const stayConnected = pageData?.stayConnected || { heading: 'STAY CONNECTED', posters: [] };
-  const momentsCaptured = pageData?.momentsCaptured || { heading: 'MOMENTS CAPTURED', images: [] };
-  const footerGraphic = pageData?.footerGraphic || '/assets/Images/Group 339.png';
+  const upcomingEvents = previewData?.upcomingEvents || pageData?.upcomingEvents || { heading: 'THE UPCOMING EVENTS', events: [] };
+  const highlightedPrograms = previewData?.highlightedPrograms || pageData?.highlightedPrograms || { heading: 'THE HIGHLIGHTED PROGRAMS', images: [] };
+  const essenceOfCulture = previewData?.essenceOfCulture || pageData?.essenceOfCulture || { heading: 'THE ESSENCE OF CULTURE', items: [] };
+  const stayConnected = previewData?.stayConnected || pageData?.stayConnected || { heading: 'STAY CONNECTED', posters: [] };
+  const momentsCaptured = previewData?.momentsCaptured || pageData?.momentsCaptured || { heading: 'MOMENTS CAPTURED', images: [] };
+  const footerGraphic = previewData?.footerGraphic || pageData?.footerGraphic || '/assets/Images/Group 339.png';
 
   return (
     <div className="min-h-screen flex flex-col bg-[#050505] text-white overflow-x-hidden font-sans">
