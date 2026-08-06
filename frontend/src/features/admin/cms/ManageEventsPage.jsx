@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Trash2, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, Monitor, Tablet, Smartphone, X, FileText, Info, Calendar, Sparkles, Music, Share2, Camera, Layout } from 'lucide-react';
+import { Plus, Trash2, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, Monitor, Tablet, Smartphone, X, FileText, Info, Calendar, Sparkles, Music, Share2, Camera, Layout, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
@@ -110,6 +110,7 @@ const ManageEventsPage = () => {
   const [modalData, setModalData] = useState({});
   const [modalFile, setModalFile] = useState(null);
   const [modalImageUrl, setModalImageUrl] = useState('');
+  const [isModalSaving, setIsModalSaving] = useState(false);
 
   useEffect(() => {
     if (isPreviewModalOpen && iframeRef.current) {
@@ -153,13 +154,17 @@ const ManageEventsPage = () => {
     setIsAddModalOpen(true);
   };
 
-  const handleModalSave = () => {
-    if (!addModalType || !isAddModalOpen) return;
+  const handleModalSave = async () => {
+    if (!addModalType || !isAddModalOpen || isModalSaving) return;
+    setIsModalSaving(true);
     const { section, key } = addModalType;
     
-    // Lock modal to prevent duplicate additions on fast/multiple clicks
+    // Brief delay to show loading state and prevent rapid multiple clicks
+    await new Promise(resolve => setTimeout(resolve, 400));
+    
     setAddModalType(null);
     setIsAddModalOpen(false);
+    setIsModalSaving(false);
 
     setFormData(prev => {
       const arr = [...(prev[section][key] || [])];
@@ -919,8 +924,11 @@ const ManageEventsPage = () => {
               </div>
 
               <div className="px-6 py-4 border-t border-gray-100 flex justify-end gap-3 bg-white shrink-0">
-                <button onClick={() => setIsAddModalOpen(false)} className="px-6 py-2.5 rounded-lg text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors">Cancel</button>
-                <button onClick={handleModalSave} className="px-6 py-2.5 bg-primary hover:bg-[#151c48] text-white rounded-lg text-sm font-semibold transition-colors shadow-md">Add Item</button>
+                <button onClick={() => setIsAddModalOpen(false)} disabled={isModalSaving} className="px-6 py-2.5 rounded-lg text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50">Cancel</button>
+                <button onClick={handleModalSave} disabled={isModalSaving} className="flex items-center gap-2 px-6 py-2.5 bg-primary hover:bg-[#151c48] text-white rounded-lg text-sm font-semibold transition-colors shadow-md disabled:opacity-70 disabled:cursor-not-allowed">
+                  {isModalSaving && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {isModalSaving ? 'Saving...' : 'Add Item'}
+                </button>
               </div>
 
             </motion.div>
