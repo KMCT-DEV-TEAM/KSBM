@@ -144,7 +144,8 @@ router.post('/examinations', protect, uploadAssets.single('image'), async (req, 
 
 router.post('/blogs', protect, uploadAssets.single('image'), async (req, res) => {
   if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
+    console.error('Upload failed: No req.file present. req.body:', req.body);
+    return res.status(400).json({ message: 'No image provided', body: req.body });
   }
 
   const fileUrl = `/assets/Images/blogs/${req.file.filename}`;

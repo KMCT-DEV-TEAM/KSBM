@@ -133,6 +133,28 @@ const ManageBlogsPage = () => {
           if (cleanData.blogs) {
             cleanData.blogs = cleanData.blogs.map(b => {
               const { uuid, _id, ...rest } = b;
+              if (!rest.title) rest.title = 'Untitled Article';
+              if (!rest.category) rest.category = 'General';
+              if (!rest.filterCategory) rest.filterCategory = 'All Topics';
+              if (!rest.excerpt) rest.excerpt = 'No excerpt provided for this article.';
+              if (!rest.image) rest.image = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800&auto=format&fit=crop';
+              if (!rest.readTime) rest.readTime = '5 min read';
+              if (!rest.date) rest.date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+              
+              if (rest.sections) {
+                rest.sections = rest.sections.map(s => {
+                  const { _id, ...secRest } = s;
+                  if (!secRest.content) secRest.content = ' ';
+                  if (!secRest.id) secRest.id = `sec-${Math.random().toString(36).substring(2, 9)}`;
+                  return secRest;
+                });
+              }
+              if (rest.relatedArticles) {
+                rest.relatedArticles = rest.relatedArticles.map(ra => {
+                  const { _id, ...raRest } = ra;
+                  return raRest;
+                });
+              }
               return rest;
             });
           }
@@ -354,15 +376,15 @@ const ManageBlogsPage = () => {
     if (isPreviewModalOpen) {
       const sanitizedBlogs = (data.blogs || []).map(b => ({
         ...b,
-        image: typeof b.image === 'object' ? (b.image.previewUrl || b.image.oldUrl) : b.image,
+        image: b.image && typeof b.image === 'object' ? (b.image.previewUrl || b.image.oldUrl) : b.image,
         sections: (b.sections || []).map(s => ({
           ...s,
-          inlineImage: typeof s.inlineImage === 'object' ? (s.inlineImage.previewUrl || s.inlineImage.oldUrl) : s.inlineImage
+          inlineImage: s.inlineImage && typeof s.inlineImage === 'object' ? (s.inlineImage.previewUrl || s.inlineImage.oldUrl) : s.inlineImage
         }))
       }));
       const sanitizedHero = {
         ...data.hero,
-        backgroundImage: typeof data.hero?.backgroundImage === 'object' ? (data.hero.backgroundImage.previewUrl || data.hero.backgroundImage.oldUrl) : data.hero?.backgroundImage
+        backgroundImage: data.hero?.backgroundImage && typeof data.hero?.backgroundImage === 'object' ? (data.hero.backgroundImage.previewUrl || data.hero.backgroundImage.oldUrl) : data.hero?.backgroundImage
       };
       
       const pData = {
