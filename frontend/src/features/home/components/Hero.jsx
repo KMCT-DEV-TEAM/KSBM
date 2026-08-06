@@ -19,7 +19,7 @@ const Hero = ({ previewData }) => {
   const [dataLoaded, setDataLoaded] = useState(!!previewData);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
-  
+
   const globalLinks = useGlobalLinks();
   const heroApplyBtn = globalLinks['global_apply'];
   const heroBrochureBtn = globalLinks['hero_brochure'];
@@ -43,13 +43,13 @@ const Hero = ({ previewData }) => {
   }, [previewData]);
 
   const images = React.useMemo(() => {
-    return settings?.bannerImages?.length > 0 
+    return settings?.bannerImages?.length > 0
       ? settings.bannerImages.map(img => img.url)
       : [
-          '/assets/Images/Home/hero_banner_1.png',
-          '/assets/Images/Home/hero_banner_2.png',
-          '/assets/Images/Home/hero_banner_3.png'
-        ];
+        '/assets/Images/Home/hero_banner_1.png',
+        '/assets/Images/Home/hero_banner_2.png',
+        '/assets/Images/Home/hero_banner_3.png'
+      ];
   }, [settings?.bannerImages]);
 
   useEffect(() => {
@@ -119,210 +119,210 @@ const Hero = ({ previewData }) => {
         )}
       </AnimatePresence>
       <div className="relative min-h-screen w-full bg-slate-900 overflow-hidden flex items-center">
-      {/* Background Images with Transition */}
-      {images.map((img, index) => (
-        <motion.div
-          key={img}
-          initial={false}
-          animate={{
-            opacity: index === currentImageIndex ? 1 : 0,
-            scale: index === currentImageIndex ? 1 : 1.05,
-            zIndex: index === currentImageIndex ? 0 : -1
-          }}
-          transition={{ duration: 1.5, ease: "easeInOut" }}
-          className="absolute inset-0"
-        >
-          <img
-            src={img}
-            alt="Campus"
-            className="w-full h-full object-cover"
-          />
-          {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-black/40"></div>
-          {/* Gradient for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/40 to-transparent"></div>
-        </motion.div>
-      ))}
-
-      {/* Main Content */}
-      <motion.div
-        initial="hidden"
-        animate={imagesLoaded ? "visible" : "hidden"}
-        variants={{
-          hidden: { opacity: 0 },
-          visible: {
-            opacity: 1,
-            transition: {
-              staggerChildren: 0.2,
-              delayChildren: 0.3,
-            }
-          }
-        }}
-        className="relative z-10 w-[98%] max-w-[1440px] mx-auto pl-4 pr-16 sm:pl-6 sm:pr-20 lg:px-8 py-20 flex flex-col justify-center"
-      >
-
-        {/* Pill Badge */}
-        {settings?.pillText?.isVisible !== false && (
+        {/* Background Images with Transition */}
+        {images.map((img, index) => (
           <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+            key={img}
+            initial={false}
+            animate={{
+              opacity: index === currentImageIndex ? 1 : 0,
+              scale: index === currentImageIndex ? 1 : 1.05,
+              zIndex: index === currentImageIndex ? 0 : -1
             }}
-            className="inline-flex items-center gap-2.5 bg-background/20 backdrop-blur-md rounded-full pr-5 pl-2 py-1.5 text-[0.60rem] sm:text-[0.65rem] font-semibold tracking-widest text-white border border-white/30 uppercase mb-8 self-start shadow-sm"
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            className="absolute inset-0"
           >
-            <div className="flex items-center justify-center bg-white/10 rounded-full p-1">
-              <svg viewBox="-50 -50 100 100" className="w-5 h-5 text-[#5594c0]" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <g key={i} transform={`rotate(${i * 45})`}>
-                    <polygon points="0,-4 -6,-16 6,-16" />
-                    <polygon points="0,-32 -8,-18 8,-18" />
-                    <polygon points="0,-34 -12,-48 12,-48" />
-                    <polygon points="-11,-20 -20,-20 -15,-30" />
-                    <polygon points="11,-20 20,-20 15,-30" />
-                  </g>
-                ))}
-              </svg>
-            </div>
-            {settings?.pillText?.text || 'ADMISSIONS OPEN 2025-26'}
+            <img
+              src={img}
+              alt="Campus"
+              className="w-full h-full object-cover"
+            />
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 bg-black/40"></div>
+            {/* Gradient for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/40 to-transparent"></div>
           </motion.div>
-        )}
+        ))}
 
-        {/* Heading */}
-        <motion.h1
+        {/* Main Content */}
+        <motion.div
+          initial="hidden"
+          animate={imagesLoaded ? "visible" : "hidden"}
           variants={{
-            hidden: { opacity: 0, y: 30 },
-            visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.2,
+                delayChildren: 0.3,
+              }
+            }
           }}
-          className="text-3xl md:text-4xl lg:text-6xl font-bold leading-[1.1] tracking-tight"
+          className="relative z-10 w-[98%] max-w-[1440px] mx-auto pl-4 pr-16 sm:pl-6 sm:pr-20 lg:px-8 py-20 flex flex-col justify-center"
         >
-          {settings?.headingLine1?.isVisible !== false && (
-            <span className="text-white block">{settings?.headingLine1?.text || 'Empowering Future'}</span>
-          )}
-          {settings?.headingLine2?.isVisible !== false && (
-            <span className="text-[#bce0f0] block">{settings?.headingLine2?.text || 'Business Leaders'}</span>
-          )}
-        </motion.h1>
 
-        {/* Description */}
-        {settings?.description?.isVisible !== false && (
-          <motion.p
+          {/* Pill Badge */}
+          {settings?.pillText?.isVisible !== false && (
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+              }}
+              className="inline-flex items-center gap-2.5 bg-background/20 backdrop-blur-md rounded-full pr-5 pl-2 py-1.5 text-[0.60rem] sm:text-[0.65rem] font-semibold tracking-widest text-white border border-white/30 uppercase mb-8 self-start shadow-sm"
+            >
+              <div className="flex items-center justify-center bg-white/10 rounded-full p-1">
+                <svg viewBox="-50 -50 100 100" className="w-5 h-5 text-[#5594c0]" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <g key={i} transform={`rotate(${i * 45})`}>
+                      <polygon points="0,-4 -6,-16 6,-16" />
+                      <polygon points="0,-32 -8,-18 8,-18" />
+                      <polygon points="0,-34 -12,-48 12,-48" />
+                      <polygon points="-11,-20 -20,-20 -15,-30" />
+                      <polygon points="11,-20 20,-20 15,-30" />
+                    </g>
+                  ))}
+                </svg>
+              </div>
+              {settings?.pillText?.text || 'ADMISSIONS OPEN 2025-26'}
+            </motion.div>
+          )}
+
+          {/* Heading */}
+          <motion.h1
             variants={{
               hidden: { opacity: 0, y: 30 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
             }}
-            className="w-[75%] md:w-full max-w-2xl text-xs md:text-sm mt-6 text-gray-200 leading-relaxed font-medium"
+            className="text-3xl md:text-4xl lg:text-6xl font-bold leading-[1.1] tracking-tight"
           >
-            {settings?.description?.text || "Unlock your potential with India's leading B-School, where traditional academic rigor meets modern industry innovation. Join a network of global visionaries."}
-          </motion.p>
+            {settings?.headingLine1?.isVisible !== false && (
+              <span className="text-white block">{settings?.headingLine1?.text || 'Empowering Future'}</span>
+            )}
+            {settings?.headingLine2?.isVisible !== false && (
+              <span className="text-[#bce0f0] block">{settings?.headingLine2?.text || 'Business Leaders'}</span>
+            )}
+          </motion.h1>
+
+          {/* Description */}
+          {settings?.description?.isVisible !== false && (
+            <motion.p
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+              }}
+              className="w-[75%] md:w-full max-w-2xl text-xs md:text-sm mt-6 text-gray-200 leading-relaxed font-medium"
+            >
+              {settings?.description?.text || "Unlock your potential with India's leading B-School, where traditional academic rigor meets modern industry innovation. Join a network of global visionaries."}
+            </motion.p>
+          )}
+
+          {/* Action Buttons */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 30 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+            }}
+            className="flex flex-row flex-wrap items-center gap-4 mt-10"
+          >
+            {(heroApplyBtn?.isActive !== false) && (
+              <a
+                href={heroApplyBtn?.link || '#'}
+                target={(heroApplyBtn?.link || '').startsWith('http') ? '_blank' : undefined}
+                rel={(heroApplyBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
+                className="bg-secondary text-primary text-sm md:text-base font-bold px-6 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-auto justify-center"
+              >
+                {heroApplyBtn?.label || 'Apply Now'} <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
+              </a>
+            )}
+            {(heroBrochureBtn?.isActive !== false) && (
+              <a
+                href={heroBrochureBtn?.link || '#'}
+                target={(heroBrochureBtn?.link || '').startsWith('http') ? '_blank' : undefined}
+                rel={(heroBrochureBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
+                className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-bold px-6 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-auto justify-center"
+                download
+              >
+                <Download className="w-4 h-4 md:w-5 md:h-5" /> {heroBrochureBtn?.label || 'Download Brochure'}
+              </a>
+            )}
+          </motion.div>
+        </motion.div>
+
+        {/* Desktop Glassmorphism Floating Card */}
+        {settings?.statsCard?.isVisible !== false && (
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={imagesLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+            transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
+            className="hidden md:block absolute bottom-4 lg:bottom-10 right-6 lg:right-10 z-20"
+          >
+            <div className="relative bg-background/20 backdrop-blur-md border border-white/30 rounded-2xl p-5 w-[280px] lg:w-[320px] shadow-2xl">
+              {/* Blue Badge Icon Overlap */}
+              <div className="absolute -top-3 -right-3 bg-primary p-2 rounded-xl shadow-lg border border-white/10 text-white z-30">
+                <BadgeCheck className="w-5 h-5" />
+              </div>
+
+              <h3 className="text-lg font-bold text-white mb-4">{settings?.statsCard?.batchText || 'Batch 2025–27'}</h3>
+
+              <div className="flex flex-col gap-4">
+                <div className="flex items-start gap-3">
+                  <div className="bg-background/20 p-2 rounded-lg shrink-0 text-white">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-white text-sm font-semibold">{settings?.statsCard?.stat1Title || 'Limited Seats'}</p>
+                    <p className="text-gray-300 text-[11px] mt-0.5 leading-tight">{settings?.statsCard?.stat1Subtitle || 'Last few slots remaining'}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="bg-background/20 p-2 rounded-lg shrink-0 text-white">
+                    <Award className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-white text-sm font-semibold">{settings?.statsCard?.stat2Title || '100% Placement'}</p>
+                    <p className="text-gray-300 text-[11px] mt-0.5 leading-tight">{settings?.statsCard?.stat2Subtitle || 'Consistent record over years'}</p>
+                  </div>
+                </div>
+              </div>
+
+              <a href={settings?.statsCard?.linkUrl && settings.statsCard.linkUrl !== '#' ? settings.statsCard.linkUrl : '/admissions'} className="inline-flex items-center gap-1.5 text-xs text-gray-300 hover:text-white mt-5 transition-colors group">
+                {settings?.statsCard?.linkText || 'Read Admission Guidelines'}
+                <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+              </a>
+            </div>
+          </motion.div>
         )}
 
-        {/* Action Buttons */}
-        <motion.div
-          variants={{
-            hidden: { opacity: 0, y: 30 },
-            visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-          }}
-          className="flex flex-row flex-wrap items-center gap-4 mt-10"
-        >
-          {(heroApplyBtn?.isActive !== false) && (
-            <a 
-              href={heroApplyBtn?.link || '#'} 
-              target={(heroApplyBtn?.link || '').startsWith('http') ? '_blank' : undefined}
-              rel={(heroApplyBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
-              className="bg-secondary text-primary text-sm md:text-base font-bold px-6 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-auto justify-center"
-            >
-              {heroApplyBtn?.label || 'Apply Now'} <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
-            </a>
-          )}
-          {(heroBrochureBtn?.isActive !== false) && (
-            <a 
-              href={heroBrochureBtn?.link || '#'} 
-              target={(heroBrochureBtn?.link || '').startsWith('http') ? '_blank' : undefined}
-              rel={(heroBrochureBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
-              className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-bold px-6 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-auto justify-center"
-              download
-            >
-              <Download className="w-4 h-4 md:w-5 md:h-5" /> {heroBrochureBtn?.label || 'Download Brochure'}
-            </a>
-          )}
-        </motion.div>
-      </motion.div>
-
-      {/* Desktop Glassmorphism Floating Card */}
-      {settings?.statsCard?.isVisible !== false && (
-      <motion.div
-        initial={{ opacity: 0, x: 50 }}
-        animate={imagesLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-        transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
-        className="hidden md:block absolute bottom-4 lg:bottom-10 right-6 lg:right-10 z-20"
-      >
-        <div className="relative bg-background/20 backdrop-blur-md border border-white/30 rounded-2xl p-5 w-[280px] lg:w-[320px] shadow-2xl">
-          {/* Blue Badge Icon Overlap */}
-          <div className="absolute -top-3 -right-3 bg-primary p-2 rounded-xl shadow-lg border border-white/10 text-white z-30">
-            <BadgeCheck className="w-5 h-5" />
-          </div>
-
-          <h3 className="text-lg font-bold text-white mb-4">{settings?.statsCard?.batchText || 'Batch 2025–27'}</h3>
-
-          <div className="flex flex-col gap-4">
-            <div className="flex items-start gap-3">
-              <div className="bg-background/20 p-2 rounded-lg shrink-0 text-white">
-                <Users className="w-4 h-4" />
+        {/* Mobile Scrolling Ticker */}
+        {settings?.statsCard?.isVisible !== false && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={imagesLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.8, delay: 1, ease: "easeOut" }}
+            className="md:hidden absolute bottom-0 left-0 w-full bg-background/20 backdrop-blur-md border-t border-white/20 text-white py-3 z-20 overflow-hidden"
+          >
+            <div className="animate-marquee whitespace-nowrap flex items-center gap-10 text-xs sm:text-sm">
+              {/* First Set */}
+              <div className="flex items-center gap-10">
+                <span className="font-bold text-secondary flex items-center gap-2"><BadgeCheck className="w-4 h-4" /> {settings?.statsCard?.batchText || 'Batch 2025–27'}</span>
+                <span className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-300" /> {settings?.statsCard?.stat1Title || 'Limited Seats'}</span>
+                <span className="flex items-center gap-2"><Award className="w-4 h-4 text-gray-300" /> {settings?.statsCard?.stat2Title || '100% Placement'}</span>
+                <a href={settings?.statsCard?.linkUrl && settings.statsCard.linkUrl !== '#' ? settings.statsCard.linkUrl : '/admissions'} className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5" /></a>
               </div>
-              <div>
-                <p className="text-white text-sm font-semibold">{settings?.statsCard?.stat1Title || 'Limited Seats'}</p>
-                <p className="text-gray-300 text-[11px] mt-0.5 leading-tight">{settings?.statsCard?.stat1Subtitle || 'Last few slots remaining'}</p>
+              {/* Second Set for seamless infinite scrolling */}
+              <div className="flex items-center gap-10">
+                <span className="font-bold text-secondary flex items-center gap-2"><BadgeCheck className="w-4 h-4" /> {settings?.statsCard?.batchText || 'Batch 2025–27'}</span>
+                <span className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-300" /> {settings?.statsCard?.stat1Title || 'Limited Seats'}</span>
+                <span className="flex items-center gap-2"><Award className="w-4 h-4 text-gray-300" /> {settings?.statsCard?.stat2Title || '100% Placement'}</span>
+                <a href={settings?.statsCard?.linkUrl && settings.statsCard.linkUrl !== '#' ? settings.statsCard.linkUrl : '/admissions'} className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5" /></a>
               </div>
             </div>
-
-            <div className="flex items-start gap-3">
-              <div className="bg-background/20 p-2 rounded-lg shrink-0 text-white">
-                <Award className="w-4 h-4" />
-              </div>
-              <div>
-                <p className="text-white text-sm font-semibold">{settings?.statsCard?.stat2Title || '100% Placement'}</p>
-                <p className="text-gray-300 text-[11px] mt-0.5 leading-tight">{settings?.statsCard?.stat2Subtitle || 'Consistent record over years'}</p>
-              </div>
-            </div>
-          </div>
-
-          <a href={settings?.statsCard?.linkUrl && settings.statsCard.linkUrl !== '#' ? settings.statsCard.linkUrl : '/admissions'} className="inline-flex items-center gap-1.5 text-xs text-gray-300 hover:text-white mt-5 transition-colors group">
-            {settings?.statsCard?.linkText || 'Read Admission Guidelines'}
-            <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-          </a>
-        </div>
-      </motion.div>
-      )}
-
-      {/* Mobile Scrolling Ticker */}
-      {settings?.statsCard?.isVisible !== false && (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={imagesLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.8, delay: 1, ease: "easeOut" }}
-        className="md:hidden absolute bottom-0 left-0 w-full bg-background/20 backdrop-blur-md border-t border-white/20 text-white py-3 z-20 overflow-hidden"
-      >
-        <div className="animate-marquee whitespace-nowrap flex items-center gap-10 text-xs sm:text-sm">
-          {/* First Set */}
-          <div className="flex items-center gap-10">
-            <span className="font-bold text-secondary flex items-center gap-2"><BadgeCheck className="w-4 h-4"/> {settings?.statsCard?.batchText || 'Batch 2025–27'}</span>
-            <span className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-300"/> {settings?.statsCard?.stat1Title || 'Limited Seats'}</span>
-            <span className="flex items-center gap-2"><Award className="w-4 h-4 text-gray-300"/> {settings?.statsCard?.stat2Title || '100% Placement'}</span>
-            <a href={settings?.statsCard?.linkUrl && settings.statsCard.linkUrl !== '#' ? settings.statsCard.linkUrl : '/admissions'} className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5"/></a>
-          </div>
-          {/* Second Set for seamless infinite scrolling */}
-          <div className="flex items-center gap-10">
-            <span className="font-bold text-secondary flex items-center gap-2"><BadgeCheck className="w-4 h-4"/> {settings?.statsCard?.batchText || 'Batch 2025–27'}</span>
-            <span className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-300"/> {settings?.statsCard?.stat1Title || 'Limited Seats'}</span>
-            <span className="flex items-center gap-2"><Award className="w-4 h-4 text-gray-300"/> {settings?.statsCard?.stat2Title || '100% Placement'}</span>
-            <a href={settings?.statsCard?.linkUrl && settings.statsCard.linkUrl !== '#' ? settings.statsCard.linkUrl : '/admissions'} className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5"/></a>
-          </div>
-        </div>
-      </motion.div>
-      )}
+          </motion.div>
+        )}
 
 
-    </div>
+      </div>
     </>
   );
 };

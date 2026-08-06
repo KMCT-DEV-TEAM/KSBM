@@ -37,7 +37,7 @@ const ManagementSection = ({ previewData }) => {
 
   const { subheading, heading, description, members } = settings;
 
-  if (settings?.showSection === false) {
+  if (settings?.showSection === false && !previewData) {
     return null;
   }
 

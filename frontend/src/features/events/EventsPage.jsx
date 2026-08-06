@@ -22,6 +22,8 @@ const EventsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [carouselIndex, setCarouselIndex] = useState(0);
 
+  const isPreview = !!previewData;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -83,13 +85,13 @@ const EventsPage = () => {
       <EventsHero hero={hero} />
 
       {/* ── About Section ── */}
-      {about?.showSection !== false && <EventsAbout about={about} />}
+      {(isPreview || about?.showSection !== false) && <EventsAbout about={about} />}
 
       {/* ── Upcoming Events ── */}
-      {upcomingEvents?.showSection !== false && <EventsUpcoming upcomingEvents={upcomingEvents} />}
+      {(isPreview || upcomingEvents?.showSection !== false) && <EventsUpcoming upcomingEvents={upcomingEvents} />}
 
       {/* ── Highlighted Programs (Carousel) ── */}
-      {highlightedPrograms?.showSection !== false && (
+      {(isPreview || highlightedPrograms?.showSection !== false) && (
         <EventsCarousel
           highlightedPrograms={highlightedPrograms}
           carouselIndex={carouselIndex}
@@ -98,7 +100,7 @@ const EventsPage = () => {
       )}
 
       {/* ── Essence of Culture ── */}
-      {essenceOfCulture?.showSection !== false && (
+      {(isPreview || essenceOfCulture?.showSection !== false) && (
         <EventsEssence
           essenceOfCulture={essenceOfCulture}
           activeTab={activeTab}
@@ -107,10 +109,10 @@ const EventsPage = () => {
       )}
 
       {/* ── Stay Connected ── */}
-      {stayConnected?.showSection !== false && <EventsStayConnected stayConnected={stayConnected} />}
+      {(isPreview || stayConnected?.showSection !== false) && <EventsStayConnected stayConnected={stayConnected} />}
 
       {/* ── Moments Captured ── */}
-      {momentsCaptured?.showSection !== false && <EventsMoments momentsCaptured={momentsCaptured} />}
+      {(isPreview || momentsCaptured?.showSection !== false) && <EventsMoments momentsCaptured={momentsCaptured} />}
 
       {/* Custom Events Footer */}
       <EventsFooter footerGraphic={footerGraphic} />

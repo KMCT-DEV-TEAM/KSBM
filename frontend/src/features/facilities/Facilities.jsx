@@ -86,7 +86,7 @@ const Facilities = () => {
 
           {/* Pattern Separator */}
 
-          {(!previewSection || previewSection === 'resources') && data?.institutionalResources?.showSection !== false && (
+          {(!previewSection || previewSection === 'resources') && (previewSection || data?.institutionalResources?.showSection !== false) && (
             <InstitutionalResourcesSection
               headerData={data?.institutionalResources}
               libraryData={data?.library}
@@ -95,7 +95,7 @@ const Facilities = () => {
           )}
 
         {/* Pattern Separator */}
-        {(!previewSection || previewSection === 'clubs') && data?.clubs?.showSection !== false && (
+        {(!previewSection || previewSection === 'clubs') && (previewSection || data?.clubs?.showSection !== false) && (
           <>
             <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-10">
               <div className="flex items-center justify-center gap-4 w-full">

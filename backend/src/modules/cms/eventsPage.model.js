@@ -8,6 +8,7 @@ const eventsPageSchema = new mongoose.Schema(
       backgroundImage: { type: String, default: '/assets/Images/Group 250.png' }
     },
     about: {
+      showSection: { type: Boolean, default: true },
       subheading: { type: String, default: 'About' },
       heading: { type: String, default: 'THE SPIRIT OF CULTURE' },
       paragraph1: { type: String, default: 'Discover a celebration where creativity knows no limits and every performance tells a story worth remembering. Kaleido is more than a cultural festival—it\'s a vibrant platform where passion meets purpose, traditions blend with innovation, and talent shines without boundaries. Bringing together students, artists, performers, and creative minds from diverse backgrounds, the festival transforms the campus into a spectacular stage filled with energy, color, and inspiration.' },

@@ -217,7 +217,7 @@ const FacilityPage = () => {
         )}
 
         {/* 2. About Section */}
-        {(!previewSection || previewSection === 'about') && about?.showSection !== false && (about?.heading || about?.paragraphs?.length > 0 || about?.image) && (
+        {(!previewSection || previewSection === 'about') && (previewSection || about?.showSection !== false) && (about?.heading || about?.paragraphs?.length > 0 || about?.image) && (
           <section className="py-10 sm:py-20 bg-white relative overflow-hidden">
             {/* Pattern Top Right */}
             <div className="absolute top-0 right-0 opacity-10 pointer-events-none">
@@ -270,7 +270,7 @@ const FacilityPage = () => {
         )}
 
         {/* 3. Activities Section */}
-        {(!previewSection || previewSection === 'activities') && activities?.showSection !== false && activities?.items?.length > 0 && (
+        {(!previewSection || previewSection === 'activities') && (previewSection || activities?.showSection !== false) && activities?.items?.length > 0 && (
           <section className="py-10 sm:py-20 bg-gray-50/80">
             <div className="w-[90%] max-w-[1440px] mx-auto text-center">
               <motion.h3
@@ -326,7 +326,7 @@ const FacilityPage = () => {
         )}
 
         {/* 4. Faculty Section */}
-        {(!previewSection || previewSection === 'faculty') && faculty?.showSection !== false && faculty?.members?.length > 0 && (
+        {(!previewSection || previewSection === 'faculty') && (previewSection || faculty?.showSection !== false) && faculty?.members?.length > 0 && (
           <section className="py-10 sm:py-20 bg-white relative">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1440px] h-[1px] bg-gray-200/50 -z-10" />
 
@@ -381,7 +381,7 @@ const FacilityPage = () => {
         )}
 
         {/* 5. Gallery Section */}
-        {(!previewSection || previewSection === 'gallery') && gallery?.showSection !== false && gallery?.images?.length > 0 && (
+        {(!previewSection || previewSection === 'gallery') && (previewSection || gallery?.showSection !== false) && gallery?.images?.length > 0 && (
           <section
             className="py-12 sm:py-24 bg-[#0b1238] relative text-white overflow-hidden"
             style={{
