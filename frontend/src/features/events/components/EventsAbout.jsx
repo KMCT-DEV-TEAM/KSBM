@@ -85,7 +85,7 @@ const EventsAbout = ({ about }) => {
           {/* Buttons */}
           <div className="flex flex-wrap items-center gap-5 mt-6 relative z-10">
             {data.brochureUrl ? (
-              <a href={data.brochureUrl} target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-md bg-gradient-to-r from-[#e74694] to-[#f57451] text-white font-semibold text-sm hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(231,70,148,0.4)]">
+              <a href={data.brochureUrl} download target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-md bg-gradient-to-r from-[#e74694] to-[#f57451] text-white font-semibold text-sm hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(231,70,148,0.4)]">
                 Event Brochure
               </a>
             ) : (
@@ -94,7 +94,7 @@ const EventsAbout = ({ about }) => {
               </button>
             )}
             {data.calendarUrl ? (
-              <a href={data.calendarUrl} target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-md border-[1.5px] border-[#e74694]/70 hover:border-[#e74694] text-white font-semibold text-sm hover:bg-[#e74694]/10 transition-colors duration-300">
+              <a href={data.calendarUrl} download target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-md border-[1.5px] border-[#e74694]/70 hover:border-[#e74694] text-white font-semibold text-sm hover:bg-[#e74694]/10 transition-colors duration-300">
                 Download Calendar
               </a>
             ) : (
