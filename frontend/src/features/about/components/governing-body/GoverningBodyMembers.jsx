@@ -38,7 +38,7 @@ const GoverningBodyMembers = ({ data }) => {
     }
   }, [data]);
 
-  if (data?.showMembers === false) return null;
+  if (data?.showMembers === false && !data?.previewType) return null;
 
   return (
     <section className="pb-20 w-[98%] max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">

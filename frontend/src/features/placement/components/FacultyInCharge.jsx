@@ -2,9 +2,13 @@ import React from 'react';
 import { resolveImage } from '../../../utils/resolveImage';
 import { motion } from 'framer-motion';
 
+const defaultFaculty = [
+  { name: 'Faculty In Charge', designation: 'Placement Officer', image: '/assets/Images/placements/achiever_1.png' }
+];
+
 const FacultyInCharge = ({ data }) => {
-  if (!data || !data.items || data.items.length === 0) return null;
-  const facultyMembers = data.items;
+  if (data?.showSection === false && !data?.isPreview) return null;
+  const facultyMembers = (data?.items && data.items.length > 0) ? data.items : defaultFaculty;
 
   return (
     <section className="py-16 md:py-24 bg-white overflow-hidden">

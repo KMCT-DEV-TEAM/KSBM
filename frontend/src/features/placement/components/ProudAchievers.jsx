@@ -10,7 +10,7 @@ const defaultAchievers = [
 ];
 
 const ProudAchievers = ({ data }) => {
-  if (data?.showSection === false) return null;
+  if (data?.showSection === false && !data?.isPreview) return null;
 
   const achievers = (data?.items && data.items.length > 0) ? data.items : defaultAchievers;
   return (

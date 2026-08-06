@@ -6,11 +6,16 @@ import ManagementDeskMembers from './components/management-desk/ManagementDeskMe
 import Loader from '../../components/Loader';
 import api from '../../api/axios';
 
-const ManagementDesk = () => {
-  const [data, setData] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+const ManagementDesk = ({ previewData }) => {
+  const [data, setData] = useState(previewData || null);
+  const [isLoaded, setIsLoaded] = useState(!!previewData);
 
   useEffect(() => {
+    if (previewData) {
+      setData(previewData);
+      return;
+    }
+
     let windowLoaded = document.readyState === 'complete';
     let dataLoaded = false;
 
@@ -51,20 +56,22 @@ const ManagementDesk = () => {
       window.removeEventListener('load', handleWindowLoad);
       clearTimeout(fallback);
     };
-  }, []);
+  }, [previewData]);
 
   return (
     <>
-      <div 
-        className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-      >
-        <Loader fullScreen={false} />
-      </div>
+      {!previewData && (
+        <div 
+          className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        >
+          <Loader fullScreen={false} />
+        </div>
+      )}
 
       <div className="bg-[#fcfcfd] min-h-screen">
-        {(data?.showHero !== false) && <ManagementDeskHero data={data} />}
-        {(data?.showIntro !== false) && <ManagementDeskIntro data={data} />}
-        {(data?.showMembers !== false) && <ManagementDeskMembers data={data} />}
+        {(!!previewData || data?.showHero !== false) && <ManagementDeskHero data={data} />}
+        {(!!previewData || data?.showIntro !== false) && <ManagementDeskIntro data={data} />}
+        {(!!previewData || data?.showMembers !== false) && <ManagementDeskMembers data={data} />}
       </div>
     </>
   );

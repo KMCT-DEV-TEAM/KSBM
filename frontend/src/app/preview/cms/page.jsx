@@ -33,9 +33,9 @@ import EventsMoments from '../../../features/events/components/EventsMoments';
 
 const ManagementDesk = ({ previewData }) => (
   <>
-    {previewData.showHero && (!previewData.previewType || previewData.previewType === 'hero') && <ManagementDeskHero data={previewData} />}
-    {previewData.showIntro && (!previewData.previewType || previewData.previewType === 'intro') && <ManagementDeskIntro data={previewData} />}
-    {previewData.showMembers && (!previewData.previewType || previewData.previewType === 'members') && <ManagementDeskMembers data={previewData} />}
+    {(!previewData.previewType || previewData.previewType === 'hero') && <ManagementDeskHero data={previewData} />}
+    {(!previewData.previewType || previewData.previewType === 'intro') && <ManagementDeskIntro data={previewData} />}
+    {(!previewData.previewType || previewData.previewType === 'members') && <ManagementDeskMembers data={previewData} />}
   </>
 );
 
