@@ -18,6 +18,20 @@ const Toast = Swal.mixin({
   timerProgressBar: true,
 });
 
+const defaultListOne = [
+  { title: 'Dedicated Placement Cell' },
+  { title: 'Industry Mentorship Programs' },
+  { title: 'Group Discussion Training' },
+  { title: 'Internship Assistance' },
+];
+
+const defaultListTwo = [
+  { title: 'Mock Interviews' },
+  { title: 'Aptitude Test Preparation' },
+  { title: 'Corporate Guest Lectures' },
+  { title: 'Personality Development' },
+];
+
 const defaultPlacementData = {
   hero: {
     badge: 'CAREER & PLACEMENTS',
@@ -1008,8 +1022,8 @@ const ManagePlacementPage = () => {
                     <h3 className="font-semibold text-gray-800">Feature List 1</h3>
                     <button onClick={() => openModal('add', 'excellenceSupportListOne')} className="text-primary hover:text-primary/80"><Plus className="w-5 h-5" /></button>
                   </div>
-                  <Reorder.Group axis="y" values={data.excellenceSupport.listOne || []} onReorder={(items) => updateArrayItems('excellenceSupport', items, 'listOne')} className="space-y-2">
-                    {(data.excellenceSupport.listOne || []).map((item, idx) => (
+                  <Reorder.Group axis="y" values={(data.excellenceSupport?.listOne?.length > 0) ? data.excellenceSupport.listOne : defaultListOne} onReorder={(items) => updateArrayItems('excellenceSupport', items, 'listOne')} className="space-y-2">
+                    {((data.excellenceSupport?.listOne?.length > 0) ? data.excellenceSupport.listOne : defaultListOne).map((item, idx) => (
                       <DraggableItemCard 
                         key={item.uuid || idx} item={item} index={idx} type="excellenceSupportListOne"
                         onEdit={(i) => openModal('edit', 'excellenceSupportListOne', i)} onDelete={() => handleDeleteItem('excellenceSupportListOne', idx)} 
@@ -1023,8 +1037,8 @@ const ManagePlacementPage = () => {
                     <h3 className="font-semibold text-gray-800">Feature List 2</h3>
                     <button onClick={() => openModal('add', 'excellenceSupportListTwo')} className="text-primary hover:text-primary/80"><Plus className="w-5 h-5" /></button>
                   </div>
-                  <Reorder.Group axis="y" values={data.excellenceSupport.listTwo || []} onReorder={(items) => updateArrayItems('excellenceSupport', items, 'listTwo')} className="space-y-2">
-                    {(data.excellenceSupport.listTwo || []).map((item, idx) => (
+                  <Reorder.Group axis="y" values={(data.excellenceSupport?.listTwo?.length > 0) ? data.excellenceSupport.listTwo : defaultListTwo} onReorder={(items) => updateArrayItems('excellenceSupport', items, 'listTwo')} className="space-y-2">
+                    {((data.excellenceSupport?.listTwo?.length > 0) ? data.excellenceSupport.listTwo : defaultListTwo).map((item, idx) => (
                       <DraggableItemCard 
                         key={item.uuid || idx} item={item} index={idx} type="excellenceSupportListTwo"
                         onEdit={(i) => openModal('edit', 'excellenceSupportListTwo', i)} onDelete={() => handleDeleteItem('excellenceSupportListTwo', idx)} 

@@ -369,7 +369,7 @@ const FacilityPage = () => {
                         <span className="text-sm">No Image</span>
                       </div>
                     )}
-                    <div className="absolute bottom-6 left-0 bg-white py-2 pl-4 pr-5 rounded-r-xl  max-w-[90%]">
+                    <div style={{ borderRadius: "0 12px 12px 0" }} className="absolute bottom-6 left-0 bg-white py-2 pl-4 pr-5 max-w-[90%]">
                       <h4 className="font-bold text-[#2b2b68] text-base mb-0.5 whitespace-nowrap">{member.name}</h4>
                       <p className="text-xs text-gray-600 font-medium whitespace-nowrap">{member.role}</p>
                     </div>

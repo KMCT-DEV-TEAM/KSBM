@@ -2,9 +2,17 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { resolveImage } from '../../../utils/resolveImage';
 
+const defaultAchievers = [
+  { id: 'def1', name: 'Pratik Patil', program: 'MBA 2022-24', company: 'Google', role: 'Business Analyst', companyLogo: '/assets/Images/placements/google_logo.svg', image: '/assets/Images/placements/achiever_1.png' },
+  { id: 'def2', name: 'Megha Sharma', program: 'MBA 2022-24', company: 'Microsoft', role: 'Product Manager', companyLogo: '/assets/Images/placements/microsoft_logo.svg', image: '/assets/Images/placements/achiever_2.png' },
+  { id: 'def3', name: 'Rohit Verma', program: 'MBA 2022-24', company: 'Infosys', role: 'Software Engineer', companyLogo: '/assets/Images/placements/infosys_logo.svg', image: '/assets/Images/placements/achiever_1.png' },
+  { id: 'def4', name: 'Neha Gupta', program: 'MBA 2022-24', company: 'Cognizant', role: 'Consultant', companyLogo: '/assets/Images/placements/cognizant_logo.svg', image: '/assets/Images/placements/achiever_2.png' },
+];
+
 const ProudAchievers = ({ data }) => {
-  if (!data || !data.items || data.items.length === 0) return null;
-  const achievers = data.items;
+  if (data?.showSection === false) return null;
+
+  const achievers = (data?.items && data.items.length > 0) ? data.items : defaultAchievers;
   return (
     <section className="py-16 md:py-24 bg-gradient-to-br from-primary/95 to-primary/50 relative overflow-hidden">
       {/* Grid Pattern Background */}
@@ -29,7 +37,7 @@ const ProudAchievers = ({ data }) => {
 
         {data?.showHeading !== false && (
           <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }} className="flex items-center gap-4 mb-12">
-            <h2 className="text-2xl md:text-3xl font-semibold text-white">{data.title}</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold text-white">{data?.title || 'Proud Achievers'}</h2>
             <div className="flex-1 h-px bg-white/20"></div>
           </motion.div>
         )}
@@ -64,7 +72,7 @@ const ProudAchievers = ({ data }) => {
                     />
 
                     {/* Overlay Box matching screenshot */}
-                    <div className="absolute bottom-6 left-0 bg-white/70 backdrop-blur-md py-3 px-5 pr-12 rounded-r-[18px] shadow-lg border border-white/50 border-l-0">
+                    <div style={{ borderRadius: "0 12px 12px 0" }} className="absolute bottom-6 left-0 bg-white/70 backdrop-blur-md py-3 px-5 pr-12  shadow-lg border border-white/50 ">
                       <div className="flex items-center gap-2 mb-1">
                         <h4 className="text-gray-900 font-semibold text-[14px] leading-tight">Placed at</h4>
                         <img src={resolveImage(achiever.companyLogo)} alt={achiever.company} className="h-4 max-w-[80px] object-contain" />
@@ -104,7 +112,7 @@ const ProudAchievers = ({ data }) => {
                     />
 
                     {/* Overlay Box matching screenshot */}
-                    <div className="absolute bottom-6 left-0 bg-white/70 backdrop-blur-md py-3 px-5 pr-12 rounded-r-[18px] shadow-lg border border-white/50 border-l-0">
+                    <div style={{ borderRadius: "0 12px 12px 0" }} className="absolute bottom-6 left-0 bg-white/70 backdrop-blur-md py-3 px-5 pr-12  shadow-lg border border-white/50 ">
                       <div className="flex items-center gap-2 mb-1">
                         <h4 className="text-gray-900 font-semibold text-[14px] leading-tight">Placed at</h4>
                         <img src={resolveImage(achiever.companyLogo)} alt={achiever.company} className="h-4 max-w-[80px] object-contain" />
