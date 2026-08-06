@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { X } from 'lucide-react';
+import { X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const AdminModal = ({ isOpen, onClose, title, onSave, isSaveDisabled = false, children }) => {
+const AdminModal = ({ isOpen, onClose, title, onSave, isSaving = false, isSaveDisabled = false, children }) => {
   const [mounted, setMounted] = useState(false);
+  const [internalSaving, setInternalSaving] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleInternalSave = async (e) => {
+    e.preventDefault();
+    if (isSaving || internalSaving || isSaveDisabled) return;
+    
+    setInternalSaving(true);
+    try {
+      // Brief visual delay to show the loading spinner as requested for UX
+      await new Promise(resolve => setTimeout(resolve, 400));
+      await onSave();
+    } finally {
+      setInternalSaving(false);
+    }
+  };
 
   if (!mounted) return null;
 
@@ -49,15 +64,18 @@ const AdminModal = ({ isOpen, onClose, title, onSave, isSaveDisabled = false, ch
             <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 rounded-b-2xl">
               <button
                 onClick={onClose}
-                className="px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-200 bg-gray-100 rounded-xl transition-colors"
+                disabled={isSaving || internalSaving}
+                className="px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-200 bg-gray-100 rounded-xl transition-colors disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
-                onClick={onSave}
-                className="px-5 py-2.5 text-sm font-medium text-white bg-primary hover:bg-[#151c48] shadow-md rounded-xl transition-all"
+                onClick={handleInternalSave}
+                disabled={isSaving || internalSaving || isSaveDisabled}
+                className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-primary hover:bg-[#151c48] shadow-md rounded-xl transition-all disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Save Changes
+                {(isSaving || internalSaving) ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                {(isSaving || internalSaving) ? 'Saving...' : 'Save Changes'}
               </button>
             </div>
           </motion.div>
