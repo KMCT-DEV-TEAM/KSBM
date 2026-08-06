@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const EventsEssence = ({ essenceOfCulture }) => {
-  const displayItems = essenceOfCulture?.items?.length > 0 ? essenceOfCulture.items : [
+  const rawItems = essenceOfCulture?.items?.length > 0 ? essenceOfCulture.items : [
     { category: 'Music', img: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop', description: 'Feel the rhythm, embrace the energy, and immerse yourself in the electrifying world of music at Kaleido.', programs: ['Solo Light Music', 'Solo Singing Classical', 'Solo Singing Western', 'Group Song Malayalam', 'Group Song Western', 'Naadan Pattu'] },
     { category: 'Dance', img: 'https://images.unsplash.com/photo-1540039155732-6761b3464195?q=80&w=800&auto=format&fit=crop', description: 'Immerse yourself in mesmerizing dance performances and high-energy choreographies.', programs: ['Solo Dance Classical', 'Solo Dance Folk', 'Group Dance Western', 'Group Dance Folk'] },
     { category: 'Fine Arts', img: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=800&auto=format&fit=crop', description: 'Explore expressive fine arts, photography, fashion, and creative masterpieces.', programs: ['Pencil Drawing', 'Watercolor Painting', 'Oil Painting', 'Photography', 'Collage Making'] },
@@ -12,6 +12,17 @@ const EventsEssence = ({ essenceOfCulture }) => {
     { category: 'Literacy', img: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=800&auto=format&fit=crop', description: 'Celebrate the spoken and written word with engaging debates, storytelling, and poetic recitations.', programs: ['Debate', 'Elocution', 'Poetry Writing', 'Story Writing'] },
     { category: 'Fashion & Media', img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop', description: 'Experience avant-garde fashion shows, conceptual photo shoots, and cinematic storytelling.', programs: ['Fashion Show', 'Spot Photography', 'Reels Contest', 'Short Film Making'] }
   ];
+
+  const displayItems = React.useMemo(() => {
+    const seen = new Set();
+    return rawItems.filter(item => {
+      const key = (item.category || '').trim().toLowerCase();
+      if (!key) return true;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [rawItems]);
 
   const [selectedDetail, setSelectedDetail] = useState(displayItems[0]?.category || 'Music');
   const [startIndex, setStartIndex] = useState(0);
@@ -83,9 +94,9 @@ const EventsEssence = ({ essenceOfCulture }) => {
         </div>
 
 
-        {/* Gradient Navigation Controls (Left Down Side) visible only when total images > 5 */}
+        {/* Gradient Navigation Controls (Left Down Side) visible only when total images > 5 on Desktop */}
         {displayItems.length > 5 && (
-          <div className="flex flex-col justify-end items-start mb-35 gap-3 ">
+          <div className="hidden md:flex flex-col justify-end items-start mb-35 gap-3">
             <button
               onClick={handleScrollUp}
               disabled={startIndex === 0}
@@ -137,8 +148,8 @@ const EventsEssence = ({ essenceOfCulture }) => {
                   >
                     <img src={item.img || "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop"} alt={item.category || "Culture"} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent pointer-events-none"></div>
-                    <div className="absolute bottom-3 left-4 pointer-events-none z-10">
-                      <h3 className={`text-sm md:text-base font-semibold uppercase tracking-wider ${selectedDetail === item.category ? 'text-pink-400 font-bold' : 'text-white'}`}>{item.category}</h3>
+                    <div className="absolute bottom-3 left-4 right-4 pointer-events-none z-10">
+                      <h3 className={`text-sm md:text-base font-semibold uppercase tracking-wider whitespace-pre-line break-words ${selectedDetail === item.category ? 'text-pink-400 font-bold' : 'text-white'}`}>{item.category}</h3>
                     </div>
                   </motion.div>
                 </div>
@@ -162,8 +173,8 @@ const EventsEssence = ({ essenceOfCulture }) => {
                 >
                   <img src={item.img || "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop"} alt={item.category || "Culture"} className="w-full h-full object-cover" />
                   <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent pointer-events-none"></div>
-                  <div className="absolute bottom-3 left-4 pointer-events-none z-10">
-                    <h3 className="text-lg font-bold uppercase tracking-wider text-pink-400">{item.category}</h3>
+                  <div className="absolute bottom-3 left-4 right-4 pointer-events-none z-10">
+                    <h3 className="text-lg font-bold uppercase tracking-wider text-pink-400 whitespace-pre-line break-words">{item.category}</h3>
                   </div>
                 </motion.div>
               )
@@ -219,14 +230,14 @@ const EventsEssence = ({ essenceOfCulture }) => {
           >
             {/* Heading Row */}
             <div className="flex items-center gap-4 mb-6">
-              <h3 className="text-xl md:text-2xl font-bold uppercase tracking-widest whitespace-nowrap leading-none">
+              <h3 className="text-xl md:text-2xl font-bold uppercase tracking-widest leading-snug whitespace-pre-line break-words">
                 <span style={{
                   background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
                 }}>{selectedDetail}</span>{' '}
-                <span style={{
+                <span className="inline-block" style={{
                   background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",

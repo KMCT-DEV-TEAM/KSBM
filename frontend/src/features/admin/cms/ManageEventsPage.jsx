@@ -154,8 +154,13 @@ const ManageEventsPage = () => {
   };
 
   const handleModalSave = () => {
-    if (!addModalType) return;
+    if (!addModalType || !isAddModalOpen) return;
     const { section, key } = addModalType;
+    
+    // Lock modal to prevent duplicate additions on fast/multiple clicks
+    setAddModalType(null);
+    setIsAddModalOpen(false);
+
     setFormData(prev => {
       const arr = [...(prev[section][key] || [])];
       const newIndex = arr.length;
@@ -167,7 +172,7 @@ const ManageEventsPage = () => {
         });
       }
       
-      arr.push({ ...modalData, img: modalImageUrl || modalData.img });
+      arr.push({ ...modalData, img: modalImageUrl || modalData.img || '' });
       
       return {
         ...prev,
@@ -177,7 +182,10 @@ const ManageEventsPage = () => {
         }
       };
     });
-    setIsAddModalOpen(false);
+
+    setModalData({});
+    setModalFile(null);
+    setModalImageUrl('');
   };
 
   const handleDragStart = (e, section, key, index) => {
@@ -265,7 +273,17 @@ const ManageEventsPage = () => {
             essenceOfCulture: { 
               ...prev.essenceOfCulture, 
               ...(d.essenceOfCulture || {}),
-              items: d.essenceOfCulture?.items?.length > 0 ? d.essenceOfCulture.items : prev.essenceOfCulture.items
+              items: (() => {
+                const raw = d.essenceOfCulture?.items?.length > 0 ? d.essenceOfCulture.items : prev.essenceOfCulture.items;
+                const seen = new Set();
+                return raw.filter(item => {
+                  const key = (item.category || '').trim().toLowerCase();
+                  if (!key) return true;
+                  if (seen.has(key)) return false;
+                  seen.add(key);
+                  return true;
+                });
+              })()
             },
             stayConnected: { 
               ...prev.stayConnected, 
@@ -289,15 +307,27 @@ const ManageEventsPage = () => {
   };
 
   const handleSave = async () => {
+    if (saving) return;
     await confirmAction({
       title: 'Save Changes?',
       message: 'Are you sure you want to save these changes to the Events website?',
       confirmText: 'Yes, save it!',
       variant: 'primary',
       action: async () => {
+        if (saving) return;
         setSaving(true);
         try {
           let updatedData = JSON.parse(JSON.stringify(formData));
+          if (updatedData.essenceOfCulture?.items?.length > 0) {
+            const seen = new Set();
+            updatedData.essenceOfCulture.items = updatedData.essenceOfCulture.items.filter(item => {
+              const key = (item.category || '').trim().toLowerCase();
+              if (!key) return true;
+              if (seen.has(key)) return false;
+              seen.add(key);
+              return true;
+            });
+          }
           for (const upload of pendingUploads) {
             const uploadedUrl = await uploadDeferredImage({ file: upload.file }, '/upload/events');
             if (uploadedUrl) {
@@ -726,9 +756,9 @@ const ManageEventsPage = () => {
                         <button onClick={() => handleRemoveArrayItem('essenceOfCulture', 'items', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-gray-500">Category Name <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 30 chars)</span></label>
-                        <input type="text" maxLength={30} value={item.category} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'category', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="Category (e.g. Dance)" />
-                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 30</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.category || '')).length}/30</span></div>
+                        <label className="text-xs font-semibold text-gray-500">Category Name <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars, supports line breaks)</span></label>
+                        <textarea rows={2} maxLength={50} value={item.category} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'category', e.target.value)} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="Category (e.g. Dance)" />
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.category || '')).length}/50</span></div>
                       </div>
                       <div>
                         <label className="text-xs font-semibold text-gray-500">Category Description <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 100 chars)</span></label>
@@ -859,8 +889,8 @@ const ManageEventsPage = () => {
                 {addModalType?.section === 'essenceOfCulture' && (
                   <div className="space-y-4">
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-gray-500">Category Name <span className="text-gray-400 font-normal ml-2">(Max 30 chars)</span></label>
-                      <input type="text" maxLength={30} value={modalData.category} onChange={e => setModalData({...modalData, category: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50" placeholder="Category (e.g. Dance)" />
+                      <label className="text-xs font-semibold text-gray-500">Category Name <span className="text-gray-400 font-normal ml-2">(Max 50 chars, supports line breaks)</span></label>
+                      <textarea rows={2} maxLength={50} value={modalData.category} onChange={e => setModalData({...modalData, category: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50" placeholder="Category (e.g. Dance)" />
                     </div>
                     <div className="space-y-1">
                       <label className="text-xs font-semibold text-gray-500">Category Description <span className="text-gray-400 font-normal ml-2">(Max 100 chars)</span></label>
