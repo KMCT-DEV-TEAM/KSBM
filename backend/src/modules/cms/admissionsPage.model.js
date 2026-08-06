@@ -126,6 +126,10 @@ const admissionsPageSchema = new mongoose.Schema(
     // 4. Eligibility Standards Section
     eligibilityHeading: { type: String, default: 'Program Requirements' },
     eligibilitySubtitle: { type: String, default: 'Eligibility Criteria' },
+    scholarshipNote: {
+      type: String,
+      default: 'Scholarships available for merit and economically disadvantaged students.'
+    },
     feeStructure: {
       amount: { type: String, default: '₹1,50,000' },
       period: { type: String, default: 'per semester' }
