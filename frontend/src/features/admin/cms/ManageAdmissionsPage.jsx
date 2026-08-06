@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Trash2, ArrowUp, ArrowDown, Award, Sparkles, Route, GraduationCap, HelpCircle, FileText, Eye, Monitor, Tablet, Smartphone, X } from 'lucide-react';
+import { Plus, Trash2, Edit2, ArrowUp, ArrowDown, Award, Sparkles, Route, GraduationCap, HelpCircle, FileText, Eye, Monitor, Tablet, Smartphone, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Swal from 'sweetalert2';
 import api from '../../../api/axios';
@@ -10,6 +10,7 @@ import SingleImageUploader from './components/SingleImageUploader';
 import SingleDocumentUploader from './components/SingleDocumentUploader';
 import { uploadDeferredImage } from './utils/uploadHelper';
 import PageHeader from './components/PageHeader';
+import AdminModal from './components/AdminModal';
 
 const Toast = Swal.mixin({
   toast: true, position: 'top-end',
@@ -38,6 +39,14 @@ const ManageAdmissionsPage = () => {
   const iframeRef = useRef(null);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [previewMode, setPreviewMode] = useState('desktop');
+
+  // ── Modal State ───────────────────────────────────────────
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState(''); // 'journey', 'faq', 'progString'
+  const [modalIndex, setModalIndex] = useState(null); // null means "Add"
+  const [modalProg, setModalProg] = useState(''); // 'MBA' or 'BBA' (used for eligibility/highlights)
+  const [modalKey, setModalKey] = useState(''); // 'eligibilityCriteria' or 'programHighlights'
+  const [modalData, setModalData] = useState({});
 
   const tabs = [
     { id: 'hero',        label: 'Hero Banner',    icon: <FileText className="w-4 h-4" /> },
@@ -415,6 +424,80 @@ const ManageAdmissionsPage = () => {
     [u[i],u[t]]=[u[t],u[i]]; setFaqs(u);
   };
 
+  // ── Modal Handlers ──────────────────────────────────────
+  const handleOpenModal = (type, index = null, prog = '', key = '') => {
+    setModalType(type);
+    setModalIndex(index);
+    setModalProg(prog);
+    setModalKey(key);
+    
+    if (type === 'journey') {
+      if (index !== null) {
+        setModalData({ ...journeySteps[index] });
+      } else {
+        setModalData({ step: String(journeySteps.length+1).padStart(2,'0'), title: '', desc: '', icon: 'CheckCircle2' });
+      }
+    } else if (type === 'faq') {
+      if (index !== null) {
+        setModalData({ ...faqs[index] });
+      } else {
+        setModalData({ question: '', answer: '' });
+      }
+    } else if (type === 'progString') {
+      if (index !== null) {
+        const obj = prog === 'MBA' ? mba : bba;
+        setModalData({ value: obj[key][index] });
+      } else {
+        setModalData({ value: '' });
+      }
+    }
+    
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setModalData({});
+  };
+
+  const handleSaveModal = () => {
+    if (modalType === 'journey') {
+      if (!modalData.title?.trim() || !modalData.desc?.trim()) {
+        Toast.fire({ icon: 'warning', title: 'Please fill all fields' });
+        return;
+      }
+      if (modalIndex !== null) {
+        const u=[...journeySteps]; u[modalIndex] = { ...u[modalIndex], ...modalData }; setJourneySteps(u);
+      } else {
+        setJourneySteps([...journeySteps, { ...modalData }]);
+      }
+    } else if (modalType === 'faq') {
+      if (!modalData.question?.trim() || !modalData.answer?.trim()) {
+        Toast.fire({ icon: 'warning', title: 'Please fill all fields' });
+        return;
+      }
+      if (modalIndex !== null) {
+        const u=[...faqs]; u[modalIndex] = { ...u[modalIndex], ...modalData }; setFaqs(u);
+      } else {
+        setFaqs([...faqs, { ...modalData }]);
+      }
+    } else if (modalType === 'progString') {
+      if (!modalData.value?.trim()) {
+        Toast.fire({ icon: 'warning', title: 'Value cannot be empty' });
+        return;
+      }
+      if (modalIndex !== null) {
+        updateProgStringItem(modalProg, modalKey, modalIndex, modalData.value);
+      } else {
+        const o = modalProg === 'MBA' ? { ...mba } : { ...bba };
+        const s = modalProg === 'MBA' ? setMba : setBba;
+        o[modalKey] = [...(o[modalKey] || []), modalData.value];
+        s(o);
+      }
+    }
+    handleCloseModal();
+  };
+
   const inputCls  = "w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none";
   const panelCls  = "bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100";
   const panelHdr  = "flex justify-between items-center mb-6 border-b pb-3";
@@ -558,8 +641,8 @@ const ManageAdmissionsPage = () => {
                 <div className="pt-4 border-t space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-sm font-bold uppercase text-gray-700">Steps ({journeySteps.length})</h3>
-                    <button type="button" onClick={addJourneyStep} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-blue-900">
-                      <Plus className="w-3.5 h-3.5" /> Add Step
+                    <button type="button" onClick={() => handleOpenModal('journey')} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all disabled:opacity-50">
+                      <Plus className="w-4 h-4" /> Add Step
                     </button>
                   </div>
                   <div className="space-y-3">
@@ -569,12 +652,17 @@ const ManageAdmissionsPage = () => {
                           <button type="button" onClick={()=>moveJourneyStep(idx,'up')} disabled={idx===0} className={`p-1.5 rounded border ${idx===0?'text-gray-300 border-gray-100 cursor-not-allowed':'text-gray-600 border-gray-200 hover:bg-white'}`}><ArrowUp className="w-4 h-4" /></button>
                           <button type="button" onClick={()=>moveJourneyStep(idx,'down')} disabled={idx===journeySteps.length-1} className={`p-1.5 rounded border ${idx===journeySteps.length-1?'text-gray-300 border-gray-100 cursor-not-allowed':'text-gray-600 border-gray-200 hover:bg-white'}`}><ArrowDown className="w-4 h-4" /></button>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 flex-1 w-full">
-                          <div className="md:col-span-2"><label className="block text-[11px] font-bold text-gray-500 mb-1">Step #</label><input type="text" maxLength={10} value={step.step} onChange={e=>updateJourneyStep(idx,'step',e.target.value)} className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-bold" /><CharCounter text={step.step} limit={10} /></div>
-                          <div className="md:col-span-4"><label className="block text-[11px] font-bold text-gray-500 mb-1">Title</label><input type="text" maxLength={80} value={step.title} onChange={e=>updateJourneyStep(idx,'title',e.target.value)} className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-bold" /><CharCounter text={step.title} limit={80} /></div>
-                          <div className="md:col-span-6"><label className="block text-[11px] font-bold text-gray-500 mb-1">Description</label><textarea rows={2} maxLength={250} value={step.desc} onChange={e=>updateJourneyStep(idx,'desc',e.target.value)} className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium" /><CharCounter text={step.desc} limit={250} /></div>
+                        <div className="flex flex-col flex-1 ml-3">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded">Step {step.step}</span>
+                            <span className="text-sm font-bold text-gray-800">{step.title}</span>
+                          </div>
+                          <span className="text-xs text-gray-500 line-clamp-2">{step.desc}</span>
                         </div>
-                        <button type="button" onClick={()=>deleteJourneyStep(idx)} className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-xl transition-colors"><Trash2 className="w-5 h-5" /></button>
+                        <div className="flex items-center gap-1 shrink-0 ml-auto">
+                          <button type="button" onClick={()=>handleOpenModal('journey', idx)} className="text-blue-500 hover:text-blue-700 p-2 hover:bg-blue-50 rounded-xl transition-colors"><Edit2 className="w-5 h-5" /></button>
+                          <button type="button" onClick={()=>deleteJourneyStep(idx)} className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-xl transition-colors"><Trash2 className="w-5 h-5" /></button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -618,19 +706,19 @@ const ManageAdmissionsPage = () => {
                           <div><label className={fieldLabel}>Fee Amount</label><input type="text" maxLength={20} value={obj.feeStructure?.amount || ''} onChange={e=>setObj({...obj, feeStructure: {...obj.feeStructure, amount: e.target.value}})} className="w-full px-4 py-2 rounded-xl border border-gray-200 text-sm font-bold bg-white" /><CharCounter text={obj.feeStructure?.amount || ''} limit={20} /></div>
                           <div><label className={fieldLabel}>Fee Period</label><input type="text" maxLength={30} value={obj.feeStructure?.period || ''} onChange={e=>setObj({...obj, feeStructure: {...obj.feeStructure, period: e.target.value}})} className="w-full px-4 py-2 rounded-xl border border-gray-200 text-sm font-medium bg-white" /><CharCounter text={obj.feeStructure?.period || ''} limit={30} /></div>
                         </div>
-                        {[['eligibilityCriteria','Eligibility Criteria'],['programHighlights','Program Highlights']].map(([key,lbl])=>(
+                        {[['programHighlights','Program Highlights']].map(([key,lbl])=>(
                           <div key={key} className="space-y-3 pt-4 border-t">
                             <div className="flex items-center justify-between">
                               <label className="text-xs font-bold uppercase text-gray-700">{lbl}</label>
-                              <button type="button" onClick={()=>addProgStringItem(prog,key)} className="px-3 py-1 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 flex items-center gap-1"><Plus className="w-3.5 h-3.5" /> Add Item</button>
+                              <button type="button" onClick={()=>handleOpenModal('progString', null, prog, key)} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all disabled:opacity-50"><Plus className="w-4 h-4" /> Add Item</button>
                             </div>
                             {obj[key].map((str,i)=>(
-                              <div key={i}>
-                                <div className="flex items-center gap-2">
-                                  <input type="text" maxLength={250} value={str} onChange={e=>updateProgStringItem(prog,key,i,e.target.value)} className="flex-1 px-3 py-2 rounded-xl border border-gray-200 text-sm font-medium bg-white" />
-                                  <button type="button" onClick={()=>deleteProgStringItem(prog,key,i)} className="p-2 text-red-500 hover:text-red-700"><Trash2 className="w-4 h-4" /></button>
+                              <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-gray-100 bg-white shadow-sm">
+                                <span className="text-sm font-medium text-gray-700 flex-1 truncate pr-4">{str}</span>
+                                <div className="flex items-center gap-1 shrink-0">
+                                  <button type="button" onClick={()=>handleOpenModal('progString', i, prog, key)} className="p-1.5 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"><Edit2 className="w-4 h-4" /></button>
+                                  <button type="button" onClick={()=>deleteProgStringItem(prog,key,i)} className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
                                 </div>
-                                <CharCounter text={str} limit={250} />
                               </div>
                             ))}
                           </div>
@@ -683,7 +771,7 @@ const ManageAdmissionsPage = () => {
                 <div className="pt-4 border-t space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-sm font-bold uppercase text-gray-700">Frequently Asked Questions ({faqs.length})</h3>
-                    <button type="button" onClick={addFaq} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-blue-900"><Plus className="w-3.5 h-3.5" /> Add FAQ</button>
+                    <button type="button" onClick={() => handleOpenModal('faq')} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all disabled:opacity-50"><Plus className="w-4 h-4" /> Add FAQ</button>
                   </div>
                   <div className="space-y-3">
                     {faqs.map((faq,idx)=>(
@@ -692,11 +780,14 @@ const ManageAdmissionsPage = () => {
                           <button type="button" onClick={()=>moveFaq(idx,'up')} disabled={idx===0} className={`p-1.5 rounded border ${idx===0?'text-gray-300 border-gray-100 cursor-not-allowed':'text-gray-600 border-gray-200 hover:bg-white'}`}><ArrowUp className="w-4 h-4" /></button>
                           <button type="button" onClick={()=>moveFaq(idx,'down')} disabled={idx===faqs.length-1} className={`p-1.5 rounded border ${idx===faqs.length-1?'text-gray-300 border-gray-100 cursor-not-allowed':'text-gray-600 border-gray-200 hover:bg-white'}`}><ArrowDown className="w-4 h-4" /></button>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 flex-1 w-full">
-                          <div className="md:col-span-5"><label className="block text-[11px] font-bold text-gray-500 mb-1">Question</label><input type="text" maxLength={150} value={faq.question} onChange={e=>updateFaq(idx,'question',e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-bold bg-white" /><CharCounter text={faq.question} limit={150} /></div>
-                          <div className="md:col-span-7"><label className="block text-[11px] font-bold text-gray-500 mb-1">Answer</label><textarea rows={2} maxLength={500} value={faq.answer} onChange={e=>updateFaq(idx,'answer',e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs font-medium bg-white" /><CharCounter text={faq.answer} limit={500} /></div>
+                        <div className="flex flex-col flex-1 ml-3 overflow-hidden">
+                          <span className="text-sm font-bold text-gray-800 truncate mb-1">{faq.question}</span>
+                          <span className="text-xs text-gray-500 line-clamp-2">{faq.answer}</span>
                         </div>
-                        <button type="button" onClick={()=>deleteFaq(idx)} className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-xl transition-colors"><Trash2 className="w-5 h-5" /></button>
+                        <div className="flex items-center gap-1 shrink-0 ml-auto">
+                          <button type="button" onClick={()=>handleOpenModal('faq', idx)} className="text-blue-500 hover:text-blue-700 p-2 hover:bg-blue-50 rounded-xl transition-colors"><Edit2 className="w-5 h-5" /></button>
+                          <button type="button" onClick={()=>deleteFaq(idx)} className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-xl transition-colors"><Trash2 className="w-5 h-5" /></button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -707,6 +798,59 @@ const ManageAdmissionsPage = () => {
 
         </motion.div>
       </AnimatePresence>
+
+      {/* ── Add/Edit Modal ────────────────────────────────────── */}
+      <AdminModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title={modalIndex !== null ? `Edit ${modalType === 'journey' ? 'Step' : modalType === 'faq' ? 'FAQ' : 'Item'}` : `Add ${modalType === 'journey' ? 'Step' : modalType === 'faq' ? 'FAQ' : 'Item'}`}
+        onSave={handleSaveModal}
+      >
+        <div className="space-y-4">
+          {modalType === 'journey' && (
+            <>
+              <div>
+                <label className={fieldLabel}>Step Number</label>
+                <input type="text" maxLength={10} value={modalData.step || ''} onChange={e=>setModalData({...modalData, step: e.target.value})} className={inputCls} />
+                <CharCounter text={modalData.step} limit={10} />
+              </div>
+              <div>
+                <label className={fieldLabel}>Title</label>
+                <input type="text" maxLength={80} value={modalData.title || ''} onChange={e=>setModalData({...modalData, title: e.target.value})} className={inputCls} />
+                <CharCounter text={modalData.title} limit={80} />
+              </div>
+              <div>
+                <label className={fieldLabel}>Description</label>
+                <textarea rows={3} maxLength={250} value={modalData.desc || ''} onChange={e=>setModalData({...modalData, desc: e.target.value})} className={inputCls} />
+                <CharCounter text={modalData.desc} limit={250} />
+              </div>
+            </>
+          )}
+
+          {modalType === 'faq' && (
+            <>
+              <div>
+                <label className={fieldLabel}>Question</label>
+                <input type="text" maxLength={150} value={modalData.question || ''} onChange={e=>setModalData({...modalData, question: e.target.value})} className={inputCls} />
+                <CharCounter text={modalData.question} limit={150} />
+              </div>
+              <div>
+                <label className={fieldLabel}>Answer</label>
+                <textarea rows={4} maxLength={500} value={modalData.answer || ''} onChange={e=>setModalData({...modalData, answer: e.target.value})} className={inputCls} />
+                <CharCounter text={modalData.answer} limit={500} />
+              </div>
+            </>
+          )}
+
+          {modalType === 'progString' && (
+            <div>
+              <label className={fieldLabel}>Item Text</label>
+              <textarea rows={3} maxLength={250} value={modalData.value || ''} onChange={e=>setModalData({...modalData, value: e.target.value})} className={inputCls} />
+              <CharCounter text={modalData.value} limit={250} />
+            </div>
+          )}
+        </div>
+      </AdminModal>
     </div>
   );
 };
