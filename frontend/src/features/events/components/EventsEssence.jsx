@@ -236,22 +236,14 @@ const EventsEssence = ({ essenceOfCulture }) => {
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
-                }}>{selectedDetail}</span>{' '}
-                <span className="inline-block" style={{
-                  background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}>
-                  STAGE
-                </span>
+                }}>{selectedDetail}</span>
               </h3>
               <div className="flex-1 h-[1px] bg-pink-500/30"></div>
             </div>
 
             {/* Description */}
             <p className="text-gray-300 text-sm md:text-sm leading-loose mb-10">
-              {activeItem.description || `Feel the rhythm, embrace the energy, and immerse yourself in the electrifying world of ${(selectedDetail || '').toLowerCase()} at Kaleido. From soulful melodies and classical performances to high-energy bands, fusion acts, and live concerts, the ${selectedDetail} Stage brings together talented performers who create unforgettable moments through every note. Whether you're performing under the spotlight or cheering from the crowd, experience the power of ${(selectedDetail || '').toLowerCase()} as it unites voices, ignites emotions, and transforms the festival into a celebration of harmony, passion, and creativity. Join us for performances that resonate long after the final encore.`}
+              {activeItem.description || `Feel the rhythm, embrace the energy, and immerse yourself in the electrifying world of ${(selectedDetail || '').toLowerCase()} at Kaleido. From soulful melodies and classical performances to high-energy bands, fusion acts, and live concerts, the ${selectedDetail} brings together talented performers who create unforgettable moments through every note. Whether you're performing under the spotlight or cheering from the crowd, experience the power of ${(selectedDetail || '').toLowerCase()} as it unites voices, ignites emotions, and transforms the festival into a celebration of harmony, passion, and creativity. Join us for performances that resonate long after the final encore.`}
             </p>
 
             {/* Programs Grid */}
