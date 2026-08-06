@@ -199,7 +199,7 @@ const BlogDetailPage = ({ id }) => {
               transition={{ duration: 0.6 }}
               className="w-full h-[250px] sm:h-[350px] lg:h-[400px] rounded-[24px] overflow-hidden shadow-[0_20px_50px_rgba(32,38,88,0.15)]"
             >
-              <img src={article.image} alt={article.title} className="w-full h-full object-cover object-center" />
+              <img src={article.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800&auto=format&fit=crop'} alt={article.title} className="w-full h-full object-cover object-center" />
             </motion.div>
           </div>
         </div>
@@ -291,7 +291,7 @@ const BlogDetailPage = ({ id }) => {
                   {article.relatedArticles.map((rel, idx) => (
                     <Link href={`/blogs/${rel._id || rel.id}`} key={rel._id || rel.id || `rel-${idx}`} className="flex items-center gap-4 group cursor-pointer">
                       <div className="w-[85px] h-[75px] rounded-xl overflow-hidden shrink-0 shadow-sm">
-                        <img src={rel.image} alt={rel.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <img src={rel.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800&auto=format&fit=crop'} alt={rel.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                       </div>
                       <div className="flex-1">
                         <h5 className="text-[14px] font-semibold text-[#111827] leading-snug group-hover:text-primary transition-colors line-clamp-2 mb-1.5">

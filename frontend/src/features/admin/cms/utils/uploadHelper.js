@@ -9,7 +9,7 @@ import api from '../../../../api/axios';
  */
 export const uploadDeferredImage = async (imageObj, uploadEndpoint) => {
   // If it's a new file selected by the user
-  if (imageObj && typeof imageObj === 'object' && imageObj.file) {
+  if (imageObj && typeof imageObj === 'object' && (imageObj.file instanceof File || imageObj.file instanceof Blob)) {
     // 1. Delete the old image if it existed and was not a default image
     if (imageObj.oldUrl && !imageObj.oldUrl.startsWith('blob:') && !imageObj.oldUrl.startsWith('http')) {
       try {
@@ -36,6 +36,8 @@ export const uploadDeferredImage = async (imageObj, uploadEndpoint) => {
       }
     }
     return imageObj.previewUrl || '';
+  } else if (imageObj && typeof imageObj === 'object') {
+    return imageObj.previewUrl || imageObj.oldUrl || '';
   }
   
   // If no change was made, return the existing URL (or empty string)
