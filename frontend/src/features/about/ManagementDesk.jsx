@@ -61,7 +61,7 @@ const ManagementDesk = ({ previewData }) => {
   return (
     <>
       {!previewData && (
-        <div 
+        <div
           className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
           <Loader fullScreen={false} />
