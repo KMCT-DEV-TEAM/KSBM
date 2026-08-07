@@ -161,7 +161,6 @@ const ManageMbaPage = ({ isBba = false }) => {
   const [overviewFloatingBadgeText, setOverviewFloatingBadgeText] = useState(isBba ? '3-Year Foundation' : '100% Case-Study Driven');
   const [overviewPrimaryBtnText, setOverviewPrimaryBtnText] = useState('Apply Now');
   const [overviewSecondaryBtnText, setOverviewSecondaryBtnText] = useState('Download Brochure');
-  const [highlights, setHighlights] = useState([]);
 
   const [dimensions, setDimensions] = useState([]);
 
@@ -230,7 +229,6 @@ const ManageMbaPage = ({ isBba = false }) => {
     heroCardTitle, heroCardStat1Title, heroCardStat1Sub, heroCardStat2Title, heroCardStat2Sub,
     overviewTitle, overviewText, overviewSubtext, overviewImage,
     overviewBadgeText, overviewFloatingBadgeText, overviewPrimaryBtnText, overviewSecondaryBtnText,
-    highlights,
     dimensions,
     whyChoosePills: {
       badgeText: whyChoosePills.badgeText,
@@ -295,9 +293,9 @@ const ManageMbaPage = ({ isBba = false }) => {
     if (isPreviewModalOpen && iframeRef.current) {
       const sendData = () => {
         if (iframeRef.current && iframeRef.current.contentWindow) {
-          iframeRef.current.contentWindow.postMessage({ 
-            type: 'preview-cms-data', 
-            componentName: componentMap[activeTab], 
+          iframeRef.current.contentWindow.postMessage({
+            type: 'preview-cms-data',
+            componentName: componentMap[activeTab],
             payload: { ...currentDraftData, programType: isBbaMode ? 'bba' : 'mba' }
           }, '*');
         }
@@ -352,7 +350,6 @@ const ManageMbaPage = ({ isBba = false }) => {
       setOverviewFloatingBadgeText(data.overviewFloatingBadgeText || (isBba ? '3-Year Foundation' : '100% Case-Study Driven'));
       setOverviewPrimaryBtnText(data.overviewPrimaryBtnText || 'Apply Now');
       setOverviewSecondaryBtnText(data.overviewSecondaryBtnText || 'Download Brochure');
-      setHighlights(data.highlights || []);
 
       setDimensions(data.dimensions || []);
       setShowSections(data.showSections || { hero: true, overview: true, dimensions: true, whyChoose: true, internships: true, dynamic: true, gallery: true, calendar: true, eligibility: true, recruiters: true });
@@ -467,7 +464,6 @@ const ManageMbaPage = ({ isBba = false }) => {
             overviewFloatingBadgeText,
             overviewPrimaryBtnText,
             overviewSecondaryBtnText,
-            highlights,
             dimensions,
             internshipTitle,
             internshipDesc,
@@ -541,12 +537,6 @@ const ManageMbaPage = ({ isBba = false }) => {
           setOverviewFloatingBadgeText('3-Year Foundation');
           setOverviewPrimaryBtnText('Apply Now');
           setOverviewSecondaryBtnText('Download Brochure');
-          setHighlights([
-            '3-Year Full-Time Undergraduate Degree Program',
-            'Affiliated with Calicut University & AICTE Approved',
-            'Integrated Skill Development & Leadership Training',
-            'Direct Corporate Internships & Career Counseling'
-          ]);
         } else {
           setShortTitle('MBA');
           setTitle('Master of Business Administration');
@@ -569,12 +559,6 @@ const ManageMbaPage = ({ isBba = false }) => {
           setOverviewFloatingBadgeText('100% Case-Study Driven');
           setOverviewPrimaryBtnText('Apply Now');
           setOverviewSecondaryBtnText('Download Brochure');
-          setHighlights([
-            '2-Year Full-Time AICTE Approved Curriculum',
-            'Dual Specializations (Finance, Marketing, HR, Ops)',
-            'Harvard & IIM Case-Study Pedagogy',
-            'Guaranteed Corporate Mentorship & Live Projects'
-          ]);
         }
         setInternshipBadge('EXPERIENTIAL LEARNING');
         setInternshipBtnText('Apply Now');
@@ -635,20 +619,6 @@ const ManageMbaPage = ({ isBba = false }) => {
     });
   };
 
-  // Highlights helpers
-  const addHighlight = () => {
-    openAddModal(
-      'Add Highlight Item',
-      [{ name: 'text', label: 'Highlight Text', type: 'text', maxLength: 100, required: true, placeholder: 'New highlight item' }],
-      (data) => setHighlights([...highlights, data.text])
-    );
-  };
-  const updateHighlight = (index, val) => {
-    const updated = [...highlights];
-    updated[index] = val;
-    setHighlights(updated);
-  };
-  const removeHighlight = (index) => confirmAction({ title: 'Remove Highlight', message: 'Are you sure you want to remove this highlight?', confirmText: 'Yes, remove', variant: 'danger', action: () => setHighlights(highlights.filter((_, i) => i !== index)) });
 
   // Dimensions helpers
   const addDimension = () => {
@@ -656,7 +626,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       'Add New Dimension',
       [
         { name: 'title', label: 'Dimension Title', type: 'text', maxLength: 100, required: true },
-        { name: 'description', label: 'Dimension Description', type: 'textarea', maxLength: 200, required: true }
+        { name: 'credits', label: 'Credits Text', type: 'text', maxLength: 30, placeholder: 'e.g. Credits: 18' }
       ],
       (data) => {
         setDimensions([
@@ -664,7 +634,7 @@ const ManageMbaPage = ({ isBba = false }) => {
           {
             number: `0${dimensions.length + 1}`,
             title: data.title,
-            description: data.description,
+            credits: data.credits || '',
             topics: []
           }
         ]);
@@ -676,7 +646,19 @@ const ManageMbaPage = ({ isBba = false }) => {
     updated[index][field] = val;
     setDimensions(updated);
   };
-  const removeDimension = (index) => confirmAction({ title: 'Remove Dimension', message: 'Are you sure you want to remove this dimension card?', confirmText: 'Yes, remove', variant: 'danger', action: () => setDimensions(dimensions.filter((_, i) => i !== index)) });
+  const removeDimension = (index) => confirmAction({
+    title: 'Remove Dimension',
+    message: 'Are you sure you want to remove this dimension card?',
+    confirmText: 'Yes, remove',
+    variant: 'danger',
+    action: () => {
+      const updated = dimensions.filter((_, i) => i !== index).map((dim, i) => ({
+        ...dim,
+        number: `0${i + 1}`
+      }));
+      setDimensions(updated);
+    }
+  });
 
   const addDimensionTopic = (dimIdx) => {
     openAddModal(
@@ -1083,7 +1065,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       </div>
       <PageHeader
         title={`${pageName} CMS`}
-        description="Manage titles, banner images, curriculum highlights, overview details, and eligibility criteria."
+        description="Manage titles, banner images, overview details, and eligibility criteria."
         onPreview={() => setIsPreviewModalOpen(true)}
         onReset={handleResetToDefault}
         onSave={handleSave}
@@ -1103,7 +1085,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" checked={showSections.hero ?? true} onChange={(e) => setShowSections({...showSections, hero: e.target.checked})} />
+                  <input type="checkbox" className="sr-only peer" checked={showSections.hero ?? true} onChange={(e) => setShowSections({ ...showSections, hero: e.target.checked })} />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
@@ -1205,7 +1187,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" checked={showSections.overview ?? true} onChange={(e) => setShowSections({...showSections, overview: e.target.checked})} />
+                  <input type="checkbox" className="sr-only peer" checked={showSections.overview ?? true} onChange={(e) => setShowSections({ ...showSections, overview: e.target.checked })} />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
@@ -1287,40 +1269,6 @@ const ManageMbaPage = ({ isBba = false }) => {
                   </div>
                 </div>
               </div>
-
-              <div className="pt-4 border-t border-gray-100">
-                <div className="flex items-center justify-between mb-4">
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Checklist Highlights (Left Column)</label>
-                  <button
-                    type="button"
-                    onClick={addHighlight}
-                    className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
-                  >
-                    <Plus className="w-4 h-4" /> Add Highlight Item
-                  </button>
-                </div>
-
-                <div className="space-y-3">
-                  {highlights.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-3">
-                      <input
-                        type="text"
-                        value={item}
-                        onChange={(e) => updateHighlight(idx, e.target.value)}
-                        className="flex-1 px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                        placeholder="Enter checkmark highlight..."
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeHighlight(idx)}
-                        className="p-2.5 rounded-xl text-red-500 hover:bg-red-50 transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
 
@@ -1333,7 +1281,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" checked={showSections.dimensions ?? true} onChange={(e) => setShowSections({...showSections, dimensions: e.target.checked})} />
+                  <input type="checkbox" className="sr-only peer" checked={showSections.dimensions ?? true} onChange={(e) => setShowSections({ ...showSections, dimensions: e.target.checked })} />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
@@ -1364,14 +1312,14 @@ const ManageMbaPage = ({ isBba = false }) => {
                             [
                               { name: 'number', label: 'Card Number / Step', type: 'text', maxLength: 10, required: true },
                               { name: 'title', label: 'Dimension Card Title', type: 'text', maxLength: 60, required: true },
-                              { name: 'description', label: 'Dimension Description', type: 'textarea', maxLength: 300, required: true },
+                              { name: 'credits', label: 'Credits Text', type: 'text', maxLength: 30, placeholder: 'e.g. Credits: 18' },
                               { name: 'topicsText', label: 'Topics (Comma Separated)', type: 'textarea', maxLength: 500, placeholder: 'e.g. Finance, Marketing, Leadership' }
                             ],
                             { ...dim, topicsText: dim.topics?.join(', ') || '' },
                             (data) => {
                               const updated = [...dimensions];
                               const topicsArray = (data.topicsText || '').split(',').map(t => t.trim()).filter(Boolean);
-                              updated[idx] = { number: data.number, title: data.title, description: data.description, topics: topicsArray };
+                              updated[idx] = { number: data.number, title: data.title, credits: data.credits || '', topics: topicsArray };
                               setDimensions(updated);
                             }
                           );
@@ -1394,9 +1342,14 @@ const ManageMbaPage = ({ isBba = false }) => {
                     <div className="flex gap-4 pr-20">
                       <div className="text-3xl font-black text-gray-200">{dim.number || '00'}</div>
                       <div className="space-y-1">
-                        <h4 className="text-sm font-bold text-gray-800">{dim.title || 'Untitled'}</h4>
-                        <p className="text-sm text-gray-600 line-clamp-2">{dim.description || 'No description provided.'}</p>
-
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-sm font-bold text-gray-800">{dim.title || 'Untitled'}</h4>
+                          {dim.credits && (
+                            <span className="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-semibold border border-blue-200">
+                              {dim.credits}
+                            </span>
+                          )}
+                        </div>
                         {dim.topics && dim.topics.length > 0 && (
                           <div className="mt-3 flex flex-wrap gap-2">
                             {dim.topics.map((t, i) => (
@@ -1423,7 +1376,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" checked={showSections.whyChoose ?? true} onChange={(e) => setShowSections({...showSections, whyChoose: e.target.checked})} />
+                  <input type="checkbox" className="sr-only peer" checked={showSections.whyChoose ?? true} onChange={(e) => setShowSections({ ...showSections, whyChoose: e.target.checked })} />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
@@ -1557,7 +1510,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" checked={showSections.internships ?? true} onChange={(e) => setShowSections({...showSections, internships: e.target.checked})} />
+                  <input type="checkbox" className="sr-only peer" checked={showSections.internships ?? true} onChange={(e) => setShowSections({ ...showSections, internships: e.target.checked })} />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
@@ -1654,7 +1607,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" checked={showSections.dynamic ?? true} onChange={(e) => setShowSections({...showSections, dynamic: e.target.checked})} />
+                  <input type="checkbox" className="sr-only peer" checked={showSections.dynamic ?? true} onChange={(e) => setShowSections({ ...showSections, dynamic: e.target.checked })} />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
@@ -1803,7 +1756,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 <div className="flex items-center gap-6">
                   <h2 className="text-lg font-bold text-primary">Moments Gallery Settings</h2>
                   <label className="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" className="sr-only peer" checked={showSections.gallery ?? true} onChange={(e) => setShowSections({...showSections, gallery: e.target.checked})} />
+                    <input type="checkbox" className="sr-only peer" checked={showSections.gallery ?? true} onChange={(e) => setShowSections({ ...showSections, gallery: e.target.checked })} />
                     <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
                     <span className="ml-3 text-xs font-semibold text-gray-500 uppercase">Show Section</span>
                   </label>
@@ -1939,7 +1892,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" checked={showSections.calendar ?? true} onChange={(e) => setShowSections({...showSections, calendar: e.target.checked})} />
+                  <input type="checkbox" className="sr-only peer" checked={showSections.calendar ?? true} onChange={(e) => setShowSections({ ...showSections, calendar: e.target.checked })} />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
@@ -2066,8 +2019,8 @@ const ManageMbaPage = ({ isBba = false }) => {
                       className={`p-5 rounded-xl bg-gray-50/80 border ${draggedCalendarIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative shadow-sm transition-all duration-200 group flex items-start gap-4`}
                     >
                       <div className="flex-shrink-0 cursor-grab text-gray-400 active:cursor-grabbing p-2 hover:bg-gray-100 rounded transition-colors" title="Drag to reorder">
-                      <GripVertical className="w-6 h-6" />
-                    </div>
+                        <GripVertical className="w-6 h-6" />
+                      </div>
 
                       <div className="absolute top-4 right-4 flex gap-2">
                         <button
@@ -2158,7 +2111,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" checked={showSections.eligibility ?? true} onChange={(e) => setShowSections({...showSections, eligibility: e.target.checked})} />
+                  <input type="checkbox" className="sr-only peer" checked={showSections.eligibility ?? true} onChange={(e) => setShowSections({ ...showSections, eligibility: e.target.checked })} />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
@@ -2249,7 +2202,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <p className="text-xs text-gray-500">Toggle this to show or hide this entire section on the public page.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" checked={showSections.recruiters ?? true} onChange={(e) => setShowSections({...showSections, recruiters: e.target.checked})} />
+                  <input type="checkbox" className="sr-only peer" checked={showSections.recruiters ?? true} onChange={(e) => setShowSections({ ...showSections, recruiters: e.target.checked })} />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>
@@ -2329,9 +2282,9 @@ const ManageMbaPage = ({ isBba = false }) => {
                 title="Live Preview"
                 onLoad={() => {
                   if (iframeRef.current) {
-                    iframeRef.current.contentWindow.postMessage({ 
-                      type: 'preview-cms-data', 
-                      componentName: componentMap[activeTab], 
+                    iframeRef.current.contentWindow.postMessage({
+                      type: 'preview-cms-data',
+                      componentName: componentMap[activeTab],
                       payload: { ...currentDraftData, programType: isBbaMode ? 'bba' : 'mba' }
                     }, '*');
                   }

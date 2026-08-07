@@ -1,4 +1,4 @@
-import React from 'react';
+
 import EventsPage from '../../features/events/EventsPage';
 
 export const metadata = {

@@ -24,10 +24,16 @@ const Toast = Swal.mixin({
 
 const ManagePrograms = () => {
   const [subheading, setSubheading] = useState('');
+  const [showSubheading, setShowSubheading] = useState(true);
+
   const [heading, setHeading] = useState('');
+  const [showHeading, setShowHeading] = useState(true);
+
   const [description, setDescription] = useState('');
+  const [showDescription, setShowDescription] = useState(true);
+
   const [programs, setPrograms] = useState([]);
-  const [showSection, setShowSection] = useState(true);
+  const [showPrograms, setShowPrograms] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -53,10 +59,16 @@ const ManagePrograms = () => {
     try {
       const { data } = await api.get('/cms/programs');
       setSubheading(data.subheading || '');
+      setShowSubheading(data.showSubheading ?? true);
+
       setHeading(data.heading || '');
+      setShowHeading(data.showHeading ?? true);
+
       setDescription(data.description || '');
+      setShowDescription(data.showDescription ?? true);
+
       setPrograms(data.programs || []);
-      setShowSection(data.showSection ?? true);
+      setShowPrograms(data.showPrograms ?? true);
     } catch (error) {
       console.error('Error fetching programs settings:', error);
       Toast.fire({ icon: 'error', title: 'Failed to load programs settings.' });
@@ -86,7 +98,7 @@ const ManagePrograms = () => {
 
           await api.put('/cms/programs', {
             subheading, heading, description, programs: finalPrograms,
-            showSection
+            showSubheading, showHeading, showDescription, showPrograms
           });
 
           await executeDeletions();
@@ -110,8 +122,11 @@ const ManagePrograms = () => {
       variant: 'primary',
       action: async () => {
         setSubheading('Our Courses');
+        setShowSubheading(true);
         setHeading('Academic Programs');
+        setShowHeading(true);
         setDescription('Discover our MBA and BBA programmes, crafted to develop future-ready professionals through innovative learning, industry engagement, and leadership-focused education.');
+        setShowDescription(true);
         setPrograms([
           {
             id: 'mba',
@@ -128,7 +143,7 @@ const ManagePrograms = () => {
             tag: 'UNDERGRADUATE'
           }
         ]);
-        setShowSection(true);
+        setShowPrograms(true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
@@ -339,8 +354,8 @@ const ManagePrograms = () => {
             <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
               <ProgramsPreview previewData={{
                 subheading, heading, description, programs,
-                previewDevice: previewMode,
-                showSection
+                showSubheading, showHeading, showDescription, showPrograms,
+                previewDevice: previewMode
               }} />
             </div>
           </div>
@@ -352,7 +367,7 @@ const ManagePrograms = () => {
         <div className="fixed inset-0 z-[110] flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
             <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-xl font-bold text-[#566A7F]">
                 {editingProgramIndex === -1 ? 'Add New Program' : 'Edit Program'}
               </h2>
               <button
@@ -373,7 +388,7 @@ const ManagePrograms = () => {
                     onChange={(e) => setCurrentProgram({ ...currentProgram, title: e.target.value })}
                     placeholder="e.g. MBA"
                     maxLength={50}
-                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                   <div className="text-right text-xs text-gray-400 mt-1">
                     {currentProgram.title.length} / 50
@@ -388,7 +403,7 @@ const ManagePrograms = () => {
                     rows="3"
                     placeholder="e.g. Master of Business Administration..."
                     maxLength={200}
-                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                   <div className="text-right text-xs text-gray-400 mt-1">
                     {currentProgram.subtitle?.length || 0} / 200
@@ -403,7 +418,7 @@ const ManagePrograms = () => {
                     onChange={(e) => setCurrentProgram({ ...currentProgram, tag: e.target.value })}
                     placeholder="e.g. GRADUATE"
                     maxLength={15}
-                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                   <div className="text-right text-xs text-gray-400 mt-1">
                     {currentProgram.tag?.length || 0} / 15
@@ -450,54 +465,47 @@ const ManagePrograms = () => {
         </div>
       )}
 
-      {/* Global Visibility Settings */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
-        <div className="flex justify-between items-center">
-          <div>
-            <h3 className="text-lg font-bold text-[#1e2869]">Section Visibility</h3>
-            <p className="text-sm text-gray-500 mt-1">Show or hide this entire section on the landing page</p>
-          </div>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" className="sr-only peer" checked={showSection} onChange={(e) => setShowSection(e.target.checked)} />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-            <span className="ms-3 text-sm font-semibold text-gray-600 uppercase tracking-wider">{showSection ? 'Visible' : 'Hidden'}</span>
-          </label>
-        </div>
-      </div>
-
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
 
         {/* Header Text Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-primary mb-4 border-b pb-2">Header Content</h3>
+          <h3 className="text-lg font-bold text-[#1e2869] mb-4">Header Content</h3>
           <div className="grid grid-cols-1 gap-6">
             <div>
-              <div className="flex items-center gap-3 mb-1.5">
-<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
-</div>
-<input
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={showSubheading} onChange={(e) => setShowSubheading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
+                  <span className="text-xs font-semibold text-gray-500">Show</span>
+                </label>
+              </div>
+              <input
                 type="text"
                 value={subheading}
                 onChange={(e) => setSubheading(e.target.value)}
                 placeholder="e.g. Our Courses"
                 maxLength={60}
-                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
               <div className="text-right text-xs text-gray-400 mt-1">
                 {subheading.length} / 60
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-3 mb-1.5">
-<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
-</div>
-<input
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={showHeading} onChange={(e) => setShowHeading(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
+                  <span className="text-xs font-semibold text-gray-500">Show</span>
+                </label>
+              </div>
+              <input
                 type="text"
                 value={heading}
                 onChange={(e) => setHeading(e.target.value)}
                 placeholder="e.g. Academic Programs"
                 maxLength={60}
-                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
               <div className="text-right text-xs text-gray-400 mt-1">
                 {heading.length} / 60
@@ -506,6 +514,10 @@ const ManagePrograms = () => {
             <div>
               <div className="flex justify-between items-center mb-1.5">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Description</label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={showDescription} onChange={(e) => setShowDescription(e.target.checked)} className="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary" />
+                  <span className="text-xs font-semibold text-gray-500">Show</span>
+                </label>
               </div>
               <textarea
                 value={description}
@@ -513,7 +525,7 @@ const ManagePrograms = () => {
                 rows="3"
                 placeholder="Description text..."
                 maxLength={300}
-                className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
               <div className="text-right text-xs text-gray-400 mt-1">
                 {description.length} / 300
@@ -526,7 +538,11 @@ const ManagePrograms = () => {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-4">
-              <h3 className="text-lg font-bold text-primary border-b pb-2">Programs</h3>
+              <h3 className="text-lg font-bold text-[#1e2869]">Programs</h3>
+              <label className="flex items-center gap-2 cursor-pointer border-l border-gray-200 pl-4">
+                <input type="checkbox" checked={showPrograms} onChange={(e) => setShowPrograms(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                <span className="text-sm font-semibold text-gray-500">Show Programs</span>
+              </label>
             </div>
             <button
               onClick={openAddProgramModal}
@@ -569,7 +585,7 @@ const ManagePrograms = () => {
 
                 {/* Program Content */}
                 <div className="p-4 flex-1 flex flex-col">
-                  <h4 className="text-sm font-bold text-gray-800 mb-1">{program.title || '(Untitled Program)'}</h4>
+                  <h4 className="font-bold text-[#566A7F] text-lg mb-1">{program.title || '(Untitled Program)'}</h4>
                   <p className="text-sm text-gray-500 line-clamp-2 flex-1">{program.subtitle}</p>
 
                   {/* Actions */}
