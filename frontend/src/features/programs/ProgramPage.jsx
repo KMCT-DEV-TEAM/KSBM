@@ -181,7 +181,8 @@ const programConfigs = {
           'Principles of Management & Economics',
           'Corporate Law & Business Ethics',
           'Organizational Behavior & Communication'
-        ]
+        ],
+        credits: 'Credits: 18'
       },
       {
         number: '02',
@@ -191,7 +192,8 @@ const programConfigs = {
           'Marketing Management Essentials',
           'Professional Corporate Communication',
           'Digital & Social Media Fundamentals'
-        ]
+        ],
+        credits: 'Credits: 20'
       },
       {
         number: '03',
@@ -201,7 +203,8 @@ const programConfigs = {
           'Financial Accounting & Reporting',
           'Cost Accounting & Budgetary Control',
           'Banking & Financial Services'
-        ]
+        ],
+        credits: 'Credits: 22'
       },
       {
         number: '04',
@@ -211,7 +214,8 @@ const programConfigs = {
           'Venture Creation & Business Planning',
           'Startup Incubation & Ecosystems',
           'Innovation & New Product Development'
-        ]
+        ],
+        credits: 'Credits: 16'
       }
     ],
     internshipBgImage: '/assets/Images/image%2067.png',

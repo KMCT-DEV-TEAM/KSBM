@@ -626,16 +626,18 @@ const ManageMbaPage = ({ isBba = false }) => {
       'Add New Dimension',
       [
         { name: 'title', label: 'Dimension Title', type: 'text', maxLength: 100, required: true },
-        { name: 'credits', label: 'Credits Text', type: 'text', maxLength: 30, placeholder: 'e.g. Credits: 18' }
+        { name: 'credits', label: 'Credits Text', type: 'text', maxLength: 30, placeholder: 'e.g. Credits: 18' },
+        { name: 'topicsText', label: 'Topics (Comma Separated)', type: 'textarea', maxLength: 500, placeholder: 'e.g. Finance, Marketing, Leadership' }
       ],
       (data) => {
+        const topicsArray = (data.topicsText || '').split(',').map(t => t.trim()).filter(Boolean);
         setDimensions([
           ...dimensions,
           {
             number: `0${dimensions.length + 1}`,
             title: data.title,
             credits: data.credits || '',
-            topics: []
+            topics: topicsArray
           }
         ]);
       }
