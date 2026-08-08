@@ -34,7 +34,7 @@ const AboutCtaSection = ({ previewData }) => {
   const buttonLink = globalLinks['global_apply']?.link || data?.buttonLink || '/apply';
   const bgColor = data?.backgroundColor || '#2B2F66';
 
-  if (data?.showSection === false && !previewData) return null;
+  if (data?.showSection === false) return null;
 
   return (
     <section className="relative overflow-hidden w-full pb-16 pt-6 bg-[#fcfcfd]">
@@ -55,7 +55,7 @@ const AboutCtaSection = ({ previewData }) => {
                 {index < array.length - 1 && <span className="mx-1.5">KSBM</span>}
               </React.Fragment>
             ))}
-          </h2>
+          </h2> 
           <p className="text-white/80 text-xs md:text-sm max-w-xl mx-auto lg:mx-0 font-light">
             {subtext}
           </p>

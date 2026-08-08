@@ -24,12 +24,7 @@ const programConfigs = {
     overviewText: 'Our MBA program combines rigorous academic foundations with experiential learning, empowering students to master complex global business challenges and lead with confidence.',
     overviewSubtext: 'Through case-study pedagogy, industry mentorship, and live corporate projects, students develop executive presence, analytical rigor, and entrepreneurial innovation.',
     overviewImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop',
-    highlights: [
-      '2-Year Full-Time AICTE Approved Curriculum',
-      'Dual Specializations (Finance, Marketing, HR, Ops)',
-      'Harvard & IIM Case-Study Pedagogy',
-      'Guaranteed Corporate Mentorship & Live Projects'
-    ],
+
     dimensions: [
       {
         number: '01',
@@ -176,12 +171,7 @@ const programConfigs = {
     overviewText: 'The BBA program at KSBM lays the essential groundwork for young minds aspiring to make an impact in the corporate world or launch their own ventures.',
     overviewSubtext: 'Combining fundamental business theory with practical workshops, presentation modules, and industry exposure, the curriculum ensures smooth transition to corporate careers or premier MBA programs.',
     overviewImage: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop',
-    highlights: [
-      '3-Year Full-Time Undergraduate Degree Program',
-      'Affiliated with Calicut University & AICTE Approved',
-      'Integrated Skill Development & Leadership Training',
-      'Direct Corporate Internships & Career Counseling'
-    ],
+
     dimensions: [
       {
         number: '01',
@@ -191,7 +181,8 @@ const programConfigs = {
           'Principles of Management & Economics',
           'Corporate Law & Business Ethics',
           'Organizational Behavior & Communication'
-        ]
+        ],
+        credits: 'Credits: 18'
       },
       {
         number: '02',
@@ -201,7 +192,8 @@ const programConfigs = {
           'Marketing Management Essentials',
           'Professional Corporate Communication',
           'Digital & Social Media Fundamentals'
-        ]
+        ],
+        credits: 'Credits: 20'
       },
       {
         number: '03',
@@ -211,7 +203,8 @@ const programConfigs = {
           'Financial Accounting & Reporting',
           'Cost Accounting & Budgetary Control',
           'Banking & Financial Services'
-        ]
+        ],
+        credits: 'Credits: 22'
       },
       {
         number: '04',
@@ -221,7 +214,8 @@ const programConfigs = {
           'Venture Creation & Business Planning',
           'Startup Incubation & Ecosystems',
           'Innovation & New Product Development'
-        ]
+        ],
+        credits: 'Credits: 16'
       }
     ],
     internshipBgImage: '/assets/Images/image%2067.png',
@@ -370,16 +364,16 @@ const ProgramPage = ({ programType = 'mba' }) => {
     <>
       <PageTransition dataLoaded={dataLoaded} />
       <div className="min-h-screen bg-[#fafafa]">
-      {(!activePreviewTab || activePreviewTab === 'hero') && <ProgramHero program={{ ...config, isPreview }} />}
-      {(!activePreviewTab || activePreviewTab === 'overview') && (isPreview || config?.showSections?.overview !== false) && <ProgramOverview program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'dimensions') && (isPreview || config?.showSections?.dimensions !== false) && <LearningDimensionsGrid dimensions={config.dimensions} />}
-      {(!activePreviewTab || activePreviewTab === 'whyChoose') && (isPreview || config?.showSections?.whyChoose !== false) && <WhyChoosePills program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'internship') && (isPreview || config?.showSections?.internships !== false) && <SummerInternshipBanner program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'dynamicLearning') && (isPreview || config?.showSections?.dynamic !== false) && <DynamicLearningSection program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'momentsGallery') && (isPreview || config?.showSections?.gallery !== false) && <MomentsGallery program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'academicCalendarBanner') && (isPreview || config?.showSections?.calendar !== false) && <AcademicCalendarBanner program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'eligibility') && (isPreview || config?.showSections?.eligibility !== false) && <AdmissionEligibility eligibility={config.eligibility} />}
-      {(!activePreviewTab || activePreviewTab === 'topRecruiters') && (isPreview || config?.showSections?.recruiters !== false) && <TopRecruitersGrid />}
+      {(!activePreviewTab || activePreviewTab === 'hero') && (config?.showSections?.hero !== false) && <ProgramHero program={{ ...config, isPreview }} />}
+      {(!activePreviewTab || activePreviewTab === 'overview') && (config?.showSections?.overview !== false) && <ProgramOverview program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'dimensions') && (config?.showSections?.dimensions !== false) && <LearningDimensionsGrid dimensions={config.dimensions} />}
+      {(!activePreviewTab || activePreviewTab === 'whyChoose') && (config?.showSections?.whyChoose !== false) && <WhyChoosePills program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'internship') && (config?.showSections?.internships !== false) && <SummerInternshipBanner program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'dynamicLearning') && (config?.showSections?.dynamic !== false) && <DynamicLearningSection program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'momentsGallery') && (config?.showSections?.gallery !== false) && <MomentsGallery program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'academicCalendarBanner') && (config?.showSections?.calendar !== false) && <AcademicCalendarBanner program={config} />}
+      {(!activePreviewTab || activePreviewTab === 'eligibility') && (config?.showSections?.eligibility !== false) && <AdmissionEligibility eligibility={config.eligibility} />}
+      {(!activePreviewTab || activePreviewTab === 'topRecruiters') && (config?.showSections?.recruiters !== false) && <TopRecruitersGrid />}
       </div>
     </>
   );

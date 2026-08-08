@@ -138,82 +138,155 @@ const LearningDimensionsGrid = ({ dimensions = [] }) => {
           </p>
         </motion.div>
 
-        {/* 4 Cards Grid - One Row on Desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 xl:gap-6 place-items-center">
-          {(dimensions.length > 0 ? dimensions : [{}, {}, {}, {}]).map((dim, idx) => {
-            const isLast = idx === (dimensions.length > 0 ? dimensions.length - 1 : 3);
-            const isPrimary = hoveredIdx === idx || (hoveredIdx === null && isLast);
+        {/* Cards Container */}
+        {dimensions.length > 4 ? (
+          <div className="w-full overflow-hidden relative group py-4">
+             <style>{`
+              @keyframes scrollLeftDim {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+              }
+              .animate-scroll-left-dim {
+                animation: scrollLeftDim ${dimensions.length * 6}s linear infinite;
+                width: max-content;
+              }
+              .group:hover .animate-scroll-left-dim {
+                animation-play-state: paused;
+              }
+            `}</style>
+            <div className="flex animate-scroll-left-dim gap-5 xl:gap-6 px-4">
+              {[...dimensions, ...dimensions].map((dim, idx) => {
+                const realIdx = idx % dimensions.length;
+                const isLast = realIdx === dimensions.length - 1;
+                const isPrimary = hoveredIdx === realIdx || (hoveredIdx === null && isLast);
+                
+                const creditsText = dim.credits || (realIdx === 0 ? 'Credits: 18' : realIdx === 1 ? 'Credits: 20' : realIdx === 2 ? 'Credits: 22' : 'Credits: 16');
+                const displayTopics = (dim.topics && dim.topics.length > 0) ? dim.topics : [];
+                const displayTitle = dim.title || 'Curriculum Dimension';
 
-            const creditsText = dim.credits || (idx === 0 ? 'Credits: 18' : idx === 1 ? 'Credits: 20' : idx === 2 ? 'Credits: 22' : 'Credits: 16');
-            const defaultTopics = idx === 0
-              ? ['Financial Accounting', 'Marketing Management', 'Organizational Behavior']
-              : idx === 1
-                ? ['Corporate Finance', 'Operations Research', 'Business Analytics']
-                : idx === 2
-                  ? ['Global Strategy', 'Innovation Management', 'Specialization Track I']
-                  : ['Industry Consulting Project', 'Entrepreneurial Lab', 'Final Thesis'];
-
-            const displayTopics = (dim.topics && dim.topics.length > 0 && dim.title !== 'Business Strategy & Leadership')
-              ? dim.topics
-              : defaultTopics;
-
-            const displayTitle = (dim.title && dim.title !== 'Business Strategy & Leadership' && dim.title !== 'Financial Management & Analytics' && dim.title !== 'Marketing & Consumer Insights' && dim.title !== 'Operations & Supply Chain')
-              ? dim.title
-              : idx === 0 ? 'Core Foundations' : idx === 1 ? 'Analytical Depth' : idx === 2 ? 'Strategic Integration' : 'Capstone Mastery';
-
-            return (
-              <motion.div
-                key={idx}
-                onMouseEnter={() => setHoveredIdx(idx)}
-                onMouseLeave={() => setHoveredIdx(null)}
-                onClick={() => {
-                  setActiveModalSemester(idx);
-                  setIsCurriculumModalOpen(true);
-                }}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: idx * 0.12 }}
-                className={`w-full max-w-[419px] min-h-[389px] h-full rounded-[20px] p-6 sm:p-7 flex flex-col justify-between transition-all duration-500 hover:-translate-y-1.5 border cursor-pointer ${isPrimary
-                  ? 'bg-[#303580] text-white border-white/15 shadow-[0_20px_40px_rgba(0,0,0,0.3)]'
-                  : 'bg-white text-[#303580] border-slate-100 shadow-[0_15px_35px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)]'
-                  }`}
-              >
-                {/* Top Section: Number + Title + Bullets */}
-                <div>
-                  <div className="mb-6">
-                    <span className={`text-[24px] font-bold tracking-tight block transition-colors duration-300 ${isPrimary ? 'text-white' : 'text-[#303580]'}`}>
-                      {dim.number || `0${idx + 1}`}
-                    </span>
-                    <h3 className={`text-[16px] font-normal tracking-tight mt-1 leading-snug transition-colors duration-300 ${isPrimary ? 'text-white' : 'text-[#303580]'}`}>
-                      {displayTitle}
-                    </h3>
-                  </div>
-
-                  {/* Topics / Bullet points with circle dots */}
-                  <div className="flex flex-col gap-3.5 mt-2">
-                    {displayTopics.map((topic, tIdx) => (
-                      <div key={tIdx} className="flex items-center gap-2.5">
-                        <span className={`w-1.5 h-1.5 rounded-full shrink-0 transition-colors duration-300 ${isPrimary ? 'bg-white' : 'bg-[#303580]'}`} />
-                        <span className={`text-[13.5px] font-normal leading-snug transition-colors duration-300 ${isPrimary ? 'text-white/95' : 'text-slate-700'}`}>
-                          {topic}
+                return (
+                  <div
+                    key={idx}
+                    onMouseEnter={() => setHoveredIdx(realIdx)}
+                    onMouseLeave={() => setHoveredIdx(null)}
+                    onClick={() => {
+                      setActiveModalSemester(realIdx);
+                      setIsCurriculumModalOpen(true);
+                    }}
+                    className={`shrink-0 w-[300px] sm:w-[350px] lg:w-[419px] min-h-[389px] h-full rounded-[20px] p-6 sm:p-7 flex flex-col justify-between transition-all duration-500 hover:-translate-y-1.5 border cursor-pointer ${isPrimary
+                      ? 'bg-[#303580] text-white border-white/15 shadow-[0_20px_40px_rgba(0,0,0,0.3)]'
+                      : 'bg-white text-[#303580] border-slate-100 shadow-[0_15px_35px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)]'
+                      }`}
+                  >
+                    {/* Top Section */}
+                    <div>
+                      <div className="mb-6">
+                        <span className={`text-[24px] font-bold tracking-tight block transition-colors duration-300 ${isPrimary ? 'text-white' : 'text-[#303580]'}`}>
+                          {dim.number || `0${realIdx + 1}`}
                         </span>
+                        <h3 className={`text-[16px] font-normal tracking-tight mt-1 leading-snug transition-colors duration-300 ${isPrimary ? 'text-white' : 'text-[#303580]'}`}>
+                          {displayTitle}
+                        </h3>
                       </div>
-                    ))}
+                      {/* Topics */}
+                      <div className="flex flex-col gap-3.5 mt-2">
+                        {displayTopics.map((topic, tIdx) => (
+                          <div key={tIdx} className="flex items-center gap-2.5">
+                            <span className={`w-1.5 h-1.5 rounded-full shrink-0 transition-colors duration-300 ${isPrimary ? 'bg-white' : 'bg-[#303580]'}`} />
+                            <span className={`text-[13.5px] font-normal leading-snug transition-colors duration-300 ${isPrimary ? 'text-white/95' : 'text-slate-700'}`}>
+                              {topic}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Bottom Section */}
+                    <div className="mt-auto pt-4">
+                      <div className={`w-full h-px mb-4 transition-colors duration-300 ${isPrimary ? 'bg-white/20' : 'bg-slate-100'}`} />
+                      <p className={`text-[12px] font-normal transition-colors duration-300 ${isPrimary ? 'text-white' : 'text-gray-400'}`}>
+                        {creditsText}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 xl:gap-6 place-items-center">
+            {(dimensions.length > 0 ? dimensions : [{}, {}, {}, {}]).map((dim, idx) => {
+              const isLast = idx === (dimensions.length > 0 ? dimensions.length - 1 : 3);
+              const isPrimary = hoveredIdx === idx || (hoveredIdx === null && isLast);
 
-                {/* Bottom Section: Divider Line + Credits Footer */}
-                <div className="mt-auto pt-4">
-                  <div className={`w-full h-px mb-4 transition-colors duration-300 ${isPrimary ? 'bg-white/20' : 'bg-slate-100'}`} />
-                  <p className={`text-[12px] font-normal transition-colors duration-300 ${isPrimary ? 'text-white' : 'text-gray-400'}`}>
-                    {creditsText}
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+              const creditsText = dim.credits || (idx === 0 ? 'Credits: 18' : idx === 1 ? 'Credits: 20' : idx === 2 ? 'Credits: 22' : 'Credits: 16');
+              const defaultTopics = idx === 0
+                ? ['Financial Accounting', 'Marketing Management', 'Organizational Behavior']
+                : idx === 1
+                  ? ['Corporate Finance', 'Operations Research', 'Business Analytics']
+                  : idx === 2
+                    ? ['Global Strategy', 'Innovation Management', 'Specialization Track I']
+                    : ['Industry Consulting Project', 'Entrepreneurial Lab', 'Final Thesis'];
+
+              const displayTopics = (dim.topics && dim.topics.length > 0 && dim.title !== 'Business Strategy & Leadership')
+                ? dim.topics
+                : defaultTopics;
+
+              const displayTitle = (dim.title && dim.title !== 'Business Strategy & Leadership' && dim.title !== 'Financial Management & Analytics' && dim.title !== 'Marketing & Consumer Insights' && dim.title !== 'Operations & Supply Chain')
+                ? dim.title
+                : idx === 0 ? 'Core Foundations' : idx === 1 ? 'Analytical Depth' : idx === 2 ? 'Strategic Integration' : 'Capstone Mastery';
+
+              return (
+                <motion.div
+                  key={idx}
+                  onMouseEnter={() => setHoveredIdx(idx)}
+                  onMouseLeave={() => setHoveredIdx(null)}
+                  onClick={() => {
+                    setActiveModalSemester(idx);
+                    setIsCurriculumModalOpen(true);
+                  }}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: idx * 0.12 }}
+                  className={`w-full max-w-[419px] min-h-[389px] h-full rounded-[20px] p-6 sm:p-7 flex flex-col justify-between transition-all duration-500 hover:-translate-y-1.5 border cursor-pointer ${isPrimary
+                    ? 'bg-[#303580] text-white border-white/15 shadow-[0_20px_40px_rgba(0,0,0,0.3)]'
+                    : 'bg-white text-[#303580] border-slate-100 shadow-[0_15px_35px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)]'
+                    }`}
+                >
+                  {/* Top Section */}
+                  <div>
+                    <div className="mb-6">
+                      <span className={`text-[24px] font-bold tracking-tight block transition-colors duration-300 ${isPrimary ? 'text-white' : 'text-[#303580]'}`}>
+                        {dim.number || `0${idx + 1}`}
+                      </span>
+                      <h3 className={`text-[16px] font-normal tracking-tight mt-1 leading-snug transition-colors duration-300 ${isPrimary ? 'text-white' : 'text-[#303580]'}`}>
+                        {displayTitle}
+                      </h3>
+                    </div>
+                    {/* Topics */}
+                    <div className="flex flex-col gap-3.5 mt-2">
+                      {displayTopics.map((topic, tIdx) => (
+                        <div key={tIdx} className="flex items-center gap-2.5">
+                          <span className={`w-1.5 h-1.5 rounded-full shrink-0 transition-colors duration-300 ${isPrimary ? 'bg-white' : 'bg-[#303580]'}`} />
+                          <span className={`text-[13.5px] font-normal leading-snug transition-colors duration-300 ${isPrimary ? 'text-white/95' : 'text-slate-700'}`}>
+                            {topic}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Bottom Section */}
+                  <div className="mt-auto pt-4">
+                    <div className={`w-full h-px mb-4 transition-colors duration-300 ${isPrimary ? 'bg-white/20' : 'bg-slate-100'}`} />
+                    <p className={`text-[12px] font-normal transition-colors duration-300 ${isPrimary ? 'text-white' : 'text-gray-400'}`}>
+                      {creditsText}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
 
         {/* Bottom Curriculum Button */}
         <motion.div
