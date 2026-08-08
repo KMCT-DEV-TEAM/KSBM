@@ -30,6 +30,26 @@ const defaultFeatures = [
   }
 ];
 
+const FeatureCard = ({ feat, idx, renderIcon, disableAnimation }) => (
+  <motion.div
+    initial={disableAnimation ? false : { opacity: 0, y: 30 }}
+    whileInView={disableAnimation ? undefined : { opacity: 1, y: 0 }}
+    viewport={disableAnimation ? undefined : { once: true, margin: "-30px" }}
+    transition={disableAnimation ? undefined : { duration: 0.5, delay: idx * 0.1 }}
+    className="bg-[#666B9F] rounded-[10px] p-6 shadow-md flex flex-col justify-start group h-full w-full"
+  >
+    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center mb-5 shrink-0">
+      <span className="text-[#666B9F]">{renderIcon(feat.icon)}</span>
+    </div>
+    <h3 className="text-[15px] font-bold text-white mb-2 leading-tight">
+      {feat.title}
+    </h3>
+    <p className="text-xs text-white/80 font-normal leading-relaxed">
+      {feat.desc}
+    </p>
+  </motion.div>
+);
+
 const DynamicLearningSection = ({ program }) => {
   const badgeText = program?.dynamicLearning?.badgeText || 'ABOUT THE IV';
   const title = program?.dynamicLearning?.title || 'Experience Dynamic Learning';
@@ -122,28 +142,38 @@ const DynamicLearningSection = ({ program }) => {
         </div>
 
         {/* Bottom Feature Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch pb-10">
-          {features.map((feat, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-30px" }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="bg-[#666B9F] rounded-[10px] p-6 shadow-md flex flex-col justify-start group"
-            >
-              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center mb-5 shrink-0">
-                <span className="text-[#666B9F]">{renderIcon(feat.icon)}</span>
-              </div>
-              <h3 className="text-[15px] font-bold text-white mb-2 leading-tight">
-                {feat.title}
-              </h3>
-              <p className="text-xs text-white/80 font-normal leading-relaxed">
-                {feat.desc}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+        {features.length <= 4 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch pb-10">
+            {features.map((feat, idx) => (
+              <FeatureCard key={idx} feat={feat} idx={idx} renderIcon={renderIcon} />
+            ))}
+          </div>
+        ) : (
+          <div className="relative w-full overflow-hidden pb-10">
+            <style jsx>{`
+              @keyframes marquee {
+                0% { transform: translateX(0%); }
+                100% { transform: translateX(-50%); }
+              }
+              .animate-marquee {
+                display: flex;
+                align-items: stretch;
+                width: max-content;
+                animation: marquee ${Math.max(features.length * 6, 25)}s linear infinite;
+              }
+              .animate-marquee:hover {
+                animation-play-state: paused;
+              }
+            `}</style>
+            <div className="animate-marquee gap-6">
+              {[...features, ...features, ...features].map((feat, idx) => (
+                <div key={idx} className="w-[280px] shrink-0">
+                  <FeatureCard feat={feat} idx={idx} renderIcon={renderIcon} disableAnimation={true} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

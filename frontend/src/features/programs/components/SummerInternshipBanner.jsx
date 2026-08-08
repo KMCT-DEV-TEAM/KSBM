@@ -6,10 +6,9 @@ import { motion } from 'framer-motion';
 import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
 
 const SummerInternshipBanner = ({ program }) => {
-  const badgeText = program?.internshipBadge || "EXPERIENTIAL LEARNING";
-  const btnText = program?.internshipBtnText || "Apply Now";
+  const badgeText = program?.internshipBadge ?? "EXPERIENTIAL LEARNING";
   const globalLinks = useGlobalLinks();
-  const btnLink = globalLinks['global_apply']?.link || program?.internshipBtnLink || "/#contact";
+  const btnLink = globalLinks['global_apply']?.link || "/#contact";
   const floatingImages = program?.internshipImages && program.internshipImages.length > 0
     ? program.internshipImages
     : [
@@ -48,17 +47,17 @@ const SummerInternshipBanner = ({ program }) => {
               <span>{badgeText}</span>
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[58px] font-bold tracking-tight text-white mb-6 leading-tight font-heading">
-              {program?.internshipTitle || "Summer Internship Program"}
+              {program?.internshipTitle ?? "Summer Internship Program"}
             </h2>
             <p className="text-gray-200 text-[16px] font-normal leading-relaxed max-w-2xl mb-8">
-              {program?.internshipDesc || "Our mandatory 8-week summer internship bridges the gap between academic theory and real-world corporate challenges, enabling students to work directly with industry leaders across top conglomerates and high-growth startups."}
+              {program?.internshipDesc ?? "Our mandatory 8-week summer internship bridges the gap between academic theory and real-world corporate challenges, enabling students to work directly with industry leaders across top conglomerates and high-growth startups."}
             </p>
 
             <Link
               href={btnLink}
               className="px-8 py-4 rounded-[18px] bg-white text-primary font-semibold text-sm sm:text-base tracking-wide shadow-[0_10px_25px_rgba(255,255,255,0.2)] hover:bg-blue-50 hover:scale-[1.03] transition-all duration-300 flex items-center justify-center gap-2 group"
             >
-              <span>{btnText}</span>
+              <span>Apply Now</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </motion.div>

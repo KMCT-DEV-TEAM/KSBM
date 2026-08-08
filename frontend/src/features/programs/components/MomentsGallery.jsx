@@ -105,13 +105,13 @@ const MomentsGallery = ({ program }) => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-10"
         >
-          <span className="inline-flex w-full items-center justify-center gap-2 text-xs sm:text-sm font-medium tracking-[0.25em] text-white uppercase mb-3">
-            <span className="w-full h-[1px] bg-white rounded-[18px] shrink-0" />
-            <span>
+          <div className="flex items-center justify-center gap-3 sm:gap-4 mb-4 w-full">
+            <div className="flex-1 max-w-[48px] sm:max-w-[96px] h-[1px] bg-white/40 rounded-[18px]"></div>
+            <span className="text-xs sm:text-sm font-medium tracking-[0.15em] sm:tracking-[0.25em] text-white/90 uppercase text-center shrink">
               {badgeText}
             </span>
-            <span className="w-full h-[1px] bg-white rounded-[18px] shrink-0" />
-          </span>
+            <div className="flex-1 max-w-[48px] sm:max-w-[96px] h-[1px] bg-white/40 rounded-[18px]"></div>
+          </div>
           <h2 className="text-2xl sm:text-3xl lg:text-[40px] font-semibold tracking-tight text-white mt-3 font-heading">
             {titleText}
           </h2>
@@ -146,7 +146,7 @@ const MomentsGallery = ({ program }) => {
         }
       `}</style>
 
-      <div className="relative w-full overflow-hidden py-4 z-10 space-y-5 sm:space-y-6">
+      <div className="relative w-full overflow-hidden py-4 z-10 space-y-5 sm:space-y-6 hidden md:block">
         {/* Line 1: Right to Left */}
         <div className="animate-marquee-row1 gap-5 sm:gap-6 px-4">
           {[...items, ...items, ...items, ...items].map((item, idx) => (
@@ -162,7 +162,7 @@ const MomentsGallery = ({ program }) => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
 
               <div className="absolute bottom-0 left-0 w-full p-6 sm:p-7 z-10 flex flex-col justify-end">
-                <h3 className="text-md sm:text-sm font-medium text-white leading-snug font-heading">
+                <h3 className="text-base sm:text-sm font-medium text-white leading-snug font-heading">
                   {item.title || item.subtitle}
                 </h3>
               </div>
@@ -185,7 +185,31 @@ const MomentsGallery = ({ program }) => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
 
               <div className="absolute bottom-0 left-0 w-full p-6 sm:p-7 z-10 flex flex-col justify-end">
-                <h3 className="text-md sm:text-sm font-medium text-white leading-snug font-heading">
+                <h3 className="text-base sm:text-sm font-medium text-white leading-snug font-heading">
+                  {item.title || item.subtitle}
+                </h3>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile Grid Layout */}
+      <div className="block md:hidden px-4 z-10 relative">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-8">
+          {items.map((item, idx) => (
+            <div
+              key={`grid-${idx}`}
+              className="relative rounded-[10px] overflow-hidden group cursor-pointer shadow-lg border-none bg-gray-900 h-[220px]"
+            >
+              <img
+                src={item.image || '/assets/Images/mba/gallery_67.png'}
+                alt={item.title || `Gallery image ${idx + 1}`}
+                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-90" />
+              <div className="absolute bottom-0 left-0 w-full p-5 z-10 flex flex-col justify-end">
+                <h3 className="text-base font-medium text-white leading-snug font-heading">
                   {item.title || item.subtitle}
                 </h3>
               </div>

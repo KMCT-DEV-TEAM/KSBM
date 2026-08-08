@@ -2,6 +2,20 @@ import React, { useState, useEffect } from 'react';
 import LogoUploader from './LogoUploader';
 import SingleDocumentUploader from './SingleDocumentUploader';
 
+import Swal from 'sweetalert2';
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer);
+    toast.addEventListener('mouseleave', Swal.resumeTimer);
+  }
+});
+
 const AddItemModal = ({ isOpen, onClose, title, fields, onSave, initialData }) => {
   const [formData, setFormData] = useState({});
 
@@ -28,7 +42,10 @@ const AddItemModal = ({ isOpen, onClose, title, fields, onSave, initialData }) =
   const handleSubmit = () => {
     for (const field of fields) {
       if (field.required && !formData[field.name]) {
-        alert(`Please fill in the required field: ${field.label}`);
+        Toast.fire({
+          icon: 'warning',
+          title: `Please fill in the required field: ${field.label}`
+        });
         return;
       }
     }
