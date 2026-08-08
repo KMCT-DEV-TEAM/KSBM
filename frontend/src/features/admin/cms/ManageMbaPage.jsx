@@ -354,19 +354,20 @@ const ManageMbaPage = ({ isBba = false }) => {
       setDimensions(data.dimensions || []);
       setShowSections(data.showSections || { hero: true, overview: true, dimensions: true, whyChoose: true, internships: true, dynamic: true, gallery: true, calendar: true, eligibility: true, recruiters: true });
 
-      setInternshipTitle(data.internshipsTitle || '');
-      setInternshipDesc(data.internshipsDesc || '');
-      setInternshipBgImage(data.internshipsBgImage || '');
+      setInternshipTitle(data.internshipTitle || data.internshipsTitle || (isBba ? 'Summer Internship & Industry Projects' : 'Summer Internship Program'));
+      setInternshipDesc(data.internshipDesc || data.internshipsDesc || (isBba ? 'Students undergo structured industrial visits and a dedicated corporate project phase, gaining valuable workplace skills, professional mentorship, and early career clarity.' : 'Our mandatory 8-week summer internship bridges the gap between academic theory and real-world corporate challenges, working with industry leaders across India and abroad.'));
+      setInternshipBgImage(data.internshipBgImage || data.internshipsBgImage || (isBba ? '/assets/Images/bba/bba_internship_1.png' : '/assets/Images/mba/mba_internship_1.png'));
 
       setEligibility(data.eligibility || []);
 
-      setInternshipBadge(data.internshipsBadge || 'EXPERIENTIAL LEARNING');
-      setInternshipBtnText(data.internshipsBtnText || 'Apply Now');
-      setInternshipBtnLink(data.internshipsBtnLink || '/#contact');
-      setInternshipImages(data.internshipsImages && data.internshipsImages.length > 0 ? data.internshipsImages : [
-        '/assets/Images/mba/internship_2.png',
-        '/assets/Images/mba/internship_27.png',
-        '/assets/Images/mba/internship_28.png'
+      setInternshipBadge(data.internshipBadge || data.internshipsBadge || 'EXPERIENTIAL LEARNING');
+      setInternshipBtnText(data.internshipBtnText || data.internshipsBtnText || 'Apply Now');
+      setInternshipBtnLink(data.internshipBtnLink || data.internshipsBtnLink || '/#contact');
+      const fetchedInternshipImages = data.internshipImages || data.internshipsImages;
+      setInternshipImages(fetchedInternshipImages && fetchedInternshipImages.length > 0 ? fetchedInternshipImages : [
+        isBba ? '/assets/Images/bba/bba_internship_1.png' : '/assets/Images/mba/internship_2.png',
+        isBba ? '/assets/Images/bba/bba_internship_2.png' : '/assets/Images/mba/internship_27.png',
+        isBba ? '/assets/Images/bba/bba_internship_3.png' : '/assets/Images/mba/internship_28.png'
       ]);
 
       setWhyChoosePills(data.whyChoosePills || {
@@ -515,13 +516,14 @@ const ManageMbaPage = ({ isBba = false }) => {
       confirmText: 'Yes, reset it!',
       variant: 'danger',
       action: async () => {
+        setShowSections({ hero: true, overview: true, dimensions: true, whyChoose: true, internships: true, dynamic: true, gallery: true, calendar: true, eligibility: true, recruiters: true });
         if (isBba) {
           setShortTitle('BBA');
           setTitle('Bachelor of Business Administration');
           setHeroTitleLine1('Bachelor of Business');
           setHeroTitleLine2('Administration (BBA)');
           setDescription('A dynamic three-year undergraduate program designed to build strong business foundations, leadership capabilities, and practical skills for aspiring professionals and future entrepreneurs.');
-          setHeroImage('/assets/Images/mba/mba_hero_bg.png');
+          setHeroImage('/assets/Images/bba/bba_hero_bg.png');
           setHeroPrimaryBtnText('EXPLORE PROGRAM');
           setHeroSecondaryBtnText('DOWNLOAD BROCHURE');
           setHeroCardTitle('Batch 2025–27');
@@ -532,11 +534,123 @@ const ManageMbaPage = ({ isBba = false }) => {
           setOverviewTitle('Bachelor of Business Administration');
           setOverviewText('The BBA program at KSBM lays the essential groundwork for young minds aspiring to make an impact in the corporate world or launch their own ventures.');
           setOverviewSubtext('Combining fundamental business theory with practical workshops, presentation modules, and industry exposure, the curriculum ensures smooth transition to corporate careers or premier MBA programs.');
-          setOverviewImage('/assets/Images/mba/mba_main.png');
+          setOverviewImage('/assets/Images/bba/bba_overview.png');
           setOverviewBadgeText('UNDERGRADUATE EXCELLENCE');
           setOverviewFloatingBadgeText('3-Year Foundation');
           setOverviewPrimaryBtnText('Apply Now');
           setOverviewSecondaryBtnText('Download Brochure');
+          setDimensions([
+            {
+              number: '01',
+              title: 'Business Fundamentals & Ethics',
+              description: 'Building a robust foundation in core management principles, economics, accounting, and business law.',
+              credits: 'Credits: 18',
+              topics: [
+                'Principles of Management & Economics',
+                'Corporate Law & Business Ethics',
+                'Organizational Behavior & Communication'
+              ]
+            },
+            {
+              number: '02',
+              title: 'Marketing & Communication',
+              description: 'Developing persuasive professional communication, consumer psychology understanding, and digital branding.',
+              credits: 'Credits: 20',
+              topics: [
+                'Marketing Management Essentials',
+                'Professional Corporate Communication',
+                'Digital & Social Media Fundamentals'
+              ]
+            },
+            {
+              number: '03',
+              title: 'Financial Accounting & Management',
+              description: 'Understanding corporate accounting practices, financial reporting, budgeting, and banking basics.',
+              credits: 'Credits: 22',
+              topics: [
+                'Financial Accounting & Reporting',
+                'Cost Accounting & Budgetary Control',
+                'Banking & Financial Services'
+              ]
+            },
+            {
+              number: '04',
+              title: 'Entrepreneurship & Innovation',
+              description: 'Fostering venture creation skills, startup incubation, and practical business plan development.',
+              credits: 'Credits: 16',
+              topics: [
+                'Venture Creation & Business Planning',
+                'Startup Incubation & Ecosystems',
+                'Innovation & New Product Development'
+              ]
+            }
+          ]);
+          setInternshipTitle('Summer Internship & Industry Projects');
+          setInternshipDesc('Students undergo structured industrial visits and a dedicated corporate project phase, gaining valuable workplace skills, professional mentorship, and early career clarity.');
+          setInternshipBgImage('/assets/Images/bba/bba_internship_1.png');
+          setInternshipBadge('EXPERIENTIAL LEARNING');
+          setInternshipBtnText('Apply Now');
+          setInternshipBtnLink('/#contact');
+          setInternshipImages([
+            '/assets/Images/bba/bba_internship_1.png',
+            '/assets/Images/bba/bba_internship_2.png',
+            '/assets/Images/bba/bba_internship_3.png'
+          ]);
+          setEligibility([
+            {
+              step: '01',
+              title: 'Academic Eligibility',
+              description: 'Successful completion of Higher Secondary (10+2) examination or equivalent from a recognized board.',
+              bullets: [
+                'Minimum 50% aggregate marks in 10+2 (any stream)',
+                'Students awaiting 12th results can apply provisionally',
+                'Recognized by State / CBSE / ICSE boards'
+              ]
+            },
+            {
+              step: '02',
+              title: 'Aptitude Assessment',
+              description: 'Evaluation of general aptitude, communication ability, and interest in business studies.',
+              bullets: [
+                'KSBM General Business Aptitude Assessment',
+                'Evaluation of basic analytical & verbal skills',
+                'Merit-based screening as per university guidelines'
+              ]
+            },
+            {
+              step: '03',
+              title: 'Personal Counseling & Interview',
+              description: 'Interactive session to understand student career aspirations and guide specialization pathways.',
+              bullets: [
+                'One-on-one interaction with faculty panel',
+                'Assessment of student motivation and career clarity',
+                'Final admission offer & registration counseling'
+              ]
+            }
+          ]);
+          setMomentsGallery({
+            badgeText: 'GALLERY',
+            title: 'Moments Captured in Trip',
+            bgImage: '',
+            items: [
+              { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/bba/bba_gallery_1.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
+              { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/bba/bba_gallery_2.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
+              { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/bba/bba_gallery_1.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
+              { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/bba/bba_gallery_2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
+              { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/bba/bba_gallery_1.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
+            ]
+          });
+          setAcademicCalendarBanner({
+            badgeText: 'ACADEMIC SCHEDULE 2026-27',
+            title: 'Download the Official Academic Calendar',
+            description: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
+            viewBtnText: 'View Calendar',
+            viewBtnUrl: '/assets/Images/bba/bba_schedule.png',
+            downloadBtnText: 'Download Calendar',
+            downloadBtnUrl: '/assets/Images/bba/bba_schedule.png',
+            image: '/assets/Images/bba/bba_schedule.png',
+            events: defaultCalendarEvents
+          });
         } else {
           setShortTitle('MBA');
           setTitle('Master of Business Administration');
@@ -559,15 +673,119 @@ const ManageMbaPage = ({ isBba = false }) => {
           setOverviewFloatingBadgeText('100% Case-Study Driven');
           setOverviewPrimaryBtnText('Apply Now');
           setOverviewSecondaryBtnText('Download Brochure');
+          setDimensions([
+            {
+              number: '01',
+              title: 'Strategic Management & Leadership',
+              description: 'Mastering corporate strategy, competitive advantage, organizational behavior, and executive leadership.',
+              credits: 'Credits: 18',
+              topics: [
+                'Corporate Strategy & Business Policy',
+                'Executive Leadership & Ethics',
+                'Organizational Dynamics & Change'
+              ]
+            },
+            {
+              number: '02',
+              title: 'Financial Management & Valuation',
+              description: 'Deep dive into corporate finance, investment banking, portfolio management, and financial modeling.',
+              credits: 'Credits: 20',
+              topics: [
+                'Corporate Finance & Valuations',
+                'Investment Banking & Markets',
+                'Financial Modeling & Risk Analysis'
+              ]
+            },
+            {
+              number: '03',
+              title: 'Marketing Strategy & Brand Mgmt',
+              description: 'Advanced marketing management, consumer analytics, digital transformation, and brand equity.',
+              credits: 'Credits: 22',
+              topics: [
+                'Strategic Marketing Management',
+                'Consumer Psychology & Analytics',
+                'Digital Marketing Transformation'
+              ]
+            },
+            {
+              number: '04',
+              title: 'Operations & Supply Chain',
+              description: 'Optimizing global supply chains, quality management, logistics, and operational excellence.',
+              credits: 'Credits: 16',
+              topics: [
+                'Global Supply Chain Management',
+                'Total Quality & Lean Management',
+                'Logistics & Resource Optimization'
+              ]
+            }
+          ]);
+          setInternshipTitle('Summer Internship Program');
+          setInternshipDesc('Our mandatory 8-week summer internship bridges the gap between academic theory and real-world corporate challenges, working with industry leaders across India and abroad.');
+          setInternshipBgImage('/assets/Images/mba/mba_internship_1.png');
+          setInternshipBadge('EXPERIENTIAL LEARNING');
+          setInternshipBtnText('Apply Now');
+          setInternshipBtnLink('/#contact');
+          setInternshipImages([
+            '/assets/Images/mba/internship_2.png',
+            '/assets/Images/mba/internship_27.png',
+            '/assets/Images/mba/internship_28.png'
+          ]);
+          setEligibility([
+            {
+              step: '01',
+              title: 'Academic Requirement',
+              description: "Candidates must hold a recognized Bachelor's Degree in any discipline with minimum qualifying marks.",
+              bullets: [
+                'Minimum 50% aggregate marks in graduation',
+                'Final year degree students may also apply',
+                'Degree from any university recognized by UGC/AIU'
+              ]
+            },
+            {
+              step: '02',
+              title: 'Entrance Examination',
+              description: 'Valid score in national or state-level management aptitude tests.',
+              bullets: [
+                'Valid CAT / CMAT / KMAT / MAT score',
+                'Competitive percentile score preferred',
+                'Exemption criteria as per state university regulations'
+              ]
+            },
+            {
+              step: '03',
+              title: 'Selection Process',
+              description: 'Multi-stage evaluation testing leadership aptitude, communication skills, and academic merit.',
+              bullets: [
+                'Shortlisting based on entrance examination scores',
+                'Group Discussion (GD) on contemporary business topics',
+                'Personal Interview (PI) with expert panel'
+              ]
+            }
+          ]);
+          setMomentsGallery({
+            badgeText: 'GALLERY',
+            title: 'Moments Captured in Trip',
+            bgImage: '',
+            items: [
+              { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/mba/gallery_67.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
+              { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/mba/internship_27.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
+              { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/mba/internship_28.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
+              { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/mba/internship_2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
+              { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/mba/gallery_58.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
+            ]
+          });
+          setAcademicCalendarBanner({
+            badgeText: 'ACADEMIC SCHEDULE 2026-27',
+            title: 'Download the Official Academic Calendar',
+            description: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
+            viewBtnText: 'View Calendar',
+            viewBtnUrl: '/assets/Images/mba/calendar_64.png',
+            downloadBtnText: 'Download Calendar',
+            downloadBtnUrl: '/assets/Images/mba/calendar_64.png',
+            image: '/assets/Images/mba/calendar_64.png',
+            events: defaultCalendarEvents
+          });
         }
-        setInternshipBadge('EXPERIENTIAL LEARNING');
-        setInternshipBtnText('Apply Now');
-        setInternshipBtnLink('/#contact');
-        setInternshipImages([
-          '/assets/Images/mba/internship_2.png',
-          '/assets/Images/mba/internship_27.png',
-          '/assets/Images/mba/internship_28.png'
-        ]);
         setWhyChoosePills({
           badgeText: 'LEARNING GOALS',
           title: 'Key Learning Dimensions',
@@ -584,35 +802,13 @@ const ManageMbaPage = ({ isBba = false }) => {
           title: 'Experience Dynamic Learning',
           desc1: 'Beyond the classroom, KSBM offers an electrifying campus ecosystem packed with management clubs, national-level conclaves, cultural extravaganzas, and executive workshops.',
           desc2: 'We believe true leadership is forged through holistic development, peer collaboration, and continuous exposure to diverse real-world scenarios.',
-          images: ['/assets/Images/mba/dynamic_49.png', '/assets/Images/mba/dynamic_60.png'],
+          images: isBba ? ['/assets/Images/bba/bba_internship_1.png', '/assets/Images/bba/bba_internship_2.png'] : ['/assets/Images/mba/dynamic_49.png', '/assets/Images/mba/dynamic_60.png'],
           features: [
             { title: 'Management Clubs', desc: 'Specialized student-led clubs in Finance, Marketing, HR, and Entrepreneurship.', icon: 'Users' },
             { title: 'Leadership Conclaves', desc: 'Annual summits bringing top business leaders and innovators to campus.', icon: 'Award' },
             { title: 'Cultural & Sports', desc: 'National-level fests, athletic tournaments, and vibrant community celebrations.', icon: 'Trophy' },
             { title: 'Corporate Workshops', desc: 'Intensive bootcamps on AI in business, advanced Excel, and executive presence.', icon: 'Briefcase' }
           ]
-        });
-        setMomentsGallery({
-          badgeText: 'GALLERY',
-          title: 'Moments Captured in Trip',
-          bgImage: '',
-          items: [
-            { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/mba/gallery_67.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
-            { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/mba/internship_27.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-            { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/mba/internship_28.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-            { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/mba/internship_2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
-            { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/mba/gallery_58.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
-          ]
-        });
-        setAcademicCalendarBanner({
-          badgeText: 'ACADEMIC SCHEDULE 2026-27',
-          title: 'Download the Official Academic Calendar',
-          description: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
-          viewBtnText: 'View Calendar',
-          viewBtnUrl: '/assets/Images/mba/calendar_64.png',
-          downloadBtnText: 'Download Calendar',
-          downloadBtnUrl: '/assets/Images/mba/calendar_64.png',
-          image: '/assets/Images/mba/calendar_64.png'
         });
         Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save Changes to confirm.' });
       }
@@ -1440,7 +1636,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                             'Edit Dimension Pill',
                             [
                               { name: 'title', label: 'Dimension Title', type: 'text', maxLength: 100, required: true },
-                              { name: 'description', label: 'Description', type: 'textarea', maxLength: 300, required: true },
+                              { name: 'description', label: 'Description', type: 'textarea', maxLength: 200, required: true },
                               {
                                 name: 'icon',
                                 label: 'Icon Name',
