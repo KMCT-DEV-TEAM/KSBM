@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, CheckCircle2, FileText, Award, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const AdmissionEligibility = ({ eligibility }) => {
+const AdmissionEligibility = ({ eligibility, title, subtitle }) => {
   return (
     <section id="admission" className="py-20 sm:py-28 bg-primary relative overflow-hidden text-white">
       {/* Decorative Gradient / Grid */}
@@ -25,44 +25,70 @@ const AdmissionEligibility = ({ eligibility }) => {
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-white mt-3 mb-4 font-heading">
-            Admission & Eligibility
+            {title || 'Admission & Eligibility'}
           </h2>
           <p className="text-gray-300 text-base sm:text-lg font-normal">
-            Clear, transparent, and merit-based admission process designed to discover passionate future business leaders.
+            {subtitle || 'Clear, transparent, and merit-based admission process designed to discover passionate future business leaders.'}
           </p>
         </motion.div>
 
-        {/* 3 Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch mb-16 max-w-5xl mx-auto">
-          {eligibility.map((item, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-30px" }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="bg-white/10 rounded-[18px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group h-full"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-
-                  <span className="text-2xl font-bold text-white/80 font-heading">
-                    {item.step || `0${idx + 1}`}
-                  </span>
+        {eligibility.length <= 4 ? (
+          <div className={`grid grid-cols-1 ${
+              eligibility.length === 1 ? 'md:grid-cols-1' :
+              eligibility.length === 2 ? 'md:grid-cols-2' :
+              eligibility.length === 3 ? 'md:grid-cols-3' :
+              'md:grid-cols-4'
+            } gap-6 items-stretch mb-16 max-w-6xl mx-auto`}>
+            {eligibility.map((item, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="bg-white/10 rounded-[18px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group h-full min-h-[260px]"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-2xl font-bold text-white/80 font-heading">
+                      {item.step || `0${idx + 1}`}
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-semibold text-white group-hover:text-white transition-colors duration-300 mb-2 font-heading">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-white font-normal leading-relaxed mb-5">
+                    {item.description}
+                  </p>
                 </div>
-
-                <h3 className="text-lg font-semibold text-white group-hover:text-white transition-colors duration-300 mb-2 font-heading">
-                  {item.title}
-                </h3>
-
-                <p className="text-xs sm:text-sm text-white font-normal leading-relaxed mb-5">
-                  {item.description}
-                </p>
-              </div>
-
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className="relative w-full overflow-hidden mb-16">
+            <div className="animate-marquee items-stretch gap-6 py-4">
+              {[...eligibility, ...eligibility].map((item, idx) => (
+                <div key={idx} className="flex-none w-[320px] lg:w-[350px] flex">
+                  <div className="w-full bg-white/10 rounded-[18px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group min-h-[260px]">
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-2xl font-bold text-white/80 font-heading">
+                          {item.step || `0${(idx % eligibility.length) + 1}`}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-semibold text-white group-hover:text-white transition-colors duration-300 mb-2 font-heading">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-white font-normal leading-relaxed mb-5">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Bottom CTA */}
         <motion.div

@@ -987,7 +987,7 @@ export const updateMbaPageSettings = async (req, res) => {
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
       'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
-      'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
+      'eligibilityTitle', 'eligibilitySubtitle', 'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
     ];
     const settings = await MbaPageSetting.getSettings();
     fields.forEach((field) => {
@@ -1001,6 +1001,12 @@ export const updateMbaPageSettings = async (req, res) => {
     if (req.body.showSections !== undefined) {
       settings.markModified('showSections');
     }
+    if (req.body.eligibility !== undefined) settings.markModified('eligibility');
+    if (req.body.dimensions !== undefined) settings.markModified('dimensions');
+    if (req.body.whyChoosePills !== undefined) settings.markModified('whyChoosePills');
+    if (req.body.internshipImages !== undefined) settings.markModified('internshipImages');
+    if (req.body.dynamicLearning !== undefined) settings.markModified('dynamicLearning');
+    if (req.body.momentsGallery !== undefined) settings.markModified('momentsGallery');
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
@@ -1084,7 +1090,7 @@ export const updateBbaPageSettings = async (req, res) => {
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
       'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
-      'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
+      'eligibilityTitle', 'eligibilitySubtitle', 'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
     ];
     const settings = await BbaPageSetting.getSettings();
     fields.forEach((field) => {
@@ -1098,6 +1104,12 @@ export const updateBbaPageSettings = async (req, res) => {
     if (req.body.showSections !== undefined) {
       settings.markModified('showSections');
     }
+    if (req.body.eligibility !== undefined) settings.markModified('eligibility');
+    if (req.body.dimensions !== undefined) settings.markModified('dimensions');
+    if (req.body.whyChoosePills !== undefined) settings.markModified('whyChoosePills');
+    if (req.body.internshipImages !== undefined) settings.markModified('internshipImages');
+    if (req.body.dynamicLearning !== undefined) settings.markModified('dynamicLearning');
+    if (req.body.momentsGallery !== undefined) settings.markModified('momentsGallery');
     const updatedSettings = await settings.save();
     res.json(updatedSettings);
   } catch (error) {
