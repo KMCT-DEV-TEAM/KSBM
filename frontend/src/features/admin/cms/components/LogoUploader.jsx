@@ -6,7 +6,7 @@ import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
 import confirmAction from '../../../../utils/confirmAction';
 
-const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, onChange, onUploadStateChange, label, uploadEndpoint = '/upload', disableDelete = false, layout = 'vertical', deferredMode = false, defaultImage = '' }) => {
+const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, onChange, onUploadStateChange, label, uploadEndpoint = '/upload', disableDelete = false, layout = 'vertical', deferredMode = false, defaultImage = '', acceptTypes = { 'image/*': ['.png', '.jpg', '.jpeg', '.svg', '.webp'] } }) => {
   const [isUploading, setIsUploading] = useState(false);
   const displayUrl = currentLogoUrl || value || currentImage || defaultImage;
 
@@ -89,12 +89,12 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      'image/*': ['.png', '.jpg', '.jpeg', '.svg', '.webp']
-    },
+    accept: acceptTypes,
     maxFiles: 1,
     disabled: isUploading
   });
+
+  const isPdf = displayUrl?.toLowerCase().includes('.pdf') || (displayUrl?.startsWith('blob:') && acceptTypes['application/pdf']);
 
   return (
     <div className="w-full">
@@ -123,9 +123,9 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-700">
-                      {isDragActive ? "Drop image here..." : (label ? `Drag & drop ${label.toLowerCase()}, or click to select` : "Drag & drop a new image/logo, or click to select")}
+                      {isDragActive ? "Drop file here..." : (label ? `Drag & drop ${label.toLowerCase()}, or click to select` : "Drag & drop a new file, or click to select")}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">Supports PNG, JPG, SVG, WEBP up to 5MB</p>
+                    <p className="text-xs text-gray-500 mt-1">Supports {Object.values(acceptTypes).flat().map(ext => ext.replace('.', '').toUpperCase()).join(', ')} up to 5MB</p>
                   </div>
                 </>
               )}
@@ -136,13 +136,19 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
         {displayUrl && (
           <div className={`${layout === 'horizontal' ? 'flex-1 m-0' : 'mt-4'} p-4 border border-gray-100 rounded-lg bg-gray-50 flex items-center justify-between`}>
             <div className="flex items-center space-x-4">
-              <div className="w-20 h-20 bg-white border border-gray-200 rounded flex items-center justify-center p-1 shadow-sm relative">
-                <img 
-                  src={displayUrl} 
-                  onError={(e) => { e.target.onerror = null; e.target.src = defaultImage || 'https://via.placeholder.com/150?text=Error'; }}
-                  alt="Uploaded Image" 
-                  className="max-w-full max-h-full object-contain" 
-                />
+              <div className="w-20 h-20 bg-white border border-gray-200 rounded flex items-center justify-center p-1 shadow-sm relative overflow-hidden">
+                {isPdf ? (
+                  <div className="flex flex-col items-center justify-center w-full h-full bg-gray-50 text-gray-400">
+                    <span className="text-xs font-bold mt-1">PDF</span>
+                  </div>
+                ) : (
+                  <img 
+                    src={displayUrl} 
+                    onError={(e) => { e.target.onerror = null; e.target.src = defaultImage || 'https://via.placeholder.com/150?text=Error'; }}
+                    alt="Uploaded Image" 
+                    className="max-w-full max-h-full object-contain" 
+                  />
+                )}
                 <div className="absolute -top-2 -left-2 bg-black/60 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
                   {(defaultImage && displayUrl.includes(defaultImage)) ? "Default" : "Current"}
                 </div>

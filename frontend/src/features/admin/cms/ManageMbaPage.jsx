@@ -87,7 +87,11 @@ const processDeferredUploads = async (obj, apiInstance) => {
       try {
         const res = await fetch(obj);
         const blob = await res.blob();
-        const file = new File([blob], 'upload.png', { type: blob.type });
+        const ext = blob.type === 'application/pdf' ? '.pdf' :
+          blob.type === 'image/jpeg' ? '.jpg' :
+            blob.type === 'image/webp' ? '.webp' :
+              blob.type === 'image/svg+xml' ? '.svg' : '.png';
+        const file = new File([blob], `upload${ext}`, { type: blob.type });
         const formData = new FormData();
         formData.append('image', file);
         const uploadRes = await apiInstance.post('/upload/mba', formData, {
@@ -168,6 +172,8 @@ const ManageMbaPage = ({ isBba = false }) => {
   const [internshipDesc, setInternshipDesc] = useState('');
   const [internshipBgImage, setInternshipBgImage] = useState('');
 
+  const [eligibilityTitle, setEligibilityTitle] = useState('');
+  const [eligibilitySubtitle, setEligibilitySubtitle] = useState('');
   const [eligibility, setEligibility] = useState([]);
 
   const [internshipBadge, setInternshipBadge] = useState('EXPERIENTIAL LEARNING');
@@ -230,6 +236,8 @@ const ManageMbaPage = ({ isBba = false }) => {
     internshipBgImage,
     internshipBadge,
     internshipImages,
+    eligibilityTitle,
+    eligibilitySubtitle,
     eligibility,
     dynamicLearning,
     momentsGallery,
@@ -320,8 +328,10 @@ const ManageMbaPage = ({ isBba = false }) => {
 
       setInternshipTitle(data.internshipTitle || data.internshipsTitle || (isBba ? 'Summer Internship & Industry Projects' : 'Summer Internship Program'));
       setInternshipDesc(data.internshipDesc || data.internshipsDesc || (isBba ? 'Students undergo structured industrial visits and a dedicated corporate project phase, gaining valuable workplace skills, professional mentorship, and early career clarity.' : 'Our mandatory 8-week summer internship bridges the gap between academic theory and real-world corporate challenges, working with industry leaders across India and abroad.'));
-      setInternshipBgImage(data.internshipBgImage || data.internshipsBgImage || (isBba ? '/assets/Images/bba/bba_internship_1.png' : '/assets/Images/mba/mba_internship_1.png'));
+      setInternshipBgImage(data.internshipBgImage || data.internshipsBgImage || (isBba ? '/assets/Images/bba/bba_internship_1.png' : '/assets/Images/mba/gallery_67.png'));
 
+      setEligibilityTitle(data.eligibilityTitle || 'Admission & Eligibility');
+      setEligibilitySubtitle(data.eligibilitySubtitle || 'Clear, transparent, and merit-based admission process designed to discover passionate future business leaders.');
       setEligibility(data.eligibility || []);
 
       setInternshipBadge(data.internshipBadge || data.internshipsBadge || 'EXPERIENTIAL LEARNING');
@@ -429,6 +439,8 @@ const ManageMbaPage = ({ isBba = false }) => {
             internshipBgImage,
             internshipBadge,
             internshipImages,
+            eligibilityTitle,
+            eligibilitySubtitle,
             eligibility,
             whyChoosePills,
             dynamicLearning,
@@ -649,7 +661,7 @@ const ManageMbaPage = ({ isBba = false }) => {
             } else {
               setInternshipTitle('Summer Internship Program');
               setInternshipDesc('Our mandatory 8-week summer internship bridges the gap between academic theory and real-world corporate challenges, working with industry leaders across India and abroad.');
-              setInternshipBgImage('/assets/Images/mba/mba_internship_1.png');
+              setInternshipBgImage('/assets/Images/mba/gallery_67.png');
               setInternshipBadge('EXPERIENTIAL LEARNING');
               setInternshipImages([
                 '/assets/Images/mba/internship_2.png',
@@ -722,6 +734,8 @@ const ManageMbaPage = ({ isBba = false }) => {
             }
             break;
           case 'eligibility':
+            setEligibilityTitle('Admission & Eligibility');
+            setEligibilitySubtitle('Clear, transparent, and merit-based admission process designed to discover passionate future business leaders.');
             if (isBba) {
               setEligibility([
                 {
@@ -888,11 +902,13 @@ const ManageMbaPage = ({ isBba = false }) => {
     updated[index][field] = val;
     setEligibility(updated);
   };
-  const removeEligibilityStep = (index) => confirmAction({ title: 'Remove Eligibility Step', message: 'Are you sure you want to remove this eligibility card?', confirmText: 'Yes, remove', variant: 'danger', action: () => {
-    const remaining = eligibility.filter((_, i) => i !== index);
-    const renumbered = remaining.map((item, idx) => ({ ...item, step: String(idx + 1).padStart(2, '0') }));
-    setEligibility(renumbered);
-  }});
+  const removeEligibilityStep = (index) => confirmAction({
+    title: 'Remove Eligibility Step', message: 'Are you sure you want to remove this eligibility card?', confirmText: 'Yes, remove', variant: 'danger', action: () => {
+      const remaining = eligibility.filter((_, i) => i !== index);
+      const renumbered = remaining.map((item, idx) => ({ ...item, step: String(idx + 1).padStart(2, '0') }));
+      setEligibility(renumbered);
+    }
+  });
 
   const addEligibilityBullet = (stepIdx) => {
     openAddModal(
@@ -958,72 +974,6 @@ const ManageMbaPage = ({ isBba = false }) => {
     setDraggedPillIndex(null);
   };
 
-  // Academic Calendar Events helpers
-  const addCalendarEvent = () => {
-    openAddModal(
-      'Add Calendar Event',
-      [
-        { name: 'title', label: 'Event Title', type: 'text', maxLength: 100, required: true },
-        { name: 'date', label: 'Date', type: 'text', maxLength: 100, required: true, placeholder: 'e.g. November 15, 2026' },
-        { name: 'semester', label: 'Semester / Term', type: 'text', maxLength: 50, required: true, placeholder: 'e.g. Trimester 1' },
-        { name: 'category', label: 'Category', type: 'text', maxLength: 50, required: true, placeholder: 'e.g. Exams & Assessments' },
-        { name: 'description', label: 'Description', type: 'textarea', maxLength: 200, required: true }
-      ],
-      (data) => {
-        setAcademicCalendarBanner({
-          ...academicCalendarBanner,
-          events: [
-            ...(academicCalendarBanner.events || []),
-            {
-              id: Date.now().toString(),
-              title: data.title,
-              date: data.date,
-              semester: data.semester,
-              category: data.category,
-              description: data.description
-            }
-          ]
-        });
-      }
-    );
-  };
-  const updateCalendarEvent = (idx, field, val) => {
-    const updated = [...(academicCalendarBanner.events || [])];
-    updated[idx] = { ...updated[idx], [field]: val };
-    setAcademicCalendarBanner({ ...academicCalendarBanner, events: updated });
-  };
-  const handleCalendarDragStart = (e, index) => {
-    setDraggedCalendarIndex(index);
-    e.dataTransfer.effectAllowed = 'move';
-    setTimeout(() => { if (e.target) e.target.style.opacity = '0.5'; }, 0);
-  };
-  const handleCalendarDragOver = (e) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-  };
-  const handleCalendarDrop = (e, targetIndex) => {
-    e.preventDefault();
-    if (draggedCalendarIndex === null || draggedCalendarIndex === targetIndex) return;
-    const items = [...(academicCalendarBanner.events || [])];
-    const draggedItem = items[draggedCalendarIndex];
-    items.splice(draggedCalendarIndex, 1);
-    items.splice(targetIndex, 0, draggedItem);
-    setAcademicCalendarBanner({ ...academicCalendarBanner, events: items });
-    setDraggedCalendarIndex(null);
-  };
-  const handleCalendarDragEnd = (e) => {
-    if (e.target) e.target.style.opacity = '1';
-    setDraggedCalendarIndex(null);
-  };
-  const removeCalendarEvent = (idx) => confirmAction({ title: 'Remove Event', message: 'Are you sure you want to remove this calendar event?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updated = (academicCalendarBanner.events || []).filter((_, i) => i !== idx); setAcademicCalendarBanner({ ...academicCalendarBanner, events: updated }); } });
-  const moveCalendarEvent = (idx, direction) => {
-    const current = [...(academicCalendarBanner.events || [])];
-    const target = idx + direction;
-    if (target < 0 || target >= current.length) return;
-    const [item] = current.splice(idx, 1);
-    current.splice(target, 0, item);
-    setAcademicCalendarBanner({ ...academicCalendarBanner, events: current });
-  };
 
   // DynamicLearning helpers
   const addDynamicFeature = () => {
@@ -1744,7 +1694,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               <div className="pt-4 border-t border-gray-100">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Banner Background Image</label>
                 <div className="space-y-4">
-                  <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={internshipBgImage} defaultImage="/assets/Images/mba/internship_bg.png" onUploadSuccess={(url) => setInternshipBgImage(url)} />
+                  <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={internshipBgImage} defaultImage="/assets/Images/mba/gallery_67.png" onUploadSuccess={(url) => setInternshipBgImage(url)} />
                   <div>
 
                   </div>
@@ -2114,113 +2064,19 @@ const ManageMbaPage = ({ isBba = false }) => {
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-gray-100 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-base font-bold text-primary flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-primary" /> Interactive Schedule & Key Milestones
-                    </h3>
-                    <p className="text-xs text-gray-500 mt-0.5">Manage timeline events displayed when visitors click "View Calendar" on the program page.</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={addCalendarEvent}
-                    className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
-                  >
-                    <Plus className="w-4 h-4" /> Add Schedule Event
-                  </button>
-                </div>
-
-                <div className="space-y-4">
-                  {(academicCalendarBanner.events || []).map((ev, idx) => (
-                    <div
-                      key={ev.id || idx}
-                      draggable
-                      onDragStart={(e) => handleCalendarDragStart(e, idx)}
-                      onDragOver={handleCalendarDragOver}
-                      onDrop={(e) => handleCalendarDrop(e, idx)}
-                      onDragEnd={handleCalendarDragEnd}
-                      className={`p-5 rounded-xl bg-gray-50/80 border ${draggedCalendarIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative shadow-sm transition-all duration-200 group flex items-start gap-4`}
-                    >
-                      <div className="flex-shrink-0 cursor-grab text-gray-400 active:cursor-grabbing p-2 hover:bg-gray-100 rounded transition-colors" title="Drag to reorder">
-                        <GripVertical className="w-6 h-6" />
-                      </div>
-
-                      <div className="absolute top-4 right-4 flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            openEditModal(
-                              'Edit Schedule Event',
-                              [
-                                { name: 'title', label: 'Event Title', type: 'text', maxLength: 60, required: true },
-                                { name: 'date', label: 'Date Range', type: 'text', maxLength: 100, required: true },
-                                {
-                                  name: 'semester',
-                                  label: 'Semester / Term',
-                                  type: 'select',
-                                  required: true,
-                                  options: [
-                                    { value: 'Trimester 1', label: 'Trimester 1' },
-                                    { value: 'Trimester 2', label: 'Trimester 2' },
-                                    { value: 'Trimester 3', label: 'Trimester 3' },
-                                    { value: 'Key Events', label: 'Key Events' }
-                                  ]
-                                },
-                                {
-                                  name: 'category',
-                                  label: 'Category',
-                                  type: 'select',
-                                  required: true,
-                                  options: [
-                                    { value: 'Leadership & Events', label: 'Leadership & Events' },
-                                    { value: 'Exams & Assessments', label: 'Exams & Assessments' },
-                                    { value: 'Industrial Visits', label: 'Industrial Visits' },
-                                    { value: 'Term Breaks & Holidays', label: 'Term Breaks & Holidays' }
-                                  ]
-                                },
-                                { name: 'description', label: 'Brief Description', type: 'textarea', maxLength: 300, required: true }
-                              ],
-                              ev,
-                              (data) => {
-                                const updatedEvents = [...(academicCalendarBanner.events || [])];
-                                updatedEvents[idx] = { ...updatedEvents[idx], ...data };
-                                setAcademicCalendarBanner({ ...academicCalendarBanner, events: updatedEvents });
-                              }
-                            );
-                          }}
-                          className="p-2 rounded-lg text-blue-500 hover:bg-blue-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
-                          title="Edit Item"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => removeCalendarEvent(idx)}
-                          className="p-2 rounded-lg text-red-500 hover:bg-red-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
-                          title="Remove Event"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-
-                      <div className="flex-grow flex flex-col gap-1 pr-20">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">{ev.semester || 'Trimester 1'}</span>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 bg-gray-200 px-2 py-0.5 rounded">{ev.category || 'Event'}</span>
-                        </div>
-                        <h4 className="text-sm font-bold text-gray-800">{ev.title || 'Untitled Event'}</h4>
-                        <p className="text-xs font-semibold text-gray-500 flex items-center gap-1"><Calendar className="w-3 h-3" /> {ev.date || 'No date set'}</p>
-                        <p className="text-xs text-gray-600 mt-2">{ev.description || 'No description provided.'}</p>
-                      </div>
-                    </div>
-                  ))}
-
-                  {(academicCalendarBanner.events || []).length === 0 && (
-                    <div className="text-center py-8 text-gray-400 text-xs border-2 border-dashed border-gray-200 rounded-xl">
-                      No schedule events added. Click "Add Schedule Event" to create one, or default timeline will be shown.
-                    </div>
-                  )}
+              <div className="pt-6 border-t border-gray-100">
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-2">Upload Academic Calendar PDF</label>
+                <div className="space-y-3 max-w-md">
+                  <LogoUploader
+                    deferredMode={true}
+                    uploadEndpoint="/upload/mba"
+                    currentLogoUrl={academicCalendarBanner.pdfUrl || ''}
+                    defaultImage=""
+                    acceptTypes={{ 'application/pdf': ['.pdf'] }}
+                    onUploadSuccess={(url) => setAcademicCalendarBanner({ ...academicCalendarBanner, pdfUrl: url })}
+                    label="Calendar PDF"
+                  />
+                  <p className="text-xs text-gray-500">Upload the PDF that users will see when they click "View Calendar" or "Download Calendar".</p>
                 </div>
               </div>
             </div>
@@ -2238,6 +2094,23 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <input type="checkbox" className="sr-only peer" checked={showSections.eligibility ?? true} onChange={(e) => setShowSections({ ...showSections, eligibility: e.target.checked })} />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
+              </div>
+            </div>
+          )}
+          {activeTab === 'eligibility' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
+              <div className="flex items-center justify-between border-b pb-4">
+                <h2 className="text-lg font-bold text-primary">Admission Section Details</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Section Title</label>
+                  <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" value={eligibilityTitle} onChange={(e) => setEligibilityTitle(e.target.value)} />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Section Subtitle</label>
+                  <textarea className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]" value={eligibilitySubtitle} onChange={(e) => setEligibilitySubtitle(e.target.value)} />
+                </div>
               </div>
             </div>
           )}

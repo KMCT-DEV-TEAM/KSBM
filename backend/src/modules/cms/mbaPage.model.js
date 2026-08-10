@@ -120,6 +120,11 @@ const mbaPageSchema = new mongoose.Schema(
         '/assets/Images/mba/mba_internship_3.png'
       ]
     },
+    eligibilityTitle: { type: String, default: 'Admission & Eligibility' },
+    eligibilitySubtitle: {
+      type: String,
+      default: 'Clear, transparent, and merit-based admission process designed to discover passionate future business leaders.'
+    },
     eligibility: {
       type: [
         {
