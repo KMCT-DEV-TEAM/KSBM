@@ -208,6 +208,10 @@ const ManageGrievancePage = () => {
   };
 
   const handleDeleteCellOption = (idx) => {
+    if (formData.formSection.cellOptions.length <= 1) {
+      Toast.fire({ icon: 'warning', title: 'At least one grievance cell option must remain.' });
+      return;
+    }
     const newOptions = [...formData.formSection.cellOptions];
     newOptions.splice(idx, 1);
     handleChange('formSection', 'cellOptions', newOptions);
@@ -225,6 +229,10 @@ const ManageGrievancePage = () => {
   };
 
   const handleDeleteListItem = (field, idx) => {
+    if ((formData.formSection[field] || []).length <= 1) {
+      Toast.fire({ icon: 'warning', title: 'At least one item must remain.' });
+      return;
+    }
     const newList = [...(formData.formSection[field] || [])];
     newList.splice(idx, 1);
     handleChange('formSection', field, newList);

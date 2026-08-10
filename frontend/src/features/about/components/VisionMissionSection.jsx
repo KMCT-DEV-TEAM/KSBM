@@ -5,10 +5,15 @@ import { Eye } from 'lucide-react';
 import api from '../../../api/axios';
 
 const VisionMissionSection = ({ previewData }) => {
-  const scrollRef = useRef(null);
-  const floatScrollRef = useRef(0);
+  const visionScrollRef = useRef(null);
+  const visionFloatScrollRef = useRef(0);
+  const [isVisionHovered, setIsVisionHovered] = useState(false);
+  
+  const missionScrollRef = useRef(null);
+  const missionFloatScrollRef = useRef(0);
+  const [isMissionHovered, setIsMissionHovered] = useState(false);
+  
   const sectionRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false);
   const [activeCard, setActiveCard] = useState(null);
   
   const [data, setData] = useState({
@@ -22,15 +27,15 @@ const VisionMissionSection = ({ previewData }) => {
       'To foster a culture of continuous learning, ethical practice, and compassionate patient care.',
       'To contribute to the healthcare sector by producing highly skilled and dedicated nursing professionals.'
     ],
-    missionImage: '/assets/Images/image 28.png'
-  ,
+    missionImage: '/assets/Images/image 28.png',
     showSection: true
   });
 
-  const { scrollYProgress } = useScroll({ container: scrollRef });
+  const { scrollYProgress: visionScrollYProgress } = useScroll({ container: visionScrollRef });
+  const visionIndicatorY = useTransform(visionScrollYProgress, [0, 1], [0, 110]);
 
-  // Custom scrollbar thumb movement (track is 150px, thumb is 40px)
-  const indicatorY = useTransform(scrollYProgress, [0, 1], [0, 110]);
+  const { scrollYProgress: missionScrollYProgress } = useScroll({ container: missionScrollRef });
+  const missionIndicatorY = useTransform(missionScrollYProgress, [0, 1], [0, 110]);
 
   useEffect(() => {
     if (previewData) {
@@ -50,32 +55,57 @@ const VisionMissionSection = ({ previewData }) => {
     fetchData();
   }, [previewData]);
 
+  // Vision Auto-scroll
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el || isHovered) return;
+    const el = visionScrollRef.current;
+    if (!el || isVisionHovered) return;
 
-    floatScrollRef.current = el.scrollTop;
+    visionFloatScrollRef.current = el.scrollTop;
     let animationId;
     const scroll = () => {
-      floatScrollRef.current += 0.1; // Adjusted speed
-      el.scrollTop = floatScrollRef.current;
+      visionFloatScrollRef.current += 0.1;
+      el.scrollTop = visionFloatScrollRef.current;
 
-      // Sync if user manually scrolls
-      if (Math.abs(el.scrollTop - floatScrollRef.current) > 2) {
-        floatScrollRef.current = el.scrollTop;
+      if (Math.abs(el.scrollTop - visionFloatScrollRef.current) > 2) {
+        visionFloatScrollRef.current = el.scrollTop;
       }
 
-      // Reset if reached the bottom
       if (el.scrollTop >= el.scrollHeight - el.clientHeight) {
         el.scrollTop = 0;
-        floatScrollRef.current = 0;
+        visionFloatScrollRef.current = 0;
       }
       animationId = requestAnimationFrame(scroll);
     };
 
     animationId = requestAnimationFrame(scroll);
     return () => cancelAnimationFrame(animationId);
-  }, [isHovered]);
+  }, [isVisionHovered]);
+
+  // Mission Auto-scroll
+  useEffect(() => {
+    const el = missionScrollRef.current;
+    if (!el || isMissionHovered) return;
+
+    missionFloatScrollRef.current = el.scrollTop;
+    let animationId;
+    const scroll = () => {
+      missionFloatScrollRef.current += 0.1;
+      el.scrollTop = missionFloatScrollRef.current;
+
+      if (Math.abs(el.scrollTop - missionFloatScrollRef.current) > 2) {
+        missionFloatScrollRef.current = el.scrollTop;
+      }
+
+      if (el.scrollTop >= el.scrollHeight - el.clientHeight) {
+        el.scrollTop = 0;
+        missionFloatScrollRef.current = 0;
+      }
+      animationId = requestAnimationFrame(scroll);
+    };
+
+    animationId = requestAnimationFrame(scroll);
+    return () => cancelAnimationFrame(animationId);
+  }, [isMissionHovered]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -125,7 +155,7 @@ const VisionMissionSection = ({ previewData }) => {
           </div>
 
           <div 
-            className="flex-1 relative rounded-2xl shadow-lg p-10 lg:p-14 flex flex-col justify-center items-center min-h-[300px] overflow-hidden cursor-pointer group"
+            className="flex-1 relative rounded-2xl shadow-lg p-10 lg:p-14 flex flex-col min-h-[300px] overflow-hidden cursor-pointer group"
             onClick={() => {
               if (window.innerWidth < 768) setActiveCard(activeCard === 'vision' ? null : 'vision');
             }}
@@ -147,23 +177,43 @@ const VisionMissionSection = ({ previewData }) => {
             {/* Purple Overlay */}
             <div className={`absolute inset-0 bg-[#454e7d]/90 z-0 transition-opacity duration-500 ${activeCard === 'vision' ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100'}`}></div>
 
-            <div className={`relative z-10 flex flex-col items-center text-center transition-all duration-500 ${activeCard === 'vision' ? 'opacity-100' : 'opacity-0 pointer-events-none md:group-hover:opacity-100 md:group-hover:pointer-events-auto'}`}>
-              {/* Eye Icon */}
-              <div className="mb-4 text-white/80 md:hidden">
-                <Eye size={36} strokeWidth={1} />
-              </div>
-
-              {/* Title */}
-              <h3 className="text-white text-2xl md:text-3xl font-serif font-bold mb-8">
+            <div className={`transition-all duration-500 w-full h-full flex flex-col relative z-10 ${activeCard === 'vision' ? 'opacity-100' : 'opacity-0 pointer-events-none md:group-hover:opacity-100 md:group-hover:pointer-events-auto'}`}>
+              {/* Top Center Title */}
+              <h3 className="text-white text-2xl md:text-3xl font-serif font-bold text-center mb-16">
                 {data.visionTitle}
               </h3>
 
-              {/* Content text */}
-              {data.visionContent.map((para, idx) => (
-                <p key={idx} className="text-white/90 text-sm md:text-base leading-relaxed italic max-w-sm mb-2 whitespace-pre-line">
-                  {para}
-                </p>
-              ))}
+              {/* Content Section */}
+              <div className="flex flex-col pr-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-[2px] h-6 bg-white shrink-0"></div>
+                  <h4 className="text-white text-lg font-bold tracking-wide">{data.visionTitle}</h4>
+                </div>
+
+                {/* Scrollable Container */}
+                <div
+                  ref={visionScrollRef}
+                  onMouseEnter={() => setIsVisionHovered(true)}
+                  onMouseLeave={() => setIsVisionHovered(false)}
+                  onTouchStart={() => setIsVisionHovered(true)}
+                  onTouchEnd={() => setIsVisionHovered(false)}
+                  className="overflow-y-auto pr-2 h-[120px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] flex flex-col gap-6"
+                >
+                  {data.visionContent.map((para, idx) => (
+                    <p key={idx} className="text-white/90 text-sm md:text-base leading-relaxed italic pl-1 whitespace-pre-line">
+                      {para}
+                    </p>
+                  ))}
+                </div>
+              </div>
+
+              {/* Custom Scroll Indicator (Right Edge) */}
+              <div className="absolute right-8 top-1/2 -translate-y-1/2 h-[150px] w-[2px] bg-white/10 rounded-full">
+                <motion.div
+                  className="w-full bg-gradient-to-b from-white to-transparent rounded-full"
+                  style={{ height: '40px', y: visionIndicatorY }}
+                />
+              </div>
             </div>
           </div>
         </motion.div>
@@ -218,11 +268,11 @@ const VisionMissionSection = ({ previewData }) => {
 
                 {/* Scrollable Container */}
                 <div
-                  ref={scrollRef}
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
-                  onTouchStart={() => setIsHovered(true)}
-                  onTouchEnd={() => setIsHovered(false)}
+                  ref={missionScrollRef}
+                  onMouseEnter={() => setIsMissionHovered(true)}
+                  onMouseLeave={() => setIsMissionHovered(false)}
+                  onTouchStart={() => setIsMissionHovered(true)}
+                  onTouchEnd={() => setIsMissionHovered(false)}
                   className="overflow-y-auto pr-2 h-[120px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] flex flex-col gap-6"
                 >
                   {data.missionContent.map((para, idx) => (
@@ -237,7 +287,7 @@ const VisionMissionSection = ({ previewData }) => {
               <div className="absolute right-8 top-1/2 -translate-y-1/2 h-[150px] w-[2px] bg-white/10 rounded-full">
                 <motion.div
                   className="w-full bg-gradient-to-b from-white to-transparent rounded-full"
-                  style={{ height: '40px', y: indicatorY }}
+                  style={{ height: '40px', y: missionIndicatorY }}
                 />
               </div>
             </div>

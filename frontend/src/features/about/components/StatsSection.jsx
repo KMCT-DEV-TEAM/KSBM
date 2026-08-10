@@ -32,7 +32,7 @@ const Counter = ({ value }) => {
   const match = strValue.match(/^(\d+)(.*)$/);
   
   if (!match) {
-    return <span>{value}</span>;
+    return <span ref={ref}>{value}</span>;
   }
 
   return <span ref={ref}>0{match[2]}</span>;
@@ -40,12 +40,8 @@ const Counter = ({ value }) => {
 
 const StatsSection = ({ previewData }) => {
   const [statsData, setStatsData] = useState({});
-  const [stats, setStats] = useState([
-    { value: '16+', label: 'YEARS OF EXCELLENCE' },
-    { value: '991+', label: 'ACTIVE STUDENTS' },
-    { value: '196+', label: 'GLOBAL RECRUITERS' },
-    { value: '196+', label: 'GLOBAL RECRUITERS' },
-  ]);
+  const [stats, setStats] = useState([]);
+  const [isLoading, setIsLoading] = useState(!previewData);
 
   useEffect(() => {
     if (previewData) {
@@ -64,12 +60,16 @@ const StatsSection = ({ previewData }) => {
         }
       } catch (error) {
         console.error('Error fetching Stats data:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchStats();
   }, [previewData]);
 
+  if (isLoading) return null;
   if (statsData?.showSection === false && !previewData) return null;
+  if (stats.length === 0 && !previewData) return null;
 
   return (
     <section className="w-full pb-10">
@@ -88,19 +88,19 @@ const StatsSection = ({ previewData }) => {
             }
           }
         }}
-        className="w-[98%] max-w-[1440px] bg-[#f4fafe] py-12 mx-auto px-4 sm:px-6 lg:px-8 rounded-xl shadow-sm"
+        className="w-[98%] max-w-[1440px] bg-[#f4fafe] py-8 md:py-12 mx-auto px-2 sm:px-6 lg:px-8 rounded-xl shadow-sm"
       >
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 w-full">
+        <div className="flex flex-wrap md:flex-nowrap justify-center items-start gap-y-8 gap-x-2 md:gap-4 w-full">
           {stats.map((stat, index) => (
             <motion.div 
               key={index} 
               variants={{ hidden: { opacity: 0, scale: 0.8 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } } }}
-              className="flex flex-col items-center justify-center text-center px-2"
+              className="flex flex-col items-center justify-start text-center w-[47%] sm:w-[45%] md:w-auto md:flex-1 px-1"
             >
-              <span className="font-serif text-[#4e558e] mb-2 text-3xl md:text-4xl lg:text-5xl">
+              <span className="font-serif text-[#4e558e] mb-1 md:mb-2 text-3xl md:text-3xl lg:text-4xl">
                 <Counter value={stat.value} />
               </span>
-              <span className="text-xs font-bold tracking-widest text-gray-600 uppercase">
+              <span className="text-[11px] sm:text-xs font-bold tracking-wider md:tracking-widest text-gray-600 uppercase break-words w-full leading-tight">
                 {stat.label}
               </span>
             </motion.div>

@@ -54,11 +54,13 @@ export const getGrievances = async (req, res) => {
 export const updateGrievanceStatus = async (req, res) => {
   try {
     const { status } = req.body;
-    const grievance = await Grievance.findById(req.params.id);
+    const updatedGrievance = await Grievance.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true, runValidators: true }
+    );
 
-    if (grievance) {
-      grievance.status = status;
-      const updatedGrievance = await grievance.save();
+    if (updatedGrievance) {
       res.status(200).json(updatedGrievance);
     } else {
       res.status(404).json({ message: 'Grievance not found' });
