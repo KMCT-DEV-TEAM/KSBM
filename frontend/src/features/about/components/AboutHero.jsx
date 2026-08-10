@@ -42,8 +42,6 @@ const AboutHero = ({ previewData }) => {
     fetchHeroData();
   }, [previewData]);
 
-  if (heroData?.showSection === false) return null;
-
   return (
     <section className="relative w-full min-h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32">
       {/* Background Image */}
@@ -58,7 +56,7 @@ const AboutHero = ({ previewData }) => {
       </div>
       
       {/* Content */}
-      {heroData.showTextContent && (
+      {(heroData.showTextContent && heroData.showSection !== false) && (
       <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-white flex flex-col items-start text-left">
         <motion.div 
           initial="hidden"

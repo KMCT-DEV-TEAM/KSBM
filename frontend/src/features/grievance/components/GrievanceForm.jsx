@@ -113,6 +113,16 @@ const GrievanceForm = ({ formData: cmsData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.department) {
+      Toast.fire({ icon: 'warning', title: 'Please select a Department.' });
+      return;
+    }
+
+    if (!formData.course) {
+      Toast.fire({ icon: 'warning', title: 'Please select a Course.' });
+      return;
+    }
+
     if (formData.grievanceCell.length === 0) {
       Toast.fire({ icon: 'warning', title: 'Please select at least one Grievance Cell.' });
       return;

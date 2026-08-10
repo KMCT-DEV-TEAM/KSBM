@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { Eye, CheckCircle2, XCircle, Search, LayoutTemplate, Clock, X } from 'lucide-react';
 import AdminSkeleton from '../cms/components/AdminSkeleton';
 import PageHeader from '../cms/components/PageHeader';
+import confirmAction from '../../../utils/confirmAction';
 
 const Toast = Swal.mixin({
   toast: true,

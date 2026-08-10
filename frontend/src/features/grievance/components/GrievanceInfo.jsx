@@ -20,10 +20,23 @@ const GrievanceInfo = ({ infoData }) => {
             className="flex-1"
           >
             <div className="flex items-center gap-4 mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-primary whitespace-nowrap">
-                {title}
+              <h2 className={`text-2xl md:text-3xl font-bold text-primary ${title.length > 20 ? 'whitespace-normal' : 'whitespace-nowrap'}`}>
+                {(() => {
+                  if (title.length <= 20) return title;
+                  const middle = Math.floor(title.length / 2);
+                  let breakIdx = title.lastIndexOf(' ', middle + 5);
+                  if (breakIdx === -1) breakIdx = title.indexOf(' ');
+                  if (breakIdx === -1) return title;
+                  return (
+                    <>
+                      {title.slice(0, breakIdx)}
+                      <br />
+                      {title.slice(breakIdx + 1)}
+                    </>
+                  );
+                })()}
               </h2>
-              <div className="w-full h-[1px] bg-gray-200 rounded-full"></div>
+              <div className="flex-1 h-[1px] bg-gray-200 rounded-full"></div>
             </div>
             
             <p className="text-gray-500 leading-[1.8] text-[15px] md:text-[16px] text-justify">

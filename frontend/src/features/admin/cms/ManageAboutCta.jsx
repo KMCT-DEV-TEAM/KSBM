@@ -218,14 +218,10 @@ const ManageAboutCta = () => {
           <textarea value={subtext} maxLength={150} onChange={(e) => setSubtext(e.target.value)} rows={3} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8">
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
             <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Button Text</label>
             <input type="text" value={buttonText} onChange={(e) => setButtonText(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-          </div>
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-            <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Button Link</label>
-            <input type="text" value={buttonLink} onChange={(e) => setButtonLink(e.target.value)} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
           </div>
         </div>
 
