@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { Save, RefreshCw, Plus, Trash2, GraduationCap, FileText, BookOpen, Briefcase, Award, Eye, Monitor, Tablet, Smartphone, X, RotateCcw, ChevronLeft, ChevronRight, Calendar, ArrowUp, ArrowDown, GripVertical, Edit2 } from 'lucide-react';
+import { Save, RefreshCw, Plus, Trash2, GraduationCap, FileText, BookOpen, Briefcase, Award, Eye, Monitor, Tablet, Smartphone, X, RotateCcw, ChevronLeft, ChevronRight, Calendar, ArrowUp, ArrowDown, GripVertical, Edit2, MousePointerClick } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
@@ -174,6 +174,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
   const [eligibilityTitle, setEligibilityTitle] = useState('');
   const [eligibilitySubtitle, setEligibilitySubtitle] = useState('');
+  const [eligibilityBtnText, setEligibilityBtnText] = useState('Start your Application');
+  const [eligibilityBtnLink, setEligibilityBtnLink] = useState('');
   const [eligibility, setEligibility] = useState([]);
 
   const [internshipBadge, setInternshipBadge] = useState('EXPERIENTIAL LEARNING');
@@ -332,6 +334,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
       setEligibilityTitle(data.eligibilityTitle || 'Admission & Eligibility');
       setEligibilitySubtitle(data.eligibilitySubtitle || 'Clear, transparent, and merit-based admission process designed to discover passionate future business leaders.');
+      setEligibilityBtnText(data.eligibilityBtnText || 'Start your Application');
+      setEligibilityBtnLink(data.eligibilityBtnLink || '');
       setEligibility(data.eligibility || []);
 
       setInternshipBadge(data.internshipBadge || data.internshipsBadge || 'EXPERIENTIAL LEARNING');
@@ -441,6 +445,8 @@ const ManageMbaPage = ({ isBba = false }) => {
             internshipImages,
             eligibilityTitle,
             eligibilitySubtitle,
+            eligibilityBtnText,
+            eligibilityBtnLink,
             eligibility,
             whyChoosePills,
             dynamicLearning,
@@ -736,6 +742,8 @@ const ManageMbaPage = ({ isBba = false }) => {
           case 'eligibility':
             setEligibilityTitle('Admission & Eligibility');
             setEligibilitySubtitle('Clear, transparent, and merit-based admission process designed to discover passionate future business leaders.');
+            setEligibilityBtnText('Start your Application');
+            setEligibilityBtnLink('');
             if (isBba) {
               setEligibility([
                 {
@@ -1111,7 +1119,8 @@ const ManageMbaPage = ({ isBba = false }) => {
     { id: 'momentsGallery', name: 'Moments Gallery', icon: <FileText className="w-4 h-4" /> },
     { id: 'academicCalendarBanner', name: 'Academic Calendar', icon: <Calendar className="w-4 h-4" /> },
     { id: 'eligibility', name: 'Admission & Eligibility', icon: <Award className="w-4 h-4" /> },
-    { id: 'topRecruiters', name: 'Top Recruiters & Partners', icon: <Briefcase className="w-4 h-4" /> }
+    { id: 'topRecruiters', name: 'Top Recruiters & Partners', icon: <Briefcase className="w-4 h-4" /> },
+    { id: 'actionButtons', name: 'Action Buttons', icon: <MousePointerClick className="w-4 h-4" /> }
   ];
 
 
@@ -1290,19 +1299,6 @@ const ManageMbaPage = ({ isBba = false }) => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
-                <div>
-                  <CharCountLabel label="Primary Action Button Text" value={heroPrimaryBtnText} max={30} />
-                  <input maxLength={30}
-                    type="text"
-                    value={heroPrimaryBtnText}
-                    onChange={(e) => setHeroPrimaryBtnText(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    placeholder="EXPLORE PROGRAM"
-                  />
-                </div>
-              </div>
-
               <div className="pt-4 border-t border-gray-100">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Hero Background Image</label>
                 <div className="space-y-4">
@@ -1383,16 +1379,6 @@ const ManageMbaPage = ({ isBba = false }) => {
                     onChange={(e) => setOverviewFloatingBadgeText(e.target.value)}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     placeholder="100% Case-Study Driven"
-                  />
-                </div>
-                <div>
-                  <CharCountLabel label="Primary Action Button Text" value={overviewPrimaryBtnText} max={30} />
-                  <input maxLength={30}
-                    type="text"
-                    value={overviewPrimaryBtnText}
-                    onChange={(e) => setOverviewPrimaryBtnText(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    placeholder="Apply Now"
                   />
                 </div>
               </div>
@@ -2212,7 +2198,99 @@ const ManageMbaPage = ({ isBba = false }) => {
                 <p className="text-xs text-gray-500 mt-1">Manage corporate logos, placement categories, CTC highlights, and partner links displayed at the bottom of the {shortTitle} Program Page.</p>
               </div>
               <div className="pt-2">
-                <ManageRecruiters />
+                <ManageRecruiters hideVisibilityToggle={true} />
+              </div>
+            </div>
+          )}
+
+          {/* Action Buttons Section */}
+          {activeTab === 'actionButtons' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 mb-6">
+              <h2 className="text-lg font-bold text-primary border-b pb-2">Program Action Buttons</h2>
+              <p className="text-sm text-gray-500 mb-4">Manage the text and links for buttons displayed across various sections of this program page.</p>
+              
+              <div className="space-y-8">
+                {/* Hero Banner Buttons */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-3 border-b pb-1">Hero Banner Buttons</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <CharCountLabel label="Primary Action Button Text" value={heroPrimaryBtnText} max={30} />
+                      <input maxLength={30}
+                        type="text"
+                        value={heroPrimaryBtnText}
+                        onChange={(e) => setHeroPrimaryBtnText(e.target.value)}
+                        className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                      />
+                    </div>
+                    <div>
+                      <CharCountLabel label="Secondary Action Button Text" value={heroSecondaryBtnText} max={30} />
+                      <input maxLength={30}
+                        type="text"
+                        value={heroSecondaryBtnText}
+                        onChange={(e) => setHeroSecondaryBtnText(e.target.value)}
+                        className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Overview Buttons */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-3 border-b pb-1">Overview Section Buttons</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <CharCountLabel label="Primary Action Button Text" value={overviewPrimaryBtnText} max={30} />
+                      <input maxLength={30}
+                        type="text"
+                        value={overviewPrimaryBtnText}
+                        onChange={(e) => setOverviewPrimaryBtnText(e.target.value)}
+                        className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                      />
+                    </div>
+                    <div>
+                      <CharCountLabel label="Secondary Action Button Text" value={overviewSecondaryBtnText} max={30} />
+                      <input maxLength={30}
+                        type="text"
+                        value={overviewSecondaryBtnText}
+                        onChange={(e) => setOverviewSecondaryBtnText(e.target.value)}
+                        className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Internship Buttons */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-3 border-b pb-1">Internship Section Button</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <CharCountLabel label="Action Button Text" value={internshipBtnText} max={30} />
+                      <input maxLength={30} type="text" className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" value={internshipBtnText} onChange={(e) => setInternshipBtnText(e.target.value)} />
+                    </div>
+                    <div>
+                      <CharCountLabel label="Action Button Link (Optional)" value={internshipBtnLink} max={100} />
+                      <input maxLength={100} type="text" className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" value={internshipBtnLink} onChange={(e) => setInternshipBtnLink(e.target.value)} placeholder="/contact or external link" />
+                      <p className="text-xs text-gray-500 mt-1">Leave empty to use the Global Apply Link.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Admission Buttons */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-3 border-b pb-1">Admission & Eligibility Button</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Action Button Text</label>
+                      <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" value={eligibilityBtnText} onChange={(e) => setEligibilityBtnText(e.target.value)} placeholder="Start your Application" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Action Button Link (Optional)</label>
+                      <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" value={eligibilityBtnLink} onChange={(e) => setEligibilityBtnLink(e.target.value)} placeholder="/admissions or external link" />
+                      <p className="text-xs text-gray-500 mt-1">Leave empty to use the Global Apply Link.</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}

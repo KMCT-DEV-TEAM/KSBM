@@ -372,7 +372,7 @@ const ProgramPage = ({ programType = 'mba' }) => {
       {(!activePreviewTab || activePreviewTab === 'dynamicLearning') && (config?.showSections?.dynamic !== false) && <DynamicLearningSection program={config} />}
       {(!activePreviewTab || activePreviewTab === 'momentsGallery') && (config?.showSections?.gallery !== false) && <MomentsGallery program={config} />}
       {(!activePreviewTab || activePreviewTab === 'academicCalendarBanner') && (config?.showSections?.calendar !== false) && <AcademicCalendarBanner program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'eligibility') && (config?.showSections?.eligibility !== false) && <AdmissionEligibility eligibility={config.eligibility} title={config.eligibilityTitle} subtitle={config.eligibilitySubtitle} />}
+      {(!activePreviewTab || activePreviewTab === 'eligibility') && (config?.showSections?.eligibility !== false) && <AdmissionEligibility eligibility={config.eligibility} eligibilityTitle={config.eligibilityTitle} eligibilitySubtitle={config.eligibilitySubtitle} eligibilityBtnText={config.eligibilityBtnText} eligibilityBtnLink={config.eligibilityBtnLink} />}
       {(!activePreviewTab || activePreviewTab === 'topRecruiters') && (config?.showSections?.recruiters !== false) && <TopRecruitersGrid />}
       </div>
     </>

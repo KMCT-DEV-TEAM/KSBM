@@ -121,6 +121,9 @@ const mbaPageSchema = new mongoose.Schema(
       ]
     },
     eligibilityTitle: { type: String, default: 'Admission & Eligibility' },
+
+    eligibilityBtnText: { type: String, default: 'Start your Application' },
+    eligibilityBtnLink: { type: String, default: '' },
     eligibilitySubtitle: {
       type: String,
       default: 'Clear, transparent, and merit-based admission process designed to discover passionate future business leaders.'
