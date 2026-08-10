@@ -227,11 +227,11 @@ const LearningDimensionsGrid = ({ dimensions = [] }) => {
                     ? ['Global Strategy', 'Innovation Management', 'Specialization Track I']
                     : ['Industry Consulting Project', 'Entrepreneurial Lab', 'Final Thesis'];
 
-              const displayTopics = (dim.topics && dim.topics.length > 0 && dim.title !== 'Business Strategy & Leadership')
+              const displayTopics = (dim.topics && dim.topics.length > 0)
                 ? dim.topics
                 : defaultTopics;
 
-              const displayTitle = (dim.title && dim.title !== 'Business Strategy & Leadership' && dim.title !== 'Financial Management & Analytics' && dim.title !== 'Marketing & Consumer Insights' && dim.title !== 'Operations & Supply Chain')
+              const displayTitle = dim.title
                 ? dim.title
                 : idx === 0 ? 'Core Foundations' : idx === 1 ? 'Analytical Depth' : idx === 2 ? 'Strategic Integration' : 'Capstone Mastery';
 

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Download, Calendar as CalendarIcon, Clock, GraduationCap, CalendarPlus, ChevronRight, X, Filter, Sparkles, CheckCircle2, BookOpen, Briefcase, Award, Search, FileSpreadsheet, FileDown, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Swal from 'sweetalert2';
+import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
 
 const defaultCalendarEvents = [
   { id: '1', title: 'Orientation & Leadership Summit', date: 'July 15 - July 18, 2026', semester: 'Trimester 1', category: 'Leadership & Events', description: 'Inaugural session, corporate guest keynotes, and campus orientation for the incoming cohort.' },
@@ -24,10 +25,13 @@ const AcademicCalendarBanner = ({ program }) => {
   const badgeText = program?.academicCalendarBanner?.badgeText || 'ACADEMIC SCHEDULE 2026-27';
   const titleText = program?.academicCalendarBanner?.title || 'Download the Official Academic Calendar';
   const descriptionText = program?.academicCalendarBanner?.description || 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.';
-  const viewBtnText = program?.academicCalendarBanner?.viewBtnText || 'View Calendar';
-  const viewBtnUrl = program?.academicCalendarBanner?.viewBtnUrl || '/assets/Images/mba/mba_calendar.png';
-  const downloadBtnText = program?.academicCalendarBanner?.downloadBtnText || 'Download Calendar';
-  const downloadBtnUrl = program?.academicCalendarBanner?.downloadBtnUrl || '/assets/Images/mba/mba_calendar.png';
+  
+  const globalLinks = useGlobalLinks();
+  const viewBtnText = 'View Calendar';
+  const viewBtnUrl = globalLinks['global_view_calendar']?.link || '/assets/Images/mba/mba_calendar.png';
+  const downloadBtnText = 'Download Calendar';
+  const downloadBtnUrl = globalLinks['global_download_calendar']?.link || '/assets/Images/mba/mba_calendar.png';
+  
   const image = program?.academicCalendarBanner?.image || '/assets/Images/mba/mba_calendar.png';
 
   const events = (program?.academicCalendarBanner?.events && program.academicCalendarBanner.events.length > 0)
