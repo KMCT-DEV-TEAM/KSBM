@@ -58,7 +58,7 @@ const CustomSelect = ({ value, onChange, options, placeholder, inputClasses }) =
             {options.map((opt, idx) => (
               <div
                 key={idx}
-                className="px-5 py-3 hover:bg-gray-50 cursor-pointer text-gray-700 text-sm font-medium transition-colors"
+                className={`px-5 py-3 hover:bg-gray-50 cursor-pointer text-gray-700 text-sm font-medium transition-colors ${idx !== options.length - 1 ? 'border-b border-gray-100' : ''}`}
                 onClick={() => {
                   onChange(opt);
                   setIsOpen(false);
