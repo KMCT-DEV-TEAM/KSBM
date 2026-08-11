@@ -221,7 +221,7 @@ const ContactHero = ({ previewData, onDataLoaded }) => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      placeholder="Your Name"
+                      placeholder="Your Name *"
                       className="w-full px-4 py-3.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 text-sm focus:outline-none focus:border-white/50 focus:bg-white/15 transition-all shadow-inner"
                       required
                     />
@@ -232,7 +232,7 @@ const ContactHero = ({ previewData, onDataLoaded }) => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="Email Address"
+                      placeholder="Email Address *"
                       className="w-full px-4 py-3.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 text-sm focus:outline-none focus:border-white/50 focus:bg-white/15 transition-all shadow-inner"
                       required
                     />
@@ -245,26 +245,26 @@ const ContactHero = ({ previewData, onDataLoaded }) => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    placeholder="Phone Number"
+                    placeholder="Phone Number *"
                     className="w-full px-4 py-3.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 text-sm focus:outline-none focus:border-white/50 focus:bg-white/15 transition-all shadow-inner"
                   />
                 </div>
 
                 <div className="relative">
-                  <div 
+                  <div
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="w-full px-4 py-3.5 rounded-xl bg-white/10 border border-white/20 text-white/90 text-sm focus:outline-none focus:border-white/50 transition-all shadow-inner cursor-pointer flex justify-between items-center"
                   >
                     <span>{formData.service || 'Select Service'}</span>
                     <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                   </div>
-                  
+
                   {isDropdownOpen && (
                     <>
                       <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)} />
                       <div className="absolute top-full left-0 mt-2 w-full bg-white rounded-xl shadow-xl z-50 overflow-hidden text-gray-800 text-sm border border-gray-100">
                         {['MBA Admissions Inquiry', 'Placement & Corporate Relations', 'Campus Visit & Tour', 'Examination & Academic Records', 'General Inquiry'].map((serviceOption, idx, arr) => (
-                          <div 
+                          <div
                             key={serviceOption}
                             onClick={() => {
                               setFormData(prev => ({ ...prev, service: serviceOption }));
