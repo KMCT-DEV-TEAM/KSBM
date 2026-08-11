@@ -373,9 +373,9 @@ const ManageManagementDesk = () => {
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <div className="flex justify-between items-center mb-1.5">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Hero Subtext</label>
-                <span className="text-xs text-gray-400">{(heroSubtext || '').length}/200</span>
+                <span className="text-xs text-gray-400">{(heroSubtext || '').length}/225</span>
               </div>
-              <textarea maxLength={200} value={heroSubtext} onChange={(e) => setHeroSubtext(e.target.value)} rows={4} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+              <textarea maxLength={225} value={heroSubtext} onChange={(e) => setHeroSubtext(e.target.value)} rows={4} className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
@@ -440,13 +440,13 @@ const ManageManagementDesk = () => {
                     </div>
                     <div className="flex flex-col flex-1 relative">
                       <textarea 
-                        maxLength={500}
+                        maxLength={600}
                         value={para}
                         onChange={(e) => updateIntroDescription(index, e.target.value)}
                         rows={4}
                         className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                       />
-                      <span className="text-[10px] text-gray-400 absolute bottom-2 right-3 bg-white px-1 rounded-sm">{(para || '').length}/500</span>
+                      <span className="text-[10px] text-gray-400 absolute bottom-2 right-3 bg-white px-1 rounded-sm">{(para || '').length}/600</span>
                     </div>
                     <button onClick={() => removeIntroDescriptionPara(index)} className="p-2 text-red-500 hover:bg-red-50 rounded-md mt-1 shrink-0"><Trash2 className="w-4 h-4" /></button>
                   </div>

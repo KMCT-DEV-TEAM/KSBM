@@ -195,7 +195,7 @@ const ContactHero = ({ previewData, onDataLoaded }) => {
           className="flex items-center justify-center gap-4 sm:gap-6 w-full mb-10 sm:mb-14"
         >
           <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-white/60"></div>
-          <span className="text-sm sm:text-base font-bold tracking-[0.25em] text-white uppercase whitespace-nowrap px-2">
+          <span className="text-sm sm:text-base font-bold tracking-[0.25em] text-white uppercase whitespace-normal text-center sm:whitespace-nowrap px-2">
             {heroData.badge}
           </span>
           <div className="flex-1 h-[1px] bg-gradient-to-l from-transparent via-white/40 to-white/60"></div>
