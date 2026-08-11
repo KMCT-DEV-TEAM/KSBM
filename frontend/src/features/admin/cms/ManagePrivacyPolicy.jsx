@@ -472,22 +472,22 @@ const ManagePrivacyPolicy = () => {
                     <textarea
                       rows="4"
                       value={mainContent.closingParagraph1 || ''}
-                      maxLength={500}
+                      maxLength={1000}
                       onChange={(e) => setMainContent({ ...mainContent, closingParagraph1: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium"
                     />
-                    <div className="text-right text-xs text-gray-400 mt-1">{mainContent.closingParagraph1?.length || 0}/500</div>
+                    <div className="text-right text-xs text-gray-400 mt-1">{mainContent.closingParagraph1?.length || 0}/1000</div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-800 mb-1">Closing Summary Paragraph 2</label>
                     <textarea
                       rows="3"
                       value={mainContent.closingParagraph2 || ''}
-                      maxLength={500}
+                      maxLength={1000}
                       onChange={(e) => setMainContent({ ...mainContent, closingParagraph2: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium"
                     />
-                    <div className="text-right text-xs text-gray-400 mt-1">{mainContent.closingParagraph2?.length || 0}/500</div>
+                    <div className="text-right text-xs text-gray-400 mt-1">{mainContent.closingParagraph2?.length || 0}/1000</div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-800 mb-1">Closing Statement (Intellectual Property Note)</label>
@@ -547,9 +547,9 @@ const ManagePrivacyPolicy = () => {
                   placeholder="Enter the bullet point content..."
                   className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm leading-relaxed"
                   rows="4"
-                  maxLength={500}
+                  maxLength={200}
                 />
-                <div className="text-right text-xs text-gray-400 mt-1">{newBulletPoint?.length || 0}/500</div>
+                <div className="text-right text-xs text-gray-400 mt-1">{newBulletPoint?.length || 0}/200</div>
               </div>
             </div>
 

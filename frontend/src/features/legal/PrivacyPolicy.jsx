@@ -65,7 +65,7 @@ const PrivacyPolicy = () => {
     <div className="min-h-screen bg-white flex flex-col justify-between">
       <main>
         {/* Top Hero Section */}
-        <section className="relative min-h-[520px] sm:min-h-[620px] md:min-h-[680px] flex items-center justify-center overflow-hidden bg-[#111836] py-24 sm:py-32 px-4">
+        <section className="relative min-h-[520px] sm:min-h-[620px] md:min-h-[680px] flex flex-col justify-center overflow-hidden bg-[#111836] pt-32 pb-16 px-4">
           {/* Background Image & Overlay */}
           <div className="absolute inset-0 z-0">
             <img
@@ -76,18 +76,18 @@ const PrivacyPolicy = () => {
             <div className="absolute inset-0 bg-primary/75" />
           </div>
 
-          <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28">
+          <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               className="max-w-3xl"
             >
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4 leading-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-6 leading-tight mt-8">
                 {hero.title || 'Privacy Policy'}
               </h1>
 
-              <p className="font-medium text-white/80 leading-relaxed text-[18px] max-w-2xl">
+              <p className="font-medium text-white/80 leading-relaxed text-[16px] sm:text-[18px] max-w-2xl mb-4">
                 {hero.subtitle || 'Browse our FAQs to learn more about admissions, course structure, eligibility, placement assistance, scholarships, and campus facilities before you apply.'}
               </p>
             </motion.div>
@@ -115,9 +115,6 @@ const PrivacyPolicy = () => {
                 {mainContent.paragraph4 && <p>{mainContent.paragraph4}</p>}
                 {mainContent.paragraph5 && <p>{mainContent.paragraph5}</p>}
                 {mainContent.paragraph6 && <p>{mainContent.paragraph6}</p>}
-                {mainContent.paragraph1 && <p>{mainContent.paragraph1}</p>}
-                {mainContent.paragraph2 && <p>{mainContent.paragraph2}</p>}
-                {mainContent.paragraph3 && <p>{mainContent.paragraph3}</p>}
               </div>
 
               {/* Bullet Points */}
