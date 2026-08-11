@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, CheckCircle2, ChevronDown } from 'lucide-react';
 import Swal from 'sweetalert2';
 import api from '../../../api/axios';
 
@@ -75,6 +75,7 @@ const ContactHero = ({ previewData, onDataLoaded }) => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -249,20 +250,34 @@ const ContactHero = ({ previewData, onDataLoaded }) => {
                   />
                 </div>
 
-                <div>
-                  <select
-                    name="service"
-                    value={formData.service}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3.5 rounded-xl bg-white/10 border border-white/20 text-white/90 text-sm focus:outline-none focus:border-white/50 transition-all shadow-inner cursor-pointer"
+                <div className="relative">
+                  <div 
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="w-full px-4 py-3.5 rounded-xl bg-white/10 border border-white/20 text-white/90 text-sm focus:outline-none focus:border-white/50 transition-all shadow-inner cursor-pointer flex justify-between items-center"
                   >
-                    <option value="">Select Service</option>
-                    <option value="MBA Admissions Inquiry">MBA Admissions Inquiry</option>
-                    <option value="Placement & Corporate Relations">Placement & Corporate Relations</option>
-                    <option value="Campus Visit & Tour">Campus Visit & Tour</option>
-                    <option value="Examination & Academic Records">Examination & Academic Records</option>
-                    <option value="General Inquiry">General Inquiry</option>
-                  </select>
+                    <span>{formData.service || 'Select Service'}</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  
+                  {isDropdownOpen && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)} />
+                      <div className="absolute top-full left-0 mt-2 w-full bg-white rounded-xl shadow-xl z-50 overflow-hidden text-gray-800 text-sm border border-gray-100">
+                        {['MBA Admissions Inquiry', 'Placement & Corporate Relations', 'Campus Visit & Tour', 'Examination & Academic Records', 'General Inquiry'].map((serviceOption, idx, arr) => (
+                          <div 
+                            key={serviceOption}
+                            onClick={() => {
+                              setFormData(prev => ({ ...prev, service: serviceOption }));
+                              setIsDropdownOpen(false);
+                            }}
+                            className={`px-5 py-3.5 cursor-pointer hover:bg-gray-50 transition-colors ${idx !== arr.length - 1 ? 'border-b border-gray-100' : ''}`}
+                          >
+                            {serviceOption}
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <div>
