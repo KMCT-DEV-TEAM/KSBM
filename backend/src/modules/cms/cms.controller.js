@@ -987,7 +987,7 @@ export const updateMbaPageSettings = async (req, res) => {
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
       'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
-      'eligibilityTitle', 'eligibilitySubtitle', 'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
+      'eligibilityTitle', 'eligibilitySubtitle', 'eligibilityBtnText', 'eligibilityBtnLink', 'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
     ];
     const settings = await MbaPageSetting.getSettings();
     fields.forEach((field) => {
@@ -1090,7 +1090,7 @@ export const updateBbaPageSettings = async (req, res) => {
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
       'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
-      'eligibilityTitle', 'eligibilitySubtitle', 'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
+      'eligibilityTitle', 'eligibilitySubtitle', 'eligibilityBtnText', 'eligibilityBtnLink', 'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
     ];
     const settings = await BbaPageSetting.getSettings();
     fields.forEach((field) => {

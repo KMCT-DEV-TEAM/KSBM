@@ -3,8 +3,14 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, FileText, Award, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
 
-const AdmissionEligibility = ({ eligibility, title, subtitle }) => {
+const AdmissionEligibility = ({ eligibility = [], eligibilityTitle, eligibilitySubtitle, btnText, btnLink, eligibilityBtnText, eligibilityBtnLink, title, subtitle }) => {
+  const globalLinks = useGlobalLinks();
+  const applyLink = btnLink || eligibilityBtnLink || globalLinks['global_apply']?.link || '/admissions';
+  const displayTitle = eligibilityTitle || title || 'Admission & Eligibility';
+  const displaySubtitle = eligibilitySubtitle || subtitle || 'Clear, transparent, and merit-based admission process designed to discover passionate future business leaders.';
+
   return (
     <section id="admission" className="py-20 sm:py-28 bg-primary relative overflow-hidden text-white">
       {/* Decorative Gradient / Grid */}
@@ -25,10 +31,10 @@ const AdmissionEligibility = ({ eligibility, title, subtitle }) => {
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-white mt-3 mb-4 font-heading">
-            {title || 'Admission & Eligibility'}
+            {displayTitle}
           </h2>
           <p className="text-gray-300 text-base sm:text-lg font-normal">
-            {subtitle || 'Clear, transparent, and merit-based admission process designed to discover passionate future business leaders.'}
+            {displaySubtitle}
           </p>
         </motion.div>
 
@@ -101,13 +107,15 @@ const AdmissionEligibility = ({ eligibility, title, subtitle }) => {
           <p className="text-gray-300 text-sm sm:text-base font-medium mb-6">
             Ready to embark on your leadership and academic excellence journey?
           </p>
-          <Link
-            href="/#contact"
+          <a
+            href={applyLink}
+            target={applyLink.startsWith('http') ? '_blank' : undefined}
+            rel={applyLink.startsWith('http') ? 'noopener noreferrer' : undefined}
             className="px-10 py-5 rounded-[18px] bg-white text-primary font-semibold text-base tracking-wide shadow-[0_12px_30px_rgba(255,255,255,0.25)] hover:bg-blue-50 hover:scale-[1.03] transition-all duration-300 flex items-center gap-3 group"
           >
-            <span>Start your Application</span>
+            <span>{btnText || eligibilityBtnText || 'Start your Application'}</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
+          </a>
         </motion.div>
 
       </div>
