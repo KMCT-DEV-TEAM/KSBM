@@ -540,6 +540,7 @@ const ManageAlumni = () => {
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       placeholder="Brief intro..."
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.hero?.subtitle?.length || 0}/300 characters</div>
                   </div>
                 </div>
                 <div>
@@ -576,7 +577,6 @@ const ManageAlumni = () => {
                   <div>
                     <div className="flex justify-between mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Small Subtitle</label>
-                      <span className="text-xs text-gray-400">{data.legacy?.subtitle?.length || 0}/50</span>
 </div>
 <input
                       type="text"
@@ -585,7 +585,7 @@ const ManageAlumni = () => {
                       onChange={(e) => updateSection('legacy', 'subtitle', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
-<div className="text-right text-xs text-gray-400 mt-1">{data.hero?.subtitle?.length || 0}/300 characters</div>
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.legacy?.subtitle?.length || 0}/50 characters</div>
                   </div>
                   <div>
                     <div className="mb-1.5">
@@ -616,11 +616,11 @@ const ManageAlumni = () => {
                       onChange={(e) => updateSection('legacy', 'description1', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.legacy?.description1?.length || 0}/600 characters</div>
                   </div>
                   <div>
                     <div className="flex justify-between mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Paragraph 2</label>
-                      <span className="text-xs text-gray-400">{data.legacy?.description2?.length || 0}/600</span>
                     </div>
                     <textarea
                       rows="4"
@@ -629,6 +629,7 @@ const ManageAlumni = () => {
                       onChange={(e) => updateSection('legacy', 'description2', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.legacy?.description2?.length || 0}/600 characters</div>
                   </div>
                 </div>
 
@@ -661,7 +662,6 @@ const ManageAlumni = () => {
                   <div>
                     <div className="flex justify-between mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Floating Quote</label>
-                      <span className="text-xs text-gray-400">{data.legacy?.floatingQuote?.length || 0}/150</span>
 </div>
 <input
                       type="text"
@@ -670,48 +670,60 @@ const ManageAlumni = () => {
                       onChange={(e) => updateSection('legacy', 'floatingQuote', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
-<div className="text-right text-xs text-gray-400 mt-1">{data.legacy?.description1?.length || 0}/600 characters</div>
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.legacy?.floatingQuote?.length || 0}/150 characters</div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Stat 1 (Value & Label)</label>
                     <div className="grid grid-cols-2 gap-2">
-                      <input
-                        type="text"
-                        value={data.legacy?.stat1Value || ''}
-                        maxLength={20}
-                        onChange={(e) => updateSection('legacy', 'stat1Value', e.target.value)}
-                        className="px-3 py-2.5 border border-gray-300 rounded-xl text-sm outline-none"
-                        placeholder="30k+"
-                      />
-                      <input
-                        type="text"
-                        value={data.legacy?.stat1Label || ''}
-                        maxLength={50}
-                        onChange={(e) => updateSection('legacy', 'stat1Label', e.target.value)}
-                        className="px-3 py-2.5 border border-gray-300 rounded-xl text-sm outline-none"
-                        placeholder="Global Alumni"
-                      />
+                      <div>
+                        <input
+                          type="text"
+                          value={data.legacy?.stat1Value || ''}
+                          maxLength={20}
+                          onChange={(e) => updateSection('legacy', 'stat1Value', e.target.value)}
+                          className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm outline-none"
+                          placeholder="30k+"
+                        />
+                        <div className="text-right text-xs text-gray-400 mt-1">{data.legacy?.stat1Value?.length || 0}/20 characters</div>
+                      </div>
+                      <div>
+                        <input
+                          type="text"
+                          value={data.legacy?.stat1Label || ''}
+                          maxLength={50}
+                          onChange={(e) => updateSection('legacy', 'stat1Label', e.target.value)}
+                          className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm outline-none"
+                          placeholder="Global Alumni"
+                        />
+                        <div className="text-right text-xs text-gray-400 mt-1">{data.legacy?.stat1Label?.length || 0}/50 characters</div>
+                      </div>
                     </div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Stat 2 (Value & Label)</label>
                     <div className="grid grid-cols-2 gap-2">
-                      <input
-                        type="text"
-                        value={data.legacy?.stat2Value || ''}
-                        maxLength={20}
-                        onChange={(e) => updateSection('legacy', 'stat2Value', e.target.value)}
-                        className="px-3 py-2.5 border border-gray-300 rounded-xl text-sm outline-none"
-                        placeholder="150+"
-                      />
-                      <input
-                        type="text"
-                        value={data.legacy?.stat2Label || ''}
-                        maxLength={50}
-                        onChange={(e) => updateSection('legacy', 'stat2Label', e.target.value)}
-                        className="px-3 py-2.5 border border-gray-300 rounded-xl text-sm outline-none"
-                        placeholder="Industry Leaders"
-                      />
+                      <div>
+                        <input
+                          type="text"
+                          value={data.legacy?.stat2Value || ''}
+                          maxLength={20}
+                          onChange={(e) => updateSection('legacy', 'stat2Value', e.target.value)}
+                          className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm outline-none"
+                          placeholder="150+"
+                        />
+                        <div className="text-right text-xs text-gray-400 mt-1">{data.legacy?.stat2Value?.length || 0}/20 characters</div>
+                      </div>
+                      <div>
+                        <input
+                          type="text"
+                          value={data.legacy?.stat2Label || ''}
+                          maxLength={50}
+                          onChange={(e) => updateSection('legacy', 'stat2Label', e.target.value)}
+                          className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm outline-none"
+                          placeholder="Industry Leaders"
+                        />
+                        <div className="text-right text-xs text-gray-400 mt-1">{data.legacy?.stat2Label?.length || 0}/50 characters</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -743,7 +755,7 @@ const ManageAlumni = () => {
                   <Plus className="w-4 h-4" /> Add Event
                 </button>
               </div>
-              <div className="mb-6">
+              <div className="mb-6 max-w-md">
                 <div className="mb-1.5">
 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
                   
@@ -753,7 +765,7 @@ const ManageAlumni = () => {
                   value={data.events?.heading || ''}
                   maxLength={50}
                   onChange={(e) => updateSection('events', 'heading', e.target.value)}
-                  className="max-w-md w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
 <div className="text-right text-xs text-gray-400 mt-1">{data.events?.heading?.length || 0}/50 characters</div>
               </div>
@@ -885,7 +897,7 @@ const ManageAlumni = () => {
                   <Plus className="w-4 h-4" /> Add Photo
                 </button>
               </div>
-              <div className="mb-6">
+              <div className="mb-6 max-w-md">
                 <div className="mb-1.5">
 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
                   
@@ -895,7 +907,7 @@ const ManageAlumni = () => {
                   value={data.gallery?.heading || ''}
                   maxLength={50}
                   onChange={(e) => updateSection('gallery', 'heading', e.target.value)}
-                  className="max-w-md w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
 <div className="text-right text-xs text-gray-400 mt-1">{data.gallery?.heading?.length || 0}/50 characters</div>
               </div>
@@ -996,6 +1008,7 @@ const ManageAlumni = () => {
                     onChange={(e) => updateSection('cta', 'subtitle', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.cta?.subtitle?.length || 0}/300 characters</div>
                 </div>
               </div>
             </div>
@@ -1039,7 +1052,6 @@ const ManageAlumni = () => {
                       <div>
                         <div className="flex justify-between mb-1.5">
                           <label className="block text-sm font-semibold text-gray-700">Event Title</label>
-                          <span className="text-xs text-gray-400">{currentItem?.title?.length || 0}/100</span>
 </div>
 <input
                           type="text"
@@ -1049,7 +1061,7 @@ const ManageAlumni = () => {
                           className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                           placeholder="e.g. Global Reunion 2024"
                         />
-<div className="text-right text-xs text-gray-400 mt-1">{data.cta?.subtitle?.length || 0}/300 characters</div>
+                        <div className="text-right text-xs text-gray-400 mt-1">{currentItem?.title?.length || 0}/100 characters</div>
                       </div>
                       <div>
                         <div className="mb-1.5">
@@ -1079,6 +1091,7 @@ const ManageAlumni = () => {
                           className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                           placeholder="Event details..."
                         />
+                        <div className="text-right text-xs text-gray-400 mt-1">{currentItem?.description?.length || 0}/200 characters</div>
                       </div>
                     </>
                   )}
@@ -1088,7 +1101,6 @@ const ManageAlumni = () => {
                       <div>
                         <div className="flex justify-between mb-1.5">
                           <label className="block text-sm font-semibold text-gray-700">Full Name</label>
-                          <span className="text-xs text-gray-400">{currentItem?.name?.length || 0}/100</span>
 </div>
 <input
                           type="text"
@@ -1098,7 +1110,7 @@ const ManageAlumni = () => {
                           className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                           placeholder="e.g. Dr. Arvind Nair"
                         />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem?.description?.length || 0}/200 characters</div>
+                        <div className="text-right text-xs text-gray-400 mt-1">{currentItem?.name?.length || 0}/100 characters</div>
                       </div>
                       <div>
                         <div className="mb-1.5">
