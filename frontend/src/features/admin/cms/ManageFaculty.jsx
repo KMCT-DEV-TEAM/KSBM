@@ -194,22 +194,44 @@ const ManageFaculty = () => {
 
   const handleResetToDefault = async () => {
     await confirmAction({
-      title: 'Reset to Defaults?',
-      message: 'This will reset all input fields to default values. Click "Save Changes" to apply.',
+      title: 'Reset Section to Defaults?',
+      message: 'This will reset all input fields in the current section to default values. Click "Save Changes" to apply.',
       confirmText: 'Yes, reset!',
       variant: 'primary',
       action: async () => {
-        setShowHeroTextContent(true);
-        setHeroHeading('Faculty Members');
-        setHeroSubtext('Our distinguished faculty are committed to delivering quality education through innovative teaching, practical learning, and personalized mentorship, helping students build the skills and confidence needed for successful careers.');
-        setHeroBgImage('/assets/Images/image 2.png');
-        
-        setShowIntro(true);
-        setIntroSubheading('FACULTY MEMBERS');
-        setIntroHeading('Learn from the Best');
-        setIntroText('At KSBM, our faculty members are the cornerstone of academic excellence. With a blend of strong academic credentials, industry expertise, and a passion for teaching, they create a dynamic learning environment that encourages critical thinking, innovation, and leadership. Beyond the classroom, our faculty mentor, inspire, and guide students through every stage of their academic journey, equipping them with the knowledge, confidence, and practical skills needed to succeed in an ever-evolving global business landscape.');
-        setShowKsbmFaculty(true);
-        setShowAdjunctFaculty(true);
+        if (activeTab === 'hero') {
+          setShowHeroTextContent(true);
+          setHeroHeading('Faculty Members');
+          setHeroSubtext('Our distinguished faculty are committed to delivering quality education through innovative teaching, practical learning, and personalized mentorship, helping students build the skills and confidence needed for successful careers.');
+          setHeroBgImage('/assets/Images/image 2.png');
+        } else if (activeTab === 'intro') {
+          setShowIntro(true);
+          setIntroSubheading('FACULTY MEMBERS');
+          setIntroHeading('Learn from the Best');
+          setIntroText('At KSBM, our faculty members are the cornerstone of academic excellence. With a blend of strong academic credentials, industry expertise, and a passion for teaching, they create a dynamic learning environment that encourages critical thinking, innovation, and leadership. Beyond the classroom, our faculty mentor, inspire, and guide students through every stage of their academic journey, equipping them with the knowledge, confidence, and practical skills needed to succeed in an ever-evolving global business landscape.');
+        } else if (activeTab === 'ksbm') {
+          setShowKsbmFaculty(true);
+          setKsbmFacultyHeading("KSBM Faculty");
+          setKsbmFaculty([
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 1 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 2 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 3 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 4 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 5 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 6 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 7 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 8 }
+          ]);
+        } else if (activeTab === 'adjunct') {
+          setShowAdjunctFaculty(true);
+          setAdjunctFacultyHeading("Adjunct Faculty");
+          setAdjunctFaculty([
+            { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 1 },
+            { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 2 },
+            { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 3 },
+            { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 4 }
+          ]);
+        }
         
         Toast.fire({ icon: 'info', title: 'Reset to defaults. Click Save Changes to apply.' });
       }
