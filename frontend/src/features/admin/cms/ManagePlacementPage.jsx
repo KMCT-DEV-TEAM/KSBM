@@ -648,6 +648,7 @@ const ManagePlacementPage = () => {
                       onChange={(e) => updateSection('hero', 'subtitle', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.hero?.subtitle?.length || 0}/300 characters</div>
                   </div>
                 </div>
                 <div>
@@ -682,18 +683,17 @@ const ManagePlacementPage = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <div className="flex justify-between mb-1.5">
+                  <div className="mb-1.5">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Badge Text</label>
-                    <span className="text-xs text-gray-400">{data.overview?.deskBadge?.length || 0}/50</span>
-</div>
-<input
+                  </div>
+                  <input
                     type="text"
                     value={data.overview?.deskBadge || ''}
                     maxLength={50}
                     onChange={(e) => updateSection('overview', 'deskBadge', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
-<div className="text-right text-xs text-gray-400 mt-1">{data.hero?.subtitle?.length || 0}/300 characters</div>
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.deskBadge?.length || 0}/50 characters</div>
                 </div>
                 <div>
                   <div className="mb-1.5">
@@ -723,11 +723,11 @@ const ManagePlacementPage = () => {
                     onChange={(e) => updateSection('overview', 'description1', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.description1?.length || 0}/400 characters</div>
                 </div>
                 <div>
                   <div className="flex justify-between mb-1.5">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description 2</label>
-                    <span className="text-xs text-gray-400">{data.overview?.description2?.length || 0}/400</span>
                   </div>
                   <textarea
                     rows="4"
@@ -736,12 +736,12 @@ const ManagePlacementPage = () => {
                     onChange={(e) => updateSection('overview', 'description2', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.description2?.length || 0}/400 characters</div>
                 </div>
               </div>
               <div>
                   <div className="flex justify-between mb-1.5">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Floating Quote</label>
-                    <span className="text-xs text-gray-400">{data.overview?.floatingQuote?.length || 0}/200</span>
 </div>
 <input
                     type="text"
@@ -750,22 +750,34 @@ const ManagePlacementPage = () => {
                     onChange={(e) => updateSection('overview', 'floatingQuote', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
-<div className="text-right text-xs text-gray-400 mt-1">{data.overview?.description1?.length || 0}/400 characters</div>
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.floatingQuote?.length || 0}/200 characters</div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
                 <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Statistic 1</label>
-                  <div className="space-y-2">
-                    <input type="text" placeholder="Value (e.g. 100+)" value={data.overview?.stat1Value || ''} maxLength={20} onChange={(e) => updateSection('overview', 'stat1Value', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
-                    <input type="text" placeholder="Label (e.g. Placed)" value={data.overview?.stat1Label || ''} maxLength={50} onChange={(e) => updateSection('overview', 'stat1Label', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <input type="text" placeholder="Value (e.g. 100+)" value={data.overview?.stat1Value || ''} maxLength={20} onChange={(e) => updateSection('overview', 'stat1Value', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.stat1Value?.length || 0}/20 characters</div>
+                    </div>
+                    <div>
+                      <input type="text" placeholder="Label (e.g. Placed)" value={data.overview?.stat1Label || ''} maxLength={50} onChange={(e) => updateSection('overview', 'stat1Label', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.stat1Label?.length || 0}/50 characters</div>
+                    </div>
                   </div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Statistic 2</label>
-                  <div className="space-y-2">
-                    <input type="text" placeholder="Value (e.g. 150+)" value={data.overview?.stat2Value || ''} maxLength={20} onChange={(e) => updateSection('overview', 'stat2Value', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
-                    <input type="text" placeholder="Label (e.g. Companies)" value={data.overview?.stat2Label || ''} maxLength={50} onChange={(e) => updateSection('overview', 'stat2Label', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <input type="text" placeholder="Value (e.g. 150+)" value={data.overview?.stat2Value || ''} maxLength={20} onChange={(e) => updateSection('overview', 'stat2Value', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.stat2Value?.length || 0}/20 characters</div>
+                    </div>
+                    <div>
+                      <input type="text" placeholder="Label (e.g. Companies)" value={data.overview?.stat2Label || ''} maxLength={50} onChange={(e) => updateSection('overview', 'stat2Label', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.stat2Label?.length || 0}/50 characters</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -840,7 +852,7 @@ const ManagePlacementPage = () => {
                   <Plus className="w-4 h-4" /> Add Achiever
                 </button>
               </div>
-              <div className="mb-6">
+              <div className="mb-6 max-w-md">
                 <div className="mb-1.5">
 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
                   
@@ -850,7 +862,7 @@ const ManagePlacementPage = () => {
                   value={data.proudAchievers?.title || ''}
                   maxLength={50}
                   onChange={(e) => updateSection('proudAchievers', 'title', e.target.value)}
-                  className="max-w-md w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
 <div className="text-right text-xs text-gray-400 mt-1">{data.proudAchievers?.title?.length || 0}/50 characters</div>
               </div>
@@ -931,6 +943,7 @@ const ManagePlacementPage = () => {
                     onChange={(e) => updateSection('topRecruiters', 'description', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.topRecruiters?.description?.length || 0}/300 characters</div>
                 </div>
               </div>
 
@@ -975,9 +988,8 @@ const ManagePlacementPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between mb-1.5">
+                    <div className="mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading Title</label>
-                      <span className="text-xs text-gray-400">{data.excellenceSupport?.title?.length || 0}/100</span>
 </div>
 <input
                       type="text"
@@ -986,7 +998,7 @@ const ManagePlacementPage = () => {
                       onChange={(e) => updateSection('excellenceSupport', 'title', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
-<div className="text-right text-xs text-gray-400 mt-1">{data.topRecruiters?.description?.length || 0}/300 characters</div>
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.excellenceSupport?.title?.length || 0}/100 characters</div>
                   </div>
                   <div>
                     <div className="flex items-center gap-3 mb-1.5">
@@ -1000,6 +1012,7 @@ const ManagePlacementPage = () => {
                       onChange={(e) => updateSection('excellenceSupport', 'description', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.excellenceSupport?.description?.length || 0}/300 characters</div>
                   </div>
                 </div>
                 <div>
@@ -1077,12 +1090,11 @@ const ManagePlacementPage = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div>
-                  <div className="flex justify-between mb-1.5">
+                  <div className="mb-1.5">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Badge</label>
-                    <span className="text-xs text-gray-400">{data.facultyInCharge?.badge?.length || 0}/50</span>
 </div>
 <input type="text" value={data.facultyInCharge?.badge || ''} maxLength={50} onChange={(e) => updateSection('facultyInCharge', 'badge', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
-<div className="text-right text-xs text-gray-400 mt-1">{data.excellenceSupport?.description?.length || 0}/300 characters</div>
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.facultyInCharge?.badge?.length || 0}/50 characters</div>
                 </div>
                 <div>
                   <div className="mb-1.5">
@@ -1098,6 +1110,7 @@ const ManagePlacementPage = () => {
                     
                   </div>
                   <textarea rows="2" value={data.facultyInCharge?.description || ''} maxLength={300} onChange={(e) => updateSection('facultyInCharge', 'description', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.facultyInCharge?.description?.length || 0}/300 characters</div>
                 </div>
               </div>
 
@@ -1146,12 +1159,11 @@ const ManagePlacementPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between mb-1.5">
+                    <div className="mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading</label>
-                      <span className="text-xs text-gray-400">{data.placementCommittee?.title?.length || 0}/100</span>
 </div>
 <input type="text" value={data.placementCommittee?.title || ''} maxLength={100} onChange={(e) => updateSection('placementCommittee', 'title', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
-<div className="text-right text-xs text-gray-400 mt-1">{data.facultyInCharge?.description?.length || 0}/300 characters</div>
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.title?.length || 0}/100 characters</div>
                   </div>
                   <div>
                     <div className="flex items-center gap-3 mb-1.5">
@@ -1159,14 +1171,14 @@ const ManagePlacementPage = () => {
                       
                     </div>
                     <textarea rows="3" value={data.placementCommittee?.description || ''} maxLength={300} onChange={(e) => updateSection('placementCommittee', 'description', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.description?.length || 0}/300 characters</div>
                   </div>
                   <div>
-                    <div className="flex justify-between mb-1.5">
+                  <div className="mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Button Text</label>
-                      <span className="text-xs text-gray-400">{data.placementCommittee?.buttonText?.length || 0}/50</span>
 </div>
 <input type="text" value={data.placementCommittee?.buttonText || ''} maxLength={50} onChange={(e) => updateSection('placementCommittee', 'buttonText', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
-<div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.description?.length || 0}/300 characters</div>
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.buttonText?.length || 0}/50 characters</div>
                   </div>
                 </div>
                 <div>
@@ -1224,7 +1236,7 @@ const ManagePlacementPage = () => {
                   <Plus className="w-4 h-4" /> Add Activity
                 </button>
               </div>
-              <div className="mb-6">
+              <div className="mb-6 max-w-md">
                 <div className="mb-1.5">
 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
                   
@@ -1234,7 +1246,7 @@ const ManagePlacementPage = () => {
                   value={data.activities?.title || ''}
                   maxLength={100}
                   onChange={(e) => updateSection('activities', 'title', e.target.value)}
-                  className="max-w-md w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
 <div className="text-right text-xs text-gray-400 mt-1">{data.activities?.title?.length || 0}/100 characters</div>
               </div>
@@ -1432,11 +1444,11 @@ const ManagePlacementPage = () => {
 <div className="text-right text-xs text-gray-400 mt-1">{currentItem.title?.length || 0}/100 characters</div>
                       </div>
                       <div>
-                        <div className="flex justify-between mb-1.5">
-                          <label className="block text-sm font-medium text-gray-700">Description</label>
-                          <span className="text-xs text-gray-400">{currentItem.description?.length || 0}/300</span>
+                        <div className="flex items-center gap-3 mb-1.5">
+                          <label className="block text-sm font-semibold text-gray-700">Description</label>
                         </div>
                         <textarea rows="3" maxLength={300} value={currentItem.description || ''} onChange={e => setCurrentItem({...currentItem, description: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                        <div className="text-right text-xs text-gray-400 mt-1">{currentItem.description?.length || 0}/300 characters</div>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Activity Image</label>

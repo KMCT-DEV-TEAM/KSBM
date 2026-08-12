@@ -489,6 +489,7 @@ const ManageExaminationsPage = () => {
                       onChange={(e) => updateSection('heroSubtitle', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.heroSubtitle?.length || 0}/300 characters</div>
                   </div>
                 </div>
                 <div>
@@ -523,9 +524,8 @@ const ManageExaminationsPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between mb-1.5">
+                    <div className="mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Title</label>
-                      <span className="text-xs text-gray-400">{data.overviewTitle?.length || 0}/100</span>
 </div>
 <input
                       type="text"
@@ -534,7 +534,7 @@ const ManageExaminationsPage = () => {
                       onChange={(e) => updateSection('overviewTitle', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
-<div className="text-right text-xs text-gray-400 mt-1">{data.heroSubtitle?.length || 0}/300 characters</div>
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.overviewTitle?.length || 0}/100 characters</div>
                   </div>
                   <div>
                     <div className="flex items-center gap-3 mb-1.5">
@@ -548,11 +548,11 @@ const ManageExaminationsPage = () => {
                       onChange={(e) => updateSection('overviewText1', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.overviewText1?.length || 0}/600 characters</div>
                   </div>
                   <div>
-                    <div className="flex justify-between mb-1.5">
+                    <div className="mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Paragraph 2 Text</label>
-                      <span className="text-xs text-gray-400">{data.overviewText2?.length || 0}/600</span>
                     </div>
                     <textarea
                       rows="4"
@@ -561,6 +561,7 @@ const ManageExaminationsPage = () => {
                       onChange={(e) => updateSection('overviewText2', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.overviewText2?.length || 0}/600 characters</div>
                   </div>
                 </div>
                 <div>
@@ -595,9 +596,8 @@ const ManageExaminationsPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between mb-1.5">
+                    <div className="mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Banner Title</label>
-                      <span className="text-xs text-gray-400">{data.calendarTitle?.length || 0}/100</span>
 </div>
 <input
                       type="text"
@@ -606,7 +606,7 @@ const ManageExaminationsPage = () => {
                       onChange={(e) => updateSection('calendarTitle', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
-<div className="text-right text-xs text-gray-400 mt-1">{data.overviewText1?.length || 0}/600 characters</div>
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.calendarTitle?.length || 0}/100 characters</div>
                   </div>
                   <div>
                     <div className="flex items-center gap-3 mb-1.5">
@@ -620,12 +620,12 @@ const ManageExaminationsPage = () => {
                       onChange={(e) => updateSection('calendarText', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.calendarText?.length || 0}/300 characters</div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <div className="flex justify-between mb-1.5">
+                      <div className="mb-1.5">
                         <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">View Button Label</label>
-                        <span className="text-xs text-gray-400">{data.calendarViewBtnText?.length || 0}/50</span>
 </div>
 <input
                         type="text"
@@ -634,7 +634,7 @@ const ManageExaminationsPage = () => {
                         onChange={(e) => updateSection('calendarViewBtnText', e.target.value)}
                         className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       />
-<div className="text-right text-xs text-gray-400 mt-1">{data.calendarText?.length || 0}/300 characters</div>
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.calendarViewBtnText?.length || 0}/50 characters</div>
                     </div>
                     <div>
                       <div className="mb-1.5">
