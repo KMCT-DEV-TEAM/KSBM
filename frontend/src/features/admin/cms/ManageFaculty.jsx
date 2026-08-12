@@ -468,7 +468,7 @@ const ManageFaculty = () => {
                   onChange={(e) => setHeroHeading(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
-<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{heroHeading?.length || 0}/50</span></div>
+<div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{heroHeading?.length || 0}/50</span></div>
               </div>
               <div>
                 <div className="flex items-center gap-3 mb-1.5">
@@ -482,6 +482,7 @@ const ManageFaculty = () => {
                   onChange={(e) => setHeroSubtext(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
+                <div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{heroSubtext?.length || 0}/300</span></div>
               </div>
             </div>
             <div>
@@ -518,7 +519,6 @@ const ManageFaculty = () => {
               <div>
                 <div className="flex justify-between mb-1.5">
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Intro Subheading Tag</label>
-                  <span className="text-xs text-gray-400">{introSubheading?.length || 0}/50</span>
 </div>
 <input
                   type="text"
@@ -527,7 +527,7 @@ const ManageFaculty = () => {
                   onChange={(e) => setIntroSubheading(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
-<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 300</span><span className="text-[10px] text-gray-400 font-medium">{heroSubtext?.length || 0}/300</span></div>
+<div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{introSubheading?.length || 0}/50</span></div>
               </div>
               <div>
                 <div className="mb-1.5">
@@ -541,7 +541,7 @@ const ManageFaculty = () => {
                   onChange={(e) => setIntroHeading(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
-<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 100</span><span className="text-[10px] text-gray-400 font-medium">{introHeading?.length || 0}/100</span></div>
+<div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{introHeading?.length || 0}/100</span></div>
               </div>
             </div>
             <div>
@@ -556,6 +556,7 @@ const ManageFaculty = () => {
                 onChange={(e) => setIntroText(e.target.value)}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
               />
+              <div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{introText?.length || 0}/600</span></div>
             </div>
           </div>
         </div>
@@ -589,9 +590,9 @@ const ManageFaculty = () => {
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 mb-6">
             <div className="flex justify-between items-center mb-1.5">
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Section Heading</label>
-              <span className="text-xs text-gray-400">{(ksbmFacultyHeading || '').length}/60</span>
             </div>
             <input type="text" maxLength={60} value={ksbmFacultyHeading} onChange={(e) => setKsbmFacultyHeading(e.target.value)} placeholder="e.g. KSBM Faculty" className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+            <div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{(ksbmFacultyHeading || '').length}/60</span></div>
           </div>
 
           <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
@@ -645,9 +646,9 @@ const ManageFaculty = () => {
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 mb-6">
             <div className="flex justify-between items-center mb-1.5">
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Section Heading</label>
-              <span className="text-xs text-gray-400">{(adjunctFacultyHeading || '').length}/60</span>
             </div>
             <input type="text" maxLength={60} value={adjunctFacultyHeading} onChange={(e) => setAdjunctFacultyHeading(e.target.value)} placeholder="e.g. Adjunct Faculty" className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+            <div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{(adjunctFacultyHeading || '').length}/60</span></div>
           </div>
 
           <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
@@ -710,7 +711,6 @@ const ManageFaculty = () => {
                   <div>
                     <div className="flex justify-between mb-1.5">
                       <label className="block text-sm font-semibold text-gray-700">Full Name</label>
-                      <span className="text-xs text-gray-400">{currentMember?.name?.length || 0}/50</span>
 </div>
 <input
                       type="text"
@@ -720,7 +720,7 @@ const ManageFaculty = () => {
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       placeholder="e.g. Dr. Navas K. M"
                     />
-<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 600</span><span className="text-[10px] text-gray-400 font-medium">{introText?.length || 0}/600</span></div>
+<div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{currentMember?.name?.length || 0}/50</span></div>
                   </div>
                   
                   <div>
@@ -736,7 +736,7 @@ const ManageFaculty = () => {
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       placeholder="e.g. Managing Trustee"
                     />
-<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 100</span><span className="text-[10px] text-gray-400 font-medium">{currentMember?.title?.length || 0}/100</span></div>
+<div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{currentMember?.title?.length || 0}/100</span></div>
                   </div>
                   
                   <div>

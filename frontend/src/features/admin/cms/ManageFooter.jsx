@@ -76,10 +76,10 @@ const ManageFooter = () => {
       description: 'Empowering global leaders through intellectual rigor and strategic excellence since 1998.',
       socialLinks: { instagram: '#', facebook: '#', whatsapp: '#' },
       programs: [
-        { label: 'MBA Full-time' },
-        { label: 'Executive MBA' },
-        { label: 'BBA Program' },
-        { label: 'PhD in Management' }
+        { label: 'MBA Full-time', url: '#' },
+        { label: 'Executive MBA', url: '#' },
+        { label: 'BBA Program', url: '#' },
+        { label: 'PhD in Management', url: '#' }
       ],
       contactInfo: {
         address: 'KMCT Hills, Kerala, India',
@@ -179,6 +179,23 @@ const ManageFooter = () => {
               <input type="text" value={socialLinks.whatsapp} onChange={e => setSocialLinks({...socialLinks, whatsapp: e.target.value})} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" />
             </div>
           </div>
+        </div>
+      </SectionForm>
+
+      <SectionForm title="Programs">
+        <div className="space-y-4">
+          {programs.map((prog, index) => (
+            <div key={index} className="flex items-center gap-4">
+              <div className="flex-1">
+                <input type="text" placeholder="Label" value={prog.label || ''} onChange={e => handleLinkChange(programs, setPrograms, index, 'label', e.target.value)} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" />
+              </div>
+              <div className="flex-1">
+                <input type="text" placeholder="URL" value={prog.url || ''} onChange={e => handleLinkChange(programs, setPrograms, index, 'url', e.target.value)} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" />
+              </div>
+              <button onClick={() => removeLink(programs, setPrograms, index)} className="p-2.5 text-red-500 hover:bg-red-50 rounded-md transition-colors"><Trash2 className="w-4 h-4" /></button>
+            </div>
+          ))}
+          <button onClick={() => addLink(programs, setPrograms)} className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary-dark transition-colors"><Plus className="w-4 h-4" /> Add Program Link</button>
         </div>
       </SectionForm>
 
