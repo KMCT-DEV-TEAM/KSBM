@@ -22,7 +22,7 @@ const FacultyGridSection = ({ title, members, id }) => {
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
         {/* Section Header with right divider line */}
         <div className="flex items-center gap-6 mb-10 md:mb-14">
-          <h3 className="text-xl sm:text-2xl font-semibold text-[#1e2869] whitespace-nowrap tracking-tight">
+          <h3 className="text-xl sm:text-2xl font-semibold text-[#1e2869] tracking-tight break-words">
             {title}
           </h3>
           <div className={`flex-grow h-[1px] ${isKsbmFaculty ? 'bg-primary' : 'bg-gray-200/80'}`}></div>

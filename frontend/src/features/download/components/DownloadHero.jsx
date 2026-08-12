@@ -8,7 +8,7 @@ const DownloadHero = ({ heroData, fullScreen = false }) => {
   const backgroundImage = heroData?.backgroundImage || '/assets/Images/image 73.png';
 
   return (
-    <section className={`relative w-full ${fullScreen ? 'min-h-screen h-[100vh]' : 'min-h-[70vh] sm:min-h-[78vh] md:min-h-[82vh] lg:min-h-[86vh]'} flex items-end bg-[#1B2155] overflow-hidden pt-28 sm:pt-32 pb-24 sm:pb-32 lg:pb-36`}>
+    <section className={`relative w-full ${fullScreen ? 'min-h-screen h-[100vh]' : 'min-h-[70vh] sm:min-h-[78vh] md:min-h-[82vh] lg:min-h-[86vh]'} flex items-end bg-[#1B2155] overflow-hidden pt-28 sm:pt-32 pb-36 sm:pb-40 lg:pb-44`}>
       {/* Background Image & Deep Navy Overlay */}
       <div className="absolute inset-0 z-0">
         <img

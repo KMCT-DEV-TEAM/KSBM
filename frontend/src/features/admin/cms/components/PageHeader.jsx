@@ -92,7 +92,7 @@ const PageHeader = ({ title, description, onPreview, previewUrl, onReset, onSave
               className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all disabled:opacity-50"
             >
               {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              Save Changes
+              {isSaving ? 'Saving...' : 'Save Changes'}
             </button>
           )}
         </div>

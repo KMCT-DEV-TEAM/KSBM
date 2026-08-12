@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, Trash2, ChevronUp, ChevronDown, Eye, Monitor, Tablet, Smartphone, X, Image as ImageIcon, FileText, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Trash2, ChevronUp, ChevronDown, Eye, Monitor, Tablet, Smartphone, X, Image as ImageIcon, FileText, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
@@ -24,6 +24,7 @@ const ManageFaqPage = () => {
   const [previewMode, setPreviewMode] = useState('desktop');
   const [activeTab, setActiveTab] = useState('hero');
   const [isAddFaqModalOpen, setIsAddFaqModalOpen] = useState(false);
+  const [isAddingFaq, setIsAddingFaq] = useState(false);
   const [newFaq, setNewFaq] = useState({ question: '', answer: '' });
   const tabsContainerRef = useRef(null);
   const iframeRef = useRef(null);
@@ -192,18 +193,23 @@ const ManageFaqPage = () => {
       Toast.fire({ icon: 'error', title: 'Please fill both question and answer' });
       return;
     }
-    setFormData(prev => ({
-      ...prev,
-      mainContent: {
-        ...prev.mainContent,
-        faqs: [
-          ...(prev.mainContent.faqs || []),
-          newFaq
-        ]
-      }
-    }));
-    setIsAddFaqModalOpen(false);
-    setNewFaq({ question: '', answer: '' });
+    
+    setIsAddingFaq(true);
+    setTimeout(() => {
+      setFormData(prev => ({
+        ...prev,
+        mainContent: {
+          ...prev.mainContent,
+          faqs: [
+            ...(prev.mainContent.faqs || []),
+            newFaq
+          ]
+        }
+      }));
+      setIsAddFaqModalOpen(false);
+      setNewFaq({ question: '', answer: '' });
+      setIsAddingFaq(false);
+    }, 500);
   };
 
   const handleRemoveFaq = (index) => {
@@ -502,9 +508,11 @@ const ManageFaqPage = () => {
                 </button>
                 <button
                   onClick={submitNewFaq}
-                  className="px-5 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
+                  disabled={isAddingFaq}
+                  className="flex items-center justify-center min-w-[120px] px-5 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all disabled:opacity-50"
                 >
-                  Add FAQ
+                  {isAddingFaq ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                  {isAddingFaq ? 'Adding...' : 'Add FAQ'}
                 </button>
               </div>
             </motion.div>

@@ -6,7 +6,7 @@ import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
 import confirmAction from '../../../../utils/confirmAction';
 
-const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, onChange, onUploadStateChange, label, uploadEndpoint = '/upload', disableDelete = false, layout = 'vertical', deferredMode = false, defaultImage = '', acceptTypes = { 'image/*': ['.png', '.jpg', '.jpeg', '.svg', '.webp'] } }) => {
+const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, onChange, onUploadStateChange, label, uploadEndpoint = '/upload', disableDelete = false, layout = 'vertical', deferredMode = false, defaultImage = '', acceptTypes = { 'image/*': ['.png', '.jpg', '.jpeg', '.svg', '.webp'] }, maxSize = 204800 }) => {
   const [isUploading, setIsUploading] = useState(false);
   const displayUrl = currentLogoUrl || value || currentImage || defaultImage;
 
@@ -26,7 +26,19 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
     if (onChange) onChange(finalUrl, file);
   }, [onUploadSuccess, onChange, displayUrl, deferredMode, defaultImage]);
 
-  const onDrop = useCallback(async (acceptedFiles) => {
+  const onDrop = useCallback(async (acceptedFiles, fileRejections) => {
+    if (fileRejections.length > 0) {
+      const error = fileRejections[0].errors[0];
+      if (error.code === 'file-too-large') {
+        const maxSizeMB = maxSize / (1024 * 1024);
+        const limitText = maxSizeMB >= 1 ? `${maxSizeMB.toFixed(1)}MB` : `${(maxSize / 1024).toFixed(0)}KB`;
+        Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: 'File Too Large', text: `Please upload a logo smaller than ${limitText}.`, showConfirmButton: false, timer: 3000 });
+      } else {
+        Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: 'Invalid File', text: error.message, showConfirmButton: false, timer: 3000 });
+      }
+      return;
+    }
+
     const file = acceptedFiles[0];
     if (!file) return;
 
@@ -91,7 +103,8 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
     onDrop,
     accept: acceptTypes,
     maxFiles: 1,
-    disabled: isUploading
+    disabled: isUploading,
+    maxSize: maxSize
   });
 
   const isPdf = displayUrl?.toLowerCase().includes('.pdf') || (displayUrl?.startsWith('blob:') && acceptTypes['application/pdf']);
@@ -125,7 +138,7 @@ const LogoUploader = ({ currentLogoUrl, value, currentImage, onUploadSuccess, on
                     <p className="text-sm font-medium text-gray-700">
                       {isDragActive ? "Drop file here..." : (label ? `Drag & drop ${label.toLowerCase()}, or click to select` : "Drag & drop a new file, or click to select")}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">Supports {Object.values(acceptTypes).flat().map(ext => ext.replace('.', '').toUpperCase()).join(', ')} up to 5MB</p>
+                    <p className="text-xs text-gray-500 mt-1">Supports {Object.values(acceptTypes).flat().map(ext => ext.replace('.', '').toUpperCase()).join(', ')} up to {maxSize >= 1048576 ? `${(maxSize / 1048576).toFixed(1)}MB` : `${(maxSize / 1024).toFixed(0)}KB`}</p>
                   </div>
                 </>
               )}
