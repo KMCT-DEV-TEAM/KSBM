@@ -1221,15 +1221,18 @@ export const updatePlacementPageSettings = async (req, res) => {
       'facultyInCharge', 'placementCommittee', 'activities'
     ];
     
-    const settings = await PlacementPage.getSettings();
-    
+    let updateData = {};
     fields.forEach((field) => {
       if (req.body[field] !== undefined) {
-        settings[field] = req.body[field];
+        updateData[field] = req.body[field];
       }
     });
 
-    const updatedSettings = await settings.save();
+    const updatedSettings = await PlacementPage.findOneAndUpdate(
+      {},
+      { $set: updateData },
+      { new: true, upsert: true }
+    );
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating Placement Page settings', error: error.message });

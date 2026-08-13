@@ -13,10 +13,14 @@ const defaultRecruiters = [
 const TopRecruiters = ({ data }) => {
   if (data?.showSection === false && !data?.isPreview) return null;
   
-  let recruiters = (data?.items && data.items.length > 0) ? data.items : defaultRecruiters;
-  if (recruiters.length < 5) {
-    const missing = 5 - recruiters.length;
-    recruiters = [...recruiters, ...defaultRecruiters.slice(0, missing)];
+  let recruiters = data?.items || [];
+  
+  if (recruiters.length > 0 && recruiters.length < 5) {
+    let filled = [...recruiters];
+    while (filled.length < 5) {
+      filled = [...filled, ...recruiters];
+    }
+    recruiters = filled;
   }
   return (
     <section className="py-16 bg-white relative text-center overflow-hidden">
@@ -45,7 +49,7 @@ const TopRecruiters = ({ data }) => {
           <motion.div 
             className="flex w-max gap-8 md:gap-20 py-4 mb-4"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 45 }}
           >
             {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
               <div key={`l1-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
@@ -58,7 +62,7 @@ const TopRecruiters = ({ data }) => {
           <motion.div 
             className="flex w-max gap-8 md:gap-20 py-4 mb-4"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 35 }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 55 }}
           >
             {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
               <div key={`l2-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
@@ -71,7 +75,7 @@ const TopRecruiters = ({ data }) => {
           <motion.div 
             className="flex w-max gap-8 md:gap-20 py-4"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 50 }}
           >
             {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
               <div key={`l3-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
