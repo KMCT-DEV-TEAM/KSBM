@@ -59,36 +59,58 @@ const defaultPlacementData = {
   },
   proudAchievers: {
     title: 'Proud Achievers',
-    items: []
+    items: [
+      { uuid: 'pa1', name: 'Pratik Patil', program: 'MBA 2022-24', company: 'Google', role: 'Business Analyst', companyLogo: '/assets/Images/placements/google_logo.svg', image: '/assets/Images/placements/achiever_1.png' },
+      { uuid: 'pa2', name: 'Megha Sharma', program: 'MBA 2022-24', company: 'Microsoft', role: 'Product Manager', companyLogo: '/assets/Images/placements/microsoft_logo.svg', image: '/assets/Images/placements/achiever_2.png' },
+      { uuid: 'pa3', name: 'Rohit Verma', program: 'MBA 2022-24', company: 'Infosys', role: 'Software Engineer', companyLogo: '/assets/Images/placements/infosys_logo.svg', image: '/assets/Images/placements/achiever_1.png' },
+      { uuid: 'pa4', name: 'Neha Gupta', program: 'MBA 2022-24', company: 'Cognizant', role: 'Consultant', companyLogo: '/assets/Images/placements/cognizant_logo.svg', image: '/assets/Images/placements/achiever_2.png' }
+    ]
   },
   topRecruiters: {
     title: 'Top Recruiters',
     description: 'Our strong industry connections ensure that our students get the best career opportunities.',
-    items: []
+    items: [
+      { uuid: 'tr1', name: 'Infosys', logo: '/assets/Images/placements/infosys_logo.svg' },
+      { uuid: 'tr2', name: 'Wipro', logo: '/assets/Images/placements/wipro_logo.svg' },
+      { uuid: 'tr3', name: 'Cognizant', logo: '/assets/Images/placements/cognizant_logo.svg' },
+      { uuid: 'tr4', name: 'Google', logo: '/assets/Images/placements/google_logo.svg' },
+      { uuid: 'tr5', name: 'Microsoft', logo: '/assets/Images/placements/microsoft_logo.svg' }
+    ]
   },
   excellenceSupport: {
     title: 'Excellence in Placement Support',
     description: 'Comprehensive training and guidance to ensure you step into the corporate world with confidence.',
     backgroundImage: '/assets/Images/placements/default-excellence-bg.png',
-    listOne: [],
-    listTwo: []
+    listOne: defaultListOne,
+    listTwo: defaultListTwo
   },
   facultyInCharge: {
     badge: 'Faculty In-Charge',
     title: 'Empowering Careers. Inspiring Success.',
     description: 'Our experienced faculty members work tirelessly to bridge the gap.',
-    items: []
+    items: [
+      { uuid: 'f1', name: 'Dr. Sarah Johnson', designation: 'Head of Placements', image: '/assets/Images/placements/committee_1.png' },
+      { uuid: 'f2', name: 'Prof. David Chen', designation: 'Corporate Relations', image: '/assets/Images/placements/committee_1.png' }
+    ]
   },
   placementCommittee: {
     title: 'Placement Committee',
     description: 'The Placement Committee consists of student representatives.',
     buttonText: 'Connect with Committee',
     image: '/assets/Images/placements/default-committee-vector.png',
-    items: []
+    items: [
+      { uuid: 'c1', name: 'Rahul Sharma', role: 'President', image: '/assets/Images/placements/committee_1.png' },
+      { uuid: 'c2', name: 'Anita Patel', role: 'Corporate Outreach', image: '/assets/Images/placements/committee_1.png' },
+      { uuid: 'c3', name: 'Vikram Singh', role: 'Student Coordinator', image: '/assets/Images/placements/committee_1.png' }
+    ]
   },
   activities: {
     title: 'Placement Activities & Events',
-    items: []
+    items: [
+      { uuid: 'a1', title: 'Mock Interview Session', description: 'Industry experts conduct one-on-one mock interviews to prepare students for real-world scenarios.', image: '/assets/Images/placements/activity_1.png' },
+      { uuid: 'a2', title: 'Resume Building Workshop', description: 'Interactive workshop helping students craft compelling resumes that stand out to top recruiters.', image: '/assets/Images/placements/activity_2.png' },
+      { uuid: 'a3', title: 'Pre-Placement Talk', description: 'An engaging session by top recruiters on expectations from fresh graduates and how to build a strong career trajectory.', image: '/assets/Images/placements/activity_1.png' }
+    ]
   }
 };
 
@@ -104,7 +126,7 @@ const DraggableItemCard = ({ item, index, onEdit, onDelete, type }) => {
   
   if (type === 'proudAchievers') {
     primaryText = item.name;
-    secondaryText = `${item.company} - ${item.role}`;
+    secondaryText = item.company ? `${item.company} - ${item.role}` : item.role;
   } else if (type === 'topRecruiters') {
     primaryText = item.name;
     secondaryText = 'Recruiter Logo';
@@ -346,14 +368,18 @@ const ManagePlacementPage = () => {
   };
 
   const handleResetToDefault = async () => {
+    const sectionName = tabs.find(t => t.id === activeTab)?.label || 'this section';
     await confirmAction({
-      title: 'Reset to Defaults?',
-      message: 'This will reset all input fields to default values. Click "Save Changes" to apply.',
-      confirmText: 'Yes, reset!',
+      title: `Reset ${sectionName}?`,
+      message: `This will reset all input fields in the ${sectionName} section to their default values. Click "Save Changes" to apply.`,
+      confirmText: 'Yes, reset section!',
       variant: 'primary',
       action: async () => {
-        setData(defaultPlacementData);
-        Toast.fire({ icon: 'info', title: 'Reset to defaults. Click Save Changes to apply.' });
+        setData(prev => ({
+          ...prev,
+          [activeTab]: defaultPlacementData[activeTab]
+        }));
+        Toast.fire({ icon: 'info', title: `Reset ${sectionName} to defaults. Click Save Changes to apply.` });
       }
     });
   };
@@ -402,10 +428,10 @@ const ManagePlacementPage = () => {
       
       setCurrentItem(list[index]);
     } else {
-      let defaultImg = '/assets/Images/placements/default-avatar.png';
-      
-      if (type === 'proudAchievers') setCurrentItem({ name: '', program: '', company: '', role: '', companyLogo: defaultImg, image: defaultImg });
-      else if (type === 'topRecruiters') setCurrentItem({ name: '', logo: defaultImg });
+      const defaultImg = '/assets/Images/placements/default-avatar.png';
+      const defaultLogo = '/assets/Images/placements/default-partner-1.jpg';
+      if (type === 'proudAchievers') setCurrentItem({ name: '', program: '', role: '', companyLogo: defaultLogo, image: defaultImg });
+      else if (type === 'topRecruiters') setCurrentItem({ name: '', logo: defaultLogo });
       else if (type === 'facultyInCharge') setCurrentItem({ name: '', designation: '', image: defaultImg });
       else if (type === 'placementCommittee') setCurrentItem({ name: '', role: '', image: defaultImg });
       else if (type === 'activities') setCurrentItem({ title: '', description: '', image: defaultImg });
@@ -1138,7 +1164,7 @@ const ManagePlacementPage = () => {
                 <div className="flex items-center gap-6">
                   <div className="flex items-center gap-2">
                     <Users className="w-5 h-5 text-primary" />
-                    <h2 className="text-lg font-bold text-[#1e2869]">Placement Committee ({(data.placementCommittee?.items || []).length})</h2>
+                    <h2 className="text-lg font-bold text-[#1e2869]">Placement Committee</h2>
                   </div>
                   <label className="flex items-center cursor-pointer">
                     <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
@@ -1149,12 +1175,6 @@ const ManagePlacementPage = () => {
                     </div>
                   </label>
                 </div>
-                <button
-                  onClick={() => openModal('add', 'placementCommittee')}
-                  className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-white bg-primary hover:bg-[#151c48] rounded-xl transition-all flex items-center gap-1.5 shadow-sm"
-                >
-                  <Plus className="w-4 h-4" /> Add Member
-                </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="space-y-4">
@@ -1194,20 +1214,7 @@ const ManagePlacementPage = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
-                {!(data.placementCommittee?.items || []).length ? (
-                  <div className="h-full flex flex-col items-center justify-center text-gray-400">
-                    <Users className="w-12 h-12 mb-3 opacity-20" />
-                    <p>No Members added yet.</p>
-                  </div>
-                ) : (
-                  <Reorder.Group axis="y" values={data.placementCommittee.items} onReorder={(items) => updateArrayItems('placementCommittee', items)} className="space-y-3">
-                    {data.placementCommittee.items.map((item, idx) => (
-                      <DraggableItemCard key={item.uuid || idx} item={item} index={idx} type="placementCommittee" onEdit={(i) => openModal('edit', 'placementCommittee', i)} onDelete={() => handleDeleteItem('placementCommittee', idx)} />
-                    ))}
-                  </Reorder.Group>
-                )}
-              </div>
+
             </div>
           )}
 
@@ -1321,14 +1328,7 @@ const ManagePlacementPage = () => {
 <input type="text" maxLength={50} value={currentItem.program || ''} onChange={e => setCurrentItem({...currentItem, program: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
 <div className="text-right text-xs text-gray-400 mt-1">{currentItem.program?.length || 0}/50 characters</div>
                         </div>
-                        <div>
-                          <div className="mb-1.5">
-<label className="block text-sm font-medium text-gray-700">Company</label>
-                            
-</div>
-<input type="text" maxLength={50} value={currentItem.company || ''} onChange={e => setCurrentItem({...currentItem, company: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem.company?.length || 0}/50 characters</div>
-                        </div>
+
                         <div>
                           <div className="mb-1.5">
 <label className="block text-sm font-medium text-gray-700">Role</label>
@@ -1345,7 +1345,7 @@ const ManagePlacementPage = () => {
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Company Logo</label>
-                          <SingleImageUploader imageUrl={currentItem.companyLogo || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-avatar.png" onUploadComplete={(url) => setCurrentItem({...currentItem, companyLogo: url})} onUploadStateChange={setIsUploading} deferredUpload={true} />
+                          <SingleImageUploader imageUrl={currentItem.companyLogo || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-partner-1.jpg" onUploadComplete={(url) => setCurrentItem({...currentItem, companyLogo: url})} onUploadStateChange={setIsUploading} deferredUpload={true} />
                         </div>
                       </div>
                     </>
@@ -1363,7 +1363,7 @@ const ManagePlacementPage = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Recruiter Logo</label>
-                        <SingleImageUploader imageUrl={currentItem.logo || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-avatar.png" onUploadComplete={(url) => setCurrentItem({...currentItem, logo: url})} onUploadStateChange={setIsUploading} deferredUpload={true} />
+                        <SingleImageUploader imageUrl={currentItem.logo || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-partner-1.jpg" onUploadComplete={(url) => setCurrentItem({...currentItem, logo: url})} onUploadStateChange={setIsUploading} deferredUpload={true} />
                       </div>
                     </>
                   )}
