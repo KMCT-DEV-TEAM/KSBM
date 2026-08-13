@@ -59,7 +59,14 @@ const ExamNotifications = ({ data }) => {
     if (!matchesSearch) return false;
 
     if (activeCategory === 'ALL') return true;
-    return item.title?.toUpperCase().includes(activeCategory) || item.label?.toUpperCase().includes(activeCategory);
+    
+    // Check explicit category field first, fallback to guessing from title if not set
+    if (item.category) {
+      if (item.category === 'Both') return true;
+      return item.category === activeCategory;
+    }
+    
+    return item.title?.toUpperCase().includes(activeCategory);
   });
 
   const displayedNotifications = showAll ? filteredNotifications : filteredNotifications.slice(0, 3);
@@ -90,12 +97,14 @@ const ExamNotifications = ({ data }) => {
               Notifications
             </h3>
             <div className="h-[1px] bg-gray-200/80 flex-1"></div>
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="text-xs font-semibold text-[#1b2559] hover:underline shrink-0 cursor-pointer"
-            >
-              {showAll ? 'See less' : 'See all'}
-            </button>
+            {filteredNotifications.length > 3 && (
+              <button
+                onClick={() => setShowAll(!showAll)}
+                className="text-xs font-semibold text-[#1b2559] hover:underline shrink-0 cursor-pointer"
+              >
+                {showAll ? 'See less' : `See all (${filteredNotifications.length - 3} more)`}
+              </button>
+            )}
           </div>
           <p className="text-xs text-gray-500 mt-1.5">Search through recent examination timetable updates and circulars</p>
         </div>
@@ -157,16 +166,7 @@ const ExamNotifications = ({ data }) => {
               </motion.div>
             ))}
 
-            {filteredNotifications.length > 3 && (
-              <div className="pt-4 text-center">
-                <button
-                  onClick={() => setShowAll(!showAll)}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl border border-gray-300 hover:border-[#1b2559] text-xs font-semibold text-[#1b2559] bg-white hover:bg-slate-50 transition-all shadow-2xs"
-                >
-                  <span>{showAll ? 'Show Less' : `See All (${filteredNotifications.length - displayedNotifications.length} more)`}</span>
-                </button>
-              </div>
-            )}
+
           </div>
         ) : (
           <div className="text-center py-16 px-6 bg-slate-50/60 rounded-2xl border border-dashed border-gray-200">

@@ -214,6 +214,17 @@ const Header = ({ previewData }) => {
         activeItem = navItems.find(item => item.link !== '/' && pathname.startsWith(item.link));
       }
 
+      // If still no match, check sublinks (e.g. /alumni is under Academics)
+      if (!activeItem) {
+        activeItem = navItems.find(item => {
+          const subLinks = getSubLinks(item.label);
+          if (subLinks) {
+            return subLinks.some(sub => sub.href !== '/' && (pathname === sub.href || pathname.startsWith(sub.href)));
+          }
+          return false;
+        });
+      }
+
       if (activeItem) {
         setActiveNav(activeItem.label);
       } else if (pathname === '/') {

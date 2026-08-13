@@ -259,7 +259,7 @@ const ManageExaminationsPage = () => {
       
       setCurrentItem(list[index]);
     } else {
-      if (type === 'notifications') setCurrentItem({ label: 'EXAMINATION ANNOUNCEMENT', title: '', date: '', pdfUrl: '#' });
+      if (type === 'notifications') setCurrentItem({ label: 'EXAMINATION ANNOUNCEMENT', title: '', date: '', category: 'Both', pdfUrl: '#' });
       else if (type === 'results') setCurrentItem({ slNo: '01', dateDuration: '', courseName: '', semesterInfo: '', pdfUrl: '#' });
     }
     setIsModalOpen(true);
@@ -664,7 +664,7 @@ const ManageExaminationsPage = () => {
                       onUploadStateChange={setIsUploading}
                       label="Upload PDF (Used for View & Download)"
                       deferredUpload={true}
-                      recommendedSize="PDF up to 10MB"
+                      recommendedSize="PDF up to 2MB"
                     />
                   </div>
                 </div>
@@ -810,27 +810,45 @@ const ManageExaminationsPage = () => {
                     <input
                       type="text"
                       value={currentItem.label || ''}
+                      maxLength={40}
                       onChange={(e) => setCurrentItem({ ...currentItem, label: e.target.value })}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{currentItem?.label?.length || 0}/40 characters</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Program Category</label>
+                    <select
+                      value={currentItem.category || 'Both'}
+                      onChange={(e) => setCurrentItem({ ...currentItem, category: e.target.value })}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none bg-white"
+                    >
+                      <option value="Both">Both (MBA & BBA)</option>
+                      <option value="MBA">MBA Only</option>
+                      <option value="BBA">BBA Only</option>
+                    </select>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Title</label>
                     <input
                       type="text"
                       value={currentItem.title || ''}
+                      maxLength={150}
                       onChange={(e) => setCurrentItem({ ...currentItem, title: e.target.value })}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{currentItem?.title?.length || 0}/150 characters</div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Date</label>
                     <input
                       type="text"
                       value={currentItem.date || ''}
+                      maxLength={30}
                       onChange={(e) => setCurrentItem({ ...currentItem, date: e.target.value })}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{currentItem?.date?.length || 0}/30 characters</div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">PDF Document (Optional)</label>
@@ -842,7 +860,7 @@ const ManageExaminationsPage = () => {
                       onUploadStateChange={setIsUploading}
                       label="Upload PDF"
                       deferredUpload={false}
-                      recommendedSize="PDF up to 10MB"
+                      recommendedSize="PDF up to 2MB"
                     />
                   </div>
                 </>
@@ -855,18 +873,22 @@ const ManageExaminationsPage = () => {
                       <input
                         type="text"
                         value={currentItem.slNo || ''}
+                        maxLength={10}
                         onChange={(e) => setCurrentItem({ ...currentItem, slNo: e.target.value })}
                         className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       />
+                      <div className="text-right text-xs text-gray-400 mt-1">{currentItem?.slNo?.length || 0}/10 characters</div>
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Date & Duration</label>
                       <input
                         type="text"
                         value={currentItem.dateDuration || ''}
+                        maxLength={30}
                         onChange={(e) => setCurrentItem({ ...currentItem, dateDuration: e.target.value })}
                         className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       />
+                      <div className="text-right text-xs text-gray-400 mt-1">{currentItem?.dateDuration?.length || 0}/30 characters</div>
                     </div>
                   </div>
                   <div>
@@ -874,18 +896,22 @@ const ManageExaminationsPage = () => {
                     <input
                       type="text"
                       value={currentItem.courseName || ''}
+                      maxLength={100}
                       onChange={(e) => setCurrentItem({ ...currentItem, courseName: e.target.value })}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{currentItem?.courseName?.length || 0}/100 characters</div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Semester Info</label>
                     <input
                       type="text"
                       value={currentItem.semesterInfo || ''}
+                      maxLength={50}
                       onChange={(e) => setCurrentItem({ ...currentItem, semesterInfo: e.target.value })}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{currentItem?.semesterInfo?.length || 0}/50 characters</div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">PDF Document (Optional)</label>
@@ -897,7 +923,7 @@ const ManageExaminationsPage = () => {
                       onUploadStateChange={setIsUploading}
                       label="Upload PDF"
                       deferredUpload={false}
-                      recommendedSize="PDF up to 10MB"
+                      recommendedSize="PDF up to 2MB"
                     />
                   </div>
                 </>
