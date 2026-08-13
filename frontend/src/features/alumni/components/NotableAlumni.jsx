@@ -86,10 +86,10 @@ const NotableAlumni = ({ data }) => {
 
               {/* Name & Role */}
               <div className="text-center w-full px-1">
-                <h3 className="font-semibold text-xs sm:text-sm text-white group-hover:text-primary transition-colors line-clamp-1">
+                <h3 className="font-semibold text-xs sm:text-sm text-white transition-colors">
                   {person.name}
                 </h3>
-                <p className="text-[11px] text-white/70 font-light mt-0.5 line-clamp-1">
+                <p className="text-[11px] text-white/70 font-light mt-0.5">
                   {person.role}
                 </p>
               </div>

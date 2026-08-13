@@ -1105,12 +1105,12 @@ const ManageAlumni = () => {
 <input
                           type="text"
                           value={currentItem.name || ''}
-                          maxLength={100}
+                          maxLength={30}
                           onChange={(e) => setCurrentItem({ ...currentItem, name: e.target.value })}
                           className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                           placeholder="e.g. Dr. Arvind Nair"
                         />
-                        <div className="text-right text-xs text-gray-400 mt-1">{currentItem?.name?.length || 0}/100 characters</div>
+                        <div className="text-right text-xs text-gray-400 mt-1">{currentItem?.name?.length || 0}/30 characters</div>
                       </div>
                       <div>
                         <div className="mb-1.5">
@@ -1120,12 +1120,12 @@ const ManageAlumni = () => {
 <input
                           type="text"
                           value={currentItem.role || ''}
-                          maxLength={100}
+                          maxLength={35}
                           onChange={(e) => setCurrentItem({ ...currentItem, role: e.target.value })}
                           className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                           placeholder="e.g. CEO, Global Corporate"
                         />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem?.role?.length || 0}/100 characters</div>
+<div className="text-right text-xs text-gray-400 mt-1">{currentItem?.role?.length || 0}/35 characters</div>
                       </div>
                     </>
                   )}
