@@ -97,12 +97,14 @@ const ExamNotifications = ({ data }) => {
               Notifications
             </h3>
             <div className="h-[1px] bg-gray-200/80 flex-1"></div>
-            {filteredNotifications.length > 3 && (
+            {filteredNotifications.length > 0 && (
               <button
                 onClick={() => setShowAll(!showAll)}
                 className="text-xs font-semibold text-[#1b2559] hover:underline shrink-0 cursor-pointer"
               >
-                {showAll ? 'See less' : `See all (${filteredNotifications.length - 3} more)`}
+                {showAll 
+                  ? 'See less' 
+                  : (filteredNotifications.length > 3 ? `See all (${filteredNotifications.length - 3} more)` : 'See all')}
               </button>
             )}
           </div>

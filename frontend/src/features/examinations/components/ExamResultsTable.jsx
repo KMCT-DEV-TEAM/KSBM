@@ -88,12 +88,16 @@ const ExamResultsTable = ({ data }) => {
               Results
             </h3>
             <div className="h-[1px] bg-gray-200/80 flex-1"></div>
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="text-xs font-semibold text-[#1b2559] hover:underline shrink-0 cursor-pointer"
-            >
-              {showAll ? 'See less' : 'See all'}
-            </button>
+            {rawResults.length > 0 && (
+              <button
+                onClick={() => setShowAll(!showAll)}
+                className="text-xs font-semibold text-[#1b2559] hover:underline shrink-0 cursor-pointer"
+              >
+                {showAll 
+                  ? 'See less' 
+                  : (rawResults.length > 3 ? `See all (${rawResults.length - 3} more)` : 'See all')}
+              </button>
+            )}
           </div>
           <p className="text-xs text-gray-500 mt-1.5">Easily check published end-semester examination results</p>
         </div>
