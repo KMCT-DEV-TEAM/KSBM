@@ -85,6 +85,7 @@ const GrievanceForm = ({ formData: cmsData }) => {
     complaint: '',
     grievanceCell: []
   });
+  const [errors, setErrors] = useState({});
 
   const cells = cmsData?.cellOptions || [
     "Student Grievance Cell",
@@ -113,18 +114,19 @@ const GrievanceForm = ({ formData: cmsData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.department) {
-      Toast.fire({ icon: 'warning', title: 'Please select a Department.' });
-      return;
-    }
+    let newErrors = {};
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.idNumber.trim()) newErrors.idNumber = 'Roll Call No. / Employee Id is required';
+    if (!formData.email.trim()) newErrors.email = 'Email Address is required';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Please enter a valid email address';
+    if (!formData.department) newErrors.department = 'Department is required';
+    if (!formData.course) newErrors.course = 'Course is required';
+    if (!formData.complaint.trim()) newErrors.complaint = 'Complaint details are required';
+    if (formData.grievanceCell.length === 0) newErrors.grievanceCell = 'Please select at least one Grievance Cell';
 
-    if (!formData.course) {
-      Toast.fire({ icon: 'warning', title: 'Please select a Course.' });
-      return;
-    }
+    setErrors(newErrors);
 
-    if (formData.grievanceCell.length === 0) {
-      Toast.fire({ icon: 'warning', title: 'Please select at least one Grievance Cell.' });
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
 
@@ -160,6 +162,7 @@ const GrievanceForm = ({ formData: cmsData }) => {
         complaint: '',
         grievanceCell: []
       });
+      setErrors({});
 
     } catch (error) {
       console.error('Submission error:', error);
@@ -214,30 +217,44 @@ const GrievanceForm = ({ formData: cmsData }) => {
                 <input
                   type="text"
                   placeholder="Name of student / Faculty / Non - teaching faculty *"
-                  className={inputClasses}
+                  className={`${inputClasses} ${errors.name ? 'border-[#ff6b6b] focus:border-[#ff6b6b]' : ''}`}
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
+                  onChange={(e) => {
+                    setFormData({ ...formData, name: e.target.value });
+                    if (errors.name) setErrors({ ...errors, name: null });
+                  }}
                 />
+                {errors.name && <p className="text-[#ff6b6b] text-sm mt-1.5 ml-1 font-semibold drop-shadow-md">{errors.name}</p>}
               </div>
 
               {/* Row 2 */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input
-                  type="text"
-                  placeholder="Student Roll Call No. / Employee Id *"
-                  className={inputClasses}
-                  value={formData.idNumber}
-                  onChange={(e) => setFormData({ ...formData, idNumber: e.target.value })}
-                  required
-                />
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  className={inputClasses}
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                />
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Student Roll Call No. / Employee Id *"
+                    className={`${inputClasses} ${errors.idNumber ? 'border-[#ff6b6b] focus:border-[#ff6b6b]' : ''}`}
+                    value={formData.idNumber}
+                    onChange={(e) => {
+                      setFormData({ ...formData, idNumber: e.target.value });
+                      if (errors.idNumber) setErrors({ ...errors, idNumber: null });
+                    }}
+                  />
+                  {errors.idNumber && <p className="text-[#ff6b6b] text-sm mt-1.5 ml-1 font-semibold drop-shadow-md">{errors.idNumber}</p>}
+                </div>
+                <div>
+                  <input
+                    type="email"
+                    placeholder="Email Address *"
+                    className={`${inputClasses} ${errors.email ? 'border-[#ff6b6b] focus:border-[#ff6b6b]' : ''}`}
+                    value={formData.email}
+                    onChange={(e) => {
+                      setFormData({ ...formData, email: e.target.value });
+                      if (errors.email) setErrors({ ...errors, email: null });
+                    }}
+                  />
+                  {errors.email && <p className="text-[#ff6b6b] text-sm mt-1.5 ml-1 font-semibold drop-shadow-md">{errors.email}</p>}
+                </div>
               </div>
 
               {/* Row 3 */}
@@ -245,21 +262,29 @@ const GrievanceForm = ({ formData: cmsData }) => {
                 <div className="relative">
                   <CustomSelect
                     value={formData.department}
-                    onChange={(val) => setFormData({ ...formData, department: val })}
+                    onChange={(val) => {
+                      setFormData({ ...formData, department: val });
+                      if (errors.department) setErrors({ ...errors, department: null });
+                    }}
                     options={departments}
                     placeholder="Department *"
-                    inputClasses={inputClasses}
+                    inputClasses={`${inputClasses} ${errors.department ? 'border-[#ff6b6b] focus:border-[#ff6b6b]' : ''}`}
                   />
+                  {errors.department && <p className="text-[#ff6b6b] text-sm mt-1.5 ml-1 font-semibold drop-shadow-md">{errors.department}</p>}
                 </div>
 
                 <div className="relative">
                   <CustomSelect
                     value={formData.course}
-                    onChange={(val) => setFormData({ ...formData, course: val })}
+                    onChange={(val) => {
+                      setFormData({ ...formData, course: val });
+                      if (errors.course) setErrors({ ...errors, course: null });
+                    }}
                     options={courses}
                     placeholder="Course *"
-                    inputClasses={inputClasses}
+                    inputClasses={`${inputClasses} ${errors.course ? 'border-[#ff6b6b] focus:border-[#ff6b6b]' : ''}`}
                   />
+                  {errors.course && <p className="text-[#ff6b6b] text-sm mt-1.5 ml-1 font-semibold drop-shadow-md">{errors.course}</p>}
                 </div>
               </div>
 
@@ -268,11 +293,14 @@ const GrievanceForm = ({ formData: cmsData }) => {
                 <textarea
                   placeholder="Complaint: *"
                   rows="4"
-                  className={`${inputClasses} resize-none`}
+                  className={`${inputClasses} resize-none ${errors.complaint ? 'border-[#ff6b6b] focus:border-[#ff6b6b]' : ''}`}
                   value={formData.complaint}
-                  onChange={(e) => setFormData({ ...formData, complaint: e.target.value })}
-                  required
+                  onChange={(e) => {
+                    setFormData({ ...formData, complaint: e.target.value });
+                    if (errors.complaint) setErrors({ ...errors, complaint: null });
+                  }}
                 ></textarea>
+                {errors.complaint && <p className="text-[#ff6b6b] text-sm mt-1.5 ml-1 font-semibold drop-shadow-md">{errors.complaint}</p>}
               </div>
 
               {/* Checkboxes */}
@@ -286,7 +314,10 @@ const GrievanceForm = ({ formData: cmsData }) => {
                           type="checkbox"
                           className="opacity-0 absolute w-full h-full cursor-pointer"
                           checked={formData.grievanceCell.includes(idx)}
-                          onChange={() => handleCheckboxChange(idx)}
+                          onChange={() => {
+                            handleCheckboxChange(idx);
+                            if (errors.grievanceCell) setErrors({ ...errors, grievanceCell: null });
+                          }}
                         />
                         {formData.grievanceCell.includes(idx) && (
                           <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
@@ -296,6 +327,7 @@ const GrievanceForm = ({ formData: cmsData }) => {
                     </label>
                   ))}
                 </div>
+                {errors.grievanceCell && <p className="text-[#ff6b6b] text-sm mt-2 font-semibold drop-shadow-md">{errors.grievanceCell}</p>}
               </div>
 
               {/* Submit Button */}
