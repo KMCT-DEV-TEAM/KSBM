@@ -941,10 +941,31 @@ const ManageMbaPage = ({ isBba = false }) => {
     openAddModal(
       'Add Dimension Pill',
       [
-        { name: 'title', label: 'Title', type: 'text', maxLength: 60, required: true },
+        { name: 'title', label: 'Dimension Title', type: 'text', maxLength: 100, required: true },
+        { name: 'description', label: 'Description', type: 'textarea', maxLength: 200, required: true },
+        {
+          name: 'icon',
+          label: 'Icon Name',
+          type: 'select',
+          required: true,
+          options: [
+            { value: 'BookOpen', label: 'BookOpen (Management)' },
+            { value: 'Users', label: 'Users (Leadership/Team)' },
+            { value: 'Briefcase', label: 'Briefcase (Analytics/Business)' },
+            { value: 'Globe', label: 'Globe (Collaboration/Global)' },
+            { value: 'Award', label: 'Award (Innovation/Excellence)' },
+            { value: 'Sparkles', label: 'Sparkles' },
+            { value: 'Trophy', label: 'Trophy' },
+            { value: 'Target', label: 'Target' },
+            { value: 'TrendingUp', label: 'TrendingUp' },
+            { value: 'Zap', label: 'Zap' },
+            { value: 'Shield', label: 'Shield' },
+            { value: 'Heart', label: 'Heart' }
+          ]
+        }
       ],
       (data) => {
-        const updatedItems = [...(whyChoosePills.items || []), { title: data.title, description: data.description, icon: 'BookOpen' }];
+        const updatedItems = [...(whyChoosePills.items || []), { title: data.title, description: data.description, icon: data.icon || 'BookOpen' }];
         setWhyChoosePills({ ...whyChoosePills, items: updatedItems });
       }
     );
@@ -988,9 +1009,26 @@ const ManageMbaPage = ({ isBba = false }) => {
     openAddModal(
       'Add Feature Card',
       [
-        { name: 'title', label: 'Feature Title', type: 'text', maxLength: 100, required: true },
-        { name: 'desc', label: 'Feature Description', type: 'textarea', maxLength: 250, required: true },
-        { name: 'icon', label: 'Icon Name (lucide-react)', type: 'text', maxLength: 50, defaultValue: 'Award' }
+        { name: 'title', label: 'Feature Title', type: 'text', maxLength: 60, required: true },
+        { name: 'desc', label: 'Feature Description', type: 'textarea', maxLength: 300, required: true },
+        {
+          name: 'icon',
+          label: 'Icon Name',
+          type: 'select',
+          required: true,
+          options: [
+            { value: 'Users', label: 'Users' },
+            { value: 'Award', label: 'Award' },
+            { value: 'Trophy', label: 'Trophy' },
+            { value: 'Briefcase', label: 'Briefcase' },
+            { value: 'BookOpen', label: 'BookOpen' },
+            { value: 'Globe', label: 'Globe' },
+            { value: 'Sparkles', label: 'Sparkles' },
+            { value: 'Target', label: 'Target' },
+            { value: 'TrendingUp', label: 'TrendingUp' },
+            { value: 'Zap', label: 'Zap' }
+          ]
+        }
       ],
       (data) => {
         const updatedFeatures = [...(dynamicLearning.features || []), { title: data.title, desc: data.desc, icon: data.icon || 'Award' }];
@@ -1721,13 +1759,6 @@ const ManageMbaPage = ({ isBba = false }) => {
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
               <div className="flex items-center justify-between border-b pb-4">
                 <h2 className="text-lg font-bold text-primary">Dynamic Learning Section Settings</h2>
-                <button
-                  type="button"
-                  onClick={addDynamicFeature}
-                  className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" /> Add Feature Card
-                </button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -2198,7 +2229,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                 <p className="text-xs text-gray-500 mt-1">Manage corporate logos, placement categories, CTC highlights, and partner links displayed at the bottom of the {shortTitle} Program Page.</p>
               </div>
               <div className="pt-2">
-                <ManageRecruiters hideVisibilityToggle={true} />
+                <ManageRecruiters hideVisibilityToggle={true} hideHeader={true} />
               </div>
             </div>
           )}
