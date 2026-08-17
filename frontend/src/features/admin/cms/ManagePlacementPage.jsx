@@ -540,8 +540,8 @@ const ManagePlacementPage = () => {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${activeTab === tab.id
-                ? 'bg-primary text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
+                  ? 'bg-primary text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
                 }`}
             >
               {tab.icon}
@@ -1114,8 +1114,8 @@ const ManagePlacementPage = () => {
                   disabled={(data.facultyInCharge?.items || []).length >= 3}
                   title={(data.facultyInCharge?.items || []).length >= 3 ? "Maximum 3 faculty members allowed" : ""}
                   className={`px-4 py-2 text-xs font-bold uppercase tracking-wider text-white rounded-xl transition-all flex items-center gap-1.5 shadow-sm ${(data.facultyInCharge?.items || []).length >= 3
-                    ? 'bg-gray-400 cursor-not-allowed opacity-70'
-                    : 'bg-primary hover:bg-[#151c48]'
+                      ? 'bg-gray-400 cursor-not-allowed opacity-70'
+                      : 'bg-primary hover:bg-[#151c48]'
                     }`}
                 >
                   <Plus className="w-4 h-4" /> Add Faculty
