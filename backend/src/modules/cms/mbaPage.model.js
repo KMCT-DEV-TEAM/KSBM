@@ -15,6 +15,7 @@ const mbaPageSchema = new mongoose.Schema(
       default: '/assets/Images/mba/mba_hero_bg.png'
     },
     heroPrimaryBtnText: { type: String, default: 'EXPLORE PROGRAM' },
+    heroPrimaryBtnLink: { type: String, default: '#overview' },
     heroSecondaryBtnText: { type: String, default: 'DOWNLOAD BROCHURE' },
     heroCardTitle: { type: String, default: 'Batch 2025–27' },
     heroCardStat1Title: { type: String, default: 'Limited Seats' },

@@ -1200,12 +1200,21 @@ const ManagePlacementPage = () => {
                     <textarea rows="3" value={data.placementCommittee?.description || ''} maxLength={300} onChange={(e) => updateSection('placementCommittee', 'description', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
                     <div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.description?.length || 0}/300 characters</div>
                   </div>
-                  <div>
-                    <div className="mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Button Text</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <div className="mb-1.5">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Button Text</label>
+                      </div>
+                      <input type="text" value={data.placementCommittee?.buttonText || ''} maxLength={50} onChange={(e) => updateSection('placementCommittee', 'buttonText', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.buttonText?.length || 0}/50 characters</div>
                     </div>
-                    <input type="text" value={data.placementCommittee?.buttonText || ''} maxLength={50} onChange={(e) => updateSection('placementCommittee', 'buttonText', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
-                    <div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.buttonText?.length || 0}/50 characters</div>
+                    <div>
+                      <div className="mb-1.5">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Button Link</label>
+                      </div>
+                      <input type="text" value={data.placementCommittee?.buttonUrl || ''} maxLength={100} onChange={(e) => updateSection('placementCommittee', 'buttonUrl', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" placeholder="e.g. /contact or https://..." />
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.buttonUrl?.length || 0}/100 characters</div>
+                    </div>
                   </div>
                 </div>
                 <div>
@@ -1220,17 +1229,6 @@ const ManagePlacementPage = () => {
                   />
 
                   <div className="mt-6">
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Committee PDF Document</label>
-                    <SingleDocumentUploader
-                      fileUrl={data.placementCommittee?.buttonUrl || ''}
-                      uploadEndpoint="/upload/placements"
-                      defaultFile="#"
-                      onUploadComplete={(urlObj) => updateSection('placementCommittee', 'buttonUrl', urlObj)}
-                      onUploadStateChange={setIsUploading}
-                      label="Upload PDF (Used for View Committee button)"
-                      deferredUpload={true}
-                      recommendedSize="PDF up to 2MB"
-                    />
                   </div>
                 </div>
               </div>

@@ -149,6 +149,7 @@ const ManageMbaPage = ({ isBba = false }) => {
   const [description, setDescription] = useState('');
   const [heroImage, setHeroImage] = useState('');
   const [heroPrimaryBtnText, setHeroPrimaryBtnText] = useState('EXPLORE PROGRAM');
+  const [heroPrimaryBtnLink, setHeroPrimaryBtnLink] = useState('#overview');
   const [heroSecondaryBtnText, setHeroSecondaryBtnText] = useState('DOWNLOAD BROCHURE');
   const [heroCardTitle, setHeroCardTitle] = useState('Batch 2025–27');
   const [heroCardStat1Title, setHeroCardStat1Title] = useState('Limited Seats');
@@ -227,7 +228,7 @@ const ManageMbaPage = ({ isBba = false }) => {
   const currentDraftData = {
     showSections,
     shortTitle, title, description, heroImage,
-    heroTitleLine1, heroTitleLine2, heroPrimaryBtnText, heroSecondaryBtnText,
+    heroTitleLine1, heroTitleLine2, heroPrimaryBtnText, heroPrimaryBtnLink, heroSecondaryBtnText,
     heroCardTitle, heroCardStat1Title, heroCardStat1Sub, heroCardStat2Title, heroCardStat2Sub,
     overviewTitle, overviewText, overviewSubtext, overviewImage,
     overviewBadgeText, overviewFloatingBadgeText, overviewPrimaryBtnText, overviewSecondaryBtnText,
@@ -309,6 +310,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       setDescription(data.description || '');
       setHeroImage(data.heroImage || '');
       setHeroPrimaryBtnText(data.heroPrimaryBtnText || 'EXPLORE PROGRAM');
+      setHeroPrimaryBtnLink(data.heroPrimaryBtnLink || '#overview');
       setHeroSecondaryBtnText(data.heroSecondaryBtnText || 'DOWNLOAD BROCHURE');
       setHeroCardTitle(data.heroCardTitle || 'Batch 2025–27');
       setHeroCardStat1Title(data.heroCardStat1Title || 'Limited Seats');
@@ -423,6 +425,7 @@ const ManageMbaPage = ({ isBba = false }) => {
             description,
             heroImage,
             heroPrimaryBtnText,
+            heroPrimaryBtnLink,
             heroSecondaryBtnText,
             heroCardTitle,
             heroCardStat1Title,
@@ -1158,7 +1161,6 @@ const ManageMbaPage = ({ isBba = false }) => {
     { id: 'academicCalendarBanner', name: 'Academic Calendar', icon: <Calendar className="w-4 h-4" /> },
     { id: 'eligibility', name: 'Admission & Eligibility', icon: <Award className="w-4 h-4" /> },
     { id: 'topRecruiters', name: 'Top Recruiters & Partners', icon: <Briefcase className="w-4 h-4" /> },
-    { id: 'actionButtons', name: 'Action Buttons', icon: <MousePointerClick className="w-4 h-4" /> }
   ];
 
 
@@ -1335,6 +1337,29 @@ const ManageMbaPage = ({ isBba = false }) => {
                   className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   placeholder="Enter comprehensive hero description..."
                 />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
+                <div>
+                  <CharCountLabel label="Primary Button Text" value={heroPrimaryBtnText} max={30} />
+                  <input maxLength={30}
+                    type="text"
+                    value={heroPrimaryBtnText}
+                    onChange={(e) => setHeroPrimaryBtnText(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="EXPLORE PROGRAM"
+                  />
+                </div>
+                <div>
+                  <CharCountLabel label="Primary Button Link" value={heroPrimaryBtnLink} max={100} />
+                  <input maxLength={100}
+                    type="text"
+                    value={heroPrimaryBtnLink}
+                    onChange={(e) => setHeroPrimaryBtnLink(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="e.g. #overview or /contact"
+                  />
+                </div>
               </div>
 
               <div className="pt-4 border-t border-gray-100">
@@ -2233,99 +2258,6 @@ const ManageMbaPage = ({ isBba = false }) => {
               </div>
             </div>
           )}
-
-          {/* Action Buttons Section */}
-          {activeTab === 'actionButtons' && (
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 mb-6">
-              <h2 className="text-lg font-bold text-primary border-b pb-2">Program Action Buttons</h2>
-              <p className="text-sm text-gray-500 mb-4">Manage the text and links for buttons displayed across various sections of this program page.</p>
-              
-              <div className="space-y-8">
-                {/* Hero Banner Buttons */}
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-3 border-b pb-1">Hero Banner Buttons</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <CharCountLabel label="Primary Action Button Text" value={heroPrimaryBtnText} max={30} />
-                      <input maxLength={30}
-                        type="text"
-                        value={heroPrimaryBtnText}
-                        onChange={(e) => setHeroPrimaryBtnText(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                      />
-                    </div>
-                    <div>
-                      <CharCountLabel label="Secondary Action Button Text" value={heroSecondaryBtnText} max={30} />
-                      <input maxLength={30}
-                        type="text"
-                        value={heroSecondaryBtnText}
-                        onChange={(e) => setHeroSecondaryBtnText(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Overview Buttons */}
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-3 border-b pb-1">Overview Section Buttons</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <CharCountLabel label="Primary Action Button Text" value={overviewPrimaryBtnText} max={30} />
-                      <input maxLength={30}
-                        type="text"
-                        value={overviewPrimaryBtnText}
-                        onChange={(e) => setOverviewPrimaryBtnText(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                      />
-                    </div>
-                    <div>
-                      <CharCountLabel label="Secondary Action Button Text" value={overviewSecondaryBtnText} max={30} />
-                      <input maxLength={30}
-                        type="text"
-                        value={overviewSecondaryBtnText}
-                        onChange={(e) => setOverviewSecondaryBtnText(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Internship Buttons */}
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-3 border-b pb-1">Internship Section Button</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <CharCountLabel label="Action Button Text" value={internshipBtnText} max={30} />
-                      <input maxLength={30} type="text" className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" value={internshipBtnText} onChange={(e) => setInternshipBtnText(e.target.value)} />
-                    </div>
-                    <div>
-                      <CharCountLabel label="Action Button Link (Optional)" value={internshipBtnLink} max={100} />
-                      <input maxLength={100} type="text" className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" value={internshipBtnLink} onChange={(e) => setInternshipBtnLink(e.target.value)} placeholder="/contact or external link" />
-                      <p className="text-xs text-gray-500 mt-1">Leave empty to use the Global Apply Link.</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Admission Buttons */}
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-3 border-b pb-1">Admission & Eligibility Button</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Action Button Text</label>
-                      <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" value={eligibilityBtnText} onChange={(e) => setEligibilityBtnText(e.target.value)} placeholder="Start your Application" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Action Button Link (Optional)</label>
-                      <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" value={eligibilityBtnLink} onChange={(e) => setEligibilityBtnLink(e.target.value)} placeholder="/admissions or external link" />
-                      <p className="text-xs text-gray-500 mt-1">Leave empty to use the Global Apply Link.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
         </>
       )}
 
