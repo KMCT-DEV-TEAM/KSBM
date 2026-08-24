@@ -62,7 +62,7 @@ const EventsEssence = ({ essenceOfCulture }) => {
   };
 
   return (
-    <section className="w-full  px-6 relative">
+    <section className="w-full px-6 relative pt-14 md:pt-22">
       <div className="flex flex-col items-center mb-12">
         <h5 className="text-center text-sm md:text-base font-semibold uppercase tracking-[0.2em] mb-2"
           style={{
@@ -184,7 +184,7 @@ const EventsEssence = ({ essenceOfCulture }) => {
           {/* Mobile Controls */}
           {displayItems.length > 1 && (
             <div className="flex justify-center mt-6 gap-4 w-full">
-              <button 
+              <button
                 onClick={() => {
                   const currentIndex = displayItems.findIndex(i => i.category === selectedDetail);
                   const prevIndex = currentIndex === 0 ? displayItems.length - 1 : currentIndex - 1;
@@ -194,7 +194,7 @@ const EventsEssence = ({ essenceOfCulture }) => {
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
-              <button 
+              <button
                 onClick={() => {
                   const currentIndex = displayItems.findIndex(i => i.category === selectedDetail);
                   const nextIndex = currentIndex === displayItems.length - 1 ? 0 : currentIndex + 1;

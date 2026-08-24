@@ -2,6 +2,7 @@ import React from 'react';
 import GrievancePage from '../../features/grievance/GrievancePage';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import SideContact from '../../components/SideContact';
 
 export const metadata = {
   title: 'Grievance Form | KSBM',
@@ -16,6 +17,7 @@ export default function GrievanceRoute() {
         <GrievancePage />
       </main>
       <Footer />
+      <SideContact />
     </div>
   );
 }

@@ -61,7 +61,7 @@ const VisionMissionSection = ({ previewData }) => {
     visionFloatScrollRef.current = el.scrollTop;
     let animationId;
     const scroll = () => {
-      visionFloatScrollRef.current += 0.1;
+      visionFloatScrollRef.current += 0.3;
       el.scrollTop = visionFloatScrollRef.current;
 
       if (Math.abs(el.scrollTop - visionFloatScrollRef.current) > 2) {
@@ -87,7 +87,7 @@ const VisionMissionSection = ({ previewData }) => {
     missionFloatScrollRef.current = el.scrollTop;
     let animationId;
     const scroll = () => {
-      missionFloatScrollRef.current += 0.1;
+      missionFloatScrollRef.current += 0.3;
       el.scrollTop = missionFloatScrollRef.current;
 
       if (Math.abs(el.scrollTop - missionFloatScrollRef.current) > 2) {
@@ -124,7 +124,7 @@ const VisionMissionSection = ({ previewData }) => {
       <motion.div
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.2 }}
+        viewport={{ once: true, amount: 0.2 }}
         variants={{
           hidden: { opacity: 0 },
           visible: {

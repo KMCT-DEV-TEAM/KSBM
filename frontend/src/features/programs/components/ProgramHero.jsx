@@ -110,7 +110,11 @@ const ProgramHero = ({ program }) => {
           }}
           className="flex flex-col lg:flex-row items-start lg:items-center gap-4 mt-10"
         >
-          <Link href="#overview" className="bg-secondary text-primary text-sm md:text-base font-semibold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start">
+          <Link 
+            href={program.heroPrimaryBtnLink || "#overview"} 
+            target={program.heroPrimaryBtnLink?.startsWith('http') ? '_blank' : undefined}
+            className="bg-secondary text-primary text-sm md:text-base font-semibold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start"
+          >
             <span>{primaryBtnText}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>

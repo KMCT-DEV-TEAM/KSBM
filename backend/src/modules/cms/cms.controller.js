@@ -982,7 +982,7 @@ export const updateMbaPageSettings = async (req, res) => {
   try {
     const fields = [
       'shortTitle', 'title', 'heroTitleLine1', 'heroTitleLine2', 'description', 'heroImage',
-      'heroPrimaryBtnText', 'heroSecondaryBtnText', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
+      'heroPrimaryBtnText', 'heroPrimaryBtnLink', 'heroSecondaryBtnText', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
       'overviewTitle', 'overviewText', 'overviewSubtext', 'overviewImage',
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
       'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
@@ -1085,7 +1085,7 @@ export const updateBbaPageSettings = async (req, res) => {
   try {
     const fields = [
       'shortTitle', 'title', 'heroTitleLine1', 'heroTitleLine2', 'description', 'heroImage',
-      'heroPrimaryBtnText', 'heroSecondaryBtnText', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
+      'heroPrimaryBtnText', 'heroPrimaryBtnLink', 'heroSecondaryBtnText', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
       'overviewTitle', 'overviewText', 'overviewSubtext', 'overviewImage',
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
       'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
