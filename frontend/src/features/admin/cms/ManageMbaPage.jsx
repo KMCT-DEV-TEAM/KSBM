@@ -1155,8 +1155,8 @@ const ManageMbaPage = ({ isBba = false }) => {
     { id: 'overview', name: 'Program Overview', icon: <FileText className="w-4 h-4" /> },
     { id: 'dimensions', name: '4 Core Dimensions', icon: <BookOpen className="w-4 h-4" /> },
     { id: 'whyChoose', name: 'Key Learning Dimensions', icon: <BookOpen className="w-4 h-4" /> },
-    { id: 'internship', name: 'Internship Banner', icon: <Briefcase className="w-4 h-4" /> },
-    { id: 'dynamicLearning', name: 'Dynamic Learning', icon: <Award className="w-4 h-4" /> },
+    { id: 'internship', name: 'Dynamic Learning', icon: <Briefcase className="w-4 h-4" /> },
+    { id: 'dynamicLearning', name: 'Internship Banner', icon: <Award className="w-4 h-4" /> },
     { id: 'momentsGallery', name: 'Moments Gallery', icon: <FileText className="w-4 h-4" /> },
     { id: 'academicCalendarBanner', name: 'Academic Calendar', icon: <Calendar className="w-4 h-4" /> },
     { id: 'eligibility', name: 'Admission & Eligibility', icon: <Award className="w-4 h-4" /> },
@@ -1743,7 +1743,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               <div className="pt-4 border-t border-gray-100">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Banner Background Image</label>
                 <div className="space-y-4">
-                  <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={internshipBgImage} defaultImage="/assets/Images/mba/gallery_67.png" onUploadSuccess={(url) => setInternshipBgImage(url)} />
+                  <LogoUploader maxSize={1048576} deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={internshipBgImage} defaultImage="/assets/Images/mba/gallery_67.png" onUploadSuccess={(url) => setInternshipBgImage(url)} />
                   <div>
 
                   </div>
@@ -1756,7 +1756,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   {[0, 1, 2].map((i) => (
                     <div key={i} className="p-4 rounded-xl bg-gray-50 border border-gray-200 space-y-3">
                       <label className="block text-xs font-bold text-gray-600">Card Image #{i + 1}</label>
-                      <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={(internshipImages || [])[i] || ''} defaultImage={i === 0 ? '/assets/Images/mba/internship_2.png' : i === 1 ? '/assets/Images/mba/internship_27.png' : '/assets/Images/mba/internship_28.png'} onUploadSuccess={(url) => updateInternshipImage(i, url)} />
+                      <LogoUploader maxSize={1048576} deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={(internshipImages || [])[i] || ''} defaultImage={i === 0 ? '/assets/Images/mba/internship_2.png' : i === 1 ? '/assets/Images/mba/internship_27.png' : '/assets/Images/mba/internship_28.png'} onUploadSuccess={(url) => updateInternshipImage(i, url)} />
 
                     </div>
                   ))}
@@ -1834,7 +1834,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   {[0, 1].map((i) => (
                     <div key={i} className="p-4 rounded-xl bg-gray-50 border border-gray-200 space-y-3">
                       <label className="block text-xs font-bold text-gray-600">Collage Image #{i + 1}</label>
-                      <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={(dynamicLearning.images || [])[i] || ''} defaultImage={i === 0 ? '/assets/Images/mba/dynamic_49.png' : '/assets/Images/mba/dynamic_60.png'} onUploadSuccess={(url) => updateDynamicImage(i, url)} />
+                      <LogoUploader maxSize={1048576} deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={(dynamicLearning.images || [])[i] || ''} defaultImage={i === 0 ? '/assets/Images/mba/dynamic_49.png' : '/assets/Images/mba/dynamic_60.png'} onUploadSuccess={(url) => updateDynamicImage(i, url)} />
 
                     </div>
                   ))}
