@@ -391,6 +391,7 @@ const ManageAchievements = () => {
                       }}
                       deferredMode={true}
                       disableDelete={true}
+                      maxSize={1048576}
                     />
                   </div>
                 </div>
@@ -498,7 +499,7 @@ const ManageAchievements = () => {
               >
                 <div className="h-40 bg-gray-100 relative overflow-hidden flex-shrink-0">
                   {item.image ? (
-                    <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                    <img src={item.image} alt={item.title} className="w-full h-full object-contain bg-white" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs uppercase tracking-widest font-semibold">No Image</div>
                   )}
