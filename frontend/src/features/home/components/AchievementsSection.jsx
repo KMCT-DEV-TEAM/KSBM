@@ -146,11 +146,11 @@ const AchievementsSection = ({ previewData }) => {
                 className="group cursor-pointer flex flex-col"
               >
                 {/* Image */}
-                <div className="w-full h-[240px] md:h-[280px] lg:h-[300px] rounded-[1.5rem] overflow-hidden mb-6 shadow-sm relative group-hover:shadow-md transition-shadow duration-500">
+                <div className="w-full h-[240px] md:h-[280px] lg:h-[300px] bg-white rounded-[1.5rem] overflow-hidden mb-6 shadow-sm relative group-hover:shadow-md transition-shadow duration-500">
                   <img
                     src={item.image || 'https://via.placeholder.com/300x200'}
                     alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
                   
