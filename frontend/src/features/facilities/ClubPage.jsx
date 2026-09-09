@@ -9,48 +9,29 @@ import Footer from '../../components/Footer';
 import Loader from '../../components/Loader';
 import { useGlobalLinks } from '../../hooks/useGlobalLinks';
 
-const buildGalleryColumns = (items) => {
-  const columns = [];
-  if (!items || !Array.isArray(items)) return columns;
-  let i = 0;
-  let colIndex = 0;
+const getGridItemClass = (idx) => {
+  const pattern = idx % 5;
+  let base = "w-full h-full shadow-lg";
+  if (pattern === 0) return `${base} col-span-1 row-span-2`;
+  if (pattern === 1) return `${base} col-span-1 row-span-1`;
+  if (pattern === 2) return `${base} col-span-1 row-span-1`;
+  if (pattern === 3) return `${base} col-span-2 row-span-1`;
+  if (pattern === 4) return `${base} col-span-1 row-span-2`;
+  return base;
+};
 
-  while (i < items.length) {
-    const pattern = colIndex % 5;
+const getChunkWidthClass = (len) => {
+  if (len === 1) return "w-[188px] sm:w-[238px] lg:w-[282px]";
+  if (len === 2) return "w-[392px] sm:w-[492px] lg:w-[588px]";
+  if (len === 3 || len === 4) return "w-[596px] sm:w-[746px] lg:w-[894px]";
+  return "w-[800px] sm:w-[1000px] lg:w-[1200px]";
+};
 
-    if (pattern === 0) {
-      columns.push({ type: 'tall', items: [items[i]] });
-      i += 1;
-    } else if (pattern === 1) {
-      const top = items[i];
-      const bottom = items[i + 1];
-      if (bottom) {
-        columns.push({ type: 'split-top-small', items: [top, bottom] });
-        i += 2;
-      } else {
-        columns.push({ type: 'tall', items: [top] });
-        i += 1;
-      }
-    } else if (pattern === 2) {
-      columns.push({ type: 'tall', items: [items[i]] });
-      i += 1;
-    } else if (pattern === 3) {
-      const top = items[i];
-      const bottom = items[i + 1];
-      if (bottom) {
-        columns.push({ type: 'split-top-large', items: [top, bottom] });
-        i += 2;
-      } else {
-        columns.push({ type: 'tall', items: [top] });
-        i += 1;
-      }
-    } else {
-      columns.push({ type: 'tall', items: [items[i]] });
-      i += 1;
-    }
-    colIndex++;
-  }
-  return columns;
+const getChunkGridColsClass = (len) => {
+  if (len === 1) return "grid-cols-1";
+  if (len === 2) return "grid-cols-2";
+  if (len === 3 || len === 4) return "grid-cols-3";
+  return "grid-cols-4";
 };
 
 const GalleryImage = ({ item, className = '' }) => {
@@ -126,6 +107,14 @@ const ClubPage = () => {
   const heroBg = hero?.backgroundImage || clubData.image || 'https://images.unsplash.com/photo-1542840410-3092f99611a3?q=80&w=1974&auto=format&fit=crop';
   const heroTitle = hero?.title || clubData.title;
   const heroSubtitle = hero?.subtitle || 'Explore our club activities and connect with peers.';
+
+  const chunkedImages = [];
+  if (gallery?.images) {
+    for (let i = 0; i < gallery.images.length; i += 5) {
+      chunkedImages.push(gallery.images.slice(i, i + 5));
+    }
+  }
+  const displayChunks = chunkedImages.length > 0 ? [...chunkedImages, ...chunkedImages, ...chunkedImages] : [];
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50/50">
@@ -326,16 +315,41 @@ const ClubPage = () => {
         {/* 5. Gallery Section */}
         {gallery?.showSection !== false && gallery?.images?.length > 0 && (
           <section
-            className="py-24 bg-[#0b1238] relative text-white overflow-hidden"
+            className="py-24 bg-[#2D325A] relative text-white overflow-hidden"
             style={{
               backgroundImage: "url('/assets/Images/image 55.png')",
-              backgroundSize: '400px auto',
-              backgroundPosition: 'left 5% center',
+              backgroundSize: '500px auto',
+              backgroundPosition: 'left -5% center',
               backgroundRepeat: 'no-repeat'
             }}
           >
-            <div className="absolute inset-0 bg-[#0b1238]/25" />
-            <div className="w-[95%] max-w-[1440px] mx-auto relative z-10">
+            <div className="absolute inset-0 bg-[#2D325A]/40" />
+
+            {/* Dots Pattern Top Right */}
+            <div className="absolute top-24 right-10 opacity-20 pointer-events-none hidden lg:block">
+              <svg width="80" height="120" viewBox="0 0 80 120" fill="currentColor" className="text-white">
+                <circle cx="10" cy="10" r="4.5" /><circle cx="30" cy="10" r="4.5" /><circle cx="50" cy="10" r="4.5" /><circle cx="70" cy="10" r="4.5" />
+                <circle cx="10" cy="30" r="4.5" /><circle cx="30" cy="30" r="4.5" /><circle cx="50" cy="30" r="4.5" /><circle cx="70" cy="30" r="4.5" />
+                <circle cx="10" cy="50" r="4.5" /><circle cx="30" cy="50" r="4.5" /><circle cx="50" cy="50" r="4.5" /><circle cx="70" cy="50" r="4.5" />
+                <circle cx="10" cy="70" r="4.5" /><circle cx="30" cy="70" r="4.5" /><circle cx="50" cy="70" r="4.5" /><circle cx="70" cy="70" r="4.5" />
+                <circle cx="10" cy="90" r="4.5" /><circle cx="30" cy="90" r="4.5" /><circle cx="50" cy="90" r="4.5" /><circle cx="70" cy="90" r="4.5" />
+                <circle cx="10" cy="110" r="4.5" /><circle cx="30" cy="110" r="4.5" /><circle cx="50" cy="110" r="4.5" /><circle cx="70" cy="110" r="4.5" />
+              </svg>
+            </div>
+
+            {/* Dots Pattern Bottom Left */}
+            <div className="absolute bottom-24 left-10 opacity-20 pointer-events-none hidden lg:block">
+              <svg width="80" height="120" viewBox="0 0 80 120" fill="currentColor" className="text-white">
+                <circle cx="10" cy="10" r="4.5" /><circle cx="30" cy="10" r="4.5" /><circle cx="50" cy="10" r="4.5" /><circle cx="70" cy="10" r="4.5" />
+                <circle cx="10" cy="30" r="4.5" /><circle cx="30" cy="30" r="4.5" /><circle cx="50" cy="30" r="4.5" /><circle cx="70" cy="30" r="4.5" />
+                <circle cx="10" cy="50" r="4.5" /><circle cx="30" cy="50" r="4.5" /><circle cx="50" cy="50" r="4.5" /><circle cx="70" cy="50" r="4.5" />
+                <circle cx="10" cy="70" r="4.5" /><circle cx="30" cy="70" r="4.5" /><circle cx="50" cy="70" r="4.5" /><circle cx="70" cy="70" r="4.5" />
+                <circle cx="10" cy="90" r="4.5" /><circle cx="30" cy="90" r="4.5" /><circle cx="50" cy="90" r="4.5" /><circle cx="70" cy="90" r="4.5" />
+                <circle cx="10" cy="110" r="4.5" /><circle cx="30" cy="110" r="4.5" /><circle cx="50" cy="110" r="4.5" /><circle cx="70" cy="110" r="4.5" />
+              </svg>
+            </div>
+
+            <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -343,60 +357,31 @@ const ClubPage = () => {
                 className="text-center mb-16"
               >
                 <div className="flex items-center justify-center gap-4 mb-4">
-                  <div className="h-[1px] w-12 bg-white/30" />
-                  <p className="text-xs tracking-[0.3em] font-semibold text-white/70 uppercase">Gallery</p>
-                  <div className="h-[1px] w-12 bg-white/30" />
+                  <div className="h-[1px] w-24 bg-white/40" />
+                  <p className="text-sm tracking-[0.25em] font-medium text-white/80 uppercase">Gallery</p>
+                  <div className="h-[1px] w-24 bg-white/40" />
                 </div>
-                <h2 className="text-3xl md:text-5xl font-semibold tracking-tight">
+                <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
                   {gallery.heading || 'Captured in Culture'}
                 </h2>
               </motion.div>
 
-              <div className="overflow-hidden relative w-full -mx-4 px-4 sm:mx-0 sm:px-0">
-                <div className="animate-marquee gap-3 sm:gap-4 pb-6 flex">
-                  {[...buildGalleryColumns(gallery.images), ...buildGalleryColumns(gallery.images)].map((col, colIdx) => {
-                    if (col.type === 'tall') {
-                      return (
-                        <div key={colIdx} className="shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] snap-center">
-                          <GalleryImage
-                            item={col.items[0]}
-                            className="h-[280px] sm:h-[340px] lg:h-[400px]"
-                          />
-                        </div>
-                      );
-                    }
-
-                    if (col.type === 'split-top-small') {
-                      return (
-                        <div key={colIdx} className="shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] flex flex-col gap-3 sm:gap-4 snap-center">
-                          <GalleryImage
-                            item={col.items[0]}
-                            className="h-[120px] sm:h-[145px] lg:h-[170px]"
-                          />
-                          <GalleryImage
-                            item={col.items[1]}
-                            className="h-[148px] sm:h-[183px] lg:h-[218px]"
-                          />
-                        </div>
-                      );
-                    }
-
-                    if (col.type === 'split-top-large') {
-                      return (
-                        <div key={colIdx} className="shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] flex flex-col gap-3 sm:gap-4 snap-center">
-                          <GalleryImage
-                            item={col.items[0]}
-                            className="h-[148px] sm:h-[183px] lg:h-[218px]"
-                          />
-                          <GalleryImage
-                            item={col.items[1]}
-                            className="h-[120px] sm:h-[145px] lg:h-[170px]"
-                          />
-                        </div>
-                      );
-                    }
-                    return null;
-                  })}
+              <div className="overflow-hidden relative w-full -mx-4 px-4 sm:mx-0 sm:px-0 mt-8">
+                <div className="animate-marquee gap-4 md:gap-6 flex w-max pb-6" style={{ animationDuration: '50s' }}>
+                  {displayChunks.map((chunk, chunkIdx) => (
+                    <div 
+                      key={chunkIdx}
+                      className={`grid ${getChunkGridColsClass(chunk.length)} gap-4 md:gap-6 auto-rows-[150px] sm:auto-rows-[190px] lg:auto-rows-[240px] grid-flow-dense shrink-0 ${getChunkWidthClass(chunk.length)}`}
+                    >
+                      {chunk.map((item, idx) => (
+                        <GalleryImage
+                          key={idx}
+                          item={item}
+                          className={getGridItemClass(idx)}
+                        />
+                      ))}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

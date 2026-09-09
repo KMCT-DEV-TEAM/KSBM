@@ -61,7 +61,7 @@ const AchievementsSection = ({ previewData }) => {
     );
   }
 
-  const { subheading, heading, achievements, showSubheading, showHeading, showAchievements, previewDevice } = data;
+  const { subheading, heading, achievements, showSubheading = true, showHeading = true, showAchievements = true, previewDevice } = data;
   const displayAchievements = achievements?.slice(0, 3) || [];
 
   const isMobilePreview = previewDevice === 'mobile';

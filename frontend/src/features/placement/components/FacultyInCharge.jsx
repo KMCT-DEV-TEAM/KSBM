@@ -45,7 +45,7 @@ const FacultyInCharge = ({ data }) => {
             className="lg:w-1/2 flex flex-col sm:flex-row gap-6 justify-end"
           >
             {facultyMembers.map((faculty, index) => (
-              <div key={index} className="relative rounded-2xl overflow-hidden shadow-lg w-full sm:w-[220px] lg:w-[260px] aspect-[3/4] group">
+              <div key={index} className="relative rounded-2xl overflow-hidden shadow-lg w-full sm:w-[220px] lg:w-[260px] aspect-[3/4] group bg-primary/5">
                 <img
                   src={faculty.image}
                   alt={faculty.name}
