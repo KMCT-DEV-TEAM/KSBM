@@ -61,7 +61,7 @@ const VisionMissionSection = ({ previewData }) => {
     visionFloatScrollRef.current = el.scrollTop;
     let animationId;
     const scroll = () => {
-      visionFloatScrollRef.current += 0.3;
+      visionFloatScrollRef.current += 0.15;
       el.scrollTop = visionFloatScrollRef.current;
 
       if (Math.abs(el.scrollTop - visionFloatScrollRef.current) > 2) {
@@ -87,7 +87,7 @@ const VisionMissionSection = ({ previewData }) => {
     missionFloatScrollRef.current = el.scrollTop;
     let animationId;
     const scroll = () => {
-      missionFloatScrollRef.current += 0.3;
+      missionFloatScrollRef.current += 0.15;
       el.scrollTop = missionFloatScrollRef.current;
 
       if (Math.abs(el.scrollTop - missionFloatScrollRef.current) > 2) {
