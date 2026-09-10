@@ -24,8 +24,9 @@ const ManagementSection = ({ previewData }) => {
               heading: data.heading || 'The Architects Of Excellence',
               description: data.description || 'Our leadership board combines decades of top-tier industry experience with a profound commitment to academic innovation.',
               members: data.members || []
-            ,
-              showSection: data.showSection});
+              ,
+              showSection: data.showSection
+            });
           }
         } catch (error) {
           console.error('Error fetching management settings:', error);
@@ -44,7 +45,7 @@ const ManagementSection = ({ previewData }) => {
   return (
     <section className="w-full bg-white py-20 lg:py-32 relative z-10">
       <div className="w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Header Section (Centered) */}
         <div className="text-center max-w-4xl mx-auto mb-20 lg:mb-28">
           <motion.p
@@ -79,7 +80,8 @@ const ManagementSection = ({ previewData }) => {
         <div className="flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-12 w-full max-w-6xl mx-auto">
           {members.map((member, index) => {
             // Check if it's the center card (assuming exactly 3 members)
-            const isCenter = index === 1;  return (
+            const isCenter = index === 1;
+            return (
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -94,19 +96,6 @@ const ManagementSection = ({ previewData }) => {
                   alt={member.name}
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
-
-                {/* Vertical Text (Left Edge) */}
-                {member.verticalText && (
-                  <div className={`absolute top-12 left-4 lg:left-6 flex flex-col items-center gap-4 z-20`}>
-                    <div className="w-[1px] h-12 bg-white/40"></div>
-                    <span
-                      className="text-white/80 text-[8px] md:text-[10px] font-bold tracking-[0.3em] uppercase"
-                      style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
-                    >
-                      {member.verticalText}
-                    </span>
-                  </div>
-                )}
 
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1b2559]/95 via-[#1b2559]/40 to-transparent opacity-90 z-10 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -128,7 +117,7 @@ const ManagementSection = ({ previewData }) => {
             );
           })}
         </div>
-        
+
       </div>
     </section>
   );
