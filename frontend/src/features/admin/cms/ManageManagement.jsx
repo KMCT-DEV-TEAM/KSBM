@@ -82,7 +82,7 @@ const ManageManagement = () => {
             subheading, heading, description, members: finalMembers,
             showSection
           });
-          
+
           await executeDeletions();
           setMembers(finalMembers);
           Toast.fire({ icon: 'success', title: 'Management section saved successfully!' });
@@ -103,40 +103,37 @@ const ManageManagement = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-      setSubheading('OUR MANAGEMENT');
-      setHeading('The Architects Of Excellence');
-      setDescription('Our leadership board combines decades of top-tier industry experience with a profound commitment to academic innovation.');
-      setMembers([
-        {
-          id: '1',
-          name: 'Dr. Sarah Mitchell',
-          role: 'MANAGING DIRECTOR',
-          verticalText: 'DIRECTOR',
-          image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-        },
-        {
-          id: '2',
-          name: 'Dr. Adrian Starlin',
-          role: 'CHAIRMAN DIRECTOR',
-          verticalText: 'CHAIRMAN',
-          image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-        },
-        {
-          id: '3',
-          name: 'Dr. Elena Rostova',
-          role: 'EXECUTIVE DIRECTOR',
-          verticalText: 'EXECUTIVE',
-          image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-        }
-      ]);
-      setShowSection(true);
-      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-    }
+        setSubheading('OUR MANAGEMENT');
+        setHeading('The Architects Of Excellence');
+        setDescription('Our leadership board combines decades of top-tier industry experience with a profound commitment to academic innovation.');
+        setMembers([
+          {
+            id: '1',
+            name: 'Dr. Sarah Mitchell',
+            role: 'MANAGING DIRECTOR',
+            image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          },
+          {
+            id: '2',
+            name: 'Dr. Adrian Starlin',
+            role: 'CHAIRMAN DIRECTOR',
+            image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          },
+          {
+            id: '3',
+            name: 'Dr. Elena Rostova',
+            role: 'EXECUTIVE DIRECTOR',
+            image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+          }
+        ]);
+        setShowSection(true);
+        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+      }
     });
   };
 
   const handleConfirmAction = async () => {
-    
+
     setConfirmModal({ ...confirmModal, isOpen: false });
   };
 
@@ -147,7 +144,6 @@ const ManageManagement = () => {
         id: Date.now().toString(),
         name: 'New Member',
         role: 'ROLE',
-        verticalText: 'TEXT',
         image: ''
       }
     ]);
@@ -162,7 +158,7 @@ const ManageManagement = () => {
       if (oldItem && oldItem[field]) markForDeletion(oldItem[field]);
     }
 
-    setMembers(members.map(member => 
+    setMembers(members.map(member =>
       member.id === id ? { ...member, [field]: value, [`${field}File`]: file } : member
     ));
   };
@@ -183,7 +179,7 @@ const ManageManagement = () => {
     });
   };
 
-  
+
   useEffect(() => {
     if (isPreviewModalOpen) {
       const pData = {
@@ -261,7 +257,7 @@ const ManageManagement = () => {
           </div>
           <div className="flex-1 bg-gray-100 overflow-hidden relative flex justify-center items-center p-4">
             <div className={`bg-white shadow-2xl transition-all duration-300 h-full ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1920px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <iframe 
+              <iframe
                 ref={iframeRef}
                 src="/preview/management"
                 className="w-full h-full border-0"
@@ -338,43 +334,31 @@ const ManageManagement = () => {
           <div className="space-y-4">
             {members.map((member, index) => (
               <div key={member.id} className="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col gap-6 relative group">                <div className="w-full grid grid-cols-2 gap-4">
-                  <div className="col-span-2">
-                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Name</label>
-                    <input
-                      type="text"
-                      value={member.name}
-                      maxLength={40}
-                      onChange={(e) => handleUpdateMember(member.id, 'name', e.target.value)}
-                      placeholder="e.g. Dr. Sarah Mitchell"
-                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    />
-                    <div className="text-xs text-right mt-1 text-gray-500">{member.name.length}/40</div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Role</label>
-                    <input
-                      type="text"
-                      value={member.role}
-                      maxLength={40}
-                      onChange={(e) => handleUpdateMember(member.id, 'role', e.target.value)}
-                      placeholder="e.g. MANAGING DIRECTOR"
-                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    />
-                    <div className="text-xs text-right mt-1 text-gray-500">{member.role.length}/40</div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Vertical Text</label>
-                    <input
-                      type="text"
-                      value={member.verticalText}
-                      maxLength={15}
-                      onChange={(e) => handleUpdateMember(member.id, 'verticalText', e.target.value)}
-                      placeholder="e.g. DIRECTOR"
-                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    />
-                    <div className="text-xs text-right mt-1 text-gray-500">{member.verticalText.length}/15</div>
-                  </div>
+                <div className="col-span-2">
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Name</label>
+                  <input
+                    type="text"
+                    value={member.name}
+                    maxLength={40}
+                    onChange={(e) => handleUpdateMember(member.id, 'name', e.target.value)}
+                    placeholder="e.g. Dr. Sarah Mitchell"
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                  <div className="text-xs text-right mt-1 text-gray-500">{member.name.length}/40</div>
                 </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Role</label>
+                  <input
+                    type="text"
+                    value={member.role}
+                    maxLength={40}
+                    onChange={(e) => handleUpdateMember(member.id, 'role', e.target.value)}
+                    placeholder="e.g. MANAGING DIRECTOR"
+                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                  <div className="text-xs text-right mt-1 text-gray-500">{member.role.length}/40</div>
+                </div>
+              </div>
 
                 <div className="w-full">
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Profile Image</label>
@@ -389,7 +373,7 @@ const ManageManagement = () => {
                 </div>
               </div>
             ))}
-            
+
             {members.length === 0 && (
               <div className="text-center py-8 text-gray-400 text-sm">
                 No management members added yet. Click "Add Member" to create one.
@@ -400,7 +384,7 @@ const ManageManagement = () => {
 
       </div>
 
-      <ConfirmationModal 
+      <ConfirmationModal
         isOpen={confirmModal.isOpen}
         onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
         onConfirm={handleConfirmAction}
