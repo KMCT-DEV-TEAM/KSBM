@@ -733,6 +733,7 @@ const ManageEventsPage = () => {
                         <span className="text-xs font-bold text-gray-500 uppercase">Image #{idx + 1}</span>
                       </div>
                       <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
+                        maxSize={1048576}
                         currentImage={item.img}
                         defaultImage={defaults.highlightedPrograms.images[0]?.img} onChange={(url, file) => handleImageUploadChange(`highlightedPrograms.images.${idx}.img`, url, file, item.img, defaults.highlightedPrograms.images[0]?.img)}
                       />
