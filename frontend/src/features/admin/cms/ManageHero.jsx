@@ -7,6 +7,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import BannerUploader from './components/BannerUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import LogoUploader from './components/LogoUploader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
 import Hero from '../../home/components/Hero';
 
@@ -24,14 +25,16 @@ const Toast = Swal.mixin({
 
 const ManageHero = () => {
   const iframeRef = useRef(null);
-  
+
   const [pillText, setPillText] = useState({ text: 'ADMISSIONS OPEN 2025-26', isVisible: true });
   const [headingLine1, setHeadingLine1] = useState({ text: 'Empowering Future', isVisible: true });
   const [headingLine2, setHeadingLine2] = useState({ text: 'Business Leaders', isVisible: true });
   const [description, setDescription] = useState({ text: "Unlock your potential with India's leading B-School, where traditional academic rigor meets modern industry innovation. Join a network of global visionaries.", isVisible: true });
-  
+
+  const [secondaryButton, setSecondaryButton] = useState({ text: 'Download Brochure', isVisible: true, link: '#' });
+
   const [bannerImages, setBannerImages] = useState([]);
-  
+
   const [statsCard, setStatsCard] = useState({
     isVisible: true,
     batchText: 'Batch 2025–27',
@@ -65,6 +68,7 @@ const ManageHero = () => {
         if (data.headingLine1) setHeadingLine1(typeof data.headingLine1 === 'string' ? { text: data.headingLine1, isVisible: true } : data.headingLine1);
         if (data.headingLine2) setHeadingLine2(typeof data.headingLine2 === 'string' ? { text: data.headingLine2, isVisible: true } : data.headingLine2);
         if (data.description) setDescription(typeof data.description === 'string' ? { text: data.description, isVisible: true } : data.description);
+        if (data.secondaryButton) setSecondaryButton(data.secondaryButton);
         if (data.bannerImages) setBannerImages(data.bannerImages);
         if (data.statsCard) setStatsCard(data.statsCard);
         if (data.showSection !== undefined) setShowSection(data.showSection);
@@ -94,16 +98,17 @@ const ManageHero = () => {
             return img;
           }));
 
-          await api.put('/cms/hero', { 
-            pillText, 
-            headingLine1, 
-            headingLine2, 
-            description, 
+          await api.put('/cms/hero', {
+            pillText,
+            headingLine1,
+            headingLine2,
+            description,
+            secondaryButton,
             bannerImages: finalBannerImages,
             statsCard,
             showSection
           }, { hideLoader: true });
-          
+
           await executeDeletions();
           setBannerImages(finalBannerImages);
           Toast.fire({ icon: 'success', title: 'Hero settings saved successfully!' });
@@ -128,6 +133,7 @@ const ManageHero = () => {
         setHeadingLine1({ text: 'Empowering Future', isVisible: true });
         setHeadingLine2({ text: 'Business Leaders', isVisible: true });
         setDescription({ text: "Unlock your potential with India's leading B-School, where traditional academic rigor meets modern industry innovation. Join a network of global visionaries.", isVisible: true });
+        setSecondaryButton({ text: 'Download Brochure', isVisible: true, link: '#' });
         setBannerImages([
           { url: '/assets/Images/Home/hero_banner_1.png' },
           { url: '/assets/Images/Home/hero_banner_2.png' },
@@ -154,6 +160,7 @@ const ManageHero = () => {
     headingLine1,
     headingLine2,
     description,
+    secondaryButton,
     bannerImages,
     statsCard,
     showSection
@@ -167,9 +174,9 @@ const ManageHero = () => {
           iframeRef.current.contentWindow.postMessage({ type: 'preview-hero-data', payload: previewData }, '*');
         }
       };
-      
+
       sendData();
-      
+
       let count = 0;
       interval = setInterval(() => {
         sendData();
@@ -201,23 +208,23 @@ const ManageHero = () => {
             <div className="flex items-center gap-2 text-sm font-bold text-[#697A8D] uppercase tracking-wider">
               <Eye className="w-5 h-5" /> Live Preview
             </div>
-            
+
             <div className="flex items-center bg-white rounded-md border border-gray-200 p-0.5">
-              <button 
+              <button
                 onClick={() => setPreviewMode('desktop')}
                 className={`p-1.5 rounded-sm transition-colors ${previewMode === 'desktop' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Desktop View"
               >
                 <Monitor className="w-4 h-4" />
               </button>
-              <button 
+              <button
                 onClick={() => setPreviewMode('tablet')}
                 className={`p-1.5 rounded-sm transition-colors ${previewMode === 'tablet' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Tablet View"
               >
                 <Tablet className="w-4 h-4" />
               </button>
-              <button 
+              <button
                 onClick={() => setPreviewMode('mobile')}
                 className={`p-1.5 rounded-sm transition-colors ${previewMode === 'mobile' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Mobile View"
@@ -226,7 +233,7 @@ const ManageHero = () => {
               </button>
             </div>
 
-            <button 
+            <button
               onClick={() => setIsPreviewModalOpen(false)}
               className="p-2 text-gray-500 hover:text-red-500 bg-gray-100 hover:bg-red-50 rounded-md transition-colors"
             >
@@ -248,7 +255,7 @@ const ManageHero = () => {
 
       {/* Main Form Card */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 w-full">
-        
+
         {/* Section Visibility Toggle */}
         <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
           <div>
@@ -274,9 +281,9 @@ const ManageHero = () => {
         {/* Banner Images Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
           <h3 className="text-lg font-bold text-[#1e2869] mb-4">Banner Background Images</h3>
-          <BannerUploader 
-            bannerImages={bannerImages} 
-            setBannerImages={setBannerImages} 
+          <BannerUploader
+            bannerImages={bannerImages}
+            setBannerImages={setBannerImages}
             onUploadStateChange={(uploading) => setIsUploading(uploading)}
             deferredMode={true}
             onMarkForDeletion={markForDeletion}
@@ -286,12 +293,12 @@ const ManageHero = () => {
         {/* Text Settings */}
         <div className="mb-8 pb-8 border-b border-gray-100">
           <h3 className="text-lg font-bold text-[#1e2869] mb-4">Text Content</h3>
-          
+
           <div className="space-y-6">
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Pill Badge Text</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={pillText.text}
                 maxLength={25}
                 onChange={(e) => setPillText({ ...pillText, text: e.target.value })}
@@ -305,12 +312,12 @@ const ManageHero = () => {
                 <span className="text-sm font-semibold text-[#566A7F]">Show Pill Badge</span>
               </label>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Heading Line 1 (White Text)</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={headingLine1.text}
                   maxLength={36}
                   onChange={(e) => setHeadingLine1({ ...headingLine1, text: e.target.value })}
@@ -324,11 +331,11 @@ const ManageHero = () => {
                   <span className="text-sm font-semibold text-[#566A7F]">Show Heading Line 1</span>
                 </label>
               </div>
-              
+
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Heading Line 2 (Blue Text)</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={headingLine2.text}
                   maxLength={25}
                   onChange={(e) => setHeadingLine2({ ...headingLine2, text: e.target.value })}
@@ -346,7 +353,7 @@ const ManageHero = () => {
 
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Description</label>
-              <textarea 
+              <textarea
                 value={description.text}
                 maxLength={250}
                 onChange={(e) => setDescription({ ...description, text: e.target.value })}
@@ -361,6 +368,35 @@ const ManageHero = () => {
                 <span className="text-sm font-semibold text-[#566A7F]">Show Description</span>
               </label>
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-4 rounded-lg border border-gray-100">
+              <div>
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">Download Brochure Text</label>
+                <input
+                  type="text"
+                  value={secondaryButton.text}
+                  maxLength={50}
+                  onChange={(e) => setSecondaryButton({ ...secondaryButton, text: e.target.value })}
+                  className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                />
+                <label className="flex items-center gap-2 mt-2 cursor-pointer">
+                  <input type="checkbox" checked={secondaryButton.isVisible} onChange={(e) => setSecondaryButton({ ...secondaryButton, isVisible: e.target.checked })} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                  <span className="text-sm font-semibold text-[#566A7F]">Show Button</span>
+                </label>
+              </div>
+              <div>
+                <LogoUploader
+                  label="Download Brochure Link (PDF)"
+                  currentLogoUrl={secondaryButton.link}
+                  onUploadSuccess={(url) => setSecondaryButton({ ...secondaryButton, link: url })}
+                  uploadEndpoint="/upload/home"
+                  acceptTypes={{ 'application/pdf': ['.pdf'] }}
+                  maxSize={104857600}
+                  layout="vertical"
+                />
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -369,7 +405,7 @@ const ManageHero = () => {
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-bold text-[#1e2869]">Stats Floating Card</h3>
             <label className="flex items-center gap-2 cursor-pointer">
-              <input 
+              <input
                 type="checkbox"
                 checked={statsCard.isVisible}
                 onChange={(e) => setStatsCard({ ...statsCard, isVisible: e.target.checked })}
@@ -378,12 +414,12 @@ const ManageHero = () => {
               <span className="text-sm font-semibold text-gray-500">Show Stats Card</span>
             </label>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 md:col-span-2">
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Batch Text</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={statsCard.batchText}
                 maxLength={15}
                 onChange={(e) => setStatsCard({ ...statsCard, batchText: e.target.value })}
@@ -391,14 +427,14 @@ const ManageHero = () => {
               />
               <div className="text-xs text-right mt-1 text-gray-500">{statsCard.batchText.length}/15</div>
             </div>
-            
+
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <h4 className="font-semibold text-sm text-[#566A7F] mb-3 border-b pb-2">Statistic 1</h4>
               <div className="space-y-3">
                 <div>
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Title</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={statsCard.stat1Title}
                     maxLength={20}
                     onChange={(e) => setStatsCard({ ...statsCard, stat1Title: e.target.value })}
@@ -408,8 +444,8 @@ const ManageHero = () => {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Subtitle</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={statsCard.stat1Subtitle}
                     maxLength={30}
                     onChange={(e) => setStatsCard({ ...statsCard, stat1Subtitle: e.target.value })}
@@ -425,8 +461,8 @@ const ManageHero = () => {
               <div className="space-y-3">
                 <div>
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Title</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={statsCard.stat2Title}
                     maxLength={20}
                     onChange={(e) => setStatsCard({ ...statsCard, stat2Title: e.target.value })}
@@ -436,8 +472,8 @@ const ManageHero = () => {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Subtitle</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={statsCard.stat2Subtitle}
                     maxLength={30}
                     onChange={(e) => setStatsCard({ ...statsCard, stat2Subtitle: e.target.value })}
@@ -453,8 +489,8 @@ const ManageHero = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Link Text</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={statsCard.linkText}
                     maxLength={30}
                     onChange={(e) => setStatsCard({ ...statsCard, linkText: e.target.value })}
@@ -464,8 +500,8 @@ const ManageHero = () => {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Link URL</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={statsCard.linkUrl}
                     onChange={(e) => setStatsCard({ ...statsCard, linkUrl: e.target.value })}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"

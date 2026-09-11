@@ -94,6 +94,11 @@ if (!fs.existsSync(downloadsAssetsDir)) {
   fs.mkdirSync(downloadsAssetsDir, { recursive: true });
 }
 
+const brochuresDir = path.join(__dirname, '../../../frontend/public/assets/brochures');
+if (!fs.existsSync(brochuresDir)) {
+  fs.mkdirSync(brochuresDir, { recursive: true });
+}
+
 const termsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/terms');
 if (!fs.existsSync(termsAssetsDir)) {
   fs.mkdirSync(termsAssetsDir, { recursive: true });
@@ -160,6 +165,8 @@ const storage = multer.diskStorage({
       targetDir = eventsAssetsDir;
     } else if (req.originalUrl.includes('/upload/gallery')) {
       targetDir = galleryAssetsDir;
+    } else if (req.originalUrl.includes('/upload/brochure')) {
+      targetDir = brochuresDir;
     }
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir, { recursive: true });
@@ -172,5 +179,5 @@ const storage = multer.diskStorage({
   }
 });
 
-export const uploadAssets = multer({ storage: storage });
+export const uploadAssets = multer({ storage: storage, limits: { fileSize: 104857600 } });
 

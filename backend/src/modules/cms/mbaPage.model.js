@@ -17,6 +17,7 @@ const mbaPageSchema = new mongoose.Schema(
     heroPrimaryBtnText: { type: String, default: 'EXPLORE PROGRAM' },
     heroPrimaryBtnLink: { type: String, default: '#overview' },
     heroSecondaryBtnText: { type: String, default: 'DOWNLOAD BROCHURE' },
+    heroSecondaryBtnLink: { type: String, default: '' },
     heroCardTitle: { type: String, default: 'Batch 2025–27' },
     heroCardStat1Title: { type: String, default: 'Limited Seats' },
     heroCardStat1Sub: { type: String, default: 'Last few slots remaining' },
@@ -39,6 +40,7 @@ const mbaPageSchema = new mongoose.Schema(
     overviewFloatingBadgeText: { type: String, default: '100% Case-Study Driven' },
     overviewPrimaryBtnText: { type: String, default: 'Apply Now' },
     overviewSecondaryBtnText: { type: String, default: 'Download Brochure' },
+    overviewSecondaryBtnLink: { type: String, default: '' },
     highlights: {
       type: [String],
       default: [
