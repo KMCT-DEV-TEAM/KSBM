@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Loader from '../../../components/Loader';
 import api from '../../../api/axios';
 import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
+import { downloadFile } from '../../../utils/downloadFile';
 import {
   ArrowUpRight,
   Download,
@@ -234,15 +235,13 @@ const Hero = ({ previewData }) => {
                 {heroApplyBtn?.label || 'Apply Now'} <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
               </a>
             )}
-            {(heroBrochureBtn?.isActive !== false) && (
+            {(settings?.secondaryButton?.isVisible !== false) && (
               <a
-                href={heroBrochureBtn?.link || '#'}
-                target={(heroBrochureBtn?.link || '').startsWith('http') ? '_blank' : undefined}
-                rel={(heroBrochureBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-bold px-6 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-auto justify-center"
-                download
+                href={settings?.secondaryButton?.link || '#'}
+                onClick={(e) => downloadFile(e, settings?.secondaryButton?.link, 'Brochure.pdf')}
+                className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-bold px-6 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-auto justify-center cursor-pointer"
               >
-                <Download className="w-4 h-4 md:w-5 md:h-5" /> {heroBrochureBtn?.label || 'Download Brochure'}
+                <Download className="w-4 h-4 md:w-5 md:h-5" /> {settings?.secondaryButton?.text || 'Download Brochure'}
               </a>
             )}
           </motion.div>

@@ -425,6 +425,7 @@ const ManageGalleryPage = () => {
                 <label className="text-sm font-semibold text-gray-700 block mb-2">Upload Image</label>
                 <LogoUploader
                   label="Upload Media"
+                  maxSize={1048576}
                   currentImage={currentItem.img}
                   uploadEndpoint="/upload/gallery"
                   onUploadSuccess={(url) => setCurrentItem({...currentItem, img: url})}

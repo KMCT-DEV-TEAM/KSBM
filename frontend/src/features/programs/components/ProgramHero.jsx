@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, ArrowRight } from 'lucide-react';
 import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
+import { downloadFile } from '../../../utils/downloadFile';
 
 const ProgramHero = ({ program }) => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const isBba = program.id === 'bba';
   const globalLinks = useGlobalLinks();
-  const brochureUrl = globalLinks['hero_brochure']?.link || null;
 
   useEffect(() => {
     const img = new Image();
@@ -118,16 +118,14 @@ const ProgramHero = ({ program }) => {
             <span>{primaryBtnText}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
-          {brochureUrl ? (
+          {(program.heroSecondaryBtnLink || program.heroSecondaryBtnText) ? (
             <a
-              href={brochureUrl}
-              download
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-semibold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start"
+              href={program.heroSecondaryBtnLink || '#'}
+              onClick={(e) => downloadFile(e, program.heroSecondaryBtnLink, 'Brochure.pdf')}
+              className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-semibold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-full md:w-auto justify-center lg:justify-start cursor-pointer"
             >
               <Download className="w-4 h-4" />
-              <span>{secondaryBtnText}</span>
+              <span>{program.heroSecondaryBtnText || secondaryBtnText}</span>
             </a>
           ) : null}
         </motion.div>

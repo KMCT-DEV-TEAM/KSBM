@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, Download, CheckCircle, ShieldCheck, Sparkles, GraduationCap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
+import { downloadFile } from '../../../utils/downloadFile';
 
 const ProgramOverview = ({ program }) => {
   const badgeText = program.overviewBadgeText || (program.id === 'bba' ? 'UNDERGRADUATE EXCELLENCE' : 'POSTGRADUATE EXCELLENCE');
@@ -12,7 +13,6 @@ const ProgramOverview = ({ program }) => {
   const secondaryBtnText = program.overviewSecondaryBtnText || 'Download Brochure';
   const globalLinks = useGlobalLinks();
   const applyLink = globalLinks['global_apply']?.link || '#admission';
-  const brochureUrl = globalLinks['hero_brochure']?.link || null;
 
   return (
     <section id="overview" className="py-20 lg:py-28 bg-white relative overflow-hidden">
@@ -52,16 +52,14 @@ const ProgramOverview = ({ program }) => {
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
 
-              {brochureUrl ? (
+              {(program.overviewSecondaryBtnLink || program.overviewSecondaryBtnText) ? (
                 <a
-                  href={brochureUrl}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-8 py-4 rounded-[8px] bg-white border-2 border-primary/20 text-primary font-semibold text-sm tracking-wide hover:bg-blue-50/50 hover:border-primary transition-all duration-300 flex items-center justify-center gap-2 group"
+                  href={program.overviewSecondaryBtnLink || '#'}
+                  onClick={(e) => downloadFile(e, program.overviewSecondaryBtnLink, 'Brochure.pdf')}
+                  className="w-full sm:w-auto px-8 py-4 rounded-[8px] bg-white border-2 border-primary/20 text-primary font-semibold text-sm tracking-wide hover:bg-blue-50/50 hover:border-primary transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
                 >
                   <Download className="w-4 h-4 text-primary group-hover:-translate-y-0.5 transition-transform" />
-                  <span>{secondaryBtnText}</span>
+                  <span>{program.overviewSecondaryBtnText || secondaryBtnText}</span>
                 </a>
               ) : null}
             </div>

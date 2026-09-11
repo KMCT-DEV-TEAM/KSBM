@@ -847,6 +847,7 @@ const ManageEventsPage = () => {
                         <button onClick={() => handleRemoveArrayItem('momentsCaptured', 'images', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
                       </div>
                       <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
+                        maxSize={1048576}
                         currentImage={item.img}
                         defaultImage={defaults.momentsCaptured.images[0]?.img} onChange={(url, file) => handleImageUploadChange(`momentsCaptured.images.${idx}.img`, url, file, item.img, defaults.momentsCaptured.images[0]?.img)}
                       />
@@ -920,6 +921,7 @@ const ManageEventsPage = () => {
                   <LogoUploader 
                     uploadEndpoint="/upload/events" 
                     deferredMode={true}
+                    maxSize={addModalType?.section === 'momentsCaptured' ? 1048576 : 204800}
                     currentImage={modalImageUrl}
                     defaultImage={''}
                     onChange={(url, file) => {

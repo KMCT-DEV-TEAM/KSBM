@@ -151,6 +151,7 @@ const ManageMbaPage = ({ isBba = false }) => {
   const [heroPrimaryBtnText, setHeroPrimaryBtnText] = useState('EXPLORE PROGRAM');
   const [heroPrimaryBtnLink, setHeroPrimaryBtnLink] = useState('#overview');
   const [heroSecondaryBtnText, setHeroSecondaryBtnText] = useState('DOWNLOAD BROCHURE');
+  const [heroSecondaryBtnLink, setHeroSecondaryBtnLink] = useState('');
   const [heroCardTitle, setHeroCardTitle] = useState('Batch 2025–27');
   const [heroCardStat1Title, setHeroCardStat1Title] = useState('Limited Seats');
   const [heroCardStat1Sub, setHeroCardStat1Sub] = useState('Last few slots remaining');
@@ -166,6 +167,7 @@ const ManageMbaPage = ({ isBba = false }) => {
   const [overviewFloatingBadgeText, setOverviewFloatingBadgeText] = useState(isBba ? '3-Year Foundation' : '100% Case-Study Driven');
   const [overviewPrimaryBtnText, setOverviewPrimaryBtnText] = useState('Apply Now');
   const [overviewSecondaryBtnText, setOverviewSecondaryBtnText] = useState('Download Brochure');
+  const [overviewSecondaryBtnLink, setOverviewSecondaryBtnLink] = useState('');
 
   const [dimensions, setDimensions] = useState([]);
 
@@ -228,10 +230,10 @@ const ManageMbaPage = ({ isBba = false }) => {
   const currentDraftData = {
     showSections,
     shortTitle, title, description, heroImage,
-    heroTitleLine1, heroTitleLine2, heroPrimaryBtnText, heroPrimaryBtnLink, heroSecondaryBtnText,
+    heroTitleLine1, heroTitleLine2, heroPrimaryBtnText, heroPrimaryBtnLink, heroSecondaryBtnText, heroSecondaryBtnLink,
     heroCardTitle, heroCardStat1Title, heroCardStat1Sub, heroCardStat2Title, heroCardStat2Sub,
     overviewTitle, overviewText, overviewSubtext, overviewImage,
-    overviewBadgeText, overviewFloatingBadgeText, overviewPrimaryBtnText, overviewSecondaryBtnText,
+    overviewBadgeText, overviewFloatingBadgeText, overviewPrimaryBtnText, overviewSecondaryBtnText, overviewSecondaryBtnLink,
     dimensions,
     whyChoosePills,
     internshipTitle,
@@ -312,6 +314,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       setHeroPrimaryBtnText(data.heroPrimaryBtnText || 'EXPLORE PROGRAM');
       setHeroPrimaryBtnLink(data.heroPrimaryBtnLink || '#overview');
       setHeroSecondaryBtnText(data.heroSecondaryBtnText || 'DOWNLOAD BROCHURE');
+      setHeroSecondaryBtnLink(data.heroSecondaryBtnLink || '');
       setHeroCardTitle(data.heroCardTitle || 'Batch 2025–27');
       setHeroCardStat1Title(data.heroCardStat1Title || 'Limited Seats');
       setHeroCardStat1Sub(data.heroCardStat1Sub || 'Last few slots remaining');
@@ -326,6 +329,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       setOverviewFloatingBadgeText(data.overviewFloatingBadgeText || (isBba ? '3-Year Foundation' : '100% Case-Study Driven'));
       setOverviewPrimaryBtnText(data.overviewPrimaryBtnText || 'Apply Now');
       setOverviewSecondaryBtnText(data.overviewSecondaryBtnText || 'Download Brochure');
+      setOverviewSecondaryBtnLink(data.overviewSecondaryBtnLink || '');
 
       setDimensions(data.dimensions || []);
       setShowSections(data.showSections || { hero: true, overview: true, dimensions: true, whyChoose: true, internships: true, dynamic: true, gallery: true, calendar: true, eligibility: true, recruiters: true });
@@ -427,6 +431,7 @@ const ManageMbaPage = ({ isBba = false }) => {
             heroPrimaryBtnText,
             heroPrimaryBtnLink,
             heroSecondaryBtnText,
+            heroSecondaryBtnLink,
             heroCardTitle,
             heroCardStat1Title,
             heroCardStat1Sub,
@@ -440,6 +445,7 @@ const ManageMbaPage = ({ isBba = false }) => {
             overviewFloatingBadgeText,
             overviewPrimaryBtnText,
             overviewSecondaryBtnText,
+            overviewSecondaryBtnLink,
             dimensions,
             internshipTitle,
             internshipDesc,
@@ -1362,6 +1368,30 @@ const ManageMbaPage = ({ isBba = false }) => {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
+                <div>
+                  <CharCountLabel label="Secondary Button Text" value={heroSecondaryBtnText} max={30} />
+                  <input maxLength={30}
+                    type="text"
+                    value={heroSecondaryBtnText}
+                    onChange={(e) => setHeroSecondaryBtnText(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="DOWNLOAD BROCHURE"
+                  />
+                </div>
+                <div>
+                  <LogoUploader 
+                    label="Download Brochure (PDF)"
+                    currentLogoUrl={heroSecondaryBtnLink}
+                    onUploadSuccess={(url) => setHeroSecondaryBtnLink(url)}
+                    uploadEndpoint="/upload/mba"
+                    acceptTypes={{ 'application/pdf': ['.pdf'] }}
+                    maxSize={104857600}
+                    layout="vertical"
+                  />
+                </div>
+              </div>
+
               <div className="pt-4 border-t border-gray-100">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Hero Background Image</label>
                 <div className="space-y-4">
@@ -1442,6 +1472,43 @@ const ManageMbaPage = ({ isBba = false }) => {
                     onChange={(e) => setOverviewFloatingBadgeText(e.target.value)}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     placeholder="100% Case-Study Driven"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
+                <div>
+                  <CharCountLabel label="Primary Button Text" value={overviewPrimaryBtnText} max={30} />
+                  <input maxLength={30}
+                    type="text"
+                    value={overviewPrimaryBtnText}
+                    onChange={(e) => setOverviewPrimaryBtnText(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="Apply Now"
+                  />
+                </div>
+                <div>
+                  <CharCountLabel label="Secondary Button Text" value={overviewSecondaryBtnText} max={30} />
+                  <input maxLength={30}
+                    type="text"
+                    value={overviewSecondaryBtnText}
+                    onChange={(e) => setOverviewSecondaryBtnText(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="Download Brochure"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
+                <div>
+                  <LogoUploader 
+                    label="Download Brochure (PDF)"
+                    currentLogoUrl={overviewSecondaryBtnLink}
+                    onUploadSuccess={(url) => setOverviewSecondaryBtnLink(url)}
+                    uploadEndpoint="/upload/mba"
+                    acceptTypes={{ 'application/pdf': ['.pdf'] }}
+                    maxSize={104857600}
+                    layout="vertical"
                   />
                 </div>
               </div>
