@@ -24,6 +24,7 @@ const ManageGalleryPage = () => {
   const [previewMode, setPreviewMode] = useState('desktop');
   const [activeTab, setActiveTab] = useState('hero');
   const [deletedImages, setDeletedImages] = useState([]);
+  const [newCategoryText, setNewCategoryText] = useState('');
   const tabsContainerRef = useRef(null);
   const iframeRef = useRef(null);
 
@@ -50,6 +51,7 @@ const ManageGalleryPage = () => {
     gallery: {
       heading: 'Moments Captured in Campus',
       badge: 'Gallery',
+      categories: ['Sports', 'Cultural'],
       items: [
         { title: 'Temple', category: 'Cultural', img: 'https://images.unsplash.com/photo-1542840410-3092f99611a3?q=80&w=800&auto=format&fit=crop' },
         { title: 'Camp Fire', category: 'Cultural', img: 'https://images.unsplash.com/photo-1523580494112-071d1694d8d6?q=80&w=800&auto=format&fit=crop' },
@@ -95,11 +97,13 @@ const ManageGalleryPage = () => {
       if (res.data) {
         setFormData(prev => {
           const fetchedGallery = res.data.gallery || {};
+          const cats = fetchedGallery.categories?.length > 0 ? fetchedGallery.categories : (prev.gallery.categories || ['Sports', 'Cultural']);
           return {
             hero: { ...prev.hero, ...(res.data.hero || {}) },
             gallery: { 
               ...prev.gallery, 
               ...fetchedGallery,
+              categories: cats,
               items: fetchedGallery.items?.length > 0 ? fetchedGallery.items : prev.gallery.items
             }
           };
@@ -114,6 +118,20 @@ const ManageGalleryPage = () => {
   };
 
   const handleSave = async () => {
+    // If there is pending text in the category input, add it before saving
+    let finalFormData = { ...formData };
+    const trimmedNewCategory = newCategoryText.trim();
+    if (trimmedNewCategory && !(finalFormData.gallery.categories || []).includes(trimmedNewCategory)) {
+      finalFormData = {
+        ...finalFormData,
+        gallery: {
+          ...finalFormData.gallery,
+          categories: [...(finalFormData.gallery.categories || []), trimmedNewCategory]
+        }
+      };
+      setNewCategoryText('');
+    }
+
     await confirmAction({
       title: 'Save Changes?',
       message: 'Are you sure you want to save these changes to the website?',
@@ -122,7 +140,7 @@ const ManageGalleryPage = () => {
       action: async () => {
         setSaving(true);
         try {
-          await api.put('/cms/gallery-page', formData, { hideLoader: true });
+          await api.put('/cms/gallery-page', finalFormData, { hideLoader: true });
           
           for (const imgUrl of deletedImages) {
             try {
@@ -154,6 +172,7 @@ const ManageGalleryPage = () => {
       gallery: {
         heading: 'Moments Captured in Campus',
         badge: 'Gallery',
+        categories: ['Sports', 'Cultural'],
         items: [
           { title: 'Temple', category: 'Cultural', img: 'https://images.unsplash.com/photo-1542840410-3092f99611a3?q=80&w=800&auto=format&fit=crop' },
           { title: 'Camp Fire', category: 'Cultural', img: 'https://images.unsplash.com/photo-1523580494112-071d1694d8d6?q=80&w=800&auto=format&fit=crop' },
@@ -165,6 +184,7 @@ const ManageGalleryPage = () => {
       }
     };
     setFormData(defaults);
+    setNewCategoryText('');
     Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
   };
 
@@ -189,10 +209,6 @@ const ManageGalleryPage = () => {
   const saveModalItem = () => {
     if (!currentItem.img) {
       Toast.fire({ icon: 'error', title: 'Please upload an image first.' });
-      return;
-    }
-    if (!currentItem.title) {
-      Toast.fire({ icon: 'error', title: 'Please enter a title.' });
       return;
     }
 
@@ -239,6 +255,40 @@ const ManageGalleryPage = () => {
       updated[index] = updated[target];
       updated[target] = temp;
       return { ...prev, gallery: { ...prev.gallery, items: updated } };
+    });
+  };
+
+  const handleAddCategory = () => {
+    const trimmed = newCategoryText.trim();
+    if (!trimmed) return;
+    
+    setFormData(prev => {
+      const currentCats = prev.gallery.categories || [];
+      if (currentCats.includes(trimmed)) {
+        Toast.fire({ icon: 'warning', title: 'Category already exists.' });
+        return prev;
+      }
+      return {
+        ...prev,
+        gallery: {
+          ...prev.gallery,
+          categories: [...currentCats, trimmed]
+        }
+      };
+    });
+    setNewCategoryText('');
+  };
+
+  const handleRemoveCategory = (catToRemove) => {
+    setFormData(prev => {
+      const currentCats = prev.gallery.categories || [];
+      return {
+        ...prev,
+        gallery: {
+          ...prev.gallery,
+          categories: currentCats.filter(c => c !== catToRemove)
+        }
+      };
     });
   };
 
@@ -342,6 +392,32 @@ const ManageGalleryPage = () => {
                 <input type="text" maxLength={50} value={formData.gallery.heading} onChange={e => setFormData({ ...formData, gallery: { ...formData.gallery, heading: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. Moments Captured in Campus" />
                 <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{formData.gallery.heading?.length || 0}/50</span></div>
               </div>
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-xs font-semibold text-gray-500">Manage Categories</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={newCategoryText} 
+                    onChange={e => setNewCategoryText(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddCategory(); } }}
+                    className="flex-1 p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none optional-field" 
+                    placeholder="e.g. Academic" 
+                  />
+                  <button onClick={handleAddCategory} className="px-4 py-2.5 bg-primary text-white rounded-md text-sm font-semibold hover:bg-primary/90 transition-colors">
+                    Add
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {(formData.gallery.categories || []).map(cat => (
+                    <div key={cat} className="flex items-center gap-1.5 bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200">
+                      <span>{cat}</span>
+                      <button onClick={() => handleRemoveCategory(cat)} className="text-gray-400 hover:text-red-500 transition-colors rounded-full p-0.5 hover:bg-red-50">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-between items-center mb-4">
@@ -368,14 +444,10 @@ const ManageGalleryPage = () => {
                   <div className="flex-1 flex flex-col gap-4">
                     <div className="w-full aspect-[4/3] rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center border border-gray-100">
                       {item.img ? (
-                        <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
+                        <img src={item.img} alt="Gallery item" className="w-full h-full object-cover" />
                       ) : (
                         <ImageIcon className="w-8 h-8 text-gray-300" />
                       )}
-                    </div>
-                    
-                    <div className="pt-2 border-t border-gray-100 text-center">
-                      <p className="font-semibold text-gray-800 text-sm truncate" title={item.title}>{item.title || 'Untitled Item'}</p>
                     </div>
                   </div>
                 </div>
@@ -406,18 +478,11 @@ const ManageGalleryPage = () => {
             
             <div className="p-6 space-y-6">
               <div>
-                <div className="flex justify-between items-center mb-2">
-                  <label className="text-sm font-semibold text-gray-700">Item Title</label>
-                  <span className="text-xs text-gray-400">{currentItem.title?.length || 0}/50 characters</span>
-                </div>
-                <input type="text" maxLength={50} value={currentItem.title} onChange={e => setCurrentItem({...currentItem, title: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all focus:bg-white" placeholder="e.g. Annual Sports Meet" />
-              </div>
-              
-              <div>
                 <label className="text-sm font-semibold text-gray-700 block mb-2">Category</label>
                 <select value={currentItem.category} onChange={e => setCurrentItem({...currentItem, category: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all focus:bg-white">
-                  <option value="Cultural">Cultural (General Images)</option>
-                  <option value="Sports">Sports</option>
+                  {(formData.gallery.categories || ['Cultural', 'Sports']).map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
                 </select>
               </div>
 

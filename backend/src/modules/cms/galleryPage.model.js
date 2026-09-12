@@ -10,11 +10,12 @@ const galleryPageSchema = new mongoose.Schema(
     gallery: {
       heading: { type: String, default: 'Moments Captured in Campus' },
       badge: { type: String, default: 'Gallery' },
+      categories: { type: [String], default: ['Sports', 'Cultural'] },
       items: {
         type: [
           {
             title: { type: String },
-            category: { type: String, enum: ['Cultural', 'Sports'], default: 'Cultural' },
+            category: { type: String, default: 'Cultural' },
             img: { type: String }
           }
         ],
