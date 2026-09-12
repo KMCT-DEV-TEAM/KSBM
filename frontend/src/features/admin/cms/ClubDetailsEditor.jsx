@@ -691,13 +691,13 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
                     <div className="md:col-span-2">
                       <label className="block text-sm font-semibold text-gray-700 mb-1.5">Description text</label>
                       <textarea
-                        rows="2"
+                        rows="4"
                         value={club.faculty.description}
-                        maxLength={300}
+                        maxLength={700}
                         onChange={(e) => setClub({ ...club, faculty: { ...club.faculty, description: e.target.value } })}
                         className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm resize-none"
                       />
-                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 300</span><span className="text-[10px] text-gray-400 font-medium">{(club.faculty.description || '').length}/300</span></div>
+                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 700</span><span className="text-[10px] text-gray-400 font-medium">{(club.faculty.description || '').length}/700</span></div>
                     </div>
                   </div>
 
@@ -975,24 +975,24 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
               <input
                 type="text"
                 value={modalConfig.data?.name || ''}
-                maxLength={15}
+                maxLength={50}
                 onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, name: e.target.value } })}
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
                 placeholder="Name"
               />
-              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 15</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.name || '').length}/15</span></div>
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.name || '').length}/50</span></div>
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Role <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 value={modalConfig.data?.role || ''}
-                maxLength={15}
+                maxLength={50}
                 onChange={(e) => setModalConfig({ ...modalConfig, data: { ...modalConfig.data, role: e.target.value } })}
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20"
                 placeholder="Role (e.g. Mentor)"
               />
-              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 15</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.role || '').length}/15</span></div>
+              <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(modalConfig.data?.role || '').length}/50</span></div>
             </div>
           </div>
         )}
