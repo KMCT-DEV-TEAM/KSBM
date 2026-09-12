@@ -10,10 +10,10 @@ const aboutUsStatsSchema = new mongoose.Schema(
     stats: {
       type: [statItemSchema],
       default: [
-        { value: '25+', label: 'Years of Excellence' },
-        { value: '25k+', label: 'Students Graduated' },
-        { value: '30+', label: 'Institutions' },
-        { value: '5+', label: 'Campuses' }
+        { value: '16+', label: 'YEARS OF EXCELLENCE' },
+        { value: '991+', label: 'ACTIVE STUDENTS' },
+        { value: '196+', label: 'GLOBAL RECRUITERS' },
+        { value: '196+', label: 'GLOBAL RECRUITERS' }
       ]
     },
     showSection: { type: Boolean, default: true },

@@ -9,11 +9,11 @@ const legacyCardSchema = new mongoose.Schema({
 
 const legacySchema = new mongoose.Schema(
   {
-    subheading: { type: String, default: 'OUR LEGACY' },
-    heading: { type: String, default: 'A Journey of Educational Excellence' },
+    subheading: { type: String, default: 'OUR IDENTITY' },
+    heading: { type: String, default: 'A Legacy of Strategic Excellence.' },
     description: { 
       type: String, 
-      default: 'Founded by the visionary leader Dr. Navas K.M., KMCT Group of Institutions has been a beacon of quality education and healthcare in Kerala. With over two decades of excellence, the group has established numerous institutions that shape the future of thousands of students.' 
+      default: 'Founded with a vision to revolutionize business leadership in the region, KSBM has consistently pushed the boundaries of traditional management education. We are not merely an institution; it is a transformative space where students are not just participants in commerce, but leaders of it.\n\nOur curriculum is meticulously crafted to reflect the complexities of the global economy, emphasizing critical thinking, strategic foresight, and an entrepreneurial mindset. We empower our students to see beyond immediate numbers and shape the architects of commerce.' 
     },
     image: { type: String, default: '/assets/Images/image 2.png' },
     cards: {

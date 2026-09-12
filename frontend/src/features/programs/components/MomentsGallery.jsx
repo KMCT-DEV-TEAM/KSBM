@@ -132,13 +132,13 @@ const MomentsGallery = ({ program }) => {
           display: flex;
           align-items: center;
           width: max-content;
-          animation: marquee-rtl ${Math.max(items.length * 6, 25)}s linear infinite;
+          animation: marquee-rtl ${Math.max(items.length * 12, 50)}s linear infinite;
         }
         .animate-marquee-row2 {
           display: flex;
           align-items: center;
           width: max-content;
-          animation: marquee-rtl ${Math.max(items.length * 6.5, 28)}s linear infinite;
+          animation: marquee-rtl ${Math.max(items.length * 13, 56)}s linear infinite;
         }
         .animate-marquee-row1:hover,
         .animate-marquee-row2:hover {

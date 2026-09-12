@@ -17,7 +17,7 @@ const ManageAboutUsPage = () => {
   const tabs = [
     { id: 'hero', label: 'Hero Section', icon: <FileText className="w-4 h-4" /> },
     { id: 'vision', label: 'Vision & Mission', icon: <Eye className="w-4 h-4" /> },
-    { id: 'legacy', label: 'Legacy Timeline', icon: <Clock className="w-4 h-4" /> },
+    { id: 'legacy', label: 'Overview', icon: <Clock className="w-4 h-4" /> },
     { id: 'leadership', label: 'Leadership', icon: <Users className="w-4 h-4" /> },
     { id: 'stats', label: 'Stats', icon: <BarChart className="w-4 h-4" /> },
     { id: 'cta', label: 'Apply CTA', icon: <MousePointerClick className="w-4 h-4" /> }
