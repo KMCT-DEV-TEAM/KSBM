@@ -292,12 +292,12 @@ const ClubPage = () => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
-                    className="relative rounded-2xl overflow-hidden w-64 aspect-[3/4] group shadow-lg"
+                    className="relative rounded-2xl overflow-hidden w-64 aspect-[3/4] group shadow-lg bg-[#e8ecf5]"
                   >
                     {member.image ? (
-                      <img src={member.image} alt={member.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                      <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
                     ) : (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+                      <div className="w-full h-full bg-[#e8ecf5] flex items-center justify-center text-gray-400">
                         <span className="text-sm">No Image</span>
                       </div>
                     )}

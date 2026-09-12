@@ -51,9 +51,9 @@ const TestimonialsSection = ({ previewData }) => {
             setSettings({
               subheading: data.subheading || 'Testimonials',
               heading: data.heading || 'Voices of Success',
-              testimonials: data.testimonials && data.testimonials.length > 0 ? data.testimonials : settings.testimonials
-            ,
-              showSection: data.showSection});
+              testimonials: data.testimonials && data.testimonials.length > 0 ? data.testimonials : settings.testimonials,
+              showSection: data.showSection
+            });
           }
         } catch (error) {
           console.error('Error fetching testimonials settings:', error);
@@ -112,15 +112,16 @@ const TestimonialsSection = ({ previewData }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="hidden lg:flex gap-6 h-[380px] w-full max-w-7xl mx-auto justify-center"
+          className="hidden lg:flex gap-6 h-[400px] w-full max-w-7xl mx-auto justify-center"
         >
           {displayTestimonials.map((testimonial, index) => {
-            const isActive = activeIndex === index;  return (
+            const isActive = activeIndex === index;
+            return (
               <div
                 key={testimonial.id}
                 onClick={() => setActiveIndex(index)}
                 className={`relative flex transition-all duration-1000 ease-in-out cursor-pointer overflow-hidden ${isActive
-                  ? 'w-[550px] xl:w-[650px] 2xl:w-[750px] gap-6'
+                  ? 'w-[650px] xl:w-[750px] 2xl:w-[850px] gap-6'
                   : 'w-[200px] xl:w-[240px] 2xl:w-[280px] gap-0'
                   }`}
               >
@@ -134,25 +135,22 @@ const TestimonialsSection = ({ previewData }) => {
                 </div>
 
                 {/* Text Content */}
-                <div className={`h-full py-4 flex flex-col justify-center transition-all duration-1000 ease-in-out min-w-[280px] xl:min-w-[320px] ${isActive ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
-                  <div className="w-full">
-                    <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 leading-snug pr-4">
-                      {testimonial.quote}
-                    </h3>
-                    <p className="text-gray-500 text-[0.85rem] leading-[1.8] mb-6 pr-6">
-                      {testimonial.body}
-                    </p>
-
-                    <div className="flex items-center gap-3 mt-auto">
-                      <img
-                        src={testimonial.avatar}
-                        alt={testimonial.name}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
-                      <div>
-                        <p className="text-[0.8rem] font-bold text-gray-900">{testimonial.name}</p>
-                        <p className="text-[0.6rem] font-medium text-gray-500 uppercase mt-0.5">{testimonial.course}</p>
-                      </div>
+                <div className={`h-full py-4 flex flex-col transition-all duration-1000 ease-in-out min-w-[280px] xl:min-w-[320px] overflow-hidden ${isActive ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
+                  <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 leading-snug pr-4 shrink-0">
+                    {testimonial.quote}
+                  </h3>
+                  <p className="text-gray-500 text-[0.85rem] leading-[1.8] pr-6 overflow-y-auto flex-1 mb-4">
+                    {testimonial.body}
+                  </p>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <img
+                      src={testimonial.avatar}
+                      alt={testimonial.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="text-[0.8rem] font-bold text-gray-900">{testimonial.name}</p>
+                      <p className="text-[0.6rem] font-medium text-gray-500 uppercase mt-0.5">{testimonial.course}</p>
                     </div>
                   </div>
                 </div>
@@ -223,19 +221,21 @@ const TestimonialsSection = ({ previewData }) => {
           </div>
         </motion.div>
 
-        {/* Show More Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="w-full flex justify-center mt-12 lg:mt-16"
-        >
-          <Link href="/testimonials" className="group flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase hover:text-primary/80 transition-colors">
-            <span>Read All Testimonials</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </motion.div>
+        {/* Show More Button — only visible when there are more than 3 testimonials */}
+        {(testimonials?.length || 0) > 3 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="w-full flex justify-center mt-12 lg:mt-16"
+          >
+            <Link href="/testimonials" className="group flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase hover:text-primary/80 transition-colors">
+              <span>Read All Testimonials</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </motion.div>
+        )}
 
       </div>
     </section>
@@ -243,4 +243,3 @@ const TestimonialsSection = ({ previewData }) => {
 };
 
 export default TestimonialsSection;
-
