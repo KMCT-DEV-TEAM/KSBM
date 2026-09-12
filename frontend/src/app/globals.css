@@ -82,7 +82,7 @@
   }
 
   .animate-marquee {
-    animation: scrollLeft 25s linear infinite;
+    animation: scrollLeft 50s linear infinite;
     display: flex;
     width: max-content;
   }
@@ -92,7 +92,7 @@
   }
 
   .animate-marquee-reverse {
-    animation: scrollRight 25s linear infinite;
+    animation: scrollRight 50s linear infinite;
     display: flex;
     width: max-content;
   }
