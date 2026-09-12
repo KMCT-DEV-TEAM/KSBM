@@ -49,7 +49,7 @@ const TopRecruiters = ({ data }) => {
           <motion.div 
             className="flex w-max gap-8 md:gap-20 py-4 mb-4"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 45 }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 90 }}
           >
             {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
               <div key={`l1-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
@@ -58,11 +58,11 @@ const TopRecruiters = ({ data }) => {
             ))}
           </motion.div>
 
-          {/* Line 2 - Moving Left */}
+          {/* Line 2 - Moving Right */}
           <motion.div 
             className="flex w-max gap-8 md:gap-20 py-4 mb-4"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 55 }}
+            animate={{ x: ["-50%", "0%"] }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 110 }}
           >
             {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
               <div key={`l2-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
@@ -75,7 +75,7 @@ const TopRecruiters = ({ data }) => {
           <motion.div 
             className="flex w-max gap-8 md:gap-20 py-4"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 50 }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 100 }}
           >
             {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
               <div key={`l3-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">

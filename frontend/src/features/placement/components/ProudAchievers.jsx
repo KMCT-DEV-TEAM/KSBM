@@ -55,7 +55,7 @@ const ProudAchievers = ({ data }) => {
           <motion.div
             className="flex w-max gap-6 md:gap-8 py-4 mb-4"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 80 }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 160 }}
           >
             {[...achievers, ...achievers, ...achievers, ...achievers].map((achiever, index) => (
               <div
@@ -95,7 +95,7 @@ const ProudAchievers = ({ data }) => {
           <motion.div
             className="flex w-max gap-6 md:gap-8 py-4"
             animate={{ x: ["-50%", "0%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 100 }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 200 }}
           >
             {[...achievers, ...achievers, ...achievers, ...achievers].map((achiever, index) => (
               <div

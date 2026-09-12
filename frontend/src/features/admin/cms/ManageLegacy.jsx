@@ -132,8 +132,8 @@ const ManageLegacy = () => {
   return (
     <div className="space-y-6 w-full">
       <PageHeader
-        title="Legacy Section"
-        description="Manage the timeline and history cards."
+        title="Overview Section"
+        description="Manage the overview and history cards."
         onPreview={() => setIsPreviewModalOpen(true)}
         onReset={handleResetToDefault}
         onSave={handleSave}
