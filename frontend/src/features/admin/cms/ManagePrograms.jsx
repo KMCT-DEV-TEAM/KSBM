@@ -440,6 +440,7 @@ const ManagePrograms = () => {
                       }}
                       deferredMode={true}
                       disableDelete={true}
+                      maxSize={1048576}
                     />
                   </div>
                 </div>

@@ -95,7 +95,6 @@ const processDeferredUploads = async (obj, apiInstance) => {
         const formData = new FormData();
         formData.append('image', file);
         const uploadRes = await apiInstance.post('/upload/mba', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
           hideLoader: true
         });
         return uploadRes.data.url;
@@ -364,7 +363,7 @@ const ManageMbaPage = ({ isBba = false }) => {
         ]
       });
 
-      setDynamicLearning(data.dynamic || {
+      setDynamicLearning(data.dynamicLearning || {
         badgeText: 'ABOUT THE IV',
         title: 'Experience Dynamic Learning',
         desc1: 'Beyond the classroom, KSBM offers an electrifying campus ecosystem packed with management clubs, national-level conclaves, cultural extravaganzas, and executive workshops.',
@@ -392,13 +391,13 @@ const ManageMbaPage = ({ isBba = false }) => {
       });
 
       setAcademicCalendarBanner({
-        ...(data.calendar || {}),
-        badgeText: data.calendar?.badgeText || 'ACADEMIC SCHEDULE 2026-27',
-        title: data.calendar?.title || 'Download the Official Academic Calendar',
-        description: data.calendar?.description || 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
-        image: data.calendar?.image || '/assets/Images/mba/calendar_64.png',
-        events: (data.calendar?.events && data.calendar.events.length > 0)
-          ? data.calendar.events
+        ...(data.academicCalendarBanner || {}),
+        badgeText: data.academicCalendarBanner?.badgeText || 'ACADEMIC SCHEDULE 2026-27',
+        title: data.academicCalendarBanner?.title || 'Download the Official Academic Calendar',
+        description: data.academicCalendarBanner?.description || 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
+        image: data.academicCalendarBanner?.image || '/assets/Images/mba/calendar_64.png',
+        events: (data.academicCalendarBanner?.events && data.academicCalendarBanner.events.length > 0)
+          ? data.academicCalendarBanner.events
           : defaultCalendarEvents
       });
 
@@ -467,6 +466,16 @@ const ManageMbaPage = ({ isBba = false }) => {
           const processedPayload = await processDeferredUploads(rawPayload, api);
 
           await api.put(endpoint, processedPayload);
+
+          // Sync state with real uploaded URLs so UI reflects correct images without reload
+          if (processedPayload.heroImage) setHeroImage(processedPayload.heroImage);
+          if (processedPayload.overviewImage) setOverviewImage(processedPayload.overviewImage);
+          if (processedPayload.internshipBgImage) setInternshipBgImage(processedPayload.internshipBgImage);
+          if (processedPayload.internshipImages) setInternshipImages(processedPayload.internshipImages);
+          if (processedPayload.dynamicLearning) setDynamicLearning(processedPayload.dynamicLearning);
+          if (processedPayload.momentsGallery) setMomentsGallery(processedPayload.momentsGallery);
+          if (processedPayload.academicCalendarBanner) setAcademicCalendarBanner(processedPayload.academicCalendarBanner);
+          if (processedPayload.dimensions) setDimensions(processedPayload.dimensions);
 
           const newImages = extractImageUrls(processedPayload);
           const deletedUrls = originalImagesRef.current.filter(url => !newImages.includes(url));
@@ -1514,7 +1523,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               <div className="pt-4 border-t border-gray-100">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Showcase Image (Right side)</label>
                 <div className="space-y-4">
-                  <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={overviewImage} defaultImage="/assets/Images/mba/mba_main.png" onUploadSuccess={(url) => setOverviewImage(url)} />
+                  <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={overviewImage} defaultImage="/assets/Images/mba/mba_main.png" onUploadSuccess={(url) => setOverviewImage(url)} maxSize={1048576} />
                   <div>
 
                   </div>
