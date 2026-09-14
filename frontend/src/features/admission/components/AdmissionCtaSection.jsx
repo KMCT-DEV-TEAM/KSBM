@@ -39,22 +39,22 @@ const AdmissionCtaSection = ({ data }) => {
             </p>
 
             <div className="flex flex-wrap gap-4 mt-2">
-              <a
+              <Link
                 href={data?.ctaApplyBtnUrl || applyBtn?.link || '#'}
                 target={(data?.ctaApplyBtnUrl || applyBtn?.link || '').startsWith('http') ? '_blank' : undefined}
                 rel={(data?.ctaApplyBtnUrl || applyBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
                 className="inline-flex h-[46px] items-center justify-center rounded-lg bg-primary px-6 text-sm md:text-base font-semibold text-white transition-all hover:bg-[#151c48] shadow-md hover:shadow-lg hover:-translate-y-0.5"
               >
                 {data?.ctaApplyBtnText || applyBtn?.label || 'Apply Now'} <ArrowRight className="ml-2 w-4 h-4" />
-              </a>
-              <a
+              </Link>
+              <Link
                 href={data?.ctaEnquiryBtnUrl || enquiryBtn?.link || '#'}
                 target={(data?.ctaEnquiryBtnUrl || enquiryBtn?.link || '').startsWith('http') ? '_blank' : undefined}
                 rel={(data?.ctaEnquiryBtnUrl || enquiryBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
                 className="inline-flex h-[46px] items-center justify-center rounded-lg border-2 border-primary px-6 text-sm md:text-base font-semibold text-primary bg-white transition-all hover:bg-gray-50 shadow-sm hover:shadow-md hover:-translate-y-0.5"
               >
                 {data?.ctaEnquiryBtnText || enquiryBtn?.label || 'Enquire Now'} <ArrowRight className="ml-2 w-4 h-4" />
-              </a>
+              </Link>
             </div>
 
           </div>

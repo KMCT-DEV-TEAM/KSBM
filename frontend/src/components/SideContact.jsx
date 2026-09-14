@@ -23,8 +23,8 @@ const SideContact = () => {
   useEffect(() => {
     setMounted(true);
     const handleScroll = () => {
-      // Trigger color change when scrolled past 400px
-      if (window.scrollY > 400) {
+      // Trigger color change when scrolled past 200px
+      if (window.scrollY > 200) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -44,16 +44,16 @@ const SideContact = () => {
   const isHomePage = pathname === '/';
   
   const getStyleClasses = () => {
-    if (pathname !== '/events' && (pathname === '/testimonials' || isScrolled)) {
-      return 'bg-white border border-gray-200 text-primary';
+    if (pathname !== '/events' && pathname !== '/contact' && (pathname === '/testimonials' || isScrolled)) {
+      return 'bg-primary border border-primary/20 text-white shadow-lg';
     }
     // Universal style for first section (not scrolled) on all pages
     return 'bg-background/20 backdrop-blur-md border border-white/30 text-white';
   };
 
   const getHoverClasses = () => {
-    if (pathname !== '/events' && (pathname === '/testimonials' || isScrolled)) {
-      return 'hover:bg-gray-100';
+    if (pathname !== '/events' && pathname !== '/contact' && (pathname === '/testimonials' || isScrolled)) {
+      return 'hover:bg-[#0f1433]';
     }
     return 'hover:bg-background/30';
   };
