@@ -95,8 +95,9 @@ const MemberCard = ({ member, index }) => {
           </h4>
         )}
         {member.showTitle !== false && (
-          <p className="text-[#a6adcf] text-[8px] sm:text-[10px] font-bold tracking-widest uppercase sm:mt-1.5 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 leading-[1.1] sm:leading-normal">
-            <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#a6adcf] shrink-0"></span> {member.title}
+          <p className="text-[#a6adcf] text-[8px] sm:text-[10px] font-bold tracking-widest uppercase sm:mt-1.5 text-center leading-[1.1] sm:leading-normal">
+            <span className="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-[#a6adcf] mr-1.5 align-middle mb-[2px]"></span>
+            <span className="align-middle">{member.title}</span>
           </p>
         )}
       </div>
