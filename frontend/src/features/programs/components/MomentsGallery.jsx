@@ -162,9 +162,6 @@ const MomentsGallery = ({ program }) => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
 
               <div className="absolute bottom-0 left-0 w-full p-6 sm:p-7 z-10 flex flex-col justify-end">
-                <h3 className="text-base sm:text-sm font-medium text-white leading-snug font-heading">
-                  {item.title || item.subtitle}
-                </h3>
               </div>
             </div>
           ))}
@@ -185,9 +182,6 @@ const MomentsGallery = ({ program }) => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
 
               <div className="absolute bottom-0 left-0 w-full p-6 sm:p-7 z-10 flex flex-col justify-end">
-                <h3 className="text-base sm:text-sm font-medium text-white leading-snug font-heading">
-                  {item.title || item.subtitle}
-                </h3>
               </div>
             </div>
           ))}
@@ -209,9 +203,6 @@ const MomentsGallery = ({ program }) => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-90" />
               <div className="absolute bottom-0 left-0 w-full p-5 z-10 flex flex-col justify-end">
-                <h3 className="text-base font-medium text-white leading-snug font-heading">
-                  {item.title || item.subtitle}
-                </h3>
               </div>
             </div>
           ))}
