@@ -235,8 +235,8 @@ const ManageGoverningMembers = () => {
 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Title</label>
                       
 </div>
-<input type="text" maxLength={50} value={member.title} onChange={(e) => updateMember(index, 'title', e.target.value)} className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
-<div className="text-right text-xs text-gray-400 mt-1">{member.title.length}/50 characters</div>
+<input type="text" maxLength={150} value={member.title} onChange={(e) => updateMember(index, 'title', e.target.value)} className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+<div className="text-right text-xs text-gray-400 mt-1">{member.title.length}/150 characters</div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Member Image</label>
@@ -292,13 +292,13 @@ const ManageGoverningMembers = () => {
 </div>
 <input 
                   type="text" 
-                  maxLength={50}
+                  maxLength={150}
                   value={newMember.title} 
                   onChange={(e) => setNewMember({ ...newMember, title: e.target.value })} 
                   className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary" 
                   placeholder="e.g. CHAIRMAN" 
                 />
-<div className="text-right text-xs text-gray-400 mt-1">{newMember.title.length}/50 characters</div>
+<div className="text-right text-xs text-gray-400 mt-1">{newMember.title.length}/150 characters</div>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Member Image</label>
