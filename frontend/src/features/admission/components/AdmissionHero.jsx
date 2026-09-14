@@ -108,15 +108,16 @@ const AdmissionHero = ({ data, showText = true }) => {
                 {heroApplyBtn?.label || 'Apply Now'} <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
               </a>
             )}
-            {heroBrochureBtn?.isActive !== false && (
+            {(data?.heroBrochureFile || heroBrochureBtn?.isActive !== false) && (
               <a
-                href={heroBrochureBtn?.link || '#'}
-                target={(heroBrochureBtn?.link || '').startsWith('http') ? '_blank' : undefined}
-                rel={(heroBrochureBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
+                href={data?.heroBrochureFile || heroBrochureBtn?.link || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-background/20 backdrop-blur-md border border-white/30 text-white text-sm md:text-base font-bold px-6 py-3.5 rounded-full flex items-center gap-2 hover:bg-background/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 w-auto justify-center"
+                download
               >
                 <Download className="w-4 h-4 md:w-5 md:h-5" />
-                <span>{heroBrochureBtn?.label || 'Download Brochure'}</span>
+                <span>{data?.heroBrochureBtnText || heroBrochureBtn?.label || 'Download Brochure'}</span>
               </a>
             )}
           </motion.div>

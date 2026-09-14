@@ -186,6 +186,10 @@ const admissionsPageSchema = new mongoose.Schema(
       default: 'Applications for the upcoming academic year are now open. Take the first step towards a transformative management education under a community of vibrant peers, experienced faculty, and industry leaders.'
     },
     ctaImage: { type: String, default: '/assets/Images/admissions/admissions-cta.png' },
+    ctaApplyBtnText: { type: String, default: 'Apply Now' },
+    ctaApplyBtnUrl: { type: String, default: '/apply' },
+    ctaEnquiryBtnText: { type: String, default: 'Enquire Now' },
+    ctaEnquiryBtnUrl: { type: String, default: '/contact' },
 
     // 6. FAQ Section
     faqHeading: { type: String, default: 'FAQ' },

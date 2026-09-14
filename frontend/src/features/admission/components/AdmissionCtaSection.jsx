@@ -3,8 +3,12 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
 
 const AdmissionCtaSection = ({ data }) => {
+  const globalLinks = useGlobalLinks();
+  const applyBtn = globalLinks['global_apply'];
+  const enquiryBtn = globalLinks['global_enquire'] || globalLinks['global_enquiry'];
   const heading = data?.ctaHeading || 'Begin Your Leadership Journey at KSBM';
   const desc = data?.ctaDesc || 'Applications for the upcoming academic year are now open. Take the first step towards a transformative management education under a community of vibrant peers, experienced faculty, and industry leaders.';
   const image = data?.ctaImage || '/assets/Images/admissions/image 78.png';
@@ -34,6 +38,24 @@ const AdmissionCtaSection = ({ data }) => {
               {desc}
             </p>
 
+            <div className="flex flex-wrap gap-4 mt-2">
+              <a
+                href={data?.ctaApplyBtnUrl || applyBtn?.link || '#'}
+                target={(data?.ctaApplyBtnUrl || applyBtn?.link || '').startsWith('http') ? '_blank' : undefined}
+                rel={(data?.ctaApplyBtnUrl || applyBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
+                className="inline-flex h-[46px] items-center justify-center rounded-lg bg-primary px-6 text-sm md:text-base font-semibold text-white transition-all hover:bg-[#151c48] shadow-md hover:shadow-lg hover:-translate-y-0.5"
+              >
+                {data?.ctaApplyBtnText || applyBtn?.label || 'Apply Now'} <ArrowRight className="ml-2 w-4 h-4" />
+              </a>
+              <a
+                href={data?.ctaEnquiryBtnUrl || enquiryBtn?.link || '#'}
+                target={(data?.ctaEnquiryBtnUrl || enquiryBtn?.link || '').startsWith('http') ? '_blank' : undefined}
+                rel={(data?.ctaEnquiryBtnUrl || enquiryBtn?.link || '').startsWith('http') ? 'noopener noreferrer' : undefined}
+                className="inline-flex h-[46px] items-center justify-center rounded-lg border-2 border-primary px-6 text-sm md:text-base font-semibold text-primary bg-white transition-all hover:bg-gray-50 shadow-sm hover:shadow-md hover:-translate-y-0.5"
+              >
+                {data?.ctaEnquiryBtnText || enquiryBtn?.label || 'Enquire Now'} <ArrowRight className="ml-2 w-4 h-4" />
+              </a>
+            </div>
 
           </div>
 
