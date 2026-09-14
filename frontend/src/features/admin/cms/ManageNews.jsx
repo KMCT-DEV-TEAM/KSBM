@@ -401,6 +401,7 @@ const ManageNews = () => {
                   <div className="bg-gray-50 p-4 rounded-lg border border-[#D9DEE3]">
                     <LogoUploader
                       currentLogoUrl={currentArticle.image}
+                      maxSize={1048576}
                       onUploadSuccess={(url, file) => {
                         if (file) {
                           if (currentArticle.image) markForDeletion(currentArticle.image);
