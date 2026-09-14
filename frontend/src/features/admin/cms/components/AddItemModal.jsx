@@ -100,6 +100,7 @@ const AddItemModal = ({ isOpen, onClose, title, fields, onSave, initialData }) =
                       handleChange(field.name, url);
                     }}
                     deferredMode={true}
+                    maxSize={field.maxSize || 1048576}
                   />
               )}
 

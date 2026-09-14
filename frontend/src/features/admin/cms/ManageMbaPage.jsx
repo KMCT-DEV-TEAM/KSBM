@@ -1095,8 +1095,6 @@ const ManageMbaPage = ({ isBba = false }) => {
     openAddModal(
       'Add Gallery Photo',
       [
-        { name: 'title', label: 'Photo Title', type: 'text', maxLength: 60, required: true },
-        { name: 'subtitle', label: 'Subtitle', type: 'text', maxLength: 60, required: true },
         { name: 'image', label: 'Upload Photo', type: 'image', required: true }
       ],
       (data) => {
@@ -2059,8 +2057,6 @@ const ManageMbaPage = ({ isBba = false }) => {
                           openEditModal(
                             'Edit Gallery Photo',
                             [
-                              { name: 'title', label: 'Photo Title', type: 'text', maxLength: 60, required: true },
-                              { name: 'subtitle', label: 'Subtitle', type: 'text', maxLength: 60, required: true },
                               {
                                 name: 'span',
                                 label: 'Grid Layout Size (Span)',
