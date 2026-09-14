@@ -46,8 +46,8 @@ const GoverningBodyMembers = ({ data }) => {
         {members.length > 0 && members.map((member, idx) => (
           <React.Fragment key={member._id || idx}>
             <MemberCard member={member} index={idx} />
-            {/* Force a break after the 2nd element on desktop to keep the 2-item top row */}
-            {idx === 1 && members.length > 2 && (
+            {/* Force a break after the 4th element on desktop to keep the 4-item top row */}
+            {idx === 3 && members.length > 4 && (
               <div className="hidden lg:block w-full h-0 m-0 p-0 -mt-16 pointer-events-none"></div>
             )}
           </React.Fragment>
