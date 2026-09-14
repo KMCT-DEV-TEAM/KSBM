@@ -63,7 +63,7 @@ const ProudAchievers = ({ data }) => {
                 className="w-[260px] sm:w-[280px] md:w-[300px] flex-shrink-0 group flex flex-col gap-4"
               >
                 {/* Image Card Container */}
-                <div className="relative rounded-2xl overflow-hidden shadow-xl transition-all duration-300 group-hover:-translate-y-2">
+                <div className="relative rounded-2xl overflow-hidden shadow-xl transition-all duration-300 group-hover:-translate-y-2 border border-white/30">
                   <div className="aspect-[3/4] relative">
                     <img
                       src={resolveImage(achiever.image)}
@@ -103,7 +103,7 @@ const ProudAchievers = ({ data }) => {
                 className="w-[260px] sm:w-[280px] md:w-[300px] flex-shrink-0 group flex flex-col gap-4"
               >
                 {/* Image Card Container */}
-                <div className="relative rounded-2xl overflow-hidden shadow-xl transition-all duration-300 group-hover:-translate-y-2">
+                <div className="relative rounded-2xl overflow-hidden shadow-xl transition-all duration-300 group-hover:-translate-y-2 border border-white/30">
                   <div className="aspect-[3/4] relative">
                     <img
                       src={resolveImage(achiever.image)}
