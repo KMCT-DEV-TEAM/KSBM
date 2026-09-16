@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCmsFallbackData } from '../utils/cmsFallbackHelper';
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
@@ -55,7 +56,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle token expiration (401)
+// Response interceptor to handle token expiration (401) and graceful CMS fallbacks
 api.interceptors.response.use(
   (response) => {
     if (!response.config.hideLoader) {
@@ -73,7 +74,7 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     // If the error is 401 and we haven't already retried this request, and it's not the refresh endpoint itself
-    if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== '/users/refresh') {
+    if (error.response?.status === 401 && !originalRequest?._retry && originalRequest?.url !== '/users/refresh') {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -114,8 +115,26 @@ api.interceptors.response.use(
       }
     }
 
+    // Graceful fallback for GET requests when backend is offline, unreachable, or returns an error
+    const method = (originalRequest?.method || 'get').toLowerCase();
+    if (method === 'get' && originalRequest?.url) {
+      const fallbackData = getCmsFallbackData(originalRequest.url);
+      if (fallbackData !== null) {
+        console.warn(`[CMS Fallback] Backend unreachable or returned error for "${originalRequest.url}". Serving canonical default CMS data.`);
+        return {
+          data: fallbackData,
+          status: 200,
+          statusText: 'OK (Fallback Defaults)',
+          headers: {},
+          config: originalRequest,
+          isFallback: true
+        };
+      }
+    }
+
     return Promise.reject(error);
   }
 );
 
 export default api;
+

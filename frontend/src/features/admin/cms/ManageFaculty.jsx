@@ -9,6 +9,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { DEFAULT_FACULTIES } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -200,37 +201,23 @@ const ManageFaculty = () => {
       variant: 'primary',
       action: async () => {
         if (activeTab === 'hero') {
-          setShowHeroTextContent(true);
-          setHeroHeading('Faculty Members');
-          setHeroSubtext('Our distinguished faculty are committed to delivering quality education through innovative teaching, practical learning, and personalized mentorship, helping students build the skills and confidence needed for successful careers.');
-          setHeroBgImage('/assets/Images/image 2.png');
+          setShowHeroTextContent(DEFAULT_FACULTIES.showHeroTextContent ?? true);
+          setHeroHeading(DEFAULT_FACULTIES.heroHeading || 'Faculty Members');
+          setHeroSubtext(DEFAULT_FACULTIES.heroSubtext || '');
+          setHeroBgImage(DEFAULT_FACULTIES.heroBgImage || '/assets/Images/aboutus/faculty.png');
         } else if (activeTab === 'intro') {
-          setShowIntro(true);
-          setIntroSubheading('FACULTY MEMBERS');
-          setIntroHeading('Learn from the Best');
-          setIntroText('At KSBM, our faculty members are the cornerstone of academic excellence. With a blend of strong academic credentials, industry expertise, and a passion for teaching, they create a dynamic learning environment that encourages critical thinking, innovation, and leadership. Beyond the classroom, our faculty mentor, inspire, and guide students through every stage of their academic journey, equipping them with the knowledge, confidence, and practical skills needed to succeed in an ever-evolving global business landscape.');
+          setShowIntro(DEFAULT_FACULTIES.showIntro ?? true);
+          setIntroSubheading(DEFAULT_FACULTIES.introSubheading || 'FACULTY MEMBERS');
+          setIntroHeading(DEFAULT_FACULTIES.introHeading || 'Learn from the Best');
+          setIntroText(DEFAULT_FACULTIES.introText || '');
         } else if (activeTab === 'ksbm') {
-          setShowKsbmFaculty(true);
-          setKsbmFacultyHeading("KSBM Faculty");
-          setKsbmFaculty([
-            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 1 },
-            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 2 },
-            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 3 },
-            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 4 },
-            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 5 },
-            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 6 },
-            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 7 },
-            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 8 }
-          ]);
+          setShowKsbmFaculty(DEFAULT_FACULTIES.showKsbmFaculty ?? true);
+          setKsbmFacultyHeading(DEFAULT_FACULTIES.ksbmFacultyHeading || 'KSBM Faculty');
+          setKsbmFaculty(DEFAULT_FACULTIES.ksbmFaculty || []);
         } else if (activeTab === 'adjunct') {
-          setShowAdjunctFaculty(true);
-          setAdjunctFacultyHeading("Adjunct Faculty");
-          setAdjunctFaculty([
-            { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 1 },
-            { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 2 },
-            { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 3 },
-            { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 4 }
-          ]);
+          setShowAdjunctFaculty(DEFAULT_FACULTIES.showAdjunctFaculty ?? true);
+          setAdjunctFacultyHeading(DEFAULT_FACULTIES.adjunctFacultyHeading || 'Adjunct Faculty');
+          setAdjunctFaculty(DEFAULT_FACULTIES.adjunctFaculty || []);
         }
         
         Toast.fire({ icon: 'info', title: 'Reset to defaults. Click Save Changes to apply.' });

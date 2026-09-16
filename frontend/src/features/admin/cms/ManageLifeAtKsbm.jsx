@@ -7,6 +7,7 @@ import LifeAtKSBMSectionPreview from '../../home/components/LifeAtKSBMSection';
 import SectionForm from './components/SectionForm';
 import PageHeader from './components/PageHeader';
 import confirmAction from '../../../utils/confirmAction';
+import { DEFAULT_LIFE_AT_KSBM } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -73,29 +74,20 @@ const ManageLifeAtKsbm = () => {
   };
 
   const handleResetToDefault = async () => {
-    // Reset to defaults...
-    const defaults = {
-      subheading: 'Life at KSBM',
-      heading: 'Beyond the Classroom',
-      description: 'Experience a vibrant campus life that nurtures leadership, creativity, and lifelong connections through diverse clubs, cultural festivals, and community initiatives.',
-      images: [
-        { src: '/assets/Images/Home/life_at_ksbm_1.jpg', alt: 'Students in cafe' },
-        { src: '/assets/Images/Home/life_at_ksbm_2.jpg', alt: 'Students jumping' },
-        { src: '/assets/Images/Home/life_at_ksbm_3.jpg', alt: 'Campus festival' },
-        { src: '/assets/Images/Home/life_at_ksbm_4.jpg', alt: 'Meeting room' },
-        { src: '/assets/Images/Home/life_at_ksbm_5.jpg', alt: 'Selfie' },
-        { src: '/assets/Images/Home/life_at_ksbm_6.jpg', alt: 'Dining hall' },
-        { src: '/assets/Images/Home/life_at_ksbm_7.jpg', alt: 'Outdoor gathering' },
-        { src: '/assets/Images/Home/life_at_ksbm_8.jpg', alt: 'Campus gate' }
-      ],
-      showSection: true,
-    };
-    setSubheading(defaults.subheading);
-    setHeading(defaults.heading);
-    setDescription(defaults.description);
-    setImages(defaults.images);
-    setShowSection(defaults.showSection);
-    Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
+    await confirmAction({
+      title: 'Reset to Defaults?',
+      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary',
+      action: async () => {
+        setSubheading(DEFAULT_LIFE_AT_KSBM.subheading);
+        setHeading(DEFAULT_LIFE_AT_KSBM.heading);
+        setDescription(DEFAULT_LIFE_AT_KSBM.description);
+        setImages(DEFAULT_LIFE_AT_KSBM.images);
+        setShowSection(DEFAULT_LIFE_AT_KSBM.showSection ?? true);
+        Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
+      }
+    });
   };
 
   const handleNewImageUpload = async (event) => {

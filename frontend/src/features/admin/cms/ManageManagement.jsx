@@ -10,6 +10,7 @@ import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
+import { DEFAULT_MANAGEMENT } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -103,30 +104,11 @@ const ManageManagement = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setSubheading('OUR MANAGEMENT');
-        setHeading('The Architects Of Excellence');
-        setDescription('Our leadership board combines decades of top-tier industry experience with a profound commitment to academic innovation.');
-        setMembers([
-          {
-            id: '1',
-            name: 'Dr. Sarah Mitchell',
-            role: 'MANAGING DIRECTOR',
-            image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-          },
-          {
-            id: '2',
-            name: 'Dr. Adrian Starlin',
-            role: 'CHAIRMAN DIRECTOR',
-            image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-          },
-          {
-            id: '3',
-            name: 'Dr. Elena Rostova',
-            role: 'EXECUTIVE DIRECTOR',
-            image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-          }
-        ]);
-        setShowSection(true);
+        setSubheading(DEFAULT_MANAGEMENT.subheading || 'OUR MANAGEMENT');
+        setHeading(DEFAULT_MANAGEMENT.heading || 'The Architects Of Excellence');
+        setDescription(DEFAULT_MANAGEMENT.description || '');
+        setMembers(DEFAULT_MANAGEMENT.members || []);
+        setShowSection(DEFAULT_MANAGEMENT.showSection ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });

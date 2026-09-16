@@ -8,6 +8,7 @@ import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import { uploadDeferredImage } from './utils/uploadHelper';
+import { DEFAULT_GOVERNING_BODY } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -120,10 +121,8 @@ const ManageGoverningMembers = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setMembers([
-          { name: "Dr. Navas K M", title: "Managing Trustee", image: "/assets/Images/image 31.png" }
-        ]);
-        setShowMembers(true);
+        setMembers(DEFAULT_GOVERNING_BODY.members || []);
+        setShowMembers(DEFAULT_GOVERNING_BODY.showMembers ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });

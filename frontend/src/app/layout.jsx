@@ -40,7 +40,7 @@ export async function generateMetadata() {
       } : undefined,
     };
   } catch (error) {
-    console.error('Error fetching global SEO:', error);
+    // Backend offline or unreachable, fall back to default metadata
     return {
       title: 'KMCT School of Business Management | KSBM',
       description: 'Welcome to KMCT School of Business Management (KSBM). We build careers that matter with 99% placement rates, top-tier academic programs, accreditation, state-of-the-art facilities, and a vibrant campus life.',

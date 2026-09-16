@@ -10,6 +10,7 @@ import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
 import AdminModal from './components/AdminModal';
+import { DEFAULT_FACILITIES_PAGE } from './constants/defaultCmsData';
 import { Pencil } from 'lucide-react';
 
 const TabSkeleton = () => (
@@ -211,35 +212,53 @@ const ManageClubDetails = () => {
     });
   };
 
-  const handleReset = () => {
-    if (window.confirm('Are you sure you want to reset all changes? Any unsaved work will be lost.')) {
-      clearDeletions();
-      const foundClub = facilitiesData.clubs.items[clubIndex];
-      setClub({
-        ...foundClub,
-        hero: foundClub.hero || { title: '', subtitle: '', backgroundImage: '' },
-        about: {
-          heading: foundClub.about?.heading || '',
-          paragraphs: foundClub.about?.paragraphs || [],
-          image: foundClub.about?.image || ''
-        },
-        activities: {
-          heading: foundClub.activities?.heading || '',
-          items: foundClub.activities?.items || []
-        },
-        faculty: {
-          heading: foundClub.faculty?.heading || '',
-          subheading: foundClub.faculty?.subheading || '',
-          description: foundClub.faculty?.description || '',
-          members: foundClub.faculty?.members || []
-        },
-        gallery: {
-          heading: foundClub.gallery?.heading || '',
-          images: foundClub.gallery?.images || []
-        }
-      });
-      Toast.fire({ icon: 'success', title: 'Changes have been reset to last saved state' });
-    }
+  const handleReset = async () => {
+    await confirmAction({
+      title: 'Reset to Default?',
+      message: 'Are you sure you want to reset this club page to default content and images? Any unsaved modifications will be reverted.',
+      confirmText: 'Yes, reset it!',
+      variant: 'warning',
+      action: () => {
+        clearDeletions();
+        const defaultClub = (DEFAULT_FACILITIES_PAGE?.clubs?.items || []).find(
+          (c) => c._id === clubId || c.title?.toLowerCase() === club?.title?.toLowerCase()
+        ) || facilitiesData?.clubs?.items?.[clubIndex] || {};
+
+        setClub({
+          ...defaultClub,
+          hero: {
+            title: defaultClub.hero?.title || '',
+            subtitle: defaultClub.hero?.subtitle || '',
+            backgroundImage: defaultClub.hero?.backgroundImage || '',
+            showTextContent: defaultClub.hero?.showTextContent !== false && defaultClub.hero?.showTextContent !== 'false'
+          },
+          about: {
+            heading: defaultClub.about?.heading || '',
+            paragraphs: defaultClub.about?.paragraphs || [],
+            image: defaultClub.about?.image || '',
+            showSection: defaultClub.about?.showSection !== false
+          },
+          activities: {
+            heading: defaultClub.activities?.heading || '',
+            items: JSON.parse(JSON.stringify(defaultClub.activities?.items || [])),
+            showSection: defaultClub.activities?.showSection !== false
+          },
+          faculty: {
+            heading: defaultClub.faculty?.heading || '',
+            subheading: defaultClub.faculty?.subheading || '',
+            description: defaultClub.faculty?.description || '',
+            members: JSON.parse(JSON.stringify(defaultClub.faculty?.members || [])),
+            showSection: defaultClub.faculty?.showSection !== false
+          },
+          gallery: {
+            heading: defaultClub.gallery?.heading || '',
+            images: JSON.parse(JSON.stringify(defaultClub.gallery?.images || [])),
+            showSection: defaultClub.gallery?.showSection !== false
+          }
+        });
+        Toast.fire({ icon: 'success', title: 'Reset to default successfully! Click "Save Changes" to apply.' });
+      }
+    });
   };
 
   if (isLoading) return <AdminSkeleton />;

@@ -10,6 +10,7 @@ import SingleImageUploader from './components/SingleImageUploader';
 import SingleDocumentUploader from './components/SingleDocumentUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { DEFAULT_PLACEMENT_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -380,7 +381,7 @@ const ManagePlacementPage = () => {
       action: async () => {
         setData(prev => ({
           ...prev,
-          [activeTab]: defaultPlacementData[activeTab]
+          [activeTab]: DEFAULT_PLACEMENT_PAGE[activeTab] || prev[activeTab]
         }));
         Toast.fire({ icon: 'info', title: `Reset ${sectionName} to defaults. Click Save Changes to apply.` });
       }

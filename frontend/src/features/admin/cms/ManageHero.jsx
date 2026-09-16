@@ -9,7 +9,7 @@ import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import LogoUploader from './components/LogoUploader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
-import Hero from '../../home/components/Hero';
+import { DEFAULT_HERO } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -129,27 +129,14 @@ const ManageHero = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setPillText({ text: 'ADMISSIONS OPEN 2025-26', isVisible: true });
-        setHeadingLine1({ text: 'Empowering Future', isVisible: true });
-        setHeadingLine2({ text: 'Business Leaders', isVisible: true });
-        setDescription({ text: "Unlock your potential with India's leading B-School, where traditional academic rigor meets modern industry innovation. Join a network of global visionaries.", isVisible: true });
-        setSecondaryButton({ text: 'Download Brochure', isVisible: true, link: '#' });
-        setBannerImages([
-          { url: '/assets/Images/Home/hero_banner_1.png' },
-          { url: '/assets/Images/Home/hero_banner_2.png' },
-          { url: '/assets/Images/Home/hero_banner_3.png' }
-        ]);
-        setStatsCard({
-          isVisible: true,
-          batchText: 'Batch 2025–27',
-          stat1Title: 'Limited Seats',
-          stat1Subtitle: 'Last few slots remaining',
-          stat2Title: '100% Placement',
-          stat2Subtitle: 'Consistent record over years',
-          linkText: 'Read Admission Guidelines',
-          linkUrl: '/admissions'
-        });
-        setShowSection(true);
+        setPillText(DEFAULT_HERO.pillText || { text: '', isVisible: true });
+        setHeadingLine1(DEFAULT_HERO.headingLine1 || { text: '', isVisible: true });
+        setHeadingLine2(DEFAULT_HERO.headingLine2 || { text: '', isVisible: true });
+        setDescription(DEFAULT_HERO.description || { text: '', isVisible: true });
+        setSecondaryButton(DEFAULT_HERO.secondaryButton || { text: '', isVisible: true, link: '#' });
+        setBannerImages(DEFAULT_HERO.bannerImages || []);
+        setStatsCard(DEFAULT_HERO.statsCard || {});
+        setShowSection(DEFAULT_HERO.showSection ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });

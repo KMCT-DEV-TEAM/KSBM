@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
-import StatsSection from '../../about/components/StatsSection';
+import { DEFAULT_ABOUT_US_STATS } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -101,12 +101,8 @@ const ManageAboutUsStats = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setStats([
-          { value: '25+', label: 'Years of Excellence' },
-          { value: '500+', label: 'Expert Faculties' },
-          { value: '25,000+', label: 'Alumni Network' }
-        ]);
-        setShowSection(true);
+        setStats(DEFAULT_ABOUT_US_STATS.stats || []);
+        setShowSection(DEFAULT_ABOUT_US_STATS.showSection ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });

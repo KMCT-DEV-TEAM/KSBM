@@ -8,6 +8,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import confirmAction from '../../../utils/confirmAction';
 import SingleImageUploader from './components/SingleImageUploader';
 import PageHeader from './components/PageHeader';
+import { DEFAULT_CONTACT_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -33,28 +34,8 @@ const ManageContactPage = () => {
     }
   };
 
-  const [hero, setHero] = useState({
-    title: 'Stay Connected. \nStart Your Journey With KSBM.',
-    subtitle: 'Reach out to our admissions office, placement cell, or general inquiry desk. We are here to answer your questions and guide you toward a transformative management education experience.',
-    badge: 'CONTACT INFORMATION',
-    backgroundImage: '/assets/Images/contact/contact_hero.png'
-  });
-
-  const [contactBox, setContactBox] = useState({
-    badge: 'CONTACT US',
-    title: 'Start Your Journey',
-    subtitle: 'Whether you are seeking admission to our flagship management programs or exploring corporate collaboration, our doors are always open to support your ambitions.',
-    phoneLabel: 'Call us for inquiry',
-    phoneNumber: '+91 495 2211 444',
-    phoneSecondary: '/ +1 (212) 555-0198',
-    emailLabel: 'Email anytime',
-    emailPrimary: 'admissions@ksbm.ac.in',
-    emailSecondary: 'solutions@lumina.com',
-    addressLabel: 'Visit Our Office',
-    addressText: 'KMCT Hills, Mampara, Pazhur P.O., Kuttippuram, Kerala - 679571',
-    bottomBadgeText: 'Admissions Open 2025–27',
-    bottomBadgeDesk: 'KSBM Desk'
-  });
+  const [hero, setHero] = useState(DEFAULT_CONTACT_PAGE.hero);
+  const [contactBox, setContactBox] = useState(DEFAULT_CONTACT_PAGE.contactBox);
 
   const [imagesToDelete, setImagesToDelete] = useState([]);
 
@@ -143,29 +124,8 @@ const ManageContactPage = () => {
       confirmText: 'Yes, reset it!',
       variant: 'danger',
       action: async () => {
-        setHero({
-          title: 'Stay Connected. \nStart Your Journey With KSBM.',
-          subtitle: 'Reach out to our admissions office, placement cell, or general inquiry desk. We are here to answer your questions and guide you toward a transformative management education experience.',
-          badge: 'CONTACT INFORMATION',
-          backgroundImage: '/assets/Images/contact/contact_hero.png'
-        });
-
-        setContactBox({
-          badge: 'CONTACT US',
-          title: 'Start Your Journey',
-          subtitle: 'Whether you are seeking admission to our flagship management programs or exploring corporate collaboration, our doors are always open to support your ambitions.',
-          phoneLabel: 'Call us for inquiry',
-          phoneNumber: '+91 495 2211 444',
-          phoneSecondary: '/ +1 (212) 555-0198',
-          emailLabel: 'Email anytime',
-          emailPrimary: 'admissions@ksbm.ac.in',
-          emailSecondary: 'solutions@lumina.com',
-          addressLabel: 'Visit Our Office',
-          addressText: 'KMCT Hills, Mampara, Pazhur P.O., Kuttippuram, Kerala - 679571',
-          bottomBadgeText: 'Admissions Open 2025–27',
-          bottomBadgeDesk: 'KSBM Desk'
-        });
-
+        setHero(DEFAULT_CONTACT_PAGE.hero);
+        setContactBox(DEFAULT_CONTACT_PAGE.contactBox);
         Toast.fire({ icon: 'info', title: 'Defaults restored. Click Save Changes to confirm.' });
       }
     });

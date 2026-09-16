@@ -6,10 +6,11 @@ import Swal from 'sweetalert2';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import AdminSkeleton from './components/AdminSkeleton';
 import NewsSectionPreview from '../../home/components/NewsSection';
-import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import LogoUploader from './components/LogoUploader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
+import { DEFAULT_NEWS } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -120,26 +121,8 @@ const ManageNews = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        const defaults = {
-          subheading: 'News and Events',
-          heading: 'Latest From KSBM',
-          featuredArticle: {
-            tag: 'FEATURED',
-            date: 'OCTOBER 24, 2024',
-            title: 'KSBM National Business Summit 2024: Navigating the AI Frontier',
-            description: 'Over 50 industry experts converged at KSBM to discuss the transformative power of AI in modern business management.',
-            image: '/assets/Images/Home/news_featured.jpg'
-          },
-          sideArticles: [
-            { date: 'OCTOBER 15, 2024', title: 'KSBM Students Win National HR Conclave 2024', image: '/assets/Images/Home/news_side_1.jpg' },
-            { date: 'OCTOBER 08, 2024', title: "Inauguration of the 'Innovate KSBM' Incubation Lab", image: '/assets/Images/Home/news_side_2.jpg' },
-            { date: 'SEPTEMBER 28, 2024', title: 'New Global Faculty Partnership with Zurich School of Finance', image: '/assets/Images/Home/news_side_3.jpg' },
-            { date: 'AUGUST 12, 2024', title: 'Annual Alumni Meet 2024: Bridging Generations', image: '/assets/Images/Home/news_side_4.jpg' }
-          ],
-          showSection: true,
-        };
-
-        const defaultImages = [defaults.featuredArticle.image, ...defaults.sideArticles.map(a => a.image)];
+        const defaults = DEFAULT_NEWS;
+        const defaultImages = [defaults.featuredArticle?.image, ...(defaults.sideArticles || []).map(a => a.image)].filter(Boolean);
         
         articles.forEach(item => {
           if (item.image && !defaultImages.includes(item.image)) {
@@ -147,15 +130,19 @@ const ManageNews = () => {
           }
         });
 
-        const combinedWithIds = [defaults.featuredArticle, ...defaults.sideArticles].map((item, index) => ({
+        const combined = [];
+        if (defaults.featuredArticle) combined.push(defaults.featuredArticle);
+        if (defaults.sideArticles) combined.push(...defaults.sideArticles);
+
+        const combinedWithIds = combined.map((item, index) => ({
           ...item,
           id: `news-default-${Date.now()}-${index}`
         }));
 
-        setSubheading(defaults.subheading);
-        setHeading(defaults.heading);
+        setSubheading(defaults.subheading || '');
+        setHeading(defaults.heading || '');
         setArticles(combinedWithIds);
-        setShowSection(defaults.showSection);
+        setShowSection(defaults.showSection ?? true);
         
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }

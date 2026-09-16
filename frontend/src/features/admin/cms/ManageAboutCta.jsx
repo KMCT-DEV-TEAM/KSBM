@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
-import AboutCtaSection from '../../about/components/AboutCtaSection';
+import { DEFAULT_ABOUT_CTA } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -104,11 +104,11 @@ const ManageAboutCta = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setHeading('Begin Your Leadership Journey at KSBM');
-        setSubtext('Applications for the academic year 2024-25 are now open. Secure your seat in the cohort of the future.');
-        setButtonText('Apply Now Online');
-        setButtonLink('/apply');
-        setShowSection(true);
+        setHeading(DEFAULT_ABOUT_CTA.heading || 'Begin Your Leadership Journey at KSBM');
+        setSubtext(DEFAULT_ABOUT_CTA.subtext || '');
+        setButtonText(DEFAULT_ABOUT_CTA.buttonText || 'Apply Now Online');
+        setButtonLink(DEFAULT_ABOUT_CTA.buttonLink || '/apply');
+        setShowSection(DEFAULT_ABOUT_CTA.showSection ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });

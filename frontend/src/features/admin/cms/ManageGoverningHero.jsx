@@ -8,6 +8,7 @@ import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import { uploadDeferredImage } from './utils/uploadHelper';
+import { DEFAULT_GOVERNING_BODY } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -129,17 +130,14 @@ const ManageGoverningHero = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setHeroHeading('KSBM Governing Body');
-        setHeroSubtext('Strategizing for excellence: The leadership framework dedicated to advancing pharmaceutical management education through visionary governance, industrial synergy, and academic rigor.');
-        setHeroBgImage('/assets/Images/image 2.png');
-        setContentSubheading('COMMITTEE');
-        setContentHeading('Governing Body');
-        setContentDescription([
-          "The Governing Body of KMCT School of Business Management plays a pivotal role in shaping the institution's academic and administrative framework. The body is chaired by Dr. Navas KM, with Dr. Ayisha Nazreen serving as the Special Invitee, and Dr. Sujith Varma as the Member Secretary. It also includes selected faculty members who serve as academic nominees, industry representatives, and ex-officio members, ensuring a diverse and well-rounded leadership.",
-          "The Governing Body is committed to maintaining academic excellence, fostering research and innovation, and strengthening industry-academic collaborations. Through strategic decision-making and policy implementation, it ensures the holistic development of students and the institution, keeping pace with the evolving landscape of management education."
-        ]);
-        setShowHeroTextContent(true);
-        setShowContentDetails(true);
+        setHeroHeading(DEFAULT_GOVERNING_BODY.heroHeading || 'KSBM Governing Body');
+        setHeroSubtext(DEFAULT_GOVERNING_BODY.heroSubtext || '');
+        setHeroBgImage(DEFAULT_GOVERNING_BODY.heroBgImage || '/assets/Images/aboutus/governing_body.png');
+        setContentSubheading(DEFAULT_GOVERNING_BODY.contentSubheading || 'COMMITTEE');
+        setContentHeading(DEFAULT_GOVERNING_BODY.contentHeading || 'Governing Body');
+        setContentDescription(DEFAULT_GOVERNING_BODY.contentDescription || []);
+        setShowHeroTextContent(DEFAULT_GOVERNING_BODY.showHeroTextContent ?? true);
+        setShowContentDetails(DEFAULT_GOVERNING_BODY.showContentDetails ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
