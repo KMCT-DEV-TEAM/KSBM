@@ -77,11 +77,11 @@ const MemberCard = ({ member, index }) => {
 
         {/* Member Image - Breaking out of the top */}
         {member.showImage !== false && (
-          <div className="absolute bottom-4 sm:bottom-6 -left-6 sm:-left-10 right-0 flex justify-center z-10 pointer-events-none">
+          <div className="absolute bottom-4 sm:bottom-6 inset-x-0 flex justify-center items-end z-10 pointer-events-none">
             <img
               src={member.image || member.img}
               alt={member.name}
-              className="w-[140%] sm:w-[150%] h-auto object-contain object-bottom drop-shadow-md"
+              className="h-[220px] sm:h-[280px] w-auto max-w-[160%] object-contain object-bottom drop-shadow-md"
             />
           </div>
         )}
