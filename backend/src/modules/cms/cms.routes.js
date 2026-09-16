@@ -101,7 +101,7 @@ import {
   reorderGlobalButtons
 } from './cms.controller.js';
 import { protect } from '../../middleware/authMiddleware.js';
-import { upload } from '../../config/cloudinary.js';
+import { uploadAssets } from '../../config/assetsUpload.js';
 
 const router = express.Router();
 
@@ -311,7 +311,7 @@ router.route('/organogram/:id')
 // ==========================================
 router.route('/seo/:pageIdentifier')
   .get(getSeoSettings)
-  .put(protect, upload.fields([{ name: 'ogImage', maxCount: 1 }, { name: 'favicon', maxCount: 1 }]), updateSeoSettings);
+  .put(protect, uploadAssets.fields([{ name: 'ogImage', maxCount: 1 }, { name: 'favicon', maxCount: 1 }]), updateSeoSettings);
 
 // ==========================================
 // Global Action Buttons Routes

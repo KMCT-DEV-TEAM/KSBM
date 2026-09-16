@@ -1,127 +1,82 @@
 import multer from 'multer';
+import multerS3 from 'multer-s3';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { s3Client, getBucketName, isS3Configured, getCustomDomain } from './s3.config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const assetsDir = path.join(__dirname, '../../../assets');
-if (!fs.existsSync(assetsDir)) {
-  fs.mkdirSync(assetsDir, { recursive: true });
-}
+// Helper function to resolve S3 key prefix based on request URL
+export const getS3KeyPrefix = (reqUrl = '') => {
+  if (reqUrl.includes('/upload/programs')) return 'ksbm/images/programs';
+  if (reqUrl.includes('/upload/home')) return 'ksbm/images/home';
+  if (reqUrl.includes('/upload/aboutus')) return 'ksbm/images/aboutus';
+  if (reqUrl.includes('/upload/management')) return 'ksbm/images/management';
+  if (reqUrl.includes('/upload/mba')) return 'ksbm/images/mba';
+  if (reqUrl.includes('/upload/faculty')) return 'ksbm/images/faculty';
+  if (reqUrl.includes('/upload/alumni')) return 'ksbm/images/alumni';
+  if (reqUrl.includes('/upload/placements')) return 'ksbm/images/placements';
+  if (reqUrl.includes('/upload/committees')) return 'ksbm/images/committees';
+  if (reqUrl.includes('/upload/examinations')) return 'ksbm/images/examinations';
+  if (reqUrl.includes('/upload/facilities')) return 'ksbm/images/facilities';
+  if (reqUrl.includes('/upload/admissions')) return 'ksbm/images/admissions';
+  if (reqUrl.includes('/upload/blogs')) return 'ksbm/images/blogs';
+  if (reqUrl.includes('/upload/grievance')) return 'ksbm/images/grievance';
+  if (reqUrl.includes('/upload/contact')) return 'ksbm/images/contact';
+  if (reqUrl.includes('/upload/faq')) return 'ksbm/images/faq';
+  if (reqUrl.includes('/upload/gallery')) return 'ksbm/images/gallery';
+  if (reqUrl.includes('/upload/downloads')) return 'ksbm/documents/downloads';
+  if (reqUrl.includes('/upload/terms')) return 'ksbm/images/terms';
+  if (reqUrl.includes('/upload/privacy')) return 'ksbm/images/privacy';
+  if (reqUrl.includes('/upload/events')) return 'ksbm/images/events';
+  if (reqUrl.includes('/upload/brochure')) return 'ksbm/documents/brochures';
+  if (reqUrl.includes('/seo')) return 'ksbm/images/seo';
+  return 'ksbm/uploads';
+};
 
-const homeAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/Home');
-if (!fs.existsSync(homeAssetsDir)) {
-  fs.mkdirSync(homeAssetsDir, { recursive: true });
-}
-
-const programsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/Home');
-if (!fs.existsSync(programsAssetsDir)) {
-  fs.mkdirSync(programsAssetsDir, { recursive: true });
-}
-
-const aboutusAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/aboutus');
-if (!fs.existsSync(aboutusAssetsDir)) {
-  fs.mkdirSync(aboutusAssetsDir, { recursive: true });
-}
-
-const managementAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/management');
-if (!fs.existsSync(managementAssetsDir)) {
-  fs.mkdirSync(managementAssetsDir, { recursive: true });
-}
-
-const mbaAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/mba');
-if (!fs.existsSync(mbaAssetsDir)) {
-  fs.mkdirSync(mbaAssetsDir, { recursive: true });
-}
-const facultyAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/faculty');
-if (!fs.existsSync(facultyAssetsDir)) {
-  fs.mkdirSync(facultyAssetsDir, { recursive: true });
-}
-
-const alumniAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/alumni');
-if (!fs.existsSync(alumniAssetsDir)) {
-  fs.mkdirSync(alumniAssetsDir, { recursive: true });
-}
-
-const placementsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/placements');
-if (!fs.existsSync(placementsAssetsDir)) {
-  fs.mkdirSync(placementsAssetsDir, { recursive: true });
+// Helper function to format the final public URL of an uploaded file
+export const getUploadedFileUrl = (file, fallbackRelativeUrl = '') => {
+  if (!file) return fallbackRelativeUrl;
+  const customDomain = getCustomDomain();
+  if (customDomain && file.key) {
+    const cleanDomain = customDomain.endsWith('/') ? customDomain.slice(0, -1) : customDomain;
+    return `${cleanDomain}/${file.key}`;
   }
+  return file.location || fallbackRelativeUrl;
+};
+
+// ==========================================
+// Local Disk Storage Setup (Fallback)
+// ==========================================
+const assetsDir = path.join(__dirname, '../../../assets');
+const homeAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/Home');
+const programsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/Home');
+const aboutusAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/aboutus');
+const managementAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/management');
+const mbaAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/mba');
+const facultyAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/faculty');
+const alumniAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/alumni');
+const placementsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/placements');
 const committeesAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/committees');
-if (!fs.existsSync(committeesAssetsDir)) {
-  fs.mkdirSync(committeesAssetsDir, { recursive: true });
-}
-
 const examinationAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/examinations');
-if (!fs.existsSync(examinationAssetsDir)) {
-  fs.mkdirSync(examinationAssetsDir, { recursive: true });
-}
-
 const facilitiesAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/fecilities');
-if (!fs.existsSync(facilitiesAssetsDir)) {
-  fs.mkdirSync(facilitiesAssetsDir, { recursive: true });
-}
-
 const admissionsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/admissions');
-if (!fs.existsSync(admissionsAssetsDir)) {
-  fs.mkdirSync(admissionsAssetsDir, { recursive: true });
-}
-
 const blogsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/blogs');
-if (!fs.existsSync(blogsAssetsDir)) {
-  fs.mkdirSync(blogsAssetsDir, { recursive: true });
-}
-
 const grievanceAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/grievance');
-if (!fs.existsSync(grievanceAssetsDir)) {
-  fs.mkdirSync(grievanceAssetsDir, { recursive: true });
-}
-
 const contactAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/contact');
-if (!fs.existsSync(contactAssetsDir)) {
-  fs.mkdirSync(contactAssetsDir, { recursive: true });
-}
-
 const faqAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/faq');
-if (!fs.existsSync(faqAssetsDir)) {
-  fs.mkdirSync(faqAssetsDir, { recursive: true });
-}
-
 const downloadsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/downloads');
-if (!fs.existsSync(downloadsAssetsDir)) {
-  fs.mkdirSync(downloadsAssetsDir, { recursive: true });
-}
-
 const brochuresDir = path.join(__dirname, '../../../frontend/public/assets/brochures');
-if (!fs.existsSync(brochuresDir)) {
-  fs.mkdirSync(brochuresDir, { recursive: true });
-}
-
 const termsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/terms');
-if (!fs.existsSync(termsAssetsDir)) {
-  fs.mkdirSync(termsAssetsDir, { recursive: true });
-}
-
 const galleryAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/gallery');
-if (!fs.existsSync(galleryAssetsDir)) {
-  fs.mkdirSync(galleryAssetsDir, { recursive: true });
-}
-
 const privacyAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/privacy');
-if (!fs.existsSync(privacyAssetsDir)) {
-  fs.mkdirSync(privacyAssetsDir, { recursive: true });
-}
-
 const eventsAssetsDir = path.join(__dirname, '../../../frontend/public/assets/Images/events');
-if (!fs.existsSync(eventsAssetsDir)) {
-  fs.mkdirSync(eventsAssetsDir, { recursive: true });
-}
+const uploadsDir = path.join(__dirname, '../../uploads');
 
-const storage = multer.diskStorage({
+const localDiskStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    console.log('UPLOAD URL:', req.originalUrl);
     let targetDir = assetsDir;
     if (req.originalUrl.includes('/upload/programs')) {
       targetDir = programsAssetsDir;
@@ -167,6 +122,8 @@ const storage = multer.diskStorage({
       targetDir = galleryAssetsDir;
     } else if (req.originalUrl.includes('/upload/brochure')) {
       targetDir = brochuresDir;
+    } else if (req.originalUrl.includes('/seo') || req.originalUrl === '/api/upload' || req.originalUrl === '/api/upload/') {
+      targetDir = uploadsDir;
     }
     if (!fs.existsSync(targetDir)) {
       fs.mkdirSync(targetDir, { recursive: true });
@@ -179,5 +136,52 @@ const storage = multer.diskStorage({
   }
 });
 
-export const uploadAssets = multer({ storage: storage, limits: { fileSize: 104857600 } });
+// ==========================================
+// AWS S3 Storage Setup
+// ==========================================
+const createS3Storage = () => {
+  return multerS3({
+    s3: s3Client,
+    bucket: getBucketName(),
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    contentDisposition: (req, file, cb) => {
+      // For PDFs or images, allow browser inline rendering
+      if (file.mimetype === 'application/pdf' || file.mimetype.startsWith('image/')) {
+        cb(null, 'inline');
+      } else {
+        cb(null, `attachment; filename="${file.originalname}"`);
+      }
+    },
+    metadata: function (req, file, cb) {
+      cb(null, {
+        fieldName: file.fieldname,
+        originalName: file.originalname,
+        uploadedAt: new Date().toISOString()
+      });
+    },
+    key: function (req, file, cb) {
+      const prefix = getS3KeyPrefix(req.originalUrl || '');
+      const cleanOriginalName = path.basename(file.originalname).replace(/[^a-zA-Z0-9.-]/g, '_');
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      const ext = path.extname(cleanOriginalName) || (file.mimetype === 'application/pdf' ? '.pdf' : '');
+      const key = `${prefix}/${uniqueSuffix}${ext}`;
+      cb(null, key);
+    }
+  });
+};
 
+// Determine storage engine based on whether S3 is configured
+const getStorage = () => {
+  if (isS3Configured()) {
+    console.log(`[Storage] Initializing AWS S3 Storage (Bucket: ${getBucketName()})`);
+    return createS3Storage();
+  } else {
+    console.warn('[Storage] AWS S3 credentials not fully configured in .env. Falling back to local disk storage.');
+    return localDiskStorage;
+  }
+};
+
+export const uploadAssets = multer({
+  storage: getStorage(),
+  limits: { fileSize: 104857600 } // 100MB limit
+});

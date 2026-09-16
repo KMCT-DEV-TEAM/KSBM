@@ -85,7 +85,7 @@ const SingleImageUploader = ({
     if (onUploadStateChange) onUploadStateChange(true);
 
     // If there is an old image and we are replacing it, request backend to delete old image
-    if (typeof currentDisplayUrl === 'string' && currentDisplayUrl !== defaultImage && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http')) {
+    if (typeof currentDisplayUrl === 'string' && currentDisplayUrl !== defaultImage && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.includes('placeholder') && !currentDisplayUrl.includes('unsplash')) {
       try {
         await api.delete('/upload', { data: { fileUrl: currentDisplayUrl }, hideLoader: true });
       } catch (err) {
@@ -147,11 +147,11 @@ const SingleImageUploader = ({
         if (deferredUpload) {
           onUploadComplete({ 
             isDeleted: true, 
-            oldUrl: (typeof currentDisplayUrl === 'string' && currentDisplayUrl !== defaultImage && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http')) ? currentDisplayUrl : null,
+            oldUrl: (typeof currentDisplayUrl === 'string' && currentDisplayUrl !== defaultImage && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.includes('placeholder') && !currentDisplayUrl.includes('unsplash')) ? currentDisplayUrl : null,
             previewUrl: defaultImage 
           });
         } else {
-          if (typeof currentDisplayUrl === 'string' && currentDisplayUrl !== defaultImage && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http')) {
+          if (typeof currentDisplayUrl === 'string' && currentDisplayUrl !== defaultImage && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.includes('placeholder') && !currentDisplayUrl.includes('unsplash')) {
             try {
               await api.delete('/upload', { data: { fileUrl: currentDisplayUrl }, hideLoader: true });
             } catch (err) {

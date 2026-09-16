@@ -42,6 +42,7 @@ import TermsAndConditionsModel from './termsAndConditions.model.js';
 import FaqModel from './faq.model.js';
 import GalleryPageModel from './galleryPage.model.js';
 import CommitteesAndCellsCms from './committeesAndCells.model.js';
+import { getUploadedFileUrl } from '../../config/assetsUpload.js';
 // @desc    Get header settings
 // @route   GET /api/cms/header
 // @access  Public
@@ -1732,11 +1733,13 @@ export const updateSeoSettings = async (req, res) => {
     // Process image uploads if exist
     if (req.files) {
       if (req.files.ogImage && req.files.ogImage.length > 0) {
-        const filePath = '/uploads/' + req.files.ogImage[0].filename;
+        const file = req.files.ogImage[0];
+        const filePath = getUploadedFileUrl(file, file.filename ? '/uploads/' + file.filename : '');
         req.body.ogImage = filePath;
       }
       if (req.files.favicon && req.files.favicon.length > 0) {
-        const filePath = '/uploads/' + req.files.favicon[0].filename;
+        const file = req.files.favicon[0];
+        const filePath = getUploadedFileUrl(file, file.filename ? '/uploads/' + file.filename : '');
         req.body.favicon = filePath;
       }
     }
