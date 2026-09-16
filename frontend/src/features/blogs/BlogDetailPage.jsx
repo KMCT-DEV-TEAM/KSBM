@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -17,6 +17,7 @@ const BlogDetailPage = ({ id }) => {
   const [loading, setLoading] = useState(true);
   const [isPreview, setIsPreview] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const isManualScroll = useRef(false);
   
   const globalLinks = useGlobalLinks();
   const applyLink = globalLinks['global_apply']?.link || '/admission';
@@ -113,13 +114,17 @@ const BlogDetailPage = ({ id }) => {
   // Sticky scroll spy logic for Table of Contents
   useEffect(() => {
     const handleScroll = () => {
+      if (isManualScroll.current) return;
       if (!article?.sections) return;
       const sections = article.sections.filter(s => s.title);
       for (let i = sections.length - 1; i >= 0; i--) {
         const el = document.getElementById(sections[i].id);
-        if (el && window.scrollY >= el.offsetTop - 150) {
-          setActiveSection(sections[i].id);
-          break;
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 200) {
+            setActiveSection(sections[i].id);
+            break;
+          }
         }
       }
     };
@@ -208,6 +213,36 @@ const BlogDetailPage = ({ id }) => {
         <div className="flex flex-col lg:flex-row gap-12 xl:gap-20 relative">
 
           <div className="flex-[2] min-w-0">
+            {/* Mobile Table of Contents */}
+            <div className="block lg:hidden mb-10">
+              <div className="bg-gray-50/50 p-6 sm:p-8 rounded-[20px] border border-gray-100 shadow-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-1.5 h-6 bg-primary rounded-full"></div>
+                  <h4 className="text-lg font-bold text-text-primary">Table of Contents</h4>
+                </div>
+                <ul className="space-y-2">
+                  {article.sections.filter(s => s.title).map((section, i) => (
+                    <li key={section.id}>
+                      <button
+                        onClick={() => {
+                          isManualScroll.current = true;
+                          setActiveSection(section.id);
+                          document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          setTimeout(() => {
+                            isManualScroll.current = false;
+                          }, 1000);
+                        }}
+                        className={`text-[14.5px] font-medium transition-all text-left w-full p-2.5 rounded-lg flex gap-3 ${activeSection === section.id ? 'text-primary bg-primary/5 translate-x-1' : 'text-gray-600 hover:text-primary hover:bg-gray-100'}`}
+                      >
+                        <span className={`font-semibold ${activeSection === section.id ? 'text-primary' : 'text-gray-400'}`}>{i + 1}.</span>
+                        {section.title}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
             {/* Main Article Body */}
             <article className="prose prose-lg prose-gray max-w-none prose-headings:text-[#202658] prose-p:text-gray-600 prose-p:leading-[1.85] prose-img:rounded-2xl">
               {article.sections.map((section, idx) => (
@@ -259,21 +294,26 @@ const BlogDetailPage = ({ id }) => {
             <div className="sticky top-28 space-y-12">
 
               {/* Table of Contents */}
-              <div className="bg-gray-50/50 p-6 sm:p-8 rounded-[20px] border border-gray-100 shadow-sm">
+              <div className="hidden lg:block bg-gray-50/50 p-6 sm:p-8 rounded-[20px] border border-gray-100 shadow-sm">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-1.5 h-6 bg-primary rounded-full"></div>
                   <h4 className="text-lg font-bold text-text-primary">Table of Contents</h4>
                 </div>
-                <ul className="space-y-4">
+                <ul className="space-y-2">
                   {article.sections.filter(s => s.title).map((section, i) => (
                     <li key={section.id}>
                       <button
                         onClick={() => {
+                          isManualScroll.current = true;
+                          setActiveSection(section.id);
                           document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          setTimeout(() => {
+                            isManualScroll.current = false;
+                          }, 1000);
                         }}
-                        className={`text-[14.5px] font-medium transition-all text-left w-full hover:text-primary flex gap-3 ${activeSection === section.id ? 'text-primary translate-x-1' : 'text-gray-500'}`}
+                        className={`text-[14.5px] font-medium transition-all text-left w-full p-2.5 rounded-lg flex gap-3 ${activeSection === section.id ? 'text-primary bg-primary/5 translate-x-1' : 'text-gray-600 hover:text-primary hover:bg-gray-100'}`}
                       >
-                        <span className={`font-semibold ${activeSection === section.id ? 'text-pink-500' : 'text-gray-400'}`}>{i + 1}.</span>
+                        <span className={`font-semibold ${activeSection === section.id ? 'text-primary' : 'text-gray-400'}`}>{i + 1}.</span>
                         {section.title}
                       </button>
                     </li>

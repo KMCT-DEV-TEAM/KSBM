@@ -85,7 +85,7 @@ const MomentsGallery = ({ program }) => {
   };
 
   return (
-    <section className="py-20 lg:py-28 bg-[#111836] relative overflow-hidden text-white">
+    <section className="py-20 lg:py-28 bg-primary relative overflow-hidden text-white">
       {bgImage && (
         <div className="absolute inset-0 z-0">
           <img src={bgImage} alt="Gallery Background" className="w-full h-full object-cover opacity-25" />

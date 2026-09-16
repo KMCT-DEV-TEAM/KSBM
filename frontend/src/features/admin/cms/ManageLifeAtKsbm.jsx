@@ -22,6 +22,7 @@ const ManageLifeAtKsbm = () => {
   const [description, setDescription] = useState('');
   const [images, setImages] = useState([]);
   const [showSection, setShowSection] = useState(true);
+  const [draggedIdx, setDraggedIdx] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -136,6 +137,33 @@ const ManageLifeAtKsbm = () => {
     }
   };
 
+  const handleDragStart = (e, index) => {
+    setDraggedIdx(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', index);
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e, index) => {
+    e.preventDefault();
+    const fromIndex = draggedIdx;
+    if (fromIndex === null || fromIndex === index) return;
+
+    const newImages = [...images];
+    const [movedItem] = newImages.splice(fromIndex, 1);
+    newImages.splice(index, 0, movedItem);
+    setImages(newImages);
+    setDraggedIdx(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIdx(null);
+  };
+
   if (isLoading) return <AdminSkeleton />;
 
   return (
@@ -231,8 +259,16 @@ const ManageLifeAtKsbm = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {images.map((img, idx) => (
-            <div key={idx} className="relative group rounded-xl overflow-hidden border border-gray-200 h-40 bg-gray-100">
-               <img src={img.src} alt={img.alt} className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
+            <div 
+              key={idx} 
+              draggable
+              onDragStart={(e) => handleDragStart(e, idx)}
+              onDragOver={(e) => handleDragOver(e, idx)}
+              onDrop={(e) => handleDrop(e, idx)}
+              onDragEnd={handleDragEnd}
+              className={`relative group rounded-xl overflow-hidden border ${draggedIdx === idx ? 'border-primary opacity-50 border-dashed' : 'border-gray-200'} h-40 bg-gray-100 cursor-move transition-all`}
+            >
+               <img src={img.src} alt={img.alt} className="w-full h-full object-cover pointer-events-none" onError={(e) => e.target.style.display = 'none'} />
                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                  <button onClick={() => removeImage(idx)} className="text-white hover:text-red-400 p-2 rounded-full transition-colors bg-red-500/20 hover:bg-red-500/40">
                    <Trash2 className="w-6 h-6" />
