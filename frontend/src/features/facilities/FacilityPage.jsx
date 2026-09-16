@@ -8,6 +8,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Loader from '../../components/Loader';
 import { useGlobalLinks } from '../../hooks/useGlobalLinks';
+import { DEFAULT_FACILITIES_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const buildGalleryColumns = (items) => {
   const columns = [];
@@ -82,8 +83,10 @@ const FacilityPage = () => {
   const globalLinks = useGlobalLinks();
   const applyLink = globalLinks['global_apply']?.link || '/contact';
 
-  const [facilityData, setFacilityData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [facilityData, setFacilityData] = useState(() => {
+    return (DEFAULT_FACILITIES_PAGE?.clubs?.items || []).find((item) => item._id === clubId || item.slug === clubId) || DEFAULT_FACILITIES_PAGE?.clubs?.items?.[0] || DEFAULT_FACILITIES_PAGE;
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const [previewSection, setPreviewSection] = useState(null);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [isIframe, setIsIframe] = useState(false);

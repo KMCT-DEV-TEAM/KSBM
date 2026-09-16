@@ -2,14 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../../api/axios';
+import { DEFAULT_MANAGEMENT } from '../../admin/cms/constants/defaultCmsData';
 
 const ManagementSection = ({ previewData }) => {
-  const [settings, setSettings] = useState({
-    subheading: 'OUR MANAGEMENT',
-    heading: 'The Architects Of Excellence',
-    description: 'Our leadership board combines decades of top-tier industry experience with a profound commitment to academic innovation.',
-    members: []
-  });
+  const [settings, setSettings] = useState(previewData || DEFAULT_MANAGEMENT);
 
   useEffect(() => {
     if (previewData) {
@@ -87,7 +83,7 @@ const ManagementSection = ({ previewData }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, margin: "-50px" }}
                 transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
-                key={member.id || member._id}
+                key={member.id || member._id || member.name || `mgmt-${index}`}
                 className={`relative aspect-[4/5] w-full max-w-[320px] lg:max-w-[320px] z-10 rounded-[2rem] overflow-hidden group cursor-pointer shadow-xl hover:shadow-[0_25px_50px_rgba(27,37,89,0.4)] transition-all duration-500 hover:-translate-y-4`}
               >
                 {/* Background Image */}

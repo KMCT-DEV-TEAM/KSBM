@@ -2,11 +2,16 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../api/axios';
+import { DEFAULT_NEWS } from '../admin/cms/constants/defaultCmsData';
 
 export default function NewsPageContent() {
-  const [articles, setArticles] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [settings, setSettings] = useState({ subheading: '', heading: '' });
+  const defaultCombined = [];
+  if (DEFAULT_NEWS.featuredArticle) defaultCombined.push(DEFAULT_NEWS.featuredArticle);
+  if (DEFAULT_NEWS.sideArticles) defaultCombined.push(...DEFAULT_NEWS.sideArticles);
+
+  const [articles, setArticles] = useState(defaultCombined);
+  const [isLoading, setIsLoading] = useState(false);
+  const [settings, setSettings] = useState({ subheading: DEFAULT_NEWS.subheading, heading: DEFAULT_NEWS.heading });
 
   useEffect(() => {
     const fetchNews = async () => {

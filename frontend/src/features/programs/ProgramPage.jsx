@@ -12,6 +12,7 @@ import MomentsGallery from './components/MomentsGallery';
 import AcademicCalendarBanner from './components/AcademicCalendarBanner';
 import AdmissionEligibility from './components/AdmissionEligibility';
 import TopRecruitersGrid from './components/TopRecruitersGrid';
+import { DEFAULT_MBA_PAGE, DEFAULT_BBA_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const programConfigs = {
   mba: {
@@ -311,9 +312,13 @@ const programConfigs = {
 };
 
 const ProgramPage = ({ programType = 'mba' }) => {
-  const [config, setConfig] = useState(programConfigs[programType?.toLowerCase()] || programConfigs.mba);
+  const defaultPage = programType?.toLowerCase() === 'bba' ? DEFAULT_BBA_PAGE : DEFAULT_MBA_PAGE;
+  const [config, setConfig] = useState(() => ({
+    ...(programConfigs[programType?.toLowerCase()] || programConfigs.mba),
+    ...(defaultPage || {})
+  }));
   const [activePreviewTab, setActivePreviewTab] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);

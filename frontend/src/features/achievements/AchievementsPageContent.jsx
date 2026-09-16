@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../api/axios';
+import { DEFAULT_ACHIEVEMENTS } from '../admin/cms/constants/defaultCmsData';
 
 export default function AchievementsPageContent() {
-  const [achievements, setAchievements] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [settings, setSettings] = useState({ subheading: '', heading: '' });
+  const [achievements, setAchievements] = useState(DEFAULT_ACHIEVEMENTS.achievements || []);
+  const [isLoading, setIsLoading] = useState(false);
+  const [settings, setSettings] = useState({ subheading: DEFAULT_ACHIEVEMENTS.subheading, heading: DEFAULT_ACHIEVEMENTS.heading });
 
   useEffect(() => {
     const fetchAchievements = async () => {

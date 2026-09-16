@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Eye } from 'lucide-react';
 import api from '../../../api/axios';
+import { DEFAULT_VISION_MISSION } from '../../admin/cms/constants/defaultCmsData';
 
 const VisionMissionSection = ({ previewData }) => {
   const visionScrollRef = useRef(null);
@@ -14,20 +15,7 @@ const VisionMissionSection = ({ previewData }) => {
   const sectionRef = useRef(null);
   const [activeCard, setActiveCard] = useState(null);
   
-  const [data, setData] = useState({
-    visionTitle: 'Our Vision',
-    visionContent: ['"To mould to competent healthcare professionals with leadership qualities through comprehensive nursing education, practice and research."'],
-    visionImage: '/assets/Images/image 27.png',
-    missionTitle: 'Our Mission',
-    missionContent: [
-      'To mould to competent healthcare professionals with leadership qualities through comprehensive nursing education, practice and research.',
-      'To provide high-quality healthcare education that integrates academic excellence with clinical practice.',
-      'To foster a culture of continuous learning, ethical practice, and compassionate patient care.',
-      'To contribute to the healthcare sector by producing highly skilled and dedicated nursing professionals.'
-    ],
-    missionImage: '/assets/Images/image 28.png',
-    showSection: true
-  });
+  const [data, setData] = useState(previewData || DEFAULT_VISION_MISSION);
 
   const { scrollYProgress: visionScrollYProgress } = useScroll({ container: visionScrollRef });
   const visionIndicatorY = useTransform(visionScrollYProgress, [0, 1], [0, 110]);

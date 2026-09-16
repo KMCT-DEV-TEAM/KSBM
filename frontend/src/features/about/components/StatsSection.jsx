@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
 import api from '../../../api/axios';
+import { DEFAULT_ABOUT_US_STATS } from '../../admin/cms/constants/defaultCmsData';
 
 const Counter = ({ value }) => {
   const ref = useRef(null);
@@ -39,9 +40,9 @@ const Counter = ({ value }) => {
 };
 
 const StatsSection = ({ previewData }) => {
-  const [statsData, setStatsData] = useState({});
-  const [stats, setStats] = useState([]);
-  const [isLoading, setIsLoading] = useState(!previewData);
+  const [statsData, setStatsData] = useState(previewData || DEFAULT_ABOUT_US_STATS);
+  const [stats, setStats] = useState((previewData || DEFAULT_ABOUT_US_STATS).stats || []);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (previewData) {

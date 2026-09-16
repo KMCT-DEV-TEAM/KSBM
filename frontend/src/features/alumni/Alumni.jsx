@@ -8,10 +8,11 @@ import AlumniEvents from './components/AlumniEvents';
 import NotableAlumni from './components/NotableAlumni';
 import AlumniGallery from './components/AlumniGallery';
 import AlumniCTA from './components/AlumniCTA';
+import { DEFAULT_ALUMNI_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const Alumni = ({ previewData }) => {
-  const [data, setData] = useState(previewData || null);
-  const [dataLoaded, setDataLoaded] = useState(!!previewData);
+  const [data, setData] = useState(previewData || DEFAULT_ALUMNI_PAGE);
+  const [dataLoaded, setDataLoaded] = useState(true);
 
   useEffect(() => {
     if (previewData) {

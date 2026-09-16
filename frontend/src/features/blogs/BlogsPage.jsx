@@ -9,13 +9,14 @@ import api from '../../api/axios';
 import { Loader2 } from 'lucide-react';
 import Loader from '../../components/Loader';
 import SideContact from '../../components/SideContact';
+import { DEFAULT_BLOGS_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const BlogsPage = () => {
   const [activeTopic, setActiveTopic] = useState('All Topics');
-  const [pageData, setPageData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [pageData, setPageData] = useState(DEFAULT_BLOGS_PAGE);
+  const [loading, setLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
 
   useEffect(() => {
     if (!loading) {

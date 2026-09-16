@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import api from '../../../api/axios';
 import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
+import { DEFAULT_ABOUT_CTA } from '../../admin/cms/constants/defaultCmsData';
 const watermarkImg = '/assets/Images/watermark_logo.png';
 
 const AboutCtaSection = ({ previewData }) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(previewData || DEFAULT_ABOUT_CTA);
 
   useEffect(() => {
     if (previewData) {

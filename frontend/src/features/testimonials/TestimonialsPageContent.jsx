@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../api/axios';
 import { Quote } from 'lucide-react';
+import { DEFAULT_TESTIMONIALS } from '../admin/cms/constants/defaultCmsData';
 
 export default function TestimonialsPageContent() {
-  const [testimonials, setTestimonials] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [testimonials, setTestimonials] = useState(DEFAULT_TESTIMONIALS.testimonials || []);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchTestimonials = async () => {

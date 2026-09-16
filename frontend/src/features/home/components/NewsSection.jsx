@@ -4,22 +4,15 @@ import api from '../../../api/axios';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { DEFAULT_NEWS } from '../../admin/cms/constants/defaultCmsData';
 
 const NewsSection = ({ previewData }) => {
-  const [data, setData] = useState({
-    subheading: 'News and Events',
-    heading: 'Latest From KSBM',
-    featuredArticle: null,
-    sideArticles: [],
-    showSubheading: true,
-    showHeading: true,
-    showSection: true
-  });
-  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(previewData || DEFAULT_NEWS);
+  const [isLoading, setIsLoading] = useState(false);
   
   // Local state for interactivity
-  const [activeFeatured, setActiveFeatured] = useState(null);
-  const [activeSideArticles, setActiveSideArticles] = useState([]);
+  const [activeFeatured, setActiveFeatured] = useState((previewData || DEFAULT_NEWS).featuredArticle);
+  const [activeSideArticles, setActiveSideArticles] = useState((previewData || DEFAULT_NEWS).sideArticles || []);
 
   useEffect(() => {
     if (previewData) {

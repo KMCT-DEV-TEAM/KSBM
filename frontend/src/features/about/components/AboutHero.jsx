@@ -2,15 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../../api/axios';
+import { DEFAULT_ABOUT_US_HERO } from '../../admin/cms/constants/defaultCmsData';
 
 const AboutHero = ({ previewData }) => {
-  const [heroData, setHeroData] = useState({
-    title: 'Advancing Business Integrity and Innovation.',
-    subtitle: 'KMCT School of Business (KSBM) ignites a passion for intellectual discovery and lifelong learning. Empowering each individual to achieve their fullest potential.',
-    backgroundImage: '/assets/Images/aboutus/about-hero-bg.jpg',
-    showTextContent: true,
-    showSection: true
-  });
+  const [heroData, setHeroData] = useState(previewData || DEFAULT_ABOUT_US_HERO);
 
   useEffect(() => {
     if (previewData) {

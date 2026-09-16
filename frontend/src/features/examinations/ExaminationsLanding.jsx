@@ -8,10 +8,11 @@ import ExamNotifications from './components/ExamNotifications';
 import ExamResultsTable from './components/ExamResultsTable';
 import api from '../../api/axios';
 import PageTransition from '../../components/PageTransition';
+import { DEFAULT_EXAMINATIONS_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const ExaminationsLanding = ({ previewData }) => {
-  const [data, setData] = useState(previewData || null);
-  const [dataLoaded, setDataLoaded] = useState(!!previewData);
+  const [data, setData] = useState(previewData || DEFAULT_EXAMINATIONS_PAGE);
+  const [dataLoaded, setDataLoaded] = useState(true);
 
   useEffect(() => {
     if (previewData) {
