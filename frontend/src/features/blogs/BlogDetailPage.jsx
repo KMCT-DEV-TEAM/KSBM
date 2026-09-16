@@ -9,14 +9,18 @@ import api from '../../api/axios';
 import { Loader2 } from 'lucide-react';
 import Loader from '../../components/Loader';
 import { useGlobalLinks } from '../../hooks/useGlobalLinks';
+import { DEFAULT_BLOGS_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const BlogDetailPage = ({ id }) => {
-  const [activeSection, setActiveSection] = useState('introduction');
-  const [article, setArticle] = useState(null);
-  const [pageHero, setPageHero] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const allBlogs = DEFAULT_BLOGS_PAGE.blogs || [];
+  const defaultFound = allBlogs.find(b => b.id === id || b.uuid === id || b._id === id || b.slug === id) || allBlogs[0];
+
+  const [activeSection, setActiveSection] = useState(defaultFound?.sections?.[0]?.id || 'introduction');
+  const [article, setArticle] = useState(defaultFound || null);
+  const [pageHero, setPageHero] = useState(DEFAULT_BLOGS_PAGE.hero || null);
+  const [loading, setLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   const isManualScroll = useRef(false);
   
   const globalLinks = useGlobalLinks();

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../../api/axios';
+import { DEFAULT_RECRUITERS } from '../../admin/cms/constants/defaultCmsData';
 
 const defaultRecruiters = [
   { name: 'Infosys', logo: '/assets/Images/Home/infosys_logo.svg', logoText: 'Infosys', color: 'text-[#007cc3]' },
@@ -12,11 +13,8 @@ const defaultRecruiters = [
 ];
 
 const RecruitersSection = ({ previewData }) => {
-  const [data, setData] = useState({
-    recruiters: [],
-    showRecruiters: true
-  });
-  const [isLoading, setIsLoading] = useState(!previewData);
+  const [data, setData] = useState(previewData || DEFAULT_RECRUITERS);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (previewData) {

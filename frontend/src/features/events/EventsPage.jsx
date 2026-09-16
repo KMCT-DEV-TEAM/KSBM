@@ -15,12 +15,13 @@ import EventsMoments from './components/EventsMoments';
 
 import Loader from '../../components/Loader';
 import SideContact from '../../components/SideContact';
+import { DEFAULT_EVENTS_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const EventsPage = () => {
   const [activeTab, setActiveTab] = useState('All');
-  const [pageData, setPageData] = useState(null);
+  const [pageData, setPageData] = useState(DEFAULT_EVENTS_PAGE);
   const [previewData, setPreviewData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
 
   const isPreview = !!previewData;

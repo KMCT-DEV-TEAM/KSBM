@@ -11,10 +11,11 @@ import ExcellenceSupport from './components/ExcellenceSupport';
 import FacultyInCharge from './components/FacultyInCharge';
 import PlacementCommittee from './components/PlacementCommittee';
 import PlacementActivities from './components/PlacementActivities';
+import { DEFAULT_PLACEMENT_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const PlacementLanding = ({ previewData }) => {
-  const [data, setData] = useState(previewData || null);
-  const [dataLoaded, setDataLoaded] = useState(!!previewData);
+  const [data, setData] = useState(previewData || DEFAULT_PLACEMENT_PAGE);
+  const [dataLoaded, setDataLoaded] = useState(true);
 
   useEffect(() => {
     if (previewData) {

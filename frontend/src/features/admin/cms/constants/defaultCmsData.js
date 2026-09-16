@@ -301,12 +301,12 @@ export const DEFAULT_GOVERNING_BODY = {
     {
       "name": "Dr. Navas K M",
       "title": "Chairman",
-      "image": "/assets/Images/aboutus/1789448121098-683122695.jpeg"
+      "image": "/assets/Images/aboutus/1789543588455-243715566.png"
     },
     {
       "name": "Dr. Ayisha Nazreen",
       "title": "Executive Trustee & Director",
-      "image": "/assets/Images/aboutus/1789448121102-261610992.jpeg"
+      "image": "/assets/Images/aboutus/1789543588457-903898140.png"
     },
     {
       "name": "T K Basheer",
@@ -358,17 +358,17 @@ export const DEFAULT_ADVISORY_BOARD = {
     {
       "name": "Dr. K. Moidu",
       "title": "FOUNDER CHAIRMAN",
-      "image": "/assets/Images/aboutus/1789448121087-890081368.jpeg"
+      "image": "/assets/Images/aboutus/1789543610213-593111313.png"
     },
     {
       "name": "Dr Navas K. M.",
       "title": "CHAIRMAN",
-      "image": "/assets/Images/aboutus/1789448121098-683122695.jpeg"
+      "image": "/assets/Images/aboutus/1789543610224-786801996.png"
     },
     {
       "name": "Dr. Ayisha Nazreen",
       "title": "EXECUTIVE TRUSTEE & DIRECTOR",
-      "image": "/assets/Images/aboutus/1789448121102-261610992.jpeg"
+      "image": "/assets/Images/aboutus/1789543610218-856236538.png"
     }
   ],
   "contentDescription": [
@@ -2116,7 +2116,7 @@ export const DEFAULT_FACILITIES_PAGE = {
 export const DEFAULT_FACULTIES = {
   "heroHeading": "Faculty Members",
   "heroSubtext": "Our distinguished faculty are committed to delivering quality education through innovative teaching, practical learning, and personalized mentorship, helping students build the skills and confidence needed for successful careers.",
-  "heroBgImage": "/assets/Images/faculty/1788415386710-397167784.png",
+  "heroBgImage": "/assets/Images/faculty/1789543531149-948422702.jpeg",
   "introSubheading": "FACULTY MEMBERS",
   "introHeading": "Learn from the Best",
   "introText": "At KSBM, our faculty members are the cornerstone of academic excellence. With a blend of strong academic credentials, industry expertise, and a passion for teaching, they create a dynamic learning environment that encourages critical thinking, innovation, and leadership. Beyond the classroom, our faculty mentor, inspire, and guide students through every stage of their academic journey, equipping them with the knowledge, confidence, and practical skills needed to succeed in an ever-evolving global business landscape.",
@@ -2130,7 +2130,7 @@ export const DEFAULT_FACULTIES = {
     {
       "name": "Dr . Sreenu G Das",
       "title": "Assistant Professor",
-      "image": "/assets/Images/faculty/1788415386710-397167784.png",
+      "image": "/assets/Images/faculty/1789534474856-388241141.jpeg",
       "order": 1
     },
     {

@@ -6,10 +6,11 @@ import Footer from '../../components/Footer';
 import Loader from '../../components/Loader';
 import DownloadHero from './components/DownloadHero';
 import DownloadContent from './components/DownloadContent';
+import { DEFAULT_DOWNLOAD_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const DownloadPage = ({ previewData }) => {
-  const [pageData, setPageData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [pageData, setPageData] = useState(previewData || DEFAULT_DOWNLOAD_PAGE);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (previewData) {
@@ -30,7 +31,7 @@ const DownloadPage = ({ previewData }) => {
   }, [previewData]);
 
   // Handle transition loader
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   useEffect(() => {
     let windowLoaded = document.readyState === 'complete';
     let dataLoaded = !!pageData;

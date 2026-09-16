@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/axios';
 import { motion } from 'framer-motion';
+import { DEFAULT_FACILITIES_HOME } from '../../admin/cms/constants/defaultCmsData';
 
 const FacilitiesSection = ({ previewData }) => {
-  const [settings, setSettings] = useState(null);
-  const [isLoading, setIsLoading] = useState(!previewData);
+  const [settings, setSettings] = useState(previewData || DEFAULT_FACILITIES_HOME);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (previewData) {

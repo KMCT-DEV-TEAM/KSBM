@@ -2,21 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/axios';
 import { motion } from 'framer-motion';
-const watermarkLogo = '/assets/Images/watermark_logo.png';
+import { DEFAULT_LIFE_AT_KSBM } from '../../admin/cms/constants/defaultCmsData';
 
 const LifeAtKSBMSection = ({ previewData }) => {
-  const [data, setData] = useState({
-    subheading: 'Life at KSBM',
-    heading: 'Beyond the Classroom',
-    description: 'Life @ KMCT is a vibrant blend of learning, innovation, culture, and unforgettable campus experiences.',
-    images: [],
-    showSubheading: true,
-    showHeading: true,
-    showDescription: true,
-    showImages: true,
-    showSection: true
-  });
-  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(previewData || DEFAULT_LIFE_AT_KSBM);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (previewData) {
@@ -91,14 +81,9 @@ const LifeAtKSBMSection = ({ previewData }) => {
     return null;
   }
 
-
   return (
     <section className={`relative w-full bg-[#f4f7f9] py-12 ${lg('lg:py-14')} overflow-hidden`}>
-
-
-
       <div className={`relative w-[98%] max-w-[1440px] mx-auto px-4 ${sm('sm:px-6')} ${lg('lg:px-8')} z-10`}>
-
         {/* Header Section */}
         {(showSubheading || showHeading || showDescription) && (
           <motion.div
@@ -130,7 +115,6 @@ const LifeAtKSBMSection = ({ previewData }) => {
       {/* Looping Collage Image Gallery */}
       {showImages && images && images.length > 0 && (
         <div className={`relative ${isPreview ? 'w-full' : 'w-[100vw] left-1/2 -translate-x-1/2'} overflow-hidden mt-8 flex flex-col gap-3 ${md('md:gap-4')}`}>
-
           {/* Top Row (Scrolls Left) */}
           <div className={`animate-marquee gap-3 ${md('md:gap-4')} pr-3 ${md('md:pr-4')} will-change-transform`} style={{ animationDuration: '40s' }}>
             {[...Array(2)].map((_, arrayIndex) => (
@@ -142,35 +126,36 @@ const LifeAtKSBMSection = ({ previewData }) => {
                       key={index}
                       className={`h-[160px] ${md('md:h-[240px]')} shrink-0 ${isWide ? `w-[280px] ${md('md:w-[500px]')}` : `w-[160px] ${md('md:w-[300px]')}`} rounded-[1rem] ${md('md:rounded-[1.5rem]')} overflow-hidden group cursor-pointer shadow-sm relative`}
                     >
-                        <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out absolute inset-0 bg-gray-100" loading="lazy" />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
+                      <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out absolute inset-0 bg-gray-100" loading="lazy" />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
 
           {/* Bottom Row (Scrolls Right) */}
           <div className={`animate-marquee-reverse gap-3 ${md('md:gap-4')} pr-3 ${md('md:pr-4')} will-change-transform`} style={{ animationDuration: '45s' }}>
             {[...Array(2)].map((_, arrayIndex) => (
               <div key={arrayIndex} className={`flex gap-3 ${md('md:gap-4')} shrink-0`}>
                 {images.slice(Math.ceil(images.length / 2)).map((img, index) => {
-                  const isWide = index % 4 === 1 || index % 4 === 2;  return (
+                  const isWide = index % 4 === 1 || index % 4 === 2;
+                  return (
                     <div
                       key={index}
                       className={`h-[160px] ${md('md:h-[240px]')} shrink-0 ${isWide ? `w-[280px] ${md('md:w-[500px]')}` : `w-[160px] ${md('md:w-[300px]')}`} rounded-[1rem] ${md('md:rounded-[1.5rem]')} overflow-hidden group cursor-pointer shadow-sm relative`}
                     >
-                        <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out absolute inset-0 bg-gray-100" loading="lazy" />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
+                      <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out absolute inset-0 bg-gray-100" loading="lazy" />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
           </div>
-        )}
+        </div>
+      )}
     </section>
   );
 };

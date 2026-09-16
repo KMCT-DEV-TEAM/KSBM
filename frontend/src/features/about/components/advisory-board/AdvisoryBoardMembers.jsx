@@ -2,21 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../../../api/axios';
+import { DEFAULT_ADVISORY_BOARD } from '../../../admin/cms/constants/defaultCmsData';
 
 const AdvisoryBoardMembers = ({ data }) => {
-  const [members, setMembers] = useState([
-    { id: 1, name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-    { id: 2, name: "Dr. Ayisha Nazreen", title: "SPECIAL INVITEE", image: "/assets/Images/image 31.png" },
-    { id: 3, name: "Dr. Shmmon M", title: "MEMBER SECRETARY", image: "/assets/Images/image 31.png" },
-    { id: 4, name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-    { id: 5, name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-    { id: 6, name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-    { id: 7, name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-    { id: 8, name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-    { id: 9, name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-    { id: 10, name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-    { id: 11, name: "Dr. Navas K M", title: "CHAIRMAN", image: "/assets/Images/image 31.png" },
-  ]);
+  const [members, setMembers] = useState(data?.members || DEFAULT_ADVISORY_BOARD.members || []);
 
   useEffect(() => {
     if (data && data.members && data.members.length > 0) {

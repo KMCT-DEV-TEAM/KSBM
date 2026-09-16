@@ -4,17 +4,12 @@ import { MapPin, Mail, Phone, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import api from '../api/axios';
 import { motion } from 'framer-motion';
+import { DEFAULT_FOOTER } from '../features/admin/cms/constants/defaultCmsData';
 const watermarkLogo = '/assets/Images/watermark_logo.png';
 
 const Footer = ({ previewData }) => {
-  const [data, setData] = useState({
-    description: 'Empowering global leaders through intellectual rigor and strategic excellence since 1998.',
-    socialLinks: { instagram: '#', facebook: '#', whatsapp: '#' },
-    programs: [],
-    contactInfo: { address: '', email: '', phone: '' },
-    copyrightText: '© 2024 KMCT School of Business. All rights reserved. Accredited by AACSB & AMBA.'
-  });
-  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(previewData || DEFAULT_FOOTER);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (previewData) {

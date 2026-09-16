@@ -3,42 +3,11 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import api from '../../../api/axios';
+import { DEFAULT_TESTIMONIALS } from '../../admin/cms/constants/defaultCmsData';
 
 const TestimonialsSection = ({ previewData }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [settings, setSettings] = useState({
-    subheading: 'Testimonials',
-    heading: 'Voices of Success',
-    testimonials: [
-      {
-        id: '1',
-        name: 'Anjali Menon',
-        course: 'MBA (2022-2024)',
-        quote: '"KSBM transformed my potential into professional success."',
-        body: 'From interactive classroom sessions to industry-oriented projects, every experience prepared me for real business challenges. The faculty, placement team, and supportive learning environment helped me grow both professionally and personally, giving me the confidence to excel in the corporate world.',
-        image: '/assets/Images/Home/testimonial_1.jpg',
-        avatar: '/assets/Images/Home/testimonial_1.jpg'
-      },
-      {
-        id: '2',
-        name: 'Rahul Sharma',
-        course: 'BBA (2021-2024)',
-        quote: '"The practical approach to learning is unmatched here."',
-        body: 'The practical approach to learning and the amazing campus life made my time at KSBM unforgettable. The placement cell was instrumental in getting me my dream job right out of college, providing excellent mentorship.',
-        image: '/assets/Images/Home/testimonial_2.jpg',
-        avatar: '/assets/Images/Home/testimonial_2.jpg'
-      },
-      {
-        id: '3',
-        name: 'Priya Patel',
-        course: 'MBA (2021-2023)',
-        quote: '"A true stepping stone to global corporate opportunities."',
-        body: 'KSBM gave me the platform to interact with industry leaders and participate in global competitions. The rigorous curriculum is exactly what the corporate world demands, making the transition seamless and rewarding.',
-        image: '/assets/Images/Home/testimonial_3.jpg',
-        avatar: '/assets/Images/Home/testimonial_3.jpg'
-      }
-    ]
-  });
+  const [settings, setSettings] = useState(previewData || DEFAULT_TESTIMONIALS);
 
   useEffect(() => {
     if (previewData) {

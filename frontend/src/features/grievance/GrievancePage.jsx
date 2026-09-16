@@ -5,10 +5,11 @@ import Loader from '../../components/Loader';
 import GrievanceHero from './components/GrievanceHero';
 import GrievanceInfo from './components/GrievanceInfo';
 import GrievanceForm from './components/GrievanceForm';
+import { DEFAULT_GRIEVANCE_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const GrievancePage = ({ previewData }) => {
-  const [pageData, setPageData] = useState(previewData || null);
-  const [loading, setLoading] = useState(!previewData);
+  const [pageData, setPageData] = useState(previewData || DEFAULT_GRIEVANCE_PAGE);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (previewData) {
@@ -28,7 +29,7 @@ const GrievancePage = ({ previewData }) => {
   }, [previewData]);
 
   // Handle transition loader
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   useEffect(() => {
     let windowLoaded = document.readyState === 'complete';
     let dataLoaded = !!pageData;

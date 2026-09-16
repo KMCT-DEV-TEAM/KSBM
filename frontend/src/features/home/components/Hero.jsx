@@ -15,9 +15,11 @@ import {
 } from 'lucide-react';
 
 
+import { DEFAULT_HERO } from '../../admin/cms/constants/defaultCmsData';
+
 const Hero = ({ previewData }) => {
-  const [settings, setSettings] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(!!previewData);
+  const [settings, setSettings] = useState(previewData || DEFAULT_HERO);
+  const [dataLoaded, setDataLoaded] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
