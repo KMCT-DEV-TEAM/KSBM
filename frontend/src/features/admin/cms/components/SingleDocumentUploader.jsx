@@ -60,7 +60,7 @@ const SingleDocumentUploader = ({
     setIsUploading(true);
     if (onUploadStateChange) onUploadStateChange(true);
 
-    if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultFile) {
+    if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.includes('placeholder') && currentDisplayUrl !== defaultFile) {
       try {
         await api.delete('/upload', { data: { fileUrl: currentDisplayUrl }, hideLoader: true });
       } catch (err) {
@@ -122,11 +122,11 @@ const SingleDocumentUploader = ({
         if (deferredUpload) {
           onUploadComplete({ 
             isDeleted: true, 
-            oldUrl: (typeof currentDisplayUrl === 'string' && currentDisplayUrl !== defaultFile && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http')) ? currentDisplayUrl : null,
+            oldUrl: (typeof currentDisplayUrl === 'string' && currentDisplayUrl !== defaultFile && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.includes('placeholder')) ? currentDisplayUrl : null,
             previewUrl: defaultFile 
           });
         } else {
-          if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultFile) {
+          if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.includes('placeholder') && currentDisplayUrl !== defaultFile) {
             try {
               await api.delete('/upload', { data: { fileUrl: currentDisplayUrl }, hideLoader: true });
             } catch (err) {

@@ -46,7 +46,7 @@ const HeroImageUploader = ({
       onUploadComplete({ 
         file, 
         previewUrl,
-        oldUrl: (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultImage) ? currentDisplayUrl : null 
+        oldUrl: (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.includes('placeholder') && currentDisplayUrl !== defaultImage) ? currentDisplayUrl : null 
       });
       return;
     }
@@ -55,7 +55,7 @@ const HeroImageUploader = ({
     if (onUploadStateChange) onUploadStateChange(true);
 
     // If there is an old image and we are replacing it, request backend to delete old image
-    if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultImage) {
+    if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.includes('placeholder') && currentDisplayUrl !== defaultImage) {
       try {
         await api.delete('/upload', { data: { fileUrl: currentDisplayUrl }, hideLoader: true });
       } catch (err) {
@@ -117,11 +117,11 @@ const HeroImageUploader = ({
         if (deferredUpload) {
           onUploadComplete({ 
             isDeleted: true, 
-            oldUrl: (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultImage) ? currentDisplayUrl : null,
+            oldUrl: (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.includes('placeholder') && currentDisplayUrl !== defaultImage) ? currentDisplayUrl : null,
             previewUrl: defaultImage 
           });
         } else {
-          if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.startsWith('http') && currentDisplayUrl !== defaultImage) {
+          if (currentDisplayUrl && !currentDisplayUrl.startsWith('blob:') && !currentDisplayUrl.includes('placeholder') && currentDisplayUrl !== defaultImage) {
             try {
               await api.delete('/upload', { data: { fileUrl: currentDisplayUrl }, hideLoader: true });
             } catch (err) {
