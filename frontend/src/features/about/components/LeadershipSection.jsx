@@ -89,13 +89,14 @@ const LeadershipSection = ({ previewData }) => {
                     className="w-full lg:w-5/12 relative flex justify-center lg:justify-start pt-8"
                   >
                     {isFirstLeader ? (
-                      <div className="relative w-[85%] max-w-[380px] aspect-[4/5]">
-                        <div className="absolute inset-x-8 bottom-0 top-35 bg-primary/30 rounded-[3rem] z-0"></div>
-                        <img
-                          src={leader.image || "/assets/Images/Group 164.png"}
-                          alt={leader.name || 'Leader'}
-                          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[110%] h-[110%] object-contain object-bottom z-10 drop-shadow-xl"
-                        />
+                      <div className="relative w-[85%] max-w-[380px]">
+                        <div className="relative w-full rounded-2xl overflow-hidden bg-gray-100 shadow-xl h-[450px]">
+                          <img
+                            src={leader.image || "/assets/Images/Group 164.png"}
+                            alt={leader.name || 'Leader'}
+                            className="w-full h-full object-cover object-center"
+                          />
+                        </div>
                         <div className="absolute -bottom-8 -right-4 lg:-right-10 bg-white rounded-2xl shadow-xl p-4 pr-8 flex items-center gap-4 z-20">
                           <img
                             src={leader.image || "/assets/Images/Group 164.png"}

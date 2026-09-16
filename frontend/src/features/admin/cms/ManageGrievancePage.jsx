@@ -7,6 +7,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
 import SingleImageUploader from './components/SingleImageUploader';
+import AddItemModal from './components/AddItemModal';
 import confirmAction from '../../../utils/confirmAction';
 import { FileText, Info, LayoutTemplate, Eye, Monitor, Tablet, Smartphone, X, Plus, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -61,6 +62,17 @@ const ManageGrievancePage = () => {
 
   const [formData, setFormData] = useState(defaults);
   const [imagesToDelete, setImagesToDelete] = useState([]);
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    title: '',
+    fields: [],
+    onSave: null,
+    initialData: null
+  });
+
+  const openAddModal = (title, fields, onSave, initialData = null) => {
+    setModalConfig({ isOpen: true, title, fields, onSave, initialData });
+  };
 
   const uploadDeferredImage = async (file) => {
     const fd = new FormData();
@@ -203,8 +215,15 @@ const ManageGrievancePage = () => {
   };
 
   const handleAddCellOption = () => {
-    const newOptions = [...formData.formSection.cellOptions, "New Option"];
-    handleChange('formSection', 'cellOptions', newOptions);
+    openAddModal(
+      'Add Grievance Cell Option',
+      [{ name: 'option', label: 'Cell Option Name', type: 'text', maxLength: 50, required: true }],
+      (data) => {
+        const newOptions = [...formData.formSection.cellOptions, data.option];
+        handleChange('formSection', 'cellOptions', newOptions);
+        setModalConfig({ ...modalConfig, isOpen: false });
+      }
+    );
   };
 
   const handleDeleteCellOption = (idx) => {
@@ -223,9 +242,16 @@ const ManageGrievancePage = () => {
     handleChange('formSection', field, newList);
   };
 
-  const handleAddListItem = (field, defaultValue) => {
-    const newList = [...(formData.formSection[field] || []), defaultValue];
-    handleChange('formSection', field, newList);
+  const handleAddListItem = (field, labelName) => {
+    openAddModal(
+      `Add ${labelName}`,
+      [{ name: 'itemName', label: labelName, type: 'text', maxLength: 50, required: true }],
+      (data) => {
+        const newList = [...(formData.formSection[field] || []), data.itemName];
+        handleChange('formSection', field, newList);
+        setModalConfig({ ...modalConfig, isOpen: false });
+      }
+    );
   };
 
   const handleDeleteListItem = (field, idx) => {
@@ -462,7 +488,7 @@ const ManageGrievancePage = () => {
                       <p className="text-xs text-gray-400 mb-2">Edit, add, or remove the exact labels that appear for the department dropdown on the form.</p>
                     </div>
                     <button 
-                      onClick={() => handleAddListItem('departments', 'New Department')}
+                      onClick={() => handleAddListItem('departments', 'Department')}
                       className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
                     >
                       <Plus className="w-4 h-4" /> Add Department
@@ -503,7 +529,7 @@ const ManageGrievancePage = () => {
                       <p className="text-xs text-gray-400 mb-2">Edit, add, or remove the exact labels that appear for the course dropdown on the form.</p>
                     </div>
                     <button 
-                      onClick={() => handleAddListItem('courses', 'New Course')}
+                      onClick={() => handleAddListItem('courses', 'Course')}
                       className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all"
                     >
                       <Plus className="w-4 h-4" /> Add Course
@@ -542,6 +568,15 @@ const ManageGrievancePage = () => {
 
         </motion.div>
       </AnimatePresence>
+
+      <AddItemModal
+        isOpen={modalConfig.isOpen}
+        onClose={() => setModalConfig({ ...modalConfig, isOpen: false })}
+        title={modalConfig.title}
+        fields={modalConfig.fields}
+        onSave={modalConfig.onSave}
+        initialData={modalConfig.initialData}
+      />
     </div>
   );
 };

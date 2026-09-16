@@ -32,12 +32,16 @@ export default function FacultyPreviewPage() {
   }
 
   const data = {
+    showHeroTextContent: previewData.showHeroTextContent,
     heroHeading: previewData.heroHeading,
     heroSubtext: previewData.heroSubtext,
     heroBgImage: previewData.heroBgImage,
+    showIntro: previewData.showIntro,
     introSubheading: previewData.introSubheading,
     introHeading: previewData.introHeading,
     introText: previewData.introText,
+    showKsbmFaculty: previewData.showKsbmFaculty,
+    showAdjunctFaculty: previewData.showAdjunctFaculty,
     ksbmFaculty: previewData.ksbmFaculty,
     adjunctFaculty: previewData.adjunctFaculty,
     ksbmFacultyHeading: previewData.ksbmFacultyHeading,

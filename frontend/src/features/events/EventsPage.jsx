@@ -14,6 +14,7 @@ import EventsStayConnected from './components/EventsStayConnected';
 import EventsMoments from './components/EventsMoments';
 
 import Loader from '../../components/Loader';
+import SideContact from '../../components/SideContact';
 
 const EventsPage = () => {
   const [activeTab, setActiveTab] = useState('All');
@@ -116,6 +117,9 @@ const EventsPage = () => {
 
       {/* Custom Events Footer */}
       <EventsFooter footerGraphic={footerGraphic} />
+      
+      {/* Global Floating Buttons */}
+      {!isPreview && <SideContact />}
     </div>
   );
 };

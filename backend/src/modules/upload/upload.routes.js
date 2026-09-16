@@ -300,6 +300,19 @@ router.post('/events', protect, uploadAssets.single('image'), async (req, res) =
   });
 });
 
+router.post('/brochure', protect, uploadAssets.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file provided' });
+  }
+
+  const fileUrl = `/assets/brochures/${req.file.filename}`;
+
+  res.status(200).json({
+    message: 'Brochure uploaded successfully',
+    url: fileUrl,
+  });
+});
+
 router.delete('/', protect, async (req, res) => {
   const { fileUrl } = req.body;
   if (!fileUrl) return res.status(400).json({ message: 'No fileUrl provided' });

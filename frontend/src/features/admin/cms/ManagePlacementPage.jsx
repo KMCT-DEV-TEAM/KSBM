@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { uploadDeferredImage } from './utils/uploadHelper';
 import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
+import SingleDocumentUploader from './components/SingleDocumentUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 
@@ -59,52 +60,75 @@ const defaultPlacementData = {
   },
   proudAchievers: {
     title: 'Proud Achievers',
-    items: []
+    items: [
+      { uuid: 'pa1', name: 'Pratik Patil', program: 'MBA 2022-24', company: 'Google', role: 'Business Analyst', companyLogo: '/assets/Images/placements/google_logo.svg', image: '/assets/Images/placements/achiever_1.png' },
+      { uuid: 'pa2', name: 'Megha Sharma', program: 'MBA 2022-24', company: 'Microsoft', role: 'Product Manager', companyLogo: '/assets/Images/placements/microsoft_logo.svg', image: '/assets/Images/placements/achiever_2.png' },
+      { uuid: 'pa3', name: 'Rohit Verma', program: 'MBA 2022-24', company: 'Infosys', role: 'Software Engineer', companyLogo: '/assets/Images/placements/infosys_logo.svg', image: '/assets/Images/placements/achiever_1.png' },
+      { uuid: 'pa4', name: 'Neha Gupta', program: 'MBA 2022-24', company: 'Cognizant', role: 'Consultant', companyLogo: '/assets/Images/placements/cognizant_logo.svg', image: '/assets/Images/placements/achiever_2.png' }
+    ]
   },
   topRecruiters: {
     title: 'Top Recruiters',
     description: 'Our strong industry connections ensure that our students get the best career opportunities.',
-    items: []
+    items: [
+      { uuid: 'tr1', name: 'Infosys', logo: '/assets/Images/placements/infosys_logo.svg' },
+      { uuid: 'tr2', name: 'Wipro', logo: '/assets/Images/placements/wipro_logo.svg' },
+      { uuid: 'tr3', name: 'Cognizant', logo: '/assets/Images/placements/cognizant_logo.svg' },
+      { uuid: 'tr4', name: 'Google', logo: '/assets/Images/placements/google_logo.svg' },
+      { uuid: 'tr5', name: 'Microsoft', logo: '/assets/Images/placements/microsoft_logo.svg' }
+    ]
   },
   excellenceSupport: {
     title: 'Excellence in Placement Support',
     description: 'Comprehensive training and guidance to ensure you step into the corporate world with confidence.',
     backgroundImage: '/assets/Images/placements/default-excellence-bg.png',
-    listOne: [],
-    listTwo: []
+    listOne: defaultListOne,
+    listTwo: defaultListTwo
   },
   facultyInCharge: {
     badge: 'Faculty In-Charge',
     title: 'Empowering Careers. Inspiring Success.',
     description: 'Our experienced faculty members work tirelessly to bridge the gap.',
-    items: []
+    items: [
+      { uuid: 'f1', name: 'Dr. Sarah Johnson', designation: 'Head of Placements', image: '/assets/Images/placements/committee_1.png' },
+      { uuid: 'f2', name: 'Prof. David Chen', designation: 'Corporate Relations', image: '/assets/Images/placements/committee_1.png' }
+    ]
   },
   placementCommittee: {
     title: 'Placement Committee',
     description: 'The Placement Committee consists of student representatives.',
-    buttonText: 'Connect with Committee',
+    buttonText: 'View Committee',
+    buttonUrl: '#',
     image: '/assets/Images/placements/default-committee-vector.png',
-    items: []
+    items: [
+      { uuid: 'c1', name: 'Rahul Sharma', role: 'President', image: '/assets/Images/placements/committee_1.png' },
+      { uuid: 'c2', name: 'Anita Patel', role: 'Corporate Outreach', image: '/assets/Images/placements/committee_1.png' },
+      { uuid: 'c3', name: 'Vikram Singh', role: 'Student Coordinator', image: '/assets/Images/placements/committee_1.png' }
+    ]
   },
   activities: {
     title: 'Placement Activities & Events',
-    items: []
+    items: [
+      { uuid: 'a1', title: 'Mock Interview Session', description: 'Industry experts conduct one-on-one mock interviews to prepare students for real-world scenarios.', image: '/assets/Images/placements/activity_1.png' },
+      { uuid: 'a2', title: 'Resume Building Workshop', description: 'Interactive workshop helping students craft compelling resumes that stand out to top recruiters.', image: '/assets/Images/placements/activity_2.png' },
+      { uuid: 'a3', title: 'Pre-Placement Talk', description: 'An engaging session by top recruiters on expectations from fresh graduates and how to build a strong career trajectory.', image: '/assets/Images/placements/activity_1.png' }
+    ]
   }
 };
 
 const DraggableItemCard = ({ item, index, onEdit, onDelete, type }) => {
   const controls = useDragControls();
-  
+
   let displayImg = '/assets/Images/placements/default-avatar.png';
   if (item?.image) displayImg = typeof item.image === 'string' ? item.image : item.image.previewUrl;
   else if (item?.logo) displayImg = typeof item.logo === 'string' ? item.logo : item.logo.previewUrl;
 
   let primaryText = '';
   let secondaryText = '';
-  
+
   if (type === 'proudAchievers') {
     primaryText = item.name;
-    secondaryText = `${item.company} - ${item.role}`;
+    secondaryText = item.company ? `${item.company} - ${item.role}` : item.role;
   } else if (type === 'topRecruiters') {
     primaryText = item.name;
     secondaryText = 'Recruiter Logo';
@@ -123,13 +147,13 @@ const DraggableItemCard = ({ item, index, onEdit, onDelete, type }) => {
   }
 
   return (
-    <Reorder.Item 
+    <Reorder.Item
       value={item}
       dragListener={false}
       dragControls={controls}
       className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex items-center gap-4 relative group hover:border-primary/30 transition-colors select-none"
     >
-      <div 
+      <div
         className="cursor-grab active:cursor-grabbing p-2 text-gray-400 hover:text-primary transition-colors touch-none"
         onPointerDown={(e) => {
           e.preventDefault();
@@ -138,27 +162,27 @@ const DraggableItemCard = ({ item, index, onEdit, onDelete, type }) => {
       >
         <GripVertical className="w-5 h-5" />
       </div>
-      
+
       {displayImg !== null && (
         <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 shrink-0 bg-gray-50 flex items-center justify-center">
           <img src={displayImg} alt={primaryText || 'Item'} className="w-full h-full object-contain" />
         </div>
       )}
-      
+
       <div className="flex-1 min-w-0">
         <h4 className="font-bold text-gray-900 truncate">{primaryText || 'Unnamed Item'}</h4>
         <p className="text-sm text-gray-500 truncate">{secondaryText || ''}</p>
       </div>
-      
+
       <div className="flex items-center gap-2 pr-2">
-        <button 
+        <button
           onClick={() => onEdit(index)}
           className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
           title="Edit"
         >
           <Pencil className="w-4 h-4" />
         </button>
-        <button 
+        <button
           onClick={() => onDelete(index)}
           className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
           title="Delete"
@@ -186,7 +210,7 @@ const ManagePlacementPage = () => {
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
-  const [modalType, setModalType] = useState('proudAchievers'); 
+  const [modalType, setModalType] = useState('proudAchievers');
   const [currentItemIndex, setCurrentItemIndex] = useState(null);
   const [currentItem, setCurrentItem] = useState({});
 
@@ -225,7 +249,7 @@ const ManagePlacementPage = () => {
         // Ensure overviewLogos exists
         if (!res.overview) res.overview = defaultPlacementData.overview;
         if (!res.overview.overviewLogos || res.overview.overviewLogos.length !== 3) {
-           res.overview.overviewLogos = defaultPlacementData.overview.overviewLogos;
+          res.overview.overviewLogos = defaultPlacementData.overview.overviewLogos;
         }
         setData(res);
       } else {
@@ -278,6 +302,7 @@ const ManagePlacementPage = () => {
           const newCollageImage2 = await uploadDeferredImage(data.overview?.collageImage2, '/upload/placements');
           const newExcellenceBgImage = await uploadDeferredImage(data.excellenceSupport?.backgroundImage, '/upload/placements');
           const newCommitteeImage = await uploadDeferredImage(data.placementCommittee?.image, '/upload/placements');
+          const newCommitteePdf = await uploadDeferredImage(data.placementCommittee?.buttonUrl, '/upload/placements');
 
           // Process overviewLogos
           const newOverviewLogos = await Promise.all((data.overview?.overviewLogos || []).map(img => uploadDeferredImage(img, '/upload/placements')));
@@ -317,19 +342,19 @@ const ManagePlacementPage = () => {
             topRecruiters: { ...data.topRecruiters, items: newTopRecruiters },
             excellenceSupport: { ...data.excellenceSupport, backgroundImage: newExcellenceBgImage },
             facultyInCharge: { ...data.facultyInCharge, items: newFacultyInCharge },
-            placementCommittee: { ...data.placementCommittee, image: newCommitteeImage, items: newPlacementCommittee },
+            placementCommittee: { ...data.placementCommittee, image: newCommitteeImage, buttonUrl: newCommitteePdf, items: newPlacementCommittee },
             activities: { ...data.activities, items: newActivities }
           };
 
           await api.put('/cms/placement-page', payload, { hideLoader: true });
-          
+
           // Execute deferred deletions
           for (const imgUrl of imagesToDelete) {
-             try {
-               await api.delete('/upload', { data: { fileUrl: imgUrl }, hideLoader: true });
-             } catch (err) {
-               console.warn('Skipped deleting image:', err);
-             }
+            try {
+              await api.delete('/upload', { data: { fileUrl: imgUrl }, hideLoader: true });
+            } catch (err) {
+              console.warn('Skipped deleting image:', err);
+            }
           }
           setImagesToDelete([]);
 
@@ -346,14 +371,18 @@ const ManagePlacementPage = () => {
   };
 
   const handleResetToDefault = async () => {
+    const sectionName = tabs.find(t => t.id === activeTab)?.label || 'this section';
     await confirmAction({
-      title: 'Reset to Defaults?',
-      message: 'This will reset all input fields to default values. Click "Save Changes" to apply.',
-      confirmText: 'Yes, reset!',
+      title: `Reset ${sectionName}?`,
+      message: `This will reset all input fields in the ${sectionName} section to their default values. Click "Save Changes" to apply.`,
+      confirmText: 'Yes, reset section!',
       variant: 'primary',
       action: async () => {
-        setData(defaultPlacementData);
-        Toast.fire({ icon: 'info', title: 'Reset to defaults. Click Save Changes to apply.' });
+        setData(prev => ({
+          ...prev,
+          [activeTab]: defaultPlacementData[activeTab]
+        }));
+        Toast.fire({ icon: 'info', title: `Reset ${sectionName} to defaults. Click Save Changes to apply.` });
       }
     });
   };
@@ -399,13 +428,13 @@ const ManagePlacementPage = () => {
       if (type === 'excellenceSupportListOne') list = data.excellenceSupport?.listOne || [];
       else if (type === 'excellenceSupportListTwo') list = data.excellenceSupport?.listTwo || [];
       else list = data[type]?.items || [];
-      
+
       setCurrentItem(list[index]);
     } else {
-      let defaultImg = '/assets/Images/placements/default-avatar.png';
-      
-      if (type === 'proudAchievers') setCurrentItem({ name: '', program: '', company: '', role: '', companyLogo: defaultImg, image: defaultImg });
-      else if (type === 'topRecruiters') setCurrentItem({ name: '', logo: defaultImg });
+      const defaultImg = '/assets/Images/placements/default-avatar.png';
+      const defaultLogo = '/assets/Images/placements/default-partner-1.jpg';
+      if (type === 'proudAchievers') setCurrentItem({ name: '', program: '', role: '', companyLogo: defaultLogo, image: defaultImg });
+      else if (type === 'topRecruiters') setCurrentItem({ name: '', logo: defaultLogo });
       else if (type === 'facultyInCharge') setCurrentItem({ name: '', designation: '', image: defaultImg });
       else if (type === 'placementCommittee') setCurrentItem({ name: '', role: '', image: defaultImg });
       else if (type === 'activities') setCurrentItem({ title: '', description: '', image: defaultImg });
@@ -424,7 +453,7 @@ const ManagePlacementPage = () => {
     let list = [];
     let sectionName = typeToSectionMap(modalType);
     let subKey = modalType === 'excellenceSupportListOne' ? 'listOne' : (modalType === 'excellenceSupportListTwo' ? 'listTwo' : 'items');
-    
+
     list = [...(data[sectionName]?.[subKey] || [])];
 
     if (modalMode === 'add') {
@@ -438,7 +467,7 @@ const ManagePlacementPage = () => {
       }
       list[currentItemIndex] = currentItem;
     }
-    
+
     updateArrayItems(sectionName, list, subKey);
     closeModal();
   };
@@ -458,12 +487,12 @@ const ManagePlacementPage = () => {
         let sectionName = typeToSectionMap(type);
         let subKey = type === 'excellenceSupportListOne' ? 'listOne' : (type === 'excellenceSupportListTwo' ? 'listTwo' : 'items');
         let list = [...(data[sectionName]?.[subKey] || [])];
-        
+
         const itemToDelete = list[index];
         if (itemToDelete?.image) trackDeletion(itemToDelete.image);
         if (itemToDelete?.logo) trackDeletion(itemToDelete.logo);
         if (itemToDelete?.companyLogo) trackDeletion(itemToDelete.companyLogo);
-        
+
         list.splice(index, 1);
         updateArrayItems(sectionName, list, subKey);
         Toast.fire({ icon: 'success', title: 'Item removed. Click Save to apply changes.' });
@@ -478,7 +507,7 @@ const ManagePlacementPage = () => {
         previewDevice: previewMode,
         ...data
       };
-      
+
       const handleIframeReady = (e) => {
         if (e.data?.type === 'iframe-ready' && e.data?.source === 'placement' && iframeRef.current?.contentWindow) {
           iframeRef.current.contentWindow.postMessage({ type: 'preview-placement-data', payload: pData }, '*');
@@ -510,11 +539,10 @@ const ManagePlacementPage = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${
-                activeTab === tab.id
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${activeTab === tab.id
                   ? 'bg-primary text-white shadow-md'
                   : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
-              }`}
+                }`}
             >
               {tab.icon}
               <span>{tab.label}</span>
@@ -598,7 +626,7 @@ const ManagePlacementPage = () => {
               <div className="flex items-center justify-between mb-4 border-b pb-3">
                 <h2 className="text-lg font-bold text-[#1e2869]">Hero Section</h2>
                 <label className="flex items-center cursor-pointer">
-                  <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
+                  <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Text Visibility</span>
                   <div className="relative">
                     <input type="checkbox" className="sr-only" checked={data.hero?.showSection !== false} onChange={(e) => updateSection('hero', 'showSection', e.target.checked)} />
                     <div className={`block w-10 h-6 rounded-full transition-colors ${data.hero?.showSection !== false ? 'bg-primary' : 'bg-gray-300'}`}></div>
@@ -610,36 +638,36 @@ const ManagePlacementPage = () => {
                 <div className="space-y-4">
                   <div>
                     <div className="mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Badge Text</label>
-                      
-</div>
-<input
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Badge Text</label>
+
+                    </div>
+                    <input
                       type="text"
                       value={data.hero?.badge || ''}
                       maxLength={50}
                       onChange={(e) => updateSection('hero', 'badge', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
-<div className="text-right text-xs text-gray-400 mt-1">{data.hero?.badge?.length || 0}/50 characters</div>
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.hero?.badge?.length || 0}/50 characters</div>
                   </div>
                   <div>
                     <div className="mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading Title</label>
-                      
-</div>
-<input
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading Title</label>
+
+                    </div>
+                    <input
                       type="text"
                       value={data.hero?.title || ''}
                       maxLength={100}
                       onChange={(e) => updateSection('hero', 'title', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
-<div className="text-right text-xs text-gray-400 mt-1">{data.hero?.title?.length || 0}/100 characters</div>
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.hero?.title?.length || 0}/100 characters</div>
                   </div>
                   <div>
                     <div className="flex items-center gap-3 mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Hero Subtitle</label>
-                      
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Hero Subtitle</label>
+
                     </div>
                     <textarea
                       rows="4"
@@ -648,6 +676,7 @@ const ManagePlacementPage = () => {
                       onChange={(e) => updateSection('hero', 'subtitle', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.hero?.subtitle?.length || 0}/300 characters</div>
                   </div>
                 </div>
                 <div>
@@ -682,39 +711,38 @@ const ManagePlacementPage = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <div className="flex justify-between mb-1.5">
+                  <div className="mb-1.5">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Badge Text</label>
-                    <span className="text-xs text-gray-400">{data.overview?.deskBadge?.length || 0}/50</span>
-</div>
-<input
+                  </div>
+                  <input
                     type="text"
                     value={data.overview?.deskBadge || ''}
                     maxLength={50}
                     onChange={(e) => updateSection('overview', 'deskBadge', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
-<div className="text-right text-xs text-gray-400 mt-1">{data.hero?.subtitle?.length || 0}/300 characters</div>
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.deskBadge?.length || 0}/50 characters</div>
                 </div>
                 <div>
                   <div className="mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading Title</label>
-                    
-</div>
-<input
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading Title</label>
+
+                  </div>
+                  <input
                     type="text"
                     value={data.overview?.title || ''}
                     maxLength={100}
                     onChange={(e) => updateSection('overview', 'title', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
-<div className="text-right text-xs text-gray-400 mt-1">{data.overview?.title?.length || 0}/100 characters</div>
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.title?.length || 0}/100 characters</div>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <div className="flex items-center gap-3 mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description 1</label>
-                    
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description 1</label>
+
                   </div>
                   <textarea
                     rows="4"
@@ -723,11 +751,11 @@ const ManagePlacementPage = () => {
                     onChange={(e) => updateSection('overview', 'description1', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.description1?.length || 0}/400 characters</div>
                 </div>
                 <div>
                   <div className="flex justify-between mb-1.5">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description 2</label>
-                    <span className="text-xs text-gray-400">{data.overview?.description2?.length || 0}/400</span>
                   </div>
                   <textarea
                     rows="4"
@@ -736,36 +764,48 @@ const ManagePlacementPage = () => {
                     onChange={(e) => updateSection('overview', 'description2', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.description2?.length || 0}/400 characters</div>
                 </div>
               </div>
               <div>
-                  <div className="flex justify-between mb-1.5">
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Floating Quote</label>
-                    <span className="text-xs text-gray-400">{data.overview?.floatingQuote?.length || 0}/200</span>
-</div>
-<input
-                    type="text"
-                    value={data.overview?.floatingQuote || ''}
-                    maxLength={200}
-                    onChange={(e) => updateSection('overview', 'floatingQuote', e.target.value)}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
-                  />
-<div className="text-right text-xs text-gray-400 mt-1">{data.overview?.description1?.length || 0}/400 characters</div>
+                <div className="flex justify-between mb-1.5">
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Floating Quote</label>
+                </div>
+                <input
+                  type="text"
+                  value={data.overview?.floatingQuote || ''}
+                  maxLength={200}
+                  onChange={(e) => updateSection('overview', 'floatingQuote', e.target.value)}
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                />
+                <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.floatingQuote?.length || 0}/200 characters</div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
                 <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Statistic 1</label>
-                  <div className="space-y-2">
-                    <input type="text" placeholder="Value (e.g. 100+)" value={data.overview?.stat1Value || ''} maxLength={20} onChange={(e) => updateSection('overview', 'stat1Value', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
-                    <input type="text" placeholder="Label (e.g. Placed)" value={data.overview?.stat1Label || ''} maxLength={50} onChange={(e) => updateSection('overview', 'stat1Label', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <input type="text" placeholder="Value (e.g. 100+)" value={data.overview?.stat1Value || ''} maxLength={20} onChange={(e) => updateSection('overview', 'stat1Value', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.stat1Value?.length || 0}/20 characters</div>
+                    </div>
+                    <div>
+                      <input type="text" placeholder="Label (e.g. Placed)" value={data.overview?.stat1Label || ''} maxLength={50} onChange={(e) => updateSection('overview', 'stat1Label', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.stat1Label?.length || 0}/50 characters</div>
+                    </div>
                   </div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Statistic 2</label>
-                  <div className="space-y-2">
-                    <input type="text" placeholder="Value (e.g. 150+)" value={data.overview?.stat2Value || ''} maxLength={20} onChange={(e) => updateSection('overview', 'stat2Value', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
-                    <input type="text" placeholder="Label (e.g. Companies)" value={data.overview?.stat2Label || ''} maxLength={50} onChange={(e) => updateSection('overview', 'stat2Label', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <input type="text" placeholder="Value (e.g. 150+)" value={data.overview?.stat2Value || ''} maxLength={20} onChange={(e) => updateSection('overview', 'stat2Value', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.stat2Value?.length || 0}/20 characters</div>
+                    </div>
+                    <div>
+                      <input type="text" placeholder="Label (e.g. Companies)" value={data.overview?.stat2Label || ''} maxLength={50} onChange={(e) => updateSection('overview', 'stat2Label', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm" />
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.overview?.stat2Label?.length || 0}/50 characters</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -840,19 +880,19 @@ const ManagePlacementPage = () => {
                   <Plus className="w-4 h-4" /> Add Achiever
                 </button>
               </div>
-              <div className="mb-6">
+              <div className="mb-6 max-w-md">
                 <div className="mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
-                  
-</div>
-<input
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
+
+                </div>
+                <input
                   type="text"
                   value={data.proudAchievers?.title || ''}
                   maxLength={50}
                   onChange={(e) => updateSection('proudAchievers', 'title', e.target.value)}
-                  className="max-w-md w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
-<div className="text-right text-xs text-gray-400 mt-1">{data.proudAchievers?.title?.length || 0}/50 characters</div>
+                <div className="text-right text-xs text-gray-400 mt-1">{data.proudAchievers?.title?.length || 0}/50 characters</div>
               </div>
 
               <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
@@ -864,13 +904,13 @@ const ManagePlacementPage = () => {
                 ) : (
                   <Reorder.Group axis="y" values={data.proudAchievers.items} onReorder={(items) => updateArrayItems('proudAchievers', items)} className="space-y-3">
                     {data.proudAchievers.items.map((item, idx) => (
-                      <DraggableItemCard 
-                        key={item.uuid || idx} 
-                        item={item} 
-                        index={idx} 
+                      <DraggableItemCard
+                        key={item.uuid || idx}
+                        item={item}
+                        index={idx}
                         type="proudAchievers"
-                        onEdit={(i) => openModal('edit', 'proudAchievers', i)} 
-                        onDelete={() => handleDeleteItem('proudAchievers', idx)} 
+                        onEdit={(i) => openModal('edit', 'proudAchievers', i)}
+                        onDelete={() => handleDeleteItem('proudAchievers', idx)}
                       />
                     ))}
                   </Reorder.Group>
@@ -907,22 +947,22 @@ const ManagePlacementPage = () => {
               <div className="grid grid-cols-1 gap-4 mb-6">
                 <div>
                   <div className="mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
-                    
-</div>
-<input
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
+
+                  </div>
+                  <input
                     type="text"
                     value={data.topRecruiters?.title || ''}
                     maxLength={50}
                     onChange={(e) => updateSection('topRecruiters', 'title', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
-<div className="text-right text-xs text-gray-400 mt-1">{data.topRecruiters?.title?.length || 0}/50 characters</div>
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.topRecruiters?.title?.length || 0}/50 characters</div>
                 </div>
                 <div>
                   <div className="flex items-center gap-3 mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</label>
-                    
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</label>
+
                   </div>
                   <textarea
                     rows="2"
@@ -931,6 +971,7 @@ const ManagePlacementPage = () => {
                     onChange={(e) => updateSection('topRecruiters', 'description', e.target.value)}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.topRecruiters?.description?.length || 0}/300 characters</div>
                 </div>
               </div>
 
@@ -943,13 +984,13 @@ const ManagePlacementPage = () => {
                 ) : (
                   <Reorder.Group axis="y" values={data.topRecruiters.items} onReorder={(items) => updateArrayItems('topRecruiters', items)} className="space-y-3">
                     {data.topRecruiters.items.map((item, idx) => (
-                      <DraggableItemCard 
-                        key={item.uuid || idx} 
-                        item={item} 
-                        index={idx} 
+                      <DraggableItemCard
+                        key={item.uuid || idx}
+                        item={item}
+                        index={idx}
                         type="topRecruiters"
-                        onEdit={(i) => openModal('edit', 'topRecruiters', i)} 
-                        onDelete={() => handleDeleteItem('topRecruiters', idx)} 
+                        onEdit={(i) => openModal('edit', 'topRecruiters', i)}
+                        onDelete={() => handleDeleteItem('topRecruiters', idx)}
                       />
                     ))}
                   </Reorder.Group>
@@ -975,23 +1016,22 @@ const ManagePlacementPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between mb-1.5">
+                    <div className="mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading Title</label>
-                      <span className="text-xs text-gray-400">{data.excellenceSupport?.title?.length || 0}/100</span>
-</div>
-<input
+                    </div>
+                    <input
                       type="text"
                       value={data.excellenceSupport?.title || ''}
                       maxLength={100}
                       onChange={(e) => updateSection('excellenceSupport', 'title', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
-<div className="text-right text-xs text-gray-400 mt-1">{data.topRecruiters?.description?.length || 0}/300 characters</div>
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.excellenceSupport?.title?.length || 0}/100 characters</div>
                   </div>
                   <div>
                     <div className="flex items-center gap-3 mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</label>
-                      
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</label>
+
                     </div>
                     <textarea
                       rows="4"
@@ -1000,6 +1040,7 @@ const ManagePlacementPage = () => {
                       onChange={(e) => updateSection('excellenceSupport', 'description', e.target.value)}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                     />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.excellenceSupport?.description?.length || 0}/300 characters</div>
                   </div>
                 </div>
                 <div>
@@ -1024,9 +1065,9 @@ const ManagePlacementPage = () => {
                   </div>
                   <Reorder.Group axis="y" values={(data.excellenceSupport?.listOne?.length > 0) ? data.excellenceSupport.listOne : defaultListOne} onReorder={(items) => updateArrayItems('excellenceSupport', items, 'listOne')} className="space-y-2">
                     {((data.excellenceSupport?.listOne?.length > 0) ? data.excellenceSupport.listOne : defaultListOne).map((item, idx) => (
-                      <DraggableItemCard 
+                      <DraggableItemCard
                         key={item.uuid || idx} item={item} index={idx} type="excellenceSupportListOne"
-                        onEdit={(i) => openModal('edit', 'excellenceSupportListOne', i)} onDelete={() => handleDeleteItem('excellenceSupportListOne', idx)} 
+                        onEdit={(i) => openModal('edit', 'excellenceSupportListOne', i)} onDelete={() => handleDeleteItem('excellenceSupportListOne', idx)}
                       />
                     ))}
                   </Reorder.Group>
@@ -1039,9 +1080,9 @@ const ManagePlacementPage = () => {
                   </div>
                   <Reorder.Group axis="y" values={(data.excellenceSupport?.listTwo?.length > 0) ? data.excellenceSupport.listTwo : defaultListTwo} onReorder={(items) => updateArrayItems('excellenceSupport', items, 'listTwo')} className="space-y-2">
                     {((data.excellenceSupport?.listTwo?.length > 0) ? data.excellenceSupport.listTwo : defaultListTwo).map((item, idx) => (
-                      <DraggableItemCard 
+                      <DraggableItemCard
                         key={item.uuid || idx} item={item} index={idx} type="excellenceSupportListTwo"
-                        onEdit={(i) => openModal('edit', 'excellenceSupportListTwo', i)} onDelete={() => handleDeleteItem('excellenceSupportListTwo', idx)} 
+                        onEdit={(i) => openModal('edit', 'excellenceSupportListTwo', i)} onDelete={() => handleDeleteItem('excellenceSupportListTwo', idx)}
                       />
                     ))}
                   </Reorder.Group>
@@ -1069,35 +1110,40 @@ const ManagePlacementPage = () => {
                   </label>
                 </div>
                 <button
-                  onClick={() => openModal('add', 'facultyInCharge')}
-                  className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-white bg-primary hover:bg-[#151c48] rounded-xl transition-all flex items-center gap-1.5 shadow-sm"
+                  onClick={() => (data.facultyInCharge?.items || []).length < 3 ? openModal('add', 'facultyInCharge') : Toast.fire({ icon: 'warning', title: 'Maximum 3 faculty members allowed' })}
+                  disabled={(data.facultyInCharge?.items || []).length >= 3}
+                  title={(data.facultyInCharge?.items || []).length >= 3 ? "Maximum 3 faculty members allowed" : ""}
+                  className={`px-4 py-2 text-xs font-bold uppercase tracking-wider text-white rounded-xl transition-all flex items-center gap-1.5 shadow-sm ${(data.facultyInCharge?.items || []).length >= 3
+                      ? 'bg-gray-400 cursor-not-allowed opacity-70'
+                      : 'bg-primary hover:bg-[#151c48]'
+                    }`}
                 >
                   <Plus className="w-4 h-4" /> Add Faculty
                 </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div>
-                  <div className="flex justify-between mb-1.5">
+                  <div className="mb-1.5">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Badge</label>
-                    <span className="text-xs text-gray-400">{data.facultyInCharge?.badge?.length || 0}/50</span>
-</div>
-<input type="text" value={data.facultyInCharge?.badge || ''} maxLength={50} onChange={(e) => updateSection('facultyInCharge', 'badge', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
-<div className="text-right text-xs text-gray-400 mt-1">{data.excellenceSupport?.description?.length || 0}/300 characters</div>
+                  </div>
+                  <input type="text" value={data.facultyInCharge?.badge || ''} maxLength={50} onChange={(e) => updateSection('facultyInCharge', 'badge', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.facultyInCharge?.badge?.length || 0}/50 characters</div>
                 </div>
                 <div>
                   <div className="mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading</label>
-                    
-</div>
-<input type="text" value={data.facultyInCharge?.title || ''} maxLength={100} onChange={(e) => updateSection('facultyInCharge', 'title', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
-<div className="text-right text-xs text-gray-400 mt-1">{data.facultyInCharge?.title?.length || 0}/100 characters</div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading</label>
+
+                  </div>
+                  <input type="text" value={data.facultyInCharge?.title || ''} maxLength={100} onChange={(e) => updateSection('facultyInCharge', 'title', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.facultyInCharge?.title?.length || 0}/100 characters</div>
                 </div>
                 <div className="md:col-span-2">
                   <div className="flex items-center gap-3 mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</label>
-                    
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</label>
+
                   </div>
                   <textarea rows="2" value={data.facultyInCharge?.description || ''} maxLength={300} onChange={(e) => updateSection('facultyInCharge', 'description', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
+                  <div className="text-right text-xs text-gray-400 mt-1">{data.facultyInCharge?.description?.length || 0}/300 characters</div>
                 </div>
               </div>
 
@@ -1125,7 +1171,7 @@ const ManagePlacementPage = () => {
                 <div className="flex items-center gap-6">
                   <div className="flex items-center gap-2">
                     <Users className="w-5 h-5 text-primary" />
-                    <h2 className="text-lg font-bold text-[#1e2869]">Placement Committee ({(data.placementCommittee?.items || []).length})</h2>
+                    <h2 className="text-lg font-bold text-[#1e2869]">Placement Committee</h2>
                   </div>
                   <label className="flex items-center cursor-pointer">
                     <span className="mr-3 text-xs font-semibold text-[#566A7F] uppercase">Show Section</span>
@@ -1136,37 +1182,39 @@ const ManagePlacementPage = () => {
                     </div>
                   </label>
                 </div>
-                <button
-                  onClick={() => openModal('add', 'placementCommittee')}
-                  className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-white bg-primary hover:bg-[#151c48] rounded-xl transition-all flex items-center gap-1.5 shadow-sm"
-                >
-                  <Plus className="w-4 h-4" /> Add Member
-                </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between mb-1.5">
+                    <div className="mb-1.5">
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading</label>
-                      <span className="text-xs text-gray-400">{data.placementCommittee?.title?.length || 0}/100</span>
-</div>
-<input type="text" value={data.placementCommittee?.title || ''} maxLength={100} onChange={(e) => updateSection('placementCommittee', 'title', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
-<div className="text-right text-xs text-gray-400 mt-1">{data.facultyInCharge?.description?.length || 0}/300 characters</div>
+                    </div>
+                    <input type="text" value={data.placementCommittee?.title || ''} maxLength={100} onChange={(e) => updateSection('placementCommittee', 'title', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.title?.length || 0}/100 characters</div>
                   </div>
                   <div>
                     <div className="flex items-center gap-3 mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</label>
-                      
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</label>
+
                     </div>
                     <textarea rows="3" value={data.placementCommittee?.description || ''} maxLength={300} onChange={(e) => updateSection('placementCommittee', 'description', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
+                    <div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.description?.length || 0}/300 characters</div>
                   </div>
-                  <div>
-                    <div className="flex justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Button Text</label>
-                      <span className="text-xs text-gray-400">{data.placementCommittee?.buttonText?.length || 0}/50</span>
-</div>
-<input type="text" value={data.placementCommittee?.buttonText || ''} maxLength={50} onChange={(e) => updateSection('placementCommittee', 'buttonText', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
-<div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.description?.length || 0}/300 characters</div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <div className="mb-1.5">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Button Text</label>
+                      </div>
+                      <input type="text" value={data.placementCommittee?.buttonText || ''} maxLength={50} onChange={(e) => updateSection('placementCommittee', 'buttonText', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" />
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.buttonText?.length || 0}/50 characters</div>
+                    </div>
+                    <div>
+                      <div className="mb-1.5">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Button Link</label>
+                      </div>
+                      <input type="text" value={data.placementCommittee?.buttonUrl || ''} maxLength={100} onChange={(e) => updateSection('placementCommittee', 'buttonUrl', e.target.value)} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm" placeholder="e.g. /contact or https://..." />
+                      <div className="text-right text-xs text-gray-400 mt-1">{data.placementCommittee?.buttonUrl?.length || 0}/100 characters</div>
+                    </div>
                   </div>
                 </div>
                 <div>
@@ -1179,23 +1227,13 @@ const ManagePlacementPage = () => {
                     onUploadStateChange={setIsUploading}
                     deferredUpload={true}
                   />
+
+                  <div className="mt-6">
+                  </div>
                 </div>
               </div>
 
-              <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
-                {!(data.placementCommittee?.items || []).length ? (
-                  <div className="h-full flex flex-col items-center justify-center text-gray-400">
-                    <Users className="w-12 h-12 mb-3 opacity-20" />
-                    <p>No Members added yet.</p>
-                  </div>
-                ) : (
-                  <Reorder.Group axis="y" values={data.placementCommittee.items} onReorder={(items) => updateArrayItems('placementCommittee', items)} className="space-y-3">
-                    {data.placementCommittee.items.map((item, idx) => (
-                      <DraggableItemCard key={item.uuid || idx} item={item} index={idx} type="placementCommittee" onEdit={(i) => openModal('edit', 'placementCommittee', i)} onDelete={() => handleDeleteItem('placementCommittee', idx)} />
-                    ))}
-                  </Reorder.Group>
-                )}
-              </div>
+
             </div>
           )}
 
@@ -1224,19 +1262,19 @@ const ManagePlacementPage = () => {
                   <Plus className="w-4 h-4" /> Add Activity
                 </button>
               </div>
-              <div className="mb-6">
+              <div className="mb-6 max-w-md">
                 <div className="mb-1.5">
-<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
-                  
-</div>
-<input
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Section Heading</label>
+
+                </div>
+                <input
                   type="text"
                   value={data.activities?.title || ''}
                   maxLength={100}
                   onChange={(e) => updateSection('activities', 'title', e.target.value)}
-                  className="max-w-md w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
-<div className="text-right text-xs text-gray-400 mt-1">{data.activities?.title?.length || 0}/100 characters</div>
+                <div className="text-right text-xs text-gray-400 mt-1">{data.activities?.title?.length || 0}/100 characters</div>
               </div>
 
               <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
@@ -1295,45 +1333,38 @@ const ManagePlacementPage = () => {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <div className="mb-1.5">
-<label className="block text-sm font-medium text-gray-700">Name</label>
-                            
-</div>
-<input type="text" maxLength={50} value={currentItem.name || ''} onChange={e => setCurrentItem({...currentItem, name: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem.name?.length || 0}/50 characters</div>
+                            <label className="block text-sm font-medium text-gray-700">Name</label>
+
+                          </div>
+                          <input type="text" maxLength={50} value={currentItem.name || ''} onChange={e => setCurrentItem({ ...currentItem, name: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                          <div className="text-right text-xs text-gray-400 mt-1">{currentItem.name?.length || 0}/50 characters</div>
                         </div>
                         <div>
                           <div className="mb-1.5">
-<label className="block text-sm font-medium text-gray-700">Program</label>
-                            
-</div>
-<input type="text" maxLength={50} value={currentItem.program || ''} onChange={e => setCurrentItem({...currentItem, program: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem.program?.length || 0}/50 characters</div>
+                            <label className="block text-sm font-medium text-gray-700">Program</label>
+
+                          </div>
+                          <input type="text" maxLength={50} value={currentItem.program || ''} onChange={e => setCurrentItem({ ...currentItem, program: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                          <div className="text-right text-xs text-gray-400 mt-1">{currentItem.program?.length || 0}/50 characters</div>
                         </div>
+
                         <div>
                           <div className="mb-1.5">
-<label className="block text-sm font-medium text-gray-700">Company</label>
-                            
-</div>
-<input type="text" maxLength={50} value={currentItem.company || ''} onChange={e => setCurrentItem({...currentItem, company: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem.company?.length || 0}/50 characters</div>
-                        </div>
-                        <div>
-                          <div className="mb-1.5">
-<label className="block text-sm font-medium text-gray-700">Role</label>
-                            
-</div>
-<input type="text" maxLength={50} value={currentItem.role || ''} onChange={e => setCurrentItem({...currentItem, role: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem.role?.length || 0}/50 characters</div>
+                            <label className="block text-sm font-medium text-gray-700">Role</label>
+
+                          </div>
+                          <input type="text" maxLength={50} value={currentItem.role || ''} onChange={e => setCurrentItem({ ...currentItem, role: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                          <div className="text-right text-xs text-gray-400 mt-1">{currentItem.role?.length || 0}/50 characters</div>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Student Image</label>
-                          <SingleImageUploader imageUrl={currentItem.image || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-avatar.png" onUploadComplete={(url) => setCurrentItem({...currentItem, image: url})} onUploadStateChange={setIsUploading} deferredUpload={true} />
+                          <SingleImageUploader imageUrl={currentItem.image || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-avatar.png" onUploadComplete={(url) => setCurrentItem({ ...currentItem, image: url })} onUploadStateChange={setIsUploading} deferredUpload={true} />
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Company Logo</label>
-                          <SingleImageUploader imageUrl={currentItem.companyLogo || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-avatar.png" onUploadComplete={(url) => setCurrentItem({...currentItem, companyLogo: url})} onUploadStateChange={setIsUploading} deferredUpload={true} />
+                          <SingleImageUploader imageUrl={currentItem.companyLogo || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-partner-1.jpg" onUploadComplete={(url) => setCurrentItem({ ...currentItem, companyLogo: url })} onUploadStateChange={setIsUploading} deferredUpload={true} />
                         </div>
                       </div>
                     </>
@@ -1343,15 +1374,15 @@ const ManagePlacementPage = () => {
                     <>
                       <div>
                         <div className="mb-1.5">
-<label className="block text-sm font-medium text-gray-700">Company Name</label>
-                          
-</div>
-<input type="text" maxLength={50} value={currentItem.name || ''} onChange={e => setCurrentItem({...currentItem, name: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem.name?.length || 0}/50 characters</div>
+                          <label className="block text-sm font-medium text-gray-700">Company Name</label>
+
+                        </div>
+                        <input type="text" maxLength={50} value={currentItem.name || ''} onChange={e => setCurrentItem({ ...currentItem, name: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                        <div className="text-right text-xs text-gray-400 mt-1">{currentItem.name?.length || 0}/50 characters</div>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Recruiter Logo</label>
-                        <SingleImageUploader imageUrl={currentItem.logo || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-avatar.png" onUploadComplete={(url) => setCurrentItem({...currentItem, logo: url})} onUploadStateChange={setIsUploading} deferredUpload={true} />
+                        <SingleImageUploader imageUrl={currentItem.logo || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-partner-1.jpg" onUploadComplete={(url) => setCurrentItem({ ...currentItem, logo: url })} onUploadStateChange={setIsUploading} deferredUpload={true} />
                       </div>
                     </>
                   )}
@@ -1359,11 +1390,11 @@ const ManagePlacementPage = () => {
                   {(modalType === 'excellenceSupportListOne' || modalType === 'excellenceSupportListTwo') && (
                     <div>
                       <div className="mb-1.5">
-<label className="block text-sm font-medium text-gray-700">Feature Text</label>
-                        
-</div>
-<input type="text" maxLength={100} value={currentItem.title || ''} onChange={e => setCurrentItem({...currentItem, title: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem.title?.length || 0}/100 characters</div>
+                        <label className="block text-sm font-medium text-gray-700">Feature Text</label>
+
+                      </div>
+                      <input type="text" maxLength={100} value={currentItem.title || ''} onChange={e => setCurrentItem({ ...currentItem, title: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                      <div className="text-right text-xs text-gray-400 mt-1">{currentItem.title?.length || 0}/100 characters</div>
                     </div>
                   )}
 
@@ -1372,24 +1403,24 @@ const ManagePlacementPage = () => {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <div className="mb-1.5">
-<label className="block text-sm font-medium text-gray-700">Name</label>
-                            
-</div>
-<input type="text" maxLength={50} value={currentItem.name || ''} onChange={e => setCurrentItem({...currentItem, name: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem.name?.length || 0}/50 characters</div>
+                            <label className="block text-sm font-medium text-gray-700">Name</label>
+
+                          </div>
+                          <input type="text" maxLength={30} value={currentItem.name || ''} onChange={e => setCurrentItem({ ...currentItem, name: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                          <div className="text-right text-xs text-gray-400 mt-1">{currentItem.name?.length || 0}/30 characters</div>
                         </div>
                         <div>
                           <div className="mb-1.5">
-<label className="block text-sm font-medium text-gray-700">Designation</label>
-                            
-</div>
-<input type="text" maxLength={50} value={currentItem.designation || ''} onChange={e => setCurrentItem({...currentItem, designation: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem.designation?.length || 0}/50 characters</div>
+                            <label className="block text-sm font-medium text-gray-700">Designation</label>
+
+                          </div>
+                          <input type="text" maxLength={30} value={currentItem.designation || ''} onChange={e => setCurrentItem({ ...currentItem, designation: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                          <div className="text-right text-xs text-gray-400 mt-1">{currentItem.designation?.length || 0}/30 characters</div>
                         </div>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Faculty Photo</label>
-                        <SingleImageUploader imageUrl={currentItem.image || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-avatar.png" onUploadComplete={(url) => setCurrentItem({...currentItem, image: url})} onUploadStateChange={setIsUploading} deferredUpload={true} />
+                        <SingleImageUploader imageUrl={currentItem.image || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-avatar.png" onUploadComplete={(url) => setCurrentItem({ ...currentItem, image: url })} onUploadStateChange={setIsUploading} deferredUpload={true} />
                       </div>
                     </>
                   )}
@@ -1399,24 +1430,24 @@ const ManagePlacementPage = () => {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <div className="mb-1.5">
-<label className="block text-sm font-medium text-gray-700">Name</label>
-                            
-</div>
-<input type="text" maxLength={50} value={currentItem.name || ''} onChange={e => setCurrentItem({...currentItem, name: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem.name?.length || 0}/50 characters</div>
+                            <label className="block text-sm font-medium text-gray-700">Name</label>
+
+                          </div>
+                          <input type="text" maxLength={50} value={currentItem.name || ''} onChange={e => setCurrentItem({ ...currentItem, name: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                          <div className="text-right text-xs text-gray-400 mt-1">{currentItem.name?.length || 0}/50 characters</div>
                         </div>
                         <div>
                           <div className="mb-1.5">
-<label className="block text-sm font-medium text-gray-700">Role</label>
-                            
-</div>
-<input type="text" maxLength={50} value={currentItem.role || ''} onChange={e => setCurrentItem({...currentItem, role: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem.role?.length || 0}/50 characters</div>
+                            <label className="block text-sm font-medium text-gray-700">Role</label>
+
+                          </div>
+                          <input type="text" maxLength={50} value={currentItem.role || ''} onChange={e => setCurrentItem({ ...currentItem, role: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                          <div className="text-right text-xs text-gray-400 mt-1">{currentItem.role?.length || 0}/50 characters</div>
                         </div>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Member Photo</label>
-                        <SingleImageUploader imageUrl={currentItem.image || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-avatar.png" onUploadComplete={(url) => setCurrentItem({...currentItem, image: url})} onUploadStateChange={setIsUploading} deferredUpload={true} />
+                        <SingleImageUploader imageUrl={currentItem.image || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-avatar.png" onUploadComplete={(url) => setCurrentItem({ ...currentItem, image: url })} onUploadStateChange={setIsUploading} deferredUpload={true} />
                       </div>
                     </>
                   )}
@@ -1425,22 +1456,22 @@ const ManagePlacementPage = () => {
                     <>
                       <div>
                         <div className="mb-1.5">
-<label className="block text-sm font-medium text-gray-700">Title</label>
-                          
-</div>
-<input type="text" maxLength={100} value={currentItem.title || ''} onChange={e => setCurrentItem({...currentItem, title: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
-<div className="text-right text-xs text-gray-400 mt-1">{currentItem.title?.length || 0}/100 characters</div>
+                          <label className="block text-sm font-medium text-gray-700">Title</label>
+
+                        </div>
+                        <input type="text" maxLength={100} value={currentItem.title || ''} onChange={e => setCurrentItem({ ...currentItem, title: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                        <div className="text-right text-xs text-gray-400 mt-1">{currentItem.title?.length || 0}/100 characters</div>
                       </div>
                       <div>
-                        <div className="flex justify-between mb-1.5">
-                          <label className="block text-sm font-medium text-gray-700">Description</label>
-                          <span className="text-xs text-gray-400">{currentItem.description?.length || 0}/300</span>
+                        <div className="flex items-center gap-3 mb-1.5">
+                          <label className="block text-sm font-semibold text-gray-700">Description</label>
                         </div>
-                        <textarea rows="3" maxLength={300} value={currentItem.description || ''} onChange={e => setCurrentItem({...currentItem, description: e.target.value})} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                        <textarea rows="3" maxLength={300} value={currentItem.description || ''} onChange={e => setCurrentItem({ ...currentItem, description: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                        <div className="text-right text-xs text-gray-400 mt-1">{currentItem.description?.length || 0}/300 characters</div>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Activity Image</label>
-                        <SingleImageUploader imageUrl={currentItem.image || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-avatar.png" onUploadComplete={(url) => setCurrentItem({...currentItem, image: url})} onUploadStateChange={setIsUploading} deferredUpload={true} />
+                        <SingleImageUploader imageUrl={currentItem.image || ''} uploadEndpoint="/upload/placements" defaultImage="/assets/Images/placements/default-avatar.png" onUploadComplete={(url) => setCurrentItem({ ...currentItem, image: url })} onUploadStateChange={setIsUploading} deferredUpload={true} />
                       </div>
                     </>
                   )}

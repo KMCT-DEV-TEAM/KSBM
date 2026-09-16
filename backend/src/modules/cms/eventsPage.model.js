@@ -14,7 +14,9 @@ const eventsPageSchema = new mongoose.Schema(
       paragraph1: { type: String, default: 'Discover a celebration where creativity knows no limits and every performance tells a story worth remembering. Kaleido is more than a cultural festival—it\'s a vibrant platform where passion meets purpose, traditions blend with innovation, and talent shines without boundaries. Bringing together students, artists, performers, and creative minds from diverse backgrounds, the festival transforms the campus into a spectacular stage filled with energy, color, and inspiration.' },
       paragraph2: { type: String, default: 'Immerse yourself in a world of mesmerizing dance performances, soul-stirring music, captivating theatre, expressive fine arts, photography, fashion, literature, and countless cultural experiences that celebrate the richness of artistic expression. Whether you\'re stepping into the spotlight as a performer, competing to showcase your skills, cheering for your peers, or simply enjoying the electrifying atmosphere, every moment at Kaleido is designed to inspire, connect, and create lasting memories.' },
       image: { type: String, default: '/assets/Images/image 91.png' },
+      brochureBtnText: { type: String, default: 'Event Brochure' },
       brochureUrl: { type: String, default: '' },
+      calendarBtnText: { type: String, default: 'Download Calendar' },
       calendarUrl: { type: String, default: '' }
     },
     upcomingEvents: {

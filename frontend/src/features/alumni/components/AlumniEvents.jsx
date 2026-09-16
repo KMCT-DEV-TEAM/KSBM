@@ -60,7 +60,7 @@ const AlumniEvents = ({ data }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1, duration: 0.5 }}
-              className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200/60 flex flex-col group cursor-pointer"
+              className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200/60 flex flex-col group cursor-pointer relative"
             >
               <div className="relative h-48 w-full overflow-hidden bg-gray-100 shrink-0">
                 <img
@@ -79,6 +79,16 @@ const AlumniEvents = ({ data }) => {
                     {event.description}
                   </p>
                 </div>
+              </div>
+
+              {/* Full Details Overlay on Hover */}
+              <div className="absolute inset-0 bg-white/95 backdrop-blur-sm p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center text-center z-10 pointer-events-none overflow-hidden">
+                <h3 className="font-bold text-sm sm:text-base text-primary mb-3">
+                  {event.title}
+                </h3>
+                <p className="text-gray-800 text-[11px] sm:text-xs leading-relaxed">
+                  {event.description}
+                </p>
               </div>
             </motion.div>
           ))}

@@ -149,7 +149,7 @@ const TermsAndConditions = ({ previewData }) => {
       <div className="min-h-screen bg-white flex flex-col justify-between">
         <main>
         {/* Top Hero Section */}
-        <section className="relative min-h-[400px] sm:min-h-[480px] md:min-h-[540px] flex items-center justify-center overflow-hidden bg-[#111836] py-16 sm:py-20 px-4">
+        <section className="relative min-h-[400px] sm:min-h-[480px] md:min-h-[540px] flex flex-col justify-center overflow-hidden bg-[#111836] pt-32 pb-16 px-4">
           <div className="absolute inset-0 z-0">
             <img
               src={hero.backgroundImage || "/assets/Images/image 73.png"}
@@ -159,18 +159,18 @@ const TermsAndConditions = ({ previewData }) => {
             <div className="absolute inset-0 bg-primary/75" />
           </div>
 
-          <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16">
+          <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               className="max-w-3xl"
             >
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4 leading-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-6 leading-tight mt-8">
                 {hero.title || 'Terms & Conditions'}
               </h1>
 
-              <p className="font-medium text-white/80 leading-relaxed text-[18px] max-w-2xl">
+              <p className="font-medium text-white/80 leading-relaxed text-[16px] sm:text-[18px] max-w-2xl mb-4">
                 {hero.subtitle || 'Please review our institutional terms of service, website usage agreement, and general guidelines governing access to KMCT School of Business Management platforms.'}
               </p>
             </motion.div>

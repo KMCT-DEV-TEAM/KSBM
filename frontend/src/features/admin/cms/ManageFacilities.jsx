@@ -46,7 +46,7 @@ const ManageFacilities = () => {
         subheading, heading, description, facilitiesList,
         showSection
       };
-      
+
       const sendUpdate = () => {
         if (iframeRef.current && iframeRef.current.contentWindow) {
           iframeRef.current.contentWindow.postMessage({
@@ -136,7 +136,7 @@ const ManageFacilities = () => {
             subheading, heading, description, facilitiesList: finalFacilitiesList,
             showSection
           });
-          
+
           await executeDeletions();
           setFacilitiesList(finalFacilitiesList);
           Toast.fire({ icon: 'success', title: 'Facilities section saved successfully!' });
@@ -179,9 +179,9 @@ const ManageFacilities = () => {
       variant: 'primary',
       action: async () => {
         const newList = [...facilitiesList];
-        
-        const defaultImage = editingFacilityIndex >= 0 && editingFacilityIndex < 6 
-          ? `/assets/Images/Home/facility_${editingFacilityIndex + 1}.jpg` 
+
+        const defaultImage = editingFacilityIndex >= 0 && editingFacilityIndex < 6
+          ? `/assets/Images/Home/facility_${editingFacilityIndex + 1}.jpg`
           : '';
         const finalImage = currentFacility.image || defaultImage;
         const facilityToSave = { ...currentFacility, image: finalImage };
@@ -240,13 +240,13 @@ const ManageFacilities = () => {
   const handleConfirmAction = async () => {
     if (confirmModal.action === 'remove_facility') {
       const targetFacility = facilitiesList[confirmModal.targetIndex];
-      
+
       if (targetFacility && targetFacility.image) {
         markForDeletion(targetFacility.image);
       }
 
       let updated = facilitiesList.filter((_, i) => i !== confirmModal.targetIndex);
-      
+
       if (updated.length < 6) {
         const defaultFacilities = [
           { title: 'Smart Classrooms', image: '/assets/Images/Home/facility_1.jpg' },
@@ -256,11 +256,11 @@ const ManageFacilities = () => {
           { title: 'Auditorium', image: '/assets/Images/Home/facility_5.jpg' },
           { title: 'Sports & Fitness', image: '/assets/Images/Home/facility_6.jpg' }
         ];
-        
+
         const missingDefaults = defaultFacilities.filter(
           def => !updated.some(fac => fac.title === def.title)
         );
-        
+
         while (updated.length < 6 && missingDefaults.length > 0) {
           updated.push(missingDefaults.shift());
         }
@@ -268,7 +268,7 @@ const ManageFacilities = () => {
 
       setFacilitiesList(updated);
     }
-      setConfirmModal({ ...confirmModal, isOpen: false });
+    setConfirmModal({ ...confirmModal, isOpen: false });
   };
 
   const handleDragStart = (e, index) => {
@@ -285,13 +285,13 @@ const ManageFacilities = () => {
   const handleDrop = (e, index) => {
     e.preventDefault();
     if (draggedFacilityIndex === null || draggedFacilityIndex === index) return;
-    
+
     const newList = [...facilitiesList];
     const draggedItem = newList[draggedFacilityIndex];
-    
+
     newList.splice(draggedFacilityIndex, 1);
     newList.splice(index, 0, draggedItem);
-    
+
     setFacilitiesList(newList);
     setDraggedFacilityIndex(null);
   };
@@ -355,7 +355,7 @@ const ManageFacilities = () => {
           </div>
           <div className="flex-1 bg-gray-100 overflow-x-auto relative p-4 flex justify-center">
             <div className={`bg-white shadow-xl min-h-[500px] transition-all duration-300 ${previewMode === 'desktop' ? 'w-full min-w-[1280px] max-w-[1600px]' : previewMode === 'tablet' ? 'w-[768px]' : 'w-[375px]'}`}>
-              <iframe 
+              <iframe
                 ref={iframeRef}
                 src="/preview/facilities"
                 className="w-full h-full border-0"
@@ -389,9 +389,9 @@ const ManageFacilities = () => {
           <div className="grid grid-cols-1 gap-6">
             <div>
               <div className="flex items-center gap-3 mb-1.5">
-<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
-</div>
-<input
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Subheading</label>
+              </div>
+              <input
                 type="text"
                 value={subheading}
                 maxLength={30}
@@ -403,9 +403,9 @@ const ManageFacilities = () => {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1.5">
-<label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
-</div>
-<input
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Main Heading</label>
+              </div>
+              <input
                 type="text"
                 value={heading}
                 maxLength={40}
@@ -545,13 +545,13 @@ const ManageFacilities = () => {
 
                 <div className="col-span-1 md:col-span-2">
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1.5">
-                    Facility Image { (editingFacilityIndex === -1 || editingFacilityIndex >= 6) && <span className="text-red-500">*</span> }
+                    Facility Image {(editingFacilityIndex === -1 || editingFacilityIndex >= 6) && <span className="text-red-500">*</span>}
                   </label>
                   <div className="bg-gray-50 p-4 rounded-lg border border-[#D9DEE3]">
                     {(() => {
                       const isDefaultCard = editingFacilityIndex >= 0 && editingFacilityIndex < 6;
-                      const defaultImage = isDefaultCard 
-                        ? `/assets/Images/Home/facility_${editingFacilityIndex + 1}.jpg` 
+                      const defaultImage = isDefaultCard
+                        ? `/assets/Images/Home/facility_${editingFacilityIndex + 1}.jpg`
                         : '';
                       return (
                         <LogoUploader
@@ -559,6 +559,7 @@ const ManageFacilities = () => {
                           onUploadSuccess={(url, file) => setCurrentFacility({ ...currentFacility, image: url, imageFile: file })}
                           uploadEndpoint="/upload/home"
                           deferredMode={true}
+                          maxSize={1048576}
                           disableDelete={!currentFacility.image || (isDefaultCard ? currentFacility.image === defaultImage : true)}
                         />
                       );

@@ -417,9 +417,8 @@ const ManageCommitteesAndCellsPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <div className="flex justify-between">
+                      <div className="mb-1.5">
                         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Heading</label>
-                        <span className="text-xs text-gray-400">{formData.heroHeading?.length || 0}/100</span>
                       </div>
                       <input
                         type="text"
@@ -428,11 +427,11 @@ const ManageCommitteesAndCellsPage = () => {
                         onChange={(e) => handleChange('heroHeading', e.target.value)}
                         className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-primary/50"
                       />
+                      <div className="text-right text-xs text-gray-400 mt-1">{formData.heroHeading?.length || 0}/100 characters</div>
                     </div>
                     <div className="space-y-2">
-                      <div className="flex justify-between">
+                      <div className="mb-1.5">
                         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Subtext</label>
-                        <span className="text-xs text-gray-400">{formData.heroSubtext?.length || 0}/400</span>
                       </div>
                       <textarea
                         maxLength={400}
@@ -440,6 +439,7 @@ const ManageCommitteesAndCellsPage = () => {
                         onChange={(e) => handleChange('heroSubtext', e.target.value)}
                         className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-primary/50 min-h-[120px] leading-relaxed"
                       />
+                      <div className="text-right text-xs text-gray-400 mt-1">{formData.heroSubtext?.length || 0}/400 characters</div>
                     </div>
                   </div>
                   <div>

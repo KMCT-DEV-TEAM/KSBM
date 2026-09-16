@@ -15,7 +15,8 @@ const HeroImageUploader = ({
   recommendedSize = "1920 × 1080 px (16:9 aspect ratio)",
   allowDelete = false,
   deferredUpload = false,
-  defaultImage = ""
+  defaultImage = "",
+  maxSize = 1048576 // Default 1MB
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   
@@ -23,7 +24,19 @@ const HeroImageUploader = ({
     ? imageUrl.previewUrl 
     : (imageUrl || defaultImage);
 
-  const onDrop = useCallback(async (acceptedFiles) => {
+  const onDrop = useCallback(async (acceptedFiles, fileRejections) => {
+    if (fileRejections.length > 0) {
+      const error = fileRejections[0].errors[0];
+      if (error.code === 'file-too-large') {
+        const maxSizeMB = maxSize / (1024 * 1024);
+        const limitText = maxSizeMB >= 1 ? `${maxSizeMB.toFixed(1)}MB` : `${(maxSize / 1024).toFixed(0)}KB`;
+        Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: 'File Too Large', text: `Please upload an image smaller than ${limitText}.`, showConfirmButton: false, timer: 3000 });
+      } else {
+        Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: 'Invalid File', text: error.message, showConfirmButton: false, timer: 3000 });
+      }
+      return;
+    }
+
     if (acceptedFiles.length === 0) return;
 
     const file = acceptedFiles[0]; // Only take the first file
@@ -89,7 +102,8 @@ const HeroImageUploader = ({
       'image/*': ['.png', '.jpg', '.jpeg', '.webp']
     },
     disabled: isUploading,
-    multiple: false
+    multiple: false,
+    maxSize: maxSize
   });
 
   const removeImage = async (e) => {
@@ -146,8 +160,8 @@ const HeroImageUploader = ({
                 <p className="text-base font-medium text-gray-700">
                   {isDragActive ? "Drop the image here..." : label}
                 </p>
-                <p className="text-sm text-gray-500 mt-2">
-                  Recommended size: {recommendedSize}. Supports PNG, JPG, WEBP up to 5MB
+                <p className="text-xs text-gray-500 mt-2">
+                  Recommended: {recommendedSize}. Max size: {maxSize >= 1048576 ? `${(maxSize / 1048576).toFixed(1)}MB` : `${(maxSize / 1024).toFixed(0)}KB`}
                 </p>
               </div>
             </>

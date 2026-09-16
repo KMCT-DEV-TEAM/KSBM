@@ -8,6 +8,7 @@ import BlogGrid from './components/BlogGrid';
 import api from '../../api/axios';
 import { Loader2 } from 'lucide-react';
 import Loader from '../../components/Loader';
+import SideContact from '../../components/SideContact';
 
 const BlogsPage = () => {
   const [activeTopic, setActiveTopic] = useState('All Topics');
@@ -127,6 +128,7 @@ const BlogsPage = () => {
         onResetFilter={(topic) => setActiveTopic(topic)}
       />
       {!isPreview && <Footer />}
+      {!isPreview && <SideContact />}
     </div>
     </>
   );

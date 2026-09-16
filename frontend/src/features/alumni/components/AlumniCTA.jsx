@@ -33,7 +33,7 @@ const AlumniCTA = ({ data }) => {
         >
           <Link
             href={data?.buttonLink || "#register"}
-            className="inline-flex items-center justify-center px-5 py-2.5 bg-white text-[#2b2b68] text-xs font-semibold rounded-xl hover:bg-gray-50 transition-colors duration-200 shadow-sm"
+            className="bg-primary text-white hover:bg-[#1e2869] border-none rounded-full py-2.5 px-6 text-[13.5px] font-semibold cursor-pointer transition-all duration-300 hover:-translate-y-[1px] hover:shadow-[0_6px_14px_rgba(0,0,0,0.15)] shadow-[0_4px_10px_rgba(0,0,0,0.1)] active:translate-y-[1px] active:shadow-[0_2px_6px_rgba(0,0,0,0.1)] inline-flex items-center justify-center"
           >
             {data?.buttonText || 'View Details'}
           </Link>

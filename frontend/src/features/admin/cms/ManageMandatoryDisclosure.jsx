@@ -53,25 +53,34 @@ const ManageMandatoryDisclosure = () => {
       Toast.fire({ icon: 'warning', title: 'Please provide title and select a PDF file' });
       return;
     }
-    setUploading(true);
-    try {
-      const fileUrl = await uploadFile(newDisclosure.file);
-      const payload = {
-        title: newDisclosure.title,
-        pdfUrl: fileUrl,
-        isDefault: disclosures.length === 0 // Make default if it's the first one
-      };
-      await api.post('/cms/mandatory-disclosure', payload);
-      Toast.fire({ icon: 'success', title: 'Disclosure added successfully' });
-      setIsAddModalOpen(false);
-      setNewDisclosure({ title: '', file: null });
-      fetchDisclosures();
-    } catch (error) {
-      console.error('Error adding disclosure:', error);
-      Toast.fire({ icon: 'error', title: 'Failed to add disclosure' });
-    } finally {
-      setUploading(false);
-    }
+    
+    await confirmAction({
+      title: 'Save Changes?',
+      message: 'Are you sure you want to save this mandatory disclosure?',
+      confirmText: 'Yes, save it!',
+      variant: 'primary',
+      action: async () => {
+        setUploading(true);
+        try {
+          const fileUrl = await uploadFile(newDisclosure.file);
+          const payload = {
+            title: newDisclosure.title,
+            pdfUrl: fileUrl,
+            isDefault: disclosures.length === 0 // Make default if it's the first one
+          };
+          await api.post('/cms/mandatory-disclosure', payload);
+          Toast.fire({ icon: 'success', title: 'Disclosure added successfully' });
+          setIsAddModalOpen(false);
+          setNewDisclosure({ title: '', file: null });
+          fetchDisclosures();
+        } catch (error) {
+          console.error('Error adding disclosure:', error);
+          Toast.fire({ icon: 'error', title: 'Failed to add disclosure' });
+        } finally {
+          setUploading(false);
+        }
+      }
+    });
   };
 
   const handleDelete = async (id) => {
@@ -102,6 +111,19 @@ const ManageMandatoryDisclosure = () => {
     }
   };
 
+  const handleGlobalSave = async () => {
+    await confirmAction({
+      title: 'Save Changes?',
+      message: 'Are you sure you want to save these changes to the website?',
+      confirmText: 'Yes, save it!',
+      variant: 'primary',
+      action: async () => {
+        // Changes are already saved instantly via other actions, just show success
+        Toast.fire({ icon: 'success', title: 'Settings saved successfully!' });
+      }
+    });
+  };
+
   if (loading) return <AdminSkeleton />;
 
   return (
@@ -109,7 +131,7 @@ const ManageMandatoryDisclosure = () => {
       <PageHeader
         title="Mandatory Disclosure"
         subtitle="Manage mandatory disclosure PDFs and set the default one."
-        onSave={() => {}} // No global save needed
+        onSave={handleGlobalSave}
         isSaving={false}
         hidePreview
       />

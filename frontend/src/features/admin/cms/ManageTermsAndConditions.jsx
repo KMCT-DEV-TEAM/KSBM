@@ -641,9 +641,9 @@ const ManageTermsAndConditions = () => {
                   placeholder="Enter the bullet point content..."
                   className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm leading-relaxed"
                   rows="4"
-                  maxLength={500}
+                  maxLength={200}
                 />
-                <div className="text-right text-xs text-gray-400 mt-1">{newBulletPoint?.length || 0}/500</div>
+                <div className="text-right text-xs text-gray-400 mt-1">{newBulletPoint?.length || 0}/200</div>
               </div>
             </div>
 

@@ -68,6 +68,7 @@ const ManageAdmissionsPage = () => {
   const [heroTitle, setHeroTitle] = useState('Empowering Future Leaders');
   const [heroSubtitle, setHeroSubtitle] = useState('Join a world-class institution dedicated to excellence in management education. Shape your future with industry-relevant curriculum and global perspectives.');
   const [heroBgImage, setHeroBgImage] = useState(DEFAULT_IMAGES.heroBgImage);
+  const [heroBrochureFile, setHeroBrochureFile] = useState('');
 
   // ── Elite ─────────────────────────────────────────────
   const [eliteHeading, setEliteHeading] = useState('The KSBM Elite Advantage');
@@ -128,6 +129,10 @@ const ManageAdmissionsPage = () => {
   const [ctaHeading, setCtaHeading] = useState('Begin Your Leadership Journey at KSBM');
   const [ctaDesc, setCtaDesc] = useState('Applications for the upcoming academic year are now open. Take the first step towards a transformative management education under a community of vibrant peers, experienced faculty, and industry leaders.');
   const [ctaImage, setCtaImage] = useState(DEFAULT_IMAGES.ctaImage);
+  const [ctaApplyBtnText, setCtaApplyBtnText] = useState('Apply Now');
+  const [ctaApplyBtnUrl, setCtaApplyBtnUrl] = useState('/apply');
+  const [ctaEnquiryBtnText, setCtaEnquiryBtnText] = useState('Enquire Now');
+  const [ctaEnquiryBtnUrl, setCtaEnquiryBtnUrl] = useState('/contact');
 
   // ── FAQ ───────────────────────────────────────────────
   const [faqHeading, setFaqHeading] = useState('FAQ');
@@ -142,11 +147,12 @@ const ManageAdmissionsPage = () => {
         activeTab,
         showSections,
         heroBadgeText, heroTitle, heroSubtitle,
-        heroBgImage,
+        heroBgImage, heroBrochureFile,
         eliteHeading, eliteSubtitle, eliteDesc, eliteImage,
         journeyHeading, journeySubtitle, journeySteps,
         eligibilityHeading, eligibilitySubtitle, scholarshipNote, mba, bba,
-        ctaHeading, ctaDesc, ctaImage,
+        ctaHeading, ctaDesc, ctaImage, 
+        ctaApplyBtnText, ctaApplyBtnUrl, ctaEnquiryBtnText, ctaEnquiryBtnUrl,
         faqHeading, faqs
       };
       
@@ -165,11 +171,11 @@ const ManageAdmissionsPage = () => {
     }
   }, [
     isPreviewModalOpen, previewMode, activeTab,
-    showSections, heroBadgeText, heroTitle, heroSubtitle, heroBgImage,
+    showSections, heroBadgeText, heroTitle, heroSubtitle, heroBgImage, heroBrochureFile,
     eliteHeading, eliteSubtitle, eliteDesc, eliteImage,
     journeyHeading, journeySubtitle, journeySteps,
     eligibilityHeading, eligibilitySubtitle, scholarshipNote, mba, bba,
-    ctaHeading, ctaDesc, ctaImage, faqHeading, faqs
+    ctaHeading, ctaDesc, ctaImage, ctaApplyBtnText, ctaApplyBtnUrl, ctaEnquiryBtnText, ctaEnquiryBtnUrl, faqHeading, faqs
   ]);
 
   const fetchSettings = async () => {
@@ -194,6 +200,7 @@ const ManageAdmissionsPage = () => {
       if (d.heroTitle !== undefined) setHeroTitle(d.heroTitle);
       if (d.heroSubtitle !== undefined) setHeroSubtitle(d.heroSubtitle);
       if (d.heroBgImage !== undefined) setHeroBgImage(d.heroBgImage);
+      if (d.heroBrochureFile !== undefined) setHeroBrochureFile(d.heroBrochureFile);
 
       if (d.eliteHeading !== undefined) setEliteHeading(d.eliteHeading);
       if (d.eliteSubtitle !== undefined) setEliteSubtitle(d.eliteSubtitle);
@@ -214,6 +221,10 @@ const ManageAdmissionsPage = () => {
       if (d.ctaHeading !== undefined) setCtaHeading(d.ctaHeading);
       if (d.ctaDesc !== undefined) setCtaDesc(d.ctaDesc);
       if (d.ctaImage !== undefined) setCtaImage(d.ctaImage);
+      if (d.ctaApplyBtnText !== undefined) setCtaApplyBtnText(d.ctaApplyBtnText);
+      if (d.ctaApplyBtnUrl !== undefined) setCtaApplyBtnUrl(d.ctaApplyBtnUrl);
+      if (d.ctaEnquiryBtnText !== undefined) setCtaEnquiryBtnText(d.ctaEnquiryBtnText);
+      if (d.ctaEnquiryBtnUrl !== undefined) setCtaEnquiryBtnUrl(d.ctaEnquiryBtnUrl);
 
       if (d.faqHeading !== undefined) setFaqHeading(d.faqHeading);
       if (d.faqs && Array.isArray(d.faqs)) setFaqs(d.faqs);
@@ -237,15 +248,18 @@ const ManageAdmissionsPage = () => {
           const finalHeroBgImage = await uploadDeferredImage(heroBgImage, '/upload/admissions');
           const finalEliteImage  = await uploadDeferredImage(eliteImage,  '/upload/admissions');
           const finalCtaImage    = await uploadDeferredImage(ctaImage,    '/upload/admissions');
+          const finalBrochure    = await uploadDeferredImage(heroBrochureFile, '/upload/admissions');
 
           const payload = {
             showSections,
             heroBadgeText, heroTitle, heroSubtitle,
             heroBgImage: finalHeroBgImage,
+            heroBrochureFile: finalBrochure,
             eliteHeading, eliteSubtitle, eliteDesc, eliteImage: finalEliteImage,
             journeyHeading, journeySubtitle, journeySteps,
             eligibilityHeading, eligibilitySubtitle, scholarshipNote, mba, bba,
             ctaHeading, ctaDesc, ctaImage: finalCtaImage,
+            ctaApplyBtnText, ctaApplyBtnUrl, ctaEnquiryBtnText, ctaEnquiryBtnUrl,
             faqHeading, faqs,
           };
 
@@ -286,6 +300,7 @@ const ManageAdmissionsPage = () => {
         setHeroTitle('Empowering Future Leaders');
         setHeroSubtitle('Join a world-class institution dedicated to excellence in management education. Shape your future with industry-relevant curriculum and global perspectives.');
         setHeroBgImage(DEFAULT_IMAGES.heroBgImage);
+        setHeroBrochureFile('');
         
         // Reset Elite
         setEliteHeading('The KSBM Elite Advantage');
@@ -345,6 +360,10 @@ const ManageAdmissionsPage = () => {
         setCtaHeading('Begin Your Leadership Journey at KSBM');
         setCtaDesc('Applications for the upcoming academic year are now open. Take the first step towards a transformative management education under a community of vibrant peers, experienced faculty, and industry leaders.');
         setCtaImage(DEFAULT_IMAGES.ctaImage);
+        setCtaApplyBtnText('Apply Now');
+        setCtaApplyBtnUrl('/apply');
+        setCtaEnquiryBtnText('Enquire Now');
+        setCtaEnquiryBtnUrl('/contact');
         
         // Reset FAQ
         setFaqHeading('FAQ');
@@ -581,6 +600,18 @@ const ManageAdmissionsPage = () => {
                   <div><label className={fieldLabel}>Badge Text</label><input type="text" maxLength={50} value={heroBadgeText} onChange={e=>setHeroBadgeText(e.target.value)} className={inputCls} /><CharCounter text={heroBadgeText} limit={50} /></div>
                   <div><label className={fieldLabel}>Hero Title</label><input type="text" maxLength={80} value={heroTitle} onChange={e=>setHeroTitle(e.target.value)} className={inputCls} /><CharCounter text={heroTitle} limit={80} /></div>
                   <div><label className={fieldLabel}>Hero Subtitle</label><textarea rows={4} maxLength={300} value={heroSubtitle} onChange={e=>setHeroSubtitle(e.target.value)} className={inputCls} /><CharCounter text={heroSubtitle} limit={300} /></div>
+                  <div>
+                    <label className={fieldLabel}>Brochure Document (PDF)</label>
+                    <SingleDocumentUploader
+                      fileUrl={getDisplayUrl(heroBrochureFile, '')}
+                      onUploadComplete={newDoc => handleImageChange(newDoc, heroBrochureFile, setHeroBrochureFile)}
+                      onUploadStateChange={setIsUploading}
+                      deferredUpload={true}
+                      defaultFile=""
+                      label="Drag & drop brochure PDF, or click to select"
+                      allowDelete={getDisplayUrl(heroBrochureFile, '') !== ''}
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className={fieldLabel}>Background Image</label>
@@ -738,11 +769,25 @@ const ManageAdmissionsPage = () => {
                 <h2 className={panelTitle}>CTA Banner</h2>
                 <Toggle checked={showSections.cta} onChange={v => setShow('cta', v)} label="Show Section" />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-5">
+              <div className="grid grid-cols-1 gap-6">
+                <div className="space-y-5 border-b pb-6">
                   <div><label className={fieldLabel}>Heading</label><input type="text" maxLength={80} value={ctaHeading} onChange={e=>setCtaHeading(e.target.value)} className={inputCls} /><CharCounter text={ctaHeading} limit={80} /></div>
                   <div><label className={fieldLabel}>Description</label><textarea rows={4} maxLength={300} value={ctaDesc} onChange={e=>setCtaDesc(e.target.value)} className={inputCls} /><CharCounter text={ctaDesc} limit={300} /></div>
                 </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-b pb-6">
+                  <div className="space-y-5">
+                    <h3 className="text-sm font-bold text-gray-700 uppercase">Apply Now Button</h3>
+                    <div><label className={fieldLabel}>Button Text</label><input type="text" maxLength={50} value={ctaApplyBtnText} onChange={e=>setCtaApplyBtnText(e.target.value)} className={inputCls} /><CharCounter text={ctaApplyBtnText} limit={50} /></div>
+                    <div><label className={fieldLabel}>Button URL</label><input type="text" maxLength={200} value={ctaApplyBtnUrl} onChange={e=>setCtaApplyBtnUrl(e.target.value)} className={inputCls} /><CharCounter text={ctaApplyBtnUrl} limit={200} /></div>
+                  </div>
+                  <div className="space-y-5">
+                    <h3 className="text-sm font-bold text-gray-700 uppercase">Enquiry Button</h3>
+                    <div><label className={fieldLabel}>Button Text</label><input type="text" maxLength={50} value={ctaEnquiryBtnText} onChange={e=>setCtaEnquiryBtnText(e.target.value)} className={inputCls} /><CharCounter text={ctaEnquiryBtnText} limit={50} /></div>
+                    <div><label className={fieldLabel}>Button URL</label><input type="text" maxLength={200} value={ctaEnquiryBtnUrl} onChange={e=>setCtaEnquiryBtnUrl(e.target.value)} className={inputCls} /><CharCounter text={ctaEnquiryBtnUrl} limit={200} /></div>
+                  </div>
+                </div>
+
                 <div>
                   <label className={fieldLabel}>CTA Visual Image</label>
                   <SingleImageUploader

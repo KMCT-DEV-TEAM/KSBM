@@ -26,8 +26,7 @@ const PlacementHero = ({ data }) => {
         <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-white flex flex-col items-start text-left">
         <motion.div
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.3 }}
+          animate="visible"
           variants={{
             hidden: { opacity: 0 },
             visible: {
@@ -37,7 +36,7 @@ const PlacementHero = ({ data }) => {
           }}
           className="max-w-4xl"
         >
-          {data?.showBadge !== false && (
+          {data?.showBadge !== false && data?.badge && (
             <motion.span
               variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }}
               className="inline-block px-4 py-1.5 rounded-md bg-white/15 text-white text-xs font-medium backdrop-blur-md mb-4 border border-white/20 tracking-wide"
@@ -47,20 +46,20 @@ const PlacementHero = ({ data }) => {
           )}
           {data?.showTitle !== false && data?.title && (
             <motion.h1
-              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.2 } } }}
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }}
               className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-[1.1] tracking-tight"
             >
-              {data.title.split('\n').map((line, i) => (
+              {typeof data.title === 'string' ? data.title.replace(/\\n/g, '\n').split('\n').map((line, i, arr) => (
                 <React.Fragment key={i}>
                   {line}
-                  {i !== data.title.split('\n').length - 1 && <br />}
+                  {i !== arr.length - 1 && <br />}
                 </React.Fragment>
-              ))}
+              )) : data.title}
             </motion.h1>
           )}
-          {data?.showSubtitle !== false && (
+          {data?.showSubtitle !== false && data?.subtitle && (
             <motion.p
-              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.4 } } }}
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }}
               className="text-base md:text-lg text-white/80 max-w-2xl font-light leading-relaxed"
             >
               {data.subtitle}

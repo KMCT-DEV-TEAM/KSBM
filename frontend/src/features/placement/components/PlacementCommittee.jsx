@@ -47,9 +47,14 @@ const PlacementCommittee = ({ data }) => {
                 </p>
               )}
               {data?.showButtonText !== false && (
-                <button className="px-6 py-2 rounded-[18px] border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-all duration-300">
+                <a 
+                  href={data.buttonUrl && data.buttonUrl !== '#' ? resolveImage(data.buttonUrl) : '#'} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block px-6 py-2 rounded-[18px] border-2 border-primary text-primary font-semibold hover:bg-primary hover:text-white transition-all duration-300 text-center"
+                >
                   {data.buttonText}
-                </button>
+                </a>
               )}
             </div>
 

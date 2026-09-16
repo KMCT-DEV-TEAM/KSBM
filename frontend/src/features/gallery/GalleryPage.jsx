@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import api from '../../api/axios';
@@ -8,6 +9,7 @@ const GalleryPage = ({ previewData }) => {
   const [activeTab, setActiveTab] = useState('All');
   const [galleryData, setGalleryData] = useState(previewData || null);
   const [selectedMedia, setSelectedMedia] = useState(null);
+  const [tabStartIndex, setTabStartIndex] = useState(0);
 
   useEffect(() => {
     if (previewData) {
@@ -32,13 +34,26 @@ const GalleryPage = ({ previewData }) => {
     backgroundImage: '/assets/Images/image 53.png'
   };
   const gallery = galleryData?.gallery || { badge: 'Gallery', heading: 'Moments Captured in Campus' };
+  const categories = gallery.categories || ['Sports', 'Cultural'];
+  const allTabs = ['All', ...categories];
+  const visibleTabs = allTabs.slice(tabStartIndex, tabStartIndex + 3);
+
+  const handleNextTabs = () => {
+    if (tabStartIndex + 3 < allTabs.length) {
+      setTabStartIndex(prev => prev + 1);
+    }
+  };
+
+  const handlePrevTabs = () => {
+    if (tabStartIndex > 0) {
+      setTabStartIndex(prev => prev - 1);
+    }
+  };
 
   const filteredItems = items.filter((item) => {
     const itemCategory = item.category || (item.type === 'video' ? 'Sports' : 'Cultural');
     if (activeTab === 'All') return true;
-    if (activeTab === 'Sports') return itemCategory === 'Sports';
-    if (activeTab === 'Cultural') return itemCategory === 'Cultural';
-    return true;
+    return itemCategory === activeTab;
   });
 
   const getCardDimensions = (item, idx, rowNum = 1) => {
@@ -102,19 +117,47 @@ const GalleryPage = ({ previewData }) => {
               </h2>
 
               {/* Filter Tabs */}
-              <div className="flex items-center justify-center gap-3">
-                {['All', 'Sports', 'Cultural'].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`px-7 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${activeTab === tab
-                      ? 'bg-white/20 border-white text-white shadow-[0_0_15px_rgba(255,255,255,0.15)]'
-                      : 'bg-transparent border-white/30 text-white/70 hover:border-white/60 hover:text-white'
-                      }`}
+              <div className="flex items-center justify-center gap-2 sm:gap-3">
+                {allTabs.length > 3 && (
+                  <button 
+                    onClick={handlePrevTabs} 
+                    disabled={tabStartIndex === 0}
+                    className="p-2 text-white/70 hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
                   >
-                    {tab}
+                    <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
                   </button>
-                ))}
+                )}
+                
+                <div className="flex items-center justify-center gap-2 sm:gap-3 overflow-hidden">
+                  <AnimatePresence mode="popLayout">
+                    {visibleTabs.map((tab) => (
+                      <motion.button
+                        key={tab}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.2 }}
+                        onClick={() => setActiveTab(tab)}
+                        className={`px-5 py-2 sm:px-7 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 border ${activeTab === tab
+                          ? 'bg-white/20 border-white text-white shadow-[0_0_15px_rgba(255,255,255,0.15)]'
+                          : 'bg-transparent border-white/30 text-white/70 hover:border-white/60 hover:text-white'
+                          }`}
+                      >
+                        {tab}
+                      </motion.button>
+                    ))}
+                  </AnimatePresence>
+                </div>
+
+                {allTabs.length > 3 && (
+                  <button 
+                    onClick={handleNextTabs} 
+                    disabled={tabStartIndex + 3 >= allTabs.length}
+                    className="p-2 text-white/70 hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -177,12 +220,6 @@ const GalleryPage = ({ previewData }) => {
                             <svg className="w-5 h-5 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                           </div>
                         )}
-
-                        <div className="absolute bottom-0 left-0 w-full p-5 sm:p-7 z-10 flex flex-col justify-end transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                          <h3 className="text-md sm:text-lg font-semibold text-white drop-shadow-md leading-snug">
-                            {item.title}
-                          </h3>
-                        </div>
                       </div>
                     ))}
                   </div>
@@ -207,12 +244,6 @@ const GalleryPage = ({ previewData }) => {
                             <svg className="w-5 h-5 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                           </div>
                         )}
-
-                        <div className="absolute bottom-0 left-0 w-full p-5 sm:p-7 z-10 flex flex-col justify-end transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                          <h3 className="text-md sm:text-lg font-semibold text-white drop-shadow-md leading-snug">
-                            {item.title}
-                          </h3>
-                        </div>
                       </div>
                     ))}
                   </div>
@@ -237,12 +268,6 @@ const GalleryPage = ({ previewData }) => {
                             <svg className="w-5 h-5 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                           </div>
                         )}
-
-                        <div className="absolute bottom-0 left-0 w-full p-5 sm:p-7 z-10 flex flex-col justify-end transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                          <h3 className="text-md sm:text-lg font-semibold text-white drop-shadow-md leading-snug">
-                            {item?.title}
-                          </h3>
-                        </div>
                       </div>
                     ))}
                   </div>
@@ -298,11 +323,6 @@ const GalleryPage = ({ previewData }) => {
                   className="w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
                 />
               )}
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent pointer-events-none rounded-b-xl">
-                <h3 className="text-xl md:text-2xl font-semibold text-white drop-shadow-md">
-                  {selectedMedia.title}
-                </h3>
-              </div>
             </motion.div>
           </motion.div>
         )}

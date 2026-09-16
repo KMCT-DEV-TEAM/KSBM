@@ -4,6 +4,7 @@ const notificationItemSchema = new mongoose.Schema({
   label: { type: String, default: 'EXAMINATION ANNOUNCEMENT' },
   title: { type: String, required: true },
   date: { type: String, default: '17 Jul 2026' },
+  category: { type: String, default: 'Both' },
   pdfUrl: { type: String, default: '#' }
 });
 

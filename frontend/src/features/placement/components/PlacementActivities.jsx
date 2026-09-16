@@ -41,7 +41,7 @@ const PlacementActivities = ({ data }) => {
             transition={{
               repeat: Infinity,
               ease: "linear",
-              duration: 25 // 25 seconds for half scroll (adjust for speed)
+              duration: 50 // 50 seconds for half scroll (adjust for speed)
             }}
           >
             {[...activities, ...activities, ...activities, ...activities].map((activity, index) => (

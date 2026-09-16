@@ -47,8 +47,8 @@ const RecruitersSection = ({ previewData }) => {
           <div className="w-full inline-flex flex-nowrap overflow-hidden">
             <ul className="flex items-center gap-8 md:gap-12 lg:gap-24 opacity-90 pr-8 md:pr-12 lg:pr-24">
               {[1, 2, 3, 4, 5].map((i) => (
-                <li key={i} className="flex items-center justify-center shrink-0 w-[80px] sm:w-[100px] md:w-[150px] lg:w-[180px]">
-                  <div className="w-full h-10 bg-gray-200 rounded"></div>
+                <li key={i} className="flex items-center justify-center shrink-0 w-[120px] sm:w-[160px] md:w-[200px] lg:w-[240px]">
+                  <div className="w-full h-20 lg:h-[100px] bg-gray-200 rounded"></div>
                 </li>
               ))}
             </ul>
@@ -85,14 +85,14 @@ const RecruitersSection = ({ previewData }) => {
             {[...displayList, ...displayList].map((company, index) => (
               <li
                 key={index}
-                className="flex items-center justify-center shrink-0 w-[80px] sm:w-[100px] md:w-[150px] lg:w-[180px] hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer"
+                className="flex items-center justify-center shrink-0 w-[120px] sm:w-[160px] md:w-[200px] lg:w-[240px] hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer"
                 title={company.name}
               >
                 {company.logo ? (
                   <img
                     src={company.logo}
                     alt={`${company.name} logo`}
-                    className="w-full h-auto object-contain max-h-[40px] lg:max-h-[50px]"
+                    className="w-full h-[80px] lg:h-[100px] object-contain"
                   />
                 ) : (
                   <span className={`text-2xl sm:text-3xl font-black tracking-tight ${company.color || 'text-primary'} font-heading`}>

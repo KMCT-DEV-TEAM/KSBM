@@ -32,6 +32,7 @@ app.use(cookieParser());
 // Serve static uploads and assets
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/assets', express.static(path.join(__dirname, '../../assets')));
+app.use('/assets/brochures', express.static(path.join(__dirname, '../../frontend/public/assets/brochures')));
 
 // Routes
 app.use('/api/users', userRoutes);

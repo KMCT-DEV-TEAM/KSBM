@@ -982,9 +982,9 @@ export const updateMbaPageSettings = async (req, res) => {
   try {
     const fields = [
       'shortTitle', 'title', 'heroTitleLine1', 'heroTitleLine2', 'description', 'heroImage',
-      'heroPrimaryBtnText', 'heroSecondaryBtnText', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
+      'heroPrimaryBtnText', 'heroPrimaryBtnLink', 'heroSecondaryBtnText', 'heroSecondaryBtnLink', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
       'overviewTitle', 'overviewText', 'overviewSubtext', 'overviewImage',
-      'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
+      'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText', 'overviewSecondaryBtnLink',
       'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
       'eligibilityTitle', 'eligibilitySubtitle', 'eligibilityBtnText', 'eligibilityBtnLink', 'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
@@ -1085,9 +1085,9 @@ export const updateBbaPageSettings = async (req, res) => {
   try {
     const fields = [
       'shortTitle', 'title', 'heroTitleLine1', 'heroTitleLine2', 'description', 'heroImage',
-      'heroPrimaryBtnText', 'heroSecondaryBtnText', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
+      'heroPrimaryBtnText', 'heroPrimaryBtnLink', 'heroSecondaryBtnText', 'heroSecondaryBtnLink', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
       'overviewTitle', 'overviewText', 'overviewSubtext', 'overviewImage',
-      'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText',
+      'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText', 'overviewSecondaryBtnLink',
       'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
       'eligibilityTitle', 'eligibilitySubtitle', 'eligibilityBtnText', 'eligibilityBtnLink', 'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
@@ -1221,15 +1221,18 @@ export const updatePlacementPageSettings = async (req, res) => {
       'facultyInCharge', 'placementCommittee', 'activities'
     ];
     
-    const settings = await PlacementPage.getSettings();
-    
+    let updateData = {};
     fields.forEach((field) => {
       if (req.body[field] !== undefined) {
-        settings[field] = req.body[field];
+        updateData[field] = req.body[field];
       }
     });
 
-    const updatedSettings = await settings.save();
+    const updatedSettings = await PlacementPage.findOneAndUpdate(
+      {},
+      { $set: updateData },
+      { new: true, upsert: true }
+    );
     res.json(updatedSettings);
   } catch (error) {
     res.status(500).json({ message: 'Server error updating Placement Page settings', error: error.message });

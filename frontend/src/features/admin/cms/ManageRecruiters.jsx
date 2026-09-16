@@ -38,7 +38,7 @@ const defaultLogoMap = {
   'Microsoft': '/assets/Images/mba/microsoft_logo.svg'
 };
 
-const ManageRecruiters = ({ hideVisibilityToggle = false }) => {
+const ManageRecruiters = ({ hideVisibilityToggle = false, hideHeader = false }) => {
   const [recruiters, setRecruiters] = useState([]);
   const [showSection, setShowSection] = useState(true);
 
@@ -275,14 +275,16 @@ const ManageRecruiters = ({ hideVisibilityToggle = false }) => {
 
   return (
     <div className="space-y-6 w-full">
-      <PageHeader
-        title="Recruiters Settings"
-        description="Manage the recruiters and partners displayed on the landing page."
-        onPreview={() => setIsPreviewModalOpen(true)}
-        onReset={handleResetToDefault}
-        onSave={handleSave}
-        isSaving={isSaving}
-      />
+      {!hideHeader && (
+        <PageHeader
+          title="Recruiters Settings"
+          description="Manage the recruiters and partners displayed on the landing page."
+          onPreview={() => setIsPreviewModalOpen(true)}
+          onReset={handleResetToDefault}
+          onSave={handleSave}
+          isSaving={isSaving}
+        />
+      )}
 
       {isPreviewModalOpen && (
         <div className="fixed inset-0 z-[100] flex flex-col bg-gray-900/80 backdrop-blur-sm">
@@ -361,12 +363,23 @@ const ManageRecruiters = ({ hideVisibilityToggle = false }) => {
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-bold text-[#1e2869]">Recruiter Cards</h3>
             </div>
-            <button
-              onClick={handleAddRecruiter}
-              className="flex items-center gap-2 text-sm font-semibold bg-primary text-white px-5 py-2.5 rounded-lg shadow-sm hover:bg-primary/90 hover:shadow transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Plus className="w-4 h-4" /> Add Recruiter Card
-            </button>
+            <div className="flex items-center gap-3">
+              {hideHeader && (
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="flex items-center gap-2 text-sm font-semibold bg-primary text-white px-5 py-2.5 rounded-lg shadow-sm hover:bg-primary/90 hover:shadow transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Save className="w-4 h-4" /> {isSaving ? 'Saving...' : 'Save Changes'}
+                </button>
+              )}
+              <button
+                onClick={handleAddRecruiter}
+                className="flex items-center gap-2 text-sm font-semibold bg-white border border-gray-200 text-gray-700 px-5 py-2.5 rounded-lg shadow-sm hover:bg-gray-50 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Plus className="w-4 h-4" /> Add Recruiter Card
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

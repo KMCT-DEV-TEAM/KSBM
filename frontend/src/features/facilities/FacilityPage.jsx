@@ -101,13 +101,13 @@ const FacilityPage = () => {
         }
       }
     };
-    
+
     window.addEventListener('message', handleMessage);
-    
+
     if (window.parent) {
       window.parent.postMessage({ type: 'iframe-ready' }, '*');
     }
-    
+
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
@@ -120,7 +120,7 @@ const FacilityPage = () => {
       try {
         const response = await api.get('/cms/facilities-page', { hideLoader: true });
         const data = response.data;
-        
+
         if (clubId && data?.clubs?.items) {
           const club = data.clubs.items.find(c => c._id === clubId);
           if (club) {
@@ -128,7 +128,7 @@ const FacilityPage = () => {
             return;
           }
         }
-        
+
         // Fallback to template if no clubId found
         if (data && data.facilityDetails) {
           setFacilityData(data.facilityDetails);
@@ -189,31 +189,31 @@ const FacilityPage = () => {
       <main className="flex-1">
         {/* 1. Hero Section */}
         {(!previewSection || previewSection === 'hero') && (
-        <section className="relative h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32 bg-[#0b1238]">
-          <img
-            src={heroBg}
-            alt={heroTitle}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-[#0b1238]/60 mix-blend-multiply" />
-          {hero?.showTextContent !== false && hero?.showTextContent !== 'false' && (
-            <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-white flex flex-col items-start text-left">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="max-w-4xl"
-              >
-                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-snug tracking-tight">
-                  {heroTitle}
-                </h1>
-                <p className="text-[11px] md:text-sm lg:text-base text-gray-200 font-medium leading-relaxed max-w-3xl">
-                  {heroSubtitle}
-                </p>
-              </motion.div>
-            </div>
-          )}
-        </section>
+          <section className="relative h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32 bg-[#0b1238]">
+            <img
+              src={heroBg}
+              alt={heroTitle}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-[#0b1238]/60 mix-blend-multiply" />
+            {hero?.showTextContent !== false && hero?.showTextContent !== 'false' && (
+              <div className="relative z-10 w-[98%] max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-white flex flex-col items-start text-left">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  className="max-w-4xl"
+                >
+                  <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-snug tracking-tight">
+                    {heroTitle}
+                  </h1>
+                  <p className="text-[11px] md:text-sm lg:text-base text-gray-200 font-medium leading-relaxed max-w-3xl">
+                    {heroSubtitle}
+                  </p>
+                </motion.div>
+              </div>
+            )}
+          </section>
         )}
 
         {/* 2. About Section */}
@@ -360,12 +360,12 @@ const FacilityPage = () => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
-                    className="relative rounded-2xl overflow-hidden w-64 aspect-[3/4] group shadow-lg"
+                    className="relative rounded-2xl overflow-hidden w-64 aspect-[3/4] group shadow-lg bg-[#e8ecf5]"
                   >
                     {member.image ? (
-                      <img src={member.image} alt={member.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                      <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
                     ) : (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+                      <div className="w-full h-full bg-[#DDDDDD] flex items-center justify-center text-gray-400">
                         <span className="text-sm">No Image</span>
                       </div>
                     )}
@@ -415,8 +415,8 @@ const FacilityPage = () => {
                     if (col.type === 'tall') {
                       return (
                         <div key={colIdx} className="shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] snap-center">
-                          <GalleryImage 
-                            item={col.items[0]} 
+                          <GalleryImage
+                            item={col.items[0]}
                             className="h-[280px] sm:h-[340px] lg:h-[400px]"
                           />
                         </div>
@@ -426,12 +426,12 @@ const FacilityPage = () => {
                     if (col.type === 'split-top-small') {
                       return (
                         <div key={colIdx} className="shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] flex flex-col gap-3 sm:gap-4 snap-center">
-                          <GalleryImage 
-                            item={col.items[0]} 
+                          <GalleryImage
+                            item={col.items[0]}
                             className="h-[120px] sm:h-[145px] lg:h-[170px]"
                           />
-                          <GalleryImage 
-                            item={col.items[1]} 
+                          <GalleryImage
+                            item={col.items[1]}
                             className="h-[148px] sm:h-[183px] lg:h-[218px]"
                           />
                         </div>
@@ -441,12 +441,12 @@ const FacilityPage = () => {
                     if (col.type === 'split-top-large') {
                       return (
                         <div key={colIdx} className="shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] flex flex-col gap-3 sm:gap-4 snap-center">
-                          <GalleryImage 
-                            item={col.items[0]} 
+                          <GalleryImage
+                            item={col.items[0]}
                             className="h-[148px] sm:h-[183px] lg:h-[218px]"
                           />
-                          <GalleryImage 
-                            item={col.items[1]} 
+                          <GalleryImage
+                            item={col.items[1]}
                             className="h-[120px] sm:h-[145px] lg:h-[170px]"
                           />
                         </div>
@@ -462,19 +462,19 @@ const FacilityPage = () => {
 
         {/* Bottom CTA */}
         {!isPreviewMode && (
-        <section className="py-10 sm:py-20 bg-gray-50 flex items-center justify-center">
-          <div className="text-center max-w-2xl px-4">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#2b2b68] mb-4">
-              Ready to lead the future?
-            </h2>
-            <p className="text-gray-600 text-xs sm:text-base mb-8">
-              Explore opportunities to engage, learn, and grow. Join our vibrant community and become part of something greater.
-            </p>
-            <Link href={applyLink} className="inline-block bg-[#2b2b68] text-white px-8 py-3 rounded-md font-semibold hover:bg-primary/90 transition-colors">
-              Apply Now
-            </Link>
-          </div>
-        </section>
+          <section className="py-10 sm:py-20 bg-gray-50 flex items-center justify-center">
+            <div className="text-center max-w-2xl px-4">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#2b2b68] mb-4">
+                Ready to lead the future?
+              </h2>
+              <p className="text-gray-600 text-xs sm:text-base mb-8">
+                Explore opportunities to engage, learn, and grow. Join our vibrant community and become part of something greater.
+              </p>
+              <Link href={applyLink} className="inline-block bg-[#2b2b68] text-white px-8 py-3 rounded-md font-semibold hover:bg-primary/90 transition-colors">
+                Apply Now
+              </Link>
+            </div>
+          </section>
         )}
 
       </main>

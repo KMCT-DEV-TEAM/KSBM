@@ -6,12 +6,24 @@ import api from '../../../../api/axios';
 import Swal from 'sweetalert2';
 import confirmAction from '../../../../utils/confirmAction';
 
-const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange, deferredMode = false, onMarkForDeletion = null }) => {
+const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange, deferredMode = false, onMarkForDeletion = null, maxSize = 1048576 }) => {
   const [isUploading, setIsUploading] = useState(false);
   const dragItem = useRef();
   const dragOverItem = useRef();
 
-  const onDrop = useCallback(async (acceptedFiles) => {
+  const onDrop = useCallback(async (acceptedFiles, fileRejections) => {
+    if (fileRejections.length > 0) {
+      const error = fileRejections[0].errors[0];
+      if (error.code === 'file-too-large') {
+        const maxSizeMB = maxSize / (1024 * 1024);
+        const limitText = maxSizeMB >= 1 ? `${maxSizeMB.toFixed(1)}MB` : `${(maxSize / 1024).toFixed(0)}KB`;
+        Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: 'File Too Large', text: `Please upload images smaller than ${limitText}.`, showConfirmButton: false, timer: 3000 });
+      } else {
+        Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: 'Invalid File', text: error.message, showConfirmButton: false, timer: 3000 });
+      }
+      return;
+    }
+
     if (acceptedFiles.length === 0) return;
 
     if (bannerImages.length + acceptedFiles.length > 5) {
@@ -94,7 +106,8 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange, de
     accept: {
       'image/*': ['.png', '.jpg', '.jpeg', '.webp']
     },
-    disabled: isUploading || bannerImages.length >= 5
+    disabled: isUploading || bannerImages.length >= 5,
+    maxSize: maxSize
   });
 
   const removeImage = async (index) => {
@@ -231,7 +244,7 @@ const BannerUploader = ({ bannerImages, setBannerImages, onUploadStateChange, de
                 <p className="text-base font-medium text-gray-700">
                   {bannerImages.length >= 5 ? "Maximum of 5 images reached." : isDragActive ? "Drop the images here..." : "Drag & drop banner images, or click to select"}
                 </p>
-                <p className="text-sm text-gray-500 mt-2">Maximum 5 images allowed. You can select multiple files. Supports PNG, JPG, WEBP up to 5MB</p>
+                <p className="text-sm text-gray-500 mt-2">Maximum 5 images allowed. You can select multiple files. Supports PNG, JPG, WEBP up to {maxSize >= 1048576 ? `${(maxSize / 1048576).toFixed(1)}MB` : `${(maxSize / 1024).toFixed(0)}KB`}</p>
               </div>
             </>
           )}

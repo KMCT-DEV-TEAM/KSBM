@@ -136,7 +136,8 @@ const placementPageSchema = new mongoose.Schema(
       showSection: { type: Boolean, default: true },
       title: { type: String, default: 'Placement Committee' },
       description: { type: String, default: 'The Placement Committee consists of student representatives who actively coordinate with recruiters, schedule interviews, and ensure a smooth placement process.' },
-      buttonText: { type: String, default: 'Connect with Committee' },
+      buttonText: { type: String, default: 'View Committee' },
+      buttonUrl: { type: String, default: '#' },
       image: { type: String, default: '/assets/Images/placements/placement_main.png' },
       items: {
         type: [committeeSchema],

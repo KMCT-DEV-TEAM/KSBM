@@ -611,39 +611,25 @@ const ManageEventsPage = () => {
                       <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 1000</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.about?.paragraph2 || '')).length}/1000</span></div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                    <div className="space-y-2">
-                      <label className="text-xs font-semibold text-gray-500">Event Brochure PDF (Optional)</label>
-                      <SingleDocumentUploader
-                        id="events-brochure"
-                        fileUrl={formData.about?.brochureUrl}
-                        deferredUpload={true}
-                        onUploadComplete={(res) => {
-                          if (res.isDeleted) {
-                            handleImageUploadChange('about.brochureUrl', '', null, formData.about?.brochureUrl);
-                          } else {
-                            handleImageUploadChange('about.brochureUrl', res.previewUrl, res.file, formData.about?.brochureUrl);
-                          }
-                        }}
-                        label="Upload Brochure PDF"
-                        accept=".pdf"
-                      />
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold text-gray-500">Brochure Button Text</label>
+                        <input type="text" maxLength={30} value={formData.about?.brochureBtnText || 'Event Brochure'} onChange={e => setFormData({ ...formData, about: { ...formData.about, brochureBtnText: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold text-gray-500">Brochure Button Link (URL)</label>
+                        <input type="text" value={formData.about?.brochureUrl || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, brochureUrl: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. https://example.com/brochure.pdf" />
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-semibold text-gray-500">Download Calendar PDF (Optional)</label>
-                      <SingleDocumentUploader
-                        id="events-calendar"
-                        fileUrl={formData.about?.calendarUrl}
-                        deferredUpload={true}
-                        onUploadComplete={(res) => {
-                          if (res.isDeleted) {
-                            handleImageUploadChange('about.calendarUrl', '', null, formData.about?.calendarUrl);
-                          } else {
-                            handleImageUploadChange('about.calendarUrl', res.previewUrl, res.file, formData.about?.calendarUrl);
-                          }
-                        }}
-                        label="Upload Calendar PDF"
-                        accept=".pdf"
-                      />
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold text-gray-500">Calendar Button Text</label>
+                        <input type="text" maxLength={30} value={formData.about?.calendarBtnText || 'Download Calendar'} onChange={e => setFormData({ ...formData, about: { ...formData.about, calendarBtnText: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold text-gray-500">Calendar Button Link (URL)</label>
+                        <input type="text" value={formData.about?.calendarUrl || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, calendarUrl: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. https://example.com/calendar.pdf" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -747,6 +733,7 @@ const ManageEventsPage = () => {
                         <span className="text-xs font-bold text-gray-500 uppercase">Image #{idx + 1}</span>
                       </div>
                       <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
+                        maxSize={1048576}
                         currentImage={item.img}
                         defaultImage={defaults.highlightedPrograms.images[0]?.img} onChange={(url, file) => handleImageUploadChange(`highlightedPrograms.images.${idx}.img`, url, file, item.img, defaults.highlightedPrograms.images[0]?.img)}
                       />
@@ -860,6 +847,7 @@ const ManageEventsPage = () => {
                         <button onClick={() => handleRemoveArrayItem('momentsCaptured', 'images', idx)} className="text-red-500 hover:text-red-700 p-1"><Trash2 className="w-4 h-4" /></button>
                       </div>
                       <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
+                        maxSize={1048576}
                         currentImage={item.img}
                         defaultImage={defaults.momentsCaptured.images[0]?.img} onChange={(url, file) => handleImageUploadChange(`momentsCaptured.images.${idx}.img`, url, file, item.img, defaults.momentsCaptured.images[0]?.img)}
                       />
@@ -933,6 +921,7 @@ const ManageEventsPage = () => {
                   <LogoUploader 
                     uploadEndpoint="/upload/events" 
                     deferredMode={true}
+                    maxSize={addModalType?.section === 'momentsCaptured' ? 1048576 : 204800}
                     currentImage={modalImageUrl}
                     defaultImage={''}
                     onChange={(url, file) => {

@@ -15,7 +15,8 @@ const SingleDocumentUploader = ({
   allowDelete = true,
   deferredUpload = false,
   defaultFile = "",
-  recommendedSize = "PDF up to 10MB"
+  recommendedSize = "PDF up to 2MB",
+  maxSize = 2097152 // Default 2MB
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   
@@ -29,7 +30,19 @@ const SingleDocumentUploader = ({
     return url.split('/').pop();
   };
 
-  const onDrop = useCallback(async (acceptedFiles) => {
+  const onDrop = useCallback(async (acceptedFiles, fileRejections) => {
+    if (fileRejections.length > 0) {
+      const error = fileRejections[0].errors[0];
+      if (error.code === 'file-too-large') {
+        const maxSizeMB = maxSize / (1024 * 1024);
+        const limitText = maxSizeMB >= 1 ? `${maxSizeMB.toFixed(1)}MB` : `${(maxSize / 1024).toFixed(0)}KB`;
+        Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: 'File Too Large', text: `Please upload a document smaller than ${limitText}.`, showConfirmButton: false, timer: 3000 });
+      } else {
+        Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: 'Invalid File', text: error.message, showConfirmButton: false, timer: 3000 });
+      }
+      return;
+    }
+
     if (acceptedFiles.length === 0) return;
 
     const file = acceptedFiles[0];
@@ -94,7 +107,8 @@ const SingleDocumentUploader = ({
       'application/pdf': ['.pdf']
     },
     disabled: isUploading,
-    multiple: false
+    multiple: false,
+    maxSize: maxSize
   });
 
   const removeFile = async (e) => {

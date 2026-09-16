@@ -46,8 +46,8 @@ const GoverningBodyMembers = ({ data }) => {
         {members.length > 0 && members.map((member, idx) => (
           <React.Fragment key={member._id || idx}>
             <MemberCard member={member} index={idx} />
-            {/* Force a break after the 3rd element on desktop to keep the 3-item top row */}
-            {idx === 2 && members.length > 3 && (
+            {/* Force a break after the 4th element on desktop to keep the 4-item top row */}
+            {idx === 3 && members.length > 4 && (
               <div className="hidden lg:block w-full h-0 m-0 p-0 -mt-16 pointer-events-none"></div>
             )}
           </React.Fragment>
@@ -95,8 +95,9 @@ const MemberCard = ({ member, index }) => {
           </h4>
         )}
         {member.showTitle !== false && (
-          <p className="text-[#a6adcf] text-[8px] sm:text-[10px] font-bold tracking-widest uppercase sm:mt-1.5 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 leading-[1.1] sm:leading-normal">
-            <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#a6adcf] shrink-0"></span> {member.title}
+          <p className="text-[#a6adcf] text-[8px] sm:text-[10px] font-bold tracking-widest uppercase sm:mt-1.5 text-center leading-[1.1] sm:leading-normal">
+            <span className="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-[#a6adcf] mr-1.5 align-middle mb-[2px]"></span>
+            <span className="align-middle">{member.title}</span>
           </p>
         )}
       </div>

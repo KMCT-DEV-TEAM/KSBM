@@ -194,22 +194,44 @@ const ManageFaculty = () => {
 
   const handleResetToDefault = async () => {
     await confirmAction({
-      title: 'Reset to Defaults?',
-      message: 'This will reset all input fields to default values. Click "Save Changes" to apply.',
+      title: 'Reset Section to Defaults?',
+      message: 'This will reset all input fields in the current section to default values. Click "Save Changes" to apply.',
       confirmText: 'Yes, reset!',
       variant: 'primary',
       action: async () => {
-        setShowHeroTextContent(true);
-        setHeroHeading('Faculty Members');
-        setHeroSubtext('Our distinguished faculty are committed to delivering quality education through innovative teaching, practical learning, and personalized mentorship, helping students build the skills and confidence needed for successful careers.');
-        setHeroBgImage('/assets/Images/image 2.png');
-        
-        setShowIntro(true);
-        setIntroSubheading('FACULTY MEMBERS');
-        setIntroHeading('Learn from the Best');
-        setIntroText('At KSBM, our faculty members are the cornerstone of academic excellence. With a blend of strong academic credentials, industry expertise, and a passion for teaching, they create a dynamic learning environment that encourages critical thinking, innovation, and leadership. Beyond the classroom, our faculty mentor, inspire, and guide students through every stage of their academic journey, equipping them with the knowledge, confidence, and practical skills needed to succeed in an ever-evolving global business landscape.');
-        setShowKsbmFaculty(true);
-        setShowAdjunctFaculty(true);
+        if (activeTab === 'hero') {
+          setShowHeroTextContent(true);
+          setHeroHeading('Faculty Members');
+          setHeroSubtext('Our distinguished faculty are committed to delivering quality education through innovative teaching, practical learning, and personalized mentorship, helping students build the skills and confidence needed for successful careers.');
+          setHeroBgImage('/assets/Images/image 2.png');
+        } else if (activeTab === 'intro') {
+          setShowIntro(true);
+          setIntroSubheading('FACULTY MEMBERS');
+          setIntroHeading('Learn from the Best');
+          setIntroText('At KSBM, our faculty members are the cornerstone of academic excellence. With a blend of strong academic credentials, industry expertise, and a passion for teaching, they create a dynamic learning environment that encourages critical thinking, innovation, and leadership. Beyond the classroom, our faculty mentor, inspire, and guide students through every stage of their academic journey, equipping them with the knowledge, confidence, and practical skills needed to succeed in an ever-evolving global business landscape.');
+        } else if (activeTab === 'ksbm') {
+          setShowKsbmFaculty(true);
+          setKsbmFacultyHeading("KSBM Faculty");
+          setKsbmFaculty([
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 1 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 2 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 3 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 4 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 5 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 6 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 7 },
+            { name: "Aleena Joseph", title: "Assistant Professor in Business Management", image: "/assets/Images/image 31.png", order: 8 }
+          ]);
+        } else if (activeTab === 'adjunct') {
+          setShowAdjunctFaculty(true);
+          setAdjunctFacultyHeading("Adjunct Faculty");
+          setAdjunctFaculty([
+            { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 1 },
+            { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 2 },
+            { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 3 },
+            { name: "Aleena Joseph", title: "Adjunct Professor in Business Management", image: "/assets/Images/image 31.png", order: 4 }
+          ]);
+        }
         
         Toast.fire({ icon: 'info', title: 'Reset to defaults. Click Save Changes to apply.' });
       }
@@ -468,7 +490,7 @@ const ManageFaculty = () => {
                   onChange={(e) => setHeroHeading(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
-<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{heroHeading?.length || 0}/50</span></div>
+<div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{heroHeading?.length || 0}/50</span></div>
               </div>
               <div>
                 <div className="flex items-center gap-3 mb-1.5">
@@ -482,6 +504,7 @@ const ManageFaculty = () => {
                   onChange={(e) => setHeroSubtext(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
+                <div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{heroSubtext?.length || 0}/300</span></div>
               </div>
             </div>
             <div>
@@ -518,7 +541,6 @@ const ManageFaculty = () => {
               <div>
                 <div className="flex justify-between mb-1.5">
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Intro Subheading Tag</label>
-                  <span className="text-xs text-gray-400">{introSubheading?.length || 0}/50</span>
 </div>
 <input
                   type="text"
@@ -527,7 +549,7 @@ const ManageFaculty = () => {
                   onChange={(e) => setIntroSubheading(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
-<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 300</span><span className="text-[10px] text-gray-400 font-medium">{heroSubtext?.length || 0}/300</span></div>
+<div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{introSubheading?.length || 0}/50</span></div>
               </div>
               <div>
                 <div className="mb-1.5">
@@ -541,7 +563,7 @@ const ManageFaculty = () => {
                   onChange={(e) => setIntroHeading(e.target.value)}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                 />
-<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 100</span><span className="text-[10px] text-gray-400 font-medium">{introHeading?.length || 0}/100</span></div>
+<div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{introHeading?.length || 0}/100</span></div>
               </div>
             </div>
             <div>
@@ -556,6 +578,7 @@ const ManageFaculty = () => {
                 onChange={(e) => setIntroText(e.target.value)}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
               />
+              <div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{introText?.length || 0}/600</span></div>
             </div>
           </div>
         </div>
@@ -589,9 +612,9 @@ const ManageFaculty = () => {
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 mb-6">
             <div className="flex justify-between items-center mb-1.5">
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Section Heading</label>
-              <span className="text-xs text-gray-400">{(ksbmFacultyHeading || '').length}/60</span>
             </div>
             <input type="text" maxLength={60} value={ksbmFacultyHeading} onChange={(e) => setKsbmFacultyHeading(e.target.value)} placeholder="e.g. KSBM Faculty" className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+            <div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{(ksbmFacultyHeading || '').length}/60</span></div>
           </div>
 
           <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
@@ -645,9 +668,9 @@ const ManageFaculty = () => {
           <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 mb-6">
             <div className="flex justify-between items-center mb-1.5">
               <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide">Section Heading</label>
-              <span className="text-xs text-gray-400">{(adjunctFacultyHeading || '').length}/60</span>
             </div>
             <input type="text" maxLength={60} value={adjunctFacultyHeading} onChange={(e) => setAdjunctFacultyHeading(e.target.value)} placeholder="e.g. Adjunct Faculty" className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+            <div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{(adjunctFacultyHeading || '').length}/60</span></div>
           </div>
 
           <div className="bg-gray-50/50 rounded-2xl border border-gray-200/60 p-4 md:p-6 min-h-[300px]">
@@ -710,7 +733,6 @@ const ManageFaculty = () => {
                   <div>
                     <div className="flex justify-between mb-1.5">
                       <label className="block text-sm font-semibold text-gray-700">Full Name</label>
-                      <span className="text-xs text-gray-400">{currentMember?.name?.length || 0}/50</span>
 </div>
 <input
                       type="text"
@@ -720,7 +742,7 @@ const ManageFaculty = () => {
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       placeholder="e.g. Dr. Navas K. M"
                     />
-<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 600</span><span className="text-[10px] text-gray-400 font-medium">{introText?.length || 0}/600</span></div>
+<div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{currentMember?.name?.length || 0}/50</span></div>
                   </div>
                   
                   <div>
@@ -736,7 +758,7 @@ const ManageFaculty = () => {
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                       placeholder="e.g. Managing Trustee"
                     />
-<div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 100</span><span className="text-[10px] text-gray-400 font-medium">{currentMember?.title?.length || 0}/100</span></div>
+<div className="flex justify-end items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">{currentMember?.title?.length || 0}/100</span></div>
                   </div>
                   
                   <div>

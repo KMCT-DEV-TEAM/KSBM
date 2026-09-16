@@ -91,7 +91,6 @@ const processDeferredUploads = async (obj, apiInstance) => {
         const formData = new FormData();
         formData.append('image', file);
         const uploadRes = await apiInstance.post('/upload/mba', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
           hideLoader: true
         });
         return uploadRes.data.url;
@@ -145,7 +144,9 @@ const ManageMbaPage = ({ isBba = false }) => {
   const [description, setDescription] = useState('');
   const [heroImage, setHeroImage] = useState('');
   const [heroPrimaryBtnText, setHeroPrimaryBtnText] = useState('EXPLORE PROGRAM');
+  const [heroPrimaryBtnLink, setHeroPrimaryBtnLink] = useState('#overview');
   const [heroSecondaryBtnText, setHeroSecondaryBtnText] = useState('DOWNLOAD BROCHURE');
+  const [heroSecondaryBtnLink, setHeroSecondaryBtnLink] = useState('');
   const [heroCardTitle, setHeroCardTitle] = useState('Batch 2025–27');
   const [heroCardStat1Title, setHeroCardStat1Title] = useState('Limited Seats');
   const [heroCardStat1Sub, setHeroCardStat1Sub] = useState('Last few slots remaining');
@@ -161,6 +162,7 @@ const ManageMbaPage = ({ isBba = false }) => {
   const [overviewFloatingBadgeText, setOverviewFloatingBadgeText] = useState(isBba ? '3-Year Foundation' : '100% Case-Study Driven');
   const [overviewPrimaryBtnText, setOverviewPrimaryBtnText] = useState('Apply Now');
   const [overviewSecondaryBtnText, setOverviewSecondaryBtnText] = useState('Download Brochure');
+  const [overviewSecondaryBtnLink, setOverviewSecondaryBtnLink] = useState('');
 
   const [dimensions, setDimensions] = useState([]);
 
@@ -219,10 +221,10 @@ const ManageMbaPage = ({ isBba = false }) => {
   const currentDraftData = {
     showSections,
     shortTitle, title, description, heroImage,
-    heroTitleLine1, heroTitleLine2, heroPrimaryBtnText, heroSecondaryBtnText,
+    heroTitleLine1, heroTitleLine2, heroPrimaryBtnText, heroPrimaryBtnLink, heroSecondaryBtnText, heroSecondaryBtnLink,
     heroCardTitle, heroCardStat1Title, heroCardStat1Sub, heroCardStat2Title, heroCardStat2Sub,
     overviewTitle, overviewText, overviewSubtext, overviewImage,
-    overviewBadgeText, overviewFloatingBadgeText, overviewPrimaryBtnText, overviewSecondaryBtnText,
+    overviewBadgeText, overviewFloatingBadgeText, overviewPrimaryBtnText, overviewSecondaryBtnText, overviewSecondaryBtnLink,
     dimensions,
     whyChoosePills,
     internshipTitle,
@@ -299,7 +301,9 @@ const ManageMbaPage = ({ isBba = false }) => {
       setDescription(data.description || '');
       setHeroImage(data.heroImage || '');
       setHeroPrimaryBtnText(data.heroPrimaryBtnText || 'EXPLORE PROGRAM');
+      setHeroPrimaryBtnLink(data.heroPrimaryBtnLink || '#overview');
       setHeroSecondaryBtnText(data.heroSecondaryBtnText || 'DOWNLOAD BROCHURE');
+      setHeroSecondaryBtnLink(data.heroSecondaryBtnLink || '');
       setHeroCardTitle(data.heroCardTitle || 'Batch 2025–27');
       setHeroCardStat1Title(data.heroCardStat1Title || 'Limited Seats');
       setHeroCardStat1Sub(data.heroCardStat1Sub || 'Last few slots remaining');
@@ -314,6 +318,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       setOverviewFloatingBadgeText(data.overviewFloatingBadgeText || (isBba ? '3-Year Foundation' : '100% Case-Study Driven'));
       setOverviewPrimaryBtnText(data.overviewPrimaryBtnText || 'Apply Now');
       setOverviewSecondaryBtnText(data.overviewSecondaryBtnText || 'Download Brochure');
+      setOverviewSecondaryBtnLink(data.overviewSecondaryBtnLink || '');
 
       setDimensions(data.dimensions || []);
       setShowSections(data.showSections || { hero: true, overview: true, dimensions: true, whyChoose: true, internships: true, dynamic: true, gallery: true, calendar: true, eligibility: true, recruiters: true });
@@ -344,7 +349,7 @@ const ManageMbaPage = ({ isBba = false }) => {
         ]
       });
 
-      setDynamicLearning(data.dynamic || {
+      setDynamicLearning(data.dynamicLearning || {
         badgeText: 'ABOUT THE IV',
         title: 'Experience Dynamic Learning',
         desc1: 'Beyond the classroom, KSBM offers an electrifying campus ecosystem packed with management clubs, national-level conclaves, cultural extravaganzas, and executive workshops.',
@@ -372,13 +377,13 @@ const ManageMbaPage = ({ isBba = false }) => {
       });
 
       setAcademicCalendarBanner({
-        ...(data.calendar || {}),
-        badgeText: data.calendar?.badgeText || 'ACADEMIC SCHEDULE 2026-27',
-        title: data.calendar?.title || 'Download the Official Academic Calendar',
-        description: data.calendar?.description || 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
-        image: data.calendar?.image || '/assets/Images/mba/calendar_64.png',
-        events: (data.calendar?.events && data.calendar.events.length > 0)
-          ? data.calendar.events
+        ...(data.academicCalendarBanner || {}),
+        badgeText: data.academicCalendarBanner?.badgeText || 'ACADEMIC SCHEDULE 2026-27',
+        title: data.academicCalendarBanner?.title || 'Download the Official Academic Calendar',
+        description: data.academicCalendarBanner?.description || 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
+        image: data.academicCalendarBanner?.image || '/assets/Images/mba/calendar_64.png',
+        events: (data.academicCalendarBanner?.events && data.academicCalendarBanner.events.length > 0)
+          ? data.academicCalendarBanner.events
           : defaultCalendarEvents
       });
 
@@ -409,7 +414,9 @@ const ManageMbaPage = ({ isBba = false }) => {
             description,
             heroImage,
             heroPrimaryBtnText,
+            heroPrimaryBtnLink,
             heroSecondaryBtnText,
+            heroSecondaryBtnLink,
             heroCardTitle,
             heroCardStat1Title,
             heroCardStat1Sub,
@@ -423,6 +430,7 @@ const ManageMbaPage = ({ isBba = false }) => {
             overviewFloatingBadgeText,
             overviewPrimaryBtnText,
             overviewSecondaryBtnText,
+            overviewSecondaryBtnLink,
             dimensions,
             internshipTitle,
             internshipDesc,
@@ -440,6 +448,16 @@ const ManageMbaPage = ({ isBba = false }) => {
           const processedPayload = await processDeferredUploads(rawPayload, api);
 
           await api.put(endpoint, processedPayload);
+
+          // Sync state with real uploaded URLs so UI reflects correct images without reload
+          if (processedPayload.heroImage) setHeroImage(processedPayload.heroImage);
+          if (processedPayload.overviewImage) setOverviewImage(processedPayload.overviewImage);
+          if (processedPayload.internshipBgImage) setInternshipBgImage(processedPayload.internshipBgImage);
+          if (processedPayload.internshipImages) setInternshipImages(processedPayload.internshipImages);
+          if (processedPayload.dynamicLearning) setDynamicLearning(processedPayload.dynamicLearning);
+          if (processedPayload.momentsGallery) setMomentsGallery(processedPayload.momentsGallery);
+          if (processedPayload.academicCalendarBanner) setAcademicCalendarBanner(processedPayload.academicCalendarBanner);
+          if (processedPayload.dimensions) setDimensions(processedPayload.dimensions);
 
           const newImages = extractImageUrls(processedPayload);
           const deletedUrls = originalImagesRef.current.filter(url => !newImages.includes(url));
@@ -917,10 +935,31 @@ const ManageMbaPage = ({ isBba = false }) => {
     openAddModal(
       'Add Dimension Pill',
       [
-        { name: 'title', label: 'Title', type: 'text', maxLength: 60, required: true },
+        { name: 'title', label: 'Dimension Title', type: 'text', maxLength: 100, required: true },
+        { name: 'description', label: 'Description', type: 'textarea', maxLength: 200, required: true },
+        {
+          name: 'icon',
+          label: 'Icon Name',
+          type: 'select',
+          required: true,
+          options: [
+            { value: 'BookOpen', label: 'BookOpen (Management)' },
+            { value: 'Users', label: 'Users (Leadership/Team)' },
+            { value: 'Briefcase', label: 'Briefcase (Analytics/Business)' },
+            { value: 'Globe', label: 'Globe (Collaboration/Global)' },
+            { value: 'Award', label: 'Award (Innovation/Excellence)' },
+            { value: 'Sparkles', label: 'Sparkles' },
+            { value: 'Trophy', label: 'Trophy' },
+            { value: 'Target', label: 'Target' },
+            { value: 'TrendingUp', label: 'TrendingUp' },
+            { value: 'Zap', label: 'Zap' },
+            { value: 'Shield', label: 'Shield' },
+            { value: 'Heart', label: 'Heart' }
+          ]
+        }
       ],
       (data) => {
-        const updatedItems = [...(whyChoosePills.items || []), { title: data.title, description: data.description, icon: 'BookOpen' }];
+        const updatedItems = [...(whyChoosePills.items || []), { title: data.title, description: data.description, icon: data.icon || 'BookOpen' }];
         setWhyChoosePills({ ...whyChoosePills, items: updatedItems });
       }
     );
@@ -1030,9 +1069,26 @@ const ManageMbaPage = ({ isBba = false }) => {
     openAddModal(
       'Add Feature Card',
       [
-        { name: 'title', label: 'Feature Title', type: 'text', maxLength: 100, required: true },
-        { name: 'desc', label: 'Feature Description', type: 'textarea', maxLength: 250, required: true },
-        { name: 'icon', label: 'Icon Name (lucide-react)', type: 'text', maxLength: 50, defaultValue: 'Award' }
+        { name: 'title', label: 'Feature Title', type: 'text', maxLength: 60, required: true },
+        { name: 'desc', label: 'Feature Description', type: 'textarea', maxLength: 300, required: true },
+        {
+          name: 'icon',
+          label: 'Icon Name',
+          type: 'select',
+          required: true,
+          options: [
+            { value: 'Users', label: 'Users' },
+            { value: 'Award', label: 'Award' },
+            { value: 'Trophy', label: 'Trophy' },
+            { value: 'Briefcase', label: 'Briefcase' },
+            { value: 'BookOpen', label: 'BookOpen' },
+            { value: 'Globe', label: 'Globe' },
+            { value: 'Sparkles', label: 'Sparkles' },
+            { value: 'Target', label: 'Target' },
+            { value: 'TrendingUp', label: 'TrendingUp' },
+            { value: 'Zap', label: 'Zap' }
+          ]
+        }
       ],
       (data) => {
         const updatedFeatures = [...(dynamicLearning.features || []), { title: data.title, desc: data.desc, icon: data.icon || 'Award' }];
@@ -1090,8 +1146,6 @@ const ManageMbaPage = ({ isBba = false }) => {
     openAddModal(
       'Add Gallery Photo',
       [
-        { name: 'title', label: 'Photo Title', type: 'text', maxLength: 60, required: true },
-        { name: 'subtitle', label: 'Subtitle', type: 'text', maxLength: 60, required: true },
         { name: 'image', label: 'Upload Photo', type: 'image', required: true }
       ],
       (data) => {
@@ -1156,12 +1210,12 @@ const ManageMbaPage = ({ isBba = false }) => {
     { id: 'overview', name: 'Program Overview', icon: <FileText className="w-4 h-4" /> },
     { id: 'dimensions', name: '4 Core Dimensions', icon: <BookOpen className="w-4 h-4" /> },
     { id: 'whyChoose', name: 'Key Learning Dimensions', icon: <BookOpen className="w-4 h-4" /> },
-    { id: 'internship', name: 'Internship Banner', icon: <Briefcase className="w-4 h-4" /> },
-    { id: 'dynamicLearning', name: 'Dynamic Learning', icon: <Award className="w-4 h-4" /> },
+    { id: 'internship', name: 'Dynamic Learning', icon: <Briefcase className="w-4 h-4" /> },
+    { id: 'dynamicLearning', name: 'Internship Banner', icon: <Award className="w-4 h-4" /> },
     { id: 'momentsGallery', name: 'Moments Gallery', icon: <FileText className="w-4 h-4" /> },
     { id: 'academicCalendarBanner', name: 'Academic Calendar', icon: <Calendar className="w-4 h-4" /> },
     { id: 'eligibility', name: 'Admission & Eligibility', icon: <Award className="w-4 h-4" /> },
-    { id: 'topRecruiters', name: 'Top Recruiters & Partners', icon: <Briefcase className="w-4 h-4" /> }
+    { id: 'topRecruiters', name: 'Top Recruiters & Partners', icon: <Briefcase className="w-4 h-4" /> },
   ];
 
 
@@ -1342,13 +1396,47 @@ const ManageMbaPage = ({ isBba = false }) => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
                 <div>
-                  <CharCountLabel label="Primary Action Button Text" value={heroPrimaryBtnText} max={30} />
+                  <CharCountLabel label="Primary Button Text" value={heroPrimaryBtnText} max={30} />
                   <input maxLength={30}
                     type="text"
                     value={heroPrimaryBtnText}
                     onChange={(e) => setHeroPrimaryBtnText(e.target.value)}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     placeholder="EXPLORE PROGRAM"
+                  />
+                </div>
+                <div>
+                  <CharCountLabel label="Primary Button Link" value={heroPrimaryBtnLink} max={100} />
+                  <input maxLength={100}
+                    type="text"
+                    value={heroPrimaryBtnLink}
+                    onChange={(e) => setHeroPrimaryBtnLink(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="e.g. #overview or /contact"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
+                <div>
+                  <CharCountLabel label="Secondary Button Text" value={heroSecondaryBtnText} max={30} />
+                  <input maxLength={30}
+                    type="text"
+                    value={heroSecondaryBtnText}
+                    onChange={(e) => setHeroSecondaryBtnText(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="DOWNLOAD BROCHURE"
+                  />
+                </div>
+                <div>
+                  <LogoUploader 
+                    label="Download Brochure (PDF)"
+                    currentLogoUrl={heroSecondaryBtnLink}
+                    onUploadSuccess={(url) => setHeroSecondaryBtnLink(url)}
+                    uploadEndpoint="/upload/mba"
+                    acceptTypes={{ 'application/pdf': ['.pdf'] }}
+                    maxSize={104857600}
+                    layout="vertical"
                   />
                 </div>
               </div>
@@ -1447,10 +1535,47 @@ const ManageMbaPage = ({ isBba = false }) => {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
+                <div>
+                  <CharCountLabel label="Primary Button Text" value={overviewPrimaryBtnText} max={30} />
+                  <input maxLength={30}
+                    type="text"
+                    value={overviewPrimaryBtnText}
+                    onChange={(e) => setOverviewPrimaryBtnText(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="Apply Now"
+                  />
+                </div>
+                <div>
+                  <CharCountLabel label="Secondary Button Text" value={overviewSecondaryBtnText} max={30} />
+                  <input maxLength={30}
+                    type="text"
+                    value={overviewSecondaryBtnText}
+                    onChange={(e) => setOverviewSecondaryBtnText(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="Download Brochure"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
+                <div>
+                  <LogoUploader 
+                    label="Download Brochure (PDF)"
+                    currentLogoUrl={overviewSecondaryBtnLink}
+                    onUploadSuccess={(url) => setOverviewSecondaryBtnLink(url)}
+                    uploadEndpoint="/upload/mba"
+                    acceptTypes={{ 'application/pdf': ['.pdf'] }}
+                    maxSize={104857600}
+                    layout="vertical"
+                  />
+                </div>
+              </div>
+
               <div className="pt-4 border-t border-gray-100">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Showcase Image (Right side)</label>
                 <div className="space-y-4">
-                  <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={overviewImage} defaultImage="/assets/Images/mba/mba_main.png" onUploadSuccess={(url) => setOverviewImage(url)} />
+                  <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={overviewImage} defaultImage="/assets/Images/mba/mba_main.png" onUploadSuccess={(url) => setOverviewImage(url)} maxSize={1048576} />
                   <div>
 
                   </div>
@@ -1744,7 +1869,7 @@ const ManageMbaPage = ({ isBba = false }) => {
               <div className="pt-4 border-t border-gray-100">
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-3">Banner Background Image</label>
                 <div className="space-y-4">
-                  <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={internshipBgImage} defaultImage="/assets/Images/mba/internship_bg.png" onUploadSuccess={(url) => setInternshipBgImage(url)} />
+                  <LogoUploader maxSize={1048576} deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={internshipBgImage} defaultImage="/assets/Images/mba/gallery_67.png" onUploadSuccess={(url) => setInternshipBgImage(url)} />
                   <div>
 
                   </div>
@@ -1757,7 +1882,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   {[0, 1, 2].map((i) => (
                     <div key={i} className="p-4 rounded-xl bg-gray-50 border border-gray-200 space-y-3">
                       <label className="block text-xs font-bold text-gray-600">Card Image #{i + 1}</label>
-                      <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={(internshipImages || [])[i] || ''} defaultImage={i === 0 ? '/assets/Images/mba/internship_2.png' : i === 1 ? '/assets/Images/mba/internship_27.png' : '/assets/Images/mba/internship_28.png'} onUploadSuccess={(url) => updateInternshipImage(i, url)} />
+                      <LogoUploader maxSize={1048576} deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={(internshipImages || [])[i] || ''} defaultImage={i === 0 ? '/assets/Images/mba/internship_2.png' : i === 1 ? '/assets/Images/mba/internship_27.png' : '/assets/Images/mba/internship_28.png'} onUploadSuccess={(url) => updateInternshipImage(i, url)} />
 
                     </div>
                   ))}
@@ -1785,13 +1910,6 @@ const ManageMbaPage = ({ isBba = false }) => {
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
               <div className="flex items-center justify-between border-b pb-4">
                 <h2 className="text-lg font-bold text-primary">Dynamic Learning Section Settings</h2>
-                <button
-                  type="button"
-                  onClick={addDynamicFeature}
-                  className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" /> Add Feature Card
-                </button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1842,7 +1960,7 @@ const ManageMbaPage = ({ isBba = false }) => {
                   {[0, 1].map((i) => (
                     <div key={i} className="p-4 rounded-xl bg-gray-50 border border-gray-200 space-y-3">
                       <label className="block text-xs font-bold text-gray-600">Collage Image #{i + 1}</label>
-                      <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={(dynamicLearning.images || [])[i] || ''} defaultImage={i === 0 ? '/assets/Images/mba/dynamic_49.png' : '/assets/Images/mba/dynamic_60.png'} onUploadSuccess={(url) => updateDynamicImage(i, url)} />
+                      <LogoUploader maxSize={1048576} deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={(dynamicLearning.images || [])[i] || ''} defaultImage={i === 0 ? '/assets/Images/mba/dynamic_49.png' : '/assets/Images/mba/dynamic_60.png'} onUploadSuccess={(url) => updateDynamicImage(i, url)} />
 
                     </div>
                   ))}
@@ -2000,8 +2118,6 @@ const ManageMbaPage = ({ isBba = false }) => {
                           openEditModal(
                             'Edit Gallery Photo',
                             [
-                              { name: 'title', label: 'Photo Title', type: 'text', maxLength: 60, required: true },
-                              { name: 'subtitle', label: 'Subtitle', type: 'text', maxLength: 60, required: true },
                               {
                                 name: 'span',
                                 label: 'Grid Layout Size (Span)',
@@ -2339,11 +2455,10 @@ const ManageMbaPage = ({ isBba = false }) => {
                 <p className="text-xs text-gray-500 mt-1">Manage corporate logos, placement categories, CTC highlights, and partner links displayed at the bottom of the {shortTitle} Program Page.</p>
               </div>
               <div className="pt-2">
-                <ManageRecruiters />
+                <ManageRecruiters hideVisibilityToggle={true} hideHeader={true} />
               </div>
             </div>
           )}
-
         </>
       )}
 
