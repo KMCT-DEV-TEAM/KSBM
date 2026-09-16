@@ -8,6 +8,7 @@ import ConfirmationModal from '../../../components/ConfirmationModal';
 import PlacementSection from '../../home/components/PlacementSection';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { DEFAULT_PLACEMENT_HOME } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -101,20 +102,21 @@ const ManagePlacement = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-      setSubheading('Placement Highlights');
-      setHeading('Building Careers That Matter');
-      setDescription('Our dedicated Placement Cell equips students with the skills, confidence, and industry exposure needed to excel in the corporate world. Through strategic industry partnerships, career guidance, and recruitment opportunities, we help transform academic potential into professional success.');
-      setStat1Value('99%');
-      setStat1Label('Placement Rate');
-      setStat2Value('12 LPA');
-      setStat2Label('Highest Package');
-      setStatistics([
-        { value: '99%', label: 'Placement Rate' },
-        { value: '12 LPA', label: 'Highest Package' }
-      ]);
-      setShowSection(true);
-      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-    }
+        setSubheading(DEFAULT_PLACEMENT_HOME.subheading || 'Placement Highlights');
+        setShowSubheading(DEFAULT_PLACEMENT_HOME.showSubheading ?? true);
+        setHeading(DEFAULT_PLACEMENT_HOME.heading || 'Building Careers That Matter');
+        setShowHeading(DEFAULT_PLACEMENT_HOME.showHeading ?? true);
+        setDescription(DEFAULT_PLACEMENT_HOME.description || '');
+        setShowDescription(DEFAULT_PLACEMENT_HOME.showDescription ?? true);
+        setStat1Value(DEFAULT_PLACEMENT_HOME.stat1Value || '99%');
+        setStat1Label(DEFAULT_PLACEMENT_HOME.stat1Label || 'Placement Rate');
+        setStat2Value(DEFAULT_PLACEMENT_HOME.stat2Value || '12 LPA');
+        setStat2Label(DEFAULT_PLACEMENT_HOME.stat2Label || 'Highest Package');
+        setShowStats(DEFAULT_PLACEMENT_HOME.showStats ?? true);
+        setStatistics(DEFAULT_PLACEMENT_HOME.statistics || []);
+        setShowSection(DEFAULT_PLACEMENT_HOME.showSection ?? true);
+        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+      }
     });
   };
 

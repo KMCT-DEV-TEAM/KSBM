@@ -11,6 +11,7 @@ import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
 import LogoUploader from './components/LogoUploader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
+import { DEFAULT_ABOUT } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -132,22 +133,15 @@ const ManageAbout = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-      setSubheading('BUILDING EXCELLENCE SINCE 1995');
-      setHeading("Shaping Tomorrow's Business Leaders");
-      setParagraphs([
-        "At KMCT School of Business Management (KSBM), we believe management education goes beyond academic excellence—it is about developing ethical leaders, innovative thinkers, and future-ready professionals. For over two decades, KSBM has been committed to delivering quality education through its MBA and BBA programs, combining academic rigor with practical learning, industry exposure, internships, and experiential training to prepare students for today's evolving business landscape.",
-        "Our MBA program equips students with advanced managerial knowledge, strategic thinking, and leadership skills for successful corporate careers, while the BBA program builds a strong foundation in business, communication, and management for higher studies and professional growth. Supported by experienced faculty, modern infrastructure, and strong industry collaborations, KSBM provides an inspiring environment that nurtures critical thinking, entrepreneurship, innovation, and lifelong learning."
-      ]);
-      setImageUrl('');
-      setStats([
-        { value: '16+', label: 'YEARS OF EXCELLENCE' },
-        { value: '991+', label: 'ACTIVE STUDENTS' },
-        { value: '196+', label: 'GLOBAL RECRUITERS' },
-        { value: '196+', label: 'GLOBAL RECRUITERS' }
-      ]);
-      setShowSection(true);
-      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-    }
+        setSubheading(DEFAULT_ABOUT.subheading || '');
+        setHeading(DEFAULT_ABOUT.heading || '');
+        setParagraphs(DEFAULT_ABOUT.paragraphs || []);
+        setImageUrl(DEFAULT_ABOUT.imageUrl || '');
+        setImageFile(null);
+        setStats(DEFAULT_ABOUT.stats || []);
+        setShowSection(DEFAULT_ABOUT.showSection ?? true);
+        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+      }
     });
   };
 

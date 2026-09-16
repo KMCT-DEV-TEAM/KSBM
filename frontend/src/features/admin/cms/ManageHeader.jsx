@@ -7,6 +7,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { DEFAULT_HEADER } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -71,23 +72,12 @@ const ManageHeader = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-      setNavItems([
-        { label: 'Home', link: '/', isVisible: true },
-        { label: 'About Us', link: '/about', isVisible: true },
-        { label: 'Academics', link: '/faculty', isVisible: true },
-        { label: 'Programs', link: '/programs', isVisible: true },
-        { label: 'Facility', link: '/facilities', isVisible: true },
-        { label: 'Admission', link: '/admissions', isVisible: true },
-        { label: 'Events', link: '/events', isVisible: true },
-        { label: 'Blogs', link: '/blogs', isVisible: true },
-        { label: 'Grievance', link: '/grievance', isVisible: true },
-        { label: 'Mandatory Disclosure', link: '/mandatory-disclosure', isVisible: true },
-      ]);
-      setActionButton({ text: 'Apply Now', isVisible: true });
-      setLogoUrl('');
-      setAlignment('center');
-      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-    }
+        setNavItems(DEFAULT_HEADER.navItems || []);
+        setActionButton(DEFAULT_HEADER.actionButton || { text: 'Apply Now', isVisible: true });
+        setLogoUrl(DEFAULT_HEADER.logoUrl || '');
+        setAlignment(DEFAULT_HEADER.alignment || 'center');
+        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+      }
     });
   };
 

@@ -9,6 +9,7 @@ import ProgramsPreview from '../../home/components/AcademicPrograms';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
+import { DEFAULT_PROGRAMS } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -121,29 +122,15 @@ const ManagePrograms = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setSubheading('Our Courses');
-        setShowSubheading(true);
-        setHeading('Academic Programs');
-        setShowHeading(true);
-        setDescription('Discover our MBA and BBA programmes, crafted to develop future-ready professionals through innovative learning, industry engagement, and leadership-focused education.');
-        setShowDescription(true);
-        setPrograms([
-          {
-            id: 'mba',
-            title: 'MBA',
-            subtitle: 'Master of Business Administration is a postgraduate degree...',
-            image: '/assets/Images/Home/academic_mba.jpg',
-            tag: 'GRADUATE'
-          },
-          {
-            id: 'bba',
-            title: 'BBA',
-            subtitle: 'Bachelor of Business Administration is an undergraduate program...',
-            image: '/assets/Images/Home/academic_bba.jpg',
-            tag: 'UNDERGRADUATE'
-          }
-        ]);
-        setShowPrograms(true);
+        setSubheading(DEFAULT_PROGRAMS.subheading || 'Our Courses');
+        setShowSubheading(DEFAULT_PROGRAMS.showSubheading ?? true);
+        setHeading(DEFAULT_PROGRAMS.heading || 'Academic Programs');
+        setShowHeading(DEFAULT_PROGRAMS.showHeading ?? true);
+        setDescription(DEFAULT_PROGRAMS.description || '');
+        setShowDescription(DEFAULT_PROGRAMS.showDescription ?? true);
+        setPrograms(DEFAULT_PROGRAMS.programs || []);
+        setShowPrograms(DEFAULT_PROGRAMS.showPrograms ?? true);
+        setShowSection(DEFAULT_PROGRAMS.showSection ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });

@@ -9,6 +9,7 @@ import SingleImageUploader from './components/SingleImageUploader';
 import SingleDocumentUploader from './components/SingleDocumentUploader';
 import confirmAction from '../../../utils/confirmAction';
 import { FileText, Eye, Monitor, Tablet, Smartphone, X, Plus, Trash2, GripVertical, FileStack, ChevronLeft, ChevronRight, Image as ImageIcon } from 'lucide-react';
+import { DEFAULT_DOWNLOAD_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -43,18 +44,7 @@ const ManageDownloadPage = () => {
 
   const categories = ['Academic', 'Compliance', 'Administration'];
 
-  const defaults = {
-    hero: {
-      title: 'Download',
-      subtitle: 'Access all essential academic documents in one convenient location. Download application forms, brochures, academic regulations, examination guidelines, fee structures, and other important resources. Stay informed with the latest documents to support your academic journey and campus experience.',
-      backgroundImage: '/assets/Images/image 53.png'
-    },
-    documents: [
-      { title: 'Minutes of council', category: 'Academic', fileUrl: '#' },
-      { title: 'Minutes of council', category: 'Academic', fileUrl: '#' },
-      { title: 'Minutes of council', category: 'Academic', fileUrl: '#' },
-    ]
-  };
+  const defaults = DEFAULT_DOWNLOAD_PAGE;
 
   const [formData, setFormData] = useState(defaults);
   const [imagesToDelete, setImagesToDelete] = useState([]);

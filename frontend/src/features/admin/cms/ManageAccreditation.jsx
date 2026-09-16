@@ -10,6 +10,7 @@ import AccreditationPreview from '../../home/components/AccreditationSection';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
+import { DEFAULT_ACCREDITATIONS } from './constants/defaultCmsData';
 
 
 const Toast = Swal.mixin({
@@ -134,17 +135,14 @@ const ManageAccreditation = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-      setSubheading('Institutional Credentials');
-      setHeading('Accreditation & Affiliations');
-      setImageUrl('');
-      setImages([
-        { url: '/assets/Images/Home/Component 86.png' },
-        { url: '/assets/Images/Home/Component 87.png' },
-        { url: '/assets/Images/Home/Component 88.png' }
-      ]);
-      setShowSection(true);
-      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-    }
+        setSubheading(DEFAULT_ACCREDITATIONS.subheading || '');
+        setHeading(DEFAULT_ACCREDITATIONS.heading || '');
+        setImageUrl(DEFAULT_ACCREDITATIONS.imageUrl || '');
+        setImages(DEFAULT_ACCREDITATIONS.images || []);
+        setShowSection(DEFAULT_ACCREDITATIONS.showSection ?? true);
+        clearDeletions();
+        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+      }
     });
   };
 

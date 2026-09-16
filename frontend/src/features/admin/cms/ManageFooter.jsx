@@ -7,6 +7,7 @@ import FooterPreview from '../../../components/Footer';
 import SectionForm from './components/SectionForm';
 import PageHeader from './components/PageHeader';
 import confirmAction from '../../../utils/confirmAction';
+import { DEFAULT_FOOTER } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -72,28 +73,20 @@ const ManageFooter = () => {
   };
 
   const handleResetToDefault = async () => {
-    const defaults = {
-      description: 'Empowering global leaders through intellectual rigor and strategic excellence since 1998.',
-      socialLinks: { instagram: '#', facebook: '#', whatsapp: '#' },
-      programs: [
-        { label: 'MBA Full-time', url: '#' },
-        { label: 'Executive MBA', url: '#' },
-        { label: 'BBA Program', url: '#' },
-        { label: 'PhD in Management', url: '#' }
-      ],
-      contactInfo: {
-        address: 'KMCT Hills, Kerala, India',
-        email: 'admissions@ksbm.ac.in',
-        phone: '+91 495 2211 444'
-      },
-      copyrightText: '© 2024 KMCT School of Business. All rights reserved. Accredited by AACSB & AMBA.'
-    };
-    setDescription(defaults.description);
-    setSocialLinks(defaults.socialLinks);
-    setPrograms(defaults.programs);
-    setContactInfo(defaults.contactInfo);
-    setCopyrightText(defaults.copyrightText);
-    Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
+    await confirmAction({
+      title: 'Reset to Defaults?',
+      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary',
+      action: async () => {
+        setDescription(DEFAULT_FOOTER.description || '');
+        setSocialLinks(DEFAULT_FOOTER.socialLinks || { instagram: '', facebook: '', whatsapp: '' });
+        setPrograms(DEFAULT_FOOTER.programs || []);
+        setContactInfo(DEFAULT_FOOTER.contactInfo || { address: '', email: '', phone: '' });
+        setCopyrightText(DEFAULT_FOOTER.copyrightText || '');
+        Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
+      }
+    });
   };
 
   const handleLinkChange = (array, setArray, index, field, value) => {

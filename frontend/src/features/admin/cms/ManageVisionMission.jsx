@@ -7,7 +7,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
-import VisionMissionSection from '../../about/components/VisionMissionSection';
+import { DEFAULT_VISION_MISSION } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -141,13 +141,13 @@ const ManageVisionMission = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setVisionTitle('Our Vision');
-        setVisionContent('"To mould to competent healthcare professionals with leadership qualities through comprehensive nursing education, practice and research."');
-        setVisionImage('/assets/Images/image 27.png');
-        setMissionTitle('Our Mission');
-        setMissionContent('To mould to competent healthcare professionals with leadership qualities through comprehensive nursing education, practice and research.\n\nTo provide high-quality healthcare education that integrates academic excellence with clinical practice.\n\nTo foster a culture of continuous learning, ethical practice, and compassionate patient care.\n\nTo contribute to the healthcare sector by producing highly skilled and dedicated nursing professionals.');
-        setMissionImage('/assets/Images/image 28.png');
-        setShowSection(true);
+        setVisionTitle(DEFAULT_VISION_MISSION.visionTitle || 'Our Vision');
+        setVisionContent(DEFAULT_VISION_MISSION.visionContent || '');
+        setVisionImage(DEFAULT_VISION_MISSION.visionImage || '/assets/Images/aboutus/vision.png');
+        setMissionTitle(DEFAULT_VISION_MISSION.missionTitle || 'Our Mission');
+        setMissionContent(DEFAULT_VISION_MISSION.missionContent || '');
+        setMissionImage(DEFAULT_VISION_MISSION.missionImage || '/assets/Images/aboutus/mission.png');
+        setShowSection(DEFAULT_VISION_MISSION.showSection ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });

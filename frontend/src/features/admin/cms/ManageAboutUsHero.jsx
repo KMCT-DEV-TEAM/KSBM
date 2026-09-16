@@ -7,7 +7,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import HeroImageUploader from './components/HeroImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
-import AboutHero from '../../about/components/AboutHero';
+import { DEFAULT_ABOUT_US_HERO } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -118,11 +118,11 @@ const ManageAboutUsHero = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setTitle('About KSBM');
-        setSubtitle('Building Excellence Since 1995');
-        setBackgroundImage('/assets/Images/aboutus/about-hero-bg.jpg');
-        setShowTextContent(true);
-        setShowSection(true);
+        setTitle(DEFAULT_ABOUT_US_HERO.title || 'About KSBM');
+        setSubtitle(DEFAULT_ABOUT_US_HERO.subtitle || '');
+        setBackgroundImage(DEFAULT_ABOUT_US_HERO.backgroundImage || '/assets/Images/aboutus/about-hero-bg.jpg');
+        setShowTextContent(DEFAULT_ABOUT_US_HERO.showTextContent ?? true);
+        setShowSection(DEFAULT_ABOUT_US_HERO.showSection ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });

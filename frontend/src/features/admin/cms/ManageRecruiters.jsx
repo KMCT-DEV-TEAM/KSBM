@@ -9,6 +9,7 @@ import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
+import { DEFAULT_RECRUITERS } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -22,21 +23,7 @@ const Toast = Swal.mixin({
   }
 });
 
-const defaultRecruiterSettings = [
-  { id: '1', name: 'Infosys', logo: '/assets/Images/mba/infosys_logo.svg' },
-  { id: '2', name: 'Wipro', logo: '/assets/Images/mba/wipro_logo.svg' },
-  { id: '3', name: 'Cognizant', logo: '/assets/Images/mba/cognizant_logo.svg' },
-  { id: '4', name: 'Google', logo: '/assets/Images/mba/google_logo.svg' },
-  { id: '5', name: 'Microsoft', logo: '/assets/Images/mba/microsoft_logo.svg' }
-];
-
-const defaultLogoMap = {
-  'Infosys': '/assets/Images/mba/infosys_logo.svg',
-  'Wipro': '/assets/Images/mba/wipro_logo.svg',
-  'Cognizant': '/assets/Images/mba/cognizant_logo.svg',
-  'Google': '/assets/Images/mba/google_logo.svg',
-  'Microsoft': '/assets/Images/mba/microsoft_logo.svg'
-};
+const defaultRecruiterSettings = DEFAULT_RECRUITERS.recruiters || [];
 
 const ManageRecruiters = ({ hideVisibilityToggle = false, hideHeader = false }) => {
   const [recruiters, setRecruiters] = useState([]);
@@ -129,26 +116,15 @@ const ManageRecruiters = ({ hideVisibilityToggle = false, hideHeader = false }) 
   const handleResetToDefault = async () => {
     await confirmAction({
       title: 'Reset to Defaults?',
-      message: 'This will reset all your settings and save them immediately.',
+      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        const newDefaults = defaultRecruiterSettings.map(item => ({ ...item, id: Date.now().toString() + Math.random().toString().slice(2, 6) }));
+        const newDefaults = (DEFAULT_RECRUITERS.recruiters || []).map(item => ({ ...item, id: Date.now().toString() + Math.random().toString().slice(2, 6) }));
         setRecruiters(newDefaults);
-        setShowSection(true);
-
-        setIsSaving(true);
-        try {
-          await api.put('/cms/recruiters', {
-            recruiters: newDefaults, showSection: true
-          });
-          Toast.fire({ icon: 'success', title: 'Settings reset to default and saved.' });
-        } catch (error) {
-          console.error('Error saving recruiters settings:', error);
-          Toast.fire({ icon: 'error', title: 'Failed to save defaults.' });
-        } finally {
-          setIsSaving(false);
-        }
+        setShowSection(DEFAULT_RECRUITERS.showSection ?? true);
+        clearDeletions();
+        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });
   };

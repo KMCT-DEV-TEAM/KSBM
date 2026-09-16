@@ -11,6 +11,7 @@ import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
+import { DEFAULT_FACILITIES_HOME } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -150,6 +151,24 @@ const ManageFacilities = () => {
     });
   };
 
+  const handleResetToDefault = async () => {
+    await confirmAction({
+      title: 'Reset to Defaults?',
+      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary',
+      action: async () => {
+        setSubheading(DEFAULT_FACILITIES_HOME.subheading || 'Campus Life');
+        setHeading(DEFAULT_FACILITIES_HOME.heading || 'World-Class Infrastructure');
+        setDescription(DEFAULT_FACILITIES_HOME.description || '');
+        setFacilitiesList(DEFAULT_FACILITIES_HOME.facilitiesList || []);
+        setShowSection(DEFAULT_FACILITIES_HOME.showSection ?? true);
+        clearDeletions();
+        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+      }
+    });
+  };
+
   const openAddFacilityModal = () => {
     setEditingFacilityIndex(-1);
     setCurrentFacility({ title: '', image: '' });
@@ -210,30 +229,6 @@ const ManageFacilities = () => {
       confirmText: 'Yes, remove it',
       variant: 'danger',
       targetIndex: index
-    });
-  };
-
-  const handleResetToDefault = async () => {
-    await confirmAction({
-      title: 'Reset to Defaults?',
-      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
-      confirmText: 'Yes, reset it!',
-      variant: 'primary',
-      action: async () => {
-        setSubheading('College Facilities');
-        setHeading('Institutional Resources');
-        setDescription('Our state-of-the-art campus offers modern classrooms, advanced learning resources, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.');
-        setFacilitiesList([
-          { title: 'Smart Classrooms', image: '/assets/Images/Home/facility_1.jpg' },
-          { title: 'Digital Library', image: '/assets/Images/Home/facility_2.jpg' },
-          { title: 'Seminar Hall', image: '/assets/Images/Home/facility_3.jpg' },
-          { title: 'Innovation Lab', image: '/assets/Images/Home/facility_4.jpg' },
-          { title: 'Auditorium', image: '/assets/Images/Home/facility_5.jpg' },
-          { title: 'Sports & Fitness', image: '/assets/Images/Home/facility_6.jpg' }
-        ]);
-        setShowSection(true);
-        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-      }
     });
   };
 

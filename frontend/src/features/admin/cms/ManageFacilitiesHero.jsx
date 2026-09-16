@@ -9,6 +9,7 @@ import { uploadDeferredImage } from './utils/uploadHelper';
 import HeroImageUploader from './components/HeroImageUploader';
 import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
+import { DEFAULT_FACILITIES_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -102,11 +103,12 @@ const ManageFacilitiesHero = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setHero({
+        setHero(DEFAULT_FACILITIES_PAGE.hero || {
           heading: 'Institutional Resources',
-          subtext: 'Our campus offers state-of-the-art facilities, modern classrooms, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.',
-          backgroundImage: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop',
-          showTextContent: true
+          subtext: 'Our campus offers state-of-the-art facilities, modern classrooms, and vibrant student spaces.',
+          backgroundImage: '/assets/Images/fecilities/facilities_hero.png',
+          showTextContent: true,
+          showSection: true
         });
         Toast.fire({ icon: 'info', title: 'Settings reset to default.' });
       }

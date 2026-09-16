@@ -8,7 +8,8 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "server": "nodemon --watch src --watch .env --env-file=.env src/server.js",
-    "seed": "node --env-file=.env seeds/adminSeed.js"
+    "seed": "node --env-file=.env seeds/adminSeed.js",
+    "seed:cms": "node --env-file=.env src/seeds/cmsSeed.js"
   },
   "keywords": [],
   "author": "",

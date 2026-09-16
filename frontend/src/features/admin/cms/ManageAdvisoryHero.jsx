@@ -8,6 +8,7 @@ import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import { uploadDeferredImage } from './utils/uploadHelper';
+import { DEFAULT_ADVISORY_BOARD } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -129,17 +130,14 @@ const ManageAdvisoryHero = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setHeroHeading('Institutional Advisory Board');
-        setHeroSubtext('The Institutional Advisory Board of KMCT School of Business Management plays a crucial role in guiding the institution\'s strategic vision and academic progress.');
-        setHeroBgImage('/assets/Images/image 2.png');
-        setContentSubheading('COMMITTEE');
-        setContentHeading('Advisory Board');
-        setContentDescription([
-          "The Advisory Board of KMCT School of Business Management is instrumental in shaping the institution's strategic direction and academic excellence.",
-          "It is composed of distinguished leaders and experts from various industries who provide valuable insights and guidance. Their collective expertise ensures that our curriculum remains relevant, innovative, and aligned with industry standards, empowering our students to become the future leaders of the business world."
-        ]);
-        setShowHeroTextContent(true);
-        setShowContentDetails(true);
+        setHeroHeading(DEFAULT_ADVISORY_BOARD.heroHeading || 'Institutional Advisory Board');
+        setHeroSubtext(DEFAULT_ADVISORY_BOARD.heroSubtext || '');
+        setHeroBgImage(DEFAULT_ADVISORY_BOARD.heroBgImage || '/assets/Images/aboutus/advisory.png');
+        setContentSubheading(DEFAULT_ADVISORY_BOARD.contentSubheading || 'COMMITTEE');
+        setContentHeading(DEFAULT_ADVISORY_BOARD.contentHeading || 'Advisory Board');
+        setContentDescription(DEFAULT_ADVISORY_BOARD.contentDescription || []);
+        setShowHeroTextContent(DEFAULT_ADVISORY_BOARD.showHeroTextContent ?? true);
+        setShowContentDetails(DEFAULT_ADVISORY_BOARD.showContentDetails ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });

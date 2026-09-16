@@ -14,6 +14,7 @@ import AdminItemCard from './components/AdminItemCard';
 import AdminModal from './components/AdminModal';
 import { Pencil, FileText } from 'lucide-react';
 import ClubDetailsEditor from './ClubDetailsEditor';
+import { DEFAULT_FACILITIES_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -169,27 +170,6 @@ const ManageClubs = () => {
     });
   };
 
-  const handleResetToDefault = async () => {
-    await confirmAction({
-      title: 'Reset to Defaults?',
-      message: 'This will reset your settings to original state. You still need to click "Save Changes".',
-      confirmText: 'Yes, reset it!',
-      variant: 'primary',
-      action: async () => {
-        setClubs({
-          heading: 'Clubs And Association',
-          description: 'Extracurricular activities at KSBM encompass academic clubs, professional societies, and cultural organizations that play an instrumental role in shaping holistic development.',
-          items: [
-            { title: 'Cultural Club', image: 'https://images.unsplash.com/photo-1543807535-eceef0bc6599?q=80&w=2070&auto=format&fit=crop' },
-            { title: 'Sports Club', image: '/assets/Images/fecilities/sports.jpg' },
-            { title: 'Health Club', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop' }
-          ]
-        });
-        Toast.fire({ icon: 'info', title: 'Settings reset to default.' });
-      }
-    });
-  };
-
   const handleItemChange = (index, field, value) => {
     const newItems = [...clubs.items];
     newItems[index][field] = value;
@@ -267,6 +247,25 @@ const ManageClubs = () => {
   const cancelDetails = () => {
     setEditingDetailsIndex(null);
     setEditingDetailsData(null);
+  };
+
+  const handleResetToDefault = async () => {
+    await confirmAction({
+      title: 'Reset to Defaults?',
+      message: 'This will reset all clubs settings to their original state. You still need to click "Save Changes" to apply.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary',
+      action: async () => {
+        setClubs(DEFAULT_FACILITIES_PAGE.clubs || {
+          heading: 'Clubs & Associations',
+          subheading: 'CAMPUS LIFE',
+          description: '',
+          items: [],
+          showSection: true
+        });
+        Toast.fire({ icon: 'info', title: 'Settings reset to default.' });
+      }
+    });
   };
 
   const openModal = (index = -1) => {
