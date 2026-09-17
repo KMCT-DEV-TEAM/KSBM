@@ -77,7 +77,7 @@ const LifeAtKSBMSection = ({ previewData }) => {
   const md = (desktopClass) => (forceMobile ? '' : desktopClass);
   const lg = (desktopClass) => (forceMobile || forceTablet ? '' : desktopClass);
 
-  if (!showSection && !previewData) {
+  if (showSection === false && !previewData) {
     return null;
   }
 

@@ -137,17 +137,31 @@ export const getCmsFallbackData = (url) => {
   // Clean URL: Strip protocol/domain, query parameters, leading/trailing slashes, and common prefixes (/api/cms/ or /cms/)
   let cleanPath = url.split('?')[0].split('#')[0];
   cleanPath = cleanPath.replace(/^https?:\/\/[^\/]+/, '');
+  if (!cleanPath.startsWith('/')) {
+    cleanPath = '/' + cleanPath;
+  }
   cleanPath = cleanPath.replace(/^\/api\//, '/');
   
-  if (!cleanPath.startsWith('/cms/')) {
+  if (!cleanPath.startsWith('/cms/') && cleanPath !== '/cms') {
     return null;
   }
 
-  const cmsEndpoint = cleanPath.replace(/^\/cms\//, '').trim();
+  const cmsEndpoint = cleanPath.replace(/^\/cms\/?/, '').replace(/\/+$/, '').trim();
 
   // 1. Direct match in routeMap
   if (routeMap[cmsEndpoint] !== undefined) {
     return JSON.parse(JSON.stringify(routeMap[cmsEndpoint]));
+  }
+
+  // 1b. Match with or without '-page' suffix
+  if (routeMap[`${cmsEndpoint}-page`] !== undefined) {
+    return JSON.parse(JSON.stringify(routeMap[`${cmsEndpoint}-page`]));
+  }
+  if (cmsEndpoint.endsWith('-page')) {
+    const stripped = cmsEndpoint.replace(/-page$/, '');
+    if (routeMap[stripped] !== undefined) {
+      return JSON.parse(JSON.stringify(routeMap[stripped]));
+    }
   }
 
   // 2. Check for dynamic SEO route: seo/:pageIdentifier

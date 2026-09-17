@@ -69,9 +69,14 @@ const Hero = ({ previewData }) => {
         });
       });
 
-      await Promise.all(promises);
+      // Quick race (max 500ms) to prevent freezing on slow/offline networks
+      await Promise.race([
+        Promise.all(promises),
+        new Promise((resolve) => setTimeout(resolve, 500))
+      ]);
+
       if (isMounted) {
-        setTimeout(() => setImagesLoaded(true), 800);
+        setImagesLoaded(true);
       }
     };
     preloadImages();
@@ -82,15 +87,10 @@ const Hero = ({ previewData }) => {
   }, [dataLoaded, previewData, images]);
 
   useEffect(() => {
-    if (!imagesLoaded) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [imagesLoaded]);
+  }, []);
 
   useEffect(() => {
     if (!imagesLoaded) return;
