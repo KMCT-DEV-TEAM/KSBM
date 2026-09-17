@@ -21,9 +21,21 @@ const app = express();
 
 dotenv.config();
 
+
+const rawOrigins = process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGIN || process.env.CORS_ORIGINS || '';
+const allowedOrigins = rawOrigins
+  ? rawOrigins.split(',').map(o => o.trim()).filter(Boolean)
+  : [];
+
 // Middlewares   
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:3001", "https://ksbm-2.onrender.com", "https://ksbm-rho.vercel.app"],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, server-to-server, Postman) or matching origins
+    if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS origin not allowed: ${origin}`));
+  },
   credentials: true,
 }));
 app.use(express.json());
