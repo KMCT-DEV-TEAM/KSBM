@@ -1,3 +1,4 @@
+import { defaultCmsData } from '../../seeds/defaultCmsData.js';
 import Header from './header.model.js';
 import MandatoryDisclosure from './mandatoryDisclosure.model.js';
 import Organogram from './organogram.model.js';
@@ -51,7 +52,8 @@ export const getHeaderSettings = async (req, res) => {
     const settings = await Header.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching header settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default header settings:', error.message);
+    res.json(defaultCmsData.headers);
   }
 };
 
@@ -83,7 +85,8 @@ export const getAboutSettings = async (req, res) => {
     const settings = await About.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching about settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default about settings:', error.message);
+    res.json(defaultCmsData.abouts);
   }
 };
 
@@ -118,7 +121,8 @@ export const getHeroSettings = async (req, res) => {
     const settings = await Hero.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching hero settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default hero settings:', error.message);
+    res.json(defaultCmsData.heros);
   }
 };
 
@@ -156,7 +160,8 @@ export const getProgramsSettings = async (req, res) => {
     const settings = await Programs.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching programs settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default programs settings:', error.message);
+    res.json(defaultCmsData.programs);
   }
 };
 
@@ -191,7 +196,8 @@ export const getAccreditationSettings = async (req, res) => {
     const settings = await Accreditation.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching accreditation settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default accreditation settings:', error.message);
+    res.json(defaultCmsData.accreditations);
   }
 };
 
@@ -226,7 +232,8 @@ export const getFacilitiesSettings = async (req, res) => {
     const settings = await Facilities.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching facilities settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default facilities settings:', error.message);
+    res.json(defaultCmsData.facilities);
   }
 };
 
@@ -258,10 +265,8 @@ export const getManagementSettings = async (req, res) => {
     const settings = await Management.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({
-      message: "Server error fetching management settings",
-      error: error.message,
-    });
+    console.warn('[CMS] Database offline, returning default management settings:', error.message);
+    res.json(defaultCmsData.managements);
   }
 };
 
@@ -298,10 +303,8 @@ export const getPlacementSettings = async (req, res) => {
     const settings = await Placement.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({
-      message: "Server error fetching placement settings",
-      error: error.message,
-    });
+    console.warn('[CMS] Database offline, returning default placement settings:', error.message);
+    res.json(defaultCmsData.placements);
   }
 };
 
@@ -353,10 +356,8 @@ export const getTestimonialsSettings = async (req, res) => {
     const settings = await Testimonials.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({
-      message: "Server error fetching testimonials settings",
-      error: error.message,
-    });
+    console.warn('[CMS] Database offline, returning default testimonials settings:', error.message);
+    res.json(defaultCmsData.testimonials);
   }
 };
 
@@ -392,7 +393,8 @@ export const getAchievementsSettings = async (req, res) => {
     const settings = await Achievements.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching achievements settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default achievements settings:', error.message);
+    res.json(defaultCmsData.achievements);
   }
 };
 
@@ -425,7 +427,8 @@ export const getRecruitersSettings = async (req, res) => {
     const settings = await Recruiters.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching recruiters settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default recruiters settings:', error.message);
+    res.json(defaultCmsData.recruiters);
   }
 };
 
@@ -456,7 +459,8 @@ export const getLifeAtKsbmSettings = async (req, res) => {
     const settings = await LifeAtKsbm.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Life at KSBM settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default life-at-ksbm settings:', error.message);
+    res.json(defaultCmsData.lifeatksbms);
   }
 };
 
@@ -489,7 +493,8 @@ export const getNewsSettings = async (req, res) => {
     const settings = await News.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching News settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default news settings:', error.message);
+    res.json(defaultCmsData.news);
   }
 };
 
@@ -522,7 +527,8 @@ export const getFooterSettings = async (req, res) => {
     const settings = await FooterModel.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Footer settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default footer settings:', error.message);
+    res.json(defaultCmsData.footers);
   }
 };
 
@@ -554,7 +560,8 @@ export const getAboutUsHeroSettings = async (req, res) => {
     const settings = await AboutUsHero.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching About Us Hero settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default about-us-hero settings:', error.message);
+    res.json(defaultCmsData.aboutusheros);
   }
 };
 
@@ -580,7 +587,8 @@ export const getVisionMissionSettings = async (req, res) => {
     const settings = await VisionMission.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Vision Mission settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default vision-mission settings:', error.message);
+    res.json(defaultCmsData.visionmissions);
   }
 };
 
@@ -608,7 +616,8 @@ export const getLeadershipSettings = async (req, res) => {
     const settings = await Leadership.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Leadership settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default leadership settings:', error.message);
+    res.json(defaultCmsData.leaderships);
   }
 };
 
@@ -666,7 +675,8 @@ export const getLegacySettings = async (req, res) => {
     const settings = await Legacy.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Legacy settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default legacy settings:', error.message);
+    res.json(defaultCmsData.legacies);
   }
 };
 
@@ -693,7 +703,8 @@ export const getAboutUsStatsSettings = async (req, res) => {
     const settings = await AboutUsStats.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching About Us Stats settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default about-us-stats settings:', error.message);
+    res.json(defaultCmsData.aboutusstats);
   }
 };
 
@@ -716,7 +727,8 @@ export const getAdvisoryBoardSettings = async (req, res) => {
     const settings = await AdvisoryBoard.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Advisory Board settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default advisory board settings:', error.message);
+    res.json(defaultCmsData.advisoryboards);
   }
 };
 
@@ -753,7 +765,8 @@ export const getGoverningBodySettings = async (req, res) => {
     const settings = await GoverningBody.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Governing Body settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default governing body settings:', error.message);
+    res.json(defaultCmsData.governingbodies);
   }
 };
 
@@ -790,7 +803,8 @@ export const getAboutCtaSettings = async (req, res) => {
     const settings = await AboutCta.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching About Us CTA settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default about-cta settings:', error.message);
+    res.json(defaultCmsData.aboutctas);
   }
 };
 
@@ -820,7 +834,8 @@ export const getFacilitiesPageSettings = async (req, res) => {
     const settings = await FacilitiesPage.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Facilities Page settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default facilities-page settings:', error.message);
+    res.json(defaultCmsData.facilitiespages);
   }
 };
 
@@ -866,7 +881,8 @@ export const getFacultySettings = async (req, res) => {
     const settings = await Faculty.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Faculty settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default faculty settings:', error.message);
+    res.json(defaultCmsData.faculties);
   }
 };
 
@@ -909,7 +925,8 @@ export const getAlumniPageSettings = async (req, res) => {
     const settings = await AlumniPage.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Alumni Page settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default alumni-page settings:', error.message);
+    res.json(defaultCmsData.alumnipages);
   }
 };
 
@@ -939,7 +956,8 @@ export const getManagementDeskSettings = async (req, res) => {
     const settings = await ManagementDesk.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Management Desk settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default management-desk settings:', error.message);
+    res.json(defaultCmsData.managementdesks);
   }
 };
 
@@ -974,7 +992,8 @@ export const getMbaPageSettings = async (req, res) => {
     const settings = await MbaPageSetting.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching MBA Page settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default mba-page settings:', error.message);
+    res.json(defaultCmsData.mbapagesettings);
   }
 };
 
@@ -1042,12 +1061,12 @@ export const getGrievancePage = async (req, res) => {
   try {
     let page = await GrievancePage.findOne();
     if (!page) {
-      page = await GrievancePage.create({});
+      return res.status(200).json(defaultCmsData.grievancepages);
     }
     res.status(200).json(page);
   } catch (error) {
-    console.error('Error in getGrievancePage:', error);
-    res.status(500).json({ message: 'Error fetching Grievance Page content', error: error.message });
+    console.warn('[CMS] Database offline, returning default grievance-page settings:', error.message);
+    res.status(200).json(defaultCmsData.grievancepages);
   }
 };
 
@@ -1077,7 +1096,8 @@ export const getBbaPageSettings = async (req, res) => {
     const settings = await BbaPageSetting.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching BBA Page settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default bba-page settings:', error.message);
+    res.json(defaultCmsData.bbapagesettings);
   }
 };
 
@@ -1126,7 +1146,8 @@ export const getExaminationsPageSettings = async (req, res) => {
     const settings = await ExaminationsPage.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Examinations Page settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default examinations-page settings:', error.message);
+    res.json(defaultCmsData.examinationspages);
   }
 };
 
@@ -1163,7 +1184,8 @@ export const getAdmissionsPageSettings = async (req, res) => {
     const settings = await AdmissionsPage.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Admissions Page settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default admissions-page settings:', error.message);
+    res.json(defaultCmsData.admissionspages);
   }
 };
 
@@ -1208,7 +1230,8 @@ export const getPlacementPageSettings = async (req, res) => {
     const settings = await PlacementPage.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Placement Page settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default placement-page settings:', error.message);
+    res.json(defaultCmsData.placementpages);
   }
 };
 
@@ -1248,7 +1271,8 @@ export const getContactPageSettings = async (req, res) => {
     const settings = await ContactPage.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Contact Page settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default contact-page settings:', error.message);
+    res.json(defaultCmsData.contactpages);
   }
 };
 
@@ -1281,7 +1305,8 @@ export const getPrivacyPolicySettings = async (req, res) => {
     const settings = await PrivacyPolicyModel.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Privacy Policy settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default privacy-policy settings:', error.message);
+    res.json(defaultCmsData.privacypolicypages);
   }
 };
 
@@ -1314,7 +1339,8 @@ export const getTermsAndConditionsSettings = async (req, res) => {
     const settings = await TermsAndConditionsModel.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Terms & Conditions settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default terms-and-conditions settings:', error.message);
+    res.json(defaultCmsData.termsandconditionspages);
   }
 };
 
@@ -1347,7 +1373,8 @@ export const getFaqSettings = async (req, res) => {
     const settings = await FaqModel.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching FAQ settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default faq settings:', error.message);
+    res.json(defaultCmsData.faqpages);
   }
 };
 
@@ -1380,7 +1407,8 @@ export const getGalleryPageSettings = async (req, res) => {
     const settings = await GalleryPageModel.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Gallery Page settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default gallery-page settings:', error.message);
+    res.json(defaultCmsData.gallerypages);
   }
 };
 
@@ -1413,7 +1441,8 @@ export const getEventsPageSettings = async (req, res) => {
     const settings = await EventsPageModel.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Events Page settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default events-page settings:', error.message);
+    res.json(defaultCmsData.eventspages);
   }
 };
 
@@ -1446,7 +1475,8 @@ export const getBlogsPageSettings = async (req, res) => {
     const settings = await BlogsPageModel.getSettings();
     res.json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching Blogs Page settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default blogs-page settings:', error.message);
+    res.json(defaultCmsData.blogspages);
   }
 };
 
@@ -1484,11 +1514,12 @@ export const getDownloadPage = async (req, res) => {
   try {
     let settings = await DownloadPage.findOne();
     if (!settings) {
-      settings = await DownloadPage.create({});
+      return res.status(200).json(defaultCmsData.downloadpages);
     }
     res.status(200).json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching download page settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default download-page settings:', error.message);
+    res.status(200).json(defaultCmsData.downloadpages);
   }
 };
 
@@ -1521,11 +1552,12 @@ export const getCommitteesAndCellsSettings = async (req, res) => {
   try {
     let settings = await CommitteesAndCellsCms.findOne();
     if (!settings) {
-      settings = await CommitteesAndCellsCms.create({});
+      return res.status(200).json(defaultCmsData.committeesandcellscms);
     }
     res.status(200).json(settings);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching committees settings', error: error.message });
+    console.warn('[CMS] Database offline, returning default committees settings:', error.message);
+    res.status(200).json(defaultCmsData.committeesandcellscms);
   }
 };
 
@@ -1552,9 +1584,13 @@ export const updateCommitteesAndCellsSettings = async (req, res) => {
 export const getMandatoryDisclosures = async (req, res) => {
   try {
     const disclosures = await MandatoryDisclosure.find().sort({ createdAt: -1 });
+    if (!disclosures || disclosures.length === 0) {
+      return res.json([defaultCmsData.mandatorydisclosures]);
+    }
     res.json(disclosures);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching mandatory disclosures', error: error.message });
+    console.warn('[CMS] Database offline, returning default mandatory disclosures:', error.message);
+    res.json([defaultCmsData.mandatorydisclosures]);
   }
 };
 
@@ -1615,11 +1651,12 @@ export const getDefaultMandatoryDisclosure = async (req, res) => {
   try {
     const disclosure = await MandatoryDisclosure.findOne({ isDefault: true });
     if (!disclosure) {
-      return res.status(404).json({ message: 'No default disclosure set' });
+      return res.json(defaultCmsData.mandatorydisclosures);
     }
     res.json(disclosure);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching default disclosure', error: error.message });
+    console.warn('[CMS] Database offline, returning default disclosure:', error.message);
+    res.json(defaultCmsData.mandatorydisclosures);
   }
 };
 
@@ -1633,9 +1670,13 @@ export const getDefaultMandatoryDisclosure = async (req, res) => {
 export const getOrganograms = async (req, res) => {
   try {
     const organograms = await Organogram.find().sort({ createdAt: -1 });
+    if (!organograms || organograms.length === 0) {
+      return res.json([defaultCmsData.organograms]);
+    }
     res.json(organograms);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching organograms', error: error.message });
+    console.warn('[CMS] Database offline, returning default organograms:', error.message);
+    res.json([defaultCmsData.organograms]);
   }
 };
 
@@ -1696,11 +1737,12 @@ export const getDefaultOrganogram = async (req, res) => {
   try {
     const organogram = await Organogram.findOne({ isDefault: true });
     if (!organogram) {
-      return res.status(404).json({ message: 'No default organogram set' });
+      return res.json(defaultCmsData.organograms);
     }
     res.json(organogram);
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching default organogram', error: error.message });
+    console.warn('[CMS] Database offline, returning default organogram:', error.message);
+    res.json(defaultCmsData.organograms);
   }
 };
 // ==========================================
@@ -1761,10 +1803,19 @@ import GlobalButton from './globalButton.model.js';
 export const getGlobalButtons = async (req, res) => {
   try {
     const buttons = await GlobalButton.find().sort({ order: 1 });
+    if (!buttons || buttons.length === 0) {
+      return res.json([
+        { identifier: 'global_apply', label: 'Apply Now', link: '/admissions', isExternal: false, isActive: true },
+        { identifier: 'hero_brochure', label: 'Download Brochure', link: '/download', isExternal: false, isActive: true }
+      ]);
+    }
     res.json(buttons);
   } catch (error) {
-    console.error('Error fetching global buttons:', error);
-    res.status(500).json({ message: 'Server Error' });
+    console.warn('[CMS] Database offline, returning default global buttons:', error.message);
+    res.json([
+      { identifier: 'global_apply', label: 'Apply Now', link: '/admissions', isExternal: false, isActive: true },
+      { identifier: 'hero_brochure', label: 'Download Brochure', link: '/download', isExternal: false, isActive: true }
+    ]);
   }
 };
 
