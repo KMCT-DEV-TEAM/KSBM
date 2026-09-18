@@ -11,6 +11,7 @@ import SingleDocumentUploader from './components/SingleDocumentUploader';
 import { uploadDeferredImage } from './utils/uploadHelper';
 import PageHeader from './components/PageHeader';
 import AdminModal from './components/AdminModal';
+import { DEFAULT_ADMISSIONS_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true, position: 'top-end',
@@ -285,106 +286,46 @@ const ManageAdmissionsPage = () => {
     });
   };
 
-  const handleResetToDefault = () => {
-    confirmAction({
+  const handleResetToDefault = async () => {
+    await confirmAction({
       title: 'Reset to Default?',
       message: 'Are you sure you want to revert all settings to their original default values? This will not be saved until you click "Save Changes".',
       confirmText: 'Yes, reset everything',
       variant: 'danger',
       action: () => {
-        // Reset Show Sections
-        setShowSections({ heroText: true, elite: true, journey: true, eligibility: true, cta: true, faq: true });
+        setShowSections(DEFAULT_ADMISSIONS_PAGE.showSections || { heroText: true, elite: true, journey: true, eligibility: true, cta: true, faq: true });
         
-        // Reset Hero
-        setHeroBadgeText('Admissions 2026');
-        setHeroTitle('Empowering Future Leaders');
-        setHeroSubtitle('Join a world-class institution dedicated to excellence in management education. Shape your future with industry-relevant curriculum and global perspectives.');
-        setHeroBgImage(DEFAULT_IMAGES.heroBgImage);
-        setHeroBrochureFile('');
+        setHeroBadgeText(DEFAULT_ADMISSIONS_PAGE.heroBadgeText || 'Admissions 2026');
+        setHeroTitle(DEFAULT_ADMISSIONS_PAGE.heroTitle || 'Empowering Future Leaders');
+        setHeroSubtitle(DEFAULT_ADMISSIONS_PAGE.heroSubtitle || '');
+        setHeroBgImage(DEFAULT_ADMISSIONS_PAGE.heroBgImage || DEFAULT_IMAGES.heroBgImage);
+        setHeroBrochureFile(DEFAULT_ADMISSIONS_PAGE.heroBrochureFile || '');
         
-        // Reset Elite
-        setEliteHeading('The KSBM Elite Advantage');
-        setEliteSubtitle('Why Choose Our Program');
-        setEliteDesc("The MBA program at KSBM is uniquely crafted for young professionals and recent graduates aiming for high-impact leadership careers. Through our case-study pedagogy, industry immersions, and rigorous academic standards, students gain practical business intelligence and decision-making capabilities that stand out in today's corporate landscape.\n\nSupported by experienced faculty and corporate mentors, we focus on analytical depth, strategic vision, and holistic individual development, preparing students to excel in top multinational corporations and dynamic entrepreneurial ventures across India and globally.");
-        setEliteImage(DEFAULT_IMAGES.eliteImage);
+        setEliteHeading(DEFAULT_ADMISSIONS_PAGE.eliteHeading || 'The KSBM Elite Advantage');
+        setEliteSubtitle(DEFAULT_ADMISSIONS_PAGE.eliteSubtitle || 'Why Choose Our Program');
+        setEliteDesc(DEFAULT_ADMISSIONS_PAGE.eliteDesc || '');
+        setEliteImage(DEFAULT_ADMISSIONS_PAGE.eliteImage || DEFAULT_IMAGES.eliteImage);
         
-        // Reset Journey
-        setJourneyHeading('Your Journey to KSBM');
-        setJourneySubtitle('Application Process');
-        setJourneySteps([
-          { step: '01', title: 'Entrance Score', desc: 'CAT / MAT / CMAT / KMAT / ATMA eligibility', icon: 'FileCheck' },
-          { step: '02', title: 'Group Discussion', desc: 'Demonstrate leadership and communication skills in interactive sessions', icon: 'Users' },
-          { step: '03', title: 'Personal Interview', desc: 'One-on-one interview assessing passion, aptitude, and career alignment.', icon: 'UserCheck' }
-        ]);
+        setJourneyHeading(DEFAULT_ADMISSIONS_PAGE.journeyHeading || 'Your Journey to KSBM');
+        setJourneySubtitle(DEFAULT_ADMISSIONS_PAGE.journeySubtitle || 'Application Process');
+        setJourneySteps(DEFAULT_ADMISSIONS_PAGE.journeySteps || []);
         
-        // Reset Eligibility
-        setEligibilityHeading('Program Requirements');
-        setEligibilitySubtitle('Eligibility Criteria');
-
-        setScholarshipNote('Scholarships available for merit and economically disadvantaged students.');
-        setMba({
-          eligibilityText: "Any recognized Bachelor's degree with a valid CMAT/CAT/KMAT score.",
-          approvedIntake: '60 Seats',
-          eligibilityCriteria: [
-            "General Category : Minimum 50% marks in aggregate in graduation.",
-            "Reserved Categories : Minimum 45% marks in aggregate for SC/ST and OBC candidates as per university norms.",
-            "Accepted Entrance Exams : Valid qualifying score in KMAT, CMAT, CAT, or MAT.",
-            "Final Year Students : Candidates appearing for final year degree examinations may apply provisionally."
-          ],
-          programHighlights: [
-            "Duration : 2 Years Full-Time (4 Semesters)",
-            "Specializations : Finance, Marketing, HR, Systems, International Business",
-            "Internship : 8-week compulsory corporate summer internship",
-            "Affiliation : Calicut University & AICTE Approved"
-          ],
-          feeStructure: { amount: '1,50,000', period: 'per semester' }
-        });
-        setBba({
-          eligibilityText: 'Pass in Plus Two (10+2) or equivalent examination from a recognized board.',
-          approvedIntake: '40 Seats',
-          eligibilityCriteria: [
-            "General Category : Pass in 10+2 or equivalent examination with minimum 45% marks.",
-            "Reserved Categories : Minimum 40% marks for candidates belonging to SC/ST categories.",
-            "Stream Flexibility : Students from Science, Commerce, and Humanities streams are eligible.",
-            "Selection Criteria : Merit-based selection as per university guidelines."
-          ],
-          programHighlights: [
-            "Duration : 3 Years Full-Time (6 Semesters)",
-            "Focus Areas : Business Foundations, Entrepreneurship, Management Principles",
-            "Industry Readiness : Live projects, industrial visits, and soft skills training",
-            "Affiliation : Calicut University & AICTE Approved"
-          ]
-        });
+        setEligibilityHeading(DEFAULT_ADMISSIONS_PAGE.eligibilityHeading || 'Program Requirements');
+        setEligibilitySubtitle(DEFAULT_ADMISSIONS_PAGE.eligibilitySubtitle || 'Eligibility Criteria');
+        setScholarshipNote(DEFAULT_ADMISSIONS_PAGE.scholarshipNote || '');
+        setMba(DEFAULT_ADMISSIONS_PAGE.mba || {});
+        setBba(DEFAULT_ADMISSIONS_PAGE.bba || {});
         
-        // Reset CTA
-        setCtaHeading('Begin Your Leadership Journey at KSBM');
-        setCtaDesc('Applications for the upcoming academic year are now open. Take the first step towards a transformative management education under a community of vibrant peers, experienced faculty, and industry leaders.');
-        setCtaImage(DEFAULT_IMAGES.ctaImage);
-        setCtaApplyBtnText('Apply Now');
-        setCtaApplyBtnUrl('/apply');
-        setCtaEnquiryBtnText('Enquire Now');
-        setCtaEnquiryBtnUrl('/contact');
+        setCtaHeading(DEFAULT_ADMISSIONS_PAGE.ctaHeading || 'Begin Your Leadership Journey at KSBM');
+        setCtaDesc(DEFAULT_ADMISSIONS_PAGE.ctaDesc || '');
+        setCtaImage(DEFAULT_ADMISSIONS_PAGE.ctaImage || DEFAULT_IMAGES.ctaImage);
+        setCtaApplyBtnText(DEFAULT_ADMISSIONS_PAGE.ctaApplyBtnText || 'Apply Now');
+        setCtaApplyBtnUrl(DEFAULT_ADMISSIONS_PAGE.ctaApplyBtnUrl || '/apply');
+        setCtaEnquiryBtnText(DEFAULT_ADMISSIONS_PAGE.ctaEnquiryBtnText || 'Enquire Now');
+        setCtaEnquiryBtnUrl(DEFAULT_ADMISSIONS_PAGE.ctaEnquiryBtnUrl || '/contact');
         
-        // Reset FAQ
-        setFaqHeading('FAQ');
-        setFaqs([
-          {
-            question: "Why is MBA/PGDM at KSBM preferred by top recruiters?",
-            answer: "KSBM programs are designed with active corporate input, ensuring our curriculum remains at the cutting edge of industry demands. Through Harvard & IIM case-study pedagogy, live corporate projects, and intensive mentorship, our graduates are job-ready and equipped with practical strategic competencies from day one."
-          },
-          {
-            question: "What is the eligibility criteria for the MBA program?",
-            answer: "Candidates must hold a recognized Bachelor's Degree in any discipline with minimum 50% aggregate marks (45% for reserved categories). Additionally, applicants must possess a valid score in CAT, CMAT, KMAT, or equivalent national/state entrance examinations."
-          },
-          {
-            question: "How are scholarships or financial assistance awarded?",
-            answer: "KSBM offers merit-based scholarships for high scorers in entrance exams and university graduations, alongside need-based financial aid for economically disadvantaged students. Educational loan assistance and tie-ups with leading banks are also provided during counseling."
-          },
-          {
-            question: "What is the selection procedure after applying online?",
-            answer: "Once your online application is submitted and reviewed, shortlisted candidates are invited for the Group Discussion (GD) and Personal Interview (PI) rounds. Final selection is based on academic record, entrance test score, and GD/PI performance."
-          }
-        ]);
+        setFaqHeading(DEFAULT_ADMISSIONS_PAGE.faqHeading || 'FAQ');
+        setFaqs(DEFAULT_ADMISSIONS_PAGE.faqs || []);
         
         Toast.fire({ icon: 'info', title: 'Fields reset to default. Click "Save Changes" to apply.' });
       }

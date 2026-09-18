@@ -2,11 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../../api/axios';
+import { DEFAULT_LEADERSHIP } from '../../admin/cms/constants/defaultCmsData';
 
 const LeadershipSection = ({ previewData }) => {
-  const [data, setData] = useState({
-    showSection: true
-  });
+  const [data, setData] = useState(previewData || DEFAULT_LEADERSHIP);
 
   useEffect(() => {
     if (previewData) {

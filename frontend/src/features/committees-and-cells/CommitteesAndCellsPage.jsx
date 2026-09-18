@@ -4,11 +4,12 @@ import { Search, FileText } from 'lucide-react';
 
 import api from '../../api/axios';
 import PageTransition from '../../components/PageTransition';
+import { DEFAULT_COMMITTEES_AND_CELLS } from '../admin/cms/constants/defaultCmsData';
 
 const CommitteesAndCellsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [data, setData] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [data, setData] = useState(DEFAULT_COMMITTEES_AND_CELLS);
+  const [dataLoaded, setDataLoaded] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {

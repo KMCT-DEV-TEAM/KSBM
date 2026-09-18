@@ -7,7 +7,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
-import LegacySection from '../../about/components/LegacySection';
+import { DEFAULT_LEGACY } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -117,11 +117,11 @@ const ManageLegacy = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setSubheading('OUR LEGACY');
-        setHeading('A Journey of Educational Excellence');
-        setDescription('Founded by the visionary leader...');
-        setImage('/assets/Images/image 2.png');
-        setShowSection(true);
+        setSubheading(DEFAULT_LEGACY.subheading || 'OUR LEGACY');
+        setHeading(DEFAULT_LEGACY.heading || 'A Journey of Educational Excellence');
+        setDescription(DEFAULT_LEGACY.description || '');
+        setImage(DEFAULT_LEGACY.image || '/assets/Images/aboutus/legacy.png');
+        setShowSection(DEFAULT_LEGACY.showSection ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });

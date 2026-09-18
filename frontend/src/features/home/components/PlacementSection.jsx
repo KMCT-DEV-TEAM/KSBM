@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../../api/axios';
+import { DEFAULT_PLACEMENT_HOME } from '../../admin/cms/constants/defaultCmsData';
 
 const PlacementSection = ({ previewData }) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(previewData || DEFAULT_PLACEMENT_HOME);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {

@@ -5,10 +5,11 @@ import AdvisoryBoardContent from './components/advisory-board/AdvisoryBoardConte
 import AdvisoryBoardMembers from './components/advisory-board/AdvisoryBoardMembers';
 import Loader from '../../components/Loader';
 import api from '../../api/axios';
+import { DEFAULT_ADVISORY_BOARD } from '../admin/cms/constants/defaultCmsData';
 
 const AdvisoryBoard = ({ previewData }) => {
-  const [data, setData] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(!!previewData);
+  const [data, setData] = useState(previewData || DEFAULT_ADVISORY_BOARD);
+  const [isLoaded, setIsLoaded] = useState(true);
 
   useEffect(() => {
     let windowLoaded = document.readyState === 'complete';

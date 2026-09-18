@@ -6,10 +6,11 @@ import FacilitiesSkeleton from './components/FacilitiesSkeleton';
 import FacilitiesHero from './components/FacilitiesHero';
 import InstitutionalResourcesSection from './components/InstitutionalResourcesSection';
 import ClubsSection from './components/ClubsSection';
+import { DEFAULT_FACILITIES_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const Facilities = () => {
-  const [data, setData] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [data, setData] = useState(DEFAULT_FACILITIES_PAGE);
+  const [dataLoaded, setDataLoaded] = useState(true);
   const [previewSection, setPreviewSection] = useState(null);
   const [isIframe, setIsIframe] = useState(false);
 

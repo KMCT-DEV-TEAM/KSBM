@@ -5,10 +5,11 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Loader from '../../../components/Loader';
 import Link from 'next/link';
+import { DEFAULT_PROGRAMS } from '../../admin/cms/constants/defaultCmsData';
 
 const AcademicPrograms = ({ previewData }) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(previewData || DEFAULT_PROGRAMS);
+  const [loading, setLoading] = useState(false);
   const scrollRef = React.useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);

@@ -6,10 +6,11 @@ import Swal from 'sweetalert2';
 import ConfirmationModal from '../../../components/ConfirmationModal';
 import AdminSkeleton from './components/AdminSkeleton';
 import AchievementsPreview from '../../home/components/AchievementsSection';
-import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import LogoUploader from './components/LogoUploader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
+import { DEFAULT_ACHIEVEMENTS } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -104,45 +105,13 @@ const ManageAchievements = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-      setSubheading('College Achievements');
-      setHeading('Awards and Achievements');
-      setShowSection(true);
-      setAchievements([
-        {
-          id: Date.now().toString() + '1',
-          category: 'Academics',
-          date: 'Oct 30, 2024',
-          title: 'National Research Excellence Award',
-          description: 'Recognizing outstanding contributions to sustainable technology research.',
-          image: '/assets/Images/Home/achievement_award.png'
-        },
-        {
-          id: Date.now().toString() + '2',
-          category: 'Sports',
-          date: 'Oct 25, 2024',
-          title: 'Championship Victory in Inter-University League',
-          description: 'Our varsity team secures the gold in the regional finals.',
-          image: '/assets/Images/Home/achievement_sports.png'
-        },
-        {
-          id: Date.now().toString() + '3',
-          category: 'Community',
-          date: 'Oct 20, 2024',
-          title: 'Social Impact Leadership Award',
-          description: 'Honoring our student volunteers for their dedication to local literacy programs.',
-          image: '/assets/Images/Home/achievement_poster.png'
-        }
-      ]);
-      achievements.forEach(item => {
-        if (item.image) {
-          const isDefaultImage = ['/assets/Images/Home/achievement_award.png', '/assets/Images/Home/achievement_sports.png', '/assets/Images/Home/achievement_poster.png'].includes(item.image);
-          if (!isDefaultImage) {
-            markForDeletion(item.image);
-          }
-        }
-      });
-      Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
-    }
+        setSubheading(DEFAULT_ACHIEVEMENTS.subheading);
+        setHeading(DEFAULT_ACHIEVEMENTS.heading);
+        setShowSection(DEFAULT_ACHIEVEMENTS.showSection ?? true);
+        setAchievements(DEFAULT_ACHIEVEMENTS.achievements || []);
+        clearDeletions();
+        Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
+      }
     });
   };
 

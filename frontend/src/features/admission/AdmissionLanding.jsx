@@ -8,10 +8,11 @@ import AdmissionJourneySection from './components/AdmissionJourneySection';
 import EligibilityStandardsSection from './components/EligibilityStandardsSection';
 import AdmissionCtaSection from './components/AdmissionCtaSection';
 import AdmissionFaqSection from './components/AdmissionFaqSection';
+import { DEFAULT_ADMISSIONS_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const AdmissionLanding = () => {
-  const [data, setData] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [data, setData] = useState(DEFAULT_ADMISSIONS_PAGE);
+  const [dataLoaded, setDataLoaded] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);

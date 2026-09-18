@@ -5,10 +5,11 @@ import ManagementDeskIntro from './components/management-desk/ManagementDeskIntr
 import ManagementDeskMembers from './components/management-desk/ManagementDeskMembers';
 import Loader from '../../components/Loader';
 import api from '../../api/axios';
+import { DEFAULT_MANAGEMENT_DESK } from '../admin/cms/constants/defaultCmsData';
 
 const ManagementDesk = ({ previewData }) => {
-  const [data, setData] = useState(previewData || null);
-  const [isLoaded, setIsLoaded] = useState(!!previewData);
+  const [data, setData] = useState(previewData || DEFAULT_MANAGEMENT_DESK);
+  const [isLoaded, setIsLoaded] = useState(true);
 
   useEffect(() => {
     if (previewData) {

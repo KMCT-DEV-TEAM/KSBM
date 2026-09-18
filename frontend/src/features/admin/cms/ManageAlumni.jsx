@@ -9,6 +9,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { DEFAULT_ALUMNI_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -18,58 +19,7 @@ const Toast = Swal.mixin({
   timerProgressBar: true,
 });
 
-const defaultAlumniData = {
-  hero: {
-    showTextContent: true,
-    title: 'Alumni',
-    subtitle: 'Our alumni stand at the forefront of global business, driving innovation through principled leadership and strategic excellence across industries worldwide.',
-    backgroundImage: '/assets/Images/alumni/hero-bg.png'
-  },
-  legacy: {
-    subtitle: 'KSBM ALUMNI NETWORK / OUR LEGACY',
-    title: 'Legacy of Excellence',
-    description1: 'Since our inception, the KMCT School of Business Management has been a beacon of academic brilliance and professional development. Our alumni embody our mission, leading top organizations and shaping global markets across diverse industries.',
-    description2: 'With over three decades of history, we take immense pride in having trained thousands of remarkable business leaders. The KMCT Alumni Association is dedicated to fostering lifelong relationships between the institution and its graduates.',
-    mainImage: '/assets/Images/alumni/legacy-main.png',
-    secondaryImage: '/assets/Images/alumni/legacy-secondary.png',
-    floatingQuote: '"Shaping the future through principled leadership."',
-    stat1Value: '30k+',
-    stat1Label: 'Global Alumni',
-    stat2Value: '150+',
-    stat2Label: 'Industry Leaders'
-  },
-  events: {
-    heading: 'ALUMNI EVENTS',
-    items: [
-      {
-        uuid: 'ev-1',
-        title: 'Global Alumni Reunion 2024',
-        description: 'Join fellow graduates for a weekend of celebration, networking, and keynotes from industry leaders.',
-        image: '/assets/Images/alumni/event-default.png',
-        date: 'December 2024'
-      }
-    ]
-  },
-  notableAlumni: {
-    subtitle: 'OUR PRIDE',
-    heading: 'Notable Alumni',
-    items: [
-      { uuid: 'na-1', name: 'Dr. Arvind Nair', role: 'CEO, Global Corporate', image: '/assets/Images/alumni/notable-default.png' }
-    ]
-  },
-  gallery: {
-    heading: 'Captured in Events',
-    items: [
-      { uuid: 'ga-1', title: 'Graduation', image: '/assets/Images/alumni/gallery-default.png' }
-    ]
-  },
-  cta: {
-    title: 'Join the KMCT Alumni Network',
-    subtitle: 'Stay connected with your alma mater, network with fellow peers, and participate in exclusive leadership and mentoring initiatives.',
-    buttonText: 'View Details',
-    buttonLink: '#register'
-  }
-};
+const defaultAlumniData = DEFAULT_ALUMNI_PAGE;
 
 const DraggableItemCard = ({ item, index, onEdit, onDelete, type }) => {
   const controls = useDragControls();

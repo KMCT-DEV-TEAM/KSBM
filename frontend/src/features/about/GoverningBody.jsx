@@ -5,10 +5,11 @@ import GoverningBodyContent from './components/governing-body/GoverningBodyConte
 import GoverningBodyMembers from './components/governing-body/GoverningBodyMembers';
 import Loader from '../../components/Loader';
 import api from '../../api/axios';
+import { DEFAULT_GOVERNING_BODY } from '../admin/cms/constants/defaultCmsData';
 
 const GoverningBody = ({ previewData }) => {
-  const [data, setData] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(!!previewData);
+  const [data, setData] = useState(previewData || DEFAULT_GOVERNING_BODY);
+  const [isLoaded, setIsLoaded] = useState(true);
 
   useEffect(() => {
     if (previewData) return;

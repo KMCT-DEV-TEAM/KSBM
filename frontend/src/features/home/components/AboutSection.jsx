@@ -42,27 +42,10 @@ const Counter = ({ value }) => {
   return <span ref={ref}>0{match[2]}</span>;
 };
 
+import { DEFAULT_ABOUT } from '../../admin/cms/constants/defaultCmsData';
+
 const AboutSection = ({ previewData }) => {
-  const [cmsData, setCmsData] = useState({
-    subheading: 'BUILDING EXCELLENCE SINCE 1995',
-    heading: "Shaping Tomorrow's Business Leaders",
-    paragraphs: [
-      "At KMCT School of Business Management (KSBM), we believe management education goes beyond academic excellence—it is about developing ethical leaders, innovative thinkers, and future-ready professionals. For over two decades, KSBM has been committed to delivering quality education through its MBA and BBA programs, combining academic rigor with practical learning, industry exposure, internships, and experiential training to prepare students for today's evolving business landscape.",
-      "Our MBA program equips students with advanced managerial knowledge, strategic thinking, and leadership skills for successful corporate careers, while the BBA program builds a strong foundation in business, communication, and management for higher studies and professional growth. Supported by experienced faculty, modern infrastructure, and strong industry collaborations, KSBM provides an inspiring environment that nurtures critical thinking, entrepreneurship, innovation, and lifelong learning."
-    ],
-    imageUrl: '',
-    stats: [
-      { value: '16+', label: 'YEARS OF EXCELLENCE' },
-      { value: '991+', label: 'ACTIVE STUDENTS' },
-      { value: '196+', label: 'GLOBAL RECRUITERS' },
-      { value: '196+', label: 'GLOBAL RECRUITERS' }
-    ],
-    showSubheading: true,
-    showHeading: true,
-    showParagraphs: true,
-    showImage: true,
-    showStats: true
-  });
+  const [cmsData, setCmsData] = useState(previewData || DEFAULT_ABOUT);
 
   useEffect(() => {
     if (previewData) {

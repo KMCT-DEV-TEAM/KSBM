@@ -9,6 +9,7 @@ import SingleImageUploader from './components/SingleImageUploader';
 import PageHeader from './components/PageHeader';
 import AdminItemCard from './components/AdminItemCard';
 import AdminModal from './components/AdminModal';
+import { DEFAULT_FACILITIES_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -185,45 +186,21 @@ const ManageInstitutionalResources = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setInstitutionalResources({
+        setInstitutionalResources(DEFAULT_FACILITIES_PAGE.institutionalResources || {
           heading: 'Institutional Resources',
-          description: 'At KSBM, we believe that a great learning experience begins with an inspiring environment. Our modern campus is thoughtfully designed to support academic excellence, innovation, and holistic student development. From technology-enabled classrooms to dedicated learning spaces, every facility empowers students to learn, collaborate, and grow with confidence.'
+          description: 'At KSBM, we believe that a great learning experience begins with an inspiring environment.',
+          showSection: true
         });
-        setLibrary({
+        setLibrary(DEFAULT_FACILITIES_PAGE.library || {
           heading: 'Library',
-          description: 'The KSBM Library serves as a dynamic hub, supporting students, faculty, and researchers with a rich collection of academic resources.',
-          description2: 'With an extensive collection of books, journals, and digital resources, the library provides a conducive environment.',
+          description: 'The KSBM Library serves as a dynamic hub.',
+          description2: '',
           mainImage: '/assets/Images/fecilities/library_main.jpg',
-          thumbnails: [
-            '/assets/Images/fecilities/facility_1.jpg',
-            '/assets/Images/fecilities/facility_2.jpg',
-            '/assets/Images/fecilities/facility_3.jpg'
-          ]
+          thumbnails: []
         });
-        setOtherResources({
+        setOtherResources(DEFAULT_FACILITIES_PAGE.otherResources || {
           heading: 'Other Resources',
-          items: [
-            { 
-              title: 'Classrooms', 
-              image: '/assets/Images/fecilities/classrooms_main.jpg',
-              thumbnails: ['/assets/Images/fecilities/facility_4.jpg', '/assets/Images/fecilities/facility_5.jpg', '/assets/Images/fecilities/facility_6.jpg']
-            },
-            { 
-              title: 'Cafeteria', 
-              image: '/assets/Images/fecilities/cafeteria_main.jpg',
-              thumbnails: ['/assets/Images/fecilities/life_1.jpg', '/assets/Images/fecilities/life_2.jpg', '/assets/Images/fecilities/life_3.jpg']
-            },
-            { 
-              title: 'Hostel', 
-              image: '/assets/Images/fecilities/hostel_main.jpg',
-              thumbnails: ['/assets/Images/fecilities/life_4.jpg', '/assets/Images/fecilities/life_5.jpg', '/assets/Images/fecilities/life_6.jpg']
-            },
-            { 
-              title: 'Computer Lab', 
-              image: '/assets/Images/fecilities/computer_lab_main.jpg',
-              thumbnails: ['/assets/Images/fecilities/life_7.jpg', '/assets/Images/fecilities/life_8.jpg', '/assets/Images/fecilities/facility_1.jpg']
-            }
-          ]
+          items: []
         });
         Toast.fire({ icon: 'info', title: 'Settings reset to default.' });
       }

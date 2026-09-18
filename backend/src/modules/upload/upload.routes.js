@@ -2,315 +2,135 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { upload, cloudinary } from '../../config/cloudinary.js';
 import { protect } from '../../middleware/authMiddleware.js';
-
-import { uploadAssets } from '../../config/assetsUpload.js';
+import { uploadAssets, getUploadedFileUrl } from '../../config/assetsUpload.js';
+import { deleteS3Object, isS3Configured, getBucketName } from '../../config/s3.config.js';
 
 const router = express.Router();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-router.post('/home', protect, uploadAssets.single('image'), async (req, res) => {
+// Helper for standard upload response with explicit terminal logging
+const handleUploadResponse = (req, res, fallbackPrefix, successMessage = 'File uploaded successfully') => {
   if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/Home/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/Home',
-    url: fileUrl,
-  });
-});
-
-router.post('/programs', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/Home/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/Home',
-    url: fileUrl,
-  });
-});
-
-router.post('/aboutus', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/aboutus/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/aboutus',
-    url: fileUrl,
-  });
-});
-
-router.post('/management', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/management/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/management',
-    url: fileUrl,
-  });
-});
-
-router.post('/mba', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/mba/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/mba',
-    url: fileUrl,
-  });
-});
-
-router.post('/faculty', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/faculty/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/faculty',
-    url: fileUrl,
-  });
-});
-
-router.post('/alumni', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/alumni/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/alumni',
-    url: fileUrl,
-  });
-});
-
-router.post('/placements', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/placements/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/placements',
-    url: fileUrl,
-  });
-});
-
-router.post('/committees', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/committees/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/committees',
-    url: fileUrl,
-  });
-});
-
-router.post('/examinations', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/examinations/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/examinations',
-    url: fileUrl,
-  });
-});
-
-router.post('/blogs', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    console.error('Upload failed: No req.file present. req.body:', req.body);
-    return res.status(400).json({ message: 'No image provided', body: req.body });
-  }
-
-  const fileUrl = `/assets/Images/blogs/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/blogs',
-    url: fileUrl,
-  });
-});
-
-router.post('/grievance', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/grievance/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/grievance',
-    url: fileUrl,
-  });
-});
-
-router.post('/contact', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/contact/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/contact',
-    url: fileUrl,
-  });
-});
-
-router.post('/facilities', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/fecilities/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/fecilities',
-    url: fileUrl,
-  });
-});
-
-router.post('/admissions', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/admissions/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/admissions',
-    url: fileUrl,
-  });
-});
-
-router.post('/', protect, upload.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  // Local URL fallback
-  const fileUrl = `/uploads/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully locally',
-    url: fileUrl,
-  });
-});
-
-router.post('/faq', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/faq/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/faq',
-    url: fileUrl,
-  });
-});
-
-router.post('/gallery', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/gallery/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/gallery',
-    url: fileUrl,
-  });
-});
-
-router.post('/downloads', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/downloads/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/downloads',
-    url: fileUrl,
-  });
-});
-
-router.post('/terms', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/terms/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/terms',
-    url: fileUrl,
-  });
-});
-
-router.post('/privacy', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/privacy/${req.file.filename}`;
-
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/privacy',
-    url: fileUrl,
-  });
-});
-
-router.post('/events', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
-  }
-
-  const fileUrl = `/assets/Images/events/${req.file.filename}`;
-  
-  res.status(200).json({
-    message: 'Image uploaded successfully to /assets/Images/events',
-    url: fileUrl,
-  });
-});
-
-router.post('/brochure', protect, uploadAssets.single('image'), async (req, res) => {
-  if (!req.file) {
+    console.warn(`[UPLOAD REJECTED] Endpoint: ${req.originalUrl} - No file was provided in request.`);
     return res.status(400).json({ message: 'No file provided' });
   }
 
-  const fileUrl = `/assets/brochures/${req.file.filename}`;
+  const fallbackUrl = `${fallbackPrefix}/${req.file.filename}`;
+  const fileUrl = getUploadedFileUrl(req.file, fallbackUrl);
+  const isS3 = Boolean(req.file.location || req.file.key);
+  const storageEngine = isS3 ? `AWS S3 (Bucket: ${getBucketName()})` : 'Local Disk Storage';
+
+  console.log('\n================== [FILE UPLOAD] ==================');
+  console.log(`📍 Route:        ${req.originalUrl}`);
+  console.log(`💾 Storage:      ${storageEngine}`);
+  console.log(`📄 Original:     ${req.file.originalname}`);
+  console.log(`🏷️  MIME Type:    ${req.file.mimetype}`);
+  if (req.file.size) console.log(`⚖️  File Size:    ${(req.file.size / 1024).toFixed(2)} KB`);
+  if (req.file.key)  console.log(`🔑 S3 Key:       ${req.file.key}`);
+  console.log(`🔗 Stored URL:   ${fileUrl}`);
+  console.log('===================================================\n');
 
   res.status(200).json({
-    message: 'Brochure uploaded successfully',
+    message: successMessage,
     url: fileUrl,
+    storage: isS3 ? 's3' : 'local',
+    key: req.file.key || undefined
   });
+};
+
+router.post('/home', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/Home', 'Image uploaded successfully');
+});
+
+router.post('/programs', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/Home', 'Image uploaded successfully');
+});
+
+router.post('/aboutus', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/aboutus', 'Image uploaded successfully');
+});
+
+router.post('/management', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/management', 'Image uploaded successfully');
+});
+
+router.post('/mba', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/mba', 'Image uploaded successfully');
+});
+
+router.post('/faculty', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/faculty', 'Image uploaded successfully');
+});
+
+router.post('/alumni', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/alumni', 'Image uploaded successfully');
+});
+
+router.post('/placements', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/placements', 'Image uploaded successfully');
+});
+
+router.post('/committees', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/committees', 'Image uploaded successfully');
+});
+
+router.post('/examinations', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/examinations', 'File uploaded successfully');
+});
+
+router.post('/blogs', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/blogs', 'Image uploaded successfully');
+});
+
+router.post('/grievance', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/grievance', 'File uploaded successfully');
+});
+
+router.post('/contact', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/contact', 'Image uploaded successfully');
+});
+
+router.post('/facilities', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/fecilities', 'Image uploaded successfully');
+});
+
+router.post('/admissions', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/admissions', 'File uploaded successfully');
+});
+
+router.post('/', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/uploads', 'File uploaded successfully');
+});
+
+router.post('/faq', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/faq', 'Image uploaded successfully');
+});
+
+router.post('/gallery', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/gallery', 'Image uploaded successfully');
+});
+
+router.post('/downloads', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/downloads', 'Document uploaded successfully');
+});
+
+router.post('/terms', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/terms', 'Image uploaded successfully');
+});
+
+router.post('/privacy', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/privacy', 'Image uploaded successfully');
+});
+
+router.post('/events', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/Images/events', 'Image uploaded successfully');
+});
+
+router.post('/brochure', protect, uploadAssets.single('image'), (req, res) => {
+  handleUploadResponse(req, res, '/assets/brochures', 'Brochure uploaded successfully');
 });
 
 router.delete('/', protect, async (req, res) => {
@@ -344,7 +164,6 @@ router.delete('/', protect, async (req, res) => {
     'default-excellence-bg.png', 'default-committee-vector.png', 'default-avatar.png',
     'default-partner-1.jpg', 'default-partner-2.jpg', 'default-partner-3.jpg',
     'default-faculty-hero.jpg', 'default-faculty-leader.jpg', 'default-committees-hero.png',
-    'image 2.png', 'image 31.png',
     'exam_hero_bg.png', 'exam_main.png', 'exam_schedule.png', 'image 64.png',
     'admissions-hero-bg.png', 'admissions-elite.png', 'admissions-cta.png',
     'hero-bg.jpg', 'default-card.jpg',
@@ -355,9 +174,30 @@ router.delete('/', protect, async (req, res) => {
   const filename = fileUrl.split('/').pop();
 
   if (defaultImages.includes(filename)) {
-    return res.status(200).json({ message: 'Default image, skipped deletion' });
+    console.log(`[DELETE SKIPPED] Default asset preserved: ${filename}`);
+    return res.status(200).json({ message: 'Default asset, skipped deletion' });
   }
 
+  // Check if file is stored in AWS S3 or CloudFront
+  const isS3Url = fileUrl.startsWith('http://') || fileUrl.startsWith('https://');
+  if (isS3Url) {
+    console.log(`\n[DELETE REQUEST] Target S3 URL: ${fileUrl}`);
+    try {
+      if (isS3Configured()) {
+        await deleteS3Object(fileUrl);
+        console.log(`[DELETE SUCCESS] Removed from AWS S3: ${fileUrl}\n`);
+        return res.status(200).json({ message: 'File deleted from S3 successfully' });
+      } else {
+        console.log(`[DELETE SKIPPED] S3 credentials not configured, skipping external delete for: ${fileUrl}\n`);
+        return res.status(200).json({ message: 'S3 not configured, skipped external delete' });
+      }
+    } catch (err) {
+      console.error('[DELETE ERROR] Failed to delete file from S3:', err);
+      return res.status(500).json({ message: 'Failed to delete file from S3', error: err.message });
+    }
+  }
+
+  // Handle local file deletion fallback
   let filePath = '';
   if (fileUrl.includes('/assets/Images/Home/')) {
     filePath = path.join(__dirname, '../../../../frontend/public', fileUrl);
@@ -399,27 +239,26 @@ router.delete('/', protect, async (req, res) => {
     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/events', filename);
   } else if (fileUrl.includes('/assets/Images/gallery/')) {
     filePath = path.join(__dirname, '../../../../frontend/public/assets/Images/gallery', filename);
+  } else if (fileUrl.includes('/assets/brochures/')) {
+    filePath = path.join(__dirname, '../../../../frontend/public', fileUrl);
   } else if (fileUrl.includes('/assets/home/')) {
     filePath = path.join(__dirname, '../../../../assets/home', filename);
   } else if (fileUrl.includes('/uploads/')) {
     filePath = path.join(__dirname, '../../../uploads', filename);
   }
 
-  console.log('DELETE request for:', fileUrl);
-  console.log('Resolved filePath:', filePath);
+  console.log(`[DELETE REQUEST] Target Local File: ${fileUrl} -> Path: ${filePath}`);
 
   if (filePath && fs.existsSync(filePath)) {
     fs.unlink(filePath, (err) => {
       if (err) {
-        console.error("Failed to delete local file:", err);
+        console.error("[DELETE ERROR] Failed to delete local file:", err);
         return res.status(500).json({ message: 'Failed to delete file' });
       }
-      console.log('File deleted successfully:', filePath);
+      console.log('[DELETE SUCCESS] Deleted local file:', filePath);
       return res.status(200).json({ message: 'File deleted successfully' });
     });
   } else {
-    console.log('File not found or already deleted:', filePath);
-    // If not found locally, might be cloudinary or already deleted, which is fine
     return res.status(200).json({ message: 'File not found on server or already deleted' });
   }
 });

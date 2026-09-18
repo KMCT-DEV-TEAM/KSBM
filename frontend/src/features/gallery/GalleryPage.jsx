@@ -5,9 +5,11 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import api from '../../api/axios';
+import { DEFAULT_GALLERY_PAGE } from '../admin/cms/constants/defaultCmsData';
+
 const GalleryPage = ({ previewData }) => {
   const [activeTab, setActiveTab] = useState('All');
-  const [galleryData, setGalleryData] = useState(previewData || null);
+  const [galleryData, setGalleryData] = useState(previewData || DEFAULT_GALLERY_PAGE);
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [tabStartIndex, setTabStartIndex] = useState(0);
 

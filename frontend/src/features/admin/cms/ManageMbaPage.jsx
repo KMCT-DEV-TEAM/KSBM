@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { Save, RefreshCw, Plus, Trash2, GraduationCap, FileText, BookOpen, Briefcase, Award, Eye, Monitor, Tablet, Smartphone, X, RotateCcw, ChevronLeft, ChevronRight, Calendar, ArrowUp, ArrowDown, GripVertical, Edit2, MousePointerClick } from 'lucide-react';
+import { Save, RefreshCw, Plus, Trash2, GraduationCap, FileText, BookOpen, Briefcase, Award, Eye, Monitor, Tablet, Smartphone, X, RotateCcw, ChevronLeft, ChevronRight, Calendar, ArrowUp, ArrowDown, GripVertical, Edit2 } from 'lucide-react';
 import api from '../../../api/axios';
 import Swal from 'sweetalert2';
 import AdminSkeleton from './components/AdminSkeleton';
@@ -9,6 +9,7 @@ import LogoUploader from './components/LogoUploader';
 import ManageRecruiters from './ManageRecruiters';
 import PageHeader from './components/PageHeader';
 import AddItemModal from './components/AddItemModal';
+import { DEFAULT_MBA_PAGE, DEFAULT_BBA_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -87,11 +88,7 @@ const processDeferredUploads = async (obj, apiInstance) => {
       try {
         const res = await fetch(obj);
         const blob = await res.blob();
-        const ext = blob.type === 'application/pdf' ? '.pdf' :
-          blob.type === 'image/jpeg' ? '.jpg' :
-            blob.type === 'image/webp' ? '.webp' :
-              blob.type === 'image/svg+xml' ? '.svg' : '.png';
-        const file = new File([blob], `upload${ext}`, { type: blob.type });
+        const file = new File([blob], 'upload.png', { type: blob.type });
         const formData = new FormData();
         formData.append('image', file);
         const uploadRes = await apiInstance.post('/upload/mba', formData, {
@@ -174,10 +171,6 @@ const ManageMbaPage = ({ isBba = false }) => {
   const [internshipDesc, setInternshipDesc] = useState('');
   const [internshipBgImage, setInternshipBgImage] = useState('');
 
-  const [eligibilityTitle, setEligibilityTitle] = useState('');
-  const [eligibilitySubtitle, setEligibilitySubtitle] = useState('');
-  const [eligibilityBtnText, setEligibilityBtnText] = useState('Start your Application');
-  const [eligibilityBtnLink, setEligibilityBtnLink] = useState('');
   const [eligibility, setEligibility] = useState([]);
 
   const [internshipBadge, setInternshipBadge] = useState('EXPERIENTIAL LEARNING');
@@ -240,8 +233,6 @@ const ManageMbaPage = ({ isBba = false }) => {
     internshipBgImage,
     internshipBadge,
     internshipImages,
-    eligibilityTitle,
-    eligibilitySubtitle,
     eligibility,
     dynamicLearning,
     momentsGallery,
@@ -335,12 +326,8 @@ const ManageMbaPage = ({ isBba = false }) => {
 
       setInternshipTitle(data.internshipTitle || data.internshipsTitle || (isBba ? 'Summer Internship & Industry Projects' : 'Summer Internship Program'));
       setInternshipDesc(data.internshipDesc || data.internshipsDesc || (isBba ? 'Students undergo structured industrial visits and a dedicated corporate project phase, gaining valuable workplace skills, professional mentorship, and early career clarity.' : 'Our mandatory 8-week summer internship bridges the gap between academic theory and real-world corporate challenges, working with industry leaders across India and abroad.'));
-      setInternshipBgImage(data.internshipBgImage || data.internshipsBgImage || (isBba ? '/assets/Images/bba/bba_internship_1.png' : '/assets/Images/mba/gallery_67.png'));
+      setInternshipBgImage(data.internshipBgImage || data.internshipsBgImage || (isBba ? '/assets/Images/bba/bba_internship_1.png' : '/assets/Images/mba/mba_internship_1.png'));
 
-      setEligibilityTitle(data.eligibilityTitle || 'Admission & Eligibility');
-      setEligibilitySubtitle(data.eligibilitySubtitle || 'Clear, transparent, and merit-based admission process designed to discover passionate future business leaders.');
-      setEligibilityBtnText(data.eligibilityBtnText || 'Start your Application');
-      setEligibilityBtnLink(data.eligibilityBtnLink || '');
       setEligibility(data.eligibility || []);
 
       setInternshipBadge(data.internshipBadge || data.internshipsBadge || 'EXPERIENTIAL LEARNING');
@@ -451,10 +438,6 @@ const ManageMbaPage = ({ isBba = false }) => {
             internshipBgImage,
             internshipBadge,
             internshipImages,
-            eligibilityTitle,
-            eligibilitySubtitle,
-            eligibilityBtnText,
-            eligibilityBtnLink,
             eligibility,
             whyChoosePills,
             dynamicLearning,
@@ -508,327 +491,75 @@ const ManageMbaPage = ({ isBba = false }) => {
       confirmText: 'Yes, reset section!',
       variant: 'danger',
       action: async () => {
+        const activeDefault = isBba ? DEFAULT_BBA_PAGE : DEFAULT_MBA_PAGE;
         switch (activeTab) {
           case 'hero':
-            if (isBba) {
-              setShortTitle('BBA');
-              setTitle('Bachelor of Business Administration');
-              setHeroTitleLine1('Bachelor of Business');
-              setHeroTitleLine2('Administration (BBA)');
-              setDescription('A dynamic three-year undergraduate program designed to build strong business foundations, leadership capabilities, and practical skills for aspiring professionals and future entrepreneurs.');
-              setHeroImage('/assets/Images/bba/bba_hero_bg.png');
-              setHeroPrimaryBtnText('EXPLORE PROGRAM');
-              setHeroSecondaryBtnText('DOWNLOAD BROCHURE');
-              setHeroCardTitle('Batch 2025–27');
-              setHeroCardStat1Title('Limited Seats');
-              setHeroCardStat1Sub('Last few slots remaining');
-              setHeroCardStat2Title('Industry Aligned');
-              setHeroCardStat2Sub('3-Year Degree & Projects');
-            } else {
-              setShortTitle('MBA');
-              setTitle('Master of Business Administration');
-              setHeroTitleLine1('Master of Business');
-              setHeroTitleLine2('Administration (MBA)');
-              setDescription('A rigorous two-year program designed to mold visionary business leaders, strategic thinkers, and dynamic entrepreneurs ready to navigate the global corporate landscape.');
-              setHeroImage('/assets/Images/mba/mba_hero_bg.png');
-              setHeroPrimaryBtnText('EXPLORE PROGRAM');
-              setHeroSecondaryBtnText('DOWNLOAD BROCHURE');
-              setHeroCardTitle('Batch 2025–27');
-              setHeroCardStat1Title('Limited Seats');
-              setHeroCardStat1Sub('Last few slots remaining');
-              setHeroCardStat2Title('100% Placement');
-              setHeroCardStat2Sub('Consistent record over years');
-            }
+            setShortTitle(activeDefault.shortTitle || (isBba ? 'BBA' : 'MBA'));
+            setTitle(activeDefault.title || (isBba ? 'Bachelor of Business Administration' : 'Master of Business Administration'));
+            setHeroTitleLine1(activeDefault.heroTitleLine1 || '');
+            setHeroTitleLine2(activeDefault.heroTitleLine2 || '');
+            setDescription(activeDefault.description || '');
+            setHeroImage(activeDefault.heroImage || (isBba ? '/assets/Images/bba/bba_hero_bg.png' : '/assets/Images/mba/mba_hero_bg.png'));
+            setHeroPrimaryBtnText(activeDefault.heroPrimaryBtnText || 'EXPLORE PROGRAM');
+            setHeroPrimaryBtnLink(activeDefault.heroPrimaryBtnLink || '/apply');
+            setHeroSecondaryBtnText(activeDefault.heroSecondaryBtnText || 'DOWNLOAD BROCHURE');
+            setHeroSecondaryBtnLink(activeDefault.heroSecondaryBtnLink || '');
+            setHeroCardTitle(activeDefault.heroCardTitle || 'Batch 2025–27');
+            setHeroCardStat1Title(activeDefault.heroCardStat1Title || 'Limited Seats');
+            setHeroCardStat1Sub(activeDefault.heroCardStat1Sub || 'Last few slots remaining');
+            setHeroCardStat2Title(activeDefault.heroCardStat2Title || (isBba ? 'Industry Aligned' : '100% Placement'));
+            setHeroCardStat2Sub(activeDefault.heroCardStat2Sub || (isBba ? '3-Year Degree & Projects' : 'Consistent record over years'));
             break;
           case 'overview':
-            if (isBba) {
-              setOverviewTitle('Bachelor of Business Administration');
-              setOverviewText('The BBA program at KSBM lays the essential groundwork for young minds aspiring to make an impact in the corporate world or launch their own ventures.');
-              setOverviewSubtext('Combining fundamental business theory with practical workshops, presentation modules, and industry exposure, the curriculum ensures smooth transition to corporate careers or premier MBA programs.');
-              setOverviewImage('/assets/Images/bba/bba_overview.png');
-              setOverviewBadgeText('UNDERGRADUATE EXCELLENCE');
-              setOverviewFloatingBadgeText('3-Year Foundation');
-              setOverviewPrimaryBtnText('Apply Now');
-              setOverviewSecondaryBtnText('Download Brochure');
-            } else {
-              setOverviewTitle('Master of Business Administration');
-              setOverviewText('Our MBA program combines rigorous academic foundations with experiential learning, empowering students to master complex global business challenges and lead with confidence.');
-              setOverviewSubtext('Through case-study pedagogy, industry mentorship, and live corporate projects, students develop executive presence, analytical rigor, and entrepreneurial innovation.');
-              setOverviewImage('/assets/Images/mba/mba_main.png');
-              setOverviewBadgeText('POSTGRADUATE EXCELLENCE');
-              setOverviewFloatingBadgeText('100% Case-Study Driven');
-              setOverviewPrimaryBtnText('Apply Now');
-              setOverviewSecondaryBtnText('Download Brochure');
-            }
+            setOverviewTitle(activeDefault.overviewTitle || '');
+            setOverviewText(activeDefault.overviewText || '');
+            setOverviewSubtext(activeDefault.overviewSubtext || '');
+            setOverviewImage(activeDefault.overviewImage || (isBba ? '/assets/Images/bba/bba_main.png' : '/assets/Images/mba/mba_main.png'));
+            setOverviewBadgeText(activeDefault.overviewBadgeText || (isBba ? 'UNDERGRADUATE EXCELLENCE' : 'POSTGRADUATE EXCELLENCE'));
+            setOverviewFloatingBadgeText(activeDefault.overviewFloatingBadgeText || (isBba ? '3-Year Foundation' : '100% Case-Study Driven'));
+            setOverviewPrimaryBtnText(activeDefault.overviewPrimaryBtnText || 'Apply Now');
+            setOverviewSecondaryBtnText(activeDefault.overviewSecondaryBtnText || 'Download Brochure');
+            setOverviewSecondaryBtnLink(activeDefault.overviewSecondaryBtnLink || '');
             break;
           case 'dimensions':
-            if (isBba) {
-              setDimensions([
-                {
-                  number: '01',
-                  title: 'Business Fundamentals & Ethics',
-                  description: 'Building a robust foundation in core management principles, economics, accounting, and business law.',
-                  credits: 'Credits: 18',
-                  topics: [
-                    'Principles of Management & Economics',
-                    'Corporate Law & Business Ethics',
-                    'Organizational Behavior & Communication'
-                  ]
-                },
-                {
-                  number: '02',
-                  title: 'Marketing & Communication',
-                  description: 'Developing persuasive professional communication, consumer psychology understanding, and digital branding.',
-                  credits: 'Credits: 20',
-                  topics: [
-                    'Marketing Management Essentials',
-                    'Professional Corporate Communication',
-                    'Digital & Social Media Fundamentals'
-                  ]
-                },
-                {
-                  number: '03',
-                  title: 'Financial Accounting & Management',
-                  description: 'Understanding corporate accounting practices, financial reporting, budgeting, and banking basics.',
-                  credits: 'Credits: 22',
-                  topics: [
-                    'Financial Accounting & Reporting',
-                    'Cost Accounting & Budgetary Control',
-                    'Banking & Financial Services'
-                  ]
-                },
-                {
-                  number: '04',
-                  title: 'Entrepreneurship & Innovation',
-                  description: 'Fostering venture creation skills, startup incubation, and practical business plan development.',
-                  credits: 'Credits: 16',
-                  topics: [
-                    'Venture Creation & Business Planning',
-                    'Startup Incubation & Ecosystems',
-                    'Innovation & New Product Development'
-                  ]
-                }
-              ]);
-            } else {
-              setDimensions([
-                {
-                  number: '01',
-                  title: 'Strategic Management & Leadership',
-                  description: 'Mastering corporate strategy, competitive advantage, organizational behavior, and executive leadership.',
-                  credits: 'Credits: 18',
-                  topics: [
-                    'Corporate Strategy & Business Policy',
-                    'Executive Leadership & Ethics',
-                    'Organizational Dynamics & Change'
-                  ]
-                },
-                {
-                  number: '02',
-                  title: 'Financial Management & Valuation',
-                  description: 'Deep dive into corporate finance, investment banking, portfolio management, and financial modeling.',
-                  credits: 'Credits: 20',
-                  topics: [
-                    'Corporate Finance & Valuations',
-                    'Investment Banking & Markets',
-                    'Financial Modeling & Risk Analysis'
-                  ]
-                },
-                {
-                  number: '03',
-                  title: 'Marketing Strategy & Brand Mgmt',
-                  description: 'Advanced marketing management, consumer analytics, digital transformation, and brand equity.',
-                  credits: 'Credits: 22',
-                  topics: [
-                    'Strategic Marketing Management',
-                    'Consumer Psychology & Analytics',
-                    'Digital Marketing Transformation'
-                  ]
-                },
-                {
-                  number: '04',
-                  title: 'Operations & Supply Chain',
-                  description: 'Optimizing global supply chains, quality management, logistics, and operational excellence.',
-                  credits: 'Credits: 16',
-                  topics: [
-                    'Global Supply Chain Management',
-                    'Total Quality & Lean Management',
-                    'Logistics & Resource Optimization'
-                  ]
-                }
-              ]);
-            }
+            setDimensions(activeDefault.dimensions || []);
             break;
           case 'whyChoose':
-            setWhyChoosePills({
+            setWhyChoosePills(activeDefault.whyChoosePills || {
               badgeText: 'LEARNING GOALS',
               title: 'Key Learning Dimensions',
-              items: [
-                { title: 'Management', description: 'Strategic Execution.', icon: 'BookOpen' },
-                { title: 'Leadership', description: 'Visionary Guidance.', icon: 'Users' },
-                { title: 'Analytics', description: 'Data-Driven Insights.', icon: 'Briefcase' },
-                { title: 'Collaboration', description: 'Cross-Functional Teams.', icon: 'Globe' },
-                { title: 'Innovation', description: 'Futuristic Innovation.', icon: 'Award' }
-              ]
+              items: []
             });
             break;
           case 'internship':
-            if (isBba) {
-              setInternshipTitle('Summer Internship & Industry Projects');
-              setInternshipDesc('Students undergo structured industrial visits and a dedicated corporate project phase, gaining valuable workplace skills, professional mentorship, and early career clarity.');
-              setInternshipBgImage('/assets/Images/bba/bba_internship_1.png');
-              setInternshipBadge('EXPERIENTIAL LEARNING');
-              setInternshipImages([
-                '/assets/Images/bba/bba_internship_1.png',
-                '/assets/Images/bba/bba_internship_2.png',
-                '/assets/Images/bba/bba_internship_3.png'
-              ]);
-            } else {
-              setInternshipTitle('Summer Internship Program');
-              setInternshipDesc('Our mandatory 8-week summer internship bridges the gap between academic theory and real-world corporate challenges, working with industry leaders across India and abroad.');
-              setInternshipBgImage('/assets/Images/mba/gallery_67.png');
-              setInternshipBadge('EXPERIENTIAL LEARNING');
-              setInternshipImages([
-                '/assets/Images/mba/internship_2.png',
-                '/assets/Images/mba/internship_27.png',
-                '/assets/Images/mba/internship_28.png'
-              ]);
-            }
+            setInternshipTitle(activeDefault.internshipTitle || (isBba ? 'Summer Internship & Industry Projects' : 'Summer Internship Program'));
+            setInternshipDesc(activeDefault.internshipDesc || '');
+            setInternshipBgImage(activeDefault.internshipBgImage || (isBba ? '/assets/Images/bba/bba_hero_bg.png' : '/assets/Images/mba/mba_internship_1.png'));
+            setInternshipBadge(activeDefault.internshipBadge || 'EXPERIENTIAL LEARNING');
+            setInternshipBtnText(activeDefault.internshipBtnText || 'Download Internship Brochure');
+            setInternshipBtnLink(activeDefault.internshipBtnLink || '');
+            setInternshipImages(activeDefault.internshipImages || []);
             break;
           case 'dynamicLearning':
-            setDynamicLearning({
-              badgeText: 'ABOUT THE IV',
-              title: 'Experience Dynamic Learning',
-              desc1: 'Beyond the classroom, KSBM offers an electrifying campus ecosystem packed with management clubs, national-level conclaves, cultural extravaganzas, and executive workshops.',
-              desc2: 'We believe true leadership is forged through holistic development, peer collaboration, and continuous exposure to diverse real-world scenarios.',
-              images: isBba ? ['/assets/Images/bba/bba_internship_1.png', '/assets/Images/bba/bba_internship_2.png'] : ['/assets/Images/mba/dynamic_49.png', '/assets/Images/mba/dynamic_60.png'],
-              features: [
-                { title: 'Management Clubs', desc: 'Specialized student-led clubs in Finance, Marketing, HR, and Entrepreneurship.', icon: 'Users' },
-                { title: 'Leadership Conclaves', desc: 'Annual summits bringing top business leaders and innovators to campus.', icon: 'Award' },
-                { title: 'Cultural & Sports', desc: 'National-level fests, athletic tournaments, and vibrant community celebrations.', icon: 'Trophy' },
-                { title: 'Corporate Workshops', desc: 'Intensive bootcamps on AI in business, advanced Excel, and executive presence.', icon: 'Briefcase' }
-              ]
-            });
+            setDynamicLearning(activeDefault.dynamicLearning || {});
             break;
           case 'momentsGallery':
-            if (isBba) {
-              setMomentsGallery({
-                badgeText: 'GALLERY',
-                title: 'Moments Captured in Trip',
-                bgImage: '',
-                items: [
-                  { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/bba/bba_gallery_1.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
-                  { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/bba/bba_gallery_2.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-                  { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/bba/bba_gallery_1.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-                  { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/bba/bba_gallery_2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
-                  { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/bba/bba_gallery_1.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
-                ]
-              });
-            } else {
-              setMomentsGallery({
-                badgeText: 'GALLERY',
-                title: 'Moments Captured in Trip',
-                bgImage: '',
-                items: [
-                  { title: 'Industrial Visit 2025', subtitle: 'Corporate Tour & Leadership Insights', image: '/assets/Images/mba/gallery_67.png', span: 'col-span-1 md:col-span-2 lg:col-span-4 h-[340px]' },
-                  { title: 'Leadership Camp', subtitle: 'Outbound Team Building', image: '/assets/Images/mba/internship_27.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-                  { title: 'Outbound Learning', subtitle: 'Nature & Strategic Reflection', image: '/assets/Images/mba/internship_28.png', span: 'col-span-1 md:col-span-1 lg:col-span-4 h-[340px]' },
-                  { title: 'Global Immersion', subtitle: 'Cross-Cultural Case Discussions', image: '/assets/Images/mba/internship_2.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' },
-                  { title: 'Corporate Night Tour', subtitle: 'Metropolitan Industry Networking', image: '/assets/Images/mba/gallery_58.png', span: 'col-span-1 md:col-span-2 lg:col-span-6 h-[340px]' }
-                ]
-              });
-            }
+            setMomentsGallery(activeDefault.momentsGallery || { badgeText: 'GALLERY', title: 'Moments Captured in Trip', items: [] });
             break;
           case 'academicCalendarBanner':
-            if (isBba) {
-              setAcademicCalendarBanner({
-                badgeText: 'ACADEMIC SCHEDULE 2026-27',
-                title: 'Download the Official Academic Calendar',
-                description: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
-                image: '/assets/Images/bba/bba_schedule.png',
-                events: defaultCalendarEvents
-              });
-            } else {
-              setAcademicCalendarBanner({
-                badgeText: 'ACADEMIC SCHEDULE 2026-27',
-                title: 'Download the Official Academic Calendar',
-                description: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
-                image: '/assets/Images/mba/calendar_64.png',
-                events: defaultCalendarEvents
-              });
-            }
+            setAcademicCalendarBanner(activeDefault.academicCalendarBanner || {
+              badgeText: 'ACADEMIC SCHEDULE 2026-27',
+              title: 'Download the Official Academic Calendar',
+              description: 'Stay fully updated with semester schedules.',
+              events: defaultCalendarEvents
+            });
             break;
           case 'eligibility':
-            setEligibilityTitle('Admission & Eligibility');
-            setEligibilitySubtitle('Clear, transparent, and merit-based admission process designed to discover passionate future business leaders.');
-            setEligibilityBtnText('Start your Application');
-            setEligibilityBtnLink('');
-            if (isBba) {
-              setEligibility([
-                {
-                  step: '01',
-                  title: 'Academic Eligibility',
-                  description: 'Successful completion of Higher Secondary (10+2) examination or equivalent from a recognized board.',
-                  bullets: [
-                    'Minimum 50% aggregate marks in 10+2 (any stream)',
-                    'Students awaiting 12th results can apply provisionally',
-                    'Recognized by State / CBSE / ICSE boards'
-                  ]
-                },
-                {
-                  step: '02',
-                  title: 'Aptitude Assessment',
-                  description: 'Evaluation of general aptitude, communication ability, and interest in business studies.',
-                  bullets: [
-                    'KSBM General Business Aptitude Assessment',
-                    'Evaluation of basic analytical & verbal skills',
-                    'Merit-based screening as per university guidelines'
-                  ]
-                },
-                {
-                  step: '03',
-                  title: 'Personal Counseling & Interview',
-                  description: 'Interactive session to understand student career aspirations and guide specialization pathways.',
-                  bullets: [
-                    'One-on-one interaction with faculty panel',
-                    'Assessment of student motivation and career clarity',
-                    'Final admission offer & registration counseling'
-                  ]
-                }
-              ]);
-            } else {
-              setEligibility([
-                {
-                  step: '01',
-                  title: 'Academic Requirement',
-                  description: "Candidates must hold a recognized Bachelor's Degree in any discipline with minimum qualifying marks.",
-                  bullets: [
-                    'Minimum 50% aggregate marks in graduation',
-                    'Final year degree students may also apply',
-                    'Degree from any university recognized by UGC/AIU'
-                  ]
-                },
-                {
-                  step: '02',
-                  title: 'Entrance Examination',
-                  description: 'Valid score in national or state-level management aptitude tests.',
-                  bullets: [
-                    'Valid CAT / CMAT / KMAT / MAT score',
-                    'Competitive percentile score preferred',
-                    'Exemption criteria as per state university regulations'
-                  ]
-                },
-                {
-                  step: '03',
-                  title: 'Selection Process',
-                  description: 'Multi-stage evaluation testing leadership aptitude, communication skills, and academic merit.',
-                  bullets: [
-                    'Shortlisting based on entrance examination scores',
-                    'Group Discussion (GD) on contemporary business topics',
-                    'Personal Interview (PI) with expert panel'
-                  ]
-                }
-              ]);
-            }
+            setEligibilityTitle(activeDefault.eligibilityTitle || (isBba ? 'BBA Eligibility Criteria' : 'MBA Eligibility Criteria'));
+            setEligibilitySubtitle(activeDefault.eligibilitySubtitle || '');
+            setEligibility(activeDefault.eligibility || []);
+            setEligibilityBtnText(activeDefault.eligibilityBtnText || 'Apply for Admission');
+            setEligibilityBtnLink(activeDefault.eligibilityBtnLink || '/apply');
             break;
           default:
             break;
@@ -912,7 +643,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       (data) => {
         const bulletsArray = (data.bulletsText || '').split(',').map(t => t.trim()).filter(Boolean);
         setEligibility([
-          ...eligibility,
+          ...eligibility, 
           {
             step: String(eligibility.length + 1).padStart(2, '0'),
             title: data.title,
@@ -928,13 +659,11 @@ const ManageMbaPage = ({ isBba = false }) => {
     updated[index][field] = val;
     setEligibility(updated);
   };
-  const removeEligibilityStep = (index) => confirmAction({
-    title: 'Remove Eligibility Step', message: 'Are you sure you want to remove this eligibility card?', confirmText: 'Yes, remove', variant: 'danger', action: () => {
-      const remaining = eligibility.filter((_, i) => i !== index);
-      const renumbered = remaining.map((item, idx) => ({ ...item, step: String(idx + 1).padStart(2, '0') }));
-      setEligibility(renumbered);
-    }
-  });
+  const removeEligibilityStep = (index) => confirmAction({ title: 'Remove Eligibility Step', message: 'Are you sure you want to remove this eligibility card?', confirmText: 'Yes, remove', variant: 'danger', action: () => {
+    const remaining = eligibility.filter((_, i) => i !== index);
+    const renumbered = remaining.map((item, idx) => ({ ...item, step: String(idx + 1).padStart(2, '0') }));
+    setEligibility(renumbered);
+  }});
 
   const addEligibilityBullet = (stepIdx) => {
     openAddModal(
@@ -1021,6 +750,72 @@ const ManageMbaPage = ({ isBba = false }) => {
     setDraggedPillIndex(null);
   };
 
+  // Academic Calendar Events helpers
+  const addCalendarEvent = () => {
+    openAddModal(
+      'Add Calendar Event',
+      [
+        { name: 'title', label: 'Event Title', type: 'text', maxLength: 100, required: true },
+        { name: 'date', label: 'Date', type: 'text', maxLength: 100, required: true, placeholder: 'e.g. November 15, 2026' },
+        { name: 'semester', label: 'Semester / Term', type: 'text', maxLength: 50, required: true, placeholder: 'e.g. Trimester 1' },
+        { name: 'category', label: 'Category', type: 'text', maxLength: 50, required: true, placeholder: 'e.g. Exams & Assessments' },
+        { name: 'description', label: 'Description', type: 'textarea', maxLength: 200, required: true }
+      ],
+      (data) => {
+        setAcademicCalendarBanner({
+          ...academicCalendarBanner,
+          events: [
+            ...(academicCalendarBanner.events || []),
+            {
+              id: Date.now().toString(),
+              title: data.title,
+              date: data.date,
+              semester: data.semester,
+              category: data.category,
+              description: data.description
+            }
+          ]
+        });
+      }
+    );
+  };
+  const updateCalendarEvent = (idx, field, val) => {
+    const updated = [...(academicCalendarBanner.events || [])];
+    updated[idx] = { ...updated[idx], [field]: val };
+    setAcademicCalendarBanner({ ...academicCalendarBanner, events: updated });
+  };
+  const handleCalendarDragStart = (e, index) => {
+    setDraggedCalendarIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(() => { if (e.target) e.target.style.opacity = '0.5'; }, 0);
+  };
+  const handleCalendarDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+  const handleCalendarDrop = (e, targetIndex) => {
+    e.preventDefault();
+    if (draggedCalendarIndex === null || draggedCalendarIndex === targetIndex) return;
+    const items = [...(academicCalendarBanner.events || [])];
+    const draggedItem = items[draggedCalendarIndex];
+    items.splice(draggedCalendarIndex, 1);
+    items.splice(targetIndex, 0, draggedItem);
+    setAcademicCalendarBanner({ ...academicCalendarBanner, events: items });
+    setDraggedCalendarIndex(null);
+  };
+  const handleCalendarDragEnd = (e) => {
+    if (e.target) e.target.style.opacity = '1';
+    setDraggedCalendarIndex(null);
+  };
+  const removeCalendarEvent = (idx) => confirmAction({ title: 'Remove Event', message: 'Are you sure you want to remove this calendar event?', confirmText: 'Yes, remove', variant: 'danger', action: () => { const updated = (academicCalendarBanner.events || []).filter((_, i) => i !== idx); setAcademicCalendarBanner({ ...academicCalendarBanner, events: updated }); } });
+  const moveCalendarEvent = (idx, direction) => {
+    const current = [...(academicCalendarBanner.events || [])];
+    const target = idx + direction;
+    if (target < 0 || target >= current.length) return;
+    const [item] = current.splice(idx, 1);
+    current.splice(target, 0, item);
+    setAcademicCalendarBanner({ ...academicCalendarBanner, events: current });
+  };
 
   // DynamicLearning helpers
   const addDynamicFeature = () => {
@@ -1479,6 +1274,16 @@ const ManageMbaPage = ({ isBba = false }) => {
                     onChange={(e) => setOverviewFloatingBadgeText(e.target.value)}
                     className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                     placeholder="100% Case-Study Driven"
+                  />
+                </div>
+                <div>
+                  <CharCountLabel label="Primary Action Button Text" value={overviewPrimaryBtnText} max={30} />
+                  <input maxLength={30}
+                    type="text"
+                    value={overviewPrimaryBtnText}
+                    onChange={(e) => setOverviewPrimaryBtnText(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    placeholder="Apply Now"
                   />
                 </div>
               </div>
@@ -2178,19 +1983,113 @@ const ManageMbaPage = ({ isBba = false }) => {
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-gray-100">
-                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-2">Upload Academic Calendar PDF</label>
-                <div className="space-y-3 max-w-md">
-                  <LogoUploader
-                    deferredMode={true}
-                    uploadEndpoint="/upload/mba"
-                    currentLogoUrl={academicCalendarBanner.pdfUrl || ''}
-                    defaultImage=""
-                    acceptTypes={{ 'application/pdf': ['.pdf'] }}
-                    onUploadSuccess={(url) => setAcademicCalendarBanner({ ...academicCalendarBanner, pdfUrl: url })}
-                    label="Calendar PDF"
-                  />
-                  <p className="text-xs text-gray-500">Upload the PDF that users will see when they click "View Calendar" or "Download Calendar".</p>
+              <div className="pt-6 border-t border-gray-100 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-base font-bold text-primary flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-primary" /> Interactive Schedule & Key Milestones
+                    </h3>
+                    <p className="text-xs text-gray-500 mt-0.5">Manage timeline events displayed when visitors click "View Calendar" on the program page.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addCalendarEvent}
+                    className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4" /> Add Schedule Event
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {(academicCalendarBanner.events || []).map((ev, idx) => (
+                    <div
+                      key={ev.id || idx}
+                      draggable
+                      onDragStart={(e) => handleCalendarDragStart(e, idx)}
+                      onDragOver={handleCalendarDragOver}
+                      onDrop={(e) => handleCalendarDrop(e, idx)}
+                      onDragEnd={handleCalendarDragEnd}
+                      className={`p-5 rounded-xl bg-gray-50/80 border ${draggedCalendarIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative shadow-sm transition-all duration-200 group flex items-start gap-4`}
+                    >
+                      <div className="flex-shrink-0 cursor-grab text-gray-400 active:cursor-grabbing p-2 hover:bg-gray-100 rounded transition-colors" title="Drag to reorder">
+                        <GripVertical className="w-6 h-6" />
+                      </div>
+
+                      <div className="absolute top-4 right-4 flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            openEditModal(
+                              'Edit Schedule Event',
+                              [
+                                { name: 'title', label: 'Event Title', type: 'text', maxLength: 60, required: true },
+                                { name: 'date', label: 'Date Range', type: 'text', maxLength: 100, required: true },
+                                {
+                                  name: 'semester',
+                                  label: 'Semester / Term',
+                                  type: 'select',
+                                  required: true,
+                                  options: [
+                                    { value: 'Trimester 1', label: 'Trimester 1' },
+                                    { value: 'Trimester 2', label: 'Trimester 2' },
+                                    { value: 'Trimester 3', label: 'Trimester 3' },
+                                    { value: 'Key Events', label: 'Key Events' }
+                                  ]
+                                },
+                                {
+                                  name: 'category',
+                                  label: 'Category',
+                                  type: 'select',
+                                  required: true,
+                                  options: [
+                                    { value: 'Leadership & Events', label: 'Leadership & Events' },
+                                    { value: 'Exams & Assessments', label: 'Exams & Assessments' },
+                                    { value: 'Industrial Visits', label: 'Industrial Visits' },
+                                    { value: 'Term Breaks & Holidays', label: 'Term Breaks & Holidays' }
+                                  ]
+                                },
+                                { name: 'description', label: 'Brief Description', type: 'textarea', maxLength: 300, required: true }
+                              ],
+                              ev,
+                              (data) => {
+                                const updatedEvents = [...(academicCalendarBanner.events || [])];
+                                updatedEvents[idx] = { ...updatedEvents[idx], ...data };
+                                setAcademicCalendarBanner({ ...academicCalendarBanner, events: updatedEvents });
+                              }
+                            );
+                          }}
+                          className="p-2 rounded-lg text-blue-500 hover:bg-blue-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
+                          title="Edit Item"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => removeCalendarEvent(idx)}
+                          className="p-2 rounded-lg text-red-500 hover:bg-red-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
+                          title="Remove Event"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <div className="flex-grow flex flex-col gap-1 pr-20">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">{ev.semester || 'Trimester 1'}</span>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 bg-gray-200 px-2 py-0.5 rounded">{ev.category || 'Event'}</span>
+                        </div>
+                        <h4 className="text-sm font-bold text-gray-800">{ev.title || 'Untitled Event'}</h4>
+                        <p className="text-xs font-semibold text-gray-500 flex items-center gap-1"><Calendar className="w-3 h-3" /> {ev.date || 'No date set'}</p>
+                        <p className="text-xs text-gray-600 mt-2">{ev.description || 'No description provided.'}</p>
+                      </div>
+                    </div>
+                  ))}
+
+                  {(academicCalendarBanner.events || []).length === 0 && (
+                    <div className="text-center py-8 text-gray-400 text-xs border-2 border-dashed border-gray-200 rounded-xl">
+                      No schedule events added. Click "Add Schedule Event" to create one, or default timeline will be shown.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -2208,23 +2107,6 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <input type="checkbox" className="sr-only peer" checked={showSections.eligibility ?? true} onChange={(e) => setShowSections({ ...showSections, eligibility: e.target.checked })} />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
-              </div>
-            </div>
-          )}
-          {activeTab === 'eligibility' && (
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
-              <div className="flex items-center justify-between border-b pb-4">
-                <h2 className="text-lg font-bold text-primary">Admission Section Details</h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Section Title</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" value={eligibilityTitle} onChange={(e) => setEligibilityTitle(e.target.value)} />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Section Subtitle</label>
-                  <textarea className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px]" value={eligibilitySubtitle} onChange={(e) => setEligibilitySubtitle(e.target.value)} />
-                </div>
               </div>
             </div>
           )}

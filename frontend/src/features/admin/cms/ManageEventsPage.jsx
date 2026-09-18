@@ -11,6 +11,7 @@ import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import { uploadDeferredImage } from './utils/uploadHelper';
 import SingleDocumentUploader from './components/SingleDocumentUploader';
+import { DEFAULT_EVENTS_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -39,67 +40,22 @@ const ManageEventsPage = () => {
     { id: 'moments', label: 'Moments Captured', icon: <Camera className="w-4 h-4" /> },
   ];
 
-  const defaults = {
-    hero: {
-      title: 'THE SPIRIT OF CULTURE',
-      subtitle: 'Experience the vibrancy and dynamic energy of our college campus. From cultural extravaganzas to technical symposiums, our events are the heartbeat of student life, fostering creativity, leadership, and lifelong memories.',
-      backgroundImage: '/assets/Images/Group 250.png'
-    },
-    about: {
-      subheading: 'About',
-      heading: 'THE SPIRIT OF CULTURE',
-      paragraph1: 'Discover a celebration where creativity knows no limits and every performance tells a story worth remembering. Kaleido is more than a cultural festival—it\'s a vibrant platform where passion meets purpose, traditions blend with innovation, and talent shines without boundaries. Bringing together students, artists, performers, and creative minds from diverse backgrounds, the festival transforms the campus into a spectacular stage filled with energy, color, and inspiration.',
-      paragraph2: 'Immerse yourself in a world of mesmerizing dance performances, soul-stirring music, captivating theatre, expressive fine arts, photography, fashion, literature, and countless cultural experiences that celebrate the richness of artistic expression. Whether you\'re stepping into the spotlight as a performer, competing to showcase your skills, cheering for your peers, or simply enjoying the electrifying atmosphere, every moment at Kaleido is designed to inspire, connect, and create lasting memories.',
-      image: '/assets/Images/image 91.png',
-      brochureUrl: '',
-      calendarUrl: ''
-    },
-    upcomingEvents: {
-      heading: 'THE UPCOMING EVENTS',
-      events: [
-        {
-          title: 'CELEBRITY VISIT',
-          description: 'Join us for an exclusive evening with renowned personalities. Experience an inspiring session filled with insights, interactions, and memorable moments.',
-          date: '12',
-          month: 'OCT',
-          img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800&auto=format&fit=crop'
-        }
-      ]
-    },
-    highlightedPrograms: {
-      heading: 'THE HIGHLIGHTED PROGRAMS',
-      images: [
-        { img: 'https://images.unsplash.com/photo-1547153760-18fc86324498?q=80&w=600&auto=format&fit=crop', alt: 'Program 1' },
-        { img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=600&auto=format&fit=crop', alt: 'Program 2' },
-        { img: 'https://images.unsplash.com/photo-1533174000273-7d5d1c2ec7ce?q=80&w=600&auto=format&fit=crop', alt: 'Program 3' },
-        { img: 'https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop', alt: 'Program 4' },
-        { img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=600&auto=format&fit=crop', alt: 'Program 5' },
-        { img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=600&auto=format&fit=crop', alt: 'Program 6' },
-        { img: 'https://images.unsplash.com/photo-1574169208507-84376144848b?q=80&w=600&auto=format&fit=crop', alt: 'Program 7' },
-        { img: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=600&auto=format&fit=crop', alt: 'Program 8' }
-      ]
-    },
-    essenceOfCulture: {
-      heading: 'THE ESSENCE OF CULTURE',
-      items: [
-        { img: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop', category: 'Concert' }
-      ]
-    },
-    stayConnected: {
-      heading: 'STAY CONNECTED',
-      posters: [
-        { img: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=600&auto=format&fit=crop' }
-      ]
-    },
-    momentsCaptured: {
-      heading: 'MOMENTS CAPTURED',
-      images: [
-        { img: 'https://images.unsplash.com/photo-1508215885820-4585e56135c8?q=80&w=600&auto=format&fit=crop' }
-      ]
-    }
-  };
+  const defaults = DEFAULT_EVENTS_PAGE;
 
   const [formData, setFormData] = useState(defaults);
+
+  const handleResetToDefault = async () => {
+    await confirmAction({
+      title: 'Reset to Defaults?',
+      message: 'This will reset all events page settings to their original state. You still need to click "Save Changes" to apply.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary',
+      action: async () => {
+        setFormData(DEFAULT_EVENTS_PAGE);
+        Toast.fire({ icon: 'info', title: 'Reset to default. Click Save Changes to apply.' });
+      }
+    });
+  };
   const [dragInfo, setDragInfo] = useState(null);
   const [pendingUploads, setPendingUploads] = useState([]);
   const [imagesToDelete, setImagesToDelete] = useState([]);
@@ -382,11 +338,6 @@ const ManageEventsPage = () => {
         }
       }
     });
-  };
-
-  const handleResetToDefault = async () => {
-    setFormData(defaults);
-    Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
   };
 
   // Helper arrays/functions for repetitive CRUD arrays

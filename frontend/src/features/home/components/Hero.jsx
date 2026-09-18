@@ -15,9 +15,11 @@ import {
 } from 'lucide-react';
 
 
+import { DEFAULT_HERO } from '../../admin/cms/constants/defaultCmsData';
+
 const Hero = ({ previewData }) => {
-  const [settings, setSettings] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(!!previewData);
+  const [settings, setSettings] = useState(previewData || DEFAULT_HERO);
+  const [dataLoaded, setDataLoaded] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
@@ -67,9 +69,14 @@ const Hero = ({ previewData }) => {
         });
       });
 
-      await Promise.all(promises);
+      // Quick race (max 500ms) to prevent freezing on slow/offline networks
+      await Promise.race([
+        Promise.all(promises),
+        new Promise((resolve) => setTimeout(resolve, 500))
+      ]);
+
       if (isMounted) {
-        setTimeout(() => setImagesLoaded(true), 800);
+        setImagesLoaded(true);
       }
     };
     preloadImages();
@@ -80,15 +87,10 @@ const Hero = ({ previewData }) => {
   }, [dataLoaded, previewData, images]);
 
   useEffect(() => {
-    if (!imagesLoaded) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [imagesLoaded]);
+  }, []);
 
   useEffect(() => {
     if (!imagesLoaded) return;

@@ -10,6 +10,7 @@ import SingleImageUploader from './components/SingleImageUploader';
 import AddItemModal from './components/AddItemModal';
 import confirmAction from '../../../utils/confirmAction';
 import { FileText, Info, LayoutTemplate, Eye, Monitor, Tablet, Smartphone, X, Plus, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { DEFAULT_GRIEVANCE_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -34,31 +35,7 @@ const ManageGrievancePage = () => {
     { id: 'form', label: 'Form Section', icon: <LayoutTemplate className="w-4 h-4" /> }
   ];
 
-  const defaults = {
-    hero: {
-      title: 'Grievance Form',
-      subtitle: 'Submit your concerns securely through our Grievance Portal. Whether your grievance is related to academics, administration, facilities, or campus services, your feedback is handled with confidentiality, fairness, and transparency. Our dedicated grievance cells ensure every concern is reviewed promptly to foster a safe, supportive, and student-centric learning environment.',
-      backgroundImage: '/assets/Images/grievance/grievance_hero.jpg'
-    },
-    infoSection: {
-      title: 'Grievance Redressal',
-      description: 'Our Grievance Redressal System is committed to fostering a safe, inclusive, and respectful campus environment where every student, faculty member, and staff member can voice their concerns with confidence. Through a transparent, fair, and confidential grievance resolution process, we ensure that issues related to academics, administration, campus facilities, student welfare, workplace conduct, and other institutional matters are addressed promptly and impartially. Managed by dedicated grievance committees, the system encourages open communication, accountability, and timely resolution while upholding the principles of integrity, equality, and justice. By listening to every concern and taking meaningful action, we strive to strengthen trust, enhance campus well-being, and create a supportive learning environment for the entire academic community.',
-      image: '/assets/Images/grievance/grievance_info.jpg'
-    },
-    formSection: {
-      backgroundImage: '/assets/Images/grievance/grievance_form.jpg',
-      cellOptions: [
-        "Student Grievance Cell",
-        "Student Grievance Cell",
-        "Student Grievance Cell",
-        "Student Grievance Cell",
-        "Student Grievance Cell",
-        "Student Grievance Cell"
-      ],
-      departments: ["Department 1", "Department 2"],
-      courses: ["Course 1", "Course 2", "Course 3"]
-    }
-  };
+  const defaults = DEFAULT_GRIEVANCE_PAGE;
 
   const [formData, setFormData] = useState(defaults);
   const [imagesToDelete, setImagesToDelete] = useState([]);

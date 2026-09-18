@@ -8,6 +8,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Loader from '../../components/Loader';
 import { useGlobalLinks } from '../../hooks/useGlobalLinks';
+import { DEFAULT_FACILITIES_PAGE } from '../admin/cms/constants/defaultCmsData';
 
 const getGridItemClass = (idx) => {
   const pattern = idx % 5;
@@ -59,8 +60,10 @@ const GalleryImage = ({ item, className = '' }) => {
 
 const ClubPage = () => {
   const { clubId } = useParams();
-  const [clubData, setClubData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [clubData, setClubData] = useState(() => {
+    return (DEFAULT_FACILITIES_PAGE?.clubs?.items || []).find((item) => item._id === clubId || item.slug === clubId) || DEFAULT_FACILITIES_PAGE?.clubs?.items?.[0] || null;
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const globalLinks = useGlobalLinks();
   const applyLink = globalLinks['global_apply']?.link || '/contact';
 

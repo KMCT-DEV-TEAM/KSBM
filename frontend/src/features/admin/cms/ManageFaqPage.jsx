@@ -8,6 +8,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import PageHeader from './components/PageHeader';
 import confirmAction from '../../../utils/confirmAction';
 import SingleImageUploader from './components/SingleImageUploader';
+import { DEFAULT_FAQ_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -29,22 +30,7 @@ const ManageFaqPage = () => {
   const tabsContainerRef = useRef(null);
   const iframeRef = useRef(null);
 
-  const defaults = {
-    hero: {
-      title: 'Everything You Need to Know',
-      subtitle: 'Browse our FAQs to learn more about admissions, course structure, eligibility, placement assistance, scholarships, and campus facilities before you apply.',
-      backgroundImage: '/assets/Images/image 73.png'
-    },
-    mainContent: {
-      heading: 'Need More Information?',
-      faqs: [
-        {
-          question: 'What MBA programs are offered at KMCT College of MBA?',
-          answer: 'MBA program offers industry-relevant specializations such as Finance, Marketing, Human Resource Management, Operations Management, Business Analytics, and International Business.'
-        }
-      ]
-    }
-  };
+  const defaults = DEFAULT_FAQ_PAGE;
 
   const [formData, setFormData] = useState(defaults);
   const [imagesToDelete, setImagesToDelete] = useState([]);

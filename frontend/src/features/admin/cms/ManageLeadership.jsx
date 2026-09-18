@@ -7,7 +7,7 @@ import AdminSkeleton from './components/AdminSkeleton';
 import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
-import LeadershipSection from '../../about/components/LeadershipSection';
+import { DEFAULT_LEADERSHIP } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -17,7 +17,7 @@ const Toast = Swal.mixin({
   timerProgressBar: true,
 });
 
-const defaultLeaders = [
+const defaultLeaders = DEFAULT_LEADERSHIP.leaders || [
   {
     id: '1',
     subheading: 'OUR VISIONARY LEADER DR. NAVAS K.M',
@@ -211,7 +211,8 @@ const ManageLeadership = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setLeaders(defaultLeaders);
+        setLeaders(DEFAULT_LEADERSHIP.leaders || defaultLeaders);
+        setShowSection(DEFAULT_LEADERSHIP.showSection ?? true);
         Toast.fire({ icon: 'info', title: 'Reset to default. Click Save Changes to apply.' });
       }
     });

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import api from "../../../api/axios";
 import Loader from "../../../components/Loader";
+import { DEFAULT_ACCREDITATIONS } from "../../admin/cms/constants/defaultCmsData";
 
 const defaultImages = [
   "/assets/Images/Home/Component 86.png",
@@ -11,8 +12,8 @@ const defaultImages = [
   "/assets/Images/Home/Component 88.png"
 ];
 const AccreditationSection = ({ previewData }) => {
-  const [settings, setSettings] = useState(null);
-  const [isLoading, setIsLoading] = useState(!previewData);
+  const [settings, setSettings] = useState(previewData || DEFAULT_ACCREDITATIONS);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (previewData) {

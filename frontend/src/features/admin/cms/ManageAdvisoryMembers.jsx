@@ -8,6 +8,7 @@ import SingleImageUploader from './components/SingleImageUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
 import { uploadDeferredImage } from './utils/uploadHelper';
+import { DEFAULT_ADVISORY_BOARD } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -120,10 +121,8 @@ const ManageAdvisoryMembers = () => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
-        setMembers([
-          { name: "Suresh P", title: "Chairman", image: "/assets/Images/image 31.png" }
-        ]);
-        setShowMembers(true);
+        setMembers(DEFAULT_ADVISORY_BOARD.members || []);
+        setShowMembers(DEFAULT_ADVISORY_BOARD.showMembers ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
     });

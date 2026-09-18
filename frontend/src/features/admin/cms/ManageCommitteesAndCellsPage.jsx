@@ -10,6 +10,7 @@ import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
 import AddItemModal from './components/AddItemModal';
 import { FileText, Eye, Monitor, Tablet, Smartphone, X, Plus, Trash2, GripVertical, ShieldCheck, Link2, Edit2, Pencil } from 'lucide-react';
+import { DEFAULT_COMMITTEES_AND_CELLS } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -218,14 +219,8 @@ const ManageCommitteesAndCellsPage = () => {
       text: 'This will revert fields back to standard values. Click "Save" to apply these changes to the live site.',
       confirmButtonText: 'Yes, reset it!',
       action: async () => {
-        setFormData({
-          showHeroSection: true,
-          heroHeading: 'Committees & Cells',
-          heroSubtext: 'Explore the various statutory committees and institutional cells established to ensure transparency, student welfare, academic excellence, and regulatory compliance.',
-          heroBgImage: '/assets/Images/image 53.png',
-          showCommitteesSection: true,
-          committees: []
-        });
+        setFormData(DEFAULT_COMMITTEES_AND_CELLS);
+        setHeroBgFile(null);
         Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
       }
     });

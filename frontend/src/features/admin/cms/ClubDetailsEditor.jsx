@@ -11,6 +11,7 @@ import PageHeader from './components/PageHeader';
 import { useDeferredUpload } from '../../../hooks/useDeferredUpload';
 import AdminModal from './components/AdminModal';
 import { Pencil } from 'lucide-react';
+import { DEFAULT_FACILITIES_PAGE } from './constants/defaultCmsData';
 
 const TabSkeleton = () => (
   <div className="space-y-6 w-full animate-pulse">
@@ -261,21 +262,25 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
       confirmText: 'Yes, reset it!',
       variant: 'primary',
       action: async () => {
+        const foundDefault = (DEFAULT_FACILITIES_PAGE.clubs?.items || []).find(
+          c => c.title?.toLowerCase() === club.title?.toLowerCase()
+        );
+        const template = foundDefault || DEFAULT_FACILITIES_PAGE.facilityDetails || {};
         const defaultData = {
           ...club,
-          hero: {
-            title: 'Welcome to the Club',
-            subtitle: 'Join us to explore and grow.',
+          hero: template.hero || {
+            title: club.title || 'World Class Facilities',
+            subtitle: 'Experience learning with top-notch infrastructure designed for holistic development.',
             backgroundImage: '/assets/Images/fecilities/facilities_hero.png',
             showTextContent: true
           },
-          about: {
+          about: template.about || {
             heading: 'About This Facility',
             paragraphs: ['Our facilities are designed to provide the best environment for students.'],
             image: '/assets/Images/fecilities/facility_1.jpg',
             showSection: true
           },
-          activities: {
+          activities: template.activities || {
             heading: 'Key Features',
             items: [
               { title: 'Feature 1', subtitle: 'State of the art', image: '/assets/Images/fecilities/facility_2.jpg' },
@@ -283,7 +288,7 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
             ],
             showSection: true
           },
-          faculty: {
+          faculty: template.faculty || {
             heading: 'Facility Management',
             subheading: 'Guided by Experts',
             description: 'Our facilities are managed by experienced professionals dedicated to student success.',
@@ -292,7 +297,7 @@ const ClubDetailsEditor = ({ initialData, onSave, onCancel }) => {
             ],
             showSection: true
           },
-          gallery: {
+          gallery: template.gallery || {
             heading: 'Facility Gallery',
             images: [
               { title: 'View 1', image: '/assets/Images/fecilities/facility_4.jpg' },

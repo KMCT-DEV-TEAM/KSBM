@@ -8,6 +8,7 @@ import PageHeader from './components/PageHeader';
 import SectionForm from './components/SectionForm';
 import LogoUploader from './components/LogoUploader';
 import confirmAction from '../../../utils/confirmAction';
+import { DEFAULT_GALLERY_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -28,8 +29,6 @@ const ManageGalleryPage = () => {
   const tabsContainerRef = useRef(null);
   const iframeRef = useRef(null);
 
-
-
   const tabs = [
     { id: 'hero', label: 'Hero Section', icon: <ImageIcon className="w-4 h-4" /> },
     { id: 'gallery', label: 'Gallery Content', icon: <FileText className="w-4 h-4" /> }
@@ -42,26 +41,7 @@ const ManageGalleryPage = () => {
     }
   };
 
-  const [formData, setFormData] = useState({
-    hero: {
-      title: 'KSBM Sports Club:\nWhere Leaders Compete',
-      subtitle: 'Forging the next generation of global leaders through the crucible of competitive sports.',
-      backgroundImage: '/assets/Images/image 53.png'
-    },
-    gallery: {
-      heading: 'Moments Captured in Campus',
-      badge: 'Gallery',
-      categories: ['Sports', 'Cultural'],
-      items: [
-        { title: 'Temple', category: 'Cultural', img: 'https://images.unsplash.com/photo-1542840410-3092f99611a3?q=80&w=800&auto=format&fit=crop' },
-        { title: 'Camp Fire', category: 'Cultural', img: 'https://images.unsplash.com/photo-1523580494112-071d1694d8d6?q=80&w=800&auto=format&fit=crop' },
-        { title: 'Mountain', category: 'Cultural', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop' },
-        { title: 'The Night Beauty', category: 'Cultural', img: 'https://images.unsplash.com/photo-1493225457124-a1a2a5f0393b?q=80&w=800&auto=format&fit=crop' },
-        { title: 'Graduation', category: 'Cultural', img: 'https://images.unsplash.com/photo-1523580494112-071d1694d8d6?q=80&w=800&auto=format&fit=crop' },
-        { title: 'Study Boy', category: 'Cultural', img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop' }
-      ]
-    }
-  });
+  const [formData, setFormData] = useState(DEFAULT_GALLERY_PAGE);
 
   useEffect(() => {
     if (iframeRef.current && isPreviewModalOpen) {
@@ -163,29 +143,17 @@ const ManageGalleryPage = () => {
   };
 
   const handleResetToDefault = async () => {
-    const defaults = {
-      hero: {
-        title: 'KSBM Sports Club:\nWhere Leaders Compete',
-        subtitle: 'Forging the next generation of global leaders through the crucible of competitive sports.',
-        backgroundImage: '/assets/Images/image 53.png'
-      },
-      gallery: {
-        heading: 'Moments Captured in Campus',
-        badge: 'Gallery',
-        categories: ['Sports', 'Cultural'],
-        items: [
-          { title: 'Temple', category: 'Cultural', img: 'https://images.unsplash.com/photo-1542840410-3092f99611a3?q=80&w=800&auto=format&fit=crop' },
-          { title: 'Camp Fire', category: 'Cultural', img: 'https://images.unsplash.com/photo-1523580494112-071d1694d8d6?q=80&w=800&auto=format&fit=crop' },
-          { title: 'Mountain', category: 'Cultural', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop' },
-          { title: 'The Night Beauty', category: 'Cultural', img: 'https://images.unsplash.com/photo-1493225457124-a1a2a5f0393b?q=80&w=800&auto=format&fit=crop' },
-          { title: 'Graduation', category: 'Cultural', img: 'https://images.unsplash.com/photo-1523580494112-071d1694d8d6?q=80&w=800&auto=format&fit=crop' },
-          { title: 'Study Boy', category: 'Cultural', img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop' }
-        ]
+    await confirmAction({
+      title: 'Reset to Defaults?',
+      message: 'This will reset all your settings to their original state. You still need to click "Save Changes" to apply them.',
+      confirmText: 'Yes, reset it!',
+      variant: 'primary',
+      action: async () => {
+        setFormData(DEFAULT_GALLERY_PAGE);
+        setNewCategoryText('');
+        Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
       }
-    };
-    setFormData(defaults);
-    setNewCategoryText('');
-    Toast.fire({ icon: 'info', title: 'Reset to default values. Click Save to apply.' });
+    });
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);

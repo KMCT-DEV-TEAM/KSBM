@@ -21,14 +21,9 @@ const Toast = Swal.mixin({
   timerProgressBar: true,
 });
 
-const defaultBlogsData = {
-  hero: {
-    title: 'Insights & Blogs',
-    subtitle: 'Explore expert articles, student success stories, industry trends, and academic insights to stay informed and inspired.',
-    backgroundImage: '/assets/Images/blogs/hero-bg.jpg'
-  },
-  blogs: []
-};
+import { DEFAULT_BLOGS_PAGE } from './constants/defaultCmsData';
+
+const defaultBlogsData = DEFAULT_BLOGS_PAGE;
 
 const ManageBlogsPage = () => {
   const [data, setData] = useState(defaultBlogsData);

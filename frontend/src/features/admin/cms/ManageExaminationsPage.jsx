@@ -10,6 +10,7 @@ import SingleImageUploader from './components/SingleImageUploader';
 import SingleDocumentUploader from './components/SingleDocumentUploader';
 import confirmAction from '../../../utils/confirmAction';
 import PageHeader from './components/PageHeader';
+import { DEFAULT_EXAMINATIONS_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -19,45 +20,7 @@ const Toast = Swal.mixin({
   timerProgressBar: true,
 });
 
-const defaultExamData = {
-  heroBadgeText: 'Examinations 2026',
-  heroTitle: 'Stay Informed. Stay Prepared. Excel in Every Examination.',
-  heroSubtitle: 'Access examination schedules, important notifications, and semester results in one place. Stay updated with key dates and academic announcements to ensure a smooth and well-organized examination experience throughout your MBA journey.',
-  heroImage: '/assets/Images/examinations/exam_hero_bg.png',
-  
-  overviewTitle: 'Examination Overview',
-  overviewText1: 'Our examination system is designed to evaluate students through a comprehensive and transparent assessment process that reflects both academic knowledge and practical application. A balanced combination of internal assessments, assignments, presentations, case studies, projects, and end-semester examinations ensures continuous learning and holistic development throughout the program.',
-  overviewText2: 'The examination process follows the academic calendar and is conducted with fairness, consistency, and integrity. Students are encouraged to demonstrate analytical thinking, problem-solving abilities, and managerial competencies through various evaluation methods. Timely notifications, published examination schedules, and prompt result declarations help students stay informed and well-prepared.',
-  overviewImage: '/assets/Images/examinations/exam_main.png',
-
-  calendarTitle: 'Download the Official Exam Calendar',
-  calendarText: 'Stay informed with the official Exam Calendar. Access semester schedules, examination dates, academic milestones, holidays, project timelines, and important university events—all in one place.',
-  calendarViewBtnText: 'View Calendar',
-  calendarViewBtnUrl: '/assets/Images/examinations/exam_schedule.png',
-  calendarDownloadBtnText: 'Download Calendar',
-  calendarDownloadBtnUrl: '/assets/Images/examinations/exam_schedule.png',
-  calendarImage: '/assets/Images/examinations/image 64.png',
-  
-  notifications: [
-    {
-      uuid: 'n-1',
-      label: 'EXAMINATION ANNOUNCEMENT',
-      title: 'REVISED TIME TABLE FOR FOURTH SEMESTER MBA (REGULAR / SUPPLEMENTARY EXAMINATIONS - JULY 2026)',
-      date: '17 Jul 2026',
-      pdfUrl: '#'
-    }
-  ],
-  results: [
-    {
-      uuid: 'r-1',
-      slNo: '01',
-      dateDuration: 'NOV 10',
-      courseName: 'CS502: Advanced Algorithms',
-      semesterInfo: 'VIII Sem MBA 2026',
-      pdfUrl: '#'
-    }
-  ]
-};
+const defaultExamData = DEFAULT_EXAMINATIONS_PAGE;
 
 const DraggableItemCard = ({ item, index, onEdit, onDelete, type }) => {
   const controls = useDragControls();

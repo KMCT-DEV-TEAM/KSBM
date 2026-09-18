@@ -139,9 +139,9 @@ const AchievementsSection = ({ previewData }) => {
                 : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12 w-full mx-auto"
             }
           >
-            {displayAchievements && displayAchievements.map((item) => (
+            {displayAchievements && displayAchievements.map((item, index) => (
               <motion.div
-                key={item.id || item._id}
+                key={item.id || item._id || item.title || `achievement-${index}`}
                 variants={cardVariants}
                 className="group cursor-pointer flex flex-col"
               >
