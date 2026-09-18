@@ -65,13 +65,12 @@ const CommitteesAndCellsPage = () => {
                   <img
                     src={data.heroBgImage}
                     alt="Committees Backdrop"
-                    className="w-full h-full object-cover opacity-35 object-center scale-105 transform duration-1000"
+                    className="w-full h-full object-cover opacity-50 object-center scale-105 transform duration-1000"
                   />
                 ) : (
                   <div className="w-full h-full bg-[#1B2155]"></div>
                 )}
-                <div className="absolute inset-0 bg-primary/50"></div>
-                <div className="absolute inset-0 bg-primary/40"></div>
+                <div className="absolute inset-0 bg-primary/60"></div>
               </>
             )}
           </div>

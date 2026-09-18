@@ -448,6 +448,7 @@ const ManageCommitteesAndCellsPage = () => {
                       uploadEndpoint="/upload/committees"
                       defaultImage="/assets/Images/committees/default-committees-hero.png"
                       disableDelete={!formData.heroBgImage || formData.heroBgImage === '/assets/Images/committees/default-committees-hero.png'}
+                      maxSize={1048576}
                       deferredMode={true}
                     />
                   </div>
