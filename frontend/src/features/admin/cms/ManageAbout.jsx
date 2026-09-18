@@ -440,9 +440,10 @@ const ManageAbout = () => {
               setImageFile(file);
             }}
             uploadEndpoint="/upload/home"
+            maxSize={1048576}
             title="Upload About Image"
             subtitle="Drag & drop an image or click to browse."
-            helpText="Recommended format: vertical portrait image. Max 5MB (JPEG, PNG, WEBP)"
+            helpText="Recommended format: vertical portrait image. Max 1MB (JPEG, PNG, WEBP)"
           />
         </div>
 
