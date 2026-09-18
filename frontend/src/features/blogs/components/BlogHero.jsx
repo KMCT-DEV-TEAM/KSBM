@@ -14,10 +14,9 @@ const BlogHero = ({ heroData, fullScreen = false }) => {
         <img
           src={backgroundImage}
           alt="Analytics and Executive Discussion Backdrop"
-          className="w-full h-full object-cover opacity-35 object-center scale-105 transform duration-1000"
+          className="w-full h-full object-cover opacity-50 object-center scale-105 transform duration-1000"
         />
-        <div className="absolute inset-0 bg-primary/50"></div>
-        <div className="absolute inset-0 bg-primary/40"></div>
+        <div className="absolute inset-0 bg-primary/60"></div>
       </div>
 
       {/* Decorative Blur Spheres */}
