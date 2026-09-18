@@ -473,7 +473,7 @@ const ManageHero = () => {
 
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 md:col-span-2">
               <h4 className="font-semibold text-sm text-[#566A7F] mb-3 border-b pb-2">Admission Guidelines Link</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Link Text</label>
                   <input
@@ -484,15 +484,7 @@ const ManageHero = () => {
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                   <div className="text-xs text-right mt-1 text-gray-500">{statsCard.linkText.length}/30</div>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Link URL</label>
-                  <input
-                    type="text"
-                    value={statsCard.linkUrl}
-                    onChange={(e) => setStatsCard({ ...statsCard, linkUrl: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                  />
+                  <p className="text-xs text-gray-500 mt-2 italic">Note: The link URL is fixed to /admissions</p>
                 </div>
               </div>
             </div>

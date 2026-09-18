@@ -287,7 +287,7 @@ const Hero = ({ previewData }) => {
                 </div>
               </div>
 
-              <a href={settings?.statsCard?.linkUrl && settings.statsCard.linkUrl !== '#' ? settings.statsCard.linkUrl : '/admissions'} className="inline-flex items-center gap-1.5 text-xs text-gray-300 hover:text-white mt-5 transition-colors group">
+              <a href="/admissions" className="inline-flex items-center gap-1.5 text-xs text-gray-300 hover:text-white mt-5 transition-colors group">
                 {settings?.statsCard?.linkText || 'Read Admission Guidelines'}
                 <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
               </a>
@@ -309,14 +309,14 @@ const Hero = ({ previewData }) => {
                 <span className="font-bold text-secondary flex items-center gap-2"><BadgeCheck className="w-4 h-4" /> {settings?.statsCard?.batchText || 'Batch 2025–27'}</span>
                 <span className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-300" /> {settings?.statsCard?.stat1Title || 'Limited Seats'}</span>
                 <span className="flex items-center gap-2"><Award className="w-4 h-4 text-gray-300" /> {settings?.statsCard?.stat2Title || '100% Placement'}</span>
-                <a href={settings?.statsCard?.linkUrl && settings.statsCard.linkUrl !== '#' ? settings.statsCard.linkUrl : '/admissions'} className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5" /></a>
+                <a href="/admissions" className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5" /></a>
               </div>
               {/* Second Set for seamless infinite scrolling */}
               <div className="flex items-center gap-10">
                 <span className="font-bold text-secondary flex items-center gap-2"><BadgeCheck className="w-4 h-4" /> {settings?.statsCard?.batchText || 'Batch 2025–27'}</span>
                 <span className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-300" /> {settings?.statsCard?.stat1Title || 'Limited Seats'}</span>
                 <span className="flex items-center gap-2"><Award className="w-4 h-4 text-gray-300" /> {settings?.statsCard?.stat2Title || '100% Placement'}</span>
-                <a href={settings?.statsCard?.linkUrl && settings.statsCard.linkUrl !== '#' ? settings.statsCard.linkUrl : '/admissions'} className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5" /></a>
+                <a href="/admissions" className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5" /></a>
               </div>
             </div>
           </motion.div>
