@@ -328,7 +328,7 @@ const BlogDetailPage = ({ id }) => {
               {/* Related Articles */}
               <div className="bg-white p-2">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-1.5 h-6 bg-[#C837AB] rounded-full"></div>
+                  <div className="w-1.5 h-6 bg-primary rounded-full"></div>
                   <h4 className="text-lg font-bold text-text-primary">Related Articles</h4>
                 </div>
                 <div className="flex flex-col gap-6">
