@@ -61,9 +61,9 @@ const ManageBlogsPage = () => {
       const { data: res } = await api.get('/cms/blogs-page');
       if (res && res.hero) {
         if (res.blogs && Array.isArray(res.blogs)) {
-          res.blogs = res.blogs.map(item => ({ 
-            ...item, 
-            uuid: `blog-${Math.random().toString(36).substr(2, 9)}` 
+          res.blogs = res.blogs.map(item => ({
+            ...item,
+            uuid: `blog-${Math.random().toString(36).substr(2, 9)}`
           }));
         }
         setData(res);
@@ -135,7 +135,7 @@ const ManageBlogsPage = () => {
               if (!rest.image) rest.image = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800&auto=format&fit=crop';
               if (!rest.readTime) rest.readTime = '5 min read';
               if (!rest.date) rest.date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-              
+
               if (rest.sections) {
                 rest.sections = rest.sections.map(s => {
                   const { _id, ...secRest } = s;
@@ -252,7 +252,7 @@ const ManageBlogsPage = () => {
     }
 
     const newData = { ...data };
-    
+
     if (modalMode === 'add' || modalMode === 'add-card') {
       newData.blogs = [...(newData.blogs || []), currentItem];
     } else {
@@ -274,12 +274,12 @@ const ManageBlogsPage = () => {
       variant: 'danger',
       action: async () => {
         const itemToDelete = data.blogs[index];
-        
+
         queueForDeletion(itemToDelete.image);
         if (itemToDelete.sections) {
           itemToDelete.sections.forEach(sec => queueForDeletion(sec.inlineImage));
         }
-        
+
         const newData = { ...data };
         newData.blogs.splice(index, 1);
         setData(newData);
@@ -292,7 +292,7 @@ const ManageBlogsPage = () => {
     setCurrentItem(prev => ({
       ...prev,
       sections: [
-        ...(prev.sections || []), 
+        ...(prev.sections || []),
         { id: `sec-${Date.now()}`, title: '', content: '', isQuote: false, inlineImage: '' }
       ]
     }));
@@ -360,7 +360,7 @@ const ManageBlogsPage = () => {
     setEditingDetailsData(prev => ({
       ...prev,
       sections: [
-        ...(prev.sections || []), 
+        ...(prev.sections || []),
         { id: `sec-${Date.now()}`, title: '', content: '', isQuote: false, inlineImage: '' }
       ]
     }));
@@ -381,14 +381,14 @@ const ManageBlogsPage = () => {
         ...data.hero,
         backgroundImage: data.hero?.backgroundImage && typeof data.hero?.backgroundImage === 'object' ? (data.hero.backgroundImage.previewUrl || data.hero.backgroundImage.oldUrl) : data.hero?.backgroundImage
       };
-      
+
       const pData = {
         activeTab,
         previewDevice: previewMode,
         hero: sanitizedHero,
         blogs: sanitizedBlogs
       };
-      
+
       const handleIframeReady = (e) => {
         if (e.data?.type === 'iframe-ready' && e.data?.source === 'blogs' && iframeRef.current?.contentWindow) {
           iframeRef.current.contentWindow.postMessage({ type: 'preview-blogs-data', payload: pData }, '*');
@@ -416,23 +416,23 @@ const ManageBlogsPage = () => {
             <div className="flex items-center gap-2 text-sm font-bold text-[#697A8D] uppercase tracking-wider">
               <Eye className="w-5 h-5" /> Live Preview
             </div>
-            
+
             <div className="flex items-center bg-white rounded-md border border-gray-200 p-0.5">
-              <button 
+              <button
                 onClick={() => setPreviewMode('desktop')}
                 className={`p-1.5 rounded-sm transition-colors ${previewMode === 'desktop' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Desktop View"
               >
                 <Monitor className="w-4 h-4" />
               </button>
-              <button 
+              <button
                 onClick={() => setPreviewMode('tablet')}
                 className={`p-1.5 rounded-sm transition-colors ${previewMode === 'tablet' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Tablet View"
               >
                 <Tablet className="w-4 h-4" />
               </button>
-              <button 
+              <button
                 onClick={() => setPreviewMode('mobile')}
                 className={`p-1.5 rounded-sm transition-colors ${previewMode === 'mobile' ? 'bg-primary/10 text-primary' : 'text-gray-400 hover:text-gray-600'}`}
                 title="Mobile View"
@@ -441,7 +441,7 @@ const ManageBlogsPage = () => {
               </button>
             </div>
 
-            <button 
+            <button
               onClick={() => setIsPreviewModalOpen(false)}
               className="p-2 text-gray-500 hover:text-red-500 bg-gray-100 hover:bg-red-50 rounded-md transition-colors"
             >
@@ -469,13 +469,13 @@ const ManageBlogsPage = () => {
               <p className="text-sm text-gray-500 mt-1">Manage the content layout of this blog post.</p>
             </div>
             <div className="flex items-center gap-3 w-full md:w-auto">
-              <button 
+              <button
                 onClick={cancelDetails}
                 className="flex items-center justify-center gap-2 flex-1 md:flex-none px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" /> Back to Blogs
               </button>
-              <button 
+              <button
                 onClick={saveDetails}
                 className="flex-1 md:flex-none px-6 py-2 bg-primary text-white font-medium rounded-lg hover:bg-[#111836] transition-colors shadow-md shadow-primary/20"
               >
@@ -483,7 +483,7 @@ const ManageBlogsPage = () => {
               </button>
             </div>
           </div>
-          
+
           <div className="space-y-1">
             <div className="flex justify-between items-center">
               <label className="text-sm font-semibold text-gray-600">Top Lead Paragraph</label>
@@ -504,7 +504,7 @@ const ManageBlogsPage = () => {
                 <h3 className="text-xl font-bold text-gray-800">Article Content Sections</h3>
                 <p className="text-sm text-gray-500">Build the body of the article by adding paragraphs, quotes, and images.</p>
               </div>
-              <button 
+              <button
                 onClick={handleDetailsAddSection}
                 className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white font-medium rounded-lg hover:bg-[#111836] transition-colors shadow-md shadow-primary/20"
               >
@@ -518,28 +518,28 @@ const ManageBlogsPage = () => {
                   <div className="absolute -top-3 -left-3 w-8 h-8 bg-white border border-gray-200 rounded-full flex items-center justify-center text-xs font-bold text-gray-400 shadow-sm">
                     {idx + 1}
                   </div>
-                  <button 
+                  <button
                     onClick={() => handleDetailsRemoveSection(idx)}
                     className="absolute top-4 right-4 p-2 text-red-500 bg-white hover:bg-red-50 border border-red-100 hover:border-red-200 rounded-lg transition-colors shadow-sm"
                     title="Remove Section"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
-                  
+
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pr-12 mt-2">
                     <div className="space-y-6">
                       <div className="flex items-center justify-between bg-white p-3 rounded-lg border border-gray-100 shadow-sm">
                         <label className="flex items-center gap-3 cursor-pointer text-sm font-semibold text-gray-700">
-                          <input 
-                            type="checkbox" 
-                            checked={sec.isQuote} 
+                          <input
+                            type="checkbox"
+                            checked={sec.isQuote}
                             onChange={(e) => handleDetailsUpdateSection(idx, 'isQuote', e.target.checked)}
                             className="w-4 h-4 rounded text-primary focus:ring-primary"
                           />
                           Format as Blockquote
                         </label>
                       </div>
-                      
+
                       {!sec.isQuote && (
                         <div className="space-y-2">
                           <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Section Title (Optional)</label>
@@ -552,7 +552,7 @@ const ManageBlogsPage = () => {
                           />
                         </div>
                       )}
-                      
+
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Content / Text</label>
                         <textarea
@@ -563,13 +563,13 @@ const ManageBlogsPage = () => {
                         />
                       </div>
                     </div>
-                    
+
                     {!sec.isQuote && (
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Inline Image (Optional)</label>
                         <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm h-[calc(100%-24px)] flex flex-col justify-center">
-                          <SingleImageUploader 
-                            imageUrl={sec.inlineImage || ''} 
+                          <SingleImageUploader
+                            imageUrl={sec.inlineImage || ''}
                             uploadEndpoint="/upload/blogs"
                             deferredUpload={true}
                             onUploadComplete={(urlObj) => handleDetailsUpdateSection(idx, 'inlineImage', urlObj)}
@@ -582,7 +582,7 @@ const ManageBlogsPage = () => {
                   </div>
                 </div>
               ))}
-              
+
               {(editingDetailsData?.sections || []).length === 0 && (
                 <div className="text-center py-16 text-gray-400 text-sm border-2 border-dashed border-gray-200 rounded-2xl bg-white shadow-sm">
                   <FileText className="w-12 h-12 mx-auto mb-4 opacity-20" />
@@ -604,11 +604,10 @@ const ManageBlogsPage = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${
-                    activeTab === tab.id
-                      ? 'bg-primary text-white shadow-md'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
-                  }`}
+                  className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap shrink-0 ${activeTab === tab.id
+                    ? 'bg-primary text-white shadow-md'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-[#111836]'
+                    }`}
                 >
                   {tab.icon}
                   <span>{tab.label}</span>
@@ -626,115 +625,115 @@ const ManageBlogsPage = () => {
             isSaving={isSaving || isUploading}
           />
 
-      {/* This is empty since we moved isPreviewModalOpen into the return block above */}
+          {/* This is empty since we moved isPreviewModalOpen into the return block above */}
 
-      <AnimatePresence mode="wait">
-        {activeTab === 'hero' && (
-          <motion.div
-            key="hero"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-          >
-            <SectionForm title="Hero Configuration">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                  <div className="space-y-1">
-                    <div className="flex justify-between items-center">
-                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Main Title</label>
-                      <span className="text-[10px] text-gray-400">{data.hero.title?.length || 0}/50</span>
+          <AnimatePresence mode="wait">
+            {activeTab === 'hero' && (
+              <motion.div
+                key="hero"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <SectionForm title="Hero Configuration">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                      <div className="space-y-1">
+                        <div className="flex justify-between items-center">
+                          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Main Title</label>
+                          <span className="text-[10px] text-gray-400">{data.hero.title?.length || 0}/50</span>
+                        </div>
+                        <input
+                          type="text"
+                          maxLength={50}
+                          value={data.hero.title}
+                          onChange={(e) => handleDataChange('hero', 'title', e.target.value)}
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex justify-between items-center">
+                          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Subtitle</label>
+                          <span className="text-[10px] text-gray-400">{data.hero.subtitle?.length || 0}/300</span>
+                        </div>
+                        <textarea
+                          maxLength={300}
+                          value={data.hero.subtitle}
+                          onChange={(e) => handleDataChange('hero', 'subtitle', e.target.value)}
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none min-h-[120px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-y"
+                        />
+                      </div>
                     </div>
-                    <input
-                      type="text"
-                      maxLength={50}
-                      value={data.hero.title}
-                      onChange={(e) => handleDataChange('hero', 'title', e.target.value)}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex justify-between items-center">
-                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Subtitle</label>
-                      <span className="text-[10px] text-gray-400">{data.hero.subtitle?.length || 0}/300</span>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Background Image</label>
+                      <SingleImageUploader
+                        imageUrl={data.hero.backgroundImage}
+                        uploadEndpoint="/upload/blogs"
+                        defaultImage="/assets/Images/blogs/hero-bg.jpg"
+                        deferredUpload={true}
+                        onUploadComplete={(urlObj) => handleDataChange('hero', 'backgroundImage', urlObj)}
+                        onUploadStateChange={setIsUploading}
+                        label="Upload Hero Background"
+                      />
                     </div>
-                    <textarea
-                      maxLength={300}
-                      value={data.hero.subtitle}
-                      onChange={(e) => handleDataChange('hero', 'subtitle', e.target.value)}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none min-h-[120px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-y"
-                    />
                   </div>
-                </div>
-                
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Background Image</label>
-                  <SingleImageUploader 
-                    imageUrl={data.hero.backgroundImage}
-                    uploadEndpoint="/upload/blogs"
-                    defaultImage="/assets/Images/blogs/hero-bg.jpg"
-                    deferredUpload={true}
-                    onUploadComplete={(urlObj) => handleDataChange('hero', 'backgroundImage', urlObj)}
-                    onUploadStateChange={setIsUploading}
-                    label="Upload Hero Background"
-                  />
-                </div>
-              </div>
-            </SectionForm>
-          </motion.div>
-        )}
+                </SectionForm>
+              </motion.div>
+            )}
 
-        {activeTab === 'blogs' && (
-          <motion.div
-            key="blogs"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
-              <div className="flex justify-between items-center mb-6">
-                <div>
-                  <h3 className="text-lg font-bold text-[#1e2869]">Blog Articles</h3>
-                  <p className="text-sm text-gray-500">Drag to reorder. These articles appear in the grid.</p>
-                </div>
-                <button
-                  onClick={() => openModal('add-card')}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white font-medium rounded-lg hover:bg-[#111836] transition-colors"
-                >
-                  <Plus className="w-4 h-4" /> Add Article
-                </button>
-              </div>
+            {activeTab === 'blogs' && (
+              <motion.div
+                key="blogs"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+                  <div className="flex justify-between items-center mb-6">
+                    <div>
+                      <h3 className="text-lg font-bold text-[#1e2869]">Blog Articles</h3>
+                      <p className="text-sm text-gray-500">Drag to reorder. These articles appear in the grid.</p>
+                    </div>
+                    <button
+                      onClick={() => openModal('add-card')}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white font-medium rounded-lg hover:bg-[#111836] transition-colors"
+                    >
+                      <Plus className="w-4 h-4" /> Add Article
+                    </button>
+                  </div>
 
-              {(data.blogs || []).length > 0 ? (
-                <Reorder.Group 
-                  axis="y" 
-                  values={data.blogs || []} 
-                  onReorder={handleReorderBlogs}
-                  className="space-y-4"
-                >
-                  {data.blogs.map((item, index) => (
-                    <DraggableListItem 
-                      key={item.uuid} 
-                      item={item} 
-                      index={index}
-                      onEditCard={() => openModal('edit-card', index)}
-                      onEditDetails={() => openDetails(index)}
-                      onDelete={() => deleteItem(index)}
-                    />
-                  ))}
-                </Reorder.Group>
-              ) : (
-                <div className="py-12 flex flex-col items-center justify-center text-gray-400 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                  <LayoutTemplate className="w-12 h-12 mb-3 opacity-20" />
-                  <p>No articles found. Add one!</p>
+                  {(data.blogs || []).length > 0 ? (
+                    <Reorder.Group
+                      axis="y"
+                      values={data.blogs || []}
+                      onReorder={handleReorderBlogs}
+                      className="space-y-4"
+                    >
+                      {data.blogs.map((item, index) => (
+                        <DraggableListItem
+                          key={item.uuid}
+                          item={item}
+                          index={index}
+                          onEditCard={() => openModal('edit-card', index)}
+                          onEditDetails={() => openDetails(index)}
+                          onDelete={() => deleteItem(index)}
+                        />
+                      ))}
+                    </Reorder.Group>
+                  ) : (
+                    <div className="py-12 flex flex-col items-center justify-center text-gray-400 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                      <LayoutTemplate className="w-12 h-12 mb-3 opacity-20" />
+                      <p>No articles found. Add one!</p>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      </>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </>
       )}
 
       <AdminModal
@@ -748,100 +747,100 @@ const ManageBlogsPage = () => {
           {(modalMode === 'add-card' || modalMode === 'edit-card') && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <label className="text-xs font-semibold text-gray-500">Article Title</label>
-                  <span className="text-[10px] text-gray-400">{currentItem?.title?.length || 0}/100</span>
-                </div>
-                <input
-                  type="text"
-                  maxLength={100}
-                  value={currentItem?.title || ''}
-                  onChange={(e) => setCurrentItem({ ...currentItem, title: e.target.value })}
-                  className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50"
-                  placeholder="E.g. The Future of AI"
-                />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <div className="flex justify-between items-center">
-                    <label className="text-xs font-semibold text-gray-500">Badge Label</label>
-                    <span className="text-[10px] text-gray-400">{currentItem?.category?.length || 0}/30</span>
+                    <label className="text-xs font-semibold text-gray-500">Article Title</label>
+                    <span className="text-[10px] text-gray-400">{currentItem?.title?.length || 0}/100</span>
                   </div>
                   <input
                     type="text"
-                    maxLength={30}
-                    value={currentItem?.category || ''}
-                    onChange={(e) => setCurrentItem({ ...currentItem, category: e.target.value })}
-                    className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50"
+                    maxLength={100}
+                    value={currentItem?.title || ''}
+                    onChange={(e) => setCurrentItem({ ...currentItem, title: e.target.value })}
+                    className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50"
+                    placeholder="E.g. The Future of AI"
                   />
                 </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-gray-500">Filter Topic</label>
-                  <select
-                    value={currentItem?.filterCategory || ''}
-                    onChange={(e) => setCurrentItem({ ...currentItem, filterCategory: e.target.value })}
-                    className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50"
-                  >
-                    <option value="All Topics">All Topics</option>
-                    <option value="Career Advice">Career Advice</option>
-                    <option value="Industry Trends">Industry Trends</option>
-                    <option value="Skill Development">Skill Development</option>
-                    <option value="Student Success">Student Success</option>
-                  </select>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <div className="flex justify-between items-center">
+                      <label className="text-xs font-semibold text-gray-500">Badge Label</label>
+                      <span className="text-[10px] text-gray-400">{currentItem?.category?.length || 0}/30</span>
+                    </div>
+                    <input
+                      type="text"
+                      maxLength={30}
+                      value={currentItem?.category || ''}
+                      onChange={(e) => setCurrentItem({ ...currentItem, category: e.target.value })}
+                      className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-gray-500">Filter Topic</label>
+                    <select
+                      value={currentItem?.filterCategory || ''}
+                      onChange={(e) => setCurrentItem({ ...currentItem, filterCategory: e.target.value })}
+                      className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50"
+                    >
+                      <option value="All Topics">All Topics</option>
+                      <option value="Career Advice">Career Advice</option>
+                      <option value="Industry Trends">Industry Trends</option>
+                      <option value="Skill Development">Skill Development</option>
+                      <option value="Student Success">Student Success</option>
+                    </select>
+                  </div>
                 </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <div className="flex justify-between items-center">
+                      <label className="text-xs font-semibold text-gray-500">Read Time</label>
+                      <span className="text-[10px] text-gray-400">{currentItem?.readTime?.length || 0}/20</span>
+                    </div>
+                    <input
+                      type="text"
+                      maxLength={20}
+                      value={currentItem?.readTime || ''}
+                      onChange={(e) => setCurrentItem({ ...currentItem, readTime: e.target.value })}
+                      className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between items-center">
+                      <label className="text-xs font-semibold text-gray-500">Author</label>
+                      <span className="text-[10px] text-gray-400">{currentItem?.author?.length || 0}/50</span>
+                    </div>
+                    <input
+                      type="text"
+                      maxLength={50}
+                      value={currentItem?.author || ''}
+                      onChange={(e) => setCurrentItem({ ...currentItem, author: e.target.value })}
+                      className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs font-semibold text-gray-500">Date</label>
+                    <span className="text-[10px] text-gray-400">{currentItem?.excerpt?.length || 0}/150</span>
+                  </div>
+                  <textarea
+                    maxLength={150}
+                    value={currentItem?.excerpt || ''}
+                    onChange={(e) => setCurrentItem({ ...currentItem, excerpt: e.target.value })}
+                    className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none min-h-[80px]"
+                    placeholder="Short description for the blog card..."
+                  />
+                </div>
+
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs font-semibold text-gray-500">Read Time</label>
-                    <span className="text-[10px] text-gray-400">{currentItem?.readTime?.length || 0}/20</span>
-                  </div>
-                  <input
-                    type="text"
-                    maxLength={20}
-                    value={currentItem?.readTime || ''}
-                    onChange={(e) => setCurrentItem({ ...currentItem, readTime: e.target.value })}
-                    className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs font-semibold text-gray-500">Author</label>
-                    <span className="text-[10px] text-gray-400">{currentItem?.author?.length || 0}/50</span>
-                  </div>
-                  <input
-                    type="text"
-                    maxLength={50}
-                    value={currentItem?.author || ''}
-                    onChange={(e) => setCurrentItem({ ...currentItem, author: e.target.value })}
-                    className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none"
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <label className="text-xs font-semibold text-gray-500">Card Excerpt</label>
-                  <span className="text-[10px] text-gray-400">{currentItem?.excerpt?.length || 0}/150</span>
-                </div>
-                <textarea
-                  maxLength={150}
-                  value={currentItem?.excerpt || ''}
-                  onChange={(e) => setCurrentItem({ ...currentItem, excerpt: e.target.value })}
-                  className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none min-h-[80px]"
-                  placeholder="Short description for the blog card..."
-                />
-              </div>
-
-              </div>
-              
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-gray-500">Cover Image</label>
-                <SingleImageUploader 
-                  imageUrl={currentItem?.image || ''} 
+                <SingleImageUploader
+                  imageUrl={currentItem?.image || ''}
                   uploadEndpoint="/upload/blogs"
                   defaultImage="/assets/Images/blogs/default-card.jpg"
                   deferredUpload={true}
@@ -875,13 +874,13 @@ const DraggableListItem = ({ item, index, onEditCard, onEditDetails, onDelete })
       dragControls={controls}
       className="bg-white border border-gray-100 rounded-xl p-4 flex items-center gap-4 shadow-sm group hover:border-primary/30 transition-colors"
     >
-      <div 
+      <div
         className="cursor-grab active:cursor-grabbing p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg touch-none"
         onPointerDown={(e) => controls.start(e)}
       >
         <GripVertical className="w-5 h-5" />
       </div>
-      
+
       <div className="w-16 h-12 bg-gray-100 rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
         {item.image ? (
           <img src={displayImg} alt={item.title} className="w-full h-full object-cover" />
@@ -896,21 +895,21 @@ const DraggableListItem = ({ item, index, onEditCard, onEditDetails, onDelete })
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
-        <button 
+        <button
           onClick={onEditDetails}
           className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary text-xs font-semibold rounded hover:bg-primary hover:text-white transition-colors"
           title="Manage Details Page"
         >
           <FileText className="w-3.5 h-3.5" /> Manage Details
         </button>
-        <button 
+        <button
           onClick={onEditCard}
           className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
           title="Edit Card"
         >
           <Pencil className="w-4 h-4" />
         </button>
-        <button 
+        <button
           onClick={onDelete}
           className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
           title="Delete"
