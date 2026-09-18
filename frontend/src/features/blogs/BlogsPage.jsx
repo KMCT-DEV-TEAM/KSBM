@@ -120,6 +120,7 @@ const BlogsPage = () => {
       <BlogFilter
         activeTopic={activeTopic}
         onTopicChange={(newTopic) => setActiveTopic(newTopic)}
+        topics={pageData?.filterTopics || undefined}
       />
 
       {/* Main Blog Cards Grid & Pagination */}
