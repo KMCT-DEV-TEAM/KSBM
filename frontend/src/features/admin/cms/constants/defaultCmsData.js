@@ -2335,6 +2335,12 @@ export const DEFAULT_BLOGS_PAGE = {
     "subtitle": "Explore expert articles, student success stories, industry trends, and academic insights to stay informed and inspired.",
     "backgroundImage": "/assets/Images/blogs/hero-bg.jpg"
   },
+  "filterTopics": [
+    "Career Advice",
+    "Industry Trends",
+    "Skill Development",
+    "Student Success"
+  ],
   "blogs": [
     {
       "category": "NEW BLOG",

@@ -690,7 +690,65 @@ const ManageBlogsPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
+                className="space-y-6"
               >
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+                  <div className="flex justify-between items-center mb-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-[#1e2869]">Filter Topics</h3>
+                      <p className="text-sm text-gray-500">Manage the topics available for filtering articles.</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {(data.filterTopics || []).map((topic, idx) => (
+                      <div key={idx} className="flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full text-sm font-medium">
+                        <span>{topic}</span>
+                        {topic !== 'All Topics' && (
+                          <button onClick={() => {
+                            const newTopics = [...data.filterTopics];
+                            newTopics.splice(idx, 1);
+                            setData(prev => ({ ...prev, filterTopics: newTopics }));
+                          }} className="text-gray-400 hover:text-red-500 focus:outline-none ml-1">
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex gap-2 max-w-sm">
+                    <input 
+                      type="text" 
+                      id="new-topic-input"
+                      placeholder="Add a new topic..." 
+                      className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          const val = e.target.value.trim();
+                          if (val && !(data.filterTopics || []).includes(val)) {
+                            setData(prev => ({ ...prev, filterTopics: [...(prev.filterTopics || []), val] }));
+                            e.target.value = '';
+                          }
+                        }
+                      }}
+                    />
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const input = document.getElementById('new-topic-input');
+                        const val = input.value.trim();
+                        if (val && !(data.filterTopics || []).includes(val)) {
+                          setData(prev => ({ ...prev, filterTopics: [...(prev.filterTopics || []), val] }));
+                          input.value = '';
+                        }
+                      }}
+                      className="px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
                   <div className="flex justify-between items-center mb-6">
                     <div>
@@ -783,11 +841,9 @@ const ManageBlogsPage = () => {
                       onChange={(e) => setCurrentItem({ ...currentItem, filterCategory: e.target.value })}
                       className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none focus:border-primary/50"
                     >
-                      <option value="All Topics">All Topics</option>
-                      <option value="Career Advice">Career Advice</option>
-                      <option value="Industry Trends">Industry Trends</option>
-                      <option value="Skill Development">Skill Development</option>
-                      <option value="Student Success">Student Success</option>
+                      {(data.filterTopics || ['All Topics']).map(topic => (
+                        <option key={topic} value={topic}>{topic}</option>
+                      ))}
                     </select>
                   </div>
                 </div>
