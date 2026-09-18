@@ -58,31 +58,7 @@ const TopRecruiters = ({ data }) => {
             ))}
           </motion.div>
 
-          {/* Line 2 - Moving Right */}
-          <motion.div 
-            className="flex w-max gap-8 md:gap-20 py-4 mb-4"
-            animate={{ x: ["-50%", "0%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 110 }}
-          >
-            {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
-              <div key={`l2-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
-                <img src={resolveImage(recruiter.logo)} alt={recruiter.name} className="w-full h-auto object-contain" />
-              </div>
-            ))}
-          </motion.div>
 
-          {/* Line 3 - Moving Left (Faster) */}
-          <motion.div 
-            className="flex w-max gap-8 md:gap-20 py-4"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 100 }}
-          >
-            {[...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters, ...recruiters].map((recruiter, index) => (
-              <div key={`l3-${recruiter.id}-${index}`} className="w-20 md:w-32 lg:w-40 flex-shrink-0 flex items-center justify-center p-4">
-                <img src={resolveImage(recruiter.logo)} alt={recruiter.name} className="w-full h-auto object-contain" />
-              </div>
-            ))}
-          </motion.div>
         </div>
 
       </motion.div>
