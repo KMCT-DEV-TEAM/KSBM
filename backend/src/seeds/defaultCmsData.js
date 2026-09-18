@@ -2213,7 +2213,7 @@ export const DEFAULT_FACULTIES = {
   "showIntro": true,
   "showKsbmFaculty": true,
   "adjunctFacultyHeading": "Adjunct Faculty",
-  "ksbmFacultyHeading": "KSBM Faculty Event TitleEvent TitleEvent TitleEvent TitleEve"
+  "ksbmFacultyHeading": "KSBM Faculty"
 };
 
 export const DEFAULT_EVENTS_PAGE = {
