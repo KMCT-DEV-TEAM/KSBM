@@ -551,6 +551,7 @@ const ManageAdmissionsPage = () => {
                       defaultFile=""
                       label="Drag & drop brochure PDF, or click to select"
                       allowDelete={getDisplayUrl(heroBrochureFile, '') !== ''}
+                      recommendedSize=""
                     />
                   </div>
                 </div>

@@ -13,6 +13,7 @@ const NewsSection = ({ previewData }) => {
   // Local state for interactivity
   const [activeFeatured, setActiveFeatured] = useState((previewData || DEFAULT_NEWS).featuredArticle);
   const [activeSideArticles, setActiveSideArticles] = useState((previewData || DEFAULT_NEWS).sideArticles || []);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     if (previewData) {
@@ -54,6 +55,7 @@ const NewsSection = ({ previewData }) => {
     
     setActiveFeatured(clickedArticle);
     setActiveSideArticles(newSideArticles);
+    setIsExpanded(false); // Reset expanded state on swap
   };
 
   if (isLoading) {
@@ -126,6 +128,7 @@ const NewsSection = ({ previewData }) => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
+              onClick={() => setIsExpanded(!isExpanded)}
               className="w-full lg:w-[55%] group cursor-pointer"
             >
               {/* Image Wrapper */}
@@ -156,7 +159,7 @@ const NewsSection = ({ previewData }) => {
                     </h3>
                   )}
                   {activeFeatured.description && (
-                    <p className="text-white/70 text-sm line-clamp-2 md:line-clamp-3">
+                    <p className={`text-white/70 text-sm ${isExpanded ? 'max-h-[160px] overflow-y-auto pr-2' : 'line-clamp-2 md:line-clamp-3'}`}>
                       {activeFeatured.description}
                     </p>
                   )}
