@@ -1,10 +1,12 @@
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Download, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Swal from 'sweetalert2';
 
 const AcademicCalendarBanner = ({ program }) => {
+  const router = useRouter();
   const badgeText = program?.academicCalendarBanner?.badgeText || 'ACADEMIC SCHEDULE 2026-27';
   const titleText = program?.academicCalendarBanner?.title || 'Download the Official Academic Calendar';
   const descriptionText = program?.academicCalendarBanner?.description || 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.';
@@ -18,7 +20,7 @@ const AcademicCalendarBanner = ({ program }) => {
   const handleViewAction = (e) => {
     e.preventDefault();
     if (pdfUrl) {
-      window.open(pdfUrl, '_blank', 'noopener,noreferrer');
+      router.push(`/pdf-viewer?url=${encodeURIComponent(pdfUrl)}&title=Academic Calendar`);
     } else {
       Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'No Calendar PDF Available', showConfirmButton: false, timer: 3000 });
     }
