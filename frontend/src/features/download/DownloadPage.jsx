@@ -30,40 +30,29 @@ const DownloadPage = ({ previewData }) => {
     fetchPageData();
   }, [previewData]);
 
-  // Handle transition loader
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
-    let windowLoaded = document.readyState === 'complete';
-    let dataLoaded = !!pageData;
-
-    const checkReady = () => {
-      if (windowLoaded && dataLoaded) {
-        setTimeout(() => setIsLoaded(true), 400);
+    if (!loading) {
+      if (previewData) {
+        setIsLoaded(true);
+        return;
       }
-    };
-
-    const handleWindowLoad = () => {
-      windowLoaded = true;
-      checkReady();
-    };
-
-    if (windowLoaded) {
-      checkReady();
-    } else {
-      window.addEventListener('load', handleWindowLoad);
+      const handleLoad = () => {
+        setTimeout(() => setIsLoaded(true), 400);
+      };
+      if (document.readyState === 'complete') {
+        handleLoad();
+      } else {
+        window.addEventListener('load', handleLoad);
+        const fallback = setTimeout(handleLoad, 3000);
+        return () => {
+          window.removeEventListener('load', handleLoad);
+          clearTimeout(fallback);
+        };
+      }
     }
-
-    if (pageData) {
-      dataLoaded = true;
-      checkReady();
-    }
-
-    const fallback = setTimeout(() => setIsLoaded(true), 5000);
-    return () => {
-      window.removeEventListener('load', handleWindowLoad);
-      clearTimeout(fallback);
-    };
-  }, [pageData]);
+  }, [loading, previewData]);
 
   return (
     <>

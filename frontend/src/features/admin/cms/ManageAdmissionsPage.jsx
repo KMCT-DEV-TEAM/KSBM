@@ -70,6 +70,8 @@ const ManageAdmissionsPage = () => {
   const [heroSubtitle, setHeroSubtitle] = useState('Join a world-class institution dedicated to excellence in management education. Shape your future with industry-relevant curriculum and global perspectives.');
   const [heroBgImage, setHeroBgImage] = useState(DEFAULT_IMAGES.heroBgImage);
   const [heroBrochureFile, setHeroBrochureFile] = useState('');
+  const [applyNowUrl, setApplyNowUrl] = useState('/admissions');
+  const [applyNowBtnId, setApplyNowBtnId] = useState(null);
 
   // ── Elite ─────────────────────────────────────────────
   const [eliteHeading, setEliteHeading] = useState('The KSBM Elite Advantage');
@@ -140,7 +142,22 @@ const ManageAdmissionsPage = () => {
   const [faqs, setFaqs] = useState([]);
 
   // ─────────────────────────────────────────────────────
-  useEffect(() => { fetchSettings(); }, []);
+  useEffect(() => { fetchSettings(); fetchGlobalApply(); }, []);
+
+  const fetchGlobalApply = async () => {
+    try {
+      const { data } = await api.get('/cms/global-buttons');
+      if (Array.isArray(data)) {
+        const btn = data.find(b => b.identifier === 'global_apply');
+        if (btn) {
+          setApplyNowUrl(btn.link || '/admissions');
+          setApplyNowBtnId(btn._id || btn.id || null);
+        }
+      }
+    } catch (err) {
+      console.warn('Could not fetch global apply link:', err);
+    }
+  };
 
   useEffect(() => {
     if (isPreviewModalOpen) {
@@ -265,6 +282,15 @@ const ManageAdmissionsPage = () => {
           };
 
           await api.put('/cms/admissions-page', payload);
+
+          // Also update the global Apply Now link
+          if (applyNowUrl && applyNowBtnId) {
+            try {
+              await api.put(`/cms/global-buttons/${applyNowBtnId}`, { link: applyNowUrl });
+            } catch (err) {
+              console.warn('Failed to update global apply link:', err);
+            }
+          }
 
           for (const imgUrl of imagesToDelete) {
             try { await api.delete('/upload', { data: { fileUrl: imgUrl }, hideLoader: true }); }
@@ -549,10 +575,22 @@ const ManageAdmissionsPage = () => {
                       onUploadStateChange={setIsUploading}
                       deferredUpload={true}
                       defaultFile=""
-                      label="Drag & drop brochure PDF, or click to select"
+                      label="Drag &amp; drop brochure PDF, or click to select"
                       allowDelete={getDisplayUrl(heroBrochureFile, '') !== ''}
+                      maxSize={Infinity}
                       recommendedSize=""
                     />
+                  </div>
+                  <div>
+                    <label className={fieldLabel}>Apply Now Link</label>
+                    <input
+                      type="text"
+                      value={applyNowUrl}
+                      onChange={e => setApplyNowUrl(e.target.value)}
+                      className={inputCls}
+                      placeholder="e.g. /admissions or https://apply.example.com"
+                    />
+                    <p className="text-[11px] text-blue-500 mt-1">⚡ Updates the global "Apply Now" link across the entire website.</p>
                   </div>
                 </div>
                 <div>

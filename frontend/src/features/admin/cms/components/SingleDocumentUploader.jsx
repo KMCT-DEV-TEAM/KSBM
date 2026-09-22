@@ -108,7 +108,7 @@ const SingleDocumentUploader = ({
     },
     disabled: isUploading,
     multiple: false,
-    maxSize: maxSize
+    maxSize: maxSize === Infinity ? undefined : maxSize
   });
 
   const removeFile = async (e) => {
