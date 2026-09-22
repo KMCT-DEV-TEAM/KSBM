@@ -16,7 +16,7 @@ const BlogsPage = () => {
   const [pageData, setPageData] = useState(DEFAULT_BLOGS_PAGE);
   const [loading, setLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (!loading) {
@@ -105,7 +105,7 @@ const BlogsPage = () => {
     <>
       {!isPreview && (
         <div 
-          className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-700 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
           <Loader fullScreen={false} />
         </div>

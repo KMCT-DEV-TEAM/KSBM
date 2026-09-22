@@ -20,7 +20,7 @@ const BlogDetailPage = ({ id }) => {
   const [pageHero, setPageHero] = useState(DEFAULT_BLOGS_PAGE.hero || null);
   const [loading, setLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
   const isManualScroll = useRef(false);
   
   const globalLinks = useGlobalLinks();
@@ -59,7 +59,7 @@ const BlogDetailPage = ({ id }) => {
         const foundArticle = allBlogs.find(b => b.id === id || b.uuid === id || b._id === id) || allBlogs[0];
         
         if (foundArticle) {
-          const related = allBlogs.filter(b => b.id !== foundArticle.id && b.uuid !== foundArticle.uuid).slice(0, 3);
+          const related = allBlogs.filter(b => (b.id !== foundArticle.id && b.uuid !== foundArticle.uuid && b._id !== foundArticle._id) && b.category === foundArticle.category).slice(0, 3);
           const currentIndex = allBlogs.findIndex(b => b === foundArticle);
           const prevArticle = currentIndex > 0 ? allBlogs[currentIndex - 1] : null;
           const nextArticle = currentIndex < allBlogs.length - 1 && currentIndex !== -1 ? allBlogs[currentIndex + 1] : null;
@@ -87,7 +87,7 @@ const BlogDetailPage = ({ id }) => {
         const foundArticle = allBlogs.find(b => b.id === id || b._id === id);
         if (foundArticle) {
           // Populate related articles for the sidebar dynamically
-          const related = allBlogs.filter(b => b.id !== id && b._id !== id).slice(0, 3);
+          const related = allBlogs.filter(b => (b.id !== foundArticle.id && b._id !== foundArticle._id && b.uuid !== foundArticle.uuid) && b.category === foundArticle.category).slice(0, 3);
 
           const currentIndex = allBlogs.findIndex(b => b.id === id || b._id === id);
           const prevArticle = currentIndex > 0 ? allBlogs[currentIndex - 1] : null;
@@ -140,7 +140,7 @@ const BlogDetailPage = ({ id }) => {
     <>
       {!isPreview && (
         <div 
-          className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-700 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
           <Loader fullScreen={false} />
         </div>
