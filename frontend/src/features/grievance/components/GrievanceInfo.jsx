@@ -52,11 +52,11 @@ const GrievanceInfo = ({ infoData }) => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex-1 w-full"
           >
-            <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-lg border border-gray-100">
+            <div className="w-full">
               <img 
                 src={image} 
                 alt={title} 
-                className="w-full h-full object-cover"
+                className="w-full h-auto rounded-3xl"
               />
             </div>
           </motion.div>

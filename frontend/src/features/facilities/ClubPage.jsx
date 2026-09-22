@@ -64,8 +64,27 @@ const ClubPage = () => {
     return (DEFAULT_FACILITIES_PAGE?.clubs?.items || []).find((item) => item._id === clubId || item.slug === clubId) || DEFAULT_FACILITIES_PAGE?.clubs?.items?.[0] || null;
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const globalLinks = useGlobalLinks();
   const applyLink = globalLinks['global_apply']?.link || '/contact';
+
+  useEffect(() => {
+    if (!isLoading) {
+      const handleLoad = () => {
+        setTimeout(() => setIsLoaded(true), 400);
+      };
+      if (document.readyState === 'complete') {
+        handleLoad();
+      } else {
+        window.addEventListener('load', handleLoad);
+        const fallback = setTimeout(handleLoad, 3000);
+        return () => {
+          window.removeEventListener('load', handleLoad);
+          clearTimeout(fallback);
+        };
+      }
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     const fetchClubData = async () => {
@@ -87,7 +106,7 @@ const ClubPage = () => {
     fetchClubData();
   }, [clubId]);
 
-  if (isLoading) return <Loader fullScreen={true} />;
+
 
   if (!clubData) {
     return (
@@ -120,7 +139,13 @@ const ClubPage = () => {
   const displayChunks = chunkedImages.length > 0 ? [...chunkedImages, ...chunkedImages, ...chunkedImages] : [];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50/50">
+    <>
+      <div 
+        className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+      >
+        <Loader fullScreen={false} />
+      </div>
+    <div className="min-h-screen flex flex-col bg-white overflow-hidden selection:bg-primary/30 selection:text-primary">
       <Header />
 
       <main className="flex-1">
@@ -410,6 +435,7 @@ const ClubPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

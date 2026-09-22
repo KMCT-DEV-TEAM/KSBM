@@ -1195,7 +1195,7 @@ export const getAdmissionsPageSettings = async (req, res) => {
 export const updateAdmissionsPageSettings = async (req, res) => {
   try {
     const fields = [
-      'heroBadgeText', 'heroTitle', 'heroSubtitle', 'heroApplyBtnText', 'heroApplyBtnUrl', 'heroBrochureBtnText', 'heroBrochureBtnUrl', 'heroBgImage', 'heroStats',
+      'heroBadgeText', 'heroTitle', 'heroSubtitle', 'heroApplyBtnText', 'heroApplyBtnUrl', 'heroBrochureBtnText', 'heroBrochureBtnUrl', 'heroBgImage', 'heroBrochureFile', 'heroStats',
       'eliteHeading', 'eliteSubtitle', 'eliteDesc', 'eliteImage', 'eliteAdvantages',
       'journeyHeading', 'journeySubtitle', 'journeySteps',
       'eligibilityHeading', 'eligibilitySubtitle', 'scholarshipNote', 'feeStructure', 'mba', 'bba',

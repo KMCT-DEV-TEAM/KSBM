@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import Loader from '../../components/Loader';
 import api from '../../api/axios';
 import { DEFAULT_GALLERY_PAGE } from '../admin/cms/constants/defaultCmsData';
 
@@ -12,6 +13,30 @@ const GalleryPage = ({ previewData }) => {
   const [galleryData, setGalleryData] = useState(previewData || DEFAULT_GALLERY_PAGE);
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [tabStartIndex, setTabStartIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!loading) {
+      if (previewData) {
+        setIsLoaded(true);
+        return;
+      }
+      const handleLoad = () => {
+        setTimeout(() => setIsLoaded(true), 400);
+      };
+      if (document.readyState === 'complete') {
+        handleLoad();
+      } else {
+        window.addEventListener('load', handleLoad);
+        const fallback = setTimeout(handleLoad, 3000);
+        return () => {
+          window.removeEventListener('load', handleLoad);
+          clearTimeout(fallback);
+        };
+      }
+    }
+  }, [loading, previewData]);
 
   useEffect(() => {
     if (previewData) {
@@ -71,6 +96,12 @@ const GalleryPage = ({ previewData }) => {
   };
 
   return (
+    <>
+      <div 
+        className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+      >
+        <Loader fullScreen={false} />
+      </div>
     <div className="min-h-screen flex flex-col bg-[#111836] overflow-x-hidden">
       {!previewData && <Header />}
 
@@ -332,6 +363,7 @@ const GalleryPage = ({ previewData }) => {
 
       {!previewData && <Footer />}
     </div>
+    </>
   );
 };
 

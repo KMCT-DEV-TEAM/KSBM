@@ -186,33 +186,6 @@ const EligibilityStandardsSection = ({ data }) => {
 
             </div>
 
-            {/* Bottom Full-Width Fee Structure Banner Card */}
-            <div className="bg-primary text-white rounded-[18px] p-5 sm:p-6 shadow-[0_15px_40px_rgba(43,47,102,0.25)] flex flex-col md:flex-row items-start md:items-center justify-between gap-5 md:gap-6 border border-[#C4C6CF] w-full">
-              <div className="flex flex-col justify-center">
-                <h4 className="text-sm sm:text-base font-semibold text-white mb-0.5">
-                  Fee Structure
-                </h4>
-                <p className="text-xs text-gray-300 uppercase tracking-wider mb-1.5">
-                  Total Fee
-                </p>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-xl sm:text-2xl font-semibold text-white">
-                    {currentData.feeStructure.amount}
-                  </span>
-                  <span className="text-xs sm:text-sm text-gray-300 font-normal">
-                    {currentData.feeStructure.period}
-                  </span>
-                </div>
-              </div>
-
-              {/* Scholarship Note Box */}
-              <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-3 rounded-[18px] border border-white/15 max-w-md w-full md:w-auto">
-                <AwardIcon className="w-6 h-6 text-white shrink-0" />
-                <p className="text-xs text-gray-200 font-medium leading-normal">
-                  {scholarshipNote}
-                </p>
-              </div>
-            </div>
 
           </motion.div>
         </AnimatePresence>

@@ -23,8 +23,31 @@ const EventsPage = () => {
   const [previewData, setPreviewData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const isPreview = !!previewData;
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (isPreview) {
+        setIsLoaded(true);
+        return;
+      }
+      const handleLoad = () => {
+        setTimeout(() => setIsLoaded(true), 400);
+      };
+      if (document.readyState === 'complete') {
+        handleLoad();
+      } else {
+        window.addEventListener('load', handleLoad);
+        const fallback = setTimeout(handleLoad, 3000);
+        return () => {
+          window.removeEventListener('load', handleLoad);
+          clearTimeout(fallback);
+        };
+      }
+    }
+  }, [isLoading, isPreview]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,7 +101,7 @@ const EventsPage = () => {
       <Header />
 
       <div 
-        className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${!isLoading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
         <Loader fullScreen={false} />
       </div>
