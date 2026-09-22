@@ -2336,6 +2336,7 @@ export const DEFAULT_BLOGS_PAGE = {
     "backgroundImage": "/assets/Images/blogs/hero-bg.jpg"
   },
   "filterTopics": [
+    "All Topics",
     "Career Advice",
     "Industry Trends",
     "Skill Development",

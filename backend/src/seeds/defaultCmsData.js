@@ -1479,9 +1479,16 @@ export const DEFAULT_FACILITIES_PAGE = {
   "hero": {
     "heading": "Institutional Resources",
     "subtext": "Our campus offers state-of-the-art facilities, modern classrooms, and vibrant student spaces that create an inspiring environment for academic excellence and professional growth.",
-    "backgroundImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop",
+    "backgroundImage": "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1600&auto=format&fit=crop",
     "showTextContent": true
   },
+  "filterTopics": [
+    "All Topics",
+    "Career Advice",
+    "Industry Trends",
+    "Skill Development",
+    "Student Success"
+  ],
   "library": {
     "heading": "Library",
     "description": "The KSBM Library serves as a dynamic hub, supporting students, faculty, and researchers with a rich collection of academic resources.The KSBM Library serves as a dynamic hub, supporting students, faculty, and researchers with a rich collection of academic resources.The KSBM Library serves as a dynamic hub, supporting students, faculty, and researchers with a rich collection of academic resources.",
@@ -2335,6 +2342,13 @@ export const DEFAULT_BLOGS_PAGE = {
     "subtitle": "Explore expert articles, student success stories, industry trends, and academic insights to stay informed and inspired.",
     "backgroundImage": "/assets/Images/blogs/hero-bg.jpg"
   },
+  "filterTopics": [
+    "All Topics",
+    "Career Advice",
+    "Industry Trends",
+    "Skill Development",
+    "Student Success"
+  ],
   "blogs": [
     {
       "category": "NEW BLOG",
