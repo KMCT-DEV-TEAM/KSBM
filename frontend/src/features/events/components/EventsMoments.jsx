@@ -45,7 +45,7 @@ const EventsMoments = ({ momentsCaptured }) => {
               <motion.div
                 className="flex flex-col"
                 animate={{ y: ["0%", "-50%"] }}
-                transition={{ ease: "linear", duration: 25, repeat: Infinity }}
+                transition={{ ease: "linear", duration: 50, repeat: Infinity }}
               >
                 {[...Array(2)].map((_, groupIdx) => (
                   <div key={groupIdx} className="flex flex-col gap-6 pb-6">
@@ -64,7 +64,7 @@ const EventsMoments = ({ momentsCaptured }) => {
               <motion.div
                 className="flex flex-col"
                 animate={{ y: ["-50%", "0%"] }}
-                transition={{ ease: "linear", duration: 30, repeat: Infinity }}
+                transition={{ ease: "linear", duration: 60, repeat: Infinity }}
               >
                 {[...Array(2)].map((_, groupIdx) => (
                   <div key={groupIdx} className="flex flex-col gap-6 pb-6">
@@ -83,7 +83,7 @@ const EventsMoments = ({ momentsCaptured }) => {
               <motion.div
                 className="flex flex-col"
                 animate={{ y: ["0%", "-50%"] }}
-                transition={{ ease: "linear", duration: 20, repeat: Infinity }}
+                transition={{ ease: "linear", duration: 40, repeat: Infinity }}
               >
                 {[...Array(2)].map((_, groupIdx) => (
                   <div key={groupIdx} className="flex flex-col gap-6 pb-6">
