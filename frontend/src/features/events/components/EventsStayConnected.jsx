@@ -84,14 +84,14 @@ const EventsStayConnected = ({ stayConnected }) => {
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-            }}>Stay Connected</h5>
+            }}>{stayConnected?.subheading || "Stay Connected"}</h5>
           <h2 className="text-xl md:text-3xl font-bold uppercase tracking-widest text-[#ffccf0] drop-shadow-[0_0_15px_rgba(219,39,119,0.8)] mb-8 leading-snug">
             {stayConnected?.heading || "Follow us on Social Media"}
           </h2>
           <p className="text-lg md:text-xl text-gray-300 mb-8 font-light tracking-wide leading-relaxed">
-            Don't miss out on the latest updates, behind-the-scenes moments, and exclusive announcements for KALEIDO KMCT 2025.
+            {stayConnected?.description1 || "Don't miss out on the latest updates, behind-the-scenes moments, and exclusive announcements for KALEIDO KMCT 2025."}
             <br /><br />
-            Join the conversation across all our platforms using the hashtag <span className="text-pink-400 font-semibold">#KaleidoKMCT2025</span> and be part of the largest cultural celebration!
+            Join the conversation across all our platforms using the hashtag <span className="text-pink-400 font-semibold">{stayConnected?.hashtag || "#KaleidoKMCT2025"}</span> {stayConnected?.description2 || "and be part of the largest cultural celebration!"}
           </p>
 
         </div>
