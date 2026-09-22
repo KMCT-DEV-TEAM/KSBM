@@ -1,8 +1,10 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X } from 'lucide-react';
 import api from '../../api/axios';
 import { DEFAULT_NEWS } from '../admin/cms/constants/defaultCmsData';
+import { useRouter } from 'next/navigation';
 
 export default function NewsPageContent() {
   const defaultCombined = [];
@@ -12,6 +14,7 @@ export default function NewsPageContent() {
   const [articles, setArticles] = useState(defaultCombined);
   const [isLoading, setIsLoading] = useState(false);
   const [settings, setSettings] = useState({ subheading: DEFAULT_NEWS.subheading, heading: DEFAULT_NEWS.heading });
+  const router = useRouter();
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -72,10 +75,11 @@ export default function NewsPageContent() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
+              onClick={() => router.push(`/news/${item._id || encodeURIComponent(item.title)}`)}
               className="group cursor-pointer flex flex-col bg-white rounded-[1.5rem] p-4 shadow-sm hover:shadow-md transition-shadow duration-300"
             >
               {/* Image */}
-              <div className="w-full h-[200px] md:h-[240px] rounded-[1rem] overflow-hidden mb-4 relative">
+              <div className="w-full h-[200px] md:h-[240px] rounded-[1rem] overflow-hidden mb-6 relative">
                 <img
                   src={item.image || 'https://via.placeholder.com/300x200'}
                   alt={item.title}

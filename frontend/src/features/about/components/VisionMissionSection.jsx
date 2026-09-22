@@ -23,6 +23,25 @@ const VisionMissionSection = ({ previewData }) => {
   const { scrollYProgress: missionScrollYProgress } = useScroll({ container: missionScrollRef });
   const missionIndicatorY = useTransform(missionScrollYProgress, [0, 1], [0, 110]);
 
+  const [isVisionScrollable, setIsVisionScrollable] = useState(false);
+  const [isMissionScrollable, setIsMissionScrollable] = useState(false);
+
+  useEffect(() => {
+    const checkScrollable = () => {
+      if (visionScrollRef.current) {
+        setIsVisionScrollable(visionScrollRef.current.scrollHeight > visionScrollRef.current.clientHeight);
+      }
+      if (missionScrollRef.current) {
+        setIsMissionScrollable(missionScrollRef.current.scrollHeight > missionScrollRef.current.clientHeight);
+      }
+    };
+    checkScrollable();
+    // Add small delay to allow font loading / rendering
+    setTimeout(checkScrollable, 100);
+    window.addEventListener('resize', checkScrollable);
+    return () => window.removeEventListener('resize', checkScrollable);
+  }, [data, activeCard]);
+
   useEffect(() => {
     if (previewData) {
       setData(prev => ({ ...prev, ...previewData }));
@@ -44,7 +63,7 @@ const VisionMissionSection = ({ previewData }) => {
   // Vision Auto-scroll
   useEffect(() => {
     const el = visionScrollRef.current;
-    if (!el) return;
+    if (!el || !isVisionScrollable) return;
 
     visionFloatScrollRef.current = el.scrollTop;
     let animationId;
@@ -65,12 +84,12 @@ const VisionMissionSection = ({ previewData }) => {
 
     animationId = requestAnimationFrame(scroll);
     return () => cancelAnimationFrame(animationId);
-  }, []);
+  }, [isVisionScrollable]);
 
   // Mission Auto-scroll
   useEffect(() => {
     const el = missionScrollRef.current;
-    if (!el) return;
+    if (!el || !isMissionScrollable) return;
 
     missionFloatScrollRef.current = el.scrollTop;
     let animationId;
@@ -91,7 +110,7 @@ const VisionMissionSection = ({ previewData }) => {
 
     animationId = requestAnimationFrame(scroll);
     return () => cancelAnimationFrame(animationId);
-  }, []);
+  }, [isMissionScrollable]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -190,12 +209,14 @@ const VisionMissionSection = ({ previewData }) => {
               </div>
 
               {/* Custom Scroll Indicator (Right Edge) */}
-              <div className="absolute right-8 top-1/2 -translate-y-1/2 h-[150px] w-[2px] bg-white/10 rounded-full">
-                <motion.div
-                  className="w-full bg-gradient-to-b from-white to-transparent rounded-full"
-                  style={{ height: '40px', y: visionIndicatorY }}
-                />
-              </div>
+              {isVisionScrollable && (
+                <div className="absolute right-8 top-1/2 -translate-y-1/2 h-[150px] w-[2px] bg-white/10 rounded-full">
+                  <motion.div
+                    className="w-full bg-gradient-to-b from-white to-transparent rounded-full"
+                    style={{ height: '40px', y: visionIndicatorY }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </motion.div>
@@ -262,12 +283,14 @@ const VisionMissionSection = ({ previewData }) => {
               </div>
 
               {/* Custom Scroll Indicator (Right Edge) */}
-              <div className="absolute right-8 top-1/2 -translate-y-1/2 h-[150px] w-[2px] bg-white/10 rounded-full">
-                <motion.div
-                  className="w-full bg-gradient-to-b from-white to-transparent rounded-full"
-                  style={{ height: '40px', y: missionIndicatorY }}
-                />
-              </div>
+              {isMissionScrollable && (
+                <div className="absolute right-8 top-1/2 -translate-y-1/2 h-[150px] w-[2px] bg-white/10 rounded-full">
+                  <motion.div
+                    className="w-full bg-gradient-to-b from-white to-transparent rounded-full"
+                    style={{ height: '40px', y: missionIndicatorY }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </motion.div>

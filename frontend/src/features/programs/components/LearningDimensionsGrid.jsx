@@ -141,7 +141,7 @@ const LearningDimensionsGrid = ({ dimensions = [] }) => {
         {/* Cards Container */}
         {dimensions.length > 4 ? (
           <div className="w-full overflow-hidden relative group py-4">
-             <style>{`
+            <style>{`
               @keyframes scrollLeftDim {
                 0% { transform: translateX(0); }
                 100% { transform: translateX(-50%); }
@@ -159,7 +159,7 @@ const LearningDimensionsGrid = ({ dimensions = [] }) => {
                 const realIdx = idx % dimensions.length;
                 const isLast = realIdx === dimensions.length - 1;
                 const isPrimary = hoveredIdx === realIdx || (hoveredIdx === null && isLast);
-                
+
                 const creditsText = dim.credits || (realIdx === 0 ? 'Credits: 18' : realIdx === 1 ? 'Credits: 20' : realIdx === 2 ? 'Credits: 22' : 'Credits: 16');
                 const displayTopics = (dim.topics && dim.topics.length > 0) ? dim.topics : [];
                 const displayTitle = dim.title || 'Curriculum Dimension';
@@ -289,7 +289,7 @@ const LearningDimensionsGrid = ({ dimensions = [] }) => {
         )}
 
         {/* Bottom Curriculum Button */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -306,7 +306,7 @@ const LearningDimensionsGrid = ({ dimensions = [] }) => {
             <span>View Our Detailed Curriculum</span>
             <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
           </button>
-        </motion.div>
+        </motion.div> */}
 
       </div>
 

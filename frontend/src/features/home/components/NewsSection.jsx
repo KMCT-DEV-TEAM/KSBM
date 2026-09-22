@@ -2,18 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/axios';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ArrowRight, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { DEFAULT_NEWS } from '../../admin/cms/constants/defaultCmsData';
+import { useRouter } from 'next/navigation';
 
 const NewsSection = ({ previewData }) => {
   const [data, setData] = useState(previewData || DEFAULT_NEWS);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   
   // Local state for interactivity
   const [activeFeatured, setActiveFeatured] = useState((previewData || DEFAULT_NEWS).featuredArticle);
   const [activeSideArticles, setActiveSideArticles] = useState((previewData || DEFAULT_NEWS).sideArticles || []);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     if (previewData) {
@@ -55,7 +56,6 @@ const NewsSection = ({ previewData }) => {
     
     setActiveFeatured(clickedArticle);
     setActiveSideArticles(newSideArticles);
-    setIsExpanded(false); // Reset expanded state on swap
   };
 
   if (isLoading) {
@@ -128,21 +128,21 @@ const NewsSection = ({ previewData }) => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              onClick={() => setIsExpanded(!isExpanded)}
+              onClick={() => router.push(`/news/${activeFeatured._id || encodeURIComponent(activeFeatured.title)}`)}
               className="w-full lg:w-[55%] group cursor-pointer"
             >
               {/* Image Wrapper */}
-              <div className="relative w-full aspect-[4/3] lg:aspect-[4/3] rounded-[1.5rem] overflow-hidden mb-6 lg:mb-0 shadow-sm">
+              <div className="relative w-full aspect-[4/3] lg:aspect-[4/3] rounded-[1.5rem] overflow-hidden mb-4 md:mb-6 lg:mb-0 shadow-sm">
                 <img
                   src={activeFeatured.image}
                   alt={activeFeatured.title}
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+                <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 
-                {/* Content Overlay */}
-                <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8 flex flex-col justify-end">
+                {/* Content Overlay (Desktop) / Below (Mobile) */}
+                <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8 flex-col justify-end hidden md:flex">
                   {activeFeatured.tag && (
                     <span className="bg-primary/90 text-white text-[0.65rem] font-semibold tracking-wider px-3 py-1 rounded-sm w-max mb-4 uppercase">
                       {activeFeatured.tag}
@@ -159,11 +159,35 @@ const NewsSection = ({ previewData }) => {
                     </h3>
                   )}
                   {activeFeatured.description && (
-                    <p className={`text-white/70 text-sm ${isExpanded ? 'max-h-[160px] overflow-y-auto pr-2' : 'line-clamp-2 md:line-clamp-3'}`}>
+                    <p className="text-white/70 text-sm line-clamp-2 md:line-clamp-3">
                       {activeFeatured.description}
                     </p>
                   )}
                 </div>
+              </div>
+
+              {/* Content Mobile Only (Below image) */}
+              <div className="flex flex-col md:hidden px-2 mb-8">
+                  {activeFeatured.tag && (
+                    <span className="bg-primary/10 text-primary text-[0.65rem] font-semibold tracking-wider px-2 py-1 rounded-sm w-max mb-3 uppercase">
+                      {activeFeatured.tag}
+                    </span>
+                  )}
+                  {activeFeatured.date && (
+                    <p className="text-text-secondary text-xs font-medium tracking-wide mb-2 uppercase">
+                      {activeFeatured.date}
+                    </p>
+                  )}
+                  {activeFeatured.title && (
+                    <h3 className="text-text-primary text-xl font-semibold leading-tight mb-3 group-hover:text-primary transition-colors">
+                      {activeFeatured.title}
+                    </h3>
+                  )}
+                  {activeFeatured.description && (
+                    <p className="text-text-secondary text-sm line-clamp-2 md:line-clamp-3">
+                      {activeFeatured.description}
+                    </p>
+                  )}
               </div>
             </motion.div>
           )}
@@ -180,7 +204,7 @@ const NewsSection = ({ previewData }) => {
               {activeSideArticles.slice(0, 3).map((article, index) => (
                 <div
                   key={article.title + index}
-                  onClick={() => handleArticleClick(index)}
+                  onClick={() => router.push(`/news/${article._id || encodeURIComponent(article.title)}`)}
                   className="flex gap-5 items-center group cursor-pointer rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] p-3 lg:-ml-3 lg:w-[calc(100%+1.5rem)] w-full"
                 >
                   {/* Small Image */}
