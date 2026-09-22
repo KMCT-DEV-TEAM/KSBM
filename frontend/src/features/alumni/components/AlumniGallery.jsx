@@ -1,9 +1,11 @@
 "use client";
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X } from 'lucide-react';
 
 const AlumniGallery = ({ data }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const defaultItems = [
     { title: 'Graduation', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop' },
     { title: 'Convocation', image: 'https://images.unsplash.com/photo-1627556704302-624286467c65?q=80&w=800&auto=format&fit=crop' },
@@ -17,77 +19,6 @@ const AlumniGallery = ({ data }) => {
     { title: 'Seminar', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=800&auto=format&fit=crop' }
   ];
   const items = data?.items && data.items.length > 0 ? data.items : defaultItems;
-
-  const scrollRef = useRef(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-  const [isHovered, setIsHovered] = useState(false);
-  const autoScrollRef = useRef(null);
-
-  const checkScroll = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 10);
-    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
-  }, []);
-
-  // Check if content overflows (more images than can fit)
-  const isOverflowing = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return false;
-    return el.scrollWidth > el.clientWidth + 20;
-  }, []);
-
-  // Auto-scroll: smoothly move right-to-left, loop back when reaching the end
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    // Only auto-scroll if there are enough images to overflow
-    const startAutoScroll = () => {
-      if (!isOverflowing()) return;
-
-      autoScrollRef.current = setInterval(() => {
-        if (isHovered) return;
-        
-        const maxScroll = el.scrollWidth - el.clientWidth;
-        if (el.scrollLeft >= maxScroll - 2) {
-          // Reset to start seamlessly
-          el.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          el.scrollLeft += 1;
-        }
-        checkScroll();
-      }, 30);
-    };
-
-    // Small delay to let layout settle
-    const timeout = setTimeout(startAutoScroll, 500);
-
-    return () => {
-      clearTimeout(timeout);
-      if (autoScrollRef.current) clearInterval(autoScrollRef.current);
-    };
-  }, [items, isHovered, checkScroll, isOverflowing]);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    checkScroll();
-    el.addEventListener('scroll', checkScroll);
-    window.addEventListener('resize', checkScroll);
-    return () => {
-      el.removeEventListener('scroll', checkScroll);
-      window.removeEventListener('resize', checkScroll);
-    };
-  }, [items, checkScroll]);
-
-  const scroll = (direction) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const scrollAmount = el.clientWidth * 0.7;
-    el.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
-  };
 
   // Build a masonry-style column layout from items
   const buildColumns = () => {
@@ -130,13 +61,17 @@ const AlumniGallery = ({ data }) => {
       }
       colIndex++;
     }
-    return columns;
+    // Duplicate columns to allow for seamless infinite scrolling
+    return [...columns, ...columns];
   };
 
   const columns = buildColumns();
 
   const GalleryImage = ({ item, className = '' }) => (
-    <div className={`relative overflow-hidden rounded-2xl group ${className}`}>
+    <div 
+      className={`relative overflow-hidden rounded-2xl group cursor-pointer ${className}`}
+      onClick={() => setSelectedImage(item.image)}
+    >
       <img
         src={item.image}
         alt={item.title}
@@ -194,37 +129,13 @@ const AlumniGallery = ({ data }) => {
 
         {/* Gallery Collage with Scroll */}
         <div 
-          className="relative px-2 sm:px-4"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          className="relative px-0 py-4 overflow-hidden w-full"
         >
-          {/* Left Arrow */}
-          {canScrollLeft && (
-            <button
-              onClick={() => scroll('left')}
-              className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-300 border border-gray-200"
-              aria-label="Scroll left"
-            >
-              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-            </button>
-          )}
-
-          {/* Right Arrow */}
-          {canScrollRight && (
-            <button
-              onClick={() => scroll('right')}
-              className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-300 border border-gray-200"
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-            </button>
-          )}
-
           {/* Scrollable Container */}
-          <div
-            ref={scrollRef}
-            className="flex gap-3 sm:gap-4 overflow-x-auto px-6 sm:px-12 pb-4"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          <motion.div
+            className="flex gap-3 sm:gap-4 w-max"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ ease: "linear", duration: 40, repeat: Infinity }}
           >
             {columns.map((col, colIdx) => {
               if (col.type === 'tall') {
@@ -270,9 +181,41 @@ const AlumniGallery = ({ data }) => {
 
               return null;
             })}
-          </div>
+          </motion.div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-md p-2 sm:p-4 cursor-zoom-out"
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedImage(null);
+              }}
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full backdrop-blur-md transition-colors cursor-pointer z-10"
+            >
+              <X className="w-6 h-6 sm:w-8 sm:h-8" />
+            </button>
+            <motion.img
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              src={selectedImage}
+              alt="Gallery Fullscreen"
+              className="max-w-[95vw] max-h-[85vh] sm:max-h-[90vh] object-contain rounded-lg shadow-2xl cursor-default"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </section>
   );
 };
