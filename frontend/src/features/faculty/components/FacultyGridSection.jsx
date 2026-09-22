@@ -66,7 +66,7 @@ const FacultyCard = ({ member, index }) => {
       {/* Floating Bottom Info Card */}
       <div className="relative z-10 mx-2 mb-2 sm:mx-3.5 sm:mb-3.5 bg-white/75 backdrop-blur-md rounded-lg sm:rounded-xl p-2 sm:p-4 shadow-lg border border-white/50 transition-all duration-300 group-hover:bg-white/90 group-hover:-translate-y-1">
         {member.showName !== false && (
-          <h4 className="font-semibold text-[13px] sm:text-base text-gray-900 mb-0.5 sm:mb-1 line-clamp-1">
+          <h4 className="font-semibold text-[13px] sm:text-base text-gray-900 mb-0.5 sm:mb-1">
             {member.name}
           </h4>
         )}
