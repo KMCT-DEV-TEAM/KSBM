@@ -64,14 +64,14 @@ const FacultyCard = ({ member, index }) => {
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/40 via-black/10 to-transparent pointer-events-none transition-opacity duration-300 group-hover:opacity-80"></div>
 
       {/* Floating Bottom Info Card */}
-      <div className="relative z-10 mx-3.5 mb-3.5 bg-white/75 backdrop-blur-md rounded-xl p-3.5 sm:p-4 shadow-lg border border-white/50 transition-all duration-300 group-hover:bg-white/90 group-hover:-translate-y-1">
+      <div className="relative z-10 mx-2 mb-2 sm:mx-3.5 sm:mb-3.5 bg-white/75 backdrop-blur-md rounded-lg sm:rounded-xl p-2 sm:p-4 shadow-lg border border-white/50 transition-all duration-300 group-hover:bg-white/90 group-hover:-translate-y-1">
         {member.showName !== false && (
-          <h4 className="font-semibold text-sm sm:text-base text-gray-900 mb-1 line-clamp-1">
+          <h4 className="font-semibold text-[13px] sm:text-base text-gray-900 mb-0.5 sm:mb-1 line-clamp-1">
             {member.name}
           </h4>
         )}
         {member.showTitle !== false && (
-          <p className="text-[11px] sm:text-xs text-gray-500 font-medium line-clamp-2 leading-snug">
+          <p className="text-[10px] sm:text-xs text-gray-500 font-medium line-clamp-2 leading-tight sm:leading-snug">
             {member.title}
           </p>
         )}
