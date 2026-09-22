@@ -253,6 +253,7 @@ const bbaPageSchema = new mongoose.Schema(
       viewBtnUrl: { type: String, default: '/assets/Images/bba/bba_schedule.png' },
       downloadBtnText: { type: String, default: 'Download Calendar' },
       downloadBtnUrl: { type: String, default: '/assets/Images/bba/bba_schedule.png' },
+      pdfUrl: { type: String, default: '' },
       image: { type: String, default: '/assets/Images/bba/bba_schedule.png' },
       events: { type: [mongoose.Schema.Types.Mixed], default: [] }
     },

@@ -9,6 +9,7 @@ import LogoUploader from './components/LogoUploader';
 import ManageRecruiters from './ManageRecruiters';
 import PageHeader from './components/PageHeader';
 import AddItemModal from './components/AddItemModal';
+import SingleDocumentUploader from './components/SingleDocumentUploader';
 import { DEFAULT_MBA_PAGE, DEFAULT_BBA_PAGE } from './constants/defaultCmsData';
 
 const Toast = Swal.mixin({
@@ -211,6 +212,7 @@ const ManageMbaPage = ({ isBba = false }) => {
     title: 'Download the Official Academic Calendar',
     description: 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.',
     image: '/assets/Images/mba/calendar_64.png',
+    pdfUrl: '',
     events: defaultCalendarEvents
   });
 
@@ -1977,121 +1979,28 @@ const ManageMbaPage = ({ isBba = false }) => {
                 <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-2">Right Side Illustration Image</label>
                 <div className="space-y-3 max-w-md">
                   <LogoUploader deferredMode={true} uploadEndpoint="/upload/mba" currentLogoUrl={academicCalendarBanner.image || ''} defaultImage="/assets/Images/mba/calendar_64.png" onUploadSuccess={(url) => setAcademicCalendarBanner({ ...academicCalendarBanner, image: url })} />
-                  <div>
-
-                  </div>
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-gray-100 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-base font-bold text-primary flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-primary" /> Interactive Schedule & Key Milestones
-                    </h3>
-                    <p className="text-xs text-gray-500 mt-0.5">Manage timeline events displayed when visitors click "View Calendar" on the program page.</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={addCalendarEvent}
-                    className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all cursor-pointer"
-                  >
-                    <Plus className="w-4 h-4" /> Add Schedule Event
-                  </button>
-                </div>
-
-                <div className="space-y-4">
-                  {(academicCalendarBanner.events || []).map((ev, idx) => (
-                    <div
-                      key={ev.id || idx}
-                      draggable
-                      onDragStart={(e) => handleCalendarDragStart(e, idx)}
-                      onDragOver={handleCalendarDragOver}
-                      onDrop={(e) => handleCalendarDrop(e, idx)}
-                      onDragEnd={handleCalendarDragEnd}
-                      className={`p-5 rounded-xl bg-gray-50/80 border ${draggedCalendarIndex === idx ? 'border-primary shadow-lg scale-[1.02]' : 'border-gray-200'} relative shadow-sm transition-all duration-200 group flex items-start gap-4`}
-                    >
-                      <div className="flex-shrink-0 cursor-grab text-gray-400 active:cursor-grabbing p-2 hover:bg-gray-100 rounded transition-colors" title="Drag to reorder">
-                        <GripVertical className="w-6 h-6" />
-                      </div>
-
-                      <div className="absolute top-4 right-4 flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            openEditModal(
-                              'Edit Schedule Event',
-                              [
-                                { name: 'title', label: 'Event Title', type: 'text', maxLength: 60, required: true },
-                                { name: 'date', label: 'Date Range', type: 'text', maxLength: 100, required: true },
-                                {
-                                  name: 'semester',
-                                  label: 'Semester / Term',
-                                  type: 'select',
-                                  required: true,
-                                  options: [
-                                    { value: 'Trimester 1', label: 'Trimester 1' },
-                                    { value: 'Trimester 2', label: 'Trimester 2' },
-                                    { value: 'Trimester 3', label: 'Trimester 3' },
-                                    { value: 'Key Events', label: 'Key Events' }
-                                  ]
-                                },
-                                {
-                                  name: 'category',
-                                  label: 'Category',
-                                  type: 'select',
-                                  required: true,
-                                  options: [
-                                    { value: 'Leadership & Events', label: 'Leadership & Events' },
-                                    { value: 'Exams & Assessments', label: 'Exams & Assessments' },
-                                    { value: 'Industrial Visits', label: 'Industrial Visits' },
-                                    { value: 'Term Breaks & Holidays', label: 'Term Breaks & Holidays' }
-                                  ]
-                                },
-                                { name: 'description', label: 'Brief Description', type: 'textarea', maxLength: 300, required: true }
-                              ],
-                              ev,
-                              (data) => {
-                                const updatedEvents = [...(academicCalendarBanner.events || [])];
-                                updatedEvents[idx] = { ...updatedEvents[idx], ...data };
-                                setAcademicCalendarBanner({ ...academicCalendarBanner, events: updatedEvents });
-                              }
-                            );
-                          }}
-                          className="p-2 rounded-lg text-blue-500 hover:bg-blue-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
-                          title="Edit Item"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => removeCalendarEvent(idx)}
-                          className="p-2 rounded-lg text-red-500 hover:bg-red-500/10 hover:scale-90 hover:opacity-80 transition-all duration-200"
-                          title="Remove Event"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-
-                      <div className="flex-grow flex flex-col gap-1 pr-20">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">{ev.semester || 'Trimester 1'}</span>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 bg-gray-200 px-2 py-0.5 rounded">{ev.category || 'Event'}</span>
-                        </div>
-                        <h4 className="text-sm font-bold text-gray-800">{ev.title || 'Untitled Event'}</h4>
-                        <p className="text-xs font-semibold text-gray-500 flex items-center gap-1"><Calendar className="w-3 h-3" /> {ev.date || 'No date set'}</p>
-                        <p className="text-xs text-gray-600 mt-2">{ev.description || 'No description provided.'}</p>
-                      </div>
-                    </div>
-                  ))}
-
-                  {(academicCalendarBanner.events || []).length === 0 && (
-                    <div className="text-center py-8 text-gray-400 text-xs border-2 border-dashed border-gray-200 rounded-xl">
-                      No schedule events added. Click "Add Schedule Event" to create one, or default timeline will be shown.
-                    </div>
-                  )}
+              <div className="pt-4 border-t border-gray-100">
+                <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-2">Calendar PDF Document</label>
+                <div className="space-y-3 max-w-md">
+                  <SingleDocumentUploader
+                    fileUrl={academicCalendarBanner.pdfUrl || ''}
+                    onUploadComplete={(url) => setAcademicCalendarBanner({ ...academicCalendarBanner, pdfUrl: url })}
+                    onUploadStateChange={() => {}}
+                    deferredUpload={false}
+                    uploadEndpoint="/upload/downloads"
+                    defaultFile=""
+                    label="Drag & drop Calendar PDF, or click to select"
+                    allowDelete={true}
+                    recommendedSize=""
+                    maxSize={104857600}
+                  />
                 </div>
               </div>
+
+
             </div>
           )}
 

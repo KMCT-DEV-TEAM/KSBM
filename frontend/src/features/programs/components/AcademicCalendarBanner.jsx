@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Swal from 'sweetalert2';
 
 const AcademicCalendarBanner = ({ program }) => {
-  const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const badgeText = program?.academicCalendarBanner?.badgeText || 'ACADEMIC SCHEDULE 2026-27';
   const titleText = program?.academicCalendarBanner?.title || 'Download the Official Academic Calendar';
   const descriptionText = program?.academicCalendarBanner?.description || 'Stay fully updated with semester schedules, examination dates, key leadership events, industrial tours, and term breaks for the upcoming academic year.';
@@ -19,7 +18,7 @@ const AcademicCalendarBanner = ({ program }) => {
   const handleViewAction = (e) => {
     e.preventDefault();
     if (pdfUrl) {
-      setIsPdfModalOpen(true);
+      window.open(pdfUrl, '_blank', 'noopener,noreferrer');
     } else {
       Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'No Calendar PDF Available', showConfirmButton: false, timer: 3000 });
     }
@@ -101,48 +100,6 @@ const AcademicCalendarBanner = ({ program }) => {
         </motion.div>
       </div>
 
-      <AnimatePresence>
-        {isPdfModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white w-full max-w-4xl h-[75vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden"
-            >
-              <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                <h3 className="text-lg font-bold text-[#1b2559]">Academic Calendar</h3>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={handleDownloadAction}
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-[#1b2559] rounded-lg transition-colors text-sm font-semibold cursor-pointer"
-                  >
-                    <Download className="w-4 h-4" /> Download
-                  </button>
-                  <button
-                    onClick={() => setIsPdfModalOpen(false)}
-                    className="p-2 bg-gray-100 hover:bg-gray-200 hover:text-red-600 rounded-lg transition-colors cursor-pointer"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-              <div className="flex-1 w-full bg-gray-100">
-                <iframe 
-                  src={`${pdfUrl}#toolbar=0`} 
-                  className="w-full h-full border-none"
-                  title="Academic Calendar PDF"
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 };
