@@ -2213,7 +2213,7 @@ export const DEFAULT_FACULTIES = {
   "showIntro": true,
   "showKsbmFaculty": true,
   "adjunctFacultyHeading": "Adjunct Faculty",
-  "ksbmFacultyHeading": "KSBM Faculty Event TitleEvent TitleEvent TitleEvent TitleEve"
+  "ksbmFacultyHeading": "KSBM Faculty"
 };
 
 export const DEFAULT_EVENTS_PAGE = {
@@ -2336,6 +2336,7 @@ export const DEFAULT_BLOGS_PAGE = {
     "backgroundImage": "/assets/Images/blogs/hero-bg.jpg"
   },
   "filterTopics": [
+    "All Topics",
     "Career Advice",
     "Industry Trends",
     "Skill Development",
