@@ -5,6 +5,7 @@ import { motion, useInView, useMotionValue, useTransform, animate } from 'framer
 const graduateImg = '/assets/Images/Home/graduate.png';
 const watermarkImg = '/assets/Images/Home/watermark_logo.png';
 import api from '../../../api/axios';
+import { useGlobalLinks } from '../../../hooks/useGlobalLinks';
 
 
 const Counter = ({ value }) => {
@@ -46,6 +47,8 @@ import { DEFAULT_ABOUT } from '../../admin/cms/constants/defaultCmsData';
 
 const AboutSection = ({ previewData }) => {
   const [cmsData, setCmsData] = useState(previewData || DEFAULT_ABOUT);
+  const globalLinks = useGlobalLinks();
+  const tourLink = globalLinks['virtual_tour_360']?.link || '#';
 
   useEffect(() => {
     if (previewData) {
@@ -194,7 +197,12 @@ const AboutSection = ({ previewData }) => {
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
                 className={`mt-12 flex ${!cmsData.showImage ? 'justify-center' : 'justify-start'}`}
               >
-                <button className="group bg-gradient-to-b from-primary/90 to-primary backdrop-blur-sm text-white border border-white/20 px-5 py-3 rounded-lg cursor-pointer hover:!bg-none hover:!bg-white hover:!text-primary hover:border-primary hover:-translate-y-1 transition-all flex items-center gap-2 overflow-hidden">
+                <a
+                  href={tourLink}
+                  target={tourLink.startsWith('http') ? '_blank' : undefined}
+                  rel={tourLink.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  className="group bg-gradient-to-b from-primary/90 to-primary backdrop-blur-sm text-white border border-white/20 px-5 py-3 rounded-lg cursor-pointer hover:!bg-none hover:!bg-white hover:!text-primary hover:border-primary hover:-translate-y-1 transition-all flex items-center gap-2 overflow-hidden inline-flex"
+                >
                   <Rotate3d className="w-5 h-5 shrink-0" />
                   <div className="flex items-center text-sm font-bold tracking-widest uppercase whitespace-nowrap">
                     <span>360°</span>
@@ -202,7 +210,7 @@ const AboutSection = ({ previewData }) => {
                       Visitor Tour
                     </span>
                   </div>
-                </button>
+                </a>
               </motion.div>
             </motion.div>
           </div>
