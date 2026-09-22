@@ -25,6 +25,11 @@ const Toast = Swal.mixin({
 
 const defaultRecruiterSettings = DEFAULT_RECRUITERS.recruiters || [];
 
+const defaultLogoMap = defaultRecruiterSettings.reduce((acc, curr) => {
+  if (curr.name && curr.logo) acc[curr.name] = curr.logo;
+  return acc;
+}, {});
+
 const ManageRecruiters = ({ hideVisibilityToggle = false, hideHeader = false }) => {
   const [recruiters, setRecruiters] = useState([]);
   const [showSection, setShowSection] = useState(true);
