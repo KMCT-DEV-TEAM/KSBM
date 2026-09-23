@@ -143,14 +143,14 @@ const Footer = ({ previewData }) => {
           {/* Column 1: About & Social */}
           <motion.div variants={itemVariants} className="flex flex-col pr-4">
             <div className="mb-4">
-              <img 
-                src="/assets/Images/Logo/kmct-footer-logo.png" 
-                alt="KMCT Logo" 
-                className="h-16 w-auto object-contain brightness-0 invert" 
+              <img
+                src="/assets/Images/Logo/kmct-footer-logo.png"
+                alt="KMCT Logo"
+                className="h-16 w-auto object-contain brightness-0 invert"
               />
             </div>
             <h3 className="text-xl font-semibold mb-6 tracking-wide text-white">
-              KMCT Business School of Management
+              KMCT School of Business Management
             </h3>
             {description && (
               <p className="text-secondary text-sm leading-relaxed mb-8 max-w-[90%] whitespace-pre-wrap">
