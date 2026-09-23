@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import api from '../api/axios';
 
 const WhatsAppIcon = ({ className }) => (
   <svg
@@ -18,10 +19,28 @@ const WhatsAppIcon = ({ className }) => (
 const SideContact = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [floatingContact, setFloatingContact] = useState({
+    email: 'info@kmct.org',
+    whatsapp: '1234567890',
+    phone: '+911234567890'
+  });
   const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
+
+    const fetchContactData = async () => {
+      try {
+        const { data } = await api.get('/cms/contact-page', { hideLoader: true });
+        if (data && data.floatingContact) {
+          setFloatingContact(data.floatingContact);
+        }
+      } catch (error) {
+        console.error('Failed to fetch floating contact settings', error);
+      }
+    };
+    fetchContactData();
+
     const handleScroll = () => {
       // Trigger color change when scrolled past 200px
       if (window.scrollY > 200) {
@@ -67,14 +86,14 @@ const SideContact = () => {
       style={{ borderTopLeftRadius: '16px', borderBottomLeftRadius: '16px', borderTopRightRadius: '0', borderBottomRightRadius: '0' }}
     >
       <a
-        href="mailto:info@kmct.org"
+        href={`mailto:${floatingContact.email}`}
         className={`p-3.5 block transition-colors ${getHoverClasses()}`}
         title="Email Us"
       >
         <Mail className="w-5 h-5" />
       </a>
       <a
-        href="https://wa.me/1234567890"
+        href={`https://wa.me/${floatingContact.whatsapp}`}
         target="_blank"
         rel="noreferrer"
         className={`p-3.5 block transition-colors ${getHoverClasses()}`}
@@ -83,7 +102,7 @@ const SideContact = () => {
         <WhatsAppIcon className="w-5 h-5" />
       </a>
       <a
-        href="tel:+911234567890"
+        href={`tel:${floatingContact.phone}`}
         className={`p-3.5 block transition-colors ${getHoverClasses()}`}
         title="Call Us"
       >

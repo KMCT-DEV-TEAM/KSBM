@@ -68,7 +68,7 @@ const Footer = ({ previewData }) => {
       : 'pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10 text-center md:text-left';
 
   const staticQuickLinks = [
-    { label: 'Facility', url: '/facilities' },
+    { label: 'Facilities', url: '/facilities' },
     { label: 'Admission', url: '/admissions' },
     { label: 'Gallery', url: '/gallery' },
     { label: 'FAQ', url: '/faq' },
