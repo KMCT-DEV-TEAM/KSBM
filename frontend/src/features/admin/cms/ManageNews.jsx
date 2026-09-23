@@ -345,11 +345,11 @@ const ManageNews = () => {
                     value={currentArticle.tag || ''}
                     onChange={(e) => setCurrentArticle({...currentArticle, tag: e.target.value})}
                     placeholder="e.g. FEATURED"
-                    maxLength={20}
+                    maxLength={50}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
                   <div className="text-right text-xs text-gray-400 mt-1">
-                    {currentArticle.tag?.length || 0} / 20
+                    {currentArticle.tag?.length || 0} / 50
                   </div>
                 </div>
                 
