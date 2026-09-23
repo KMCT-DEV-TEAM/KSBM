@@ -2948,6 +2948,11 @@ export const DEFAULT_CONTACT_PAGE = {
     "addressText": "KMCT School of Business Management, Mampara, Pazhur, P.O., Kuttippuram, Kerala - 679571",
     "bottomBadgeText": "Admissions Open 2026–27",
     "bottomBadgeDesk": "KSBM Desk"
+  },
+  "floatingContact": {
+    "email": "info@kmct.org",
+    "whatsapp": "1234567890",
+    "phone": "+911234567890"
   }
 };
 

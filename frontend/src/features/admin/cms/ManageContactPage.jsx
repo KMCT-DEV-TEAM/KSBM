@@ -36,6 +36,7 @@ const ManageContactPage = () => {
 
   const [hero, setHero] = useState(DEFAULT_CONTACT_PAGE.hero);
   const [contactBox, setContactBox] = useState(DEFAULT_CONTACT_PAGE.contactBox);
+  const [floatingContact, setFloatingContact] = useState(DEFAULT_CONTACT_PAGE.floatingContact || { email: 'info@kmct.org', whatsapp: '1234567890', phone: '+911234567890' });
 
   const [imagesToDelete, setImagesToDelete] = useState([]);
 
@@ -58,6 +59,7 @@ const ManageContactPage = () => {
       const data = response.data;
       if (data.hero) setHero(data.hero);
       if (data.contactBox) setContactBox(data.contactBox);
+      if (data.floatingContact) setFloatingContact(data.floatingContact);
     } catch (error) {
       console.error('Failed to fetch contact page settings', error);
       Toast.fire({ icon: 'error', title: 'Failed to load contact page settings' });
@@ -90,7 +92,7 @@ const ManageContactPage = () => {
         finalHero.backgroundImage = finalHero.backgroundImage.url;
       }
 
-      const payload = { hero: finalHero, contactBox };
+      const payload = { hero: finalHero, contactBox, floatingContact };
       await api.put('/cms/contact-page', payload);
       
       setHero(finalHero);
@@ -126,6 +128,7 @@ const ManageContactPage = () => {
       action: async () => {
         setHero(DEFAULT_CONTACT_PAGE.hero);
         setContactBox(DEFAULT_CONTACT_PAGE.contactBox);
+        setFloatingContact(DEFAULT_CONTACT_PAGE.floatingContact || { email: 'info@kmct.org', whatsapp: '1234567890', phone: '+911234567890' });
         Toast.fire({ icon: 'info', title: 'Defaults restored. Click Save Changes to confirm.' });
       }
     });
@@ -163,6 +166,7 @@ const ManageContactPage = () => {
   const tabs = [
     { id: 'hero', name: 'Hero Section', icon: <ImageIcon className="w-4 h-4" /> },
     { id: 'contactBox', name: 'Contact Info Box', icon: <Phone className="w-4 h-4" /> },
+    { id: 'floatingContact', name: 'Floating Buttons', icon: <Smartphone className="w-4 h-4" /> },
   ];
 
   return (
@@ -479,6 +483,46 @@ const ManageContactPage = () => {
                     className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium bg-white"
                   />
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: FLOATING BUTTONS */}
+        {activeTab === 'floatingContact' && (
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6">
+            <h2 className="text-lg font-bold text-[#111836] border-b pb-4">Global Floating Buttons</h2>
+            <p className="text-sm text-gray-500 mb-6">These buttons appear on the right side of the screen across the entire website.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-2"><Mail className="w-4 h-4 inline-block mr-1"/> Email Address</label>
+                <input
+                  type="email"
+                  value={floatingContact.email || ''}
+                  onChange={(e) => setFloatingContact({ ...floatingContact, email: e.target.value })}
+                  placeholder="e.g. info@kmct.org"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium bg-white shadow-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-2"><Smartphone className="w-4 h-4 inline-block mr-1"/> WhatsApp Number</label>
+                <input
+                  type="text"
+                  value={floatingContact.whatsapp || ''}
+                  onChange={(e) => setFloatingContact({ ...floatingContact, whatsapp: e.target.value })}
+                  placeholder="e.g. 1234567890 (no + sign or spaces)"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium bg-white shadow-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-800 mb-2"><Phone className="w-4 h-4 inline-block mr-1"/> Phone Number (Calling)</label>
+                <input
+                  type="text"
+                  value={floatingContact.phone || ''}
+                  onChange={(e) => setFloatingContact({ ...floatingContact, phone: e.target.value })}
+                  placeholder="e.g. +911234567890"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium bg-white shadow-sm"
+                />
               </div>
             </div>
           </div>
