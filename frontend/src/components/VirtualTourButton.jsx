@@ -29,7 +29,7 @@ const VirtualTourButton = () => {
   }, []);
 
   const globalLinks = useGlobalLinks();
-  const tourLink = globalLinks['virtual_tour_360']?.link || '#';
+  const tourLink = globalLinks['virtual_tour_360']?.link || globalLinks['virtual tour 360']?.link || '#';
 
   const useSolidTheme = isScrolled && !isOverFooter;
 

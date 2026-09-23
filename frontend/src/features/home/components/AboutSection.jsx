@@ -48,7 +48,7 @@ import { DEFAULT_ABOUT } from '../../admin/cms/constants/defaultCmsData';
 const AboutSection = ({ previewData }) => {
   const [cmsData, setCmsData] = useState(previewData || DEFAULT_ABOUT);
   const globalLinks = useGlobalLinks();
-  const tourLink = globalLinks['virtual_tour_360']?.link || '#';
+  const tourLink = globalLinks['virtual_tour_360']?.link || globalLinks['virtual tour 360']?.link || '#';
 
   useEffect(() => {
     if (previewData) {
