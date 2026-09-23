@@ -733,7 +733,7 @@ const ManageEventsPage = () => {
                         <input type="text" maxLength={200} value={Array.isArray(item.programs) ? item.programs.join(', ') : (item.programs || '')} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'programs', e.target.value.split(',').map(s => s.trim()))} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="e.g. Solo Dance, Folk Dance, Group Classical" />
                       <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 200</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.programs || '')).length}/200</span></div>
                       </div>
-                      <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
+                      <LogoUploader uploadEndpoint="/upload/events" deferredMode={true} maxSize={1048576}
                         currentImage={item.img}
                         defaultImage={defaults.essenceOfCulture.items[0]?.img} onChange={(url, file) => handleImageUploadChange(`essenceOfCulture.items.${idx}.img`, url, file, item.img, defaults.essenceOfCulture.items[0]?.img)}
                       />
