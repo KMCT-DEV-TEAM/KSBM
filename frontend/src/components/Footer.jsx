@@ -58,14 +58,14 @@ const Footer = ({ previewData }) => {
   const gridClassName = previewDevice === 'mobile'
     ? 'grid grid-cols-1 gap-12 mb-20'
     : previewDevice === 'tablet'
-    ? 'grid grid-cols-2 gap-8 mb-20'
-    : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20';
+      ? 'grid grid-cols-2 gap-8 mb-20'
+      : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20';
 
   const bottomClassName = previewDevice === 'mobile'
     ? 'pt-6 flex flex-col items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10 text-center'
     : previewDevice === 'tablet'
-    ? 'pt-6 flex flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10 text-left'
-    : 'pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10 text-center md:text-left';
+      ? 'pt-6 flex flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10 text-left'
+      : 'pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-secondary border-t border-white/10 text-center md:text-left';
 
   const staticQuickLinks = [
     { label: 'Facility', url: '/facilities' },
@@ -142,7 +142,16 @@ const Footer = ({ previewData }) => {
 
           {/* Column 1: About & Social */}
           <motion.div variants={itemVariants} className="flex flex-col pr-4">
-            <h3 className="text-2xl font-semibold mb-6 tracking-wide text-white">KSBM</h3>
+            <div className="mb-4">
+              <img 
+                src="/assets/Images/Logo/kmct-footer-logo.png" 
+                alt="KMCT Logo" 
+                className="h-16 w-auto object-contain brightness-0 invert" 
+              />
+            </div>
+            <h3 className="text-xl font-semibold mb-6 tracking-wide text-white">
+              KMCT Business School of Management
+            </h3>
             {description && (
               <p className="text-secondary text-sm leading-relaxed mb-8 max-w-[90%] whitespace-pre-wrap">
                 {description}
