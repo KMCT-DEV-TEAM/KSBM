@@ -1,8 +1,11 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 const EventsAbout = ({ about }) => {
+  const router = useRouter();
+  
   const defaultData = {
     subheading: 'About',
     heading: 'THE SPIRIT OF CULTURE',
@@ -85,20 +88,20 @@ const EventsAbout = ({ about }) => {
           {/* Buttons */}
           <div className="flex flex-wrap items-center gap-3 sm:gap-5 mt-4 md:mt-6 relative z-10">
             {data.brochureUrl ? (
-              <a href={data.brochureUrl} download target="_blank" rel="noopener noreferrer" className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-md bg-gradient-to-r from-[#e74694] to-[#f57451] text-white font-semibold text-xs sm:text-sm hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(231,70,148,0.4)]">
+              <button onClick={() => router.push(`/pdf-viewer?url=${encodeURIComponent(data.brochureUrl)}&title=${encodeURIComponent(data.brochureBtnText || 'Event Brochure')}`)} className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-md bg-gradient-to-r from-[#e74694] to-[#f57451] text-white font-semibold text-xs sm:text-sm hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(231,70,148,0.4)] cursor-pointer">
                 {data.brochureBtnText || 'Event Brochure'}
-              </a>
+              </button>
             ) : (
-              <button className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-md bg-gradient-to-r from-[#e74694] to-[#f57451] text-white font-semibold text-xs sm:text-sm hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(231,70,148,0.4)]">
+              <button className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-md bg-gradient-to-r from-[#e74694] to-[#f57451] text-white font-semibold text-xs sm:text-sm hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(231,70,148,0.4)] opacity-70 cursor-not-allowed">
                 {data.brochureBtnText || 'Event Brochure'}
               </button>
             )}
             {data.calendarUrl ? (
-              <a href={data.calendarUrl} download target="_blank" rel="noopener noreferrer" className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-md border-[1.5px] border-[#e74694]/70 hover:border-[#e74694] text-white font-semibold text-xs sm:text-sm hover:bg-[#e74694]/10 transition-colors duration-300">
+              <button onClick={() => router.push(`/pdf-viewer?url=${encodeURIComponent(data.calendarUrl)}&title=${encodeURIComponent(data.calendarBtnText || 'Download Calendar')}`)} className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-md border-[1.5px] border-[#e74694]/70 hover:border-[#e74694] text-white font-semibold text-xs sm:text-sm hover:bg-[#e74694]/10 transition-colors duration-300 cursor-pointer">
                 {data.calendarBtnText || 'Download Calendar'}
-              </a>
+              </button>
             ) : (
-              <button className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-md border-[1.5px] border-[#e74694]/70 hover:border-[#e74694] text-white font-semibold text-xs sm:text-sm hover:bg-[#e74694]/10 transition-colors duration-300">
+              <button className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-md border-[1.5px] border-[#e74694]/70 hover:border-[#e74694] text-white font-semibold text-xs sm:text-sm hover:bg-[#e74694]/10 transition-colors duration-300 opacity-70 cursor-not-allowed">
                 {data.calendarBtnText || 'Download Calendar'}
               </button>
             )}
