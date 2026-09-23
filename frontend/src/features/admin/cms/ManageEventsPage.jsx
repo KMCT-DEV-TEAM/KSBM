@@ -568,8 +568,15 @@ const ManageEventsPage = () => {
                         <input type="text" maxLength={30} value={formData.about?.brochureBtnText || 'Event Brochure'} onChange={e => setFormData({ ...formData, about: { ...formData.about, brochureBtnText: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-semibold text-gray-500">Brochure Button Link (URL)</label>
-                        <input type="text" value={formData.about?.brochureUrl || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, brochureUrl: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. https://example.com/brochure.pdf" />
+                        <SingleDocumentUploader
+                          label="Upload Brochure PDF"
+                          fileUrl={formData.about?.brochureUrl}
+                          onUploadComplete={(url) => setFormData({ ...formData, about: { ...formData.about, brochureUrl: url } })}
+                          uploadEndpoint="/upload/events"
+                          acceptTypes={{ 'application/pdf': ['.pdf'] }}
+                          maxSize={52428800}
+                          recommendedSize="PDF document"
+                        />
                       </div>
                     </div>
                     <div className="space-y-4">
@@ -578,8 +585,15 @@ const ManageEventsPage = () => {
                         <input type="text" maxLength={30} value={formData.about?.calendarBtnText || 'Download Calendar'} onChange={e => setFormData({ ...formData, about: { ...formData.about, calendarBtnText: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-semibold text-gray-500">Calendar Button Link (URL)</label>
-                        <input type="text" value={formData.about?.calendarUrl || ''} onChange={e => setFormData({ ...formData, about: { ...formData.about, calendarUrl: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" placeholder="e.g. https://example.com/calendar.pdf" />
+                        <SingleDocumentUploader
+                          label="Upload Academic Calendar PDF"
+                          fileUrl={formData.about?.calendarUrl}
+                          onUploadComplete={(url) => setFormData({ ...formData, about: { ...formData.about, calendarUrl: url } })}
+                          uploadEndpoint="/upload/events"
+                          acceptTypes={{ 'application/pdf': ['.pdf'] }}
+                          maxSize={52428800}
+                          recommendedSize="PDF document"
+                        />
                       </div>
                     </div>
                   </div>

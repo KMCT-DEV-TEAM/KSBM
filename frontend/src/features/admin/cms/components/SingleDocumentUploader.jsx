@@ -15,8 +15,8 @@ const SingleDocumentUploader = ({
   allowDelete = true,
   deferredUpload = false,
   defaultFile = "",
-  recommendedSize = "PDF up to 2MB",
-  maxSize = 2097152 // Default 2MB
+  recommendedSize = "PDF Document",
+  maxSize = 52428800 // Default 50MB
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   
