@@ -439,6 +439,7 @@ export const DEFAULT_MBA_PAGE = {
   "internshipTitle": "Learning beyond boarders",
   "internshipDesc": "As part of the MBA programme, students get the opportunity to participate in an international educational trip, offering them firsthand exposure to global business practices, international markets and diverse cultures. The experience helps students connect classroom learning with the wider world. ",
   "internshipBgImage": "/assets/Images/mba/gallery_67.png",
+  "curriculumPdf": "",
   "dimensions": [
     {
       "number": "01",
@@ -941,6 +942,7 @@ export const DEFAULT_BBA_PAGE = {
       }
     ]
   },
+  "curriculumPdf": "",
   "dimensions": [
     {
       "number": "01",

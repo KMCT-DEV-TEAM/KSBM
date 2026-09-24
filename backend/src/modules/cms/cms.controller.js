@@ -1005,7 +1005,7 @@ export const updateMbaPageSettings = async (req, res) => {
       'heroPrimaryBtnText', 'heroPrimaryBtnLink', 'heroSecondaryBtnText', 'heroSecondaryBtnLink', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
       'overviewTitle', 'overviewText', 'overviewSubtext', 'overviewImage',
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText', 'overviewSecondaryBtnLink',
-      'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
+      'highlights', 'curriculumPdf', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
       'eligibilityTitle', 'eligibilitySubtitle', 'eligibilityBtnText', 'eligibilityBtnLink', 'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
     ];
@@ -1109,7 +1109,7 @@ export const updateBbaPageSettings = async (req, res) => {
       'heroPrimaryBtnText', 'heroPrimaryBtnLink', 'heroSecondaryBtnText', 'heroSecondaryBtnLink', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
       'overviewTitle', 'overviewText', 'overviewSubtext', 'overviewImage',
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText', 'overviewSecondaryBtnLink',
-      'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
+      'highlights', 'curriculumPdf', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
       'eligibilityTitle', 'eligibilitySubtitle', 'eligibilityBtnText', 'eligibilityBtnLink', 'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
     ];
