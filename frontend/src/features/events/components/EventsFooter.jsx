@@ -127,7 +127,7 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
   const finalFooterGraphic = footerGraphic || '/assets/Images/Group 339.png';
 
   return (
-    <footer id="events-footer" className="relative bg-transparent text-white overflow-hidden pb-8 mt-10">
+    <footer id="events-footer" className="relative bg-transparent text-gray-900 overflow-hidden pb-8 mt-10">
 
       {/* Custom Events Graphic Header */}
       <div className="w-full relative z-20 pointer-events-none -mt-4 sm:-mt-8 md:-mt-12 lg:-mt-20">
@@ -151,19 +151,19 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
               <img
                 src="/assets/Images/Logo/kmct-footer-logo.png"
                 alt="KMCT Logo"
-                className="h-16 w-auto object-contain brightness-0 invert"
+                className="h-16 w-auto object-contain brightness-0"
               />
             </div>
-            <h3 className="text-xl font-semibold mb-6 tracking-wide text-white">
+            <h3 className="text-xl font-semibold mb-6 tracking-wide text-gray-900">
               KMCT School of Business Management
             </h3>
             {description && (
-              <p className="text-white/70 text-sm leading-relaxed mb-8 max-w-[90%] whitespace-pre-wrap">
+              <p className="text-gray-600 text-sm leading-relaxed mb-8 max-w-[90%] whitespace-pre-wrap">
                 {description}
               </p>
             )}
 
-            <h4 className="text-xs font-medium tracking-[0.15em] uppercase mb-4 text-white">
+            <h4 className="text-xs font-medium tracking-[0.15em] uppercase mb-4 text-gray-900">
               CONNECT US
             </h4>
             <div className="flex items-center gap-3">
@@ -198,18 +198,18 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
 
           {/* Column 2: Quick Links */}
           <motion.div variants={itemVariants} className="flex flex-col">
-            <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
+            <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-gray-900">
               QUICK LINKS
             </h4>
-            <ul className="flex flex-col gap-4 text-sm text-white/70">
+            <ul className="flex flex-col gap-4 text-sm text-gray-900/70">
               {staticQuickLinks.map((link, idx) => (
                 <li key={idx}>
                   {link.url && link.url.startsWith('/') ? (
-                    <Link href={link.url} className="hover:text-white transition-colors">
+                    <Link href={link.url} className="hover:text-gray-900 transition-colors">
                       {link.label}
                     </Link>
                   ) : (
-                    <a href={link.url || '#'} className="hover:text-white transition-colors">
+                    <a href={link.url || '#'} className="hover:text-gray-900 transition-colors">
                       {link.label}
                     </a>
                   )}
@@ -220,18 +220,18 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
 
           {/* Column 3: Useful Links */}
           <motion.div variants={itemVariants} className="flex flex-col">
-            <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
+            <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-gray-900">
               USEFUL LINKS
             </h4>
-            <ul className="flex flex-col gap-4 text-sm text-white/70">
+            <ul className="flex flex-col gap-4 text-sm text-gray-900/70">
               {staticUsefulLinks.map((link, idx) => (
                 <li key={idx}>
                   {link.url && link.url.startsWith('/') ? (
-                    <Link href={link.url} className="hover:text-white transition-colors">
+                    <Link href={link.url} className="hover:text-gray-900 transition-colors">
                       {link.label}
                     </Link>
                   ) : (
-                    <a href={link.url || '#'} className="hover:text-white transition-colors">
+                    <a href={link.url || '#'} className="hover:text-gray-900 transition-colors">
                       {link.label}
                     </a>
                   )}
@@ -242,11 +242,11 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
 
           {/* Column 4: Contact Info */}
           <motion.div variants={itemVariants} className="flex flex-col">
-            <Link href="/contact" className="group inline-flex items-center gap-2 text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white transition-colors cursor-pointer">
+            <Link href="/contact" className="group inline-flex items-center gap-2 text-sm font-medium tracking-[0.15em] uppercase mb-8 text-gray-900 transition-colors cursor-pointer">
               <span>CONTACT INFORMATION</span>
               <ArrowRight className="w-4 h-4 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
             </Link>
-            <ul className="flex flex-col gap-5 text-sm text-white/70">
+            <ul className="flex flex-col gap-5 text-sm text-gray-900/70">
               {contactInfo?.address && (
                 <li className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 mt-0.5 shrink-0 opacity-80" />
@@ -280,7 +280,7 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-white/50 border-t border-white/10 text-center md:text-left"
+          className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[0.65rem] text-gray-500 border-t border-gray-200 text-center md:text-left"
         >
           <p>
             {copyrightText}
@@ -292,7 +292,7 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
             <span>|</span>
             <Link href="/faq" className=" transition-colors">FAQ</Link>
             <span>|</span>
-            <Link href="/sitemap" className=" transition-colors hover:text-white">Sitemap</Link>
+            <Link href="/sitemap" className=" transition-colors hover:text-pink-600">Sitemap</Link>
           </div>
         </motion.div>
 

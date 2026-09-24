@@ -33,7 +33,7 @@ const S = ({ className = '', style = {} }) => (
 
 /* ─── HERO ─── */
 export const HeroSkeleton = () => (
-  <section className="relative w-full h-[100vh] flex items-center justify-center overflow-hidden bg-[#050505]">
+  <section className="relative w-full h-[100vh] flex items-center justify-center overflow-hidden bg-white">
     <div className="absolute left-[-10%] bottom-0 translate-y-[35%] w-64 sm:w-80 md:w-96 lg:w-[32rem] aspect-square z-20 pointer-events-none opacity-10">
       <S className="w-full h-full" style={{ borderRadius: '50%' }} />
     </div>
@@ -76,7 +76,7 @@ export const UpcomingSkeleton = () => (
       </div>
       <div className="space-y-6">
         {[0, 1, 2].map(i => (
-          <div key={i} className="relative flex flex-col md:flex-row bg-[#0d0d0d] rounded-[2rem] overflow-hidden border border-white/5 p-4 md:p-5 gap-6 md:gap-8">
+          <div key={i} className="relative flex flex-col md:flex-row bg-white rounded-[2rem] overflow-hidden border border-gray-200 p-4 md:p-5 gap-6 md:gap-8 shadow-sm">
             <S className="shrink-0" style={{ width: '35%', height: '192px', borderRadius: '16px' }} />
             <div className="flex-1 flex flex-col justify-center gap-3 pr-28">
               <S style={{ height: '24px', width: '192px' }} />
@@ -96,7 +96,7 @@ export const UpcomingSkeleton = () => (
 
 /* ─── CAROUSEL (HIGHLIGHTED PROGRAMS) ─── */
 export const CarouselSkeleton = () => (
-  <section className="w-full py-24 overflow-hidden relative bg-black/90">
+  <section className="w-full py-24 overflow-hidden relative bg-white/90">
     <div className="flex flex-col items-center mb-16 gap-3">
       <S style={{ height: '16px', width: '96px' }} />
       <S style={{ height: '36px', width: '288px' }} />
