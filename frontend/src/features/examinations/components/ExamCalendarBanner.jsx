@@ -2,8 +2,12 @@
 import React from 'react';
 import { Download } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { downloadFile } from '../../../utils/downloadFile';
+import Swal from 'sweetalert2';
 
 const ExamCalendarBanner = ({ data }) => {
+  const router = useRouter();
   const title = data?.calendarTitle || 'Download the Official Exam Calendar';
   const text = data?.calendarText || 'Stay informed with the official Exam Calendar. Access semester schedules, examination dates, academic milestones, holidays, project timelines, and important university events—all in one place.';
   const viewBtnText = data?.calendarViewBtnText || 'View Calendar';
@@ -37,26 +41,38 @@ const ExamCalendarBanner = ({ data }) => {
 
             <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto">
               {data?.showCalendarViewBtn !== false && (
-                <a
-                  href={viewBtnUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-[12px] bg-[#1b2559] text-white font-semibold text-xs tracking-wide shadow-md hover:bg-[#151c44] hover:-translate-y-0.5 transition-all duration-300 text-center"
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (viewBtnUrl && viewBtnUrl !== '#') {
+                      router.push(`/pdf-viewer?url=${encodeURIComponent(viewBtnUrl)}&title=Exam Calendar`);
+                    } else {
+                      Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'No Calendar PDF Available', showConfirmButton: false, timer: 3000 });
+                    }
+                  }}
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-[12px] bg-[#1b2559] text-white font-semibold text-xs tracking-wide shadow-md hover:bg-[#151c44] hover:-translate-y-0.5 transition-all duration-300 text-center cursor-pointer"
                 >
                   {viewBtnText}
-                </a>
+                </button>
               )}
 
               {data?.showCalendarDownloadBtn !== false && (
-                <a
-                  href={downloadBtnUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-[12px] bg-white border border-gray-300 text-[#1b2559] font-semibold text-xs tracking-wide hover:bg-gray-50/80 hover:border-[#1b2559] transition-all duration-300 flex items-center justify-center gap-2 shadow-2xs"
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    if (downloadBtnUrl && downloadBtnUrl !== '#') {
+                      downloadFile(e, downloadBtnUrl, 'KSBM_Exam_Calendar.pdf');
+                    } else {
+                      e.preventDefault();
+                      Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'No Calendar PDF Available', showConfirmButton: false, timer: 3000 });
+                    }
+                  }}
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-[12px] bg-white border border-gray-300 text-[#1b2559] font-semibold text-xs tracking-wide hover:bg-gray-50/80 hover:border-[#1b2559] transition-all duration-300 flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>{downloadBtnText}</span>
-                </a>
+                </button>
               )}
             </div>
           </div>
