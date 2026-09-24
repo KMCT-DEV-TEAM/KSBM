@@ -51,6 +51,11 @@ const mbaPageSchema = new mongoose.Schema(
       ]
     },
     curriculumPdf: { type: String, default: '' },
+    dimensionsBadgeText: { type: String, default: 'PROGRAM STRUCTURE' },
+    dimensionsTitle: { type: String, default: '4-Semester Curriculum Roadmap' },
+    dimensionsSubtitle: { type: String, default: 'A comprehensive journey from fundamentals to executive mastery.' },
+    dimensionsBtnText: { type: String, default: 'View Curriculum' },
+    showDimensionsBtn: { type: Boolean, default: true },
     dimensions: {
       type: [
         {

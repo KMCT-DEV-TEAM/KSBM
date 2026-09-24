@@ -51,6 +51,11 @@ const bbaPageSchema = new mongoose.Schema(
       ]
     },
     curriculumPdf: { type: String, default: '' },
+    dimensionsBadgeText: { type: String, default: 'PROGRAM STRUCTURE' },
+    dimensionsTitle: { type: String, default: '6-Semester Curriculum Roadmap' },
+    dimensionsSubtitle: { type: String, default: 'A comprehensive journey from foundational business principles to industry readiness.' },
+    dimensionsBtnText: { type: String, default: 'View Curriculum' },
+    showDimensionsBtn: { type: Boolean, default: true },
     dimensions: {
       type: [
         {

@@ -440,6 +440,11 @@ export const DEFAULT_MBA_PAGE = {
   "internshipDesc": "As part of the MBA programme, students get the opportunity to participate in an international educational trip, offering them firsthand exposure to global business practices, international markets and diverse cultures. The experience helps students connect classroom learning with the wider world. ",
   "internshipBgImage": "/assets/Images/mba/gallery_67.png",
   "curriculumPdf": "",
+  "dimensionsBadgeText": "PROGRAM STRUCTURE",
+  "dimensionsTitle": "4-Semester Curriculum Roadmap",
+  "dimensionsSubtitle": "A comprehensive journey from fundamentals to executive mastery.",
+  "dimensionsBtnText": "View Curriculum",
+  "showDimensionsBtn": true,
   "dimensions": [
     {
       "number": "01",
@@ -943,6 +948,11 @@ export const DEFAULT_BBA_PAGE = {
     ]
   },
   "curriculumPdf": "",
+  "dimensionsBadgeText": "PROGRAM STRUCTURE",
+  "dimensionsTitle": "6-Semester Curriculum Roadmap",
+  "dimensionsSubtitle": "A comprehensive journey from foundational business principles to industry readiness.",
+  "dimensionsBtnText": "View Curriculum",
+  "showDimensionsBtn": true,
   "dimensions": [
     {
       "number": "01",

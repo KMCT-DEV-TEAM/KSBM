@@ -4,11 +4,27 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, CheckCircle2, X, BookOpen, Download, FileText, Send, Award, Clock, ExternalLink } from 'lucide-react';
 import Swal from 'sweetalert2';
 
-const LearningDimensionsGrid = ({ dimensions = [], curriculumPdf = '' }) => {
+const LearningDimensionsGrid = ({
+  dimensions = [],
+  curriculumPdf = '',
+  badgeText,
+  title,
+  subtitle,
+  btnText,
+  showBtn,
+  program = {}
+}) => {
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const [isCurriculumModalOpen, setIsCurriculumModalOpen] = useState(false);
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [activeModalSemester, setActiveModalSemester] = useState(0);
+
+  const finalBadge = badgeText || program.dimensionsBadgeText || 'PROGRAM STRUCTURE';
+  const finalTitle = title || program.dimensionsTitle || '4-Semester Curriculum Roadmap';
+  const finalSubtitle = subtitle || program.dimensionsSubtitle || 'A comprehensive journey from fundamentals to executive mastery.';
+  const finalBtnText = btnText || program.dimensionsBtnText || 'View Curriculum';
+  const finalShowBtn = showBtn ?? program.showDimensionsBtn ?? true;
+  const finalCurriculumPdf = curriculumPdf || program.curriculumPdf || '';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -109,7 +125,7 @@ const LearningDimensionsGrid = ({ dimensions = [], curriculumPdf = '' }) => {
   };
 
   const handleViewCurriculum = () => {
-    if (curriculumPdf) {
+    if (finalCurriculumPdf) {
       setIsPdfModalOpen(true);
     } else {
       setActiveModalSemester(0);
@@ -137,25 +153,33 @@ const LearningDimensionsGrid = ({ dimensions = [], curriculumPdf = '' }) => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-10"
         >
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-white text-[13px] font-semibold tracking-[0.25em] uppercase mb-4 shadow-sm">
-            PROGRAM STRUCTURE
-          </span>
-          <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-semibold tracking-tight text-white mt-1 mb-3 font-heading">
-            4-Semester Curriculum Roadmap
-          </h2>
-          <p className="text-gray-300 text-[16px] font-normal mb-5">
-            A comprehensive journey from fundamentals to executive mastery.
-          </p>
-          <div className="flex justify-center">
-            {/* <button
-              onClick={handleViewCurriculum}
-              className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 backdrop-blur-md text-white text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer group"
-            >
-              <BookOpen className="w-4 h-4 text-white/90 group-hover:scale-110 transition-transform" />
-              <span>View Curriculum</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button> */}
-          </div>
+          {finalBadge && (
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-white text-[13px] font-semibold tracking-[0.25em] uppercase mb-4 shadow-sm">
+              {finalBadge}
+            </span>
+          )}
+          {finalTitle && (
+            <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-semibold tracking-tight text-white mt-1 mb-3 font-heading">
+              {finalTitle}
+            </h2>
+          )}
+          {finalSubtitle && (
+            <p className="text-gray-300 text-[16px] font-normal mb-5 whitespace-pre-line">
+              {finalSubtitle}
+            </p>
+          )}
+          {/* {finalShowBtn && finalBtnText && (
+            <div className="flex justify-center">
+              <button
+                onClick={handleViewCurriculum}
+                className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 backdrop-blur-md text-white text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer group"
+              >
+                <BookOpen className="w-4 h-4 text-white/90 group-hover:scale-110 transition-transform" />
+                <span>{finalBtnText}</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          )} */}
         </motion.div>
 
         {/* Cards Container */}
@@ -309,22 +333,24 @@ const LearningDimensionsGrid = ({ dimensions = [], curriculumPdf = '' }) => {
         )}
 
         {/* Bottom Curriculum Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-12 flex justify-center"
-        >
-          <button
-            onClick={handleViewCurriculum}
-            className="bg-white/10 backdrop-blur-md border border-white/25 hover:bg-white/20 hover:border-white/40 text-white transition-all duration-300 rounded-full px-8 py-3.5 flex items-center gap-3 text-base font-semibold group cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
+        {finalShowBtn && finalBtnText && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="mt-12 flex justify-center"
           >
-            <BookOpen className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform" />
-            <span>View Detailed Curriculum</span>
-            <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
-          </button>
-        </motion.div>
+            <button
+              onClick={handleViewCurriculum}
+              className="bg-white/10 backdrop-blur-md border border-white/25 hover:bg-white/20 hover:border-white/40 text-white transition-all duration-300 rounded-full px-8 py-3.5 flex items-center gap-3 text-base font-semibold group cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
+            >
+              <BookOpen className="w-5 h-5 text-white/90 group-hover:scale-110 transition-transform" />
+              <span>{finalBtnText}</span>
+              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+            </button>
+          </motion.div>
+        )}
 
       </div>
 
@@ -374,8 +400,8 @@ const LearningDimensionsGrid = ({ dimensions = [], curriculumPdf = '' }) => {
                     key={idx}
                     onClick={() => setActiveModalSemester(idx)}
                     className={`px-5 py-3 text-sm font-bold rounded-t-xl transition-all border-b-2 whitespace-nowrap cursor-pointer ${activeModalSemester === idx
-                        ? 'bg-white text-[#303580] border-[#303580] shadow-sm'
-                        : 'text-gray-500 hover:text-[#303580] border-transparent'
+                      ? 'bg-white text-[#303580] border-[#303580] shadow-sm'
+                      : 'text-gray-500 hover:text-[#303580] border-transparent'
                       }`}
                   >
                     {sem.semester}: {sem.title}
@@ -453,7 +479,7 @@ const LearningDimensionsGrid = ({ dimensions = [], curriculumPdf = '' }) => {
                       Get the detailed 45-page official curriculum brochure including case study titles, corporate project guidelines, and faculty advisors directly to your inbox.
                     </p>
 
-                    {curriculumPdf && (
+                    {finalCurriculumPdf && (
                       <div className="mb-5 p-3.5 bg-blue-50/80 rounded-xl border border-blue-200/80 flex items-center justify-between gap-3">
                         <div className="flex items-center gap-2.5 min-w-0">
                           <FileText className="w-5 h-5 text-[#303580] shrink-0" />
@@ -557,7 +583,7 @@ const LearningDimensionsGrid = ({ dimensions = [], curriculumPdf = '' }) => {
 
       {/* Dedicated PDF Curriculum Viewer Modal */}
       <AnimatePresence>
-        {isPdfModalOpen && curriculumPdf && (
+        {isPdfModalOpen && finalCurriculumPdf && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -591,7 +617,7 @@ const LearningDimensionsGrid = ({ dimensions = [], curriculumPdf = '' }) => {
 
                 <div className="flex items-center gap-2 shrink-0">
                   <a
-                    href={curriculumPdf}
+                    href={finalCurriculumPdf}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-colors cursor-pointer border border-white/15"
@@ -601,7 +627,7 @@ const LearningDimensionsGrid = ({ dimensions = [], curriculumPdf = '' }) => {
                     <span className="hidden sm:inline">Open in New Tab</span>
                   </a>
                   <a
-                    href={curriculumPdf}
+                    href={finalCurriculumPdf}
                     download="Curriculum_Syllabus.pdf"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E3A008] hover:bg-[#c98d04] text-white text-xs font-semibold transition-colors cursor-pointer shadow-sm"
                     title="Download PDF"
@@ -623,7 +649,7 @@ const LearningDimensionsGrid = ({ dimensions = [], curriculumPdf = '' }) => {
               {/* PDF Viewer Body */}
               <div className="flex-1 w-full h-full bg-slate-100 relative">
                 <iframe
-                  src={`${curriculumPdf}#view=FitH`}
+                  src={`${finalCurriculumPdf}#view=FitH`}
                   className="w-full h-full border-none"
                   title="Curriculum & Syllabus Document"
                 />
@@ -633,7 +659,7 @@ const LearningDimensionsGrid = ({ dimensions = [], curriculumPdf = '' }) => {
               <div className="px-5 py-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-500 flex flex-wrap items-center justify-between gap-2 shrink-0">
                 <span>If the PDF preview does not display, click the button to open directly.</span>
                 <a
-                  href={curriculumPdf}
+                  href={finalCurriculumPdf}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#303580] hover:underline font-semibold"
