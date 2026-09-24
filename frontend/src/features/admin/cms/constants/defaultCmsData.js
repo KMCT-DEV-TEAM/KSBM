@@ -51,6 +51,15 @@ export const DEFAULT_HERO = {
     "linkText": "Read Admission Guidelines",
     "linkUrl": "/admissions"
   },
+  "flashNews": {
+    "isVisible": true,
+    "newsItems": [
+      {
+        "text": "KMCT College of Legal Studies offers 5 Year B.A. LL.B. (Hons.) and 3-Year LL.B. programmes for aspiring legal professionals",
+        "url": "#"
+      }
+    ]
+  },
   "showSection": true
 };
 
