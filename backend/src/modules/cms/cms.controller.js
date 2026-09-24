@@ -1281,12 +1281,15 @@ export const getContactPageSettings = async (req, res) => {
 // @access  Private/Admin
 export const updateContactPageSettings = async (req, res) => {
   try {
-    const fields = ['hero', 'contactBox'];
+    const fields = ['hero', 'contactBox', 'floatingContact'];
     const settings = await ContactPage.getSettings();
     
     fields.forEach((field) => {
       if (req.body[field] !== undefined) {
         settings[field] = req.body[field];
+        if (typeof settings.markModified === 'function') {
+          settings.markModified(field);
+        }
       }
     });
 

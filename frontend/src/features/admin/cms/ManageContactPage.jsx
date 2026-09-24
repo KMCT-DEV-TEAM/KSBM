@@ -93,9 +93,16 @@ const ManageContactPage = () => {
       }
 
       const payload = { hero: finalHero, contactBox, floatingContact };
-      await api.put('/cms/contact-page', payload);
+      const { data } = await api.put('/cms/contact-page', payload);
       
       setHero(finalHero);
+      if (data && data.floatingContact) {
+        setFloatingContact(data.floatingContact);
+      }
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('cms-floating-contact-updated', { detail: (data && data.floatingContact) || floatingContact }));
+        localStorage.setItem('cms_floating_contact_updated', Date.now().toString());
+      }
       Toast.fire({ icon: 'success', title: 'Contact Page updated successfully' });
     } catch (error) {
       console.error('Failed to save contact page settings', error);
@@ -503,6 +510,7 @@ const ManageContactPage = () => {
                   placeholder="e.g. info@kmct.org"
                   className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium bg-white shadow-sm"
                 />
+                <p className="text-xs text-gray-400 mt-1">Generated link: mailto:{floatingContact.email || 'info@kmct.org'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-800 mb-2"><Smartphone className="w-4 h-4 inline-block mr-1"/> WhatsApp Number</label>
@@ -510,9 +518,12 @@ const ManageContactPage = () => {
                   type="text"
                   value={floatingContact.whatsapp || ''}
                   onChange={(e) => setFloatingContact({ ...floatingContact, whatsapp: e.target.value })}
-                  placeholder="e.g. 1234567890 (no + sign or spaces)"
+                  placeholder="e.g. 919876543210 (country code + number, or wa.me link)"
                   className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium bg-white shadow-sm"
                 />
+                <p className="text-xs text-gray-400 mt-1">
+                  Generated link: {floatingContact.whatsapp?.startsWith('http') ? floatingContact.whatsapp : `https://wa.me/${String(floatingContact.whatsapp || '').replace(/[^0-9]/g, '')}`}
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-800 mb-2"><Phone className="w-4 h-4 inline-block mr-1"/> Phone Number (Calling)</label>
@@ -520,9 +531,47 @@ const ManageContactPage = () => {
                   type="text"
                   value={floatingContact.phone || ''}
                   onChange={(e) => setFloatingContact({ ...floatingContact, phone: e.target.value })}
-                  placeholder="e.g. +911234567890"
+                  placeholder="e.g. +91 495 2211 444"
                   className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium bg-white shadow-sm"
                 />
+                <p className="text-xs text-gray-400 mt-1">Generated link: tel:{String(floatingContact.phone || '').replace(/[^\d+]/g, '')}</p>
+              </div>
+            </div>
+
+            {/* Live Link Test Box */}
+            <div className="mt-8 p-5 bg-blue-50/60 rounded-xl border border-blue-100">
+              <h3 className="text-sm font-semibold text-primary mb-2">Live Button Link Preview</h3>
+              <p className="text-xs text-gray-500 mb-3">Click below to test how the floating button links behave directly:</p>
+              <div className="flex flex-wrap items-center gap-3">
+                <a
+                  href={floatingContact.email ? (floatingContact.email.startsWith('mailto:') ? floatingContact.email : `mailto:${floatingContact.email.trim()}`) : '#'}
+                  className="inline-flex items-center gap-2 px-3.5 py-2 bg-white text-gray-700 text-xs font-semibold rounded-lg border border-gray-200 shadow-sm hover:border-primary hover:text-primary transition-colors"
+                >
+                  <Mail className="w-3.5 h-3.5 text-blue-500" />
+                  Email: {floatingContact.email || 'None'}
+                </a>
+                <a
+                  href={
+                    floatingContact.whatsapp
+                      ? (floatingContact.whatsapp.startsWith('http')
+                          ? floatingContact.whatsapp
+                          : `https://wa.me/${String(floatingContact.whatsapp).replace(/[^0-9]/g, '')}`)
+                      : '#'
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-3.5 py-2 bg-white text-gray-700 text-xs font-semibold rounded-lg border border-gray-200 shadow-sm hover:border-emerald-500 hover:text-emerald-600 transition-colors"
+                >
+                  <Smartphone className="w-3.5 h-3.5 text-emerald-500" />
+                  WhatsApp: {String(floatingContact.whatsapp || '').replace(/[^0-9]/g, '') || 'None'}
+                </a>
+                <a
+                  href={floatingContact.phone ? (floatingContact.phone.startsWith('tel:') ? floatingContact.phone : `tel:${String(floatingContact.phone).replace(/[^\d+]/g, '')}`) : '#'}
+                  className="inline-flex items-center gap-2 px-3.5 py-2 bg-white text-gray-700 text-xs font-semibold rounded-lg border border-gray-200 shadow-sm hover:border-blue-500 hover:text-blue-600 transition-colors"
+                >
+                  <Phone className="w-3.5 h-3.5 text-blue-600" />
+                  Phone: {floatingContact.phone || 'None'}
+                </a>
               </div>
             </div>
           </div>
