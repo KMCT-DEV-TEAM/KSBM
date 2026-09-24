@@ -46,6 +46,11 @@ const ManageHero = () => {
     linkUrl: '/admissions'
   });
 
+  const [flashNews, setFlashNews] = useState({
+    isVisible: true,
+    newsItems: []
+  });
+
   const [showSection, setShowSection] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -71,6 +76,7 @@ const ManageHero = () => {
         if (data.secondaryButton) setSecondaryButton(data.secondaryButton);
         if (data.bannerImages) setBannerImages(data.bannerImages);
         if (data.statsCard) setStatsCard(data.statsCard);
+        if (data.flashNews) setFlashNews(data.flashNews);
         if (data.showSection !== undefined) setShowSection(data.showSection);
       }
     } catch (error) {
@@ -106,6 +112,7 @@ const ManageHero = () => {
             secondaryButton,
             bannerImages: finalBannerImages,
             statsCard,
+            flashNews,
             showSection
           }, { hideLoader: true });
 
@@ -136,6 +143,7 @@ const ManageHero = () => {
         setSecondaryButton(DEFAULT_HERO.secondaryButton || { text: '', isVisible: true, link: '#' });
         setBannerImages(DEFAULT_HERO.bannerImages || []);
         setStatsCard(DEFAULT_HERO.statsCard || {});
+        setFlashNews(DEFAULT_HERO.flashNews || { isVisible: true, newsItems: [] });
         setShowSection(DEFAULT_HERO.showSection ?? true);
         Toast.fire({ icon: 'info', title: 'Settings reset to default. Click Save Changes to apply.' });
       }
@@ -150,6 +158,7 @@ const ManageHero = () => {
     secondaryButton,
     bannerImages,
     statsCard,
+    flashNews,
     showSection
   };
 
@@ -408,11 +417,11 @@ const ManageHero = () => {
               <input
                 type="text"
                 value={statsCard.batchText}
-                maxLength={15}
+                maxLength={50}
                 onChange={(e) => setStatsCard({ ...statsCard, batchText: e.target.value })}
                 className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
-              <div className="text-xs text-right mt-1 text-gray-500">{statsCard.batchText.length}/15</div>
+              <div className="text-xs text-right mt-1 text-gray-500">{statsCard.batchText.length}/50</div>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
@@ -423,22 +432,22 @@ const ManageHero = () => {
                   <input
                     type="text"
                     value={statsCard.stat1Title}
-                    maxLength={20}
+                    maxLength={50}
                     onChange={(e) => setStatsCard({ ...statsCard, stat1Title: e.target.value })}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
-                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.stat1Title.length}/20</div>
+                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.stat1Title.length}/50</div>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Subtitle</label>
                   <input
                     type="text"
                     value={statsCard.stat1Subtitle}
-                    maxLength={30}
+                    maxLength={50}
                     onChange={(e) => setStatsCard({ ...statsCard, stat1Subtitle: e.target.value })}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
-                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.stat1Subtitle.length}/30</div>
+                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.stat1Subtitle.length}/50</div>
                 </div>
               </div>
             </div>
@@ -451,22 +460,22 @@ const ManageHero = () => {
                   <input
                     type="text"
                     value={statsCard.stat2Title}
-                    maxLength={20}
+                    maxLength={50}
                     onChange={(e) => setStatsCard({ ...statsCard, stat2Title: e.target.value })}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
-                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.stat2Title.length}/20</div>
+                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.stat2Title.length}/50</div>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#566A7F] uppercase tracking-wide mb-1">Subtitle</label>
                   <input
                     type="text"
                     value={statsCard.stat2Subtitle}
-                    maxLength={30}
+                    maxLength={50}
                     onChange={(e) => setStatsCard({ ...statsCard, stat2Subtitle: e.target.value })}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
-                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.stat2Subtitle.length}/30</div>
+                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.stat2Subtitle.length}/50</div>
                 </div>
               </div>
             </div>
@@ -479,14 +488,90 @@ const ManageHero = () => {
                   <input
                     type="text"
                     value={statsCard.linkText}
-                    maxLength={30}
+                    maxLength={50}
                     onChange={(e) => setStatsCard({ ...statsCard, linkText: e.target.value })}
                     className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   />
-                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.linkText.length}/30</div>
+                  <div className="text-xs text-right mt-1 text-gray-500">{statsCard.linkText.length}/50</div>
                   <p className="text-xs text-gray-500 mt-2 italic">Note: The link URL is fixed to /admissions</p>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Flash News Section */}
+          <div className="bg-white p-6 rounded-xl border border-[#D9DEE3] shadow-sm mt-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-[#111836] font-bold text-lg">Flash News Configuration</h3>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={flashNews.isVisible}
+                  onChange={(e) => setFlashNews({ ...flashNews, isVisible: e.target.checked })}
+                  className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
+                />
+                <span className="text-sm font-semibold text-gray-500">Show Flash News</span>
+              </label>
+            </div>
+
+            <div className="space-y-4">
+              {flashNews.newsItems.map((item, index) => (
+                <div key={index} className="flex flex-col gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100 relative">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-semibold text-[#566A7F] uppercase tracking-wide">News Item {index + 1}</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newItems = [...flashNews.newsItems];
+                        newItems.splice(index, 1);
+                        setFlashNews({ ...flashNews, newsItems: newItems });
+                      }}
+                      className="text-red-500 hover:text-red-700 p-1 bg-red-50 rounded-md"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#566A7F] mb-1">Text</label>
+                    <input
+                      type="text"
+                      value={item.text || ''}
+                      onChange={(e) => {
+                        const newItems = [...flashNews.newsItems];
+                        newItems[index].text = e.target.value;
+                        setFlashNews({ ...flashNews, newsItems: newItems });
+                      }}
+                      placeholder="News text..."
+                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#566A7F] mb-1">Link (Optional)</label>
+                    <input
+                      type="text"
+                      value={item.url || ''}
+                      onChange={(e) => {
+                        const newItems = [...flashNews.newsItems];
+                        newItems[index].url = e.target.value;
+                        setFlashNews({ ...flashNews, newsItems: newItems });
+                      }}
+                      placeholder="#"
+                      className="w-full px-3 py-2 bg-white border border-[#D9DEE3] rounded-md text-[#566A7F] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    />
+                  </div>
+                </div>
+              ))}
+              
+              <button
+                type="button"
+                onClick={() => setFlashNews({
+                  ...flashNews,
+                  newsItems: [...(flashNews.newsItems || []), { text: '', url: '#' }]
+                })}
+                className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-primary hover:text-primary transition-colors font-medium text-sm flex items-center justify-center gap-2"
+              >
+                + Add News Item
+              </button>
             </div>
           </div>
         </div>

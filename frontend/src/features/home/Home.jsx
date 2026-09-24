@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import Hero from './components/Hero';
 import AboutSection from './components/AboutSection';
+import FlashNewsSection from './components/FlashNewsSection';
 import AcademicPrograms from './components/AcademicPrograms';
 import AccreditationSection from './components/AccreditationSection';
 import FacilitiesSection from './components/FacilitiesSection';
@@ -35,6 +36,7 @@ const Home = () => {
 
       <div className="w-full">
         <Hero />
+        <FlashNewsSection />
         <AboutSection />
         <AcademicPrograms />
         <AccreditationSection />
