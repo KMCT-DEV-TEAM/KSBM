@@ -22,6 +22,11 @@ const contactPageSchema = new mongoose.Schema(
       addressText: { type: String, default: 'KMCT Hills, Mampara, Pazhur P.O., Kuttippuram, Kerala - 679571' },
       bottomBadgeText: { type: String, default: 'Admissions Open 2025–27' },
       bottomBadgeDesk: { type: String, default: 'KSBM Desk' }
+    },
+    floatingContact: {
+      email: { type: String, default: 'info@kmct.org' },
+      whatsapp: { type: String, default: '1234567890' },
+      phone: { type: String, default: '+911234567890' }
     }
   },
   { timestamps: true, strict: false }

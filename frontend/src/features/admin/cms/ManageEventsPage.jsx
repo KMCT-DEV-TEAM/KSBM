@@ -747,8 +747,10 @@ const ManageEventsPage = () => {
                         <input type="text" maxLength={200} value={Array.isArray(item.programs) ? item.programs.join(', ') : (item.programs || '')} onChange={e => handleUpdateArray('essenceOfCulture', 'items', idx, 'programs', e.target.value.split(',').map(s => s.trim()))} className="w-full p-2 bg-white border border-gray-200 rounded-md text-sm outline-none mt-1" placeholder="e.g. Solo Dance, Folk Dance, Group Classical" />
                       <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 200</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.programs || '')).length}/200</span></div>
                       </div>
+
                       <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
                         maxSize={1048576}
+
                         currentImage={item.img}
                         defaultImage={defaults.essenceOfCulture.items[0]?.img} onChange={(url, file) => handleImageUploadChange(`essenceOfCulture.items.${idx}.img`, url, file, item.img, defaults.essenceOfCulture.items[0]?.img)}
                       />
@@ -763,10 +765,29 @@ const ManageEventsPage = () => {
           {activeTab === 'stayConnected' && (
             <SectionForm title="Stay Connected (Posters)" actionButton={<VisibilityToggle section="stayConnected" />}>
               <div className="space-y-4">
-                <div className="space-y-2 mb-6">
-                  <label className="text-xs font-semibold text-gray-500">Section Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
-                  <input type="text" maxLength={50} value={formData.stayConnected.heading} onChange={e => setFormData({ ...formData, stayConnected: { ...formData.stayConnected, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
-                      <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 50</span><span className="text-[10px] text-gray-400 font-medium">{(String(formData.stayConnected.heading || '')).length}/50</span></div>
+                <div className="space-y-4 mb-6">
+                  <div>
+                    <label className="text-xs font-semibold text-gray-500">Subheading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 50 chars)</span></label>
+                    <input type="text" maxLength={50} value={formData.stayConnected.subheading || 'Stay Connected'} onChange={e => setFormData({ ...formData, stayConnected: { ...formData.stayConnected, subheading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-gray-500">Section Heading <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 80 chars)</span></label>
+                    <input type="text" maxLength={80} value={formData.stayConnected.heading} onChange={e => setFormData({ ...formData, stayConnected: { ...formData.stayConnected, heading: e.target.value } })} className="w-full max-w-md p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-gray-500">Top Description <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 300 chars)</span></label>
+                    <textarea rows={3} maxLength={300} value={formData.stayConnected.description1 || ''} onChange={e => setFormData({ ...formData, stayConnected: { ...formData.stayConnected, description1: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                  </div>
+                  <div className="flex gap-4 w-full">
+                    <div className="flex-1">
+                      <label className="text-xs font-semibold text-gray-500">Hashtag <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 30 chars)</span></label>
+                      <input type="text" maxLength={30} value={formData.stayConnected.hashtag || ''} onChange={e => setFormData({ ...formData, stayConnected: { ...formData.stayConnected, hashtag: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                    </div>
+                    <div className="flex-[2]">
+                      <label className="text-xs font-semibold text-gray-500">Bottom Text <span className="text-[10px] text-gray-400 font-normal ml-2">(Max 200 chars)</span></label>
+                      <input type="text" maxLength={200} value={formData.stayConnected.description2 || ''} onChange={e => setFormData({ ...formData, stayConnected: { ...formData.stayConnected, description2: e.target.value } })} className="w-full p-2.5 bg-white border border-gray-200 rounded-md text-sm outline-none" />
+                    </div>
+                  </div>
                 </div>
                 <div className="flex justify-end mb-4">
                   <button onClick={() => openAddModal('stayConnected', 'posters', { img: '' })} className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-[#151c48] rounded-xl shadow-md transition-all">

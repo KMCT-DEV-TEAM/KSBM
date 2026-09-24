@@ -167,6 +167,7 @@ const ManageMbaPage = ({ isBba = false }) => {
   const [overviewSecondaryBtnLink, setOverviewSecondaryBtnLink] = useState('');
 
   const [dimensions, setDimensions] = useState([]);
+  const [curriculumPdf, setCurriculumPdf] = useState('');
 
   const [internshipTitle, setInternshipTitle] = useState('');
   const [internshipDesc, setInternshipDesc] = useState('');
@@ -229,6 +230,7 @@ const ManageMbaPage = ({ isBba = false }) => {
     overviewTitle, overviewText, overviewSubtext, overviewImage,
     overviewBadgeText, overviewFloatingBadgeText, overviewPrimaryBtnText, overviewSecondaryBtnText, overviewSecondaryBtnLink,
     dimensions,
+    curriculumPdf,
     whyChoosePills,
     internshipTitle,
     internshipDesc,
@@ -324,6 +326,7 @@ const ManageMbaPage = ({ isBba = false }) => {
       setOverviewSecondaryBtnLink(data.overviewSecondaryBtnLink || '');
 
       setDimensions(data.dimensions || []);
+      setCurriculumPdf(data.curriculumPdf || '');
       setShowSections(data.showSections || { hero: true, overview: true, dimensions: true, whyChoose: true, internships: true, dynamic: true, gallery: true, calendar: true, eligibility: true, recruiters: true });
 
       setInternshipTitle(data.internshipTitle || data.internshipsTitle || (isBba ? 'Summer Internship & Industry Projects' : 'Summer Internship Program'));
@@ -435,6 +438,7 @@ const ManageMbaPage = ({ isBba = false }) => {
             overviewSecondaryBtnText,
             overviewSecondaryBtnLink,
             dimensions,
+            curriculumPdf,
             internshipTitle,
             internshipDesc,
             internshipBgImage,
@@ -461,6 +465,7 @@ const ManageMbaPage = ({ isBba = false }) => {
           if (processedPayload.momentsGallery) setMomentsGallery(processedPayload.momentsGallery);
           if (processedPayload.academicCalendarBanner) setAcademicCalendarBanner(processedPayload.academicCalendarBanner);
           if (processedPayload.dimensions) setDimensions(processedPayload.dimensions);
+          if (processedPayload.curriculumPdf !== undefined) setCurriculumPdf(processedPayload.curriculumPdf);
 
           const newImages = extractImageUrls(processedPayload);
           const deletedUrls = originalImagesRef.current.filter(url => !newImages.includes(url));
@@ -525,6 +530,7 @@ const ManageMbaPage = ({ isBba = false }) => {
             break;
           case 'dimensions':
             setDimensions(activeDefault.dimensions || []);
+            setCurriculumPdf(activeDefault.curriculumPdf || '');
             break;
           case 'whyChoose':
             setWhyChoosePills(activeDefault.whyChoosePills || {
@@ -1351,6 +1357,31 @@ const ManageMbaPage = ({ isBba = false }) => {
                   <input type="checkbox" className="sr-only peer" checked={showSections.dimensions ?? true} onChange={(e) => setShowSections({ ...showSections, dimensions: e.target.checked })} />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'dimensions' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-4 mb-6">
+              <div>
+                <h3 className="text-lg font-bold text-primary">Curriculum / Syllabus Document (PDF)</h3>
+                <p className="text-xs text-gray-500 mt-1">
+                  Upload the official Curriculum / Syllabus PDF for this program. When visitors click the &quot;View Curriculum&quot; button on the live page, this PDF will be displayed immediately.
+                </p>
+              </div>
+              <div className="max-w-md pt-2">
+                <SingleDocumentUploader
+                  fileUrl={curriculumPdf || ''}
+                  onUploadComplete={(url) => setCurriculumPdf(url)}
+                  onUploadStateChange={() => {}}
+                  deferredUpload={false}
+                  uploadEndpoint="/upload/downloads"
+                  defaultFile=""
+                  label="Drag & drop Curriculum PDF, or click to select"
+                  allowDelete={true}
+                  recommendedSize="PDF document up to 100MB"
+                  maxSize={104857600}
+                />
               </div>
             </div>
           )}

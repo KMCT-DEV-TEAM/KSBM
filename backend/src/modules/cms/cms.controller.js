@@ -1006,7 +1006,7 @@ export const updateMbaPageSettings = async (req, res) => {
       'heroPrimaryBtnText', 'heroPrimaryBtnLink', 'heroSecondaryBtnText', 'heroSecondaryBtnLink', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
       'overviewTitle', 'overviewText', 'overviewSubtext', 'overviewImage',
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText', 'overviewSecondaryBtnLink',
-      'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
+      'highlights', 'curriculumPdf', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
       'eligibilityTitle', 'eligibilitySubtitle', 'eligibilityBtnText', 'eligibilityBtnLink', 'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
     ];
@@ -1110,7 +1110,7 @@ export const updateBbaPageSettings = async (req, res) => {
       'heroPrimaryBtnText', 'heroPrimaryBtnLink', 'heroSecondaryBtnText', 'heroSecondaryBtnLink', 'heroCardTitle', 'heroCardStat1Title', 'heroCardStat1Sub', 'heroCardStat2Title', 'heroCardStat2Sub',
       'overviewTitle', 'overviewText', 'overviewSubtext', 'overviewImage',
       'overviewBadgeText', 'overviewFloatingBadgeText', 'overviewPrimaryBtnText', 'overviewSecondaryBtnText', 'overviewSecondaryBtnLink',
-      'highlights', 'dimensions', 'internshipTitle', 'internshipDesc',
+      'highlights', 'curriculumPdf', 'dimensions', 'internshipTitle', 'internshipDesc',
       'internshipBgImage', 'internshipBadge', 'internshipBtnText', 'internshipBtnLink', 'internshipImages',
       'eligibilityTitle', 'eligibilitySubtitle', 'eligibilityBtnText', 'eligibilityBtnLink', 'eligibility', 'whyChoosePills', 'dynamicLearning', 'momentsGallery', 'academicCalendarBanner', 'showSections'
     ];
@@ -1282,12 +1282,15 @@ export const getContactPageSettings = async (req, res) => {
 // @access  Private/Admin
 export const updateContactPageSettings = async (req, res) => {
   try {
-    const fields = ['hero', 'contactBox'];
+    const fields = ['hero', 'contactBox', 'floatingContact'];
     const settings = await ContactPage.getSettings();
     
     fields.forEach((field) => {
       if (req.body[field] !== undefined) {
         settings[field] = req.body[field];
+        if (typeof settings.markModified === 'function') {
+          settings.markModified(field);
+        }
       }
     });
 

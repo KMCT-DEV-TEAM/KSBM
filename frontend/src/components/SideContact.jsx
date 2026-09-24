@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import api from '../api/axios';
 
 const WhatsAppIcon = ({ className }) => (
   <svg
@@ -18,10 +19,74 @@ const WhatsAppIcon = ({ className }) => (
 const SideContact = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [floatingContact, setFloatingContact] = useState({
+    email: 'info@kmct.org',
+    whatsapp: '1234567890',
+    phone: '+911234567890'
+  });
   const pathname = usePathname();
+
+  const getEmailLink = (email) => {
+    if (!email) return '#';
+    const trimmed = String(email).trim();
+    if (trimmed.startsWith('mailto:')) return trimmed;
+    return `mailto:${trimmed}`;
+  };
+
+  const getWhatsAppLink = (whatsapp) => {
+    if (!whatsapp) return '#';
+    const trimmed = String(whatsapp).trim();
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed;
+    }
+    if (trimmed.startsWith('wa.me/')) {
+      return `https://${trimmed}`;
+    }
+    const cleanNumber = trimmed.replace(/[^0-9]/g, '');
+    return cleanNumber ? `https://wa.me/${cleanNumber}` : '#';
+  };
+
+  const getPhoneLink = (phone) => {
+    if (!phone) return '#';
+    const trimmed = String(phone).trim();
+    if (trimmed.startsWith('tel:')) return trimmed;
+    const cleanPhone = trimmed.replace(/[^\d+]/g, '');
+    return cleanPhone ? `tel:${cleanPhone}` : `tel:${trimmed}`;
+  };
 
   useEffect(() => {
     setMounted(true);
+
+    const fetchContactData = async () => {
+      try {
+        const { data } = await api.get('/cms/contact-page', { hideLoader: true });
+        if (data && data.floatingContact) {
+          setFloatingContact(data.floatingContact);
+        }
+      } catch (error) {
+        console.error('Failed to fetch floating contact settings', error);
+      }
+    };
+    fetchContactData();
+
+    const handleStorage = (e) => {
+      if (e.key === 'cms_floating_contact_updated') {
+        fetchContactData();
+      }
+    };
+
+    const handleCustomEvent = (e) => {
+      if (e.detail) {
+        setFloatingContact(e.detail);
+      } else {
+        fetchContactData();
+      }
+    };
+
+    const handleFocus = () => {
+      fetchContactData();
+    };
+
     const handleScroll = () => {
       // Trigger color change when scrolled past 200px
       if (window.scrollY > 200) {
@@ -32,8 +97,17 @@ const SideContact = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('storage', handleStorage);
+    window.addEventListener('cms-floating-contact-updated', handleCustomEvent);
     handleScroll(); // Initialize on mount
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('cms-floating-contact-updated', handleCustomEvent);
+    };
   }, []);
 
   if (!mounted) return null;
@@ -67,23 +141,23 @@ const SideContact = () => {
       style={{ borderTopLeftRadius: '16px', borderBottomLeftRadius: '16px', borderTopRightRadius: '0', borderBottomRightRadius: '0' }}
     >
       <a
-        href="mailto:info@kmct.org"
+        href={getEmailLink(floatingContact?.email)}
         className={`p-3.5 block transition-colors ${getHoverClasses()}`}
         title="Email Us"
       >
         <Mail className="w-5 h-5" />
       </a>
       <a
-        href="https://wa.me/1234567890"
+        href={getWhatsAppLink(floatingContact?.whatsapp)}
         target="_blank"
-        rel="noreferrer"
+        rel="noopener noreferrer"
         className={`p-3.5 block transition-colors ${getHoverClasses()}`}
         title="WhatsApp Us"
       >
         <WhatsAppIcon className="w-5 h-5" />
       </a>
       <a
-        href="tel:+911234567890"
+        href={getPhoneLink(floatingContact?.phone)}
         className={`p-3.5 block transition-colors ${getHoverClasses()}`}
         title="Call Us"
       >

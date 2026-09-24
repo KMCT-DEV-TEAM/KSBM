@@ -50,6 +50,7 @@ const bbaPageSchema = new mongoose.Schema(
         'Direct Corporate Internships & Career Counseling'
       ]
     },
+    curriculumPdf: { type: String, default: '' },
     dimensions: {
       type: [
         {

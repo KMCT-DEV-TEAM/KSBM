@@ -92,7 +92,11 @@ const eventsPageSchema = new mongoose.Schema(
       }
     },
     stayConnected: {
-      heading: { type: String, default: 'STAY CONNECTED' },
+      subheading: { type: String, default: 'Stay Connected' },
+      heading: { type: String, default: 'Follow us on Social Media' },
+      description1: { type: String, default: "Don't miss out on the latest updates, behind-the-scenes moments, and exclusive announcements for KALEIDO KMCT 2025." },
+      hashtag: { type: String, default: '#KaleidoKMCT2025' },
+      description2: { type: String, default: 'and be part of the largest cultural celebration!' },
       posters: {
         type: [{ img: String }],
         default: [

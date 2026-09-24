@@ -50,6 +50,7 @@ const mbaPageSchema = new mongoose.Schema(
         'Guaranteed Corporate Mentorship & Live Projects'
       ]
     },
+    curriculumPdf: { type: String, default: '' },
     dimensions: {
       type: [
         {
