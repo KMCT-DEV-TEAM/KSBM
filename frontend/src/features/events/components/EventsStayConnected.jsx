@@ -18,42 +18,40 @@ const EventsStayConnected = ({ stayConnected }) => {
   const handlePrev = () => setCarouselIndex((prev) => (prev - 1 + displayPosters.length) % displayPosters.length);
 
   return (
-    <section className="w-full pt-20 pb-0 px-6 overflow-hidden relative bg-black">
+    <section className="w-full pt-20 pb-0 px-6 overflow-hidden relative bg-transparent">
 
-      {/* Background Image 129 */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-30 flex items-center justify-center">
-        <img src="/assets/Images/image 129.png" alt="Stay Connected Background" className="w-full h-auto object-contain" />
-      </div>
-
-      {/* Gradient Overlay for seamless blending with top/bottom sections */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-black/40 to-black pointer-events-none"></div>
+      {/* Decorative Glow */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] z-[-1] pointer-events-none opacity-35 blur-[80px]"
+        style={{ backgroundImage: 'radial-gradient(circle at center, #2B2F66 20%, rgba(115, 115, 115, 0) 100%)' }}
+      ></div>
 
       {/* Scattered Social Media Icons with Gradient Fill (All over the section) */}
       <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
         {/* Top Left Area */}
-        <a href="#" className="absolute top-[10%] left-[5%] pointer-events-auto text-white/10 hover:text-white/20 transition-colors duration-300">
+        <a href="#" className="absolute top-[10%] left-[5%] pointer-events-auto text-primary/10 hover:text-primary/20 transition-colors duration-300">
           <svg className="w-[30px] h-[30px]" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
           </svg>
         </a>
-        <a href="#" className="absolute top-[25%] left-[25%] pointer-events-auto text-white/10 hover:text-white/20 transition-colors duration-300">
+        <a href="#" className="absolute top-[25%] left-[25%] pointer-events-auto text-primary/10 hover:text-primary/20 transition-colors duration-300">
           <svg className="w-[20px] h-[20px]" viewBox="0 0 24 24" fill="currentColor">
             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
           </svg>
         </a>
         {/* Bottom Left Area */}
-        <a href="#" className="absolute bottom-[15%] left-[8%] pointer-events-auto text-white/10 hover:text-white/20 transition-colors duration-300">
+        <a href="#" className="absolute bottom-[15%] left-[8%] pointer-events-auto text-primary/10 hover:text-primary/20 transition-colors duration-300">
           <svg className="w-[30px] h-[30px]" viewBox="0 0 24 24" fill="currentColor">
             <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
           </svg>
         </a>
-        <a href="#" className="absolute top-[40%] left-[50%] pointer-events-auto text-white/10 hover:text-white/20 transition-colors duration-300">
+        <a href="#" className="absolute top-[40%] left-[50%] pointer-events-auto text-primary/10 hover:text-primary/20 transition-colors duration-300">
           <svg className="w-[24px] h-[24px]" viewBox="0 0 24 24" fill="currentColor">
             <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
           </svg>
         </a>
         {/* Top Right Area */}
-        <a href="#" className="absolute top-[12%] right-[9%] pointer-events-auto text-white/10 hover:text-white/20 transition-colors duration-300">
+        <a href="#" className="absolute top-[12%] right-[9%] pointer-events-auto text-primary/10 hover:text-primary/20 transition-colors duration-300">
           <svg className="w-[30px] h-[30px]" viewBox="0 0 24 24" fill="currentColor">
             <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
           </svg>
@@ -78,20 +76,16 @@ const EventsStayConnected = ({ stayConnected }) => {
 
         {/* Left Side: Social Media Text */}
         <div className="flex-1 w-full text-left flex flex-col justify-center px-4 lg:px-0">
-          <h5 className="text-sm md:text-base font-semibold uppercase tracking-[0.2em] mb-2"
-            style={{
-              background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}>{stayConnected?.subheading || "Stay Connected"}</h5>
-          <h2 className="text-xl md:text-3xl font-bold uppercase tracking-widest text-[#ffccf0] drop-shadow-[0_0_15px_rgba(219,39,119,0.8)] mb-8 leading-snug">
+          <h5 className="text-sm md:text-base font-semibold uppercase tracking-[0.2em] mb-2 text-text-secondary">
+            {stayConnected?.subheading || "Stay Connected"}
+          </h5>
+          <h2 className="text-xl md:text-3xl font-bold uppercase tracking-widest text-primary drop-shadow-sm mb-8 leading-snug">
             {stayConnected?.heading || "Follow us on Social Media"}
           </h2>
-          <p className="text-lg md:text-xl text-gray-300 mb-8 font-light tracking-wide leading-relaxed">
+          <p className="text-lg md:text-xl text-text-primary mb-8 font-medium tracking-wide leading-relaxed">
             {stayConnected?.description1 || "Don't miss out on the latest updates, behind-the-scenes moments, and exclusive announcements for KALEIDO KMCT 2025."}
             <br /><br />
-            Join the conversation across all our platforms using the hashtag <span className="text-pink-400 font-semibold">{stayConnected?.hashtag || "#KaleidoKMCT2025"}</span> {stayConnected?.description2 || "and be part of the largest cultural celebration!"}
+            Join the conversation across all our platforms using the hashtag <span className="text-primary font-bold">{stayConnected?.hashtag || "#KaleidoKMCT2025"}</span> {stayConnected?.description2 || "and be part of the largest cultural celebration!"}
           </p>
 
         </div>
@@ -137,9 +131,9 @@ const EventsStayConnected = ({ stayConnected }) => {
                   }}
                   style={{ perspective: 1000, pointerEvents: isVisible ? 'auto' : 'none' }}
                 >
-                  <div className="w-full h-full rounded-2xl overflow-hidden border-2 border-pink-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.8)] relative">
+                  <div className="w-full h-full rounded-2xl overflow-hidden border-2 border-primary/20 shadow-[0_10px_30px_rgba(43,47,102,0.4)] relative">
                     <img src={poster.img || "/assets/Images/asif_ali_poster.png"} alt="Poster" className="w-full h-full object-cover" />
-                    {position !== 0 && <div className="absolute inset-0 bg-black/40"></div>}
+                    {position !== 0 && <div className="absolute inset-0 bg-white/40"></div>}
                   </div>
                 </motion.div>
               );
@@ -147,10 +141,10 @@ const EventsStayConnected = ({ stayConnected }) => {
           </div>
 
           <div className="flex justify-center mt-8 gap-4">
-            <button onClick={handlePrev} className="p-3 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors z-10">
+            <button onClick={handlePrev} className="p-3 rounded-full bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-white transition-colors z-10">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
             </button>
-            <button onClick={handleNext} className="p-3 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors z-10">
+            <button onClick={handleNext} className="p-3 rounded-full bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-white transition-colors z-10">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
             </button>
           </div>

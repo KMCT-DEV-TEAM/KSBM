@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
-import EventsFooter from './components/EventsFooter';
+import Footer from '../../components/Footer';
 import api from '../../api/axios';
 
 // Section Components
@@ -97,11 +97,12 @@ const EventsPage = () => {
   const footerGraphic = previewData?.footerGraphic || pageData?.footerGraphic || '/assets/Images/Group 339.png';
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#050505] text-white overflow-x-hidden font-sans">
-      <Header />
+    <div className="min-h-screen flex flex-col bg-background text-text-primary overflow-x-hidden font-sans relative">
+      <div className="relative z-10 flex flex-col w-full">
+        <Header />
 
       <div 
-        className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        className={`fixed inset-0 z-[9999] bg-white transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
         <Loader fullScreen={false} />
       </div>
@@ -139,11 +140,12 @@ const EventsPage = () => {
       {/* ── Moments Captured ── */}
       {(isPreview || momentsCaptured?.showSection !== false) && <EventsMoments momentsCaptured={momentsCaptured} />}
 
-      {/* Custom Events Footer */}
-      <EventsFooter footerGraphic={footerGraphic} />
+      {/* Standard Footer */}
+      <Footer />
       
-      {/* Global Floating Buttons */}
-      {!isPreview && <SideContact />}
+        {/* Global Floating Buttons */}
+        {!isPreview && <SideContact />}
+      </div>
     </div>
   );
 };

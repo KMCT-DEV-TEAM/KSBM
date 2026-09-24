@@ -78,32 +78,13 @@ const EventsUpcoming = ({ upcomingEvents }) => {
   return (
     <section className="w-full px-6 relative z-0 py-12">
       {/* Decorative Glow */}
-      <div className="absolute left-10 top-10 w-64 h-64 bg-purple-600/10 blur-[100px] rounded-full z-[-1]"></div>
-
-      {/* Decorative Curves (Right Edge) */}
-      <div className="absolute right-0 top-24 w-14 md:w-24 h-auto pointer-events-none opacity-80 z-[-1]">
-        <img src="/assets/Images/Group 254 (1).png" alt="Decorative Curves" className="w-full h-full object-contain" />
-      </div>
-
-      {/* Decorative Curves (Left Bottom Edge) */}
-      <div className="absolute left-0 bottom-24 w-14 md:w-24 h-auto pointer-events-none opacity-80 z-[-1] scale-x-[-1]">
-        <img src="/assets/Images/Group 254 (1).png" alt="Decorative Curves" className="w-full h-full object-contain" />
-      </div>
-
-      {/* Decorative Polygon (Left Side) */}
-      <div className="absolute left-10 md:left-24 top-[40%] w-12 md:w-16 h-auto pointer-events-none opacity-80 z-0 animate-pulse drop-shadow-[0_0_15px_rgba(200,55,171,0.5)]">
-        <img src="/assets/Images/Polygon 7.png" alt="Decorative Polygon" className="w-full h-full object-contain" />
-      </div>
+      <div className="absolute left-10 top-10 w-64 h-64 bg-primary/5 blur-[100px] rounded-full z-[-1]"></div>
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <h5 className="text-center text-sm md:text-base font-semibold uppercase tracking-[0.2em] mb-2"
-          style={{
-            background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}>Coming Soon</h5>
-        <h2 className="text-center text-xl md:text-3xl font-extrabold uppercase tracking-widest mb-14 leading-tight drop-shadow-[0_0_15px_rgba(249,73,180,0.6)]">
+        <h5 className="text-center text-sm md:text-base font-semibold uppercase tracking-[0.2em] mb-2 text-text-secondary">
+          Coming Soon
+        </h5>
+        <h2 className="text-center text-xl md:text-3xl font-extrabold uppercase tracking-widest mb-14 leading-tight drop-shadow-sm text-primary">
           {heading}
         </h2>
 
@@ -126,29 +107,29 @@ const EventsUpcoming = ({ upcomingEvents }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: Math.min(idx * 0.08, 0.3) }}
-                className="relative flex flex-col md:flex-row bg-[#050505] rounded-[2rem] overflow-hidden shadow-2xl p-4 md:p-5 gap-6 md:gap-8 border border-[#c837ab]/40 hover:border-[#c837ab] transition-colors duration-500 group shrink-0"
+                className="relative flex flex-col md:flex-row bg-white rounded-[2rem] overflow-hidden shadow-xl p-4 md:p-5 gap-6 md:gap-8 border border-gray-100 hover:border-primary/20 transition-colors duration-500 group shrink-0"
               >
                 {/* Image Section */}
                 <div className="w-full md:w-[35%] shrink-0 h-44 md:h-48 lg:h-52 overflow-hidden rounded-2xl">
                   <img
                     src={event.img || "/assets/Images/image 94.png"}
                     alt={event.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 drop-shadow-[0_0_15px_rgba(200,55,171,0.2)]"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 drop-shadow-[0_0_15px_rgba(43,47,102,0.2)]"
                   />
                 </div>
 
                 {/* Content Section */}
                 <div className="flex-1 flex flex-col justify-center pr-4 md:pr-28 py-2">
-                  <h3 className="text-xl md:text-2xl font-bold text-white mb-2.5 uppercase tracking-wide group-hover:text-pink-400 transition-colors duration-300">
+                  <h3 className="text-xl md:text-2xl font-bold text-primary mb-2.5 uppercase tracking-wide group-hover:text-secondary transition-colors duration-300">
                     {event.title}
                   </h3>
-                  <p className="text-gray-300 text-xs md:text-sm leading-relaxed font-light">
+                  <p className="text-text-primary text-xs md:text-sm leading-relaxed font-medium">
                     {event.description}
                   </p>
                 </div>
 
                 {/* Date Ribbon */}
-                <div className="absolute top-0 right-6 bg-gradient-to-b from-[#C837AB] to-[#FF543E] w-[75px] md:w-[85px] h-[105px] md:h-[115px] rounded-b-[20px] flex flex-col items-center justify-center z-10 shadow-lg shadow-pink-500/20">
+                <div className="absolute top-0 right-6 bg-primary w-[75px] md:w-[85px] h-[105px] md:h-[115px] rounded-b-[20px] flex flex-col items-center justify-center z-10 shadow-lg shadow-primary/20">
                   <span className="text-white text-xs md:text-sm font-semibold mb-0.5 uppercase tracking-wider">{event.month}</span>
                   <span className="text-white text-xl md:text-3xl font-extrabold">{event.date}</span>
                 </div>
@@ -167,29 +148,29 @@ const EventsUpcoming = ({ upcomingEvents }) => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.3 }}
-                    className="relative flex flex-col bg-[#050505] rounded-[2rem] overflow-hidden shadow-2xl p-4 gap-6 border border-[#c837ab]/40 w-full shrink-0 h-[400px]"
+                    className="relative flex flex-col bg-white rounded-[2rem] overflow-hidden shadow-xl p-4 gap-6 border border-gray-100 w-full shrink-0 h-[400px]"
                   >
                     {/* Image Section */}
                     <div className="w-full h-44 overflow-hidden rounded-2xl">
                       <img
                         src={event.img || "/assets/Images/image 94.png"}
                         alt={event.title}
-                        className="w-full h-full object-cover drop-shadow-[0_0_15px_rgba(200,55,171,0.2)]"
+                        className="w-full h-full object-cover drop-shadow-[0_0_15px_rgba(43,47,102,0.2)]"
                       />
                     </div>
 
                     {/* Content Section */}
                     <div className="flex-1 flex flex-col justify-center pr-4">
-                      <h3 className="text-xl font-bold text-white mb-2.5 uppercase tracking-wide">
+                      <h3 className="text-xl font-bold text-primary mb-2.5 uppercase tracking-wide">
                         {event.title}
                       </h3>
-                      <p className="text-gray-300 text-xs leading-relaxed font-light line-clamp-4">
+                      <p className="text-text-primary text-xs leading-relaxed font-medium line-clamp-4">
                         {event.description}
                       </p>
                     </div>
 
                     {/* Date Ribbon */}
-                    <div className="absolute top-0 right-6 bg-gradient-to-b from-[#C837AB] to-[#FF543E] w-[75px] h-[105px] rounded-b-[20px] flex flex-col items-center justify-center z-10 shadow-lg shadow-pink-500/20">
+                    <div className="absolute top-0 right-6 bg-primary w-[75px] h-[105px] rounded-b-[20px] flex flex-col items-center justify-center z-10 shadow-lg shadow-primary/20">
                       <span className="text-white text-xs font-semibold mb-0.5 uppercase tracking-wider">{event.month}</span>
                       <span className="text-white text-xl font-extrabold">{event.date}</span>
                     </div>
@@ -203,13 +184,13 @@ const EventsUpcoming = ({ upcomingEvents }) => {
               <div className="flex justify-center mt-8 gap-4 w-full">
                 <button 
                   onClick={handlePrevMobile}
-                  className="p-3 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors z-10"
+                  className="p-3 rounded-full bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-white transition-colors z-10"
                 >
                   <ChevronLeft className="w-6 h-6" />
                 </button>
                 <button 
                   onClick={handleNextMobile}
-                  className="p-3 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors z-10"
+                  className="p-3 rounded-full bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-white transition-colors z-10"
                 >
                   <ChevronRight className="w-6 h-6" />
                 </button>
@@ -227,8 +208,8 @@ const EventsUpcoming = ({ upcomingEvents }) => {
                     key={i}
                     onClick={() => scrollToItem(i)}
                     className={`rounded-full transition-all duration-500 cursor-pointer ${isActive
-                      ? 'w-1 lg:w-1 h-1 lg:h-10 bg-white '
-                      : 'w-1 lg:w-1 h-1 lg:h-4 bg-white/35 hover:bg-white/75'
+                      ? 'w-1 lg:w-1 h-1 lg:h-10 bg-primary '
+                      : 'w-1 lg:w-1 h-1 lg:h-4 bg-gray-300 hover:bg-gray-400'
                       }`}
                     aria-label={`Scroll to event ${i + 1}`}
                   />

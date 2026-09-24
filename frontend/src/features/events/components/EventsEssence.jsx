@@ -64,34 +64,15 @@ const EventsEssence = ({ essenceOfCulture }) => {
   return (
     <section className="w-full px-6 relative pt-14 md:pt-22">
       <div className="flex flex-col items-center mb-12">
-        <h5 className="text-center text-sm md:text-base font-semibold uppercase tracking-[0.2em] mb-2"
-          style={{
-            background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}>Events</h5>
-        <h2 className="text-center text-xl md:text-3xl font-bold uppercase tracking-widest text-[#ffccf0] drop-shadow-[0_0_15px_rgba(219,39,119,0.8)]">
+        <h5 className="text-center text-sm md:text-base font-semibold uppercase tracking-[0.2em] mb-2 text-text-secondary">
+          Events
+        </h5>
+        <h2 className="text-center text-xl md:text-3xl font-bold uppercase tracking-widest text-primary drop-shadow-sm">
           {essenceOfCulture.heading}
         </h2>
       </div>
 
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 relative z-10">
-
-        {/* Center Floating Decorative Image (image 112) */}
-        <div className="absolute bottom-35 left-[50%] lg:left-[50%] xl:left-[50%] transform -translate-x-1/2 pointer-events-none z-0 hidden md:block">
-          <img src="/assets/Images/image 112.png" alt="Decoration" className="w-64 lg:w-80 xl:w-[450px] h-auto object-contain opacity-90" />
-        </div>
-
-        {/* Secondary Musical Decor (image 117) */}
-        <div className="absolute bottom-44 left-[60%] lg:left-[60%] xl:left-[60%] transform -translate-x-1/2 pointer-events-none z-0 hidden md:block">
-          <img src="/assets/Images/image 117.png" alt="Decoration" className="w-8 lg:w-18 h-auto object-contain opacity-60" />
-        </div>
-
-        {/* Decorative Polygon */}
-        <div className="absolute right-0 top-12 md:top-24 pointer-events-none hidden md:block opacity-80">
-          <img src="/assets/Images/Polygon 7.png" alt="" className="w-16 md:w-24 lg:w-32 object-contain" />
-        </div>
 
 
         {/* Gradient Navigation Controls (Left Down Side) visible only when total images > 5 on Desktop */}
@@ -100,9 +81,8 @@ const EventsEssence = ({ essenceOfCulture }) => {
             <button
               onClick={handleScrollUp}
               disabled={startIndex === 0}
-              className={`w-10 h-10 md:w-11 md:h-11 rounded-[10px] flex items-center justify-center text-white shadow-[0_4px_16px_rgba(200,55,171,0.35)] cursor-pointer transition-all duration-300 ${startIndex === 0 ? 'opacity-40 cursor-not-allowed scale-95' : 'hover:scale-105 active:scale-95'
+              className={`w-10 h-10 md:w-11 md:h-11 rounded-[10px] flex items-center justify-center text-white bg-primary shadow-sm cursor-pointer transition-all duration-300 ${startIndex === 0 ? 'opacity-40 cursor-not-allowed scale-95' : 'hover:scale-105 active:scale-95'
                 }`}
-              style={{ background: "linear-gradient(135deg, #C837AB 0%, #FF543E 100%)" }}
               title="Previous Category"
               aria-label="Previous Category"
             >
@@ -111,9 +91,8 @@ const EventsEssence = ({ essenceOfCulture }) => {
             <button
               onClick={handleScrollDown}
               disabled={startIndex + 5 >= displayItems.length}
-              className={`w-10 h-10 md:w-11 md:h-11 rounded-[10px] flex items-center justify-center text-white shadow-[0_4px_16px_rgba(255,84,62,0.35)] cursor-pointer transition-all duration-300 ${startIndex + 5 >= displayItems.length ? 'opacity-40 cursor-not-allowed scale-95' : 'hover:scale-105 active:scale-95'
+              className={`w-10 h-10 md:w-11 md:h-11 rounded-[10px] flex items-center justify-center text-white bg-primary shadow-sm cursor-pointer transition-all duration-300 ${startIndex + 5 >= displayItems.length ? 'opacity-40 cursor-not-allowed scale-95' : 'hover:scale-105 active:scale-95'
                 }`}
-              style={{ background: "linear-gradient(135deg, #C837AB 0%, #FF543E 100%)" }}
               title="Next Category"
               aria-label="Next Category"
             >
@@ -132,8 +111,7 @@ const EventsEssence = ({ essenceOfCulture }) => {
                   {selectedDetail === item.category && (
                     <motion.div
                       layoutId="activeThumbnailIndicator"
-                      className="absolute -left-3 top-0 w-1.5 md:w-2 h-full z-10 rounded-full"
-                      style={{ background: "linear-gradient(to bottom, #C837AB 0%, #FFDD55 40%, #FF543E 100%)" }}
+                      className="absolute -left-3 top-0 w-1.5 md:w-2 h-full z-10 rounded-full bg-primary"
                     />
                   )}
                   <motion.div
@@ -143,13 +121,13 @@ const EventsEssence = ({ essenceOfCulture }) => {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.25, delay: idx * 0.05 }}
                     onClick={() => setSelectedDetail(item.category)}
-                    className={`relative w-full h-[160px] md:h-[200px] lg:h-[220px] shrink-0 rounded-[12px] overflow-hidden shadow-[0_0_15px_rgba(219,39,119,0.1)] cursor-pointer group border-2 transition-colors duration-300 ${selectedDetail === item.category ? 'border-pink-500/80 shadow-[0_0_25px_rgba(200,55,171,0.35)]' : 'border-transparent hover:border-pink-500/40'
+                    className={`relative w-full h-[160px] md:h-[200px] lg:h-[220px] shrink-0 rounded-[12px] overflow-hidden cursor-pointer group border-2 transition-colors duration-300 ${selectedDetail === item.category ? 'border-primary shadow-sm' : 'border-transparent hover:border-primary/40'
                       }`}
                   >
                     <img src={item.img || "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop"} alt={item.category || "Culture"} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent pointer-events-none"></div>
                     <div className="absolute bottom-3 left-4 right-4 pointer-events-none z-10">
-                      <h3 className={`text-sm md:text-base font-semibold uppercase tracking-wider whitespace-pre-line break-words ${selectedDetail === item.category ? 'text-pink-400 font-bold' : 'text-white'}`}>{item.category}</h3>
+                      <h3 className={`text-sm md:text-base font-semibold uppercase tracking-wider whitespace-pre-line break-words ${selectedDetail === item.category ? 'text-primary font-bold' : 'text-white'}`}>{item.category}</h3>
                     </div>
                   </motion.div>
                 </div>
@@ -169,12 +147,12 @@ const EventsEssence = ({ essenceOfCulture }) => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
-                  className="relative w-full h-[220px] rounded-[12px] overflow-hidden shadow-[0_0_25px_rgba(200,55,171,0.35)] border-2 border-pink-500/80 shrink-0"
+                  className="relative w-full h-[220px] rounded-[12px] overflow-hidden shadow-sm border-2 border-primary shrink-0"
                 >
                   <img src={item.img || "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop"} alt={item.category || "Culture"} className="w-full h-full object-cover" />
                   <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent pointer-events-none"></div>
                   <div className="absolute bottom-3 left-4 right-4 pointer-events-none z-10">
-                    <h3 className="text-lg font-bold uppercase tracking-wider text-pink-400 whitespace-pre-line break-words">{item.category}</h3>
+                    <h3 className="text-lg font-bold uppercase tracking-wider text-primary whitespace-pre-line break-words">{item.category}</h3>
                   </div>
                 </motion.div>
               )
@@ -190,7 +168,7 @@ const EventsEssence = ({ essenceOfCulture }) => {
                   const prevIndex = currentIndex === 0 ? displayItems.length - 1 : currentIndex - 1;
                   setSelectedDetail(displayItems[prevIndex].category);
                 }}
-                className="p-3 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors z-10"
+                className="p-3 rounded-full bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-white transition-colors z-10"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
@@ -200,7 +178,7 @@ const EventsEssence = ({ essenceOfCulture }) => {
                   const nextIndex = currentIndex === displayItems.length - 1 ? 0 : currentIndex + 1;
                   setSelectedDetail(displayItems[nextIndex].category);
                 }}
-                className="p-3 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-500 hover:bg-pink-500 hover:text-white transition-colors z-10"
+                className="p-3 rounded-full bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-white transition-colors z-10"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
@@ -209,18 +187,13 @@ const EventsEssence = ({ essenceOfCulture }) => {
         </div>
 
         {/* Details Column */}
-        <div className="flex-1 flex flex-col justify-start text-white pt-0 px-6 md:px-8 pb-6 md:pb-8 relative">
+        <div className="flex-1 flex flex-col justify-start text-gray-900 pt-0 px-6 md:px-8 pb-6 md:pb-8 relative">
 
           {/* Light Background Radial Glow/Shade */}
           <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] z-[-1] pointer-events-none opacity-15 blur-[80px]"
-            style={{ backgroundImage: 'radial-gradient(circle at center, #C837AB 0%, rgba(115, 115, 115, 0) 70%)' }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] z-[-1] pointer-events-none opacity-35 blur-[80px]"
+            style={{ backgroundImage: 'radial-gradient(circle at center, #2B2F66 20%, rgba(115, 115, 115, 0) 100%)' }}
           ></div>
-
-          {/* Decorative Polygon */}
-          <div className="absolute right-0 top-12 md:top-24 pointer-events-none hidden md:block opacity-80">
-            <img src="/assets/Images/Polygon 7.png" alt="" className="w-16 md:w-24 lg:w-32 object-contain" />
-          </div>
 
           <motion.div
             key={selectedDetail}
@@ -230,37 +203,28 @@ const EventsEssence = ({ essenceOfCulture }) => {
           >
             {/* Heading Row */}
             <div className="flex items-center gap-4 mb-6">
-              <h3 className="text-xl md:text-2xl font-bold uppercase tracking-widest leading-snug whitespace-pre-line break-words">
-                <span style={{
-                  background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}>{selectedDetail}</span>
+              <h3 className="text-xl md:text-2xl font-bold uppercase tracking-widest leading-snug whitespace-pre-line break-words text-primary">
+                <span>{selectedDetail}</span>
               </h3>
-              <div className="flex-1 h-[1px] bg-pink-500/30"></div>
+              <div className="flex-1 h-[1px] bg-primary/30"></div>
             </div>
 
             {/* Description */}
-            <p className="text-gray-300 text-sm md:text-sm leading-loose mb-10">
+            <p className="text-text-primary text-sm md:text-sm leading-loose mb-10 font-medium">
               {activeItem.description || `Feel the rhythm, embrace the energy, and immerse yourself in the electrifying world of ${(selectedDetail || '').toLowerCase()} at Kaleido. From soulful melodies and classical performances to high-energy bands, fusion acts, and live concerts, the ${selectedDetail} brings together talented performers who create unforgettable moments through every note. Whether you're performing under the spotlight or cheering from the crowd, experience the power of ${(selectedDetail || '').toLowerCase()} as it unites voices, ignites emotions, and transforms the festival into a celebration of harmony, passion, and creativity. Join us for performances that resonate long after the final encore.`}
             </p>
 
             {/* Programs Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
               {(activeItem.programs?.length > 0 ? activeItem.programs : getMockPrograms(selectedDetail || '')).map((prog, i) => (
-                <div key={i} className="flex items-center gap-3 bg-white/10 hover:bg-[#3A1D25] border border-pink-500/20 rounded-[10px] px-4 py-3 transition-colors cursor-pointer">
-                  <div className="w-1.5 h-1.5 bg-pink-500 rotate-45 shrink-0 shadow-[0_0_8px_rgba(236,72,153,0.8)]"></div>
-                  <span className="text-gray-300 text-xs md:text-xs font-medium tracking-wide">{prog}</span>
+                <div key={i} className="flex items-center gap-3 bg-white hover:bg-primary/5 border border-gray-200 hover:border-primary/30 shadow-sm rounded-[10px] px-4 py-3 transition-colors cursor-pointer">
+                  <div className="w-1.5 h-1.5 bg-primary rotate-45 shrink-0 shadow-sm"></div>
+                  <span className="text-primary text-xs md:text-xs font-semibold tracking-wide">{prog}</span>
                 </div>
               ))}
             </div>
           </motion.div>
 
-          {/* Featured Image (Lady on Right Side) */}
-          <div className="mt-10 md:mt-14 flex justify-end items-end w-full relative z-10">
-            <img src="/assets/Images/image 110.png" alt="Featured Event" className="max-w-[320px] md:max-w-[440px] lg:max-w-[540px] w-full h-auto object-contain drop-shadow-[0_10px_30px_rgba(200,55,171,0.25)] transition-transform duration-500 hover:scale-[1.02]" />
-          </div>
         </div>
 
       </div>

@@ -27,24 +27,12 @@ const EventsCarousel = ({ highlightedPrograms, carouselIndex, setCarouselIndex }
 
   if (!highlightedPrograms || !highlightedPrograms.images || highlightedPrograms.images.length === 0) return null;
   return (
-    <section
-      className="w-full py-24 overflow-hidden relative"
-      style={{
-        backgroundImage: 'url(/assets/Images/image_148.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
-      {/* Dark Overlay to ensure text readability */}
-      <div className="absolute inset-0 bg-black/90 z-0 pointer-events-none"></div>
-
-      {/* Top Blend Gradient */}
-      <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-black to-transparent z-0 pointer-events-none"></div>
-
-      {/* Bottom Blend Gradient */}
-      <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-black to-transparent z-0 pointer-events-none"></div>
-
+    <section className="w-full py-24 overflow-hidden relative bg-transparent">
+      {/* Decorative Glow */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] z-[-1] pointer-events-none opacity-35 blur-[80px]"
+        style={{ backgroundImage: 'radial-gradient(circle at center, #2B2F66 20%, rgba(115, 115, 115, 0) 100%)' }}
+      ></div>
       {/* Background Accent Images (Group 276) */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-80 mix-blend-screen">
         <img src="/assets/Images/Group_276.png" alt="" className="absolute left-[15%] top-1/2 -translate-y-1/2 h-[80%] w-auto object-contain opacity-70" />
@@ -53,14 +41,10 @@ const EventsCarousel = ({ highlightedPrograms, carouselIndex, setCarouselIndex }
       </div>
 
       <div className="flex flex-col items-center relative z-10 mb-16">
-        <h5 className=" text-sm md:text-base font-semibold uppercase tracking-[0.2em] mb-2"
-          style={{
-            background: "linear-gradient(to right, #C837AB 0%, #FFDD55 40%, #FF543E 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}>Showcase</h5>
-        <h2 className="text-center text-lg md:text-2xl font-bold uppercase tracking-widest text-[#ffccf0] drop-shadow-[0_0_15px_rgba(219,39,119,0.8)]">
+        <h5 className=" text-sm md:text-base font-semibold uppercase tracking-[0.2em] mb-2 text-text-secondary">
+          Showcase
+        </h5>
+        <h2 className="text-center text-lg md:text-2xl font-bold uppercase tracking-widest text-primary drop-shadow-sm">
           {highlightedPrograms.heading}
         </h2>
       </div>
@@ -140,7 +124,7 @@ const EventsCarousel = ({ highlightedPrograms, carouselIndex, setCarouselIndex }
                 transformStyle: 'preserve-3d',
               }}
             >
-              <div className="w-full h-full shadow-[0_20px_50px_rgba(0,0,0,0.95)] overflow-hidden border border-white/10 flex items-center justify-center bg-black/40">
+              <div className="w-full h-full shadow-xl overflow-hidden border border-gray-200 flex items-center justify-center bg-white/40">
                 <img
                   src={item.img || "/assets/Images/Home/img1.jpeg"}
                   alt="Program"
