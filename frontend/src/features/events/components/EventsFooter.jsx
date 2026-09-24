@@ -111,7 +111,7 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
   };
 
   const staticQuickLinks = [
-    { label: 'Facility', url: '/facilities' },
+    { label: 'Facilities', url: '/facilities' },
     { label: 'Admission', url: '/admissions' },
     { label: 'Gallery', url: '/gallery' },
     { label: 'FAQ', url: '/faq' },
