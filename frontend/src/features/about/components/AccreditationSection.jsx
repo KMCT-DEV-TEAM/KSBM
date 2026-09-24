@@ -91,67 +91,81 @@ const AccreditationSection = ({ previewData }) => {
           </motion.h2>
         )}
 
-        {showImage && (
-          <motion.div
-            variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.8 } } }}
-            className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 lg:gap-12"
-          >
-            {settings?.images && settings.images.length > 4 ? (
-              <div className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_64px,_black_calc(100%-64px),transparent_100%)]">
-                <div className="flex items-center animate-marquee">
-                  {/* First Set */}
-                  <div className="flex items-center gap-8 sm:gap-12 lg:gap-16 pr-8 sm:pr-12 lg:pr-16 shrink-0">
-                    {settings.images.map((img, idx) => (
-                      <div key={`set1-${idx}`} className="flex-shrink-0 flex items-center justify-center">
-                        <img
-                          src={img.url}
-                          alt={`Accreditation ${idx + 1}`}
-                          className="w-auto h-12 sm:h-16 md:h-20 lg:h-24 object-contain mix-blend-multiply select-none"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  {/* Second Set (Duplicate for seamless loop) */}
-                  <div className="flex items-center gap-8 sm:gap-12 lg:gap-16 pr-8 sm:pr-12 lg:pr-16 shrink-0">
-                    {settings.images.map((img, idx) => (
-                      <div key={`set2-${idx}`} className="flex-shrink-0 flex items-center justify-center">
-                        <img
-                          src={img.url}
-                          alt={`Accreditation ${idx + 1}`}
-                          className="w-auto h-12 sm:h-16 md:h-20 lg:h-24 object-contain mix-blend-multiply select-none"
-                        />
-                      </div>
-                    ))}
+        {showImage && (() => {
+          const displayImages = settings?.images && settings.images.length > 0
+            ? settings.images
+            : (!imageUrl ? defaultImages.map(url => ({ url })) : []);
+          const isTwoLogos = displayImages.length === 2;
+
+          return (
+            <motion.div
+              variants={{ hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.8 } } }}
+              className={`flex flex-wrap items-center justify-center ${
+                isTwoLogos
+                  ? 'gap-10 sm:gap-14 md:gap-16 lg:gap-20 xl:gap-24'
+                  : 'gap-6 sm:gap-8 lg:gap-12'
+              }`}
+            >
+              {displayImages.length > 4 ? (
+                <div className="w-full inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_64px,_black_calc(100%-64px),transparent_100%)]">
+                  <div className="flex items-center animate-marquee">
+                    {/* First Set */}
+                    <div className="flex items-center gap-8 sm:gap-12 lg:gap-16 pr-8 sm:pr-12 lg:pr-16 shrink-0">
+                      {displayImages.map((img, idx) => (
+                        <div key={`set1-${idx}`} className="flex-shrink-0 flex items-center justify-center">
+                          <img
+                            src={img.url}
+                            alt={`Accreditation ${idx + 1}`}
+                            className="w-auto h-12 sm:h-16 md:h-20 lg:h-24 object-contain mix-blend-multiply select-none"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    {/* Second Set (Duplicate for seamless loop) */}
+                    <div className="flex items-center gap-8 sm:gap-12 lg:gap-16 pr-8 sm:pr-12 lg:pr-16 shrink-0">
+                      {displayImages.map((img, idx) => (
+                        <div key={`set2-${idx}`} className="flex-shrink-0 flex items-center justify-center">
+                          <img
+                            src={img.url}
+                            alt={`Accreditation ${idx + 1}`}
+                            className="w-auto h-12 sm:h-16 md:h-20 lg:h-24 object-contain mix-blend-multiply select-none"
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : settings?.images && settings.images.length > 0 ? (
-              settings.images.map((img, idx) => (
+              ) : displayImages.length > 0 ? (
+                displayImages.map((img, idx) => (
+                  <div key={idx} className="flex-shrink-0 flex items-center justify-center">
+                    <img
+                      src={img.url}
+                      alt={`Accreditation ${idx + 1}`}
+                      className={`
+                        w-auto
+                        ${isTwoLogos 
+                          ? 'h-14 sm:h-16 md:h-20 lg:h-24 max-w-[200px] sm:max-w-[240px] md:max-w-[280px]' 
+                          : 'h-12 sm:h-16 md:h-20 lg:h-24'}
+                        object-contain
+                        mix-blend-multiply
+                        select-none
+                        transition-transform
+                        duration-300
+                        hover:scale-105
+                      `}
+                    />
+                  </div>
+                ))
+              ) : imageUrl ? (
                 <img
-                  key={idx}
-                  src={img.url}
-                  alt={`Accreditation ${idx + 1}`}
-                  className="w-auto h-12 sm:h-16 md:h-20 lg:h-24 object-contain mix-blend-multiply select-none"
+                  src={imageUrl}
+                  alt="Accreditations"
+                  className="w-full max-w-2xl h-auto object-contain mix-blend-multiply select-none"
                 />
-              ))
-            ) : imageUrl ? (
-              <img
-                src={imageUrl}
-                alt="Accreditations"
-                className="w-full max-w-2xl h-auto object-contain mix-blend-multiply select-none"
-              />
-            ) : (
-              defaultImages.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img}
-                  alt={`Accreditation ${idx + 1}`}
-                  className="w-auto h-12 sm:h-16 md:h-20 lg:h-24 object-contain mix-blend-multiply select-none"
-                />
-              ))
-            )}
-          </motion.div>
-        )}
+              ) : null}
+            </motion.div>
+          );
+        })()}
       </motion.div>
     </section>
   );
