@@ -131,7 +131,7 @@ export const getHeroSettings = async (req, res) => {
 // @access  Private (Admin)
 export const updateHeroSettings = async (req, res) => {
   try {
-    const { pillText, headingLine1, headingLine2, description, primaryButton, secondaryButton, bannerImages, statsCard, showSection } = req.body;
+    const { pillText, headingLine1, headingLine2, description, primaryButton, secondaryButton, bannerImages, statsCard, flashNews, showSection } = req.body;
 
     const settings = await Hero.getSettings();
 
@@ -143,6 +143,7 @@ export const updateHeroSettings = async (req, res) => {
     if (secondaryButton !== undefined) settings.secondaryButton = secondaryButton;
     if (bannerImages !== undefined) settings.bannerImages = bannerImages;
     if (statsCard !== undefined) settings.statsCard = statsCard;
+    if (flashNews !== undefined) settings.flashNews = flashNews;
     if (showSection !== undefined) settings.showSection = showSection;
 
     const updatedSettings = await settings.save();

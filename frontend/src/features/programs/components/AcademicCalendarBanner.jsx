@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Download, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Swal from 'sweetalert2';
+import { downloadFile } from '../../../utils/downloadFile';
 
 const AcademicCalendarBanner = ({ program }) => {
   const router = useRouter();
@@ -26,25 +27,10 @@ const AcademicCalendarBanner = ({ program }) => {
     }
   };
 
-  const handleDownloadAction = async (e) => {
+  const handleDownloadAction = (e) => {
     e.preventDefault();
     if (pdfUrl) {
-      try {
-        const response = await fetch(pdfUrl);
-        if (!response.ok) throw new Error('Network response was not ok');
-        const blob = await response.blob();
-        const blobUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = 'KSBM_Academic_Schedule.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(blobUrl);
-      } catch (error) {
-        console.error("Download failed, falling back to open:", error);
-        window.open(pdfUrl, '_blank', 'noopener,noreferrer');
-      }
+      downloadFile(e, pdfUrl, 'KSBM_Academic_Schedule.pdf');
     } else {
       Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'No Calendar PDF Available', showConfirmButton: false, timer: 3000 });
     }
