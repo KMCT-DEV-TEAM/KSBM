@@ -168,6 +168,11 @@ const ManageMbaPage = ({ isBba = false }) => {
 
   const [dimensions, setDimensions] = useState([]);
   const [curriculumPdf, setCurriculumPdf] = useState('');
+  const [dimensionsBadgeText, setDimensionsBadgeText] = useState('PROGRAM STRUCTURE');
+  const [dimensionsTitle, setDimensionsTitle] = useState(isBba ? '6-Semester Curriculum Roadmap' : '4-Semester Curriculum Roadmap');
+  const [dimensionsSubtitle, setDimensionsSubtitle] = useState(isBba ? 'A comprehensive journey from foundational business principles to industry readiness.' : 'A comprehensive journey from fundamentals to executive mastery.');
+  const [dimensionsBtnText, setDimensionsBtnText] = useState('View Curriculum');
+  const [showDimensionsBtn, setShowDimensionsBtn] = useState(true);
 
   const [internshipTitle, setInternshipTitle] = useState('');
   const [internshipDesc, setInternshipDesc] = useState('');
@@ -231,6 +236,11 @@ const ManageMbaPage = ({ isBba = false }) => {
     overviewBadgeText, overviewFloatingBadgeText, overviewPrimaryBtnText, overviewSecondaryBtnText, overviewSecondaryBtnLink,
     dimensions,
     curriculumPdf,
+    dimensionsBadgeText,
+    dimensionsTitle,
+    dimensionsSubtitle,
+    dimensionsBtnText,
+    showDimensionsBtn,
     whyChoosePills,
     internshipTitle,
     internshipDesc,
@@ -327,6 +337,11 @@ const ManageMbaPage = ({ isBba = false }) => {
 
       setDimensions(data.dimensions || []);
       setCurriculumPdf(data.curriculumPdf || '');
+      setDimensionsBadgeText(data.dimensionsBadgeText || 'PROGRAM STRUCTURE');
+      setDimensionsTitle(data.dimensionsTitle || (isBba ? '6-Semester Curriculum Roadmap' : '4-Semester Curriculum Roadmap'));
+      setDimensionsSubtitle(data.dimensionsSubtitle || (isBba ? 'A comprehensive journey from foundational business principles to industry readiness.' : 'A comprehensive journey from fundamentals to executive mastery.'));
+      setDimensionsBtnText(data.dimensionsBtnText || 'View Curriculum');
+      setShowDimensionsBtn(data.showDimensionsBtn ?? true);
       setShowSections(data.showSections || { hero: true, overview: true, dimensions: true, whyChoose: true, internships: true, dynamic: true, gallery: true, calendar: true, eligibility: true, recruiters: true });
 
       setInternshipTitle(data.internshipTitle || data.internshipsTitle || (isBba ? 'Summer Internship & Industry Projects' : 'Summer Internship Program'));
@@ -439,6 +454,11 @@ const ManageMbaPage = ({ isBba = false }) => {
             overviewSecondaryBtnLink,
             dimensions,
             curriculumPdf,
+            dimensionsBadgeText,
+            dimensionsTitle,
+            dimensionsSubtitle,
+            dimensionsBtnText,
+            showDimensionsBtn,
             internshipTitle,
             internshipDesc,
             internshipBgImage,
@@ -466,6 +486,11 @@ const ManageMbaPage = ({ isBba = false }) => {
           if (processedPayload.academicCalendarBanner) setAcademicCalendarBanner(processedPayload.academicCalendarBanner);
           if (processedPayload.dimensions) setDimensions(processedPayload.dimensions);
           if (processedPayload.curriculumPdf !== undefined) setCurriculumPdf(processedPayload.curriculumPdf);
+          if (processedPayload.dimensionsBadgeText !== undefined) setDimensionsBadgeText(processedPayload.dimensionsBadgeText);
+          if (processedPayload.dimensionsTitle !== undefined) setDimensionsTitle(processedPayload.dimensionsTitle);
+          if (processedPayload.dimensionsSubtitle !== undefined) setDimensionsSubtitle(processedPayload.dimensionsSubtitle);
+          if (processedPayload.dimensionsBtnText !== undefined) setDimensionsBtnText(processedPayload.dimensionsBtnText);
+          if (processedPayload.showDimensionsBtn !== undefined) setShowDimensionsBtn(processedPayload.showDimensionsBtn);
 
           const newImages = extractImageUrls(processedPayload);
           const deletedUrls = originalImagesRef.current.filter(url => !newImages.includes(url));
@@ -531,6 +556,11 @@ const ManageMbaPage = ({ isBba = false }) => {
           case 'dimensions':
             setDimensions(activeDefault.dimensions || []);
             setCurriculumPdf(activeDefault.curriculumPdf || '');
+            setDimensionsBadgeText(activeDefault.dimensionsBadgeText || 'PROGRAM STRUCTURE');
+            setDimensionsTitle(activeDefault.dimensionsTitle || (isBba ? '6-Semester Curriculum Roadmap' : '4-Semester Curriculum Roadmap'));
+            setDimensionsSubtitle(activeDefault.dimensionsSubtitle || (isBba ? 'A comprehensive journey from foundational business principles to industry readiness.' : 'A comprehensive journey from fundamentals to executive mastery.'));
+            setDimensionsBtnText(activeDefault.dimensionsBtnText || 'View Curriculum');
+            setShowDimensionsBtn(activeDefault.showDimensionsBtn ?? true);
             break;
           case 'whyChoose':
             setWhyChoosePills(activeDefault.whyChoosePills || {
@@ -1355,6 +1385,78 @@ const ManageMbaPage = ({ isBba = false }) => {
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" className="sr-only peer" checked={showSections.dimensions ?? true} onChange={(e) => setShowSections({ ...showSections, dimensions: e.target.checked })} />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'dimensions' && (
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 space-y-6 mb-6">
+              <div className="border-b pb-4">
+                <h2 className="text-lg font-bold text-primary">Program Structure Header Settings</h2>
+                <p className="text-xs text-gray-500 mt-1">Configure the top badge, main heading, and description displayed above the curriculum roadmap.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <CharCountLabel label="Top Badge Text" value={dimensionsBadgeText} max={50} />
+                  <input
+                    type="text"
+                    maxLength={50}
+                    value={dimensionsBadgeText}
+                    onChange={(e) => setDimensionsBadgeText(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-gray-700"
+                    placeholder="e.g. PROGRAM STRUCTURE"
+                  />
+                </div>
+                <div>
+                  <CharCountLabel label="Curriculum Button Text" value={dimensionsBtnText} max={40} />
+                  <input
+                    type="text"
+                    maxLength={40}
+                    value={dimensionsBtnText}
+                    onChange={(e) => setDimensionsBtnText(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-gray-700"
+                    placeholder="e.g. View Curriculum"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <CharCountLabel label="Section Main Heading" value={dimensionsTitle} max={100} />
+                  <input
+                    type="text"
+                    maxLength={100}
+                    value={dimensionsTitle}
+                    onChange={(e) => setDimensionsTitle(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-gray-700"
+                    placeholder="e.g. 4-Semester Curriculum Roadmap"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <CharCountLabel label="Section Subtitle / Description" value={dimensionsSubtitle} max={250} />
+                  <textarea
+                    rows={2}
+                    maxLength={250}
+                    value={dimensionsSubtitle}
+                    onChange={(e) => setDimensionsSubtitle(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-gray-700"
+                    placeholder="e.g. A comprehensive journey from fundamentals to executive mastery."
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div>
+                  <h4 className="text-xs font-semibold text-gray-800 uppercase tracking-wide">Show Curriculum Button</h4>
+                  <p className="text-xs text-gray-400">Display the &quot;View Curriculum&quot; button in this section.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="sr-only peer"
+                    checked={showDimensionsBtn ?? true}
+                    onChange={(e) => setShowDimensionsBtn(e.target.checked)}
+                  />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                 </label>
               </div>

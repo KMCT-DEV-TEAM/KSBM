@@ -371,7 +371,18 @@ const ProgramPage = ({ programType = 'mba' }) => {
       <div className="min-h-screen bg-[#fafafa]">
       {(!activePreviewTab || activePreviewTab === 'hero') && (config?.showSections?.hero !== false) && <ProgramHero program={{ ...config, isPreview }} />}
       {(!activePreviewTab || activePreviewTab === 'overview') && (config?.showSections?.overview !== false) && <ProgramOverview program={config} />}
-      {(!activePreviewTab || activePreviewTab === 'dimensions') && (config?.showSections?.dimensions !== false) && <LearningDimensionsGrid dimensions={config.dimensions} curriculumPdf={config.curriculumPdf} />}
+      {(!activePreviewTab || activePreviewTab === 'dimensions') && (config?.showSections?.dimensions !== false) && (
+        <LearningDimensionsGrid
+          program={config}
+          dimensions={config?.dimensions}
+          curriculumPdf={config?.curriculumPdf}
+          badgeText={config?.dimensionsBadgeText}
+          title={config?.dimensionsTitle}
+          subtitle={config?.dimensionsSubtitle}
+          btnText={config?.dimensionsBtnText}
+          showBtn={config?.showDimensionsBtn}
+        />
+      )}
       {(!activePreviewTab || activePreviewTab === 'whyChoose') && (config?.showSections?.whyChoose !== false) && <WhyChoosePills program={config} />}
       {(!activePreviewTab || activePreviewTab === 'internship') && (config?.showSections?.internships !== false) && <SummerInternshipBanner program={config} />}
       {(!activePreviewTab || activePreviewTab === 'dynamicLearning') && (config?.showSections?.dynamic !== false) && <DynamicLearningSection program={config} />}

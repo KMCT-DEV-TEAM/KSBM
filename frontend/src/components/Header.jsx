@@ -64,7 +64,7 @@ const Header = ({ previewData }) => {
       setExpandedMobileNav({});
     }
   }, [isMobileMenuOpen, pathname]);
-  
+
   let menuTimeout;
   const handleMouseEnter = (label) => {
     clearTimeout(menuTimeout);
@@ -104,7 +104,7 @@ const Header = ({ previewData }) => {
   const [alignment, setAlignment] = useState('center');
   const [mandatoryDisclosureUrl, setMandatoryDisclosureUrl] = useState(null);
   const [organogramUrl, setOrganogramUrl] = useState(null);
-  
+
   const globalLinks = useGlobalLinks();
   const headerApplyLink = globalLinks['global_apply']?.link || '/admissions';
 
@@ -208,7 +208,7 @@ const Header = ({ previewData }) => {
     if (navItems.length > 0) {
       // Find exact match first
       let activeItem = navItems.find(item => item.link === pathname);
-      
+
       // If no exact match, check for partial match (e.g. /about/governing-body)
       if (!activeItem) {
         activeItem = navItems.find(item => item.link !== '/' && pathname.startsWith(item.link));
@@ -275,7 +275,7 @@ const Header = ({ previewData }) => {
 
   const isEventsPage = pathname === '/events';
 
-  const headerBgClass = isEventsPage 
+  const headerBgClass = isEventsPage
     ? `bg-white/10 backdrop-blur-md border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.3)] ${isScrolled ? 'bg-white/20 border-white/30' : ''}`
     : `bg-white border-gray-200 ${isScrolled ? 'border-transparent shadow-lg' : 'shadow-sm'}`;
 
@@ -293,25 +293,25 @@ const Header = ({ previewData }) => {
   return (
     <header className={`w-[98%] max-w-[1440px] fixed left-0 right-0 mx-auto mt-2 lg:mt-3 rounded-2xl z-[100] transition-all duration-300 border ${headerBgClass}`}>
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-[5px] min-h-[70px] sm:min-h-[78px]">
-        
+
         {/* Logo Section */}
         <Link href="/" className="flex items-center no-underline shrink-0">
-          <img 
-            src={logoUrl || logo} 
-            alt="KSBM Logo" 
-            className={`h-5 sm:h-6 lg:h-7 object-contain transition-all duration-300 ${isEventsPage ? 'brightness-0 invert' : ''}`} 
+          <img
+            src={logoUrl || logo}
+            alt="KSBM Logo"
+            className={`h-8 sm:h-7 md:h-8 lg:h-9 xl:h-10 object-contain transition-all duration-300 ${isEventsPage ? 'brightness-0 invert' : ''}`}
           />
         </Link>
 
         {/* Right Section: Nav & Button */}
         <div className={`flex items-center gap-4 xl:gap-8 ${getAlignmentClass()}`}>
-          
+
           {/* Navigation Section */}
           <nav className={`${desktopClass} items-center`}>
             <ul className="flex items-center list-none gap-2.5 xl:gap-4 m-0 p-0">
               {navItems.filter(item => item.isVisible !== false).map((item, idx) => (
-                <li 
-                  key={idx} 
+                <li
+                  key={idx}
                   className="relative"
                   onMouseEnter={() => handleMouseEnter(item.label)}
                   onMouseLeave={handleMouseLeave}
@@ -345,26 +345,26 @@ const Header = ({ previewData }) => {
 
                   {/* Mega Menu Injection */}
                   {(item.label.toLowerCase() === 'about us' || item.label.toLowerCase() === 'about') && (
-                    <AboutMegaMenu 
-                      isOpen={activeMegaMenu === 'about'} 
-                      onMouseEnter={() => handleMouseEnter('about')} 
-                      onMouseLeave={handleMouseLeave} 
+                    <AboutMegaMenu
+                      isOpen={activeMegaMenu === 'about'}
+                      onMouseEnter={() => handleMouseEnter('about')}
+                      onMouseLeave={handleMouseLeave}
                     />
                   )}
 
                   {(item.label.toLowerCase() === 'academics' || item.label.toLowerCase() === 'people' || item.label.toLowerCase() === 'faculty' || item.label.toLowerCase().includes('academics') || item.label.toLowerCase().includes('people') || item.label.toLowerCase().includes('faculty')) && (
-                    <PeopleMegaMenu 
-                      isOpen={activeMegaMenu === 'people'} 
-                      onMouseEnter={() => handleMouseEnter('people')} 
-                      onMouseLeave={handleMouseLeave} 
+                    <PeopleMegaMenu
+                      isOpen={activeMegaMenu === 'people'}
+                      onMouseEnter={() => handleMouseEnter('people')}
+                      onMouseLeave={handleMouseLeave}
                     />
                   )}
 
                   {(item.label.toLowerCase() === 'programs' || item.label.toLowerCase() === 'program' || item.label.toLowerCase().includes('program')) && (
-                    <ProgramsMegaMenu 
-                      isOpen={activeMegaMenu === 'programs'} 
-                      onMouseEnter={() => handleMouseEnter('programs')} 
-                      onMouseLeave={handleMouseLeave} 
+                    <ProgramsMegaMenu
+                      isOpen={activeMegaMenu === 'programs'}
+                      onMouseEnter={() => handleMouseEnter('programs')}
+                      onMouseLeave={handleMouseLeave}
                     />
                   )}
                 </li>
@@ -375,7 +375,7 @@ const Header = ({ previewData }) => {
           {/* Action Button */}
           {actionButton?.isVisible !== false && (
             <div className={`${desktopClass} items-center`}>
-              <a 
+              <a
                 href={headerApplyLink}
                 target={headerApplyLink.startsWith('http') ? '_blank' : undefined}
                 rel={headerApplyLink.startsWith('http') ? 'noopener noreferrer' : undefined}
@@ -430,9 +430,8 @@ const Header = ({ previewData }) => {
                     <div className="flex items-center justify-between w-full">
                       {hasSubs ? (
                         <span
-                          className={`block text-base font-medium py-1 flex-1 transition-colors cursor-pointer ${
-                            activeNav === item.label ? 'text-primary font-bold' : 'text-slate-600 hover:text-primary'
-                          }`}
+                          className={`block text-base font-medium py-1 flex-1 transition-colors cursor-pointer ${activeNav === item.label ? 'text-primary font-bold' : 'text-slate-600 hover:text-primary'
+                            }`}
                           onClick={() => {
                             setActiveNav(item.label);
                             setExpandedMobileNav(prev => ({
@@ -446,9 +445,8 @@ const Header = ({ previewData }) => {
                       ) : (
                         <Link
                           href={item.link}
-                          className={`block no-underline text-base font-medium py-1 flex-1 transition-colors ${
-                            activeNav === item.label ? 'text-primary font-bold' : 'text-slate-600 hover:text-primary'
-                          }`}
+                          className={`block no-underline text-base font-medium py-1 flex-1 transition-colors ${activeNav === item.label ? 'text-primary font-bold' : 'text-slate-600 hover:text-primary'
+                            }`}
                           onClick={(e) => {
                             if (item.link === '/mandatory-disclosure') {
                               e.preventDefault();
