@@ -154,7 +154,7 @@ const LearningDimensionsGrid = ({ dimensions = [] }) => {
                 animation-play-state: paused;
               }
             `}</style>
-            <div className="flex animate-scroll-left-dim gap-5 xl:gap-6 px-4">
+            <div className="flex animate-scroll-left-dim gap-5 xl:gap-6 px-4 items-stretch">
               {[...dimensions, ...dimensions].map((dim, idx) => {
                 const realIdx = idx % dimensions.length;
                 const isLast = realIdx === dimensions.length - 1;
@@ -173,7 +173,7 @@ const LearningDimensionsGrid = ({ dimensions = [] }) => {
                       setActiveModalSemester(realIdx);
                       setIsCurriculumModalOpen(true);
                     }}
-                    className={`shrink-0 w-[300px] sm:w-[350px] lg:w-[419px] min-h-[389px] h-full rounded-[20px] p-6 sm:p-7 flex flex-col justify-between transition-all duration-500 hover:-translate-y-1.5 border cursor-pointer ${isPrimary
+                    className={`shrink-0 w-[300px] sm:w-[350px] lg:w-[419px] min-h-[389px] h-auto rounded-[20px] p-6 sm:p-7 flex flex-col justify-between transition-all duration-500 hover:-translate-y-1.5 border cursor-pointer ${isPrimary
                       ? 'bg-[#303580] text-white border-white/15 shadow-[0_20px_40px_rgba(0,0,0,0.3)]'
                       : 'bg-white text-[#303580] border-slate-100 shadow-[0_15px_35px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)]'
                       }`}
@@ -213,7 +213,7 @@ const LearningDimensionsGrid = ({ dimensions = [] }) => {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 xl:gap-6 place-items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 xl:gap-6 justify-items-center items-stretch">
             {(dimensions.length > 0 ? dimensions : [{}, {}, {}, {}]).map((dim, idx) => {
               const isLast = idx === (dimensions.length > 0 ? dimensions.length - 1 : 3);
               const isPrimary = hoveredIdx === idx || (hoveredIdx === null && isLast);
@@ -248,7 +248,7 @@ const LearningDimensionsGrid = ({ dimensions = [] }) => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: idx * 0.12 }}
-                  className={`w-full max-w-[419px] min-h-[389px] h-full rounded-[20px] p-6 sm:p-7 flex flex-col justify-between transition-all duration-500 hover:-translate-y-1.5 border cursor-pointer ${isPrimary
+                  className={`w-full max-w-[419px] min-h-[389px] h-auto rounded-[20px] p-6 sm:p-7 flex flex-col justify-between transition-all duration-500 hover:-translate-y-1.5 border cursor-pointer ${isPrimary
                     ? 'bg-[#303580] text-white border-white/15 shadow-[0_20px_40px_rgba(0,0,0,0.3)]'
                     : 'bg-white text-[#303580] border-slate-100 shadow-[0_15px_35px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)]'
                     }`}

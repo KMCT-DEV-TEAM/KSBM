@@ -748,6 +748,7 @@ const ManageEventsPage = () => {
                       <div className="flex justify-between items-center mt-1"><span className="text-[10px] text-gray-400 font-medium">Approx. letter limit: 200</span><span className="text-[10px] text-gray-400 font-medium">{(String(item.programs || '')).length}/200</span></div>
                       </div>
                       <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
+                        maxSize={1048576}
                         currentImage={item.img}
                         defaultImage={defaults.essenceOfCulture.items[0]?.img} onChange={(url, file) => handleImageUploadChange(`essenceOfCulture.items.${idx}.img`, url, file, item.img, defaults.essenceOfCulture.items[0]?.img)}
                       />
@@ -886,7 +887,7 @@ const ManageEventsPage = () => {
                   <LogoUploader 
                     uploadEndpoint="/upload/events" 
                     deferredMode={true}
-                    maxSize={addModalType?.section === 'momentsCaptured' ? 1048576 : 204800}
+                    maxSize={['momentsCaptured', 'essenceOfCulture'].includes(addModalType?.section) ? 1048576 : 204800}
                     currentImage={modalImageUrl}
                     defaultImage={''}
                     onChange={(url, file) => {
