@@ -46,6 +46,8 @@ const NewsSection = ({ previewData }) => {
     }
   }, [previewData]);
 
+  const featuredRef = React.useRef(null);
+
   const handleArticleClick = (index) => {
     if (!activeFeatured || !activeSideArticles[index]) return;
     
@@ -56,6 +58,11 @@ const NewsSection = ({ previewData }) => {
     
     setActiveFeatured(clickedArticle);
     setActiveSideArticles(newSideArticles);
+
+    // If on mobile/tablet screens where columns are stacked, scroll to the large portion
+    if (typeof window !== 'undefined' && window.innerWidth < 1024 && featuredRef.current) {
+      featuredRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   };
 
   if (isLoading) {
@@ -124,12 +131,14 @@ const NewsSection = ({ previewData }) => {
           {/* Left Column: Featured Article */}
           {activeFeatured && activeFeatured.image && (
             <motion.div
-              key={activeFeatured.title} // Add key to force re-animation on swap
+              ref={featuredRef}
+              key={activeFeatured.title || activeFeatured._id} // Add key to force re-animation on swap
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               onClick={() => router.push(`/news/${activeFeatured._id || encodeURIComponent(activeFeatured.title)}`)}
               className="w-full lg:w-[55%] group cursor-pointer"
+              title="Click to read full story"
             >
               {/* Image Wrapper */}
               <div className="relative w-full aspect-[4/3] lg:aspect-[4/3] rounded-[1.5rem] overflow-hidden mb-4 md:mb-6 lg:mb-0 shadow-sm">
@@ -159,10 +168,14 @@ const NewsSection = ({ previewData }) => {
                     </h3>
                   )}
                   {activeFeatured.description && (
-                    <p className="text-white/70 text-sm line-clamp-2 md:line-clamp-3">
+                    <p className="text-white/70 text-sm line-clamp-2 md:line-clamp-3 mb-2">
                       {activeFeatured.description}
                     </p>
                   )}
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/90 group-hover:text-white group-hover:translate-x-1 transition-all mt-1">
+                    <span>Read Full Story</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
                 </div>
               </div>
 
@@ -184,10 +197,14 @@ const NewsSection = ({ previewData }) => {
                     </h3>
                   )}
                   {activeFeatured.description && (
-                    <p className="text-text-secondary text-sm line-clamp-2 md:line-clamp-3">
+                    <p className="text-text-secondary text-sm line-clamp-2 md:line-clamp-3 mb-2">
                       {activeFeatured.description}
                     </p>
                   )}
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary group-hover:text-primary/80 group-hover:translate-x-1 transition-all">
+                    <span>Read Full Story</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
               </div>
             </motion.div>
           )}
@@ -204,8 +221,9 @@ const NewsSection = ({ previewData }) => {
               {activeSideArticles.slice(0, 3).map((article, index) => (
                 <div
                   key={article.title + index}
-                  onClick={() => router.push(`/news/${article._id || encodeURIComponent(article.title)}`)}
+                  onClick={() => handleArticleClick(index)}
                   className="flex gap-5 items-center group cursor-pointer rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] p-3 lg:-ml-3 lg:w-[calc(100%+1.5rem)] w-full"
+                  title="Click to view in featured story"
                 >
                   {/* Small Image */}
                   <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-[1rem] overflow-hidden shrink-0 shadow-sm relative">
