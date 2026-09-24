@@ -110,6 +110,20 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
   };
 
+  const staticQuickLinks = [
+    { label: 'Facility', url: '/facilities' },
+    { label: 'Admission', url: '/admissions' },
+    { label: 'Gallery', url: '/gallery' },
+    { label: 'FAQ', url: '/faq' },
+    { label: 'Contact Us', url: '/contact' }
+  ];
+
+  const staticUsefulLinks = [
+    { label: 'Grievance', url: '/grievance' },
+    { label: 'Download', url: '/download' },
+    { label: 'Mandatory Disclosure', url: '/mandatory-disclosure' }
+  ];
+
   const finalFooterGraphic = footerGraphic || '/assets/Images/Group 339.png';
 
   return (
@@ -133,7 +147,16 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
 
           {/* Column 1: About & Social */}
           <motion.div variants={itemVariants} className="flex flex-col pr-4">
-            <h3 className="text-2xl font-semibold mb-6 tracking-wide text-white">KSBM</h3>
+            <div className="mb-4">
+              <img
+                src="/assets/Images/Logo/kmct-footer-logo.png"
+                alt="KMCT Logo"
+                className="h-16 w-auto object-contain brightness-0 invert"
+              />
+            </div>
+            <h3 className="text-xl font-semibold mb-6 tracking-wide text-white">
+              KMCT School of Business Management
+            </h3>
             {description && (
               <p className="text-white/70 text-sm leading-relaxed mb-8 max-w-[90%] whitespace-pre-wrap">
                 {description}
@@ -155,13 +178,13 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
                 </a>
               )}
               {/* Facebook */}
-              {socialLinks?.facebook && (
+              {/* {socialLinks?.facebook && (
                 <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:bg-[#1877F2] hover:text-white hover:border-transparent hover:scale-110 transition-all duration-300">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
                   </svg>
                 </a>
-              )}
+              )} */}
               {/* WhatsApp */}
               {socialLinks?.whatsapp && (
                 <a href={socialLinks.whatsapp} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:bg-[#25D366] hover:text-white hover:border-transparent hover:scale-110 transition-all duration-300">
@@ -173,25 +196,35 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
             </div>
           </motion.div>
 
-          {/* Column 2: Programs */}
-          <motion.div variants={itemVariants} className="flex flex-col">
-            <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
-              PROGRAMS
-            </h4>
-            <ul className="flex flex-col gap-4 text-sm text-white/70 ">
-              {programs && programs.map((prog, idx) => (
-                <li key={idx}><a href={prog.url} className="hover:text-white transition-colors">{prog.label}</a></li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Column 3: Quick Links */}
+          {/* Column 2: Quick Links */}
           <motion.div variants={itemVariants} className="flex flex-col">
             <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
               QUICK LINKS
             </h4>
             <ul className="flex flex-col gap-4 text-sm text-white/70">
-              {quickLinks && quickLinks.map((link, idx) => (
+              {staticQuickLinks.map((link, idx) => (
+                <li key={idx}>
+                  {link.url && link.url.startsWith('/') ? (
+                    <Link href={link.url} className="hover:text-white transition-colors">
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a href={link.url || '#'} className="hover:text-white transition-colors">
+                      {link.label}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Column 3: Useful Links */}
+          <motion.div variants={itemVariants} className="flex flex-col">
+            <h4 className="text-sm font-medium tracking-[0.15em] uppercase mb-8 text-white">
+              USEFUL LINKS
+            </h4>
+            <ul className="flex flex-col gap-4 text-sm text-white/70">
+              {staticUsefulLinks.map((link, idx) => (
                 <li key={idx}>
                   {link.url && link.url.startsWith('/') ? (
                     <Link href={link.url} className="hover:text-white transition-colors">

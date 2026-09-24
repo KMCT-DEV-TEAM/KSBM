@@ -267,9 +267,7 @@ const Hero = ({ previewData }) => {
 
               <div className="flex flex-col gap-4">
                 <div className="flex items-start gap-3">
-                  <div className="bg-background/20 p-2 rounded-lg shrink-0 text-white">
-                    <Users className="w-4 h-4" />
-                  </div>
+                  <div className="w-2 h-2 rounded-full bg-secondary shrink-0 mt-1.5"></div>
                   <div>
                     <p className="text-white text-sm font-semibold">{settings?.statsCard?.stat1Title || 'Limited Seats'}</p>
                     <p className="text-gray-300 text-[11px] mt-0.5 leading-tight">{settings?.statsCard?.stat1Subtitle || 'Last few slots remaining'}</p>
@@ -277,9 +275,7 @@ const Hero = ({ previewData }) => {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="bg-background/20 p-2 rounded-lg shrink-0 text-white">
-                    <Award className="w-4 h-4" />
-                  </div>
+                  <div className="w-2 h-2 rounded-full bg-secondary shrink-0 mt-1.5"></div>
                   <div>
                     <p className="text-white text-sm font-semibold">{settings?.statsCard?.stat2Title || '100% Placement'}</p>
                     <p className="text-gray-300 text-[11px] mt-0.5 leading-tight">{settings?.statsCard?.stat2Subtitle || 'Consistent record over years'}</p>
@@ -307,15 +303,15 @@ const Hero = ({ previewData }) => {
               {/* First Set */}
               <div className="flex items-center gap-10">
                 <span className="font-bold text-secondary flex items-center gap-2"><BadgeCheck className="w-4 h-4" /> {settings?.statsCard?.batchText || 'Batch 2025–27'}</span>
-                <span className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-300" /> {settings?.statsCard?.stat1Title || 'Limited Seats'}</span>
-                <span className="flex items-center gap-2"><Award className="w-4 h-4 text-gray-300" /> {settings?.statsCard?.stat2Title || '100% Placement'}</span>
+                <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div> {settings?.statsCard?.stat1Title || 'Limited Seats'}</span>
+                <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div> {settings?.statsCard?.stat2Title || '100% Placement'}</span>
                 <a href="/admissions" className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5" /></a>
               </div>
               {/* Second Set for seamless infinite scrolling */}
               <div className="flex items-center gap-10">
                 <span className="font-bold text-secondary flex items-center gap-2"><BadgeCheck className="w-4 h-4" /> {settings?.statsCard?.batchText || 'Batch 2025–27'}</span>
-                <span className="flex items-center gap-2"><Users className="w-4 h-4 text-gray-300" /> {settings?.statsCard?.stat1Title || 'Limited Seats'}</span>
-                <span className="flex items-center gap-2"><Award className="w-4 h-4 text-gray-300" /> {settings?.statsCard?.stat2Title || '100% Placement'}</span>
+                <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div> {settings?.statsCard?.stat1Title || 'Limited Seats'}</span>
+                <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-gray-300"></div> {settings?.statsCard?.stat2Title || '100% Placement'}</span>
                 <a href="/admissions" className="flex items-center gap-1.5 hover:text-secondary underline underline-offset-2">{settings?.statsCard?.linkText || 'Read Admission Guidelines'} <ExternalLink className="w-3.5 h-3.5" /></a>
               </div>
             </div>
