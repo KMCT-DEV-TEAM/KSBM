@@ -291,6 +291,8 @@ const EventsFooter = ({ previewData, footerGraphic }) => {
             <Link href="/terms-and-conditions" className=" transition-colors">Terms & Conditions</Link>
             <span>|</span>
             <Link href="/faq" className=" transition-colors">FAQ</Link>
+            <span>|</span>
+            <Link href="/sitemap" className=" transition-colors hover:text-white">Sitemap</Link>
           </div>
         </motion.div>
 
