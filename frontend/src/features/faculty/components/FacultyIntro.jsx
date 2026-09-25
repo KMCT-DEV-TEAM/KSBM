@@ -35,7 +35,7 @@ const FacultyIntro = ({ data }) => {
           )}
 
           {data?.showIntroText !== false && (
-            <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
+            <p className="text-gray-600 leading-relaxed text-sm sm:text-base text-justify">
               {data?.introText || "At KSBM, our faculty members are the cornerstone of academic excellence. With a blend of strong academic credentials, industry expertise, and a passion for teaching, they create a dynamic learning environment that encourages critical thinking, innovation, and leadership. Beyond the classroom, our faculty mentor, inspire, and guide students through every stage of their academic journey, equipping them with the knowledge, confidence, and practical skills needed to succeed in an ever-evolving global business landscape."}
             </p>
           )}

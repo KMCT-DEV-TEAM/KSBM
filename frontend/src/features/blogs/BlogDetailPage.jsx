@@ -196,7 +196,7 @@ const BlogDetailPage = ({ id }) => {
               {article.title}
             </h1>
 
-            <p className="text-[18px] text-text-secondary leading-relaxed max-w-2xl">
+            <p className="text-[18px] text-text-secondary leading-relaxed max-w-2xl text-justify">
               {article.lead}
             </p>
           </div>
@@ -254,14 +254,14 @@ const BlogDetailPage = ({ id }) => {
                   {section.isQuote ? (
                     <div className="bg-primary/5 border-l-[4px] sm:border-l-[6px] border-primary rounded-r-2xl p-6 sm:p-8 my-8 relative shadow-sm">
                       <span className="absolute top-3 left-4 sm:top-4 sm:left-5 text-5xl sm:text-6xl text-primary/20 font-serif leading-none">"</span>
-                      <p className="text-lg sm:text-xl text-text-primary font-medium italic relative z-10 leading-snug">
+                      <p className="text-lg sm:text-xl text-text-primary font-medium italic relative z-10 leading-snug text-justify">
                         {section.content}
                       </p>
                     </div>
                   ) : (
                     <>
                       <h2 className="text-xl sm:text-2xl font-bold mb-6 tracking-tight text-text-primary">{section.title}</h2>
-                      <p className="text-[15px] text-text-secondary sm:text-[17px] whitespace-pre-wrap">{section.content}</p>
+                      <p className="text-[15px] text-text-secondary sm:text-[17px] whitespace-pre-wrap text-justify">{section.content}</p>
                       {section.inlineImage && (
                         <figure className="my-10 shadow-md rounded-2xl overflow-hidden border border-gray-100 w-[90%] sm:w-3/4 md:w-2/3 mx-auto">
                           <img src={section.inlineImage} alt={section.title} className="w-full h-auto object-cover max-h-[300px]" />

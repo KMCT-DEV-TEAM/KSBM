@@ -164,7 +164,7 @@ const LeadershipSection = ({ previewData }) => {
                     )}
                     <motion.div
                       variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-                      className="text-gray-600 text-sm md:text-base leading-relaxed space-y-6"
+                      className="text-gray-600 text-sm md:text-base leading-relaxed space-y-6 text-justify"
                     >
                       {(Array.isArray(leader.description) ? leader.description : [leader.description]).filter(Boolean).map((para, pIdx) => (
                         <p key={pIdx} className="whitespace-pre-line">{para}</p>
@@ -220,7 +220,7 @@ const LeadershipSection = ({ previewData }) => {
                     )}
                     <motion.div
                       variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-                      className="text-gray-600 text-sm md:text-base leading-relaxed space-y-6"
+                      className="text-gray-600 text-sm md:text-base leading-relaxed space-y-6 text-justify"
                     >
                       {(Array.isArray(leader.description) ? leader.description : [leader.description]).filter(Boolean).map((para, pIdx) => (
                         <p key={pIdx} className="whitespace-pre-line">{para}</p>

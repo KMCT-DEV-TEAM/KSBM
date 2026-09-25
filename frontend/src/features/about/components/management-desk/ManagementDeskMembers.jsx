@@ -162,7 +162,7 @@ const ManagementDeskMembers = ({ data }) => {
 
               {/* Description Paragraphs */}
               {member.showDescription !== false && (
-                <div className="space-y-4 text-gray-600 text-xs sm:text-sm leading-relaxed relative z-10 font-normal">
+                <div className="space-y-4 text-gray-600 text-xs sm:text-sm leading-relaxed relative z-10 font-normal text-justify">
                   {(Array.isArray(member.description) && member.description.length > 0
                     ? member.description
                     : [typeof member.description === 'string' ? member.description : '']

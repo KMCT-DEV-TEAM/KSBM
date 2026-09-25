@@ -57,7 +57,7 @@ const ManagementDeskIntro = ({ data }) => {
           )}
 
           {data?.showIntroDescription !== false && (
-            <div className="space-y-6 text-gray-600 leading-relaxed text-sm md:text-[15px]">
+            <div className="space-y-6 text-gray-600 leading-relaxed text-sm md:text-[15px] text-justify">
               {description.map((para, idx) => (
                 <p key={idx}>{para}</p>
               ))}

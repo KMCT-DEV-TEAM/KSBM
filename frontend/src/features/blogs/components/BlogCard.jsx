@@ -32,7 +32,7 @@ const BlogCard = ({ blog, index = 0, onClick }) => {
           <h3 className="text-lg sm:text-[21px] font-bold text-primary leading-snug mb-3 duration-300 line-clamp-2">
             {blog?.title || 'Untitled Blog Article'}
           </h3>
-          <p className="text-xs sm:text-[14px] text-text-secondary font-normal leading-relaxed line-clamp-3">
+          <p className="text-xs sm:text-[14px] text-text-secondary font-normal leading-relaxed line-clamp-3 text-justify">
             {blog?.excerpt || 'Click to read more about this topic and discover expert academic insights.'}
           </p>
         </div>

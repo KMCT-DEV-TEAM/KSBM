@@ -32,7 +32,7 @@ const AdvisoryBoardContent = ({ data }) => {
         )}
 
         {data?.showContentDescription !== false && (
-          <div className="space-y-6 text-gray-600 leading-relaxed text-sm md:text-[15px]">
+          <div className="space-y-6 text-gray-600 leading-relaxed text-sm md:text-[15px] text-justify">
             {(data?.contentDescription && data.contentDescription.length > 0 ? data.contentDescription : [
               "The Institutional Advisory Board of KMCT School of Business Management plays a crucial role in guiding the institution's strategic vision and academic progress. The board is chaired by Dr. Navas KM, with Dr. Ayisha Nazreen (Executive Trustee and Director) serving as a Special Invitee, and Dr. Shmmon M (Principal) serving as the Member Secretary. The board also includes selected faculty members representing industry, research, teaching staff, and nominated members, ensuring a well-rounded governance structure.",
               "The Institutional Advisory Board is committed to fostering academic excellence, promoting research-driven initiatives, and strengthening industry collaborations. It aims to provide strategic direction for curriculum development, faculty advancement, and student success, ensuring the college remains at the forefront of management education and innovation."

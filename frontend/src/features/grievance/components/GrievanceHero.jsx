@@ -26,7 +26,7 @@ const GrievanceHero = ({ heroData }) => {
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
             {title}
           </h1>
-          <p className="text-white/90 text-sm md:text-base lg:text-[17px] leading-relaxed max-w-3xl">
+          <p className="text-white/90 text-sm md:text-base lg:text-[17px] leading-relaxed max-w-3xl text-justify">
             {subtitle}
           </p>
         </motion.div>

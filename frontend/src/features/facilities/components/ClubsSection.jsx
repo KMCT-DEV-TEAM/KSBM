@@ -37,7 +37,7 @@ const ClubsSection = ({ data }) => {
             </h2>
           )}
           {description && (
-            <p className="text-gray-600 text-xs sm:text-base leading-relaxed max-w-4xl mb-6 sm:mb-10">
+            <p className="text-gray-600 text-xs sm:text-base leading-relaxed max-w-4xl mb-6 sm:mb-10 text-justify">
               {description}
             </p>
           )}

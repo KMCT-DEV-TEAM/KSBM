@@ -61,7 +61,7 @@ const EventsAbout = ({ about }) => {
           </h2>
 
           {/* Paragraphs */}
-          <div className="text-text-primary text-sm md:text-[15px] leading-relaxed space-y-4 md:space-y-6 font-medium whitespace-pre-line break-words">
+          <div className="text-text-primary text-sm md:text-[15px] leading-relaxed space-y-4 md:space-y-6 font-medium whitespace-pre-line break-words text-justify">
             {data.paragraph1 && <p>{data.paragraph1}</p>}
             {data.paragraph2 && <p>{data.paragraph2}</p>}
           </div>

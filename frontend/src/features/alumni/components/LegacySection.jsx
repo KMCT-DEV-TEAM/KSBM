@@ -75,13 +75,13 @@ const LegacySection = ({ data }) => {
             )}
 
             {data?.showDescription1 !== false && (
-              <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
+              <p className="text-gray-600 text-xs sm:text-sm leading-relaxed text-justify">
                 {data?.description1 || 'Since our inception, the KMCT School of Business Management has been a beacon of academic brilliance and professional development. Our alumni embody our mission, leading top organizations and shaping global markets across diverse industries.'}
               </p>
             )}
 
             {data?.showDescription2 !== false && (
-              <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
+              <p className="text-gray-600 text-xs sm:text-sm leading-relaxed text-justify">
                 {data?.description2 || 'With over three decades of history, we take immense pride in having trained thousands of remarkable business leaders. The KMCT Alumni Association is dedicated to fostering lifelong relationships between the institution and its graduates.'}
               </p>
             )}

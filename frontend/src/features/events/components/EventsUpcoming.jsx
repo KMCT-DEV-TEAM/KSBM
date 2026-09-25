@@ -123,7 +123,7 @@ const EventsUpcoming = ({ upcomingEvents }) => {
                   <h3 className="text-xl md:text-2xl font-bold text-primary mb-2.5 uppercase tracking-wide group-hover:text-secondary transition-colors duration-300">
                     {event.title}
                   </h3>
-                  <p className="text-text-primary text-xs md:text-sm leading-relaxed font-medium">
+                  <p className="text-text-primary text-xs md:text-sm leading-relaxed font-medium text-justify">
                     {event.description}
                   </p>
                 </div>
@@ -167,7 +167,7 @@ const EventsUpcoming = ({ upcomingEvents }) => {
                       <h3 className="text-xl font-bold text-primary mb-2.5 uppercase tracking-wide">
                         {event.title}
                       </h3>
-                      <p className="text-text-primary text-xs leading-relaxed font-medium line-clamp-4">
+                      <p className="text-text-primary text-xs leading-relaxed font-medium line-clamp-4 text-justify">
                         {event.description}
                       </p>
                     </div>

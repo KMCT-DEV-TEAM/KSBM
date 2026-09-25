@@ -97,10 +97,10 @@ const DynamicLearningSection = ({ program }) => {
             <h2 className="text-2xl sm:text-3xl lg:text-[35px] font-semibold tracking-normal text-white mb-6 leading-tight">
               {title}
             </h2>
-            <p className="text-white/90 text-[15px] sm:text-[15px] leading-relaxed mb-4">
+            <p className="text-white/90 text-[15px] sm:text-[15px] leading-relaxed mb-4 text-justify">
               {desc1}
             </p>
-            <p className="text-white/90 text-[15px] sm:text-[15px] leading-relaxed">
+            <p className="text-white/90 text-[15px] sm:text-[15px] leading-relaxed text-justify">
               {desc2}
             </p>
           </motion.div>

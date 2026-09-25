@@ -27,12 +27,12 @@ const ExaminationsOverview = ({ data }) => {
               </h2>
             )}
             {data?.showOverviewText1 !== false && (
-              <p className="text-gray-600 text-sm sm:text-[15px] leading-relaxed mb-5 font-normal">
+              <p className="text-gray-600 text-sm sm:text-[15px] leading-relaxed mb-5 font-normal text-justify">
                 {text1}
               </p>
             )}
             {data?.showOverviewText2 !== false && (
-              <p className="text-gray-600 text-sm sm:text-[15px] leading-relaxed font-normal">
+              <p className="text-gray-600 text-sm sm:text-[15px] leading-relaxed font-normal text-justify">
                 {text2}
               </p>
             )}
