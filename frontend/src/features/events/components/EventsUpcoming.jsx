@@ -129,7 +129,10 @@ const EventsUpcoming = ({ upcomingEvents }) => {
                 </div>
 
                 {/* Date Ribbon */}
-                <div className="absolute top-0 right-6 bg-primary w-[75px] md:w-[85px] h-[105px] md:h-[115px] rounded-b-[20px] flex flex-col items-center justify-center z-10 shadow-lg shadow-primary/20">
+                <div 
+                  className="absolute top-0 right-6 bg-primary w-[75px] md:w-[85px] h-[105px] md:h-[115px] flex flex-col items-center justify-center z-10 shadow-lg shadow-primary/20"
+                  style={{ borderRadius: "0 0 24px 24px" }}
+                >
                   <span className="text-white text-xs md:text-sm font-semibold mb-0.5 uppercase tracking-wider">{event.month}</span>
                   <span className="text-white text-xl md:text-3xl font-extrabold">{event.date}</span>
                 </div>
@@ -170,7 +173,10 @@ const EventsUpcoming = ({ upcomingEvents }) => {
                     </div>
 
                     {/* Date Ribbon */}
-                    <div className="absolute top-0 right-6 bg-primary w-[75px] h-[105px] rounded-b-[20px] flex flex-col items-center justify-center z-10 shadow-lg shadow-primary/20">
+                    <div 
+                      className="absolute top-0 right-6 bg-primary w-[75px] h-[105px] flex flex-col items-center justify-center z-10 shadow-lg shadow-primary/20"
+                      style={{ borderRadius: "0 0 24px 24px" }}
+                    >
                       <span className="text-white text-xs font-semibold mb-0.5 uppercase tracking-wider">{event.month}</span>
                       <span className="text-white text-xl font-extrabold">{event.date}</span>
                     </div>

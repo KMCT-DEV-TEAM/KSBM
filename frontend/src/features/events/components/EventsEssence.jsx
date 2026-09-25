@@ -27,15 +27,15 @@ const EventsEssence = ({ essenceOfCulture }) => {
   const [selectedDetail, setSelectedDetail] = useState(displayItems[0]?.category || 'Music');
   const [startIndex, setStartIndex] = useState(0);
 
-  // Guarantee maximum 5 images shown on screen at a time
-  const visibleItems = displayItems.slice(startIndex, startIndex + 5);
+  // Guarantee maximum 2 images shown on screen at a time
+  const visibleItems = displayItems.slice(startIndex, startIndex + 2);
 
   const handleScrollUp = () => {
     setStartIndex(prev => Math.max(0, prev - 1));
   };
 
   const handleScrollDown = () => {
-    setStartIndex(prev => Math.min(Math.max(0, displayItems.length - 5), prev + 1));
+    setStartIndex(prev => Math.min(Math.max(0, displayItems.length - 2), prev + 1));
   };
 
   useEffect(() => {
@@ -75,8 +75,8 @@ const EventsEssence = ({ essenceOfCulture }) => {
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 relative z-10">
 
 
-        {/* Gradient Navigation Controls (Left Down Side) visible only when total images > 5 on Desktop */}
-        {displayItems.length > 5 && (
+        {/* Gradient Navigation Controls (Left Down Side) visible only when total images > 2 on Desktop */}
+        {displayItems.length > 2 && (
           <div className="hidden md:flex flex-col justify-end items-start mb-35 gap-3">
             <button
               onClick={handleScrollUp}
@@ -90,8 +90,8 @@ const EventsEssence = ({ essenceOfCulture }) => {
             </button>
             <button
               onClick={handleScrollDown}
-              disabled={startIndex + 5 >= displayItems.length}
-              className={`w-10 h-10 md:w-11 md:h-11 rounded-[10px] flex items-center justify-center text-white bg-primary shadow-sm cursor-pointer transition-all duration-300 ${startIndex + 5 >= displayItems.length ? 'opacity-40 cursor-not-allowed scale-95' : 'hover:scale-105 active:scale-95'
+              disabled={startIndex + 2 >= displayItems.length}
+              className={`w-10 h-10 md:w-11 md:h-11 rounded-[10px] flex items-center justify-center text-white bg-primary shadow-sm cursor-pointer transition-all duration-300 ${startIndex + 2 >= displayItems.length ? 'opacity-40 cursor-not-allowed scale-95' : 'hover:scale-105 active:scale-95'
                 }`}
               title="Next Category"
               aria-label="Next Category"
@@ -127,7 +127,7 @@ const EventsEssence = ({ essenceOfCulture }) => {
                     <img src={item.img || "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop"} alt={item.category || "Culture"} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent pointer-events-none"></div>
                     <div className="absolute bottom-3 left-4 right-4 pointer-events-none z-10">
-                      <h3 className={`text-sm md:text-base font-semibold uppercase tracking-wider whitespace-pre-line break-words ${selectedDetail === item.category ? 'text-primary font-bold' : 'text-white'}`}>{item.category}</h3>
+                      <h3 className={`text-sm md:text-base uppercase tracking-wider whitespace-pre-line break-words transition-all duration-300 ${selectedDetail === item.category ? 'text-white font-extrabold drop-shadow-lg' : 'text-white/70 font-medium'}`}>{item.category}</h3>
                     </div>
                   </motion.div>
                 </div>
@@ -152,7 +152,7 @@ const EventsEssence = ({ essenceOfCulture }) => {
                   <img src={item.img || "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop"} alt={item.category || "Culture"} className="w-full h-full object-cover" />
                   <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 to-transparent pointer-events-none"></div>
                   <div className="absolute bottom-3 left-4 right-4 pointer-events-none z-10">
-                    <h3 className="text-lg font-bold uppercase tracking-wider text-primary whitespace-pre-line break-words">{item.category}</h3>
+                    <h3 className="text-lg font-extrabold uppercase tracking-wider text-white drop-shadow-lg whitespace-pre-line break-words">{item.category}</h3>
                   </div>
                 </motion.div>
               )
