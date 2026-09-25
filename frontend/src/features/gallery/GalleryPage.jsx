@@ -194,126 +194,62 @@ const GalleryPage = ({ previewData }) => {
               </div>
             </div>
 
-
-            {/* Full-width Moving Marquee */}
-            <style>{`
-              @keyframes marquee-rtl {
-                0% { transform: translateX(0%); }
-                100% { transform: translateX(-50%); }
-              }
-              @keyframes marquee-ltr {
-                0% { transform: translateX(-50%); }
-                100% { transform: translateX(0%); }
-              }
-              .animate-marquee-row1 {
-                display: flex;
-                align-items: center;
-                width: max-content;
-                animation: marquee-rtl 40s linear infinite;
-              }
-              .animate-marquee-row2 {
-                display: flex;
-                align-items: center;
-                width: max-content;
-                animation: marquee-ltr 45s linear infinite;
-              }
-              .animate-marquee-row3 {
-                display: flex;
-                align-items: center;
-                width: max-content;
-                animation: marquee-rtl 42s linear infinite;
-              }
-              .animate-marquee-row1:hover,
-              .animate-marquee-row2:hover,
-              .animate-marquee-row3:hover {
-                animation-play-state: paused;
-              }
-            `}</style>
-
-            <div className="relative w-[100vw] left-[50%] right-[50%] -ml-[50vw] -mr-[50vw] overflow-hidden py-4 space-y-5 sm:space-y-6 mt-12">
+            {/* Image Grid — shows all filtered images at once */}
+            <div className="mt-10">
               {filteredItems.length > 0 ? (
-                <>
-                  {/* Line 1: Right to Left */}
-                  <div className="animate-marquee-row1 gap-5 sm:gap-6 px-4" style={{ animationDuration: `${Math.max(filteredItems.length * 12, 50)}s` }}>
-                    {[...filteredItems, ...filteredItems, ...filteredItems, ...filteredItems, ...filteredItems, ...filteredItems].map((item, idx) => (
-                      <div
-                        key={`row1-${item.id}-${idx}`}
-                        onClick={() => setSelectedMedia(item)}
-                        className={`${getCardDimensions(item, idx, 1)} relative rounded-3xl overflow-hidden group cursor-pointer shadow-2xl border border-white/10`}
-                      >
-                        <img
-                          src={item.img}
-                          alt={item.title}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#111836]/90 via-[#111836]/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
-                        
-                        {item.type === 'video' && (
-                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
-                            <svg className="w-5 h-5 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Line 2: Left to Right */}
-                  <div className="animate-marquee-row2 gap-3 sm:gap-5 px-4" style={{ animationDuration: `${Math.max(filteredItems.length * 13, 56)}s` }}>
-                    {[...filteredItems.slice().reverse(), ...filteredItems.slice().reverse(), ...filteredItems.slice().reverse(), ...filteredItems.slice().reverse(), ...filteredItems.slice().reverse(), ...filteredItems.slice().reverse()].map((item, idx) => (
-                      <div
-                        key={`row2-${item.id}-${idx}`}
-                        onClick={() => setSelectedMedia(item)}
-                        className={`${getCardDimensions(item, idx, 2)} relative rounded-3xl overflow-hidden group cursor-pointer shadow-2xl border border-white/10`}
-                      >
-                        <img
-                          src={item.img}
-                          alt={item.title}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#111836]/90 via-[#111836]/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
-                        
-                        {item.type === 'video' && (
-                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
-                            <svg className="w-5 h-5 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Line 3: Right to Left (Offset) */}
-                  <div className="animate-marquee-row3 gap-4 sm:gap-6 px-4" style={{ animationDuration: `${Math.max(filteredItems.length * 11, 52)}s` }}>
-                    {[...filteredItems.slice(1), filteredItems[0], ...filteredItems.slice(1), filteredItems[0], ...filteredItems.slice(1), filteredItems[0], ...filteredItems.slice(1), filteredItems[0], ...filteredItems.slice(1), filteredItems[0], ...filteredItems.slice(1), filteredItems[0]].map((item, idx) => (
-                      <div
-                        key={`row3-${item?.id || idx}-${idx}`}
-                        onClick={() => setSelectedMedia(item)}
-                        className={`${getCardDimensions(item, idx, 3)} relative rounded-3xl overflow-hidden group cursor-pointer shadow-2xl border border-white/10`}
-                      >
-                        <img
-                          src={item?.img || ''}
-                          alt={item?.title || 'Gallery image'}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#111836]/90 via-[#111836]/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
-                        
-                        {item?.type === 'video' && (
-                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
-                            <svg className="w-5 h-5 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </>
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="columns-2 sm:columns-3 lg:columns-4 gap-3 sm:gap-4"
+                  style={{ columnGap: '12px' }}
+                >
+                  {filteredItems.map((item, idx) => (
+                    <motion.div
+                      key={item.id || idx}
+                      initial={{ opacity: 0, scale: 0.97 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.35, delay: idx * 0.03 }}
+                      onClick={() => setSelectedMedia(item)}
+                      className="break-inside-avoid mb-3 relative rounded-2xl overflow-hidden group cursor-pointer shadow-lg border border-white/10"
+                    >
+                      <img
+                        src={item.img}
+                        alt={item.title || 'Gallery image'}
+                        className="w-full h-auto object-cover block transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      {item.title && (
+                        <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                          <p className="text-white text-xs sm:text-sm font-medium leading-snug line-clamp-2">{item.title}</p>
+                          {item.category && (
+                            <span className="text-white/60 text-[10px] uppercase tracking-widest mt-0.5 block">{item.category}</span>
+                          )}
+                        </div>
+                      )}
+                      {item.type === 'video' && (
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                          <svg className="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </motion.div>
               ) : (
-                <div className="text-center text-white/70 py-20">
-                  <p>No gallery items found for this category.</p>
+                <div className="text-center text-white/60 py-24">
+                  <p className="text-lg">No images found for this category.</p>
                 </div>
               )}
             </div>
-            
+
           </div>
         </section>
+
+
       </main>
 
       {/* Lightbox Modal */}
