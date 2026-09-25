@@ -118,7 +118,7 @@ const SideContact = () => {
   const isHomePage = pathname === '/';
   
   const getStyleClasses = () => {
-    if (pathname !== '/events' && pathname !== '/contact' && (pathname === '/testimonials' || isScrolled)) {
+    if (pathname !== '/contact' && (pathname === '/testimonials' || isScrolled)) {
       return 'bg-primary border border-primary/20 text-white shadow-lg';
     }
     // Universal style for first section (not scrolled) on all pages
@@ -126,7 +126,7 @@ const SideContact = () => {
   };
 
   const getHoverClasses = () => {
-    if (pathname !== '/events' && pathname !== '/contact' && (pathname === '/testimonials' || isScrolled)) {
+    if (pathname !== '/contact' && (pathname === '/testimonials' || isScrolled)) {
       return 'hover:bg-[#0f1433]';
     }
     return 'hover:bg-background/30';

@@ -19,19 +19,27 @@ const EventsHero = ({ hero }) => {
 
       {/* Background Image: Scaled Down */}
       <div className="absolute inset-0 z-0 flex items-center justify-center pt-10">
-        {/* Subtle gradient overlay to ensure the film strip pops if needed */}
-        <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px]"></div>
+        {/* Banner image from CMS */}
+        <img
+          src={hero?.backgroundImage || "/assets/Images/Group 250.png"}
+          alt={hero?.title || "Events Banner"}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/40"></div>
+        {/* Gradient for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/40 to-transparent"></div>
       </div>
 
       {/* Content Overlay (Title and Subtitle) */}
       {hero?.showTextContent !== false && (
-        <div className="absolute inset-0 z-20 flex flex-col justify-center md:justify-start items-start text-left px-6 md:px-16 lg:px-32 xl:px-48 pt-0 md:pt-36 lg:pt-40 w-full pointer-events-none">
+        <div className="relative z-20 w-[98%] max-w-[1440px] mx-auto pl-4 pr-16 sm:pl-6 sm:pr-20 lg:px-8 py-20 flex flex-col justify-center items-start text-left pointer-events-none">
           <h1
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-wider mb-4 text-primary leading-[1.2] md:w-[60%]"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-wider mb-4 text-white leading-[1.1] md:w-[60%]"
           >
             {hero?.title || 'THE SPIRIT OF CULTURE'}
           </h1>
-          <p className="text-text-primary font-medium text-xs sm:text-sm md:text-base max-w-lg lg:max-w-xl leading-relaxed drop-shadow-sm">
+          <p className="text-slate-200 font-medium text-sm md:text-base lg:text-lg max-w-xl leading-relaxed drop-shadow-sm">
             {hero?.subtitle || 'Experience the vibrancy and dynamic energy of our college campus. From cultural extravaganzas to technical symposiums, our events are the heartbeat of student life.'}
           </p>
         </div>

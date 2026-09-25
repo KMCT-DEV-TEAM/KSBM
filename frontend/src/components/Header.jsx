@@ -273,18 +273,9 @@ const Header = ({ previewData }) => {
   const mobileToggleClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? 'flex' : 'flex min-[1400px]:hidden';
   const mobileDropdownClass = isPreviewDesktop ? 'hidden' : isPreviewMobile ? '' : 'min-[1400px]:hidden';
 
-  const isEventsPage = pathname === '/events';
-
-  const headerBgClass = isEventsPage
-    ? `bg-white/10 backdrop-blur-md border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.3)] ${isScrolled ? 'bg-white/20 border-white/30' : ''}`
-    : `bg-white border-gray-200 ${isScrolled ? 'border-transparent shadow-lg' : 'shadow-sm'}`;
+  const headerBgClass = `bg-white border-gray-200 ${isScrolled ? 'border-transparent shadow-lg' : 'shadow-sm'}`;
 
   const getNavTextClass = (isActive) => {
-    if (isEventsPage) {
-      return isActive
-        ? 'text-white font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[2px] after:bg-white after:rounded-sm'
-        : 'text-white/80 font-medium hover:text-white';
-    }
     return isActive
       ? 'text-primary font-semibold relative after:content-[""] after:absolute after:-bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[2px] after:bg-primary after:rounded-sm'
       : 'text-gray-600 font-medium hover:text-primary';
@@ -299,7 +290,7 @@ const Header = ({ previewData }) => {
           <img
             src={logoUrl || logo}
             alt="KSBM Logo"
-            className={`h-8 sm:h-7 md:h-8 lg:h-9 xl:h-10 object-contain transition-all duration-300 ${isEventsPage ? 'brightness-0 invert' : ''}`}
+            className="h-8 sm:h-7 md:h-8 lg:h-9 xl:h-10 object-contain transition-all duration-300"
           />
         </Link>
 
@@ -395,7 +386,7 @@ const Header = ({ previewData }) => {
                 }
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
-              className={`p-2 rounded-md ${isEventsPage ? 'text-white hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100'}`}
+              className="p-2 rounded-md text-gray-700 hover:bg-gray-100"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>

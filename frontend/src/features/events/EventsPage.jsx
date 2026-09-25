@@ -102,7 +102,7 @@ const EventsPage = () => {
         <Header />
 
       <div 
-        className={`fixed inset-0 z-[9999] bg-white transition-opacity duration-1000 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        className={`fixed inset-0 z-[9999] bg-slate-900 transition-opacity duration-700 flex items-center justify-center ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
         <Loader fullScreen={false} />
       </div>
@@ -110,8 +110,9 @@ const EventsPage = () => {
       {/* ── Hero Banner ── */}
       <EventsHero hero={hero} />
 
-      {/* ── About Section ── */}
-      {(isPreview || about?.showSection !== false) && <EventsAbout about={about} />}
+      <div className="flex flex-col gap-y-8 md:gap-y-16 py-8 md:py-12">
+        {/* ── About Section ── */}
+        {(isPreview || about?.showSection !== false) && <EventsAbout about={about} />}
 
       {/* ── Upcoming Events ── */}
       {(isPreview || upcomingEvents?.showSection !== false) && <EventsUpcoming upcomingEvents={upcomingEvents} />}
@@ -137,8 +138,9 @@ const EventsPage = () => {
       {/* ── Stay Connected ── */}
       {(isPreview || stayConnected?.showSection !== false) && <EventsStayConnected stayConnected={stayConnected} />}
 
-      {/* ── Moments Captured ── */}
-      {(isPreview || momentsCaptured?.showSection !== false) && <EventsMoments momentsCaptured={momentsCaptured} />}
+        {/* ── Moments Captured ── */}
+        {(isPreview || momentsCaptured?.showSection !== false) && <EventsMoments momentsCaptured={momentsCaptured} />}
+      </div>
 
       {/* Standard Footer */}
       <Footer />

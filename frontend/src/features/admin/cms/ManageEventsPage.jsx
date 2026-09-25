@@ -530,7 +530,18 @@ const ManageEventsPage = () => {
                   </div>
                 </div>
                 
-              </div>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-gray-500 block mb-2">Banner Background Image</label>
+                    <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
+                      label="Upload Banner Image (1920x1080px recommended)"
+                      currentImage={formData.hero.backgroundImage}
+                      defaultImage={defaults.hero.backgroundImage} 
+                      maxSize={1048576}
+                      onChange={(url, file) => handleImageUploadChange('hero.backgroundImage', url, file, formData.hero.backgroundImage, defaults.hero.backgroundImage)}
+                    />
+                  </div>
+                </div>              </div>
             </SectionForm>
           )}
 
@@ -603,7 +614,9 @@ const ManageEventsPage = () => {
                   <LogoUploader uploadEndpoint="/upload/events" deferredMode={true}
                     label="About Section Image"
                     currentImage={formData.about?.image}
-                    defaultImage={defaults.about.image} onChange={(url, file) => handleImageUploadChange('about.image', url, file, formData.about?.image, defaults.about.image)}
+                    defaultImage={defaults.about.image} 
+                    maxSize={1048576}
+                    onChange={(url, file) => handleImageUploadChange('about.image', url, file, formData.about?.image, defaults.about.image)}
                   />
                 </div>
               </div>

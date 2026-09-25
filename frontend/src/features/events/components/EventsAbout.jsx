@@ -20,11 +20,6 @@ const EventsAbout = ({ about }) => {
   return (
     <section className="relative w-full px-6 md:px-12 lg:px-24 overflow-hidden z-0">
 
-      {/* Overlapping Curved Lines Design (Left Edge of Screen) */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-10 md:w-10 h-auto pointer-events-none opacity-80 z-0">
-        <img src="/assets/Images/Group 254.png" alt="Decorative Curves" className="w-full h-full object-contain" />
-      </div>
-
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
 
         {/* Left Side: Image */}
@@ -35,10 +30,11 @@ const EventsAbout = ({ about }) => {
           viewport={{ once: true }}
           className="relative flex justify-center md:justify-start order-2 md:order-1"
         >
-          {/* Decorative Polygon */}
-          <div className="absolute top-6 right-6 md:top-12 md:right-12 w-12 h-12 md:w-16 md:h-16 z-0 pointer-events-none drop-shadow-md opacity-80 animate-pulse">
-            <img src="/assets/Images/Polygon 7.png" alt="Decorative Polygon" className="w-full h-full object-contain" />
-          </div>
+          <img
+            src={data.image || '/assets/Images/image 91.png'}
+            alt="Events About"
+            className="w-full max-w-[70%] md:max-w-sm lg:max-w-md object-contain rounded-[24px] relative z-10"
+          />
         </motion.div>
 
         {/* Right Side: Content */}
