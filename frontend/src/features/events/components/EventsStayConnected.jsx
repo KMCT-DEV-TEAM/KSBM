@@ -18,7 +18,7 @@ const EventsStayConnected = ({ stayConnected }) => {
   const handlePrev = () => setCarouselIndex((prev) => (prev - 1 + displayPosters.length) % displayPosters.length);
 
   return (
-    <section className="w-full pt-20 pb-0 px-6 overflow-hidden relative bg-transparent">
+    <section className="w-full pt-20 pb-20 px-6 overflow-hidden relative bg-transparent">
 
       {/* Decorative Glow */}
       <div

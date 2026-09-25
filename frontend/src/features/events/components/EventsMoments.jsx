@@ -1,9 +1,10 @@
 "use client"
 import React from 'react';
+import Link from 'next/link';
 
 const EventsMoments = ({ momentsCaptured }) => {
   return (
-    <section className="w-full py-19 px-6 relative bg-transparent">
+    <section className="w-full pt-8 pb-0 px-6 relative bg-transparent">
       <style>{`
         @keyframes scrollUp {
           0% { transform: translateY(0); }
@@ -30,7 +31,7 @@ const EventsMoments = ({ momentsCaptured }) => {
       `}</style>
 
       <div className="relative z-10 w-full max-w-[1400px] mx-auto">
-        <div className="relative flex items-center justify-center w-full mt-10 mb-12">
+        <div className="relative flex items-center justify-center w-full">
           {/* Ambient Section Primary Glow */}
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[200px] z-[-1] pointer-events-none opacity-35 blur-[60px]"
@@ -113,6 +114,20 @@ const EventsMoments = ({ momentsCaptured }) => {
             </div>
           </div>
         </div>
+
+        {/* View Gallery Link */}
+        <div className="flex justify-center mt-6 md:mt-8 relative z-20">
+          <Link
+            href="/gallery"
+            className="group flex items-center gap-3 text-primary font-bold text-sm md:text-base uppercase tracking-[0.2em] hover:text-primary/80 transition-colors border-b-2 border-primary/20 pb-1 hover:border-primary"
+          >
+            View Gallery
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </div>
+
       </div>
     </section>
   );
