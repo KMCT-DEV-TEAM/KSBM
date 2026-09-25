@@ -161,7 +161,7 @@ const ContactHero = ({ previewData, onDataLoaded }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-[15px] sm:text-base text-white/80 max-w-3xl leading-relaxed font-normal mb-12 sm:mb-16"
+            className="text-[15px] sm:text-base text-white/80 max-w-3xl leading-relaxed font-normal mb-12 sm:mb-16 text-justify"
           >
             {heroData.subtitle}
           </motion.p>
@@ -307,7 +307,7 @@ const ContactHero = ({ previewData, onDataLoaded }) => {
               <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-4 tracking-tight leading-tight">
                 {contactBoxData.title}
               </h2>
-              <p className="text-[14px] text-white/80 leading-relaxed font-normal">
+              <p className="text-[14px] text-white/80 leading-relaxed font-normal text-justify">
                 {contactBoxData.subtitle}
               </p>
             </div>

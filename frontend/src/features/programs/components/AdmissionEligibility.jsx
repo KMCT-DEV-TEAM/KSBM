@@ -63,7 +63,7 @@ const AdmissionEligibility = ({ eligibility = [], eligibilityTitle, eligibilityS
                   <h3 className="text-lg font-semibold text-white group-hover:text-white transition-colors duration-300 mb-2 font-heading">
                     {item.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-white font-normal leading-relaxed mb-5">
+                  <p className="text-xs sm:text-sm text-white font-normal leading-relaxed mb-5 text-justify">
                     {item.description}
                   </p>
                 </div>
@@ -85,7 +85,7 @@ const AdmissionEligibility = ({ eligibility = [], eligibilityTitle, eligibilityS
                       <h3 className="text-lg font-semibold text-white group-hover:text-white transition-colors duration-300 mb-2 font-heading">
                         {item.title}
                       </h3>
-                      <p className="text-xs sm:text-sm text-white font-normal leading-relaxed mb-5">
+                      <p className="text-xs sm:text-sm text-white font-normal leading-relaxed mb-5 text-justify">
                         {item.description}
                       </p>
                     </div>

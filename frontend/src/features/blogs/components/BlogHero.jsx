@@ -34,7 +34,7 @@ const BlogHero = ({ heroData, fullScreen = false }) => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight mb-5 sm:mb-7 drop-shadow-md leading-tight">
             {title}
           </h1>
-          <p className="text-[15px] text-white/80 leading-relaxed drop-shadow-sm max-w-2xl">
+          <p className="text-[15px] text-white/80 leading-relaxed drop-shadow-sm max-w-2xl text-justify">
             {subtitle}
           </p>
         </motion.div>

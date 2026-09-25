@@ -32,7 +32,7 @@ const GoverningBodyContent = ({ data }) => {
         )}
 
         {data?.showContentDescription !== false && (
-          <div className="space-y-6 text-gray-600 leading-relaxed text-sm md:text-[15px]">
+          <div className="space-y-6 text-gray-600 leading-relaxed text-sm md:text-[15px] text-justify">
             {(data?.contentDescription && data.contentDescription.length > 0 ? data.contentDescription : [
               "The Governing Body of KMCT School of Business Management plays a crucial role in guiding the institution's strategic vision and academic progress. It is composed of distinguished leaders and experts from various industries who provide valuable insights and guidance. Their collective expertise ensures that our curriculum remains relevant, innovative, and aligned with industry standards, empowering our students to become the future leaders of the business world.",
               "We regularly collaborate with industry experts to adapt our programs, ensuring students acquire the practical skills necessary for today's dynamic business environment. This commitment to excellence makes our graduates highly sought after by top employers globally."

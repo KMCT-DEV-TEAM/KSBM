@@ -34,10 +34,10 @@ const ProgramOverview = ({ program }) => {
             <h2 className="text-3xl sm:text-4xl lg:text-[50px] font-semibold text-primary tracking-tight leading-[1.2] mb-6 font-heading">
               {program.overviewTitle || program.title}
             </h2>
-            <p className="text-gray-600 text-[15px] leading-relaxed mb-6 font-normal">
+            <p className="text-gray-600 text-[15px] leading-relaxed mb-6 font-normal text-justify">
               {program.overviewText}
             </p>
-            <p className="text-gray-600 text-[15px] leading-relaxed mb-8 font-normal">
+            <p className="text-gray-600 text-[15px] leading-relaxed mb-8 font-normal text-justify">
               {program.overviewSubtext}
             </p>
 

@@ -184,7 +184,7 @@ const AboutSection = ({ previewData }) => {
               {cmsData.showParagraphs && (
                 <motion.div
                   variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
-                  className="text-text-primary space-y-6 text-sm leading-relaxed max-w-4xl mx-auto"
+                  className="text-text-primary space-y-6 text-sm leading-relaxed max-w-4xl mx-auto text-justify"
                 >
                   {cmsData.paragraphs.map((para, index) => (
                     <p key={index}>{para}</p>

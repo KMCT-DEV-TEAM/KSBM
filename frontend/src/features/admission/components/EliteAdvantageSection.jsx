@@ -29,7 +29,7 @@ const EliteAdvantageSection = ({ data }) => {
             </div>
 
             {desc.split('\n\n').map((para, i) => (
-              <p key={i} className="text-gray-600 text-[17px] leading-relaxed mb-6 font-normal whitespace-pre-line break-words">
+              <p key={i} className="text-gray-600 text-[17px] leading-relaxed mb-6 font-normal whitespace-pre-line break-words text-justify">
                 {para}
               </p>
             ))}

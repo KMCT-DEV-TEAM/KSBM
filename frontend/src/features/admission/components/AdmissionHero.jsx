@@ -85,7 +85,7 @@ const AdmissionHero = ({ data, showText = true }) => {
               hidden: { opacity: 0, y: 30 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
             }}
-            className="max-w-2xl text-xs md:text-sm mt-6 text-gray-200 leading-relaxed font-medium text-left"
+            className="max-w-2xl text-xs md:text-sm mt-6 text-gray-200 leading-relaxed font-medium text-left text-justify"
           >
             {subtitle}
           </motion.p>

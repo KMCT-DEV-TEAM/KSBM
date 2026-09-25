@@ -54,7 +54,7 @@ const InstitutionalResourcesSection = ({ headerData, libraryData, otherResources
         <h2 className="text-[22px] sm:text-[32px] font-semibold text-[#2b2b68] tracking-tight mb-4">
           {headerData?.heading || 'Institutional Resources'}
         </h2>
-        <p className="text-gray-600 leading-relaxed text-xs sm:text-base">
+        <p className="text-gray-600 leading-relaxed text-xs sm:text-base text-justify">
           {headerData?.description || 'At KSBM, we believe that a great learning experience begins with an inspiring environment. Our modern campus is thoughtfully designed to support academic excellence, innovation, and holistic student development. From technology-enabled classrooms to dedicated learning spaces, every facility empowers students to learn, collaborate, and grow with confidence.'}
         </p>
       </motion.div>
@@ -93,7 +93,7 @@ const InstitutionalResourcesSection = ({ headerData, libraryData, otherResources
             </div>
 
             {(description || description2) && (
-              <div className="space-y-4 text-gray-600 leading-relaxed text-xs sm:text-base">
+              <div className="space-y-4 text-gray-600 leading-relaxed text-xs sm:text-base text-justify">
                 {description && <p>{description}</p>}
                 {description2 && <p>{description2}</p>}
               </div>

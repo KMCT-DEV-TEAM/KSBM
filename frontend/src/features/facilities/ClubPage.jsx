@@ -202,12 +202,12 @@ const ClubPage = () => {
                 </h2>
                 {about.paragraphs?.length > 0 ? (
                   about.paragraphs.map((p, idx) => (
-                    <p key={idx} className="text-gray-600 leading-relaxed break-words">
+                    <p key={idx} className="text-gray-600 leading-relaxed break-words text-justify">
                       {p}
                     </p>
                   ))
                 ) : (
-                  <p className="text-gray-600 leading-relaxed break-words">
+                  <p className="text-gray-600 leading-relaxed break-words text-justify">
                     Join our vibrant community where students come together to share their passion and grow their skills.
                   </p>
                 )}
@@ -306,7 +306,7 @@ const ClubPage = () => {
                   {faculty.heading || 'Faculty In Charge'}
                 </h2>
                 {faculty.description && (
-                  <p className="text-gray-600 leading-relaxed break-words">
+                  <p className="text-gray-600 leading-relaxed break-words text-justify">
                     {faculty.description}
                   </p>
                 )}

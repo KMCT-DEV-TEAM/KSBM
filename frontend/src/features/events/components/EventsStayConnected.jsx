@@ -82,7 +82,7 @@ const EventsStayConnected = ({ stayConnected }) => {
           <h2 className="text-xl md:text-3xl font-bold uppercase tracking-widest text-primary drop-shadow-sm mb-8 leading-snug">
             {stayConnected?.heading || "Follow us on Social Media"}
           </h2>
-          <p className="text-lg md:text-xl text-text-primary mb-8 font-medium tracking-wide leading-relaxed">
+          <p className="text-lg md:text-xl text-text-primary mb-8 font-medium tracking-wide leading-relaxed text-justify">
             {stayConnected?.description1 || "Don't miss out on the latest updates, behind-the-scenes moments, and exclusive announcements for KALEIDO KMCT 2025."}
             <br /><br />
             Join the conversation across all our platforms using the hashtag <span className="text-primary font-bold">{stayConnected?.hashtag || "#KaleidoKMCT2025"}</span> {stayConnected?.description2 || "and be part of the largest cultural celebration!"}

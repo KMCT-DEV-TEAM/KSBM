@@ -121,7 +121,7 @@ const FaqPage = ({ previewData }) => {
                   {hero.title || 'Everything You Need to Know'}
                 </h1>
 
-                <p className="font-medium text-white/80 leading-relaxed text-[16px] sm:text-[18px] max-w-2xl mb-4">
+                <p className="font-medium text-white/80 leading-relaxed text-[16px] sm:text-[18px] max-w-2xl mb-4 text-justify">
                   {hero.subtitle || 'Browse our FAQs to learn more about admissions, course structure, eligibility, placement assistance, scholarships, and campus facilities before you apply.'}
                 </p>
               </motion.div>
@@ -199,7 +199,7 @@ const FaqPage = ({ previewData }) => {
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.3 }}
                             >
-                              <div className="px-4 sm:px-5 pb-4 pt-2 text-gray-600 text-xs sm:text-sm leading-relaxed border-t border-gray-100 font-normal">
+                              <div className="px-4 sm:px-5 pb-4 pt-2 text-gray-600 text-xs sm:text-sm leading-relaxed border-t border-gray-100 font-normal text-justify">
                                 {item.answer}
                               </div>
                             </motion.div>

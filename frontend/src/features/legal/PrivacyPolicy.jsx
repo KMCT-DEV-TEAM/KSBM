@@ -63,7 +63,7 @@ const PrivacyPolicy = () => {
                 {hero.title || 'Privacy Policy'}
               </h1>
 
-              <p className="font-medium text-white/80 leading-relaxed text-[16px] sm:text-[18px] max-w-2xl mb-4">
+              <p className="font-medium text-white/80 leading-relaxed text-[16px] sm:text-[18px] max-w-2xl mb-4 text-justify">
                 {hero.subtitle || 'Browse our FAQs to learn more about admissions, course structure, eligibility, placement assistance, scholarships, and campus facilities before you apply.'}
               </p>
             </motion.div>
@@ -84,7 +84,7 @@ const PrivacyPolicy = () => {
                 {mainContent.heading || 'Privacy Policy'}
               </h2>
 
-              <div className="space-y-6 text-[15px] text-text-primary leading-relaxed">
+              <div className="space-y-6 text-[15px] text-text-primary leading-relaxed text-justify">
                 {mainContent.paragraph1 && <p>{mainContent.paragraph1}</p>}
                 {mainContent.paragraph2 && <p>{mainContent.paragraph2}</p>}
                 {mainContent.paragraph3 && <p>{mainContent.paragraph3}</p>}
@@ -105,7 +105,7 @@ const PrivacyPolicy = () => {
                 </ul>
               </div>
 
-              <div className="space-y-6 text-[15px] text-text-primary leading-relaxed ">
+              <div className="space-y-6 text-[15px] text-text-primary leading-relaxed text-justify">
                 {mainContent.closingParagraph1 && <p>{mainContent.closingParagraph1}</p>}
                 {mainContent.closingParagraph2 && <p>{mainContent.closingParagraph2}</p>}
                 {mainContent.closingBoldText1 && <p>{mainContent.closingBoldText1}</p>}

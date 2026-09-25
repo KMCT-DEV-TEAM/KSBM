@@ -130,7 +130,7 @@ const TermsAndConditions = ({ previewData }) => {
                 {hero.title || 'Terms & Conditions'}
               </h1>
 
-              <p className="font-medium text-white/80 leading-relaxed text-[16px] sm:text-[18px] max-w-2xl mb-4">
+              <p className="font-medium text-white/80 leading-relaxed text-[16px] sm:text-[18px] max-w-2xl mb-4 text-justify">
                 {hero.subtitle || 'Please review our institutional terms of service, website usage agreement, and general guidelines governing access to KMCT School of Business Management platforms.'}
               </p>
             </motion.div>
@@ -151,7 +151,7 @@ const TermsAndConditions = ({ previewData }) => {
                 {mainContent.heading || 'Terms of Use'}
               </h2>
 
-              <div className="space-y-6 text-[15px] text-text-primary leading-relaxed">
+              <div className="space-y-6 text-[15px] text-text-primary leading-relaxed text-justify">
                 {mainContent.introParagraph && <p>{mainContent.introParagraph}</p>}
 
                 {sections.map((sec, idx) => (
@@ -174,7 +174,7 @@ const TermsAndConditions = ({ previewData }) => {
                 </ul>
               </div>
 
-              <div className="space-y-6 text-[15px] text-text-primary leading-relaxed">
+              <div className="space-y-6 text-[15px] text-text-primary leading-relaxed text-justify">
                 {mainContent.closingParagraph1 && <p>{mainContent.closingParagraph1}</p>}
                 {mainContent.closingParagraph2 && <p>{mainContent.closingParagraph2}</p>}
               </div>

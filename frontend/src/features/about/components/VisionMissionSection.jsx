@@ -201,7 +201,7 @@ const VisionMissionSection = ({ previewData }) => {
                   className="overflow-y-auto pr-2 h-[120px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] flex flex-col gap-6"
                 >
                   {data.visionContent.map((para, idx) => (
-                    <p key={idx} className="text-white/90 text-sm md:text-base leading-relaxed italic pl-1 whitespace-pre-line">
+                    <p key={idx} className="text-white/90 text-sm md:text-base leading-relaxed italic pl-1 whitespace-pre-line text-justify">
                       {para}
                     </p>
                   ))}
@@ -275,7 +275,7 @@ const VisionMissionSection = ({ previewData }) => {
                   className="overflow-y-auto pr-2 h-[120px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] flex flex-col gap-6"
                 >
                   {data.missionContent.map((para, idx) => (
-                    <p key={idx} className="text-white/90 text-sm md:text-base leading-relaxed italic pl-1 whitespace-pre-line">
+                    <p key={idx} className="text-white/90 text-sm md:text-base leading-relaxed italic pl-1 whitespace-pre-line text-justify">
                       {para}
                     </p>
                   ))}

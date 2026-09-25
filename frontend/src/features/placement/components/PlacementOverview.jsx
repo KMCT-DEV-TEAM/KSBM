@@ -80,12 +80,12 @@ const PlacementOverview = ({ data }) => {
 
             <div className="space-y-4">
               {data?.showDescription1 !== false && (
-                <p className="text-base text-gray-600 leading-relaxed font-medium">
+                <p className="text-base text-gray-600 leading-relaxed font-medium text-justify">
                   {data.description1}
                 </p>
               )}
               {data?.showDescription2 !== false && (
-                <p className="text-base text-gray-600 leading-relaxed">
+                <p className="text-base text-gray-600 leading-relaxed text-justify">
                   {data.description2}
                 </p>
               )}
