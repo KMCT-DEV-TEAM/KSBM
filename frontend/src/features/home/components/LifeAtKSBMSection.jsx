@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import api from '../../../api/axios';
 import { motion } from 'framer-motion';
 import { DEFAULT_LIFE_AT_KSBM } from '../../admin/cms/constants/defaultCmsData';
@@ -7,6 +7,21 @@ import { DEFAULT_LIFE_AT_KSBM } from '../../admin/cms/constants/defaultCmsData';
 const LifeAtKSBMSection = ({ previewData }) => {
   const [data, setData] = useState(previewData || DEFAULT_LIFE_AT_KSBM);
   const [isLoading, setIsLoading] = useState(false);
+
+  const scrollRef = useRef(null);
+  const set1Ref = useRef(null);
+
+  // Position refs for continuous smooth animation without React re-render lag
+  const currentScrollRef = useRef(0);
+  const targetScrollRef = useRef(0);
+  const isInteractingRef = useRef(false);
+  const isHoveredRef = useRef(false);
+  const pauseTimerRef = useRef(null);
+
+  // Mouse drag state
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const startXRef = useRef(0);
+  const dragStartScrollRef = useRef(0);
 
   useEffect(() => {
     if (previewData) {
@@ -28,6 +43,154 @@ const LifeAtKSBMSection = ({ previewData }) => {
       fetchLifeAtKsbm();
     }
   }, [previewData]);
+
+  // Measure width of one repeating set
+  const getSingleSetWidth = useCallback(() => {
+    if (!set1Ref.current) return 0;
+    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768;
+    const gap = isDesktop ? 16 : 12;
+    return set1Ref.current.offsetWidth + gap;
+  }, []);
+
+  // Initialize initial scroll position to 1 setWidth so left/right infinite scroll works instantly
+  useEffect(() => {
+    const initTimer = setTimeout(() => {
+      if (scrollRef.current && set1Ref.current) {
+        const setWidth = getSingleSetWidth();
+        if (setWidth > 0 && currentScrollRef.current === 0) {
+          scrollRef.current.scrollLeft = setWidth;
+          currentScrollRef.current = setWidth;
+          targetScrollRef.current = setWidth;
+        }
+      }
+    }, 150);
+
+    return () => clearTimeout(initTimer);
+  }, [data, getSingleSetWidth]);
+
+  // Main animation frame loop (smooth auto-drift + buttery button lerp easing)
+  useEffect(() => {
+    let animationFrameId;
+    let lastTime = performance.now();
+
+    const animate = (now) => {
+      const delta = Math.min(now - lastTime, 64);
+      lastTime = now;
+
+      if (scrollRef.current) {
+        const container = scrollRef.current;
+        const setWidth = getSingleSetWidth();
+
+        // Case 1: User is manually dragging or touch-swiping
+        if (isInteractingRef.current) {
+          currentScrollRef.current = container.scrollLeft;
+          targetScrollRef.current = container.scrollLeft;
+        }
+        // Case 2: Idle ambient auto-drift (when not hovered and not interacting)
+        else if (!isHoveredRef.current) {
+          // Gentle ambient drift: ~22px per second
+          const speed = 0.022;
+          currentScrollRef.current += speed * delta;
+          targetScrollRef.current = currentScrollRef.current;
+          container.scrollLeft = currentScrollRef.current;
+        } else {
+          // Hovered: keep track of scroll position
+          currentScrollRef.current = container.scrollLeft;
+          targetScrollRef.current = container.scrollLeft;
+        }
+
+        // Seamless infinite wrap using setWidth
+        if (setWidth > 0) {
+          if (currentScrollRef.current >= setWidth * 2) {
+            currentScrollRef.current -= setWidth;
+            targetScrollRef.current -= setWidth;
+            container.scrollLeft = currentScrollRef.current;
+          } else if (currentScrollRef.current < setWidth * 0.4) {
+            currentScrollRef.current += setWidth;
+            targetScrollRef.current += setWidth;
+            container.scrollLeft = currentScrollRef.current;
+          }
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
+    };
+  }, [getSingleSetWidth]);
+
+  // Global mouseup listener for drag release
+  useEffect(() => {
+    const handleGlobalMouseUp = () => {
+      if (isMouseDown) {
+        setIsMouseDown(false);
+        if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
+        pauseTimerRef.current = setTimeout(() => {
+          isInteractingRef.current = false;
+        }, 800);
+      }
+    };
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+    return () => {
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+  }, [isMouseDown]);
+
+  // Mouse Drag Handlers
+  const handleMouseDown = (e) => {
+    if (e.button !== 0 || !scrollRef.current) return;
+    setIsMouseDown(true);
+    isInteractingRef.current = true;
+    startXRef.current = e.pageX - scrollRef.current.offsetLeft;
+    dragStartScrollRef.current = scrollRef.current.scrollLeft;
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isMouseDown || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startXRef.current) * 1.3;
+    const newPos = dragStartScrollRef.current - walk;
+    scrollRef.current.scrollLeft = newPos;
+    currentScrollRef.current = newPos;
+    targetScrollRef.current = newPos;
+  };
+
+  const handleMouseUp = () => {
+    if (!isMouseDown) return;
+    setIsMouseDown(false);
+    if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
+    pauseTimerRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+    }, 800);
+  };
+
+  // Mobile Touch Handlers
+  const handleTouchStart = () => {
+    isInteractingRef.current = true;
+  };
+
+  const handleTouchEnd = () => {
+    if (scrollRef.current) {
+      currentScrollRef.current = scrollRef.current.scrollLeft;
+      targetScrollRef.current = scrollRef.current.scrollLeft;
+    }
+    if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
+    pauseTimerRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+    }, 1200);
+  };
+
+  const handleContainerScroll = () => {
+    if (isInteractingRef.current && scrollRef.current) {
+      currentScrollRef.current = scrollRef.current.scrollLeft;
+      targetScrollRef.current = scrollRef.current.scrollLeft;
+    }
+  };
 
   if (isLoading) {
     return (
@@ -81,6 +244,53 @@ const LifeAtKSBMSection = ({ previewData }) => {
     return null;
   }
 
+  const rawImages = images && images.length > 0 ? images : [];
+  const half = Math.max(1, Math.ceil(rawImages.length / 2));
+  const baseTop = rawImages.slice(0, half);
+  const baseBottom = rawImages.length > 1 ? rawImages.slice(half) : baseTop;
+
+  // Replicate to have at least 6 items per set so setWidth is comfortably wide
+  const innerMultiplier = Math.max(1, Math.ceil(6 / Math.max(1, baseTop.length)));
+  const singleTopSet = Array(innerMultiplier).fill(baseTop).flat();
+  const singleBottomSet = Array(innerMultiplier).fill(baseBottom).flat();
+
+  // 4 identical sets for seamless continuous wrapping
+  const sets = [0, 1, 2, 3];
+
+  const renderCard = (img, index, rowKey, setIndex) => {
+    const isWide = rowKey === 'top' 
+      ? (index % 4 === 0 || index % 4 === 3)
+      : (index % 4 === 1 || index % 4 === 2);
+
+    return (
+      <div
+        key={`${rowKey}-${setIndex}-${index}`}
+        className={`h-[160px] ${md('md:h-[240px]')} shrink-0 ${
+          isWide ? `w-[260px] ${md('md:w-[500px]')}` : `w-[160px] ${md('md:w-[300px]')}`
+        } rounded-[1rem] ${md('md:rounded-[1.5rem]')} overflow-hidden group cursor-pointer shadow-sm hover:shadow-md transition-shadow relative select-none`}
+      >
+        <img
+          src={img.src}
+          alt={img.alt || 'Campus Life'}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out absolute inset-0 bg-gray-100 pointer-events-none select-none"
+          loading="lazy"
+          draggable="false"
+          onLoad={() => {
+            if (scrollRef.current && set1Ref.current && currentScrollRef.current === 0) {
+              const sw = getSingleSetWidth();
+              if (sw > 0) {
+                scrollRef.current.scrollLeft = sw;
+                currentScrollRef.current = sw;
+                targetScrollRef.current = sw;
+              }
+            }
+          }}
+        />
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
+      </div>
+    );
+  };
+
   return (
     <section className={`relative w-full bg-[#f4f7f9] py-12 ${lg('lg:py-14')} overflow-hidden`}>
       <div className={`relative w-[98%] max-w-[1440px] mx-auto px-4 ${sm('sm:px-6')} ${lg('lg:px-8')} z-10`}>
@@ -91,7 +301,7 @@ const LifeAtKSBMSection = ({ previewData }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, amount: 0.2 }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto mb-16"
+            className="text-center max-w-3xl mx-auto mb-10 lg:mb-14"
           >
             {showSubheading && (
               <p className={`text-text-secondary text-[0.65rem] ${lg('lg:text-xs')} font-semibold tracking-[0.25em] uppercase mb-4`}>
@@ -112,47 +322,58 @@ const LifeAtKSBMSection = ({ previewData }) => {
         )}
       </div>
 
-      {/* Looping Collage Image Gallery */}
-      {showImages && images && images.length > 0 && (
-        <div className={`relative ${isPreview ? 'w-full' : 'w-[100vw] left-1/2 -translate-x-1/2'} overflow-hidden mt-8 flex flex-col gap-3 ${md('md:gap-4')}`}>
-          {/* Top Row (Scrolls Left) */}
-          <div className={`animate-marquee gap-3 ${md('md:gap-4')} pr-3 ${md('md:pr-4')} will-change-transform`} style={{ animationDuration: '40s' }}>
-            {[...Array(2)].map((_, arrayIndex) => (
-              <div key={arrayIndex} className={`flex gap-3 ${md('md:gap-4')} shrink-0`}>
-                {images.slice(0, Math.ceil(images.length / 2)).map((img, index) => {
-                  const isWide = index % 4 === 0 || index % 4 === 3;
-                  return (
-                    <div
-                      key={index}
-                      className={`h-[160px] ${md('md:h-[240px]')} shrink-0 ${isWide ? `w-[280px] ${md('md:w-[500px]')}` : `w-[160px] ${md('md:w-[300px]')}`} rounded-[1rem] ${md('md:rounded-[1.5rem]')} overflow-hidden group cursor-pointer shadow-sm relative`}
-                    >
-                      <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out absolute inset-0 bg-gray-100" loading="lazy" />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
-                    </div>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
+      {/* Collage Image Gallery (Swipable on mobile, with desktop navigation buttons & gentle auto-move) */}
+      {showImages && rawImages.length > 0 && (
+        <div 
+          onMouseEnter={() => { isHoveredRef.current = true; }}
+          onMouseLeave={() => { 
+            isHoveredRef.current = false; 
+            handleMouseUp();
+          }}
+          className={`relative ${isPreview ? 'w-full' : 'w-[100vw] left-1/2 -translate-x-1/2'} overflow-hidden mt-8 group/gallery`}
+        >
+          {/* Horizontal Scroll / Touch-Swipe Container (No side blur) */}
+          <div
+            ref={scrollRef}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onScroll={handleContainerScroll}
+            className={`flex flex-col gap-3 ${md('md:gap-4')} overflow-x-auto touch-pan-x select-none py-2 px-4 ${md('md:px-8')} scrollbar-none [&::-webkit-scrollbar]:hidden ${
+              isMouseDown ? 'cursor-grabbing' : 'cursor-grab'
+            }`}
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            {/* Top Row */}
+            <div className={`flex gap-3 ${md('md:gap-4')} shrink-0 w-max`}>
+              {sets.map((setIdx) => (
+                <div 
+                  key={`top-set-${setIdx}`} 
+                  ref={setIdx === 0 ? set1Ref : null} 
+                  className={`flex gap-3 ${md('md:gap-4')} shrink-0`}
+                >
+                  {singleTopSet.map((img, idx) => renderCard(img, idx, 'top', setIdx))}
+                </div>
+              ))}
+            </div>
 
-          {/* Bottom Row (Scrolls Right) */}
-          <div className={`animate-marquee-reverse gap-3 ${md('md:gap-4')} pr-3 ${md('md:pr-4')} will-change-transform`} style={{ animationDuration: '45s' }}>
-            {[...Array(2)].map((_, arrayIndex) => (
-              <div key={arrayIndex} className={`flex gap-3 ${md('md:gap-4')} shrink-0`}>
-                {images.slice(Math.ceil(images.length / 2)).map((img, index) => {
-                  const isWide = index % 4 === 1 || index % 4 === 2;
-                  return (
-                    <div
-                      key={index}
-                      className={`h-[160px] ${md('md:h-[240px]')} shrink-0 ${isWide ? `w-[280px] ${md('md:w-[500px]')}` : `w-[160px] ${md('md:w-[300px]')}`} rounded-[1rem] ${md('md:rounded-[1.5rem]')} overflow-hidden group cursor-pointer shadow-sm relative`}
-                    >
-                      <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out absolute inset-0 bg-gray-100" loading="lazy" />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none" />
-                    </div>
-                  );
-                })}
-              </div>
-            ))}
+            {/* Bottom Row (staggered with offset) */}
+            <div className={`flex gap-3 ${md('md:gap-4')} shrink-0 w-max -ml-8 ${md('md:-ml-16')}`}>
+              {sets.map((setIdx) => (
+                <div 
+                  key={`bot-set-${setIdx}`} 
+                  className={`flex gap-3 ${md('md:gap-4')} shrink-0`}
+                >
+                  {singleBottomSet.map((img, idx) => renderCard(img, idx, 'bot', setIdx))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
