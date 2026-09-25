@@ -66,7 +66,7 @@ const EventsAbout = ({ about }) => {
             {data.paragraph2 && <p>{data.paragraph2}</p>}
           </div>
 
-          {/* Buttons */}
+          {/* Buttons
           <div className="flex flex-wrap items-center gap-3 sm:gap-5 mt-4 md:mt-6 relative z-10">
             {data.brochureUrl ? (
               <button onClick={() => router.push(`/pdf-viewer?url=${encodeURIComponent(data.brochureUrl)}&title=${encodeURIComponent(data.brochureBtnText || 'Event Brochure')}`)} className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-md bg-primary text-white font-semibold text-xs sm:text-sm hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(43,47,102,0.4)] cursor-pointer">
@@ -86,7 +86,7 @@ const EventsAbout = ({ about }) => {
                 {data.calendarBtnText || 'Download Calendar'}
               </button>
             )}
-          </div>
+          </div> */}
 
 
 
